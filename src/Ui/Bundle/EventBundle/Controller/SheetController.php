@@ -11,13 +11,16 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
+use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
+use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
@@ -45,6 +48,29 @@ class SheetController extends Controller
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventView, $locale);
+
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'eventView'     => $eventView,
+            'sheet'         => $sheet,
+            'taggedData'    => $taggedData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
+            'templateData'  => $templateData,
+        ]);
+    }
+
+    /**
+     * @param EventView $eventView
+     * @param Sheet     $sheet
+     * @param string    $locale
+     * @return array
+     */
+    private function sheetInfos(EventView $eventView, Sheet $sheet, $locale)
+    {
         $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
         $participants  = $this->get('tactician.commandbus.query')->handle(
             new CardListViewQuery(
@@ -60,17 +86,11 @@ class SheetController extends Controller
 
         $taggedData = $registrationTemplateData->getAllTaggedDatas();
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-
-        return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'eventView'     => $eventView,
-            'sheet'         => $sheet,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
-        ]);
+        return [
+            $nomenclatures,
+            $participants,
+            $taggedData,
+        ];
     }
 
     /**
@@ -216,21 +236,8 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
-        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $label         = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
-        $participants  = $this->get('tactician.commandbus.query')->handle(
-            new CardListViewQuery(
-                $sheet,
-                $this->getUser(),
-                $locale
-            )
-        );
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheet, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $twig = $object->getType() === 'nomenclature'
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
@@ -295,9 +302,7 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventView, $locale);
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $sheet = $this->getUserSheet($eventView, $locale);
 
         $addParticipant = new Add($sheet, $eventView, $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
@@ -318,20 +323,9 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the participant form
-        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $participants  = $this->get('tactician.commandbus.query')->handle(
-            new CardListViewQuery(
-                $sheet,
-                $this->getUser(),
-                $locale
-            )
-        );
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheet, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'eventView'        => $eventView,
@@ -341,6 +335,115 @@ class SheetController extends Controller
             'nomenclatures'    => $nomenclatures,
             'taggedData'       => $taggedData,
             'form_participant' => $form->createView(),
+            'label'            => $label,
+            'uid'              => $key,
+            'participants'     => $participants,
+        ]);
+    }
+
+    /**
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @throws \Exception
+     * @return array
+     */
+    private function removeParticipantData($eventView, $locale, $key)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $sheet = $this->getUserSheet($eventView, $locale);
+
+        if ($sheet->countParticipants() === 1) {
+            throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
+        }
+
+        $remove = new Remove($sheet);
+        $form   = $this->createForm(RemoveType::class, $remove, [
+            'action'       => $this->generateUrl('event_sheet_handle_remove_participant', ['locale' => $locale, 'key' => $key]),
+            'participants' => $sheet->getParticipants(),
+        ]);
+
+        return [
+            $form,
+            $remove,
+            $sheet,
+        ];
+    }
+
+    /**
+     * Render the form to remove participant. Loaded by ajax from the sheet.
+     *
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function removeParticipantAction(EventView $eventView, $locale, $key)
+    {
+        list ($form, $remove, $sheet) = $this->removeParticipantData($eventView, $locale, $key);
+
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $participants = $this->get('tactician.commandbus.query')->handle(
+            new CardListViewQuery(
+                $sheet,
+                $this->getUser(),
+                $locale,
+                false
+            )
+        );
+
+        return $this->render('EventBundle:Participant:remove.html.twig', [
+            'uid'          => $key,
+            'form'         => $form->createView(),
+            'label'        => $label,
+            'participants' => $participants,
+        ]);
+    }
+
+    /**
+     * Remove a participant and display the sheet with the modal in case of form error.
+     *
+     * @param Request   $request
+     * @param EventView $eventView
+     * @param string    $locale
+     * @param string    $key
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function handleRemoveParticipantAction(Request $request, EventView $eventView, $locale, $key)
+    {
+        list ($form, $remove, $sheet) = $this->removeParticipantData($eventView, $locale, $key);
+
+        // Handle the form, update the object and redirect to the sheet if valid
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($remove);
+
+                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+            } catch (CanNotRemoveAllParticipantsException $exception) {
+                $form->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
+            }
+        }
+
+        // If the form is not valid, render the sheet and force the popin with the remove participant form
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'eventView'        => $eventView,
+            'sheet'            => $sheet,
+            'templateData'     => $templateData,
+            'locale'           => $locale,
+            'nomenclatures'    => $nomenclatures,
+            'taggedData'       => $taggedData,
+            'form_remove'      => $form->createView(),
             'label'            => $label,
             'uid'              => $key,
             'participants'     => $participants,
