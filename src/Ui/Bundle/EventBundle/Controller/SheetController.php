@@ -367,8 +367,8 @@ class SheetController extends Controller
 
         return [
             $form,
-            $remove,
             $sheet,
+            $remove,
         ];
     }
 
@@ -384,7 +384,7 @@ class SheetController extends Controller
      */
     public function removeParticipantAction(EventView $eventView, $locale, $key)
     {
-        list ($form, $remove, $sheet) = $this->removeParticipantData($eventView, $locale, $key);
+        list ($form, $sheet) = $this->removeParticipantData($eventView, $locale, $key);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
@@ -418,7 +418,7 @@ class SheetController extends Controller
      */
     public function handleRemoveParticipantAction(Request $request, EventView $eventView, $locale, $key)
     {
-        list ($form, $remove, $sheet) = $this->removeParticipantData($eventView, $locale, $key);
+        list ($form, $sheet, $remove) = $this->removeParticipantData($eventView, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
