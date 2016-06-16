@@ -25,3 +25,4 @@ Proximum\Vimeet\Application\Command\Product\CreateOption:
                             - NotBlank: ~
                         description: ~
                         addon: ~
+                        subjectedToValidationHelp: ~

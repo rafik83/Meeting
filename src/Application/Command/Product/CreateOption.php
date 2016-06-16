@@ -71,11 +71,6 @@ class CreateOption
     public $subjectedToValidation;
 
     /**
-     * @var string
-     */
-    public $subjectedToValidationHelp;
-
-    /**
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -84,9 +79,10 @@ class CreateOption
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
-                'title'       => null,
-                'description' => null,
-                'addon'       => null,
+                'title'                     => null,
+                'description'               => null,
+                'addon'                     => null,
+                'subjectedToValidationHelp' => null,
             ];
         }
     }

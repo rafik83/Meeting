@@ -53,12 +53,11 @@ class CreateOptionHandler
             $createOption->availabilityMax,
             $createOption->updatable,
             $createOption->updatableUntil,
-            $createOption->subjectedToValidation,
-            $createOption->subjectedToValidationHelp
+            $createOption->subjectedToValidation
         );
 
         foreach ($createOption->translations as $locale => $translation) {
-            $product->translate($locale, $translation['title'], null, $translation['description'], $translation['addon']);
+            $product->translate($locale, $translation['title'], null, $translation['description'], $translation['addon'], $translation['subjectedToValidationHelp']);
         }
 
         $this->productRepository->add($product);
