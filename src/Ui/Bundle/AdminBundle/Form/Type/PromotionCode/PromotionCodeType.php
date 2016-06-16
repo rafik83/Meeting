@@ -11,10 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,7 +30,10 @@ class PromotionCodeType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('code', TextType::class)
-            ->add('validUntil', DateTimeType::class, ['required' => false])
+            ->add('validUntil', DateTimePickerType::class, [
+                'required'      => false,
+                'view_timezone' => $options['event']->getTimeZone()
+            ])
             ->add('stock', IntegerType::class, ['required' => false])
             ->add('translations', TranslationsType::class, [
                 'locales'       => $options['event']->getLocales(),
