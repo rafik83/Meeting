@@ -578,7 +578,12 @@ admin:
         slots:
             title: Créneaux de rendez-vous
             generate:
+                action: Générer des créneaux
                 title: Générer des créneaux de rendez-vous
+            table:
+                begin: De
+                end: à
+                duration: Durée
         slot:
             lock: Blocker
             unlock: Déblocker

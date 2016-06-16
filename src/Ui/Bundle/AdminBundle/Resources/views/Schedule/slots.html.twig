@@ -20,16 +20,16 @@
     <div class="mg-bt">
         <a href="{{ path('admin_schedule_slots_generate', { 'event': event.id }) }}" class="btn btn-success">
             <i class="glyphicon glyphicon-tasks"></i>
-            Générer des créneaux
+            {{ 'admin.schedule.slots.generate.action'|trans }}
         </a>
     </div>
 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Début</th>
-                <th>Fin</th>
-                <th>Durée</th>
+                <th>{{ 'admin.schedule.slots.table.begin'|trans }}</th>
+                <th>{{ 'admin.schedule.slots.table.end'|trans }}</th>
+                <th>{{ 'admin.schedule.slots.table.duration'|trans }}</th>
                 <th></th>
             </tr>
         </thead>
