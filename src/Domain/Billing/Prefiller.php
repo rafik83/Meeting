@@ -37,26 +37,52 @@ class Prefiller
      */
     public function prefill(BillingInfo $billingInfo)
     {
-        /*
-         * @todo Get the info from the user if no participant owner
-         */
         $participant  = $billingInfo->getSheet()->getParticipantOwner();
-        $locale       = $billingInfo->getSheet()->getEvent()->getFallback();
-        $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+
+        if (null === $participant) {
+            $this->prefillFromUser($billingInfo);
+        } else {
+            $locale       = $billingInfo->getSheet()->getEvent()->getFallback();
+            $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+
+            $billingInfo->prefill(
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_FIRSTNAME),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_LASTNAME),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_POSITION),
+                $templateData->getTaggedContentLabel(Tag::SHEET_ORGANIZATION),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_PHONE),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_MOBILE),
+                $participant->getUser()->getEmail(),
+                new Address(
+                    $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ADDRESS),
+                    $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ZIPCODE),
+                    $templateData->getTaggedContentLabel(Tag::PARTICIPANT_CITY),
+                    $templateData->getTaggedContentValue(Tag::PARTICIPANT_COUNTRY)
+                )
+            );
+        }
+    }
+
+    /**
+     * @param BillingInfo $billingInfo
+     */
+    private function prefillFromUser(BillingInfo $billingInfo)
+    {
+        $user = $billingInfo->getSheet()->getOwner();
 
         $billingInfo->prefill(
-            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_FIRSTNAME),
-            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_LASTNAME),
-            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_POSITION),
-            $templateData->getTaggedContentLabel(Tag::SHEET_ORGANIZATION),
-            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_PHONE),
-            $templateData->getTaggedContentLabel(Tag::PARTICIPANT_MOBILE),
-            $participant->getUser()->getEmail(),
+            $user->getAccount()->getFirstName(),
+            $user->getAccount()->getLastName(),
+            $user->getAccount()->getPosition(),
+            $user->getAccount()->getCompany(),
+            $user->getAccount()->getPhone(),
+            $user->getAccount()->getMobile(),
+            $user->getEmail(),
             new Address(
-                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ADDRESS),
-                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ZIPCODE),
-                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_CITY),
-                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_COUNTRY)
+                $user->getAccount()->getAddress(),
+                $user->getAccount()->getZipCode(),
+                $user->getAccount()->getCity(),
+                $user->getAccount()->getCountry()
             )
         );
     }
