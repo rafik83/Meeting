@@ -13,6 +13,11 @@
     <footer>
         <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
             <button class="btn btn-primary"><img src="{{ asset('assets/images/icons/icon-user.png') }}">{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}</button>
-        </a>
+        </a><br>
+        {% if participants.cardViews|length > 1 %}
+            <a href="{{ path('event_sheet_remove_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
+                <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
+            </a>
+        {% endif %}
     </footer>
 </section>
