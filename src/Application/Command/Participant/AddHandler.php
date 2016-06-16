@@ -123,8 +123,11 @@ class AddHandler
 
         // Add addionnal
         $cart = $this->cartManager->getCart($add->sheet);
-        $cart->resolveParticipantsQuantity();
-        $this->cartManager->save($cart);
+
+        if ($cart->getPlanRow()) {
+            $cart->resolveParticipantsQuantity();
+            $this->cartManager->save($cart);
+        }
 
         // Send event
         if ($user->isActive()) {
