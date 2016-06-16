@@ -130,6 +130,8 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string|null $key
+     *
      * @return TemplateObject[]
      */
     public function getObjects($key = null)
@@ -333,6 +335,22 @@ class Block extends AbstractChild
             return $object instanceof Object\ContentObjectInterface && $object->hasTag($tag);
         })->map(function (Object\ContentObjectInterface $object) {
             return $object->getContentLabel();
+        })->first();
+    }
+
+    /**
+     * @param string $tag
+     *
+     * @return mixed
+     */
+    public function getTaggedContentValue($tag)
+    {
+        $objects = new ArrayCollection($this->getObjects());
+
+        return $objects->filter(function (Object $object) use ($tag) {
+            return $object instanceof Object\ContentObjectInterface && $object->hasTag($tag);
+        })->map(function (Object\ContentObjectInterface $object) {
+            return $object->getContentValue();
         })->first();
     }
 
