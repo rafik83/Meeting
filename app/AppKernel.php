@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new League\Tactician\Bundle\TacticianBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
 
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),

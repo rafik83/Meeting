@@ -42,6 +42,7 @@ class PlanViewQueryHandler
             $planViewQuery->product->getDescription($planViewQuery->locale),
             $planViewQuery->product->getImage(),
             $planViewQuery->event->getMode(),
+            $planViewQuery->event->getCurrency(),
             $this->featuresViewQueryHandler->handle(
                 new FeaturesViewQuery(
                     $planViewQuery->product,

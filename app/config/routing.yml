@@ -26,9 +26,12 @@ vimeet_admin:
     requirements:
         _locale: fr|en
     defaults:
-        _locale: %locale%
+        _locale: '%locale%'
     host:     '%domain%'
 
 vimeet_event:
     resource: '@EventBundle/Resources/config/routing.yml'
     prefix:   /{_locale}
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"

@@ -1,4 +1,7 @@
 form:
+    vatMode:
+        et: HT
+        ati: TTC
     type_template:
         sheet:
             base: Template de Participation de base
@@ -134,12 +137,17 @@ form:
                 label: Langues
             fallback:
                 label: Langue par défaut
+            logo:
+                label: Logo
             country:
                 label: Pays
             mode:
                 label: Mode
             vat:
                 label: TVA
+            currency:
+                label: Devise
+                placeholder: -- Choisir une devise pour l'événement --
             textColor:
                 label: Couleur du texte
             leftColor:
@@ -1009,5 +1017,89 @@ form:
                 label: Enregistrer
     content_update_terms_of_sale:
         children:
+            submit:
+                label: Enregistrer
+    promotion_code_create:
+        children:
+            title:
+                label: Titre
+            code:
+                label: Code
+            validUntil:
+                label: Valide jusqu'au
+            stock:
+                label: Stock
+            submit:
+                label: Enregistrer
+            promotions:
+                label: Promotions
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        product:
+                            label: Produit
+                        type:
+                            label: Type
+                        value:
+                            label: Valeur
+    promotion_code_update:
+        children:
+            title:
+                label: Titre
+            code:
+                label: Code
+            validUntil:
+                label: Valide jusqu'au
+            stock:
+                label: Stock
+            submit:
+                label: Enregistrer
+            promotions:
+                label: Promotions
+                label_add: Ajouter
+                label_delete: Supprimer
+                prototype:
+                    children:
+                        product:
+                            label: Produit
+                        type:
+                            label: Type
+                        value:
+                            label: Valeur
+    promotion_code_translation:
+        children:
+            label:
+                label: Libellé
+            description:
+                label: Description
+    product_choice:
+        group_by:
+            type:
+                plan: Formules
+                participant: Participants
+                planning: Plannings
+                option: Options
+    generate_slot:
+        children:
+            recipes:
+                prototype:
+                    children:
+                        begin:
+                            label: De
+                        end:
+                            label: à
+                        interval:
+                            label: Interval (en minutes)
+                        duration:
+                            label: Durée (en minutes)
+                label_add: Ajouter une plage
+                label_delete: "&times;"
+            submit:
+                label: Enregistrer
+    schedule_config:
+        children:
+            scale:
+                label: Echelle (en minutes)
             submit:
                 label: Enregistrer

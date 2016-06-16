@@ -13,6 +13,10 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update');
 
 require('elao-form.js');
+require('select2');
+require('eonasdan-bootstrap-datetimepicker');
+require('moment/locale/fr');
+require('moment/locale/en-gb');
 
 // Init function
 
@@ -32,7 +36,7 @@ function init(target) {
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 
-    $('.clear-on-hidden-modal')
+    $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (e) {
             $(e.target).removeData('bs.modal').find('.modal-content').html($(e.target).data('placeholder'));
         })
@@ -40,6 +44,34 @@ function init(target) {
             $(e.target).removeData('bs.modal').find('.modal-content').empty();
         })
     ;
+
+    [].forEach.call(target.querySelectorAll('.select2'), function (element) {
+        $(element).select2({
+            language: {
+                noResults: function () {
+                    return $(element).data('no-results-label');
+                }
+            },
+            allowClear: true
+        });
+    });
+
+    $('[data-datatimepicker]').datetimepicker({
+        locale: 'fr',
+        sideBySide: true,
+        allowInputToggle: true,
+        icons: {
+            time: 'glyphicon glyphicon-time',
+            date: 'glyphicon glyphicon-calendar',
+            up: 'glyphicon glyphicon-chevron-up',
+            down: 'glyphicon glyphicon-chevron-down',
+            previous: 'glyphicon glyphicon-chevron-left',
+            next: 'glyphicon glyphicon-chevron-right',
+            today: 'glyphicon glyphicon-screenshot',
+            clear: 'glyphicon glyphicon-trash',
+            close: 'glyphicon glyphicon-remove'
+        }
+    });
 
     /* tablesort */
     function cleanNumber(i) {
@@ -88,6 +120,11 @@ function init(target) {
 
     // Disable click on <a href="#"></a>
     [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
+        element.addEventListener('click', function (event) { event.preventDefault(); });
+    });
+
+    // Disable click on active button
+    [].forEach.call(target.querySelectorAll('button.active'), function  (element) {
         element.addEventListener('click', function (event) { event.preventDefault(); });
     });
 
