@@ -10,22 +10,22 @@
 
 namespace Proximum\Vimeet\Domain\Package\Funnel;
 
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class FunnelFactory
 {
     /**
-     * @var CartRowRepositoryInterface
+     * @var CartManager
      */
-    private $cartRowRepository;
+    private $cartManager;
 
     /**
-     * @param CartRowRepositoryInterface $cartRowRepository
+     * @param CartManager $cartManager
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository)
+    public function __construct(CartManager $cartManager)
     {
-        $this->cartRowRepository = $cartRowRepository;
+        $this->cartManager = $cartManager;
     }
 
     /**
@@ -40,13 +40,13 @@ class FunnelFactory
         $package = $sheet->getPackage();
         $funnel  = new Funnel();
 
+        $cart = $this->cartManager->getCart($sheet);
+
         if ($package->isPlansEnabled()) {
             $step = new Step($this->getNextIndex($funnel), $package->getPlansLabel($locale), Step::TYPE_PLAN);
             $funnel->addStep($step);
 
-            $cartRow = $this->cartRowRepository->findCartRowPlanBySheet($sheet);
-
-            if (null !== $cartRow) {
+            if ($cart->getPlanRow()) {
                 $step->completed = true;
             }
         }

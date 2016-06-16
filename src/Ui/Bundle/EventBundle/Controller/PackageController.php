@@ -171,12 +171,13 @@ class PackageController extends Controller
      */
     private function assignProductsToCommand(Step\AbstractStep $command)
     {
-        $cartRowRepository = $this->get('repository.cart_row_repository');
+        $cartManager = $this->get('cart_manager');
+        $cart        = $cartManager->getCart($command->sheet);
 
         if ($command instanceof Step\SelectPlan) {
-            $selectedPlan = $cartRowRepository->findCartRowPlanBySheet($command->sheet);
+            $selectedPlan = $cart->getPlanRow();
 
-            if (null !== $selectedPlan) {
+            if ($selectedPlan) {
                 $command->plan = $selectedPlan->getProduct();
             }
 
@@ -184,9 +185,9 @@ class PackageController extends Controller
         }
 
         if ($command instanceof Step\SelectParticipantAndPlanning) {
-            $planningRow = $cartRowRepository->findCartRowPlanningBySheet($command->sheet);
+            $planningRow = $cart->getPlanningRow();
 
-            if (null !== $planningRow) {
+            if ($planningRow) {
                 $command->planningQuantity = $planningRow->getQuantity();
             }
 

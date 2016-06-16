@@ -11,21 +11,21 @@
 namespace Proximum\Vimeet\Application\Query\Package\Planning;
 
 use Proximum\Vimeet\Application\View\Package\PlanningView;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class PlanningViewQueryHandler
 {
     /**
-     * @var CartRowRepositoryInterface
+     * @var CartManager
      */
-    private $cartRowRepository;
+    private $cartManager;
 
     /**
-     * @param CartRowRepositoryInterface $cartRowRepository
+     * @param CartManager $cartManager
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository)
+    public function __construct(CartManager $cartManager)
     {
-        $this->cartRowRepository = $cartRowRepository;
+        $this->cartManager = $cartManager;
     }
 
     /**
@@ -35,12 +35,13 @@ class PlanningViewQueryHandler
      */
     public function handle(PlanningViewQuery $planningViewQuery)
     {
+        $cart            = $this->cartManager->getCart($planningViewQuery->sheet);
         $locale          = $planningViewQuery->locale;
         $planningProduct = $planningViewQuery->sheet->getPackage()->getPlanning();
-        $selectedPlan    = $this->cartRowRepository->findCartRowPlanBySheet($planningViewQuery->sheet);
+        $selectedPlan    = $cart->getPlanRow();
         $numberIncluded  = 0;
 
-        if (null !== $selectedPlan) {
+        if ($selectedPlan) {
             $planningProductIncluded = $selectedPlan->getProduct()->getIncludedPlanningProduct();
             
             if ($planningProductIncluded) {

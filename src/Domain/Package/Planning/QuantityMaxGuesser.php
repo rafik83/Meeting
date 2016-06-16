@@ -10,22 +10,22 @@
 
 namespace Proximum\Vimeet\Domain\Package\Planning;
 
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class QuantityMaxGuesser
 {
     /**
-     * @var CartRowRepositoryInterface
+     * @var CartManager
      */
-    private $cartRowRepository;
+    private $cartManager;
 
     /**
-     * @param CartRowRepositoryInterface $cartRowRepository
+     * @param CartManager $cartManager
      */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository)
+    public function __construct(CartManager $cartManager)
     {
-        $this->cartRowRepository = $cartRowRepository;
+        $this->cartManager = $cartManager;
     }
 
     /**
@@ -39,11 +39,16 @@ class QuantityMaxGuesser
             return 0;
         }
 
-        $planningQuantityMax = $sheet->getPackage()->getPlanning()->getQuantityMax();
+        $planningQuantityMax = 0;
 
-        $selectedPlan = $this->cartRowRepository->findCartRowPlanBySheet($sheet);
+        if ($sheet->getPackage()->getPlanning()) {
+            $planningQuantityMax = $sheet->getPackage()->getPlanning()->getQuantityMax();
+        }
 
-        if (null === $selectedPlan) {
+        $cart         = $this->cartManager->getCart($sheet);
+        $selectedPlan = $cart->getPlanRow();
+
+        if (!$selectedPlan) {
             return $planningQuantityMax;
         }
 

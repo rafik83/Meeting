@@ -11,8 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
-use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class ParticipantsViewQueryHandler
 {
@@ -22,20 +21,17 @@ class ParticipantsViewQueryHandler
     private $participantViewQueryHandler;
 
     /**
-     * @var CartRowRepositoryInterface
+     * @var CartManager
      */
-    private $cartRowRepository;
+    private $cartManager;
 
     /**
      * @param ParticipantViewQueryHandler $participantViewQueryHandler
-     * @param CartRowRepositoryInterface  $cartRowRepository
+     * @param CartManager $cartManager
      */
-    public function __construct(
-        ParticipantViewQueryHandler $participantViewQueryHandler,
-        CartRowRepositoryInterface $cartRowRepository
-    ) {
+    public function __construct(ParticipantViewQueryHandler $participantViewQueryHandler, CartManager $cartManager) {
         $this->participantViewQueryHandler = $participantViewQueryHandler;
-        $this->cartRowRepository           = $cartRowRepository;
+        $this->cartManager                 = $cartManager;
     }
 
     /**
@@ -44,15 +40,16 @@ class ParticipantsViewQueryHandler
      */
     public function handle(ParticipantsViewQuery $participantsViewQuery)
     {
+        $cart               = $this->cartManager->getCart($participantsViewQuery->sheet);
         $locale             = $participantsViewQuery->locale;
         $participantProduct = $participantsViewQuery->sheet->getPackage()->getParticipant();
-        $selectedPlan       = $this->cartRowRepository->findCartRowPlanBySheet($participantsViewQuery->sheet);
+        $selectedPlan       = $cart->getPlanRow();
         $numberIncluded     = 0;
 
-        if (null !== $selectedPlan) {
+        if ($selectedPlan) {
             $participantProductIncluded = $selectedPlan->getProduct()->getIncludedParticipantProduct();
 
-            if (false !== $participantProductIncluded && $participantProductIncluded instanceof ProductIncluded) {
+            if ($participantProductIncluded) {
                 $numberIncluded = $participantProductIncluded->getQuantity();
             }
         }
