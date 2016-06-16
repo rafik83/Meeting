@@ -912,6 +912,8 @@ form:
                             label: Texte optionnel sous le prix
             subjectedToValidation:
                 label: Ce produit est soumis à validation
+            subjectedToValidationHelp:
+                label: Message si soumis à validation
     product_create_plan:
         children:
             name:

@@ -32,6 +32,9 @@ Proximum\Vimeet\Domain\Model\Product:
             nullable: true
         subjectedToValidation:
             type: boolean
+        subjectedToValidationHelp:
+            type: string
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\ProductTranslation

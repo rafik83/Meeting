@@ -71,6 +71,11 @@ class CreateOption
     public $subjectedToValidation;
 
     /**
+     * @var string
+     */
+    public $subjectedToValidationHelp;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
