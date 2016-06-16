@@ -585,7 +585,7 @@ admin:
                 end: à
                 duration: Durée
         slot:
-            lock: Blocker
-            unlock: Déblocker
-            locked: Blocké
-            unlocked: Déblocké
+            lock: Bloquer
+            unlock: Débloquer
+            locked: Bloqué
+            unlocked: Débloqué
