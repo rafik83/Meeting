@@ -1123,6 +1123,7 @@ services:
         arguments:
             - '@query.package.plans_view_query_handler'
             - '@query.package.participant_and_planning_view_query_handler'
+            - '@query.package.groups_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PackageViewQuery }
     query.package.participant_and_planning_view_query_handler:
@@ -1151,6 +1152,22 @@ services:
             - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
+    query.package.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQueryHandler
+        arguments:
+            - '@query.package.group_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQuery }
+    query.package.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Option\GroupViewQueryHandler
+        arguments:
+            - '@query.package.option_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\GroupViewQuery }
+    query.package.option_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
 
     #
     # Elastic Transformer

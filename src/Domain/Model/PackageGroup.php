@@ -182,4 +182,34 @@ class PackageGroup
 
         return $this;
     }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getLabel($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getLabel() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    protected function hasTranslation($locale)
+    {
+        return $this->translations->containsKey($locale);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return PackageGroupTranslation
+     */
+    protected function getTranslation($locale)
+    {
+        return $this->translations->get($locale);
+    }
 }

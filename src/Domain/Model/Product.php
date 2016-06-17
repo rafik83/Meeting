@@ -280,6 +280,16 @@ class Product
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getAddon($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -460,6 +470,14 @@ class Product
     public function getVatMode()
     {
         return $this->getEvent()->getMode();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOutOfStock()
+    {
+        return $this->getAvailabilityMax() && !$this->getAvailabilityCurrent();
     }
 
     /**

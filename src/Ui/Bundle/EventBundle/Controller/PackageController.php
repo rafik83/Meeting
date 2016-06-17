@@ -74,11 +74,6 @@ class PackageController extends Controller
 
         $currentStep = $funnel->getStep($step);
 
-        if (FunnelStep::TYPE_OPTIONS === $currentStep->type) {
-            // Options step not implemented, redirect to sheet
-            return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
-        }
-
         $uncompletedStep = $funnel->getCurrentUncompletedStep();
 
         if ($currentStep !== $uncompletedStep
@@ -106,7 +101,16 @@ class PackageController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
 
-            return $this->redirectToRoute('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step+1]);
+            $nextStep = $funnel->getNextStep($step);
+
+            if ($nextStep) {
+                return $this->redirectToRoute(
+                    'event_package_step',
+                    ['sheet' => $sheet->getId(), 'step' => $nextStep->index]
+                );
+            }
+
+            return $this->redirectToRoute('event_sheet');
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(
