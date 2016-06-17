@@ -1,9 +1,23 @@
 
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
-    <header>
-        <h2>{{ item.label(locale, fallback) }}</h2>
-    </header>
-    <div class="section__content">
-        <p>{{ taggedData[item.tag]|join(', ')|default }}</p>
-    </div>
+    {% set label = item.label(locale, fallback) %}
+    {% set value = taggedData[item.tag]|join(', ')|default %}
+
+    {% if value is not empty %}
+        {% if value is url %}
+            <p>
+                <a href="{{ value }}" class="btn btn-primary"target="_blank">
+                    <i class="icon-Desktop"></i>
+                    {{ label }}
+                </a>
+            </p>
+        {% else %}
+            <header>
+                <h2>{{ label }}</h2>
+            </header>
+            <div class="section__content">
+                <p>{{ value }}</p>
+            </div>
+        {% endif %}
+    {% endif %}
 </div>
