@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode;
 
 use Proximum\Vimeet\Application\Command\PromotionCode\Update;
-use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends PromotionCodeType

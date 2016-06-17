@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Billing\UpdateInfo;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing\UpdateInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,6 +44,8 @@ class BillingController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.billing.update_info.success');
+
+            return $this->redirectToRoute('event_billing_info');
         }
 
         return $this->render('EventBundle:Billing:info.html.twig', [
