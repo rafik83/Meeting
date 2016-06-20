@@ -21,6 +21,8 @@ account:
         title: Modifier mon compte
         profile:
             title: Profil
+        company:
+            title: Société / Organisme
         avatar:
             title: Photo
     update_email:
