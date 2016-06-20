@@ -110,19 +110,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                             children:
                                 -
-                                    848e283e:
-                                        component: "object"
-                                        type: "carousel"
-                                        config:
-                                            style: "style-1"
-                                            label:
-                                                fr: "Slideshow"
-                                            placeholder:
-                                                fr: ""
-                                            help:
-                                                fr: ""
-                                            required: false
-                                -
                                     1adc1873:
                                         component: "object"
                                         type: "collection"
@@ -136,6 +123,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: ""
                                             required: true
                                             default: "1"
+                                -
                                     46663c1d:
                                         component: "object"
                                         type: "collection"
