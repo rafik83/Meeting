@@ -1,10 +1,17 @@
-<tr class="row-quantity {{ product.numberIncluded > 0 or quantityForm.vars.value > 0 ? 'selected-line' : '' }}">
+<tr class="row-quantity {{ product.included > 0 or quantityForm is defined and quantityForm.vars.value > 0 ? 'selected-line' : '' }}">
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
-                {{ product.price }}
-                <sup>€ {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
+                {{ 'package.product.price'|trans({
+                    '%price%': product.unitPrice,
+                    '%currency%': product.currency|currency_symbol,
+                    '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
+                })|html }}
             </span>
+            <p class="product-addon">{{ product.addon }}</p>
+            {% if product.availabilityMax %}
+                <span class="product-limite">Disponible <br>{{ product.availabilityCurrent }} sur {{ product.availabilityMax }}</span>
+            {% endif %}
         </div>
     </td>
     <td class="col-md-6">
@@ -12,32 +19,38 @@
         <p>{{ product.description }}</p>
     </td>
     <td class="col-md-2">
-        {% if product.numberIncluded %}
-            <h2 class="text-center">{{ product.numberIncluded }}</h2>
+        {% if product.included %}
+            <h2 class="text-center">{{ product.included }}</h2>
             <hr>
         {% endif %}
 
-        {{ form_widget(quantityForm, {attr: {
-            'class': 'qty',
-            'data-selected-line-class': 'selected-line',
-            'data-unit-price': product.price,
-            'data-included': product.numberIncluded
-        }}) }}
+        {% if product.isOutOfStock %}
+            <h3 class="out-of-stock text-center">Epuisé</h3>
+        {% elseif quantityForm is defined %}
+            {{ form_widget(quantityForm, {attr: {
+                'class': 'qty',
+                'data-selected-line-class': 'selected-line',
+                'data-unit-price': product.unitPrice,
+                'data-included': product.included
+            }}) }}
 
-        <div class="message-error text-danger text-center">
-            {{ form_errors(quantityForm) }}
-        </div>
+            <div class="message-error text-danger text-center">
+                {{ form_errors(quantityForm) }}
+            </div>
+        {% endif %}
     </td>
     <td class="col-md-2">
         <div class="product">
-            {% if product.numberIncluded %}
+            {% if product.included %}
                 <h2 class="text-center">{{ 'package.options.included'|trans }}</h2>
                 <hr>
             {% endif %}
 
             <span class="product-price text-center">
-                <span class="product-total-price">{{ quantityForm.vars.value * product.price }}</span>
-                <sup>€ {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
+                {% if quantityForm is defined %}
+                    <span class="product-total-price">{{ quantityForm.vars.value * product.unitPrice }}</span>
+                    <sup>{{ product.currency|currency_symbol }} {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
+                {% endif %}
             </span>
         </div>
     </td>

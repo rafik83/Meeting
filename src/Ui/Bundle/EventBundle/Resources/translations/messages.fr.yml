@@ -93,6 +93,8 @@ package:
         validate: Valider
     options:
         included: inclus
+    product:
+        price: "%price% <sup>%currency% %vatMode%</sup>"
 
 billing_info:
     title: Info de facturation

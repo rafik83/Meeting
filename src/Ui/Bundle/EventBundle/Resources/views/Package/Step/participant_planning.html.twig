@@ -1,5 +1,9 @@
 {% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
 
+<div class="content-header">
+    <h2>{{ 'package.select'|trans }} {{ view.currentStep.title }}</h2>
+</div>
+
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
