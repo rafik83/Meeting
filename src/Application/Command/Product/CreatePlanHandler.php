@@ -53,7 +53,7 @@ class CreatePlanHandler
         );
 
         foreach ($createPlan->translations as $locale => $translation) {
-            $product->translate($locale, $translation['title'], $translation['heading'], $translation['description'], $translation['addon']);
+            $product->translate($locale, $translation['title'], $translation['heading'], $translation['description'], $translation['addon'], null);
         }
 
         foreach ($createPlan->productIncluded as $productIncluded) {

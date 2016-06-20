@@ -41,7 +41,7 @@ class CreatePlanningHandler
         );
 
         foreach ($createPlanning->translations as $locale => $translation) {
-            $product->translate($locale, $translation['title'], null, null, null);
+            $product->translate($locale, $translation['title'], null, null, null, null);
         }
 
         $this->productRepository->add($product);
