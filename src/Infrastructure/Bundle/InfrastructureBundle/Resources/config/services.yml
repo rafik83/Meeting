@@ -10,6 +10,46 @@ services:
             - { name: kernel.event_listener, event: kernel.terminate, method: process }
 
     #
+    # Subscriber
+    #
+    vimeet_app.vimeet.application.event.notification_on_meeting_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnMeetingEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    vimeet_app.vimeet.application.event.notification_on_message_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnMessageEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    vimeet_app.vimeet.application.event.notification_on_request_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnRequestEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    vimeet_app.vimeet.application.event.notification_on_sheet_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnSheetEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    #
     # Repositories
     #
     vimeet_infrastructure.repository.event_repository:
