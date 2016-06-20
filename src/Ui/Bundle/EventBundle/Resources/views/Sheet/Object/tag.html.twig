@@ -1,7 +1,11 @@
 
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
     {% set label = item.label(locale, fallback) %}
-    {% set value = taggedData[item.tag]|join(', ')|default %}
+    {% if taggedData[item.tag] is defined %}
+        {% set value = taggedData[item.tag]|join(', ')|default %}
+    {% else %}
+        {% set value = [] %}
+    {% endif %}
 
     {% if value is not empty %}
         {% if value is url %}
