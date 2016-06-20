@@ -770,6 +770,12 @@ services:
             - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
+    command.package.step.select_options_handler:
+        class: Proximum\Vimeet\Application\Command\Package\Step\SelectOptionsHandler
+        arguments:
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateInfoHandler
         arguments:

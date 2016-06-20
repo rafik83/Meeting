@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Package\Step;
+use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -139,7 +141,7 @@ class PackageController extends Controller
         $commands = [
             FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
             FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\SelectParticipantAndPlanning::class,
-            FunnelStep::TYPE_OPTIONS              => Step\Options::class,
+            FunnelStep::TYPE_OPTIONS              => Step\SelectOptions::class,
         ];
 
         if (isset($commands[$type])) {
@@ -196,6 +198,34 @@ class PackageController extends Controller
             }
 
             return;
+        }
+
+        if ($command instanceof Step\SelectOptions) {
+            /** @var CartRow[] $optionRows */
+            $optionRows = array_combine(
+                array_map(
+                    function (CartRow $cartRow) {
+                        return $cartRow->getProduct()->getId();
+                    },
+                    $cart->getOptionsRow()->toArray()
+                ),
+                $cart->getOptionsRow()->toArray()
+            );
+
+            $availableOptionsId = array_map(
+                function (Product $product) {
+                    return $product->getId();
+                },
+                $command->sheet->getPackage()->getAvailablesOptions()
+            );
+
+            $options = [];
+
+            foreach ($availableOptionsId as $optionId) {
+                $options[$optionId] = isset($optionRows[$optionId]) ? $optionRows[$optionId]->getQuantity() : 0;
+            }
+
+            $command->options = $options;
         }
     }
 }

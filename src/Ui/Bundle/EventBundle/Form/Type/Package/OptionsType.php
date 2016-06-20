@@ -10,7 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
-use Proximum\Vimeet\Application\Command\Package\Step\Options;
+use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,23 @@ class OptionsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Sheet $sheet */
+        $sheet = $options['sheet'];
+
+        $products = $sheet->getPackage()->getAvailablesOptions();
+        
+        foreach ($products as $product) {
+            $builder->add(
+                $product->getId(),
+                QuantityType::class,
+                [
+                    'label'      => false,
+                    'max'        => $product->getQuantityMax(),
+                    'minMessage' => 'package.product.quantityMin',
+                    'maxMessage' => 'package.product.quantityMax',
+                ]
+            );
+        }
     }
 
     /**
@@ -34,7 +52,7 @@ class OptionsType extends AbstractType
         $optionsResolver->addAllowedTypes('sheet', Sheet::class);
         $optionsResolver->setDefaults(
             [
-                'data_class' => Options::class,
+                'data_class' => SelectOptions::class,
             ]
         );
     }

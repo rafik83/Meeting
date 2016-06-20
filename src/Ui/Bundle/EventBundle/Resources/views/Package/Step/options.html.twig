@@ -1,4 +1,7 @@
-<form class="form--table--head">
+{% form_theme form 'EventBundle:Common:form_theme.html.twig' %}
+
+{{ form_start(form, {attr: {class: 'form--table--head'}}) }}
+    {{ form_errors(form) }}
     {% for group in view.products.groups %}
         <div class="content-header clearfix">
             <h2 class="pull-left">Sélectionner vos options</h2>
@@ -19,7 +22,8 @@
                 <tbody>
                     {% for option in group.options %}
                         {{ include('EventBundle:Package/Step:product_row.html.twig', {
-                            product: option
+                            product: option,
+                            quantityForm: form.children[option.id] is defined ? form.children[option.id] : null
                         }) }}
                     {% endfor %}
                 </tbody>
@@ -32,4 +36,4 @@
             <button type="submit" class="btn btn-primary pull-right"><i class="icon-Valider_3"></i>Valider vos options</button>
         </div>
     </div>
-</form>
+{{ form_end(form) }}

@@ -132,6 +132,16 @@ class Cart
     }
 
     /**
+     * @return ArrayCollection CartRow[]
+     */
+    public function getOptionsRow()
+    {
+        return $this->rows->filter(function (CartRow $cartRow) {
+            return $cartRow->getProduct()->isOption();
+        });
+    }
+
+    /**
      * @param Product $product
      *
      * @return bool

@@ -95,6 +95,11 @@ package:
         included: inclus
     product:
         price: "%price% <sup>%currency% %vatMode%</sup>"
-
+        unitPrice: Prix unitaire
+        label: Intitulé & descriptions
+        quantity: Quantité
+        total: Total
+        quantityMax: Quantité maximum atteinte
+        quantityMin: Quantité minimum atteinte
 billing_info:
     title: Info de facturation
