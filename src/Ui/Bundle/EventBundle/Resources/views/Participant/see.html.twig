@@ -7,22 +7,43 @@
         <div class="profile__box">
             <section class="main">
                 <header>
-                    <h1>{{ 'account.profile.profile'|trans }}</h1>
+                    <h1></span>{{ 'account.profile.profile'|trans }}</h1>
                 </header>
                 <div class="main__content">
                     <div class="preview">
                         <div class="object--participant">
                             <div class="list list--users">
-                                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': card}) }}
+                                <div class="user clearfix">
+                                    <div class="user__avatar">
+                                        <span class="bullet"></span>
+                                        <div class="avatar">
+                                            <p>CM</p>
+                                        </div>
+                                    </div>
+                                    <div class="user__infos">
+                                        <p class="name">Emmanuelle ANDROMACAS</p>
+                                        <p class="job">Responsable Innovation</p>
+                                        <p class="edit"><a href="">Modifier la photo</a></p>
+                                    </div>
+                                </div>
+                                {# {{ include('EventBundle:Participant:preview.html.twig', { 'participant': card}) }} #}
                             </div>
+                            {#
                             {% for key, avatar in avatarTemplate %}
                                 <a href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">
                                     {{ 'account.profile.updateAvatar'|trans }}
                                 </a>
                             {% endfor %}
+                            #}
                         </div>
-                        <div>
-                            <p>{{ 'account.profile.contactInformation'|trans }}:</p>
+                        <div class="coordinates">
+                            <strong>{{ 'account.profile.contactInformation'|trans }} :</strong>
+                            <ul>
+                                <li class="phone"><span class="icon-Appeler"></span> +33909090909</li>
+                                <li class="smartphone"><span class="icon-Smartphone"></span> +33606060606</li>
+                                <li class="email"><span class="icon-Message_1"></span> contact@elao.com</li>
+                            </ul>
+                            {#
                             <ul>
                             {% for object in profileTemplate %}
                                 <li>
@@ -31,6 +52,7 @@
                             {% endfor %}
                                 <li>{{ participant.user.getEmail() }}</li>
                             </ul>
+                            #}
                         </div>
                         <div class="validation">
                             <a href="{{ path('event_account_participant_profile', {sheet: sheet.id, participant: participant.id}) }}">
@@ -44,10 +66,10 @@
                 {% if participant.user == app.user %}
                 <ul>
                     <li>
-                        <a href="{{ path('event_change_password') }}">{{ 'account.change_password.title'|trans }}</a>
+                        <a href="{{ path('event_change_password') }}"><span class="icon-Verouiller_1"></span> {{ 'account.change_password.title'|trans }}</a>
                     </li>
                     <li>
-                        <a href="{{ path('event_account_change_mail') }}">{{ 'account.update_email.title'|trans }}</a>
+                        <a href="{{ path('event_account_change_mail') }}"><span class="icon-Message_1"></span> {{ 'account.update_email.title'|trans }}</a>
                     </li>
                 </ul>
                 {% endif %}
@@ -61,12 +83,19 @@
                 <div class="main__content">
                     <div class="preview">
                         <div>
-                            <ul>
+                            <ul class="company">
                                 {% for object in companyTemplate %}
                                     <li>
-                                        {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
+                                        <strong>{{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}</strong>
                                     </li>
                                 {% endfor %}
+                                <li>Laboratoire public</li>
+                                <li class="url"><a href="">http://www.onera.fr</a></li>
+                            </ul>
+                            <ul class="adress">
+                                <li>34 Rue Jean Broquin</li>
+                                <li>69006 LYON</li>
+                                <li>FRANCE</li>
                             </ul>
                         </div>
                     </div>
