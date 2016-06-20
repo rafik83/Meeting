@@ -1063,7 +1063,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_3_asddays'
         title: 'Option A'
-        heading: 'Titre option A'
+        heading: ''
         description: 'Description option A'
         addon: 'Au lieu de 999€'
         locale: 'fr'
@@ -1079,7 +1079,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_4_asddays'
         title: 'Option B'
-        heading: 'Titre option B'
+        heading: ''
         description: 'Description option B'
         addon: ''
         locale: 'fr'
@@ -1087,7 +1087,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_4_asddays'
         title: 'Option B'
-        heading: 'Header Option B'
+        heading: ''
         description: 'Description Option B'
         addon: ''
         locale: 'en'
@@ -1095,7 +1095,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_5_asddays'
         title: 'Option C'
-        heading: 'Titre option C'
+        heading: ''
         description: 'Description option C'
         addon: ''
         locale: 'fr'
@@ -1103,7 +1103,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_5_asddays'
         title: 'Option C'
-        heading: 'Header Option C'
+        heading: ''
         description: 'Description Option C'
         addon: ''
         locale: 'en'
@@ -1111,7 +1111,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_6_asddays'
         title: 'Option D'
-        heading: 'Titre option D'
+        heading: ''
         description: 'Description option D'
         addon: ''
         locale: 'fr'
@@ -1119,7 +1119,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_6_asddays'
         title: 'Option D'
-        heading: 'Header Option D'
+        heading: ''
         description: 'Description Option D'
         addon: ''
         locale: 'en'
@@ -1127,7 +1127,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_7_asddays'
         title: 'Option E'
-        heading: 'Titre option E'
+        heading: ''
         description: 'Description option E'
         addon: ''
         locale: 'fr'
@@ -1135,7 +1135,7 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_7_asddays'
         title: 'Option E'
-        heading: 'Header Option E'
+        heading: ''
         description: 'Description Option E'
         addon: ''
         locale: 'en'
