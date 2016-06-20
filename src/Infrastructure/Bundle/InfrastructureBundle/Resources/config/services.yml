@@ -12,40 +12,32 @@ services:
     #
     # Subscriber
     #
-    vimeet_app.vimeet.application.event.notification_on_meeting_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnMeetingEventSubscriber
+    notification_subscriber:
+        abstract:  true
         arguments:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.router'
+
+    vimeet_app.vimeet.application.event.notification_on_meeting_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnMeetingEventSubscriber
+        parent: notification_subscriber
         tags:
             - { name: 'kernel.event_subscriber' }
     vimeet_app.vimeet.application.event.notification_on_message_event_subscriber:
         class: Proximum\Vimeet\Application\Event\NotificationOnMessageEventSubscriber
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
+        parent: notification_subscriber
         tags:
             - { name: 'kernel.event_subscriber' }
     vimeet_app.vimeet.application.event.notification_on_request_event_subscriber:
         class: Proximum\Vimeet\Application\Event\NotificationOnRequestEventSubscriber
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
+        parent: notification_subscriber
         tags:
             - { name: 'kernel.event_subscriber' }
     vimeet_app.vimeet.application.event.notification_on_sheet_event_subscriber:
         class: Proximum\Vimeet\Application\Event\NotificationOnSheetEventSubscriber
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
+        parent: notification_subscriber
         tags:
             - { name: 'kernel.event_subscriber' }
 
