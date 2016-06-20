@@ -3,6 +3,7 @@
   margin-bottom: 30px;
 
   footer {
+    margin-top: 10px;
     line-height: 22px;
 
     i[class^='icon-'] {
@@ -12,7 +13,9 @@
       color: $color-highlighted;
     }
 
-    a { text-decoration: underline; }
+    a {
+      text-decoration: underline;
+    }
   }
 
   &.row {
@@ -26,9 +29,9 @@
   }
 }
 
-  .section__content {
-    img { width: 100%; }
-  }
+.section__content {
+  img { width: 100%; }
+}
 
 .section-before {
   content: ' ';
