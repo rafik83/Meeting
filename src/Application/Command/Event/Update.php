@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Model;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Update
 {
@@ -23,6 +24,11 @@ class Update
      * @var string
      */
     public $title;
+
+    /**
+     * @var UploadedFile
+     */
+    public $logo;
 
     /**
      * @var array
@@ -57,6 +63,11 @@ class Update
     /**
      * @var string
      */
+    public $currency;
+
+    /**
+     * @var string
+     */
     public $leftColor;
 
     /**
@@ -82,6 +93,7 @@ class Update
         $this->mode         = $event->getMode();
         $this->country      = $event->getCountry();
         $this->vat          = $event->getVat();
+        $this->currency     = $event->getCurrency();
         $this->leftColor    = $event->getConfiguration()->getLeftColor();
         $this->rightColor   = $event->getConfiguration()->getRightColor();
         $this->textColor    = $event->getConfiguration()->getTextColor();

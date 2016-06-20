@@ -32,7 +32,7 @@ class GroupCollectionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setDefaults([
             'allow_add'      => true,
             'allow_delete'   => true,
@@ -46,8 +46,9 @@ class GroupCollectionType extends AbstractType
                     ],
                     'item_type'    => GroupType::class,
                     'item_options' => [
-                        'label' => false,
-                        'event' => $options['event'],
+                        'label'  => false,
+                        'event'  => $options['event'],
+                        'locale' => $options['locale'],
                     ],
                     'error_bubbling' => false,
                     'error_mapping' => [

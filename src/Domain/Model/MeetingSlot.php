@@ -33,17 +33,24 @@ class MeetingSlot
     private $end;
 
     /**
+     * @var boolean
+     */
+    private $locked = false;
+
+    /**
      * MeetingSlot constructor.
      *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param bool               $locked
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end)
+    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, $locked = false)
     {
-        $this->event    = $event;
-        $this->begin    = $begin;
-        $this->end      = $end;
+        $this->event   = $event;
+        $this->begin   = $begin;
+        $this->end     = $end;
+        $this->locked  = $locked;
     }
 
     /**
@@ -65,14 +72,6 @@ class MeetingSlot
     }
 
     /**
-     * @param Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
      * Get begin.
      *
      * @return \DateTimeInterface
@@ -90,5 +89,43 @@ class MeetingSlot
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return boolean
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @return MeetingSlot
+     */
+    public function lock()
+    {
+        $this->locked = true;
+
+        return $this;
+    }
+
+    /**
+     * @return MeetingSlot
+     */
+    public function unlock()
+    {
+        $this->locked = false;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    public function duration()
+    {
+        return $this->end->diff($this->begin)->format('%i min');
     }
 }

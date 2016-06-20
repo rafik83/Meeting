@@ -1,0 +1,7 @@
+Proximum\Vimeet\Application\Command\MeetingSlot\Generate:
+    properties:
+        event:
+            - NotBlank: ~
+        recipes:
+            - Count: { min: 1 }
+            - Valid: ~

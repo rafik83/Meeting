@@ -1,0 +1,85 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type;
+
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\DateTimeToStringTransformer;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class DateTimePickerType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addViewTransformer(new DateTimeToStringTransformer(
+             $options['format'],
+             $options['model_timezone'],
+             $options['view_timezone']
+         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['attr']['data-datatimepicker'] = $this->fixLocale($options['locale']);
+        $view->vars['attr']['autocomplete']        = 'off';
+        $view->vars['group_attr']['style']         = 'position: relative;';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'locale'         => 'fr',
+            'format'         => 'd/m/Y H:i',
+            'model_timezone' => date_default_timezone_get(),
+            'view_timezone'  => date_default_timezone_get(),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return TextType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'datetimepicker';
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return string
+     */
+    private function fixLocale($locale)
+    {
+        $mapping = ['fr' => 'fr', 'en' => 'en-gb'];
+
+        return isset($mapping[$locale]) ? $mapping[$locale] : $mapping['fr'];
+    }
+}

@@ -68,7 +68,8 @@ class CreatePlanType extends AbstractType
                 'allow_delete'  => true,
                 'entry_options' => [
                     'label' => false,
-                    'event' => $options['event'],
+                    'event'  => $options['event'],
+                    'locale' => $options['locale'],
                 ],
                 'attr' => [
                     'data-shared-choices-collection' => 'products',
@@ -91,7 +92,7 @@ class CreatePlanType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => CreatePlan::class,

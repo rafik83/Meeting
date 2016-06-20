@@ -24,8 +24,18 @@
     </a>
 </li>
 <li>
+    <a href="{{ path('admin_promotion_code_list', { 'event': event.id }) }}">
+        {{ 'admin.promotion_code.link'|trans }}
+    </a>
+</li>
+<li>
     <a href="{{ path('admin_sheet', { 'event': event.id }) }}">
         {{ 'admin.sheet.link'|trans }}
+    </a>
+</li>
+<li>
+    <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}">
+        {{ 'admin.schedule.link'|trans }}
     </a>
 </li>
 <li class="dropdown-submenu">

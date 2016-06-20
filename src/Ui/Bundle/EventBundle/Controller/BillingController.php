@@ -44,6 +44,8 @@ class BillingController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.billing.update_info.success');
+
+            return $this->redirectToRoute('event_billing_info');
         }
 
         return $this->render('EventBundle:Billing:info.html.twig', [

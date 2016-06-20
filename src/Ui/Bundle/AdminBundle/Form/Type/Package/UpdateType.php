@@ -32,16 +32,19 @@ class UpdateType extends AbstractType
                 'required' => true,
             ])
             ->add('plans', PlansType::class, [
-                'event' => $options['event'],
-                'label' => false,
+                'event'  => $options['event'],
+                'locale' => $options['locale'],
+                'label'  => false,
             ])
             ->add('participantAndPlanning', ParticipantAndPlanningType::class, [
-                'event' => $options['event'],
-                'label' => false,
+                'event'  => $options['event'],
+                'locale' => $options['locale'],
+                'label'  => false,
             ])
             ->add('options', OptionsType::class, [
-                'event' => $options['event'],
-                'label' => false,
+                'event'  => $options['event'],
+                'locale' => $options['locale'],
+                'label'  => false,
             ])
         ;
     }
@@ -51,7 +54,7 @@ class UpdateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Update::class,

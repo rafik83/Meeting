@@ -167,6 +167,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.promotion_code_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -216,11 +220,12 @@ services:
             - '@components.participant.participant_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Delete }
-    vimeet_infrastructure.vimeet.application.command.update_handler:
+    command.event.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@guideline.generator'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
@@ -775,6 +780,45 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
+    command.promotion_code.create_handler:
+        class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
+        arguments:
+            - '@repository.promotion_code_repository'
+            - '@promotion.unique_code_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Create }
+    command.promotion_code.update_handler:
+        class: Proximum\Vimeet\Application\Command\PromotionCode\UpdateHandler
+        arguments:
+            - '@repository.promotion_code_repository'
+            - '@promotion.unique_code_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
+    command.meeting_slot.generate_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\GenerateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.meeting.slot.slot_generator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Generate }
+    command.schedule.configure_handler:
+        class: Proximum\Vimeet\Application\Command\Schedule\ConfigureHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Schedule\Configure }
+    application.command.meeting_slot.lock_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
+    application.command.meeting_slot.unlock_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
 
     #
     # Security
@@ -1156,3 +1200,24 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@repository.cart_row_repository'
+
+    #
+    # Promotion
+    #
+    promotion.faker_code_generator:
+        class: Proximum\Vimeet\Domain\Promotion\Generator\FakerCodeGenerator
+    promotion.unique_code_checker:
+        class: Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker
+        arguments:
+            - '@repository.promotion_code_repository'
+    promotion.generator.unique_code_generator:
+        class: Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator
+        arguments:
+            - '@promotion.faker_code_generator'
+            - '@promotion.unique_code_checker'
+
+    #
+    # MeetingSlot
+    #
+    domain.meeting.slot.slot_generator:
+        class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator

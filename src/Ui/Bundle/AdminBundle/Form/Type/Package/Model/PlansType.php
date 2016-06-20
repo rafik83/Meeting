@@ -38,6 +38,7 @@ class PlansType extends AbstractType
             ])
             ->add('plans', ProductCollectionType::class, [
                 'event'            => $options['event'],
+                'locale'           => $options['locale'],
                 'product_types'    => [Product::TYPE_PLAN],
                 'collection_group' => 'plans',
                 'error_bubbling'   => false,
@@ -50,7 +51,7 @@ class PlansType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Plans::class,

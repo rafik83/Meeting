@@ -176,6 +176,7 @@ elao_php_extensions:
   - curl
   # App
   - mysqlnd
+  - imagick
 
 elao_php_configs_exclusive: true
 elao_php_configs:
