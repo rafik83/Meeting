@@ -144,19 +144,4 @@ class Message
     {
         return $this->meeting;
     }
-
-    /**
-     * @return Participant[]
-     */
-    public function getToParticipantsAndOwner()
-    {
-        $toSheetOwner   = $this->getTo()->getParticipantOwner();
-        $toParticipants = $this->getTo()->getParticipants()->toArray();
-
-        if (!in_array($toSheetOwner, $toParticipants)) {
-            array_push($toParticipants, $toSheetOwner);
-        }
-
-        return $toParticipants;
-    }
 }

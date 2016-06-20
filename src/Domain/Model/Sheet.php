@@ -527,4 +527,23 @@ class Sheet implements TraceableInterface
 
         return $this;
     }
+
+    /**
+     * Get participants users + the owner
+     *
+     * @return User[]
+     */
+    public function getUsers()
+    {
+        /** @var ArrayCollection $users */
+        $users = $this->participants->map(function (Participant $participant) {
+            return $participant->getUser();
+        });
+
+        if (!$users->contains($this->owner)) {
+            $users[] = $this->owner;
+        }
+
+        return $users->toArray();
+    }
 }
