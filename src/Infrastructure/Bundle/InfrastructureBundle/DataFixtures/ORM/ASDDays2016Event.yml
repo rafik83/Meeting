@@ -889,6 +889,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
         packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+    sheet_asddays_empty:
+        __construct: false
+        type: '@event_asddays_2016_type_fournisseur'
+        event: '@event_asddays_2016'
+        data: []
+        registrationData:
+            3ad4b72f: { text: "Elao" }
+        packageData: []
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_asddays_1:
@@ -901,11 +911,27 @@ Proximum\Vimeet\Domain\Model\Participant:
             541f84d4: { text: "John" }
             838197c7: { text: "DOE" }
             1efb9cbb: { telephone: "+33909090909" }
+    participant_asddays_2:
+        __construct: false
+        user: "@user_asddays_2"
+        sheet: "@sheet_asddays_empty"
+        owner: true
+        active: true
+        data:
+            541f84d4: { text: "John" }
+            838197c7: { text: "DOE" }
+            1efb9cbb: { telephone: "+33909090909" }
 
 Proximum\Vimeet\Domain\Model\User:
     user_asddays_1:
         __construct: false
         email: "user_asddays_1@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    user_asddays_2:
+        __construct: false
+        email: "user_asddays_2@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
