@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Package\Option;
 
 use Proximum\Vimeet\Application\View\Package\GroupsView;
-use Proximum\Vimeet\Application\View\Package\GroupView;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
 
 class GroupsViewQueryHandler

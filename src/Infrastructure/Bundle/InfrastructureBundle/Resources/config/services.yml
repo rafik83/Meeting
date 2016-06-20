@@ -1172,6 +1172,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\GroupViewQuery }
     query.package.option_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
+        arguments:
+            - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
 
@@ -1213,7 +1215,7 @@ services:
     # Package
     #
     package.planning.quantity_max_guesser:
-        class: Proximum\Vimeet\Domain\Package\Planning\QuantityMaxGuesser
+        class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
 

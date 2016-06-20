@@ -8,9 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Package\Planning;
+namespace Proximum\Vimeet\Domain\Package\Product;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class QuantityMaxGuesser
@@ -63,6 +65,33 @@ class QuantityMaxGuesser
             $sheet->getParticipants()->count() - $included,
             $planningQuantityMax
         );
+
+        return $max < 0 ? 0 : $max;
+    }
+
+    /**
+     * @param Sheet   $sheet
+     * @param Product $product
+     *
+     * @return int
+     */
+    public function getMaxByProduct(Sheet $sheet, Product $product)
+    {
+        $max          = $product->getQuantityMax();
+        $cart         = $this->cartManager->getCart($sheet);
+        $selectedPlan = $cart->getPlanRow();
+
+        if (!$selectedPlan) {
+            return $max;
+        }
+
+        $includedProduct = $selectedPlan->getProduct()->getIncludedProduct($product);
+
+        if (!$includedProduct) {
+            return $max;
+        }
+
+        $max = $max - $includedProduct->getQuantity();
 
         return $max < 0 ? 0 : $max;
     }

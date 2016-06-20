@@ -425,6 +425,18 @@ class Product
     }
 
     /**
+     * @param Product $product
+     *
+     * @return false|ProductIncluded
+     */
+    public function getIncludedProduct(Product $product)
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) use ($product) {
+            return $productIncluded->getIncluded() == $product;
+        })->first();
+    }
+
+    /**
      * @return ProductIncluded[]
      */
     public function getIncludedProducts()

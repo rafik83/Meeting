@@ -13,12 +13,26 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OptionsType extends AbstractType
 {
+    /**
+     * @var QuantityMaxGuesser
+     */
+    private $quantityMaxGuesser;
+
+    /**
+     * @param QuantityMaxGuesser $quantityMaxGuesser
+     */
+    public function __construct(QuantityMaxGuesser $quantityMaxGuesser)
+    {
+        $this->quantityMaxGuesser = $quantityMaxGuesser;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +49,7 @@ class OptionsType extends AbstractType
                 QuantityType::class,
                 [
                     'label'      => false,
-                    'max'        => $product->getQuantityMax(),
+                    'max'        => $this->quantityMaxGuesser->getMaxByProduct($sheet, $product),
                     'minMessage' => 'package.product.quantityMin',
                     'maxMessage' => 'package.product.quantityMax',
                 ]

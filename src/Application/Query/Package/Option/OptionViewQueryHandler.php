@@ -11,9 +11,23 @@
 namespace Proximum\Vimeet\Application\Query\Package\Option;
 
 use Proximum\Vimeet\Application\View\Package\ProductView;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class OptionViewQueryHandler
 {
+    /**
+     * @var CartManager
+     */
+    private $cartManager;
+
+    /**
+     * @param CartManager $cartManager
+     */
+    public function __construct(CartManager $cartManager)
+    {
+        $this->cartManager = $cartManager;
+    }
+
     /**
      * @param OptionViewQuery $optionViewQuery
      *
@@ -21,7 +35,17 @@ class OptionViewQueryHandler
      */
     public function handle(OptionViewQuery $optionViewQuery)
     {
-        $included = 0;
+        $cart         = $this->cartManager->getCart($optionViewQuery->sheet);
+        $selectedPlan = $cart->getPlanRow();
+        $included     = 0;
+
+        if ($selectedPlan) {
+            $includedProduct = $selectedPlan->getProduct()->getIncludedProduct($optionViewQuery->product);
+
+            if ($includedProduct) {
+                $included = $includedProduct->getQuantity();
+            }
+        }
 
         return new ProductView(
             $optionViewQuery->product->getId(),

@@ -136,6 +136,12 @@ services:
             - '@package.planning.quantity_max_guesser'
         tags:
             - { name: form.type }
+    form_type_package.options_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: form.type }
 
     #
     # Event Listener
