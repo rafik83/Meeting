@@ -1,0 +1,8 @@
+Proximum\Vimeet\Application\Command\Schedule\Configure:
+    properties:
+        event:
+            - NotBlank: ~
+        scale:
+            - NotBlank: ~
+            - Type: { type: integer }
+            - Range: { min: 1 }

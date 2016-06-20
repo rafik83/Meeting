@@ -297,6 +297,24 @@ admin:
         availabilityCurrentMax: Disponibilité courante / max
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
+    promotion_code:
+        link: Codes promos
+        title: Codes promos
+        new: Nouveau code
+        action:
+            close: Fermer
+        table:
+            column:
+                title: Titre
+                code: Code
+                stock: Stock
+                validUntil: Valide jusqu'au
+                action: Action
+            action:
+                edit: Modifier
+            no_result: Aucun code promo
+        error:
+            non_unique_code: Ce code est déjà utilisé
     sheet:
         title: Participations
         link: Participations
@@ -572,3 +590,20 @@ admin:
         name: Nom
         unitPrice: Prix unitaire
         productIncluded: Produits inclus
+    schedule:
+        link: Agenda
+        title: Agenda
+        slots:
+            title: Créneaux de rendez-vous
+            generate:
+                action: Générer des créneaux
+                title: Générer des créneaux de rendez-vous
+            table:
+                begin: De
+                end: à
+                duration: Durée
+        slot:
+            lock: Bloquer
+            unlock: Débloquer
+            locked: Bloqué
+            unlocked: Débloqué

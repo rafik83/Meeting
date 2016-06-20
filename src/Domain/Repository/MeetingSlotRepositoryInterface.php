@@ -16,6 +16,16 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 interface MeetingSlotRepositoryInterface
 {
     /**
+     * @param MeetingSlot $meetingSlot
+     */
+    public function add(MeetingSlot $meetingSlot);
+
+    /**
+     * @param MeetingSlot $meetingSlot
+     */
+    public function set(MeetingSlot $meetingSlot);
+
+    /**
      * @param Event $event
      *
      * @return MeetingSlot[]

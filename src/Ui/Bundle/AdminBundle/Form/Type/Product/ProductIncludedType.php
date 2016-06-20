@@ -28,6 +28,7 @@ class ProductIncludedType extends AbstractType
         $builder
             ->add('product', ProductChoiceType::class, [
                 'required'         => true,
+                'locale'           => $options['locale'],
                 'event'            => $options['event'],
                 'placeholder'      => 'form.product_create_plan.children.productIncluded.prototype.children.product.placeholder',
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
@@ -50,7 +51,7 @@ class ProductIncludedType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
     }
 }
