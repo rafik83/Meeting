@@ -18,13 +18,13 @@ class GroupView
     public $label;
 
     /**
-     * @var OptionView[]
+     * @var ProductView[]
      */
     public $options;
 
     /**
-     * @param string       $label
-     * @param OptionView[] $options
+     * @param string        $label
+     * @param ProductView[] $options
      */
     public function __construct($label, $options)
     {

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Package;
 
-class OptionView
+class ProductView
 {
     /**
      * @var int
@@ -73,6 +73,11 @@ class OptionView
     public $currency;
 
     /**
+     * @var int
+     */
+    public $included;
+
+    /**
      * @param int    $id
      * @param string $title
      * @param float  $unitPrice
@@ -85,6 +90,7 @@ class OptionView
      * @param bool   $isOutOfStock
      * @param string $vatMode
      * @param string $currency
+     * @param int    $included
      */
     public function __construct(
         $id,
@@ -98,7 +104,8 @@ class OptionView
         $availabilityMax,
         $isOutOfStock,
         $vatMode,
-        $currency
+        $currency,
+        $included
     ) {
         $this->id                  = $id;
         $this->title               = $title;
@@ -112,5 +119,6 @@ class OptionView
         $this->isOutOfStock        = $isOutOfStock;
         $this->vatMode             = $vatMode;
         $this->currency            = $currency;
+        $this->included            = $included;
     }
 }

@@ -18,31 +18,9 @@
 
                 <tbody>
                     {% for option in group.options %}
-                        <tr>
-                            <td class="col-md-2">
-                                <div class="product">
-                                    <span class="product-price">{{ option.unitPrice }} <sup>{{ option.currency }} {{ ('package.vatMode.' ~ option.vatMode)|trans }}</sup></span>
-                                    {% if option.availabilityMax %}
-                                        <span class="product-limite">Disponible <br>{{ option.availabilityCurrent }} sur {{ option.availabilityMax }}</span>
-                                    {% endif %}
-                                </div>
-                            </td>
-                            <td>
-                                <h3>{{ option.title }}</h3>
-                                <p><strong>{{ option.heading }}</strong></p>
-                                <p>{{ option.description }}</p>
-                            </td>
-                            <td class="col-md-2">
-                                {% if option.isOutOfStock %}
-                                    <h3 class="out-of-stock text-center">Epuisé</h3>
-                                {% endif %}
-                            </td>
-                            <td class="col-md-2">
-                                <div class="product">
-
-                                </div>
-                            </td>
-                        </tr>
+                        {{ include('EventBundle:Package/Step:product_row.html.twig', {
+                            product: option,
+                        }) }}
                     {% endfor %}
                 </tbody>
             </table>

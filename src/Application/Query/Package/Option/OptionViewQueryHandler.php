@@ -10,18 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Query\Package\Option;
 
-use Proximum\Vimeet\Application\View\Package\OptionView;
+use Proximum\Vimeet\Application\View\Package\ProductView;
 
 class OptionViewQueryHandler
 {
     /**
      * @param OptionViewQuery $optionViewQuery
      *
-     * @return OptionView
+     * @return ProductView
      */
     public function handle(OptionViewQuery $optionViewQuery)
     {
-        return new OptionView(
+        $included = 0;
+
+        return new ProductView(
             $optionViewQuery->product->getId(),
             $optionViewQuery->product->getTitle($optionViewQuery->locale),
             $optionViewQuery->product->getUnitPrice(),
@@ -33,7 +35,8 @@ class OptionViewQueryHandler
             $optionViewQuery->product->getAvailabilityMax(),
             $optionViewQuery->product->isOutOfStock(),
             $optionViewQuery->sheet->getEvent()->getMode(),
-            $optionViewQuery->sheet->getEvent()->getCurrency()
+            $optionViewQuery->sheet->getEvent()->getCurrency(),
+            $included
         );
     }
 }
