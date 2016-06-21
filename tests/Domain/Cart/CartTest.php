@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $datetime = new \DateTime();
         $event    = new Event();
         $type     = new Type($event);
-        $sheet    = new Sheet($event, $type, [], [], $datetime);
+        $user     = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
 
         $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 3, 3, 3, true);
         $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 3, 3, 3, true);

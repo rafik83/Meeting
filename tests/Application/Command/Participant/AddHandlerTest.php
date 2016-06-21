@@ -173,30 +173,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet->addParticipant($participant);
         $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
-        $expectedSheet       = new Sheet($event, $type, [], $user, $now);
-        $expectedParticipant = new Participant(
-            $expectedSheet,
-            $user2,
-            [
-                '541f84d4' => [
-                    'text' => 'jean'
-                ],
-                '838197c7' => [
-                    'text' => 'truc',
-                ],
-            ],
-            false
-        );
-        $expectedSheet->addParticipant($expectedParticipant);
-
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test2@test.com')->shouldBeCalled()->willReturn($user2);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add(Argument::that(function (Participant $participant) use ($expectedParticipant) {
-            return true;
-        }))->shouldBeCalled();
-        $participantRepository->add($expectedParticipant)->shouldNotBeCalled();
 
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
@@ -204,10 +184,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
 
-        $cart        = new Cart($sheet, []);
         $cartManager = $this->prophesize(CartManager::class);
-        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $cartManager->save()->shouldNotBeCalled();
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
