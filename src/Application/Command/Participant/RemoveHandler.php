@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class RemoveHandler
@@ -21,11 +22,18 @@ class RemoveHandler
     private $participantRepository;
 
     /**
-     * @param ParticipantRepositoryInterface $participantRepository
+     * @var CartManager
      */
-    public function __construct(ParticipantRepositoryInterface $participantRepository)
+    private $cartManager;
+
+    /**
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param CartManager                    $cartManager
+     */
+    public function __construct(ParticipantRepositoryInterface $participantRepository, CartManager $cartManager)
     {
         $this->participantRepository = $participantRepository;
+        $this->cartManager           = $cartManager;
     }
 
     /**
@@ -43,5 +51,8 @@ class RemoveHandler
             $remove->sheet->removeParticipant($participant);
             $this->participantRepository->delete($participant);
         }
+
+        // Update cart
+        $this->cartManager->updateParticipantsQuantity($remove->sheet);
     }
 }

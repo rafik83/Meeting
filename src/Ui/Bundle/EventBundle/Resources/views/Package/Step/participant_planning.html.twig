@@ -1,0 +1,75 @@
+{% form_theme form '@Ui/default.html.twig' %}
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <section class="object object--collection object--participant style--style-1 section">
+        <p>{{ view.products.participantsView.description }}</p>
+
+        <div class="row">
+            {% for participant in view.products.participantsView.participants %}
+                <div class="col-md-6">
+                    <div class="user__container selected-product clearfix">
+                        <div class="list--users">
+                            {{ include('EventBundle:Participant:preview.html.twig', {participant: participant.card}) }}
+                        </div>
+
+                        <div class="user__formule">
+                            <h2>
+                                {% if participant.included %}
+                                    {{ 'package.participants.included'|trans }}
+                                {% else %}
+                                    {{ participant.price }} <sup>€ {{ ('package.vatMode.' ~ participant.vatMode)|trans }}</sup>
+                                {% endif %}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ path('event_sheet') }}" class="btn pull-left">
+                    <i class="icon-Effacer"></i> {{ 'package.participants.delete'|trans }}
+                </a>
+
+                <a href="{{ path('event_sheet') }}" class="btn btn-primary pull-right">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ 'package.participants.add'|trans }}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="content-header">
+        <h2>{{ view.products.planningView.title }}</h2>
+    </div>
+
+    <section class="object object--collection style--style-1 section">
+        <div class="form--table--head">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{{ 'package.planning.unitPrice'|trans }}</th>
+                    <th>{{ 'package.planning.label'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.quantity'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.total'|trans }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{ include('EventBundle:Package/Step:product_row.html.twig', {
+                    product: view.products.planningView,
+                    quantityForm: form.planningQuantity
+                }) }}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary pull-right"><i class="icon-Valider_3"></i>{{ 'package.participant_planning.validate'|trans }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

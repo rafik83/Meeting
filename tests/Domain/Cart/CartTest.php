@@ -1,0 +1,47 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
+
+use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+
+class CartTest extends \PHPUnit_Framework_TestCase
+{
+    public function testAdd()
+    {
+        $datetime = new \DateTime();
+        $event    = new Event();
+        $type     = new Type($event);
+        $user     = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
+
+        $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 3, 3, 3, true);
+        $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 3, 3, 3, true);
+
+        $cart = new Cart($sheet, []);
+        $cart->setProduct($optionA, 1);
+        $this->assertCount(1, $cart->getRows());
+        $this->assertEquals(1, $cart->getRow($optionA)->getQuantity());
+
+        $cart->setProduct($optionA, 2);
+        $this->assertCount(1, $cart->getRows());
+        $this->assertEquals(2, $cart->getRow($optionA)->getQuantity());
+
+        $cart->setProduct($optionB, 1);
+        $this->assertCount(2, $cart->getRows());
+        $this->assertEquals(2, $cart->getRow($optionA)->getQuantity());
+        $this->assertEquals(1, $cart->getRow($optionB)->getQuantity());
+    }
+}

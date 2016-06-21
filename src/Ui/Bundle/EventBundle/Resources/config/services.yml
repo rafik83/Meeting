@@ -134,6 +134,12 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
+    form_type_package.participant_and_planning_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: form.type }
 
     #
     # Event Listener
@@ -230,3 +236,14 @@ services:
 
     markdown:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown
+
+
+    #
+    # Validators
+    #
+    validator.package.planning_quantity_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\PlanningQuantityValidator
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: validator.constraint_validator, alias: alias_name }

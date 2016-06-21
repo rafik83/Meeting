@@ -45,9 +45,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
         $participant3 = $this->createParticipantMock($sheetFrom, $user3, 3);
-        $sheetFrom->addParticpant($participant1);
-        $sheetFrom->addParticpant($participant2);
-        $sheetFrom->addParticpant($participant3);
+        $sheetFrom->addParticipant($participant1);
+        $sheetFrom->addParticipant($participant2);
+        $sheetFrom->addParticipant($participant3);
 
         $datetime = new \DateTime('2016-01-24 09:00:00');
 
@@ -109,9 +109,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
         $participant3 = $this->createParticipantMock($sheetFrom, $user3, 3);
-        $sheetFrom->addParticpant($participant1);
-        $sheetFrom->addParticpant($participant2);
-        $sheetFrom->addParticpant($participant3);
+        $sheetFrom->addParticipant($participant1);
+        $sheetFrom->addParticipant($participant2);
+        $sheetFrom->addParticipant($participant3);
 
         $datetime = new \DateTime('2016-01-24 09:00:00');
 
@@ -175,9 +175,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
         $participant3 = $this->createParticipantMock($sheetTo, $user3, 3);
-        $sheetTo->addParticpant($participant1);
-        $sheetTo->addParticpant($participant2);
-        $sheetTo->addParticpant($participant3);
+        $sheetTo->addParticipant($participant1);
+        $sheetTo->addParticipant($participant2);
+        $sheetTo->addParticipant($participant3);
 
         $datetime = new \DateTime('2016-01-24 09:00:00');
 
@@ -239,9 +239,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
         $participant3 = $this->createParticipantMock($sheetTo, $user3, 3);
-        $sheetTo->addParticpant($participant1);
-        $sheetTo->addParticpant($participant2);
-        $sheetTo->addParticpant($participant3);
+        $sheetTo->addParticipant($participant1);
+        $sheetTo->addParticipant($participant2);
+        $sheetTo->addParticipant($participant3);
 
         $datetime = new \DateTime('2016-01-24 09:00:00');
 

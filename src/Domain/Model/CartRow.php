@@ -30,7 +30,7 @@ class CartRow
     /**
      * @var int
      */
-    private $quantity;
+    private $quantity = 0;
 
     /**
      * @var string
@@ -38,23 +38,16 @@ class CartRow
     private $serializedProduct;
 
     /**
-     * @var \DateTimeInterface
+     * @param Sheet   $sheet
+     * @param Product $product
+     * @param int     $quantity
      */
-    private $createdAt;
-
-    /**
-     * @param Sheet              $sheet
-     * @param Product            $product
-     * @param int                $quantity
-     * @param \DateTimeInterface $createdAt
-     */
-    public function __construct(Sheet $sheet, Product $product, $quantity, \DateTimeInterface $createdAt)
+    public function __construct(Sheet $sheet, Product $product, $quantity)
     {
         $this->sheet             = $sheet;
-        $this->product           = $product;
         $this->quantity          = $quantity;
-        $this->createdAt         = $createdAt;
-        $this->serializedProduct = json_encode($product);
+        $this->product           = $product;
+        $this->serializedProduct = $product->getSerializedData();
     }
 
     /**
@@ -82,6 +75,21 @@ class CartRow
     }
 
     /**
+     * Set product
+     *
+     * @param Product $product
+     *
+     * @return CartRow
+     */
+    public function setProduct(Product $product)
+    {
+        $this->product           = $product;
+        $this->serializedProduct = $product->getSerializedData();
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getQuantity()
@@ -90,18 +98,38 @@ class CartRow
     }
 
     /**
+     * Set quantity
+     *
+     * @param int $quantity
+     *
+     * @return CartRow
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Add quantity
+     *
+     * @param int $quantity
+     *
+     * @return CartRow
+     */
+    public function addQuantity($quantity)
+    {
+        $this->quantity += $quantity;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getSerializedProduct()
     {
         return $this->serializedProduct;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
     }
 }

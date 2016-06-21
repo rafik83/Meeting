@@ -20,6 +20,20 @@
     {{ block('form_widget_simple') }}
 {%- endblock telephone_widget -%}
 
+{%- block quantity_widget -%}
+    {% set attr = attr|merge({
+    'data-min-message': attr['data-min-message']|trans,
+    'data-max-message': attr['data-max-message']|trans
+    }) %}
+
+    <div class="select-quantity">
+        <input type="button" value="-" class="qtyminus"/>
+        {% set control_class = 'qty' %}
+        {{ block('form_widget_simple') }}
+        <input type="button" value="+" class="qtyplus"/>
+    </div>
+{%- endblock quantity_widget -%}
+
 {%- block form_errors -%}
     {% if errors|length > 0 %}
         <ul class="text-danger">

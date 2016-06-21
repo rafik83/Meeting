@@ -972,6 +972,8 @@ form:
                     children:
                         title:
                             label: Titre
+                        description:
+                            label: Description
     product_create_planning:
         children:
             name:
@@ -987,6 +989,8 @@ form:
                     children:
                         title:
                             label: Titre
+                        description:
+                            label: Description
     billing_info_update:
         children:
             lastname:

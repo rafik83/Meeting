@@ -423,6 +423,46 @@ class Product
     }
 
     /**
+     * Get the number of participant included in this product
+     *
+     * @return int
+     */
+    public function getIncludedParticipantQuantity()
+    {
+        $included = $this->getIncludedParticipantProduct();
+
+        return $included ? $included->getQuantity() : 0;
+    }
+
+    /**
+     * @return boolean|ProductIncluded
+     */
+    public function getIncludedParticipantProduct()
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
+            return $productIncluded->getIncluded()->isParticipant();
+        })->first();
+    }
+
+    /**
+     * @return boolean|ProductIncluded
+     */
+    public function getIncludedPlanningProduct()
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
+            return $productIncluded->getIncluded()->isPlanning();
+        })->first();
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->getEvent()->getMode();
+    }
+
+    /**
      * @return string
      */
     public function getCurrency()
@@ -530,6 +570,24 @@ class Product
             $availabilityMax,
             $updatable,
             $updatableUntil
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerializedData()
+    {
+        return json_encode(
+            [
+                'name'                => $this->name,
+                'unitPrice'           => $this->unitPrice,
+                'quantityMax'         => $this->quantityMax,
+                'availabilityCurrent' => $this->availabilityCurrent,
+                'availabilityMax'     => $this->availabilityMax,
+                'updatable'           => $this->updatable,
+                'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
+            ]
         );
     }
 }
