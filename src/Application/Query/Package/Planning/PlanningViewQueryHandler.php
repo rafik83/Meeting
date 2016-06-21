@@ -61,7 +61,7 @@ class PlanningViewQueryHandler
             $planningProduct->getAvailabilityMax(),
             $planningProduct->isOutOfStock(),
             $planningProduct->getVatMode(),
-            $planningProduct->getQuantityMax(),
+            $planningProduct->getEvent()->getCurrency(),
             $included
         );
     }

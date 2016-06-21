@@ -23,7 +23,11 @@
                                 {% if participant.included %}
                                     {{ 'package.participants.included'|trans }}
                                 {% else %}
-                                    {{ participant.price }} <sup>€ {{ ('package.vatMode.' ~ participant.vatMode)|trans }}</sup>
+                                    {{ 'package.product.unitPrice'|trans({
+                                        '%price%': participant.price,
+                                        '%currency%': participant.currency|currency_symbol,
+                                        '%vatMode%': ('package.vatMode.' ~ participant.vatMode)|trans
+                                    })|html }}
                                 {% endif %}
                             </h2>
                         </div>
