@@ -1195,6 +1195,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         event: '@event_asddays_2016'
         owner: '@user_asddays_2'
         data: []
+        owner: "@user_asddays_2"
         registrationData:
             3ad4b72f: { text: "Elao" }
         createdAt: <dateTime()>
@@ -1205,6 +1206,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         event: '@event_asddays_2016'
         owner: '@user_asddays_3'
         data: []
+        owner: "@user_asddays_3"
         registrationData:
             3ad4b72f: { text: "Elao" }
         createdAt: <dateTime()>
