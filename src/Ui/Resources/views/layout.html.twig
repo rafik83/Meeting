@@ -5,6 +5,13 @@
     {{ parent() }}
 {% endblock %}
 
+{%- block textarea_widget -%}
+    {% if form.vars.fallbackTranslation is defined %}
+        <p class="help-block">{{ form.vars.fallbackTranslation }}</p>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
+
 {% block nomenclature_checkboxes_row %}
     {{ form_errors(form) }}
     {% if nomenclature.depth == 1 %}

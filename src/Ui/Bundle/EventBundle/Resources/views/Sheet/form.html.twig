@@ -10,7 +10,11 @@
         {{ form_errors(form) }}
 
         {% if form.vars.help|default(false) %}
-            <p class="help-block">{{ form.vars.help }}</p>
+            {% if form.children.content is not defined
+            or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined)
+            %}
+                <p class="help-block">{{ form.vars.help }}</p>
+            {% endif %}
         {% endif %}
 
         {% for key, child in form if key != 'submit' %}
