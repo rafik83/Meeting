@@ -79,7 +79,7 @@
                     <div role="tabpanel" class="tab-pane" id="objects">
                         <div id="object-list" class="object-list">
                             {{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale }, false) }}
+                            {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}
                             {{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale }, false) }}

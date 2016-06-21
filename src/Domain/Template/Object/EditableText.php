@@ -107,6 +107,14 @@ class EditableText extends EditableObject implements ContentObjectInterface
     }
 
     /**
+     * @return string
+     */
+    public function getTag()
+    {
+        return $this->getOption('tag');
+    }
+
+    /**
      * Get fallback content if object is translatable.
      *
      * @return string|null
