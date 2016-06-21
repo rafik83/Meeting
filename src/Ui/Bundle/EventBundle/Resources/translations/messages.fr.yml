@@ -96,12 +96,15 @@ package:
     options:
         included: inclus
     product:
-        price: "%price% <sup>%currency% %vatMode%</sup>"
-        unitPrice: Prix unitaire
+        selectOptions: Sélectionner vos options
+        unitPriceLabel: Prix unitaire
+        unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
+        totalPrice: '<span class="product-total-price">%price%</span> <sup>%currency% %vatMode%</sup>'
         label: Intitulé & descriptions
         quantity: Quantité
         total: Total
         quantityMax: Quantité maximum atteinte
         quantityMin: Quantité minimum atteinte
+        validate: Valider
 billing_info:
     title: Info de facturation

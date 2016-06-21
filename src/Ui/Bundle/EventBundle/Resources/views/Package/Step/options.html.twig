@@ -4,7 +4,7 @@
     {{ form_errors(form) }}
     {% for group in view.products.groups %}
         <div class="content-header clearfix">
-            <h2 class="pull-left">Sélectionner vos options</h2>
+            <h2 class="pull-left">{{ 'package.product.selectOptions'|trans }}</h2>
             <p class="category-option pull-left">{{ group.label }}</p>
         </div>
 
@@ -12,10 +12,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Prix unitaire</th>
-                        <th>Intitulé & description</th>
-                        <th class="text-center">Quantité</th>
-                        <th class="text-center">Total</th>
+                        <th>{{ 'package.product.unitPriceLabel'|trans }}</th>
+                        <th>{{ 'package.product.label'|trans }}</th>
+                        <th class="text-center">{{ 'package.product.quantity'|trans }}</th>
+                        <th class="text-center">{{ 'package.product.total'|trans }}</th>
                     </tr>
                 </thead>
 
@@ -33,7 +33,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <button type="submit" class="btn btn-primary pull-right"><i class="icon-Valider_3"></i>Valider vos options</button>
+            <button type="submit" class="btn btn-primary pull-right"><i class="icon-Valider_3"></i>{{ 'package.product.validate'|trans }}</button>
         </div>
     </div>
 {{ form_end(form) }}

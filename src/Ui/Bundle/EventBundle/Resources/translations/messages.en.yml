@@ -12,4 +12,5 @@ package:
         et: excl. VAT
         ati: incl. VAT
     product:
-        price: "<sup>%currency%</sup> %price%<br><small>%vatMode%</small>"
+        unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
+        totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'

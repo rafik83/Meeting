@@ -2,7 +2,7 @@
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
-                {{ 'package.product.price'|trans({
+                {{ 'package.product.unitPrice'|trans({
                     '%price%': product.unitPrice,
                     '%currency%': product.currency|currency_symbol,
                     '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
@@ -48,8 +48,11 @@
 
             <span class="product-price text-center">
                 {% if quantityForm is not null %}
-                    <span class="product-total-price">{{ quantityForm.vars.value * product.unitPrice }}</span>
-                    <sup>{{ product.currency|currency_symbol }} {{ ('package.vatMode.' ~ product.vatMode)|trans }}</sup>
+                    {{ 'package.product.totalPrice'|trans({
+                        '%price%': quantityForm.vars.value * product.unitPrice,
+                        '%currency%': product.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
+                    })|html }}
                 {% endif %}
             </span>
         </div>
