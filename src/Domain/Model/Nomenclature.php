@@ -157,6 +157,20 @@ class Nomenclature
     }
 
     /**
+     * @param $locale
+     *
+     * @return NomenclatureItem[]
+     */
+    public function getChildrenSorted($locale)
+    {
+        $children = $this->getChildren();
+
+        Nomenclature::sort($children, $locale);
+
+        return $children;
+    }
+
+    /**
      * @param array $items
      *
      * @return NomenclatureItem[]
@@ -217,7 +231,7 @@ class Nomenclature
     public function getThirdLevel()
     {
         return array_reduce($this->getItems(), function (array $carry, NomenclatureItem $item) {
-            return array_merge($carry, $item->getGrantChildren());
+            return array_merge($carry, $item->getGrandChildren());
         }, []);
     }
 

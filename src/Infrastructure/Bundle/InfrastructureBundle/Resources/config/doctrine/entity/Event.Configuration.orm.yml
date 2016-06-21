@@ -7,3 +7,5 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
         textColor:
             type: string
+        scheduleScale:
+            type: integer

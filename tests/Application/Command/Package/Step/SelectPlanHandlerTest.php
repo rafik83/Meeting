@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 
 class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,8 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $type     = new Type($event);
         $datetime = new \DateTime();
-        $sheet    = new Sheet($event, $type, [], [], $datetime);
+        $user     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $product  = Product::createPlan($event, 'plan', '', 100, 10, 40);
 
         $emptyCart    = new Cart($sheet, []);
@@ -51,9 +53,10 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $event    = new Event();
         $type     = new Type($event);
         $datetime = new \DateTime();
-        $sheet    = new Sheet($event, $type, [], [], $datetime);
-        $product1  = Product::createPlan($event, 'plan1', '', 100, 10, 40);
+        $product1 = Product::createPlan($event, 'plan1', '', 100, 10, 40);
         $product2 = Product::createPlan($event, 'plan2', '', 50, 10, 50);
+        $user     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $datetime);
 
         $actualCart   = new Cart($sheet, [new CartRow($sheet, $product1, 1)]);
         $expectedCart = new Cart($sheet, [new CartRow($sheet, $product2, 1)]);

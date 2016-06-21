@@ -95,6 +95,10 @@ class ParticipantController extends Controller
 
         $profileTemplate = $this->get('template.template_data_factory')->createProfileTemplate($participant, $locale);
 
+        if ($participant->getUser() === $user) {
+            $profileTemplate = $this->get('account.synchronizer')->get($profileTemplate, $user);
+        }
+
         $form = $this->createForm(ProfileType::class, $profileTemplate, [
             'locale'   => $locale,
             'template' => $profileTemplate,

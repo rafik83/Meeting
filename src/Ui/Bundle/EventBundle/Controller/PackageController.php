@@ -36,6 +36,8 @@ class PackageController extends Controller
      */
     public function redirectAction(Request $request, EventView $eventView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         try {
             $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
         } catch (\Exception $exception) {

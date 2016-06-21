@@ -1,0 +1,37 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Schedule;
+
+use Proximum\Vimeet\Domain\Model\Event;
+
+class Configure
+{
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @var int
+     */
+    public $scale;
+
+    /**
+     * Configure constructor.
+     *
+     * @param Event $event
+     */
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+        $this->scale = $this->event->getConfiguration()->getScheduleScale();
+    }
+}

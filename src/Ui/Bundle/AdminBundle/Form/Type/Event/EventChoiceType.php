@@ -38,12 +38,12 @@ class EventChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class'        => Event::class,
-            'choice_label' => 'title',
+            'class'            => Event::class,
+            'choice_label'     => 'title',
             'repositoryMethod' => function (EventRepositoryInterface $eventRepository) {
                 return $eventRepository->getAll();
             },
-            'choices' => function (Options $options) {
+            'choices'          => function (Options $options) {
                 return $options['repositoryMethod']($this->eventRepository);
             },
         ]);

@@ -33,10 +33,10 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event        = new Event();
         $type         = new Type($event);
-        $sheetTo      = new Sheet($event, $type, [], [], new \DateTime());
-        $sheetFrom    = new Sheet($event, $type, [], [], new \DateTime());
         $user1        = new User('test@test.fr', 'test', 'test', 'fr');
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');
+        $sheetTo      = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheetFrom    = new Sheet($event, $type, [], $user2, new \DateTime());
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);

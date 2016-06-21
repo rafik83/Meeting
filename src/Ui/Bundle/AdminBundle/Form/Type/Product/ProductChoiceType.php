@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Proximum\Vimeet\Ui\Helper\CurrencyFormatter;
 
 class ProductChoiceType extends AbstractType
 {
@@ -25,11 +27,20 @@ class ProductChoiceType extends AbstractType
     private $productRepository;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @var CurrencyFormatter
      */
-    public function __construct(ProductRepositoryInterface $productRepository)
+    private $currencyFormatter;
+
+    /**
+     * ProductChoiceType constructor.
+     *
+     * @param ProductRepositoryInterface $productRepository
+     * @param CurrencyFormatter          $currencyFormatter
+     */
+    public function __construct(ProductRepositoryInterface $productRepository, CurrencyFormatter $currencyFormatter)
     {
         $this->productRepository = $productRepository;
+        $this->currencyFormatter = $currencyFormatter;
     }
 
     /**
@@ -37,10 +48,20 @@ class ProductChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
-            'choice_label'     => 'name',
+            'choice_label'     => function (Options $options) {
+                return function (Product $product) use ($options) {
+                    if ($options['display_price'] === true) {
+                        $price = $this->currencyFormatter->format($product->getUnitPrice(), $product->getCurrency(), $options['locale']);
+
+                        return sprintf('%s (%s)', $product->getName(), $price);
+                    }
+
+                    return $product->getName();
+                };
+            },
             'repositoryMethod' => function (Options $options) {
                 return function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEvent($options['event']);
@@ -49,6 +70,7 @@ class ProductChoiceType extends AbstractType
             'choices'          => function (Options $options) {
                 return $options['repositoryMethod']($this->productRepository);
             },
+            'display_price'    => true,
         ]);
     }
 

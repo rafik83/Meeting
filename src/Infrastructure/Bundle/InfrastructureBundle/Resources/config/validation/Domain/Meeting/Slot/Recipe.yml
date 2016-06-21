@@ -1,0 +1,16 @@
+Proximum\Vimeet\Domain\Meeting\Slot\Recipe:
+    constraints:
+        - Expression: { expression: "this.begin < this.end", message: "validators.meeting.slot.recipe.date_range" }
+    properties:
+        begin:
+            - NotBlank: ~
+            - Date: ~
+        end:
+            - NotBlank: ~
+            - Date: ~
+        interval:
+            - NotBlank: ~
+            - Type: { type: integer }
+        duration:
+            - NotBlank: ~
+            - Type: { type: integer }

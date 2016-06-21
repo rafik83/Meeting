@@ -30,8 +30,8 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $event       = new Event();
         $type        = new Type($event);
         $datetime    = new \DateTime();
-        $sheet       = new Sheet($event, $type, [], [], $datetime);
         $user        = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
+        $sheet       = new Sheet($event, $type, [], $user, $datetime);
         $participant = new Participant($sheet, $user, [], true, true);
         $sheet->addParticipant($participant);
 
@@ -71,10 +71,11 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $event       = new Event();
         $type        = new Type($event);
         $datetime    = new \DateTime();
-        $sheet       = new Sheet($event, $type, [], [], $datetime);
 
         $user1        = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
+        $sheet        = new Sheet($event, $type, [], $user1, $datetime);
         $participant1 = new Participant($sheet, $user1, [], true, true);
+
         $sheet->addParticipant($participant1);
 
         $user2        = new User('clara.doe@example.net', '_salt_', '_password_', 'fr');

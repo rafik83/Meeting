@@ -39,6 +39,19 @@ class CartManager
     }
 
     /**
+     * @param Sheet $sheet
+     */
+    public function updateParticipantsQuantity(Sheet $sheet)
+    {
+        $cart = $this->getCart($sheet);
+
+        if ($cart->getPlanRow()) {
+            $cart->resolveParticipantsQuantity();
+            $this->save($cart);
+        }
+    }
+
+    /**
      * @param Cart $cart
      */
     public function save(Cart $cart)

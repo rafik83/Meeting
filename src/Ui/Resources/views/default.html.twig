@@ -1,0 +1,243 @@
+{% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
+
+{%- block form_row -%}
+    <div class="form-row">
+        {{- form_label(form) -}}
+        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ (errors|length ? 'error' : '')|trim)}) %}
+
+        {% if 'select2' in attr.class %}
+            {% set attr = attr|merge({'data-no-results-label': 'select2.no_results'|trans}) %}
+        {% endif %}
+
+        {{- form_widget(form, {attr: attr}) -}}
+
+        {{ form_errors(form) }}
+    </div>
+{%- endblock form_row -%}
+
+{%- block telephone_widget -%}
+    {%- set type = type|default('tel') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock telephone_widget -%}
+
+{%- block quantity_widget -%}
+    {% set attr = attr|merge({
+    'data-min-message': attr['data-min-message']|trans,
+    'data-max-message': attr['data-max-message']|trans
+    }) %}
+
+    <div class="select-quantity">
+        <input type="button" value="-" class="qtyminus"/>
+        {% set control_class = 'qty' %}
+        {{ block('form_widget_simple') }}
+        <input type="button" value="+" class="qtyplus"/>
+    </div>
+{%- endblock quantity_widget -%}
+
+{%- block form_errors -%}
+    {% if errors|length > 0 %}
+        <ul class="text-danger">
+            {% for error in errors %}
+                <li>{{ error.message|trans({}, 'validators') }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{%- endblock form_errors -%}
+
+{%- block form_rows -%}
+    <div class="inputs">
+        {% for child in form %}
+            {{- form_row(child) -}}
+        {% endfor %}
+    </div>
+{%- endblock form_rows -%}
+
+{%- block submit_row -%}
+    <div class="validation">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock -%}
+
+{%- block submit_widget -%}
+    {%- set type = type|default('submit') -%}
+    {%- set attr = attr|default({})|merge({'class': 'btn'}) -%}
+    {{ block('button_widget') }}
+{%- endblock -%}
+
+{%- block textarea_widget -%}
+    {% if form.vars.fallbackTranslation is defined %}
+        <p class="help-block">{{ form.vars.fallbackTranslation }}</p>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
+
+{% block nomenclature_checkboxes_row %}
+    {{ form_errors(form) }}
+    {% if nomenclature.depth == 1 %}
+        <div>
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    <i class="icon-Valider_4"></i>
+                    {{ form.vars.label|trans({}, 'forms') }} {{ nomenclature_label }}
+                </h1>
+
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+
+            <section class="object object--collection style--style-1 section">
+
+                <header>
+                    <h2>{{ nomenclature_label }}</h2>
+                </header>
+
+                <div class="object--nomenclature">
+                    <div class="border-table">
+                        <div class="row">
+                            {% for table in nomenclature.firstLevelSorted(locale)|batch(nomenclature.firstLevel|length / 3) %}
+                                <div class="col-md-4">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                        {% for first_label_item in table %}
+                                            <tr>
+                                                <td>
+                                                    {{ form_row(form[first_label_item.key], { 'attr': { 'class': 'item' }, 'simple': true }) }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <p class="link-table pull-right">
+                        <button type="button" class="btn btn-link" data-check-all-button=".item">{{ 'nomenclature.select_all'|trans }}</button>
+                        /
+                        <button type="button" class="btn btn-link" data-uncheck-all-button=".item">{{ 'nomenclature.select_none'|trans}}</button>
+                    </p>
+                </div>
+            </section>
+        </div>
+    {% elseif nomenclature.depth == 2 %}
+        <div>
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    <i class="icon-Valider_4"></i>
+                    {{ form.vars.label|trans({}, 'forms') }} {{ nomenclature_label }}
+                </h1>
+
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+
+            <section class="object object--collection style--style-1 section">
+                <div class="row">
+                    {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
+                        <div class="col-md-4">
+                            <div class="object--nomenclature">
+                                <h3 class="title-table">{{ first_level_item.label(locale) }}</h3>
+
+                                <div class="border-table with-title">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                        {% for second_label_item in first_level_item.childrenSorted(locale) %}
+                                            <tr>
+                                                <td>
+                                                    {{ form_row(form[second_label_item.key], { 'attr': { 'class': 'item' }, 'simple': true }) }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="link-table pull-right">
+                                    <a href="#">{{ 'nomenclature.select_all'|trans }}</a> /
+                                    <a href="#">{{ 'nomenclature.select_none'|trans}}</a>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    {% elseif nomenclature.depth == 3 %}
+        <div>
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    <i class="icon-Valider_4"></i>
+                    {{ form.vars.label|trans({}, 'forms') }} {{ nomenclature_label }}
+                </h1>
+
+                <ul class="nav nav-pills pull-left" role="tablist">
+                    {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
+                        <li role="presentation"{% if loop.first %} class="active"{% endif %}>
+                            <a href="#{{ first_level_item.key }}" aria-controls="{{ first_level_item.key }}">
+                                {{ first_level_item.label(locale) }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if sheet_uri is defined %}
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+
+            {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
+                <section class="object object--collection style--style-1 section">
+                    <div id="{{ first_level_item.key }}">
+                        <header>
+                            <h2>{{ first_level_item.label(locale) }}</h2>
+                        </header>
+
+                        <div class="row">
+                            {% for second_level_item in first_level_item.childrenSorted(locale) %}
+                                <div class="col-md-4">
+                                    <div class="object--nomenclature">
+                                        <h3 class="title-table">{{ second_level_item.label(locale) }}</h3>
+
+                                        <div class="border-table with-title">
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                {% for third_label_item in second_level_item.childrenSorted(locale) %}
+                                                    <tr>
+                                                        <td>
+                                                            {{ form_row(form[third_label_item.key], { 'attr': { 'class': 'item-' ~ second_level_item.key }, 'simple': true }) }}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <p class="link-table pull-right">
+                                            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ second_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
+                                            /
+                                            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ second_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{%- block url_widget -%}
+    {%- set type = type|default('text') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock url_widget -%}
