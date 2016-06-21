@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +26,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Actual event
         $event = new Event();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
+        $event->setLogo('here.jpg');
 
         // Update command
         $update = new Update($event);
@@ -41,25 +44,31 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->currency   = 'USD';
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
+        $update->logo       = 'shouldBeUploadFile';
 
         // Expected event
         $expectedEvent = new Event();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20, 'FR');
+        $expectedEvent->update('barfoo', ['fr', 'en'], 'en', Event::VAT_MODE_ATI, 20, 'FR', 'USD');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
+        $expectedEvent->setLogo('toto.jpg');
 
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
+        $fileStorage->remove('here.jpg')->shouldBeCalled();
+        $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
         $handler->handle($update);
     }
 
@@ -68,7 +77,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Actual event
         $event = new Event();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -85,6 +94,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->currency   = 'EUR';
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
@@ -92,7 +102,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected event
         $expectedEvent = new Event();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $expectedEvent->update('foobar', ['fr', 'en', 'de'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
         $expectedEvent->getTranslations()->set('de', new EventTranslation($expectedEvent, 'de', ''));
@@ -102,9 +112,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->set($expectedEvent)->shouldBeCalled();
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
         $handler->handle($update);
     }
 
@@ -113,7 +124,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Actual event
         $event = new Event();
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $event->update('foobar', ['fr', 'en'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
@@ -130,6 +141,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
+        $update->currency   = 'EUR';
         $update->leftColor  = '#FFFFFF';
         $update->rightColor = '#000000';
         $update->textColor  = '#CCCCCC';
@@ -137,7 +149,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected event
         $expectedEvent = new Event();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20, 'FR');
+        $expectedEvent->update('foobar', ['fr'], 'fr', Event::VAT_MODE_ATI, 20, 'FR', 'EUR');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
         // Mock
@@ -145,9 +157,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->set($expectedEvent)->shouldBeCalled();
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldNotBeCalled();
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal());
+        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
         $handler->handle($update);
     }
 }

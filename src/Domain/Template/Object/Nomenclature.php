@@ -105,6 +105,14 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
+     * @return NomenclatureModel
+     */
+    public function getNomenclatureModel()
+    {
+        return $this->nomenclature;
+    }
+
+    /**
      * Get nomenclature
      *
      * @return int

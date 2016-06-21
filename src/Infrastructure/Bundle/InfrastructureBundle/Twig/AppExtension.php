@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig;
 use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
 use Proximum\Vimeet\Ui\Helper\DataFormatter;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
+use Symfony\Component\Intl\Intl;
 
 class AppExtension extends \Twig_Extension
 {
@@ -54,6 +55,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('format_data', [$this, 'formatData']),
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('currency_symbol', [$this, 'currencySymbol']),
         ];
     }
 
@@ -132,6 +134,17 @@ class AppExtension extends \Twig_Extension
         }
 
         return isset($locales[$locale]) ? $locales[$locale] : (isset($locales[$fallback]) ? $locales[$fallback] : $default);
+    }
+
+    /**
+     * @param string      $currency
+     * @param string|null $locale
+     *
+     * @return string|null
+     */
+    public function currencySymbol($currency, $locale = null)
+    {
+        return Intl::getCurrencyBundle()->getCurrencySymbol($currency, $locale);
     }
 
     /**

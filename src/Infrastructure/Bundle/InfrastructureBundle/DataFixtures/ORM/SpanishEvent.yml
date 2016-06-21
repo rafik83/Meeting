@@ -4,6 +4,7 @@ Proximum\Vimeet\Domain\Model\Event:
         domain: spanish-event.<domain()>
         timeZone: 'Europe/Paris'
         locales: [es]
+        logo: 'assets/images/asddays-logo.png'
         fallback: es
         assetPath: ''
         country: 'ES'
@@ -23,6 +24,7 @@ Proximum\Vimeet\Domain\Model\Event:
         # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
         mode: 'et'
         vat: 20
+        currency: 'EUR'
         elementToJoinWithInvoice: |+
             - Número de la factura
             - Nombre del evento

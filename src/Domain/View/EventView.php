@@ -62,10 +62,16 @@ class EventView implements EventInterface
     public $country;
 
     /**
+     * @var string
+     */
+    public $logo;
+
+    /**
      * EventView constructor.
      *
      * @param int    $id
      * @param string $title
+     * @param string $logo
      * @param string $description
      * @param string $locale
      * @param string $fallback
@@ -77,6 +83,7 @@ class EventView implements EventInterface
     public function __construct(
         $id,
         $title,
+        $logo,
         $description,
         $locale,
         $fallback,
@@ -87,6 +94,7 @@ class EventView implements EventInterface
     ) {
         $this->id          = $id;
         $this->title       = $title;
+        $this->logo        = $logo;
         $this->description = $description;
         $this->locale      = $locale;
         $this->fallback    = $fallback;

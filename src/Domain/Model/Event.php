@@ -46,6 +46,11 @@ class Event implements EventInterface
     /**
      * @var string
      */
+    private $logo;
+
+    /**
+     * @var string
+     */
     private $timeZone;
 
     /**
@@ -124,6 +129,13 @@ class Event implements EventInterface
      * @var string
      */
     private $country;
+
+    /**
+     * ISO 4217 3-letter currency code
+     *
+     * @var string
+     */
+    private $currency;
 
     /**
      * Constructor.
@@ -271,6 +283,22 @@ class Event implements EventInterface
     }
 
     /**
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param string $logo
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+    }
+
+    /**
      * @param array $billingTemplate
      *
      * @deprecated billing template has to be rewritten
@@ -297,8 +325,9 @@ class Event implements EventInterface
      * @param string $mode
      * @param float  $vat
      * @param string $country
+     * @param string $currency
      */
-    public function update($title, array $locales, $fallback, $mode, $vat, $country)
+    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency)
     {
         $this->title    = $title;
         $this->locales  = $locales;
@@ -306,6 +335,7 @@ class Event implements EventInterface
         $this->mode     = $mode;
         $this->vat      = $vat;
         $this->country  = $country;
+        $this->currency = $currency;
     }
 
     /**
@@ -380,5 +410,21 @@ class Event implements EventInterface
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
     }
 }

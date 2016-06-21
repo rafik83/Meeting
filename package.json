@@ -12,6 +12,8 @@
     "tablesort": "4.0.1",
     "select2": "4.0.2",
     "intl-tel-input": "8.5.2",
+    "moment": ">=2.8",
+    "eonasdan-bootstrap-datetimepicker": "4.15.35",
     "pubsub-js": "1.5.3"
   },
   "napa": {},

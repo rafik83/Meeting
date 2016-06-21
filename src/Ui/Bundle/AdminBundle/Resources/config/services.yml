@@ -87,6 +87,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
+            - '@ui.helper.currency_formatter'
         tags:
             - { name: form.type }
     form_type_package.package_choice_type:
@@ -95,3 +96,17 @@ services:
             - '@repository.package_repository'
         tags:
             - { name: form.type }
+    form_type_event.event_update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType
+        arguments:
+            - '%infrastructure.supported_currencies%'
+        tags:
+            - { name: form.type }
+
+    #
+    # Helper
+    #
+    ui.helper.currency_formatter:
+        class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
+        arguments:
+            - '@twig.extension.intl'

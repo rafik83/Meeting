@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\PromotionCodeTranslation:
+    type:  entity
+    table: promotion_code_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        label:
+            type: string
+        description:
+            type: string
+            nullable: true
+    manyToOne:
+        promotionCode:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

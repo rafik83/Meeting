@@ -34,7 +34,7 @@ class ProductCollectionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'product_types', 'collection_group']);
+        $resolver->setRequired(['event', 'locale', 'product_types', 'collection_group']);
         $resolver->setDefaults([
             'entry_type'     => RankedType::class,
             'allow_add'      => true,
@@ -51,6 +51,7 @@ class ProductCollectionType extends AbstractType
                     'item_options' => [
                         'label'            => false,
                         'event'            => $options['event'],
+                        'locale'           => $options['locale'],
                         'placeholder'      => '',
                         'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                             return $productRepository->findByEventAndTypes($options['event'], $options['product_types']);

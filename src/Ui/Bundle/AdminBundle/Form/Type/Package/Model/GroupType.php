@@ -35,6 +35,7 @@ class GroupType extends AbstractType
             ])
             ->add('options', ProductCollectionType::class, [
                 'event'            => $options['event'],
+                'locale'           => $options['locale'],
                 'product_types'    => [Product::TYPE_OPTION],
                 'collection_group' => 'options',
                 'error_bubbling'   => false,
@@ -47,7 +48,7 @@ class GroupType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Group::class,

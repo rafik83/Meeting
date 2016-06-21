@@ -36,6 +36,23 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(MeetingSlot $meetingSlot)
+    {
+        $this->entityManager->persist($meetingSlot);
+        $this->entityManager->flush($meetingSlot);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(MeetingSlot $meetingSlot)
+    {
+        $this->entityManager->flush($meetingSlot);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this
@@ -44,7 +61,8 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->select('slot')
             ->from(MeetingSlot::class, 'slot', 'slot.id')
             ->where('slot.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('slot.begin', 'ASC');
 
         return $queryBuilder->getQuery()->getResult();
     }

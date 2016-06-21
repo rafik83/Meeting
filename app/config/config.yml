@@ -167,6 +167,7 @@ services:
 
 infrastructure:
     eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
+    supported_currencies: ['EUR', 'GBP', 'USD']
     web_asset_event_guideline_path: 'css/event'
     bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
@@ -193,3 +194,18 @@ tactician:
             middleware:
                 - tactician.middleware.validator
                 - tactician.middleware.command_handler
+
+#
+# Liip Imagine Bundle
+#
+liip_imagine:
+    driver: imagick
+    resolvers:
+       default:
+          web_path: ~
+    filter_sets:
+        cache: ~
+        event_header_logo:
+            quality: 100
+            filters:
+                thumbnail: { size: [250, 100], mode: inset }

@@ -24,10 +24,9 @@ class VatModeType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => [
-                'HT'  => Event::VAT_MODE_ET,
-                'TTC' => Event::VAT_MODE_ATI,
+                'form.vatMode.et'  => Event::VAT_MODE_ET,
+                'form.vatMode.ati' => Event::VAT_MODE_ATI,
             ],
-            'choices_as_values' => true,
         ]);
     }
 

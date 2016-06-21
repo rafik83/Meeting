@@ -423,6 +423,14 @@ class Product
     }
 
     /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->event->getCurrency();
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param string $image
