@@ -52,15 +52,25 @@
         font-weight: normal;
     }
 
+    input[type="file"] {
+        background: none;
+        border: none;
+        padding: 0;
+        box-shadow: none;
+    }
+
     input[type="text"],
     input[type="password"],
     input[type="email"],
     input[type="tel"],
     input[type="url"],
+    textarea,
     select {
         width: 100%;
         border: 1px solid #BBBDBF;
         padding: 11px 12px;
+        height: auto;
+        border-radius: 0;
 
         &:focus {
             outline: none;

@@ -74,7 +74,16 @@
                 border: 0;
                 padding: 0;
 
-                .checkbox { margin: 8px 0 8px 10px; }
+                .checkbox {
+                    .control-label {
+                        margin: 0;
+                        padding: 5px 5px 5px 30px;
+                        text-align: left;
+                    }
+
+                    margin: 0;
+                    padding: 0;
+                }
 
                 .link-add-skill {
                     display: inline-block;
