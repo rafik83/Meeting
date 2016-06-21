@@ -66,14 +66,15 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             -
                                                 90713a3d:
                                                     component: "object"
-                                                    type: "button-link"
+                                                    type: "tag"
                                                     config:
                                                         style: "style-1"
                                                         label:
                                                             fr: "Site internet"
+                                                            en: "Website"
                                                         help:
                                                             fr: ""
-                                                        required: false
+                                                        tag: "participant_website"
                                 -
                                     d691d21c:
                                         component: "object"
