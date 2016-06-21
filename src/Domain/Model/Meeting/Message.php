@@ -150,7 +150,7 @@ class Message
      */
     public function getToParticipantsAndOwner()
     {
-        $toSheetOwner   = $this->getTo()->getOwner();
+        $toSheetOwner   = $this->getTo()->getParticipantOwner();
         $toParticipants = $this->getTo()->getParticipants()->toArray();
 
         if (!in_array($toSheetOwner, $toParticipants)) {

@@ -41,13 +41,12 @@ class CategoryChoiceType extends AbstractType
     {
         $resolver->setRequired(['event', 'locale']);
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choice_label'      => function (Options $options) {
+            'choice_label' => function (Options $options) {
                 return function (Category $category) use ($options) {
                     return $category->getTitle($options['locale']);
                 };
             },
-            'choices'           => function (Options $options) {
+            'choices' => function (Options $options) {
                 return $this->categoryRepository->getCategoriesByEvent($options['event'], $options['locale']);
             },
             'choice_translation_domain' => false,

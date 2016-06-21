@@ -780,6 +780,12 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
+    command.participant.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:
@@ -883,7 +889,6 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@components.sheet.billing_view_factory'
             - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'

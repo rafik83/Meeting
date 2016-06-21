@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
-use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingView;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 
@@ -47,11 +46,6 @@ class SheetDetailsView
      * @var string
      */
     public $package;
-
-    /**
-     * @var BillingView
-     */
-    public $billing;
 
     /**
      * "nbre de demandes validée"
@@ -113,8 +107,6 @@ class SheetDetailsView
      * @param array           $participants
      * @param string          $ownerEmail
      * @param string          $ownerPhone
-     * @param string          $package
-     * @param BillingView     $billing
      * @param int             $approvedRequests
      * @param int             $pendingRequests
      * @param int             $refusedRequests
@@ -130,8 +122,6 @@ class SheetDetailsView
         array $participants,
         $ownerEmail,
         $ownerPhone,
-        $package,
-        BillingView $billing,
         $approvedRequests,
         $pendingRequests,
         $refusedRequests,
@@ -146,8 +136,6 @@ class SheetDetailsView
         $this->participants         = $participants;
         $this->ownerEmail           = $ownerEmail;
         $this->ownerPhone           = $ownerPhone;
-        $this->package              = $package;
-        $this->billing              = $billing;
         $this->approvedRequests     = $approvedRequests;
         $this->pendingRequests      = $pendingRequests;
         $this->refusedRequests      = $refusedRequests;

@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -29,7 +30,8 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event   = new Event();
         $type    = new Type($event);
-        $sheet   = new Sheet($event, $type, [], [], new \DateTime());
+        $user    = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet   = new Sheet($event, $type, [], $user, new \DateTime());
         $expectedSheet = clone $sheet;
         $expectedSheet->markAsValidated();
         $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());

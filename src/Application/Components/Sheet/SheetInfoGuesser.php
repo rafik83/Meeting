@@ -48,7 +48,17 @@ class SheetInfoGuesser
     public function guessOwnerInfo(Sheet $sheet, $locale)
     {
         try {
-            return $this->participantInfoGuesser->guessParticipantCompleteName($sheet->getOwner(), $locale);
+            $participant = $sheet->getParticipantOwner();
+
+            if (null !== $participant) {
+                return $this->participantInfoGuesser->guessParticipantCompleteName($sheet->getParticipantOwner(), $locale);
+            } else {
+                return sprintf(
+                    '%s %s',
+                    $sheet->getOwner()->getAccount()->getFirstName(),
+                    $sheet->getOwner()->getAccount()->getLastName()
+                );
+            }
         } catch (\RuntimeException $exception) {
             return '';
         }

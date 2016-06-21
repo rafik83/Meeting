@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Components\Template\Exception\MissingRequiredDataException;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -60,13 +59,11 @@ class ParticipateHandler
 
     /**
      * @param Participate $participate
-     *
-     * @throws MissingRequiredDataException
      */
     public function handle(Participate $participate)
     {
         // Create a new sheet for this event
-        $sheet = new Sheet($participate->event, $participate->type, [], [], $this->dateTime);
+        $sheet = new Sheet($participate->event, $participate->type, [], $participate->user, $this->dateTime);
 
         $sheetData       = [];
         $participantData = [];
@@ -88,7 +85,7 @@ class ParticipateHandler
         $this->sheetRepository->add($sheet);
 
         // Create a new participant
-        $participant = new Participant($sheet, $participate->user, $participantData, $participate->owner, true);
+        $participant = new Participant($sheet, $participate->user, $participantData, true);
         $this->participantRepository->add($participant);
 
         $participate->sheet       = $sheet;

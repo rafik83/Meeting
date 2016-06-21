@@ -60,6 +60,7 @@ class TypeChoiceType extends AbstractType
                 'choice_attr'  => function (TypeView $typeView) {
                     return ['data-description' => $this->markdown->toHtml($typeView->description)];
                 },
+                'translation_domain' => false,
             ]);
     }
 

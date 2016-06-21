@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 
 class AddCommentHandlerTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +27,8 @@ class AddCommentHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime = new \DateTime();
         $event    = new Event();
         $type     = new Type($event);
-        $sheet    = new Sheet($event, $type, [], [], $dateTime);
+        $user     = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet    = new Sheet($event, $type, [], $user, $dateTime);
         $author   = new Admin('test@test.com', '__SALT__', '__PASSWORD__', 'fr', 'Truc', 'Muche', 'ROLE_SUPER_ADMIN', $dateTime);
 
         $addComment = new AddComment(

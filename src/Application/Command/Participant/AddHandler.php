@@ -110,11 +110,11 @@ class AddHandler
 
         $user = $this->findOrCreateUser($add);
 
-        if ($add->sheet->hasUser($user)) {
+        if ($add->sheet->hasUserParticipant($user)) {
             throw new ParticipantAlreadyExistException('User already linked to this sheet');
         }
 
-        if (!empty($this->sheetRepository->getSheetByUserAndEvent($user, $add->sheet->getEvent()))) {
+        if (!empty($this->sheetRepository->getSheetByUserAndEventWhereUserIsParticipant($user, $add->sheet->getEvent()))) {
             throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
         }
 
@@ -129,11 +129,12 @@ class AddHandler
             $this->cartManager->save($cart);
         }
 
-        // Send event
-        if ($user->isActive()) {
-            $this->sendCompleteProfileEvent($add, $user, $participant);
-        } else {
-            $this->sendActivationEvent($add, $user);
+        if (!$add->sheet->isOwner($user)) {
+            if ($user->isActive()) {
+                $this->sendCompleteProfileEvent($add, $user, $participant);
+            } else {
+                $this->sendActivationEvent($add, $user);
+            }
         }
 
         return new AddResult($participant);
@@ -192,7 +193,7 @@ class AddHandler
             Tag::PARTICIPANT_LASTNAME  => $add->lastName,
         ]);
 
-        $participant = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
+        $participant = new Participant($add->sheet, $user, $templateData->getData(), false);
         $this->participantRepository->add($participant);
 
         $add->sheet->addParticipant($participant);

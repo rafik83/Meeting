@@ -83,10 +83,10 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     private function getFromParticipants(MessageSubjectInterface $messageSubject)
     {
-        $fromSheetOwner   = $messageSubject->getFromSheet()->getOwner();
+        $fromSheetOwner   = $messageSubject->getFromSheet()->getParticipantOwner();
         $fromParticipants = $messageSubject->getFromParticipants()->toArray();
 
-        if (!in_array($fromSheetOwner, $fromParticipants)) {
+        if (!in_array($fromSheetOwner, $fromParticipants) && $fromSheetOwner !== null) {
             array_push($fromParticipants, $fromSheetOwner);
         }
 
@@ -100,10 +100,10 @@ class NotificationEventListener implements EventSubscriberInterface
      */
     private function getToParticipants(MessageSubjectInterface $messageSubject)
     {
-        $toSheetOwner   = $messageSubject->getToSheet()->getOwner();
+        $toSheetOwner   = $messageSubject->getToSheet()->getParticipantOwner();
         $toParticipants = $messageSubject->getToParticipants()->toArray();
 
-        if (!in_array($toSheetOwner, $toParticipants)) {
+        if (!in_array($toSheetOwner, $toParticipants) && $toSheetOwner !== null) {
             array_push($toParticipants, $toSheetOwner);
         }
 
@@ -502,7 +502,7 @@ class NotificationEventListener implements EventSubscriberInterface
     public function onRequestSent(RequestSentEvent $event)
     {
         // Get sheet owner
-        $recipient = $event->getRequest()->getToSheet()->getOwner()->getUser();
+        $recipient = $event->getRequest()->getToSheet()->getOwner();
 
         $locale = $recipient->getLocale();
 
@@ -584,8 +584,8 @@ class NotificationEventListener implements EventSubscriberInterface
         // Send notification
         $this->notificationRepository->add(new Notification(
             $event->getSheet()->getEvent(),
-            $owner->getUser(),
-            $owner->getUser(),
+            $owner,
+            $owner,
             new \DateTime(),
             'sheet.validated',
             $message,

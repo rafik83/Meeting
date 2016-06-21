@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Validator\SheetAcceptedCriteria
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 
 class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +24,8 @@ class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type($event);
         $type->getValidationCriteria()->setSheetAccepted(false);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet = new Sheet($event, $type, [], $user, new \DateTime());
 
         $validator = new SheetAcceptedCriteriaValidator();
 
@@ -35,7 +37,8 @@ class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type($event);
         $type->getValidationCriteria()->setSheetAccepted(true);
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet = new Sheet($event, $type, [], $user, new \DateTime());
 
         $validator = new SheetAcceptedCriteriaValidator();
 
@@ -47,8 +50,8 @@ class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
         $event = new Event();
         $type  = new Type($event);
         $type->getValidationCriteria()->setSheetAccepted(true);
-
-        $sheet = new Sheet($event, $type, [], [], new \DateTime());
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet = new Sheet($event, $type, [], $user, new \DateTime());
         $sheet->markAsAccepted();
 
         $validator = new SheetAcceptedCriteriaValidator();
