@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
 use Symfony\Component\Form\AbstractType;

@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Package\Product;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class QuantityMaxGuesser
