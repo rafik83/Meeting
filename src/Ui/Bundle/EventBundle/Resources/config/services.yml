@@ -42,6 +42,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\Select2Extension
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType' }
+    vimeet.form_extension.textarea_extension:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\TextareaExtension
+        tags:
+            - { name: form.type_extension, extended_type: 'Symfony\Component\Form\Extension\Core\Type\TextareaType' }
 
     #
     # Form type
@@ -141,15 +145,6 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
-    vimeet_app.vimeet.application.event.notification_event_listener:
-        class: Proximum\Vimeet\Application\Event\NotificationEventListener
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
-        tags:
-            - { name: 'kernel.event_subscriber' }
     event_listener.login_event_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LoginEventListener
         arguments:

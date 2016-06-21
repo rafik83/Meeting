@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
@@ -95,7 +96,7 @@ class UpdateRequestFromHandler
 
             $this->messageRepository->add($message);
 
-            $events[] = ['meeting_request.update.message', new MessageEvent($message, $updateRequestFrom->editor)];
+            $events[] = [Events::REQUEST_UPDATE_MESSAGE, new MessageEvent($message, $updateRequestFrom->editor)];
         }
 
         // Dispatch events
@@ -113,7 +114,7 @@ class UpdateRequestFromHandler
     private function createAddedEvent(UpdateRequestFrom $updateRequestFrom, Participant $participant)
     {
         return [
-            'meeting_request.participant.added',
+            Events::REQUEST_PARTICIPANT_ADDED,
             new ParticipantAddedEvent(
                 $updateRequestFrom->editor,
                 $participant,
@@ -133,7 +134,7 @@ class UpdateRequestFromHandler
     private function createRemovedEvent(UpdateRequestFrom $updateRequestFrom, Participant $participant)
     {
         return [
-            'meeting_request.participant.removed',
+            Events::REQUEST_PARTICIPANT_REMOVED,
             new ParticipantRemovedEvent(
                 $updateRequestFrom->editor,
                 $participant,

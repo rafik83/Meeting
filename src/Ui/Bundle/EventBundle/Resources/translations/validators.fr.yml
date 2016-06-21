@@ -7,6 +7,7 @@ validators:
     participant:
         alreadyLinkedToASheet: Cette personne possède déjà une fiche pour cet événement et ne peut donc être invitée à vous rejoindre
         alreadyLinkedToThisSheet: Cette personne est déjà présente sur votre fiche
+        canNotRemoveAllParticipants: Vous ne pouvez pas supprimer tous les participants de votre fiche
 
 package:
     plans:

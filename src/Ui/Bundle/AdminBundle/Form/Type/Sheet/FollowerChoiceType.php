@@ -41,11 +41,10 @@ class FollowerChoiceType extends AbstractType
     {
         $resolver->setRequired(['event']);
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choices'           => function (Options $options) {
+            'choices' => function (Options $options) {
                 return $this->adminRepository->getFollowers($options['event']);
             },
-            'choice_label'      => function (Admin $admin) {
+            'choice_label' => function (Admin $admin) {
                 return $admin->getDisplayName();
             },
             'choice_translation_domain' => false,

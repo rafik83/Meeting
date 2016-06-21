@@ -59,10 +59,12 @@ sheet:
     object:
         action:
             add: "Ajouter:"
+            remove: "Supprimer:"
             edit: Editer
             backToSheet: Retour à la fiche
     participant:
         sendInvite: Envoyer l'invitation
+        remove: Supprimer de la fiche
     edit:
         object: Editer "%label%"
 

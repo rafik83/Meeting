@@ -160,7 +160,7 @@ event_sheet_update:
     defaults: { _controller: EventBundle:Sheet:update }
 
 event_sheet_add_participant:
-    path:   /sheet/{locale}/{key}/participant/form
+    path:   /sheet/{locale}/{key}/participant/add/form
     requirements:
         locale: '[a-z]{2}'
         key: \w+
@@ -168,12 +168,28 @@ event_sheet_add_participant:
     defaults: { _controller: EventBundle:Sheet:addParticipant }
 
 event_sheet_handle_participant:
-    path:   /sheet/{locale}/{key}/participant
+    path:   /sheet/{locale}/{key}/participant/add
     requirements:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleAddParticipant }
+
+event_sheet_remove_participant:
+    path:   /sheet/{locale}/{key}/participant/remove/form
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:removeParticipant }
+
+event_sheet_handle_remove_participant:
+    path:   /sheet/{locale}/{key}/participant/remove
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods:  [GET, POST]
+    defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
 
 
 #

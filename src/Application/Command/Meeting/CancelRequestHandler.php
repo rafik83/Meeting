@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -78,14 +79,11 @@ class CancelRequestHandler
         }
 
         // Dispatch event
-        $this->eventDispatcher->dispatch(
-            'meeting_request.canceled',
-            new RequestCanceledEvent(
-                $cancelRequest->emitter,
-                $cancelRequest->request,
-                $this->createdAt,
-                $cancelRequest->message
-            )
-        );
+        $this->eventDispatcher->dispatch(Events::REQUEST_CANCELED, new RequestCanceledEvent(
+            $cancelRequest->emitter,
+            $cancelRequest->request,
+            $this->createdAt,
+            $cancelRequest->message
+        ));
     }
 }

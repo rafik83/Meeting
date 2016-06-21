@@ -10,6 +10,38 @@ services:
             - { name: kernel.event_listener, event: kernel.terminate, method: process }
 
     #
+    # Subscriber
+    #
+    notification_subscriber:
+        abstract:  true
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+
+    vimeet_app.vimeet.application.event.notification_on_meeting_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnMeetingEventSubscriber
+        parent: notification_subscriber
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    vimeet_app.vimeet.application.event.notification_on_message_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnMessageEventSubscriber
+        parent: notification_subscriber
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    vimeet_app.vimeet.application.event.notification_on_request_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnRequestEventSubscriber
+        parent: notification_subscriber
+        tags:
+            - { name: 'kernel.event_subscriber' }
+    vimeet_app.vimeet.application.event.notification_on_sheet_event_subscriber:
+        class: Proximum\Vimeet\Application\Event\NotificationOnSheetEventSubscriber
+        parent: notification_subscriber
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    #
     # Repositories
     #
     vimeet_infrastructure.repository.event_repository:
@@ -774,6 +806,12 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
+    command.participant.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:
@@ -884,7 +922,6 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@components.sheet.billing_view_factory'
             - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'

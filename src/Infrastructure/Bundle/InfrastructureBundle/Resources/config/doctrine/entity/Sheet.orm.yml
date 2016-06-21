@@ -13,12 +13,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             type: json_array
             nullable: true
-        packageData:
-            type: json_array
-            nullable: true
-        billingData:
-            type: json_array
-            nullable: true
         createdAt:
             type: datetime
         lastLoginAt:
@@ -31,6 +25,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+        owner:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
         follower:

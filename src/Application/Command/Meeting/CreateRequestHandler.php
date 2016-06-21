@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
@@ -80,7 +81,7 @@ class CreateRequestHandler
         }
 
         // Notify request creation
-        $this->eventDispatcher->dispatch('meeting_request.sent', new RequestSentEvent(
+        $this->eventDispatcher->dispatch(Events::REQUEST_SENT, new RequestSentEvent(
             $createRequest->creator,
             $request,
             $createRequest->createdAt,
@@ -89,7 +90,7 @@ class CreateRequestHandler
 
         // Notify participant add
         foreach ($createRequest->participants as $participant) {
-            $this->eventDispatcher->dispatch('meeting_request.participant.added', new ParticipantAddedEvent(
+            $this->eventDispatcher->dispatch(Events::REQUEST_PARTICIPANT_ADDED, new ParticipantAddedEvent(
                 $createRequest->creator,
                 $participant,
                 $request,

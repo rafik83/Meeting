@@ -22,8 +22,7 @@ class CompletedChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choices'           => [
+            'choices' => [
                 'event.sheet.completed.complete'   => true,
                 'event.sheet.completed.incomplete' => false,
             ],
