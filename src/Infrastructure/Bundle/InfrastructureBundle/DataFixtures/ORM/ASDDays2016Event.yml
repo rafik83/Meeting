@@ -1193,20 +1193,20 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct: false
         type: '@event_asddays_2016_type_fournisseur'
         event: '@event_asddays_2016'
+        owner: '@user_asddays_2'
         data: []
         registrationData:
             3ad4b72f: { text: "Elao" }
-        packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_asddays_empty_with_tag:
         __construct: false
         type: '@event_asddays_2016_type_investisseur'
         event: '@event_asddays_2016'
+        owner: '@user_asddays_3'
         data: []
         registrationData:
             3ad4b72f: { text: "Elao" }
-        packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
@@ -1224,7 +1224,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: "@user_asddays_2"
         sheet: "@sheet_asddays_empty"
-        owner: true
         active: true
         data:
             541f84d4: { text: "John" }
@@ -1234,7 +1233,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: "@user_asddays_3"
         sheet: "@sheet_asddays_empty_with_tag"
-        owner: true
         active: true
         data:
             541f84d4: { text: "John" }
