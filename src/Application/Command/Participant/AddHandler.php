@@ -121,13 +121,8 @@ class AddHandler
         // Create participant
         $participant = $this->createAndFillParticipant($add, $user);
 
-        // Add addionnal
-        $cart = $this->cartManager->getCart($add->sheet);
-
-        if ($cart->getPlanRow()) {
-            $cart->resolveParticipantsQuantity();
-            $this->cartManager->save($cart);
-        }
+        // Update cart
+        $this->cartManager->updateParticipantsQuantity($add->sheet);
 
         if (!$add->sheet->isOwner($user)) {
             if ($user->isActive()) {

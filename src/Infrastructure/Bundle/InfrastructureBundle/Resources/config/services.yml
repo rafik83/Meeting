@@ -784,6 +784,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
