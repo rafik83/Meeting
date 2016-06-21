@@ -12,27 +12,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
-class ProfileDataValidator extends ConstraintValidator
+class ProfileDataValidator extends ParticipantDataValidator
 {
-    private $objectsConstraint = [
-        'button-link'   => ObjectConstraint::class,
-        'choice'        => ObjectConstraint::class,
-        'carousel'      => ObjectConstraint::class,
-        'country'       => Object\CountryConstraint::class,
-        'collection'    => ObjectConstraint::class,
-        'editable-text' => Object\EditableTextConstraint::class,
-        'image'         => ObjectConstraint::class,
-        'media'         => ObjectConstraint::class,
-        'nomenclature'  => Object\NomenclatureConstraint::class,
-        'participant'   => ObjectConstraint::class,
-        'tag'           => ObjectConstraint::class,
-        'telephone'     => Object\TelephoneConstraint::class,
-        'text'          => ObjectConstraint::class,
-        'url'           => Object\UrlConstraint::class,
-    ];
-
     /**
      * {@inheritdoc}
      */
