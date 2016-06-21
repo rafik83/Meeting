@@ -125,6 +125,13 @@ class Product
     private $productIncluded;
 
     /**
+     * "Produit soumis à validation"
+     *
+     * @var boolean
+     */
+    private $subjectedToValidation = false;
+
+    /**
      * @param Event                   $event
      * @param string                  $type
      * @param string                  $name
@@ -135,6 +142,7 @@ class Product
      * @param int                     $availabilityMax
      * @param bool                    $updatable
      * @param \DateTimeInterface|null $updatableUntil
+     * @param bool                    $subjectedToValidation
      */
     private function __construct(
         Event $event,
@@ -146,21 +154,23 @@ class Product
         $availabilityCurrent,
         $availabilityMax,
         $updatable,
-        \DateTimeInterface $updatableUntil = null
+        \DateTimeInterface $updatableUntil = null,
+        $subjectedToValidation = false
     ) {
-        $this->translations        = new ArrayCollection();
-        $this->features            = new ArrayCollection();
-        $this->productIncluded     = new ArrayCollection();
-        $this->event               = $event;
-        $this->type                = $type;
-        $this->name                = $name;
-        $this->image               = $image;
-        $this->unitPrice           = $unitPrice;
-        $this->quantityMax         = $quantityMax;
-        $this->availabilityCurrent = $availabilityCurrent;
-        $this->availabilityMax     = $availabilityMax;
-        $this->updatable           = $updatable;
-        $this->updatableUntil      = $updatableUntil;
+        $this->translations          = new ArrayCollection();
+        $this->features              = new ArrayCollection();
+        $this->productIncluded       = new ArrayCollection();
+        $this->event                 = $event;
+        $this->type                  = $type;
+        $this->name                  = $name;
+        $this->image                 = $image;
+        $this->unitPrice             = $unitPrice;
+        $this->quantityMax           = $quantityMax;
+        $this->availabilityCurrent   = $availabilityCurrent;
+        $this->availabilityMax       = $availabilityMax;
+        $this->updatable             = $updatable;
+        $this->updatableUntil        = $updatableUntil;
+        $this->subjectedToValidation = $subjectedToValidation;
     }
 
     /**
@@ -235,15 +245,16 @@ class Product
      * @param string $heading
      * @param string $description
      * @param string $addon
+     * @param string $subjectedToValidationHelp
      *
      * @return Product
      */
-    public function translate($locale, $title, $heading, $description, $addon)
+    public function translate($locale, $title, $heading, $description, $addon, $subjectedToValidationHelp)
     {
         if ($this->hasTranslation($locale)) {
-            $this->getTranslation($locale)->set($title, $heading, $description, $addon);
+            $this->getTranslation($locale)->set($title, $heading, $description, $addon, $subjectedToValidationHelp);
         } else {
-            $this->translations->set($locale, new ProductTranslation($this, $locale, $title, $heading, $description, $addon));
+            $this->translations->set($locale, new ProductTranslation($this, $locale, $title, $heading, $description, $addon, $subjectedToValidationHelp));
         }
 
         return $this;
@@ -354,7 +365,29 @@ class Product
     }
 
     /**
-     * @return ArrayCollection
+     * Get subjectedToValidation
+     *
+     * @return boolean
+     */
+    public function isSubjectedToValidation()
+    {
+        return $this->subjectedToValidation;
+    }
+
+    /**
+     * Get subjectedToValidationHelp
+     *
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getSubjectedToValidationHelp($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getSubjectedToValidationHelp() : '';
+    }
+
+    /**
+     * @return Feature[]
      */
     public function getFeatures()
     {
@@ -584,10 +617,11 @@ class Product
      * @param int                $availabilityMax
      * @param bool               $updatable
      * @param \DateTimeInterface $updatableUntil
+     * @param bool               $subjectedToValidation
      *
      * @return Product
      */
-    public static function createOption(Event $event, $name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null)
+    public static function createOption(Event $event, $name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null, $subjectedToValidation = false)
     {
         return new self(
             $event,
@@ -599,7 +633,8 @@ class Product
             $availabilityCurrent,
             $availabilityMax,
             $updatable,
-            $updatableUntil
+            $updatableUntil,
+            $subjectedToValidation
         );
     }
 

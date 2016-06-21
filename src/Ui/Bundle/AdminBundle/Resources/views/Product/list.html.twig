@@ -27,6 +27,7 @@
             <th class="text-right">{{ 'admin.product.unitPrice'|trans }}</th>
             <th class="text-right">{{ 'admin.product.quantityMax'|trans }}</th>
             <th class="text-right">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.subjectedToValidation'|trans }}</th>
             <th class="text-center">{{ 'admin.product.updatable'|trans }}</th>
             <th class="text-right">{{ 'admin.product.updatableUntil'|trans }}</th>
         </tr>
@@ -48,6 +49,7 @@
                 <td class="text-right">{{ product.unitPrice|localizedcurrency(event.currency) }}</td>
                 <td class="text-right">{{ product.quantityMax }}</td>
                 <td class="text-right">{{ product.availabilityCurrent }} / {{ product.availabilityMax }}</td>
+                <td class="text-center">{{ product.subjectedToValidation ? '✓' : '' }}</td>
                 <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
                 <td class="text-right">{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
             </tr>

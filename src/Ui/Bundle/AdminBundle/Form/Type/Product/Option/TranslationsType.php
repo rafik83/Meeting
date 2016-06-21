@@ -31,7 +31,11 @@ class TranslationsType extends AbstractType
             ])
             ->add('addon', TextareaType::class, [
                 'required' => false,
-            ]);
+            ])
+            ->add('subjectedToValidationHelp', TextareaType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     /**
