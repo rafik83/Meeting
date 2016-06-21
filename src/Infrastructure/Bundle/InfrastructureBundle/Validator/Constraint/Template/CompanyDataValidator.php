@@ -18,8 +18,8 @@ class CompanyDataValidator extends ConstraintValidator
 {
     private $objectsConstraint = [
         'button-link'   => ObjectConstraint::class,
-        'choice'        => ObjectConstraint::class,
         'carousel'      => ObjectConstraint::class,
+        'choice'        => ObjectConstraint::class,
         'country'       => Object\CountryConstraint::class,
         'collection'    => ObjectConstraint::class,
         'editable-text' => Object\EditableTextConstraint::class,
@@ -39,7 +39,7 @@ class CompanyDataValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if (!$value instanceof TemplateData) {
-            $this->context->buildViolation('Template expected')->addViolation();
+            $this->context->buildViolation('A TemplateData is expected')->addViolation();
         }
 
         $validator = $this->context->getValidator()->inContext($this->context);
