@@ -19,6 +19,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: "@type_exposant"
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        owner: "@user_1"
         data: []
         registrationData: []
 
@@ -27,14 +28,12 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: "@user_1"
         sheet: "@sheet_1"
-        owner: true
         active: true
         data: []
     participant_2:
         __construct: false
         user: "@user_2"
         sheet: "@sheet_1"
-        owner: false
         active: true
         data: []
 

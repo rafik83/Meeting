@@ -109,6 +109,14 @@ class PaginatedSheetListViewQueryHandler
      */
     private function createSheetListView(Sheet $sheet, $locale, Admin $admin, Trace $trace = null)
     {
+        if (null === $sheet->getParticipantOwner()) {
+            $firstName = $sheet->getOwner()->getAccount()->getFirstName();
+            $lastName  = $sheet->getOwner()->getAccount()->getLastName();
+        } else {
+            $firstName = $this->participantInfoGuesser->guessParticipantFirstName($sheet->getParticipantOwner(), $locale);
+            $lastName  = $this->participantInfoGuesser->guessParticipantLastName($sheet->getParticipantOwner(), $locale);
+
+        }
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
@@ -117,14 +125,14 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getType()->getCategoriesTitles($locale),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
-                $this->participantInfoGuesser->guessParticipantFirstName($sheet->getOwner(), $locale),
-                $this->participantInfoGuesser->guessParticipantLastName($sheet->getOwner(), $locale),
-                $sheet->getOwner()->getUser()->getEmail()
+                $firstName,
+                $lastName,
+                $sheet->getOwner()->getEmail()
             ),
             $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
-            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()->getUser()),
+            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),
             $trace
         );
     }

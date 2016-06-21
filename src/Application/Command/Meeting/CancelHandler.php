@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -69,14 +70,11 @@ class CancelHandler
         }
 
         // Disptach event
-        $this->eventDispatcher->dispatch(
-            'meeting.canceled',
-            new CanceledEvent(
-                $cancel->user,
-                $cancel->meeting,
-                $cancel->date,
-                $cancel->message
-            )
-        );
+        $this->eventDispatcher->dispatch(Events::MEETING_CANCELED, new CanceledEvent(
+            $cancel->user,
+            $cancel->meeting,
+            $cancel->date,
+            $cancel->message
+        ));
     }
 }

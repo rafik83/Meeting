@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
-use Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingViewFactory;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -39,11 +38,6 @@ class SheetDetailsViewFactory
     private $requestRepository;
 
     /**
-     * @var BillingViewFactory
-     */
-    private $billingViewFactory;
-
-    /**
      * @var CommentRepositoryInterface
      */
     private $commentRepository;
@@ -64,7 +58,6 @@ class SheetDetailsViewFactory
      * @param SheetInfoGuesser           $sheetInfoGuesser
      * @param ParticipantInfoGuesser     $participantInfoGuesser
      * @param RequestRepositoryInterface $requestRepository
-     * @param BillingViewFactory         $billingViewFactory
      * @param TemplateDataFactory        $templateDataFactory
      * @param CommentRepositoryInterface $commentRepository
      * @param TraceRepositoryInterface   $traceRepository
@@ -73,7 +66,6 @@ class SheetDetailsViewFactory
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         RequestRepositoryInterface $requestRepository,
-        BillingViewFactory $billingViewFactory,
         TemplateDataFactory $templateDataFactory,
         CommentRepositoryInterface $commentRepository,
         TraceRepositoryInterface $traceRepository
@@ -81,7 +73,6 @@ class SheetDetailsViewFactory
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->requestRepository      = $requestRepository;
-        $this->billingViewFactory     = $billingViewFactory;
         $this->templateDataFactory    = $templateDataFactory;
         $this->commentRepository      = $commentRepository;
         $this->traceRepository        = $traceRepository;
@@ -104,28 +95,28 @@ class SheetDetailsViewFactory
             $sheet->getState(),
             // Participant names
             array_map(function (Participant $participant) use ($templateDataFactory, $locale) {
-                $objects = $templateDataFactory->createRegistrationFromParticipant($participant, $locale)->getObjects();
+                $objects = $templateDataFactory->createRegistrationFromParticipant($participant, $locale)->getProfileObjects();
 
                 $infos = [];
 
                 /** @var Object $object */
                 foreach ($objects as $object) {
-                    if ($object instanceof Object\ContentObjectInterface && '' !== $object->getContentValue()) {
+                    if ($object instanceof Object\ContentObjectInterface) {
                         $label = $object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback());
-                        $infos[$label] = $object->getContentValue();
+                        if ($object instanceof Object\Nomenclature) {
+                            $infos[$label] = $object->getContentLabel();
+                        } else {
+                            $infos[$label] = $object->getContentValue();
+                        }
                     }
                 }
 
                 return $infos;
             }, $sheet->getParticipants()->toArray()),
             // Owner email
-            $sheet->getOwner()->getUser()->getEmail(),
+            $sheet->getOwner()->getEmail(),
             // Owner phone
-            $this->participantInfoGuesser->guessParticipantPhone($sheet->getOwner(), $locale),
-            // Package
-            $this->sheetInfoGuesser->guessSheetPackage($sheet, $locale),
-            // Billing
-            $this->billingViewFactory->createFromSheet($sheet, $locale),
+            null !== $sheet->getParticipantOwner() ? $this->participantInfoGuesser->guessParticipantPhone($sheet->getParticipantOwner(), $locale) : $sheet->getOwner()->getAccount()->getPhone(),
             // Approved requests
             $this->requestRepository->countApprovedRequestSentBySheet($sheet),
             // Pending requests

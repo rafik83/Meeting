@@ -58,7 +58,7 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetValidated(SheetValidatedEvent $event)
     {
-        $owner = $event->getSheet()->getOwner()->getUser();
+        $owner = $event->getSheet()->getOwner();
 
         $mail  = new SheetValidatedMail(
             $event->getSheet(),

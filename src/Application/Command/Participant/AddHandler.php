@@ -100,20 +100,22 @@ class AddHandler
 
         $user = $this->findOrCreateUser($add);
 
-        if ($add->sheet->hasUser($user)) {
+        if ($add->sheet->hasUserParticipant($user)) {
             throw new ParticipantAlreadyExistException('User already linked to this sheet');
         }
 
-        if (!empty($this->sheetRepository->getSheetByUserAndEvent($user, $add->sheet->getEvent()))) {
+        if (!empty($this->sheetRepository->getSheetByUserAndEventWhereUserIsParticipant($user, $add->sheet->getEvent()))) {
             throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
         }
 
         $participant = $this->createAndFillParticipant($add, $user);
 
-        if ($user->isActive()) {
-            $this->sendCompleteProfileEvent($add, $user, $participant);
-        } else {
-            $this->sendActivationEvent($add, $user);
+        if (!$add->sheet->isOwner($user)) {
+            if ($user->isActive()) {
+                $this->sendCompleteProfileEvent($add, $user, $participant);
+            } else {
+                $this->sendActivationEvent($add, $user);
+            }
         }
 
         return new AddResult($participant);
@@ -159,12 +161,12 @@ class AddHandler
     }
 
     /**
-     * @param Add $add
-     * @param     $user
+     * @param Add  $add
+     * @param User $user
      *
      * @return Participant
      */
-    protected function createAndFillParticipant(Add $add, $user)
+    protected function createAndFillParticipant(Add $add, User $user)
     {
         $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
         $templateData->setTaggedData([
@@ -172,7 +174,7 @@ class AddHandler
             Tag::PARTICIPANT_LASTNAME  => $add->lastName,
         ]);
 
-        $participant = new Participant($add->sheet, $user, $templateData->getData(), $add->owner, false);
+        $participant = new Participant($add->sheet, $user, $templateData->getData(), false);
         $this->participantRepository->add($participant);
 
         return $participant;

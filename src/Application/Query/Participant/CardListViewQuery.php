@@ -34,11 +34,13 @@ class CardListViewQuery
      * @param Sheet  $sheet
      * @param User   $user
      * @param string $locale
+     * @param bool   $editable
      */
-    public function __construct(Sheet $sheet, User $user, $locale)
+    public function __construct(Sheet $sheet, User $user, $locale, $editable = true)
     {
-        $this->sheet  = $sheet;
-        $this->user   = $user;
-        $this->locale = $locale;
+        $this->sheet    = $sheet;
+        $this->user     = $user;
+        $this->locale   = $locale;
+        $this->editable = $editable;
     }
 }

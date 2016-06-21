@@ -41,13 +41,12 @@ class TypeChoiceType extends AbstractType
     {
         $resolver->setRequired(['event', 'locale']);
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choice_label'      => function (Options $options) {
+            'choice_label' => function (Options $options) {
                 return function (Type $type) use ($options) {
                     return $type->getTitle($options['locale']);
                 };
             },
-            'choices'           => function (Options $options) {
+            'choices' => function (Options $options) {
                 return $this->typeRepository->getLocalizedTypesByEvent($options['event'], $options['locale']);
             },
             'choice_translation_domain' => false,

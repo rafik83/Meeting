@@ -4,7 +4,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@user_test'
         sheet: '@sheet_test'
-        owner: true
         active: true
         data:
             541f84d4: { text: 'Paul' }
@@ -15,7 +14,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_visiteur'
         sheet: '@proximum_sheet_visiteur'
-        owner: true
         active: true
         data:
             541f84d4: { text: <firstName()> }
@@ -24,7 +22,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_exposant'
         sheet: '@proximum_sheet_exposant'
-        owner: true
         active: true
         data:
             541f84d4: { text: <firstName()> }
@@ -33,7 +30,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_carnot'
         sheet: '@proximum_sheet_carnot'
-        owner: true
         active: true
         data:
             541f84d4: { text: <firstName()> }
@@ -42,7 +38,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_carnot2'
         sheet: '@proximum_sheet_carnot'
-        owner: false
         active: true
         data:
             541f84d4: { text: <firstName()> }
@@ -51,7 +46,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_admin'
         sheet: '@proximum_sheet_admin'
-        owner: true
         active: true
         data:
             541f84d4: { text: <firstName()> }
@@ -60,7 +54,6 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_test'
         sheet: '@proximum_sheet_test'
-        owner: true
         active: true
         data:
             541f84d4: { text: <firstName()> }
@@ -69,18 +62,113 @@ Proximum\Vimeet\Domain\Model\Participant:
         __construct: false
         user: '@proximum_user_ui'
         sheet: '@proximum_sheet_ui'
-        owner: true
         active: true
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
 
     # Random
-    participant_random_{1..30}:
+    participant_random_1:
         __construct: false
-        user: '@user_random_<current()>'
-        sheet: '@sheet_exposant<current()>'
-        owner: true
+        user: '@user_random_1'
+        sheet: '@sheet_exposant1'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_2:
+        __construct: false
+        user: '@user_random_2'
+        sheet: '@sheet_exposant2'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_3:
+        __construct: false
+        user: '@user_random_3'
+        sheet: '@sheet_exposant3'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_4:
+        __construct: false
+        user: '@user_random_4'
+        sheet: '@sheet_exposant4'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_5:
+        __construct: false
+        user: '@user_random_5'
+        sheet: '@sheet_exposant5'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_6:
+        __construct: false
+        user: '@user_random_6'
+        sheet: '@sheet_exposant6'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_13:
+        __construct: false
+        user: '@user_random_13'
+        sheet: '@sheet_exposant7'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+
+    participant_random_7:
+        __construct: false
+        user: '@user_random_7'
+        sheet: '@sheet_investisseur1'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_8:
+        __construct: false
+        user: '@user_random_8'
+        sheet: '@sheet_investisseur2'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_9:
+        __construct: false
+        user: '@user_random_9'
+        sheet: '@sheet_visiteur1'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_10:
+        __construct: false
+        user: '@user_random_10'
+        sheet: '@sheet_visiteur2'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_11:
+        __construct: false
+        user: '@user_random_11'
+        sheet: '@sheet_visiteur_visio1'
+        active: true
+        data:
+            541f84d4: { text: <firstName()> }
+            838197c7: { text: <lastName()> }
+    participant_random_12:
+        __construct: false
+        user: '@user_random_12'
+        sheet: '@sheet_visiteur_visio2'
         active: true
         data:
             541f84d4: { text: <firstName()> }
