@@ -590,3 +590,20 @@ admin:
         name: Nom
         unitPrice: Prix unitaire
         productIncluded: Produits inclus
+    schedule:
+        link: Agenda
+        title: Agenda
+        slots:
+            title: Créneaux de rendez-vous
+            generate:
+                action: Générer des créneaux
+                title: Générer des créneaux de rendez-vous
+            table:
+                begin: De
+                end: à
+                duration: Durée
+        slot:
+            lock: Bloquer
+            unlock: Débloquer
+            locked: Bloqué
+            unlocked: Débloqué

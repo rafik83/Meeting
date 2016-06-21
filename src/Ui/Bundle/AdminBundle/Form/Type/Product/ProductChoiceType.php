@@ -53,9 +53,13 @@ class ProductChoiceType extends AbstractType
         $resolver->setDefaults([
             'choice_label'     => function (Options $options) {
                 return function (Product $product) use ($options) {
-                    $price = $this->currencyFormatter->format($product->getUnitPrice(), $product->getCurrency(), $options['locale']);
+                    if ($options['display_price'] === true) {
+                        $price = $this->currencyFormatter->format($product->getUnitPrice(), $product->getCurrency(), $options['locale']);
 
-                    return sprintf('%s (%s)', $product->getName(), $price);
+                        return sprintf('%s (%s)', $product->getName(), $price);
+                    }
+
+                    return $product->getName();
                 };
             },
             'repositoryMethod' => function (Options $options) {
@@ -66,6 +70,7 @@ class ProductChoiceType extends AbstractType
             'choices'          => function (Options $options) {
                 return $options['repositoryMethod']($this->productRepository);
             },
+            'display_price'    => true,
         ]);
     }
 
