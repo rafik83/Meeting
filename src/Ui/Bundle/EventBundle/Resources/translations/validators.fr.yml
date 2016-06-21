@@ -15,5 +15,5 @@ package:
     planning:
         quantity: La quantité doit être comprise entre %min% et %max%
     product:
-        quantity: La quantité doit être comprise entre %min% et %max%
+        quantityNotMatch: La quantité doit être comprise entre %min% et %max%
         notAvailable: Vous avez sélectionné un produit qui n'est plus disponible

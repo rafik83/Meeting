@@ -10,7 +10,13 @@
             </span>
             <p class="product-addon">{{ product.addon }}</p>
             {% if product.availabilityMax %}
-                <span class="product-limite">Disponible <br>{{ product.availabilityCurrent }} sur {{ product.availabilityMax }}</span>
+                <span class="product-limite">
+                    {{ 'package.product.available'|trans }}<br>
+                    {{ 'package.product.availability'|trans({
+                        '%availabilityCurrent%': product.availabilityCurrent,
+                        '%availabilityMax%': product.availabilityMax
+                    }) }}
+                </span>
             {% endif %}
         </div>
     </td>
@@ -25,10 +31,9 @@
         {% endif %}
 
         {% if product.isOutOfStock %}
-            <h3 class="out-of-stock text-center">Epuisé</h3>
+            <h3 class="out-of-stock text-center">{{ 'package.product.outOfStock'|trans }}</h3>
         {% elseif quantityForm is defined %}
             {{ form_widget(quantityForm, {attr: {
-                'class': 'qty',
                 'data-selected-line-class': 'selected-line',
                 'data-unit-price': product.unitPrice,
                 'data-included': product.included

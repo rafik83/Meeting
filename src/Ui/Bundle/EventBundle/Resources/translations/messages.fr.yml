@@ -106,5 +106,8 @@ package:
         quantityMax: Quantité maximum atteinte
         quantityMin: Quantité minimum atteinte
         validate: Valider
+        available: Disponible
+        availability: '%availabilityCurrent% sur %availabilityMax%'
+        outOfStock: Epuisé
 billing_info:
     title: Info de facturation

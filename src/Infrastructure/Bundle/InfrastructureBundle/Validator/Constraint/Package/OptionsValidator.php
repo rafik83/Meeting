@@ -55,7 +55,7 @@ class OptionsValidator extends ConstraintValidator
             if ($quantity < 0 || $quantity > $quantityMax) {
                 $this
                     ->context
-                    ->buildViolation('package.product.quantity')
+                    ->buildViolation('package.product.quantityNotMatch')
                     ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
                     ->atPath($id)
                     ->addViolation();
