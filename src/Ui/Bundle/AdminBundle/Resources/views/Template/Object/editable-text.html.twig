@@ -9,7 +9,8 @@
     required: false,
     type: 'title',
     style: '',
-    translatable: false
+    translatable: false,
+    tag: null,
 }|merge(config|default({})) %}
 
 
@@ -88,6 +89,15 @@
                                     <select class="form-control" name="type">
                                         {% for label, value in { 'Titre': 'title', 'Texte': 'text' } %}
                                             <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">{{ 'template.object.tag'|trans }}</label>
+                                    <select class="form-control" name="tag">
+                                        <option value=""></option>
+                                        {% for tag in sheet_tags %}
+                                            <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
