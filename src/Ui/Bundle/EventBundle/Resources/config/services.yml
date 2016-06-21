@@ -253,3 +253,9 @@ services:
             - '@package.planning.quantity_max_guesser'
         tags:
             - { name: validator.constraint_validator, alias: alias_name }
+    validator.package.options_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: validator.constraint_validator, alias: alias_name }
