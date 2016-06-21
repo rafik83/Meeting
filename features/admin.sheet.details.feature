@@ -25,10 +25,10 @@ Feature: See sheet details
     And I should see "WorldCompanyInc"
     And I should see "Paul"
     And I should see "Gascoigne"
-    And I should see "Demandes validée"
-    And I should see "Propositions en attente"
-    And I should see "Demandes refusées"
-    And I should see "Propositions refusées"
+    And I should see "admin.sheet.details.meeting.request.approved"
+    And I should see "admin.sheet.details.meeting.request.pending"
+    And I should see "admin.sheet.details.meeting.request.refused"
+    And I should see "admin.sheet.details.meeting.proposition.refused"
 
   Scenario: I can add a comment on a sheet
     Given I am logged with "test@test.com" on admin

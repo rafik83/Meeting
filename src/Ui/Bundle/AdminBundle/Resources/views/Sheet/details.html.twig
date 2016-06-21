@@ -5,10 +5,10 @@
 
     <h2>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h2>
 
-    <h3>Participants</h3>
+    <h3>{{ 'admin.sheet.details.participants'|trans }}</h3>
     <table class="table table-bordered">
         <tr>
-            <th>Participants</th>
+            <th>{{ 'admin.sheet.details.participants'|trans }}</th>
             <td>
                 <table class="table">
                     <thead>
@@ -31,41 +31,22 @@
             </td>
         </tr>
         <tr>
-            <th>Email du propriétaire</th>
+            <th>{{ 'admin.sheet.details.owner.email'|trans }}</th>
             <td>{{ details.ownerEmail }}</td>
         </tr>
         <tr>
-            <th>Téléphone du propriétaire</th>
+            <th>{{ 'admin.sheet.details.owner.phone'|trans }}</th>
             <td>{{ details.ownerPhone }}</td>
         </tr>
     </table>
 
-
-    <h3>Informations de facturation</h3>
-    <p>Organisation: {{ details.billing.organization|default('-') }}</p>
-    <p>Contact: {{ details.billing.name|default('-') }}</p>
-    <p>Adresse:
-        {{ details.billing.address|default('-') }}<br>
-        {{ details.billing.zipcode }} {{ details.billing.city }}<br>
-        {% if details.billing.country %}{{ details.billing.country|country }}{% endif %}
-    </p>
-    <p>N° de TVA intracommunautaire : {{ details.billing.vat_number|default('-') }}</p>
-
-
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Forfait</h3>
-            {{ details.package }}
-        </div>
-    </div>
-
-    <h3>Demandes de Rendez-vous</h3>
+    <h3>{{ 'admin.sheet.details.meeting.request.title'|trans }}</h3>
 
     <div class="row">
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Demandes validées
+                    {{ 'admin.sheet.details.meeting.request.approved'|trans }}
                 </div>
                 <div class="panel-body text-center h1">
                     {{ details.approvedRequests }}
@@ -75,7 +56,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Demandes en attente
+                    {{ 'admin.sheet.details.meeting.request.pending'|trans }}
                 </div>
                 <div class="panel-body text-center h1">
                     {{ details.pendingRequests }}
@@ -85,7 +66,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Demandes refusées
+                    {{ 'admin.sheet.details.meeting.request.refused'|trans }}
                 </div>
                 <div class="panel-body text-center h1">
                     {{ details.refusedRequests }}
@@ -98,7 +79,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Propositions validées
+                    {{ 'admin.sheet.details.meeting.proposition.approved'|trans }}
                 </div>
                 <div class="panel-body text-center h1">
                     {{ details.approvedPropositions }}
@@ -108,7 +89,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Propositions en attente
+                    {{ 'admin.sheet.details.meeting.proposition.pending'|trans }}
                 </div>
                 <div class="panel-body text-center h1">
                     {{ details.pendingPropositions }}
@@ -118,7 +99,7 @@
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Propositions refusées
+                    {{ 'admin.sheet.details.meeting.proposition.refused'|trans }}
                 </div>
                 <div class="panel-body text-center h1">
                     {{ details.refusedPropositions }}

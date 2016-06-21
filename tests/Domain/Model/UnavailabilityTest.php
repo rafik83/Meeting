@@ -64,8 +64,8 @@ class UnavailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $event                 = new Event();
         $type                  = new Type($event);
-        $sheet                 = new Sheet($event, $type, [], [], new \DateTime());
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
+        $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());
         $participant           = new Participant($sheet, $user, [], true, true);
 
         $expected      = new Unavailability($participant, $e, $f);

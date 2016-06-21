@@ -96,7 +96,6 @@ class NomenclatureDataType extends AbstractType
             'multiple'                  => false,
             'required'                  => $object->getOption('required'),
             'choice_translation_domain' => false,
-            'choices_as_values'         => true,
             'choice_label'              => function (NomenclatureItem $item) use ($options) {
                 return $item->getLabel($options['locale']);
             },

@@ -217,7 +217,7 @@ class Nomenclature
     public function getThirdLevel()
     {
         return array_reduce($this->getItems(), function (array $carry, NomenclatureItem $item) {
-            return array_merge($carry, $item->getGrantChildren());
+            return array_merge($carry, $item->getGrandChildren());
         }, []);
     }
 
