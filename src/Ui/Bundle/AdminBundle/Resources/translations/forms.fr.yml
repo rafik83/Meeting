@@ -910,6 +910,10 @@ form:
                             label: Description
                         addon:
                             label: Texte optionnel sous le prix
+                        subjectedToValidationHelp:
+                            label: Message si soumis à validation
+            subjectedToValidation:
+                label: Ce produit est soumis à validation
     product_create_plan:
         children:
             name:
