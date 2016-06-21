@@ -46,6 +46,8 @@ class SelectOptionsHandler
 
         $options = array_combine($ids, $package->getAvailablesOptions());
 
+        $cart->clearOptions();
+
         foreach ($selectOptions->options as $id => $quantity) {
             $cart->setProduct($options[$id], $quantity);
         }

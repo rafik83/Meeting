@@ -23,7 +23,7 @@ class Cart
     private $sheet;
 
     /**
-     * @var CartRow[]
+     * @var ArrayCollection of CartRow
      */
     private $rows;
 
@@ -191,5 +191,15 @@ class Cart
     public function clear()
     {
         $this->rows->clear();
+    }
+
+    /**
+     * Clear the cart
+     */
+    public function clearOptions()
+    {
+        foreach ($this->getOptionsRow() as $row) {
+            $this->rows->removeElement($row);
+        }
     }
 }
