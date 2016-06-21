@@ -27,6 +27,14 @@
         {% if product.image %}
             <img src="{{ asset(product.image) }}" class="img-responsive">
         {% endif %}
+
+        {% if product.isSubjectedToValidation %}
+            <p>
+                <i>
+                    {{ product.subjectedToValidationHelp|default('package.product.subjectedToValidationHelp'|trans) }}
+                </i>
+            </p>
+        {% endif %}
     </td>
     <td class="col-md-2">
         {% if product.included %}

@@ -60,6 +60,8 @@ class OptionViewQueryHandler
             $optionViewQuery->product->isOutOfStock(),
             $optionViewQuery->sheet->getEvent()->getMode(),
             $optionViewQuery->sheet->getEvent()->getCurrency(),
+            $optionViewQuery->product->getSubjectedToValidationHelp($optionViewQuery->locale),
+            $optionViewQuery->product->isSubjectedToValidation(),
             $included
         );
     }

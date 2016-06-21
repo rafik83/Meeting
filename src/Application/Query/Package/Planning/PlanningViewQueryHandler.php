@@ -62,6 +62,8 @@ class PlanningViewQueryHandler
             $planningProduct->isOutOfStock(),
             $planningProduct->getVatMode(),
             $planningProduct->getEvent()->getCurrency(),
+            $planningProduct->getSubjectedToValidationHelp($planningViewQuery->locale),
+            $planningProduct->isSubjectedToValidation(),
             $included
         );
     }

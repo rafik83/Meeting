@@ -73,6 +73,16 @@ class ProductView
     public $currency;
 
     /**
+     * @var string
+     */
+    public $subjectedToValidationHelp;
+
+    /**
+     * @var bool
+     */
+    public $isSubjectedToValidation;
+
+    /**
      * @var int
      */
     public $included;
@@ -90,6 +100,8 @@ class ProductView
      * @param bool   $isOutOfStock
      * @param string $vatMode
      * @param string $currency
+     * @param string $subjectedToValidationHelp
+     * @param bool   $isSubjectedToValidation
      * @param int    $included
      */
     public function __construct(
@@ -105,20 +117,24 @@ class ProductView
         $isOutOfStock,
         $vatMode,
         $currency,
+        $subjectedToValidationHelp,
+        $isSubjectedToValidation,
         $included
     ) {
-        $this->id                  = $id;
-        $this->title               = $title;
-        $this->unitPrice           = $unitPrice;
-        $this->heading             = $heading;
-        $this->description         = $description;
-        $this->addon               = $addon;
-        $this->image               = $image;
-        $this->availabilityCurrent = $availabilityCurrent;
-        $this->availabilityMax     = $availabilityMax;
-        $this->isOutOfStock        = $isOutOfStock;
-        $this->vatMode             = $vatMode;
-        $this->currency            = $currency;
-        $this->included            = $included;
+        $this->id                        = $id;
+        $this->title                     = $title;
+        $this->unitPrice                 = $unitPrice;
+        $this->heading                   = $heading;
+        $this->description               = $description;
+        $this->addon                     = $addon;
+        $this->image                     = $image;
+        $this->availabilityCurrent       = $availabilityCurrent;
+        $this->availabilityMax           = $availabilityMax;
+        $this->isOutOfStock              = $isOutOfStock;
+        $this->vatMode                   = $vatMode;
+        $this->currency                  = $currency;
+        $this->subjectedToValidationHelp = $subjectedToValidationHelp;
+        $this->isSubjectedToValidation   = $isSubjectedToValidation;
+        $this->included                  = $included;
     }
 }
