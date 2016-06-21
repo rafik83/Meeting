@@ -16,9 +16,7 @@ use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
-use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -104,16 +102,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
-        $planRow     = new CartRow($sheet, $planProduct, 1);
-        $cart        = new Cart($sheet, [$planRow]);
         $cartManager = $this->prophesize(CartManager::class);
-        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-
-        $expectedCart = new Cart($sheet, [
-            $planRow,
-            new CartRow($sheet, $participantProduct, 1),
-        ]);
-        $cartManager->save($expectedCart)->shouldBeCalled();
+        $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
