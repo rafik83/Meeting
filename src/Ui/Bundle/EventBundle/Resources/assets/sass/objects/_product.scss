@@ -90,7 +90,7 @@
                     color: $color-highlighted;
                     display: inline-block;
                     font-size: 40px;
-                    margin-top: 5px;
+                    margin-top: 20px;
                     margin-bottom: 0;
                     sup {
                         font-size: 20px;
@@ -104,6 +104,11 @@
                 }
             }
         }
+    }
+
+    .selected-product {
+      border: solid 3px $color-highlighted;
+      margin: -3px;
     }
 
     .form--table {
@@ -123,11 +128,6 @@
                     margin-top: 30px;
                     margin-left: -5px;
                 }
-            }
-
-            .selected-line {
-                border: solid 3px $color-highlighted;
-                margin: -3px;
             }
 
             .table {

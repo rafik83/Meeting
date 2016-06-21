@@ -40,9 +40,8 @@ abstract class AbstractMeetingRequestType extends AbstractType
     {
         $builder
             ->add('participants', ChoiceType::class, [
-                'choices'           => $options['sheet']->getParticipants(),
-                'choices_as_values' => true,
-                'choice_label'      => function (Participant $participant) use ($options) {
+                'choices'      => $options['sheet']->getParticipants(),
+                'choice_label' => function (Participant $participant) use ($options) {
                     return $this->participantInfoGuesser
                         ->guessParticipantCompleteName($participant, $options['locale']);
                 },

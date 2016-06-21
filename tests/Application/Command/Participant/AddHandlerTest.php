@@ -16,15 +16,18 @@ use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
+use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -37,11 +40,20 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $now   = new \DateTime();
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], $now);
-        $owner = false;
+        $user  = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheet = new Sheet($event, $type, [], $user, $now);
         $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
-        $expectedSheet       = new Sheet($event, $type, [], [], $now);
+        $planProduct        = Product::createPlan($event, 'plan', '', 100, 10, 40);
+        $participantProduct = Product::createParticipant($event, 'participant', 50, 10);
+
+        $package  = new Package($event, 'My package', $now);
+        $package->enable(true, true, true);
+        $package->setPlans([$planProduct]);
+        $package->setParticipant($participantProduct);
+        $type->setPackage($package);
+
+        $expectedSheet       = new Sheet($event, $type, [], $user, $now);
         $expectedUser        = new User('test@test.com', '', '', 'fr');
         $expectedParticipant = new Participant(
             $expectedSheet,
@@ -54,16 +66,18 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
                     'text' => 'truc',
                 ],
             ],
-            $owner,
             false
         );
+        $expectedSheet->addParticipant($expectedParticipant);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);
         $userRepository->add($expectedUser)->shouldBeCalled();
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add($expectedParticipant)->shouldBeCalled();
+        $participantRepository->add(Argument::that(function (Participant $participant) use ($expectedParticipant) {
+            return true;
+        }))->shouldBeCalled();
 
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
@@ -88,6 +102,9 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
         $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
 
+        $cartManager = $this->prophesize(CartManager::class);
+        $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
+
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
         $editableText1 = new Template\Object\EditableText('editable-text', [
@@ -115,7 +132,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $cartManager->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
@@ -126,15 +144,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $now   = new \DateTime();
         $event = new Event();
         $type  = new Type($event);
-        $sheet = new Sheet($event, $type, [], [], $now);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
-        $owner = false;
-        $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
-
-        $expectedSheet       = new Sheet($event, $type, [], [], $now);
-        $expectedParticipant = new Participant(
-            $expectedSheet,
-            $user,
+        $user2 = new User('test2@test.com', '__SALT__', 'password', 'fr');
+        $sheet = new Sheet($event, $type, [], $user, $now);
+        $participant = new Participant(
+            $sheet,
+            $user2,
             [
                 '541f84d4' => [
                     'text' => 'jean'
@@ -143,21 +158,23 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
                     'text' => 'truc',
                 ],
             ],
-            $owner,
             false
         );
+        $sheet->addParticipant($participant);
+        $eventView = new EventView(1, 'title', '', 'description', 'fr', 'fr', ['fr'], 'PARIS', '', 'FR');
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn($user);
+        $userRepository->findByEmail('test2@test.com')->shouldBeCalled()->willReturn($user2);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+
+        $cartManager = $this->prophesize(CartManager::class);
 
         $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
         $block = new Template\Block('12', [], 'fr', 'fr');
@@ -174,12 +191,14 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $block->addChild(1, '838197c7', $editableText2);
         $templateData->addChild(0, '811f6edf', $block);
 
-        $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
+        $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldNotBeCalled();
 
         $add = new Add($sheet, $eventView, 'fr');
-        $add->email = 'test@test.com';
+        $add->email     = 'test2@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';
+
+        $this->expectException(ParticipantAlreadyExistException::class);
 
         $handler = new AddHandler(
             $userRepository->reveal(),
@@ -187,9 +206,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $cartManager->reveal()
         );
 
-        $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
+        $handler->handle($add);
     }
 }

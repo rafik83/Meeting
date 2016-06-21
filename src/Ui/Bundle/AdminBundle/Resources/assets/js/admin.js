@@ -13,6 +13,7 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update');
 
 require('elao-form.js');
+require('select2');
 require('eonasdan-bootstrap-datetimepicker');
 require('moment/locale/fr');
 require('moment/locale/en-gb');
@@ -35,7 +36,7 @@ function init(target) {
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-toggle="popover"]', target).popover();
 
-    $('.clear-on-hidden-modal')
+    $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (e) {
             $(e.target).removeData('bs.modal').find('.modal-content').html($(e.target).data('placeholder'));
         })
@@ -43,6 +44,17 @@ function init(target) {
             $(e.target).removeData('bs.modal').find('.modal-content').empty();
         })
     ;
+
+    [].forEach.call(target.querySelectorAll('.select2'), function (element) {
+        $(element).select2({
+            language: {
+                noResults: function () {
+                    return $(element).data('no-results-label');
+                }
+            },
+            allowClear: true
+        });
+    });
 
     $('[data-datatimepicker]').datetimepicker({
         locale: 'fr',
@@ -108,6 +120,11 @@ function init(target) {
 
     // Disable click on <a href="#"></a>
     [].forEach.call(target.querySelectorAll('a[href="#"'), function (element) {
+        element.addEventListener('click', function (event) { event.preventDefault(); });
+    });
+
+    // Disable click on active button
+    [].forEach.call(target.querySelectorAll('button.active'), function  (element) {
         element.addEventListener('click', function (event) { event.preventDefault(); });
     });
 

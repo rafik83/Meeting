@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         registrationData:
             3ad4b72f: { text: 'WorldCompanyInc' }
-        packageData: []
+        owner: '@user_test'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
@@ -17,9 +17,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_visiteur'
         event: '@event_rdv_carnot_2016'
         data: []
+        owner: '@proximum_user_visiteur'
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_exposant:
@@ -29,7 +29,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@proximum_user_exposant'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_carnot:
@@ -39,7 +39,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@proximum_user_carnot'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_admin:
@@ -49,7 +49,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@proximum_user_admin'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_test:
@@ -57,19 +57,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
         type: '@type_exposant'
         event: '@event_rdv_carnot_2016'
         data: []
+        owner: '@proximum_user_test'
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
-        billingData:
-            5645e4242d3df: LAROSE
-            5645e47e7e499: Proximum
-            5645e52f445d1: test_proximum'@proximum'.com
-            5645e534daa0b: Proximum
-            5645e54061ff2: Chaville
-            5645e5f35a9e0: 92370
-            5645e6067f46a: Chaville
-            5645e5fd8f6a7: FR
-            5645e610e0e1b: ""
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_ui:
@@ -79,48 +69,141 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@proximum_user_ui'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     # Random
-    sheet_exposant{1..30}:
+    sheet_exposant1:
         __construct: false
         event: '@event_rdv_carnot_2016'
         type: '@type_exposant'
         data: []
+        owner: '@user_random_1'
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
-    sheet_investisseur{1..20}:
+    sheet_exposant2:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
+        data: []
+        owner: '@user_random_2'
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+    sheet_exposant3:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
+        data: []
+        owner: '@user_random_3'
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+    sheet_exposant4:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
+        data: []
+        owner: '@user_random_4'
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+    sheet_exposant5:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
+        data: []
+        owner: '@user_random_5'
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+    sheet_exposant6:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
+        data: []
+        owner: '@user_random_6'
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+    sheet_exposant7:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_exposant'
+        data: []
+        owner: '@user_random_13'
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+
+    sheet_investisseur1:
         __construct: false
         event: '@event_rdv_carnot_2016'
         type: '@type_investisseur'
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@user_random_7'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
-    sheet_visiteur{1..20}:
+    sheet_investisseur2:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_investisseur'
+        data: []
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        owner: '@user_random_8'
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+
+    sheet_visiteur1:
         __construct: false
         event: '@event_rdv_carnot_2016'
         type: '@type_visiteur'
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@user_random_9'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
-    sheet_visiteur_visio{1..20}:
+    sheet_visiteur2:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_visiteur'
+        data: []
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        owner: '@user_random_10'
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+
+    sheet_visiteur_visio1:
         __construct: false
         event: '@event_rdv_carnot_2016'
         type: '@type_visiteur_visio'
         data: []
         registrationData:
             3ad4b72f: { text: <company()> }
-        packageData: []
+        owner: '@user_random_11'
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+    sheet_visiteur_visio2:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        type: '@type_visiteur_visio'
+        data: []
+        registrationData:
+            3ad4b72f: { text: <company()> }
+        owner: '@user_random_12'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>

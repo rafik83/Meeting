@@ -23,6 +23,17 @@ interface CartRowRepositoryInterface
     /**
      * @param CartRow $cartRow
      */
+    public function set(CartRow $cartRow);
+
+    /**
+     * @param Sheet $sheet
+     * @param array $cartRows
+     */
+    public function deleteWhereNotIn(Sheet $sheet, array $cartRows);
+
+    /**
+     * @param CartRow $cartRow
+     */
     public function delete(CartRow $cartRow);
 
     /**
@@ -31,11 +42,4 @@ interface CartRowRepositoryInterface
      * @return CartRow[]
      */
     public function findBySheet(Sheet $sheet);
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return CartRow
-     */
-    public function findCartRowPlanBySheet(Sheet $sheet);
 }

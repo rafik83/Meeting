@@ -113,7 +113,7 @@ class NomenclatureItem
      *
      * @return NomenclatureItem[]
      */
-    public function getGrantChildren()
+    public function getGrandChildren()
     {
         return array_reduce($this->children, function (array $carry, NomenclatureItem $item) {
             return array_merge($carry, $item->getChildren());
@@ -127,7 +127,7 @@ class NomenclatureItem
      */
     public function getLabel($locale)
     {
-        return $this->label[$locale];
+        return isset($this->label[$locale]) ? $this->label[$locale] : null;
     }
 
     /**

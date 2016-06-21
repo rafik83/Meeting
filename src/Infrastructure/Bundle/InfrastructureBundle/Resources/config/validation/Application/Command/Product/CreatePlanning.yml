@@ -1,0 +1,18 @@
+Proximum\Vimeet\Application\Command\Product\CreatePlanning:
+    properties:
+        name:
+            - NotBlank: ~
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        quantityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        description: ~

@@ -25,7 +25,7 @@ class CreateParticipantHandler
      */
     public function __construct(ProductRepositoryInterface $productRepository)
     {
-        $this->productRepository    = $productRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -41,7 +41,7 @@ class CreateParticipantHandler
         );
 
         foreach ($createParticipant->translations as $locale => $translation) {
-            $product->translate($locale, $translation['title'], null, null, null, null);
+            $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 
         $this->productRepository->add($product);

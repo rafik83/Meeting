@@ -1,3 +1,5 @@
+{% form_theme form '@Ui/default.html.twig' %}
+
 {{ form_start(form) }}
     <div class="modal-header">
         {# <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> #}
@@ -10,7 +12,11 @@
         {{ form_errors(form) }}
 
         {% if form.vars.help|default(false) %}
-            <p class="help-block">{{ form.vars.help }}</p>
+            {% if form.children.content is not defined
+            or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined)
+            %}
+                <p class="help-block">{{ form.vars.help }}</p>
+            {% endif %}
         {% endif %}
 
         {% for key, child in form if key != 'submit' %}

@@ -14,6 +14,7 @@ use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
 use Proximum\Vimeet\Ui\Helper\DataFormatter;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Validator\Constraints\UrlValidator;
 
 class AppExtension extends \Twig_Extension
 {
@@ -56,6 +57,16 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('choices_list', [$this, 'choicesList'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('currency_symbol', [$this, 'currencySymbol']),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTests()
+    {
+        return [
+            new \Twig_SimpleTest('url', [$this, 'isUrl'])
         ];
     }
 
@@ -145,6 +156,18 @@ class AppExtension extends \Twig_Extension
     public function currencySymbol($currency, $locale = null)
     {
         return Intl::getCurrencyBundle()->getCurrencySymbol($currency, $locale);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return bool
+     */
+    public function isUrl($value)
+    {
+        $pattern = sprintf(UrlValidator::PATTERN, implode('|', ['http', 'https']));
+
+        return (bool) is_string($value) && preg_match($pattern, $value);
     }
 
     /**

@@ -190,10 +190,10 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
 
-        $expectedSheet = new Sheet($event, $type, [], [], $now);
+        $expectedSheet = new Sheet($event, $type, [], $user, $now);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
 
-        $expectedSheetWithParticipant = new Sheet($event, $type, [], [], $now);
+        $expectedSheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant          = new Participant(
             $expectedSheetWithParticipant,
             $user,

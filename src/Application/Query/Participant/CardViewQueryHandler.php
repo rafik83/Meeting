@@ -45,7 +45,7 @@ class CardViewQueryHandler
             $infos[Tag::PARTICIPANT_LASTNAME],
             $infos[Tag::PARTICIPANT_POSITION],
             $infos[Tag::PARTICIPANT_AVATAR],
-            $cardViewQuery->participant->isOwner(),
+            $cardViewQuery->participant->isOwnerParticipant(),
             $cardViewQuery->participant->getSheet()->getId()
         );
 

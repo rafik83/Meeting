@@ -23,8 +23,7 @@ class PredefinedFiltersChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choices'           => [
+            'choices' => [
                 'admin.sheet.created_today'     => Constant::CREATED_TODAY,
                 'admin.sheet.created_this_week' => Constant::CREATED_THIS_WEEK,
             ],

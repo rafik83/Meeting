@@ -29,7 +29,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();
         $type         = new Type($event);
-        $sheet        = new Sheet($event, $type, [], [], new \DateTime());
+        $sheet        = new Sheet($event, $type, [], $user1, new \DateTime());
         $participant1 = new Participant($sheet, $user1, [], true, true);
         $participant2 = new Participant($sheet, $user2, [], false, true);
         $sheet->getParticipants()->add($participant1);
@@ -54,7 +54,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
         $event        = new Event();
         $type         = new Type($event);
-        $sheet        = new Sheet($event, $type, [], [], new \DateTime());
+        $sheet        = new Sheet($event, $type, [], $user1, new \DateTime());
         $participant1 = new Participant($sheet, $user1, [], true, true);
         $participant2 = new Participant($sheet, $user2, [], false, true);
         $sheet->getParticipants()->add($participant1);

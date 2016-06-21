@@ -68,6 +68,7 @@ class PackageController extends Controller
         $update = new Update($package);
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $package->getEvent(),
+            'locale' => $package->getEvent()->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
 

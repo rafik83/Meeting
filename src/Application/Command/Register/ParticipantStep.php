@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
-
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateData;
