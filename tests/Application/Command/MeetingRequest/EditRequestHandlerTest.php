@@ -35,11 +35,12 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -98,11 +99,12 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -163,11 +165,12 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -226,11 +229,12 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         // Context
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
+        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);

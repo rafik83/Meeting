@@ -69,11 +69,6 @@ class Event implements EventInterface
     private $fallback;
 
     /**
-     * @var array
-     */
-    private $billingTemplate;
-
-    /**
      * @var string
      */
     private $organiserName;
@@ -296,26 +291,6 @@ class Event implements EventInterface
     public function setLogo($logo)
     {
         $this->logo = $logo;
-    }
-
-    /**
-     * @param array $billingTemplate
-     *
-     * @deprecated billing template has to be rewritten
-     */
-    public function setBillingTemplate($billingTemplate)
-    {
-        $this->billingTemplate = $billingTemplate;
-    }
-
-    /**
-     * @return array
-     *
-     * @deprecated billing template has to be rewritten
-     */
-    public function getBillingTemplate()
-    {
-        return $this->billingTemplate;
     }
 
     /**

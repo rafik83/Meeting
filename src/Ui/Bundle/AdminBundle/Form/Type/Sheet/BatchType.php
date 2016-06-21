@@ -27,12 +27,12 @@ class BatchType extends AbstractType
     {
         $builder
             ->add('ids', ChoiceType::class, [
-                'choices'           => $options['ids'],
-                'choices_as_values' => true,
-                'choice_name'       => function ($id) { return $id; },
-                'expanded'          => true,
-                'multiple'          => true,
-                'label'             => false,
+                'choices'            => $options['ids'],
+                'choice_name'        => function ($id) { return $id; },
+                'expanded'           => true,
+                'multiple'           => true,
+                'label'              => false,
+                'translation_domain' => false,
             ])
             ->add('follower', FollowerChoiceType::class, [
                 'event'       => $options['event'],

@@ -41,53 +41,6 @@ Proximum\Vimeet\Domain\Model\Event:
             - Numéro de la Facture
             - Nom de l'événement
             - Montant net à payer
-        billingTemplate:
-            5645e4242d3df:
-                type: lib_text
-                required: true
-                label: { fr: "Nom", en: "Name" }
-                tags: ["billing_name"]
-            5645e47e7e499:
-                type: lib_text
-                required: false
-                label: { fr: "Téléphone", en: "Phone" }
-                tags: ["billing_phone"]
-            5645e52f445d1:
-                type: lib_email
-                required: true
-                label: { fr: "Email", en: "Email" }
-                tags: ["billing_email"]
-            5645e534daa0b:
-                type: lib_text
-                required: true
-                label: { fr: "Raison sociale", en: "Company" }
-                tags: ["billing_organization"]
-            5645e54061ff2:
-                type: lib_text
-                required: true
-                label: { fr: "Adresse", en: "Address" }
-                tags: ["billing_address"]
-            5645e5f35a9e0:
-                type: lib_text
-                required: true
-                label: { fr: "Code postal", en: "Zip code" }
-                tags: ["billing_zipcode"]
-            5645e6067f46a:
-                type: lib_text
-                required: true
-                label: { fr: "Ville", en: "City" }
-                tags: ["billing_city"]
-            5645e5fd8f6a7:
-                type: lib_country
-                required: true
-                label: { fr: "Pays", en: "Country" }
-                placeholder: { fr: "--- Sélectionner un pays  ---", en: "--- Sélectionner un pays  ---" }
-                tags: ["billing_country"]
-            5645e610e0e1b:
-                type: lib_text
-                required: false
-                label: { fr: "N° de TVA intracommunautaire", en: "N° VAT" }
-                tags: ["billing_vat_number"]
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_translation_rdv_carnot_2016_fr:
@@ -124,10 +77,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Titre de votre fiche"
+                                    en: "Title of your sheet"
                                 placeholder:
                                     fr: "Société en une phrase"
+                                    en: "Your company in a sentence"
                                 help:
                                     fr: ""
+                                    en: ""
                                 length: "200"
                                 type: "title"
                                 required: true
@@ -146,10 +102,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-1"
                                             label:
                                                 fr: "Logo"
+                                                en: "Logo"
                                             placeholder:
-                                                fr: ""
+                                                fr: "Ajouter un logo"
+                                                en: "Add a logo"
                                             help:
-                                                fr: ""
+                                                fr: "Télécharger un logo pour améliorer votre visibilité"
+                                                en: "Upload a logo to improve your impact"
                                             length: null
                                             type: null
                                             required: false
@@ -167,18 +126,21 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         style: "style-1"
                                                         label:
                                                             fr: "Catégorie"
+                                                            en: "Category"
                                                         tag: "sheet_organization"
                                             -
                                                 90713a3d:
                                                     component: "object"
-                                                    type: "button-link"
+                                                    type: "tag"
                                                     config:
                                                         style: "style-1"
                                                         label:
                                                             fr: "Site internet"
+                                                            en: "Website"
                                                         help:
                                                             fr: ""
-                                                        required: false
+                                                            en: ""
+                                                        tag: "participant_website"
                                 -
                                     d691d21c:
                                         component: "object"
@@ -187,10 +149,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-1"
                                             label:
                                                 fr: "Description d'activité"
+                                                en: "Description of activity"
                                             placeholder:
                                                 fr: ""
+                                                en: ""
                                             help:
                                                 fr: ""
+                                                en: ""
                                             length: "500"
                                             type: "text"
                                             required: false
@@ -202,10 +167,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-3"
                                 label:
                                     fr: "Compétences"
+                                    en: "Competency"
                                 placeholder:
                                     fr: ""
+                                    en: ""
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: false
                                 mode: "checkboxes"
                                 default: 1
@@ -217,19 +185,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                             children:
                                 -
-                                    848e283e:
-                                        component: "object"
-                                        type: "carousel"
-                                        config:
-                                            style: "style-1"
-                                            label:
-                                                fr: "Slideshow"
-                                            placeholder:
-                                                fr: ""
-                                            help:
-                                                fr: ""
-                                            required: false
-                                -
                                     1adc1873:
                                         component: "object"
                                         type: "collection"
@@ -237,12 +192,16 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-3"
                                             label:
                                                 fr: "Clients de référence"
+                                                en: "References"
                                             placeholder:
                                                 fr: "Vos clients de référence"
+                                                en: "Your references"
                                             help:
                                                 fr: ""
+                                                en: ""
                                             required: true
                                             default: "1"
+                                -
                                     46663c1d:
                                         component: "object"
                                         type: "collection"
@@ -250,10 +209,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-3"
                                             label:
                                                 fr: "Projets innovant"
+                                                en: "Innovative projects"
                                             placeholder:
                                                 fr: "Vos projets innovant"
+                                                en: "Your innovative projects"
                                             help:
                                                 fr: ""
+                                                en: ""
                                             required: false
                                             default: "3"
                         097ab5e8:
@@ -263,10 +225,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-3"
                                 label:
                                     fr: "Equipements, technologies et process"
+                                    en: "Equipements, technologies et process"
                                 placeholder:
                                     fr: ""
+                                    en: ""
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: false
                                 default: "3"
                     -
@@ -277,10 +242,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Repères"
+                                    en: "Landmarks"
                                 placeholder:
                                     fr: ""
+                                    en: ""
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: true
                                 default: "3"
                         a9271999:
@@ -290,10 +258,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Groupe / Membre"
+                                    en: "Group / Member of"
                                 placeholder:
                                     fr: ""
+                                    en: ""
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: false
                                 default: "3"
                         a23a2f5d:
@@ -303,10 +274,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-2"
                                 label:
                                     fr: "Certifications"
+                                    en: "Certifications"
                                 placeholder:
                                     fr: "vos certifications"
+                                    fr: "Your certifications"
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: false
                                 default: "3"
                         bef61d39:
@@ -316,6 +290,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Participants"
+                                    en: "Participants"
                                 numberOfParticipantShown: "3"
                         211efd1f:
                             component: "object"
@@ -324,10 +299,16 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Médias"
-                                placeholder:
-                                    fr: "Vos médias"
+                                    en: "Medias"
+                                titlePlaceholder:
+                                    fr: "Titre de votre média"
+                                    en: "Title of your medias"
+                                linkPlaceholder:
+                                    fr: "Lien de votre média"
+                                    en: "Link of your medias"
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: false
                                 default: "3"
             69962d34:
@@ -344,6 +325,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 style: "style-2"
                                 content:
                                     fr: "Objectifs de participation"
+                                    en: "Objectives"
                                 type: "title"
                         37db4a33:
                             component: "block"
@@ -359,10 +341,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-1"
                                             label:
                                                 fr: "Description"
+                                                en: "Description"
                                             placeholder:
                                                 fr: "Description"
+                                                en: "Description"
                                             help:
                                                 fr: "Description"
+                                                en: "Description"
                                             length: "500"
                                             type: "text"
                                             required: false
@@ -375,10 +360,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-1"
                                             label:
                                                 fr: "Offres"
+                                                fr: "Offer"
                                             placeholder:
                                                 fr: "Vos offres"
+                                                en: "Your offers"
                                             help:
                                                 fr: "Vos offres"
+                                                en: "Your offers"
                                             required: true
                                             mode: "checkboxes"
                                             nomenclature: "@nomenclature_offre_besoins->id"
@@ -389,10 +377,13 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             style: "style-1"
                                             label:
                                                 fr: "Besoins"
+                                                en: "Needs"
                                             placeholder:
                                                 fr: "Vos besoins"
+                                                en: "Your needs"
                                             help:
                                                 fr: "Vos besoins"
+                                                en: "Your needs"
                                             required: true
                                             mode: "checkboxes"
                                             nomenclature: "@nomenclature_offre_besoins->id"

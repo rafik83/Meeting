@@ -67,3 +67,8 @@
         </div>
     </div>
 {% endblock %}
+
+{%- block url_widget -%}
+    {%- set type = type|default('text') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock url_widget -%}

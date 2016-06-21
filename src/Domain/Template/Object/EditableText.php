@@ -113,7 +113,9 @@ class EditableText extends EditableObject implements ContentObjectInterface
      */
     public function getFallbackContent()
     {
-        if ($this->isTranslatable() && is_array($this->data['text']) || is_array($this->data['text'])) {
+        if ($this->isTranslatable() && isset($this->data['text']) && is_array($this->data['text'])
+            || isset($this->data['text']) && is_array($this->data['text'])
+        ) {
             return isset($this->data['text'][$this->getFallback()])
                 ? $this->data['text'][$this->getFallback()]
                 : null;

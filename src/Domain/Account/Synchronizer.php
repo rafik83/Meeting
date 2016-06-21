@@ -74,7 +74,11 @@ class Synchronizer
                 foreach ($tags as $tag) {
                     if (isset($this->tagMapping[$tag])) {
                         $method = 'get' . $this->tagMapping[$tag];
-                        $object->setContentValue($account->$method());
+                        if ($object instanceof Object\Nomenclature) {
+                            $object->setContentValue($object->getKeyForLabel($account->$method(), $templateData->getLocale()));
+                        } else {
+                            $object->setContentValue($account->$method());
+                        }
                     }
                 }
             }
@@ -102,7 +106,11 @@ class Synchronizer
                     if (isset($this->tagMapping[$tag])) {
                         $method = 'set' . $this->tagMapping[$tag];
 
-                        $account->$method($object->getContentValue());
+                        if ($object instanceof Object\Nomenclature) {
+                            $account->$method($object->getLabelForKey($object->getContentValue(), $templateData->getLocale()));
+                        } else {
+                            $account->$method($object->getContentValue());
+                        }
                     }
                 }
             }
