@@ -36,33 +36,28 @@ class QuantityMaxGuesser
      */
     public function getMaxPlanning(Sheet $sheet)
     {
-        if (null === $sheet->getPackage()->getPlanning()) {
+        $planning = $sheet->getPackage()->getPlanning();
+        
+        if (!$planning) {
             return 0;
         }
 
-        $planningQuantityMax = 0;
+        $cart              = $this->cartManager->getCart($sheet);
+        $selectedPlan      = $cart->getPlanRow();
+        $remainingQuantity = INF;
 
-        if ($sheet->getPackage()->getPlanning()) {
-            $planningQuantityMax = $sheet->getPackage()->getPlanning()->getQuantityMax();
-        }
+        if ($selectedPlan) {
+            $includedPlanningProduct = $selectedPlan->getProduct()->getIncludedPlanningProduct();
 
-        $cart         = $this->cartManager->getCart($sheet);
-        $selectedPlan = $cart->getPlanRow();
-
-        if (!$selectedPlan) {
-            return $planningQuantityMax;
-        }
-
-        $included  = 0;
-        $includedPlanningProduct = $selectedPlan->getProduct()->getIncludedPlanningProduct();
-
-        if ($includedPlanningProduct) {
-            $included = $includedPlanningProduct->getQuantity();
+            if ($includedPlanningProduct) {
+                $remainingQuantity = $sheet->getParticipants()->count() - $includedPlanningProduct->getQuantity();
+            }
         }
 
         $max = min(
-            $sheet->getParticipants()->count() - $included,
-            $planningQuantityMax
+            $remainingQuantity,
+            $planning->getQuantityMax(),
+            $planning->getAvailabilityMax() ? $planning->getAvailabilityCurrent() : INF
         );
 
         return $max < 0 ? 0 : $max;
@@ -76,21 +71,23 @@ class QuantityMaxGuesser
      */
     public function getMaxByProduct(Sheet $sheet, Product $product)
     {
-        $max          = $product->getQuantityMax();
-        $cart         = $this->cartManager->getCart($sheet);
-        $selectedPlan = $cart->getPlanRow();
+        $cart              = $this->cartManager->getCart($sheet);
+        $selectedPlan      = $cart->getPlanRow();
+        $remainingQuantity = INF;
 
-        if (!$selectedPlan) {
-            return $max;
+        if ($selectedPlan) {
+            $includedProduct = $selectedPlan->getProduct()->getIncludedProduct($product);
+
+            if ($includedProduct) {
+                $remainingQuantity = $product->getQuantityMax() - $includedProduct->getQuantity();
+            }
         }
 
-        $includedProduct = $selectedPlan->getProduct()->getIncludedProduct($product);
-
-        if (!$includedProduct) {
-            return $max;
-        }
-
-        $max = $max - $includedProduct->getQuantity();
+        $max = min(
+            $remainingQuantity,
+            $product->getQuantityMax(),
+            $product->getAvailabilityMax() ? $product->getAvailabilityCurrent() : INF
+        );
 
         return $max < 0 ? 0 : $max;
     }
