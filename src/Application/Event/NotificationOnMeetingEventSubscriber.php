@@ -13,9 +13,7 @@ namespace Proximum\Vimeet\Application\Event;
 use Proximum\Vimeet\Application\Event\Meeting\CanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\ParticipantRemovedEvent;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class NotificationOnMeetingEventSubscriber extends AbstractNotificationEventSubscriber
 {

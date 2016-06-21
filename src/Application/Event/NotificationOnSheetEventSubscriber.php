@@ -11,9 +11,7 @@
 namespace Proximum\Vimeet\Application\Event;
 
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class NotificationOnSheetEventSubscriber extends AbstractNotificationEventSubscriber
 {

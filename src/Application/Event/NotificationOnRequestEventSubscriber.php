@@ -16,9 +16,7 @@ use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent as MeetingRequestParticipantRemovedEvent;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class NotificationOnRequestEventSubscriber extends AbstractNotificationEventSubscriber
 {
