@@ -329,7 +329,7 @@ class Product
      */
     public function getQuantityMax()
     {
-        return $this->quantityMax;
+        return null === $this->quantityMax ? INF : $this->quantityMax;
     }
 
     /**
