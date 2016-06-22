@@ -57,7 +57,7 @@ class QuantityMaxGuesser
         $max = min(
             $remainingQuantity,
             $planning->getQuantityMax(),
-            $planning->getAvailabilityMax() ? $planning->getAvailabilityCurrent() : INF
+            $planning->getAvailability()
         );
 
         return $max < 0 ? 0 : $max;
@@ -86,7 +86,7 @@ class QuantityMaxGuesser
         $max = min(
             $remainingQuantity,
             $product->getQuantityMax(),
-            $product->getAvailabilityMax() ? $product->getAvailabilityCurrent() : INF
+            $product->getAvailability()
         );
 
         return $max < 0 ? 0 : $max;

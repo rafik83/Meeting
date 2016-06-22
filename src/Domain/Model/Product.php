@@ -349,6 +349,14 @@ class Product
     }
 
     /**
+     * @return int
+     */
+    public function getAvailability()
+    {
+        return $this->getAvailabilityMax() ? $this->getAvailabilityCurrent() : INF;
+    }
+
+    /**
      * @return boolean
      */
     public function isUpdatable()
