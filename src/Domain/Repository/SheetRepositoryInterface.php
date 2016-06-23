@@ -54,12 +54,12 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
-     * @param User           $user
-     * @param EventInterface $event
+     * @param User  $user
+     * @param Event $event
      *
      * @return Sheet[]
      */
-    public function getSheetByUserAndEvent(User $user, EventInterface $event);
+    public function getSheetByUserAndEvent(User $user, Event $event);
 
     /**
      * @param User           $user

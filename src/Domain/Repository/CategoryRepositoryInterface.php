@@ -39,13 +39,13 @@ interface CategoryRepositoryInterface
     public function add(Category $category);
 
     /**
-     * @param Event|int $event
-     * @param User|int  $user
-     * @param string    $locale
+     * @param Event  $event
+     * @param User   $user
+     * @param string $locale
      *
      * @return CategoryView[]
      */
-    public function getCategoryViewsByEventAndUser($event, $user, $locale);
+    public function getCategoryViewsByEventAndUser(Event $event, User $user, $locale);
 
     /**
      * @param Event  $event

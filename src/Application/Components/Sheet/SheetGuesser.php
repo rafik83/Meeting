@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetGuesser
 {
@@ -32,14 +32,14 @@ class SheetGuesser
 
     /**
      * @param User $user
-     * @param EventView $eventView
+     * @param Event $event
      * @param string $locale
      * @return Sheet
      * @throws \Exception
      */
-    public function getUserSheet(User $user, EventView $eventView, $locale)
+    public function getUserSheet(User $user, Event $event, $locale)
     {
-        $sheets = $this->sheetRepository->getSheetByUserAndEvent($user, $eventView);
+        $sheets = $this->sheetRepository->getSheetByUserAndEvent($user, $event);
 
         if (empty($sheets)) {
             throw new \Exception('Sheet not found.');
@@ -51,7 +51,7 @@ class SheetGuesser
             throw new \Exception('Sheet not found.');
         }
 
-        if (!$eventView->hasLocale($locale)) {
+        if (!$event->hasLocale($locale)) {
             throw new \Exception('Locale not available for this event.');
         }
 

@@ -91,12 +91,12 @@ interface RequestRepositoryInterface
     public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $state);
 
     /**
-     * @param int  $event
-     * @param User $user
+     * @param Event $event
+     * @param User  $user
      *
      * @return Request[]
      */
-    public function getRequestsByEventAndUser($event, User $user);
+    public function getRequestsByEventAndUser(Event $event, User $user);
 
     /**
      * @param Sheet $sheet

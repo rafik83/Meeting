@@ -1,3 +1,5 @@
+@admin
+
 Feature: Manage Admin
   I need to be able to manage Admin and Organizer
 

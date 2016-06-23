@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Billing\UpdateInfo;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing\UpdateInfoType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,15 +23,15 @@ class BillingController extends Controller
 {
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function infoAction(Request $request, EventView $eventView)
+    public function infoAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet   = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
+        $sheet   = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
         $info    = $this->get('repository.billing_info_repository')->getBySheet($sheet) ? : new BillingInfo($sheet);
         $country = $sheet->getEvent()->getCountry();
 
@@ -49,8 +50,8 @@ class BillingController extends Controller
         }
 
         return $this->render('EventBundle:Billing:info.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 }

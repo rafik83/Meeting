@@ -153,7 +153,7 @@ class AddHandler
      */
     private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
     {
-        $event = new CompleteProfileEvent($user, $add->eventView, $participant, $add->locale);
+        $event = new CompleteProfileEvent($user, $add->event, $participant, $add->locale);
         $this->eventDispatcher->dispatch('user_complete_profile', $event);
     }
 

@@ -21,11 +21,11 @@ interface NomenclatureRepositoryInterface
     public function getAll();
 
     /**
-     * @param Event|int $event
+     * @param Event $event
      *
      * @return Nomenclature[]
      */
-    public function findByEvent($event);
+    public function findByEvent(Event $event);
 
     /**
      * @param int $id

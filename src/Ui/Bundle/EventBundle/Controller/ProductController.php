@@ -10,45 +10,45 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
     /**
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function step1Action(EventView $eventView)
+    public function step1Action(EventDomain $eventDomain)
     {
         return $this->render('EventBundle:Product:step1.html.twig', [
-            'eventView'     => $eventView,
+            'event' => $eventDomain->getEvent(),
         ]);
     }
 
     /**
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function step2Action(EventView $eventView)
+    public function step2Action(EventDomain $eventDomain)
     {
         return $this->render('EventBundle:Product:step2.html.twig', [
-            'eventView'     => $eventView,
+            'event' => $eventDomain->getEvent(),
         ]);
     }
 
     /**
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function step3Action(EventView $eventView)
+    public function step3Action(EventDomain $eventDomain)
     {
         return $this->render('EventBundle:Product:step3.html.twig', [
-            'eventView'     => $eventView,
+            'event' => $eventDomain->getEvent(),
         ]);
     }
 }

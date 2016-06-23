@@ -1,3 +1,5 @@
+@event
+
 Feature: Test to go to the participant sheet
   I need to be able to register to an event and login to my account
 

@@ -1,3 +1,5 @@
+@event
+
 Feature: Show the homepage of an event
   I need to be able to see the event name and description
 

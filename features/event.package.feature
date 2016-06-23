@@ -1,3 +1,5 @@
+@event
+
 Feature: Complete my package
   I need to be able to buy plan, participants, planning and options
 

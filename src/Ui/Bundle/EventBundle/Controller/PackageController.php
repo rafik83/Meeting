@@ -14,10 +14,10 @@ use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,17 +27,17 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class PackageController extends Controller
 {
     /**
-     * @param Request   $request
-     * @param EventView $eventView
+     * @param Request     $request
+     * @param EventDomain $eventDomain
      *
      * @return RedirectResponse
      */
-    public function redirectAction(Request $request, EventView $eventView)
+    public function redirectAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         try {
-            $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
+            $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
         } catch (\Exception $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
@@ -50,13 +50,13 @@ class PackageController extends Controller
 
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      * @param int       $step
      *
      * @return RedirectResponse|Response
      */
-    public function stepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
+    public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -121,9 +121,9 @@ class PackageController extends Controller
         );
 
         return $this->render('EventBundle:Package:step.html.twig', [
-            'eventView' => $eventView,
-            'view'      => $view,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'view'  => $view,
+            'form'  => $form->createView(),
         ]);
     }
 

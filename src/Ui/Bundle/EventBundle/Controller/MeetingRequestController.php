@@ -26,8 +26,8 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,12 +39,12 @@ class MeetingRequestController extends Controller
      * List meeting requests the sheet sent
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function listRequestAction(Request $request, EventView $eventView, Sheet $sheet)
+    public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -59,7 +59,7 @@ class MeetingRequestController extends Controller
             ->generate($meetingRequest, $this->getUser(), $sheet, $request->getLocale());
 
         return $this->render('EventBundle:MeetingRequest:listRequest.html.twig', [
-            'eventView'     => $eventView,
+            'event'         => $eventDomain->getEvent(),
             'sheet'         => $sheet,
             'request_views' => $requestViews,
         ]);
@@ -69,12 +69,12 @@ class MeetingRequestController extends Controller
      * List meeting requests the sheet received
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function listPropositionAction(Request $request, EventView $eventView, Sheet $sheet)
+    public function listPropositionAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -89,7 +89,7 @@ class MeetingRequestController extends Controller
             ->generate($meetingProposition, $this->getUser(), $sheet, $request->getLocale());
 
         return $this->render('EventBundle:MeetingRequest:listProposition.html.twig', [
-            'eventView'         => $eventView,
+            'event'             => $eventDomain->getEvent(),
             'sheet'             => $sheet,
             'proposition_views' => $propositionViews,
         ]);
@@ -99,14 +99,14 @@ class MeetingRequestController extends Controller
      * Create a meeting request between two sheet
      *
      * @param Request      $request
-     * @param EventView    $eventView
+     * @param EventDomain    $eventDomain
      * @param CategoryView $categoryView
      * @param Sheet        $to
      * @param Sheet        $from
      *
      * @return RedirectResponse|Response
      */
-    public function createRequestAction(Request $request, EventView $eventView, CategoryView $categoryView, Sheet $to, Sheet $from)
+    public function createRequestAction(Request $request, EventDomain $eventDomain, CategoryView $categoryView, Sheet $to, Sheet $from)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -130,10 +130,10 @@ class MeetingRequestController extends Controller
         }
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
-            'eventView' => $eventView,
-            'fromName'  => $sheetInfoGuesser->guessSheetName($from, $request->getLocale()),
-            'toName'    => $sheetInfoGuesser->guessSheetName($to, $request->getLocale()),
-            'form'      => $form->createView(),
+            'event'    => $eventDomain->getEvent(),
+            'fromName' => $sheetInfoGuesser->guessSheetName($from, $request->getLocale()),
+            'toName'   => $sheetInfoGuesser->guessSheetName($to, $request->getLocale()),
+            'form'     => $form->createView(),
         ]);
     }
 
@@ -141,13 +141,13 @@ class MeetingRequestController extends Controller
      * Approve a meeting request
      *
      * @param Request        $request
-     * @param EventView      $eventView
+     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function approveRequestAction(Request $request, EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function approveRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -171,11 +171,11 @@ class MeetingRequestController extends Controller
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            'form'      => $form->createView(),
+            'event'    => $eventDomain->getEvent(),
+            'sheet'    => $sheet,
+            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
+            'form'     => $form->createView(),
         ]);
     }
 
@@ -183,13 +183,13 @@ class MeetingRequestController extends Controller
      * Refuse a meeting request
      *
      * @param Request        $request
-     * @param EventView      $eventView
+     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function refuseRequestAction(Request $request, EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function refuseRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -210,11 +210,11 @@ class MeetingRequestController extends Controller
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            'form'      => $form->createView(),
+            'event'    => $eventDomain->getEvent(),
+            'sheet'    => $sheet,
+            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
+            'form'     => $form->createView(),
         ]);
     }
 
@@ -222,13 +222,13 @@ class MeetingRequestController extends Controller
      * Display a meeting request
      *
      * @param Request        $request
-     * @param EventView      $eventView
+     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
      */
-    public function showRequestAction(Request $request, EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function showRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -269,7 +269,7 @@ class MeetingRequestController extends Controller
         );
 
         return $this->render('EventBundle:MeetingRequest:showRequest.html.twig', [
-            'eventView'          => $eventView,
+            'event'              => $eventDomain->getEvent(),
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestView,
             'canEdit'            => $permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet),
@@ -283,13 +283,13 @@ class MeetingRequestController extends Controller
      * Cancel a meeting request
      *
      * @param Request        $request
-     * @param EventView      $eventView
+     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function cancelRequestAction(Request $request, EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function cancelRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -310,11 +310,11 @@ class MeetingRequestController extends Controller
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:MeetingRequest:cancelRequest.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            'form'      => $form->createView(),
+            'event'    => $eventDomain->getEvent(),
+            'sheet'    => $sheet,
+            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
+            'form'     => $form->createView(),
         ]);
     }
 
@@ -322,13 +322,13 @@ class MeetingRequestController extends Controller
      * Edit a meeeting request
      *
      * @param Request        $request
-     * @param EventView      $eventView
+     * @param EventDomain    $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function editRequestAction(Request $request, EventView $eventView, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function editRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -362,11 +362,11 @@ class MeetingRequestController extends Controller
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
-            'eventView' => $eventView,
-            'fromName'  => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'    => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            'form'      => $form->createView(),
-            'sheet'     => $sheet,
+            'event'    => $eventDomain->getEvent(),
+            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
+            'form'     => $form->createView(),
+            'sheet'    => $sheet,
         ]);
     }
 }

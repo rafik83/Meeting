@@ -77,7 +77,7 @@ class ForgottenPasswordHandler
 
         $event = new ResetPasswordEvent(
             $user,
-            $forgottenPassword->eventView,
+            $forgottenPassword->event,
             $forgottenPasswordToken,
             $forgottenPassword->locale
         );

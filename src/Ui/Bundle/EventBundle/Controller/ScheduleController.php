@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,16 +33,16 @@ class ScheduleController extends Controller
 {
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      *
      * @return Response
      */
-    public function displayAction(Request $request, EventView $eventView, Sheet $sheet)
+    public function displayAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventView->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to see this schedule');
@@ -53,7 +53,7 @@ class ScheduleController extends Controller
             ->buildForSheet($sheet, $request->getLocale());
 
         return $this->render('EventBundle:Schedule:display.html.twig', [
-            'eventView'            => $eventView,
+            'event'                => $eventDomain->getEvent(),
             'participantSchedules' => $participantSchedules,
             'sheet'                => $sheet,
         ]);
@@ -61,18 +61,16 @@ class ScheduleController extends Controller
 
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      *
      * @return RedirectResponse|Response
      */
-    public function addUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet)
+    public function addUnavailabilityAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventView->getId()
-            || null === $sheet->getUserParticipant($this->getUser())
-        ) {
+        if ($sheet->getEvent() !== $eventDomain->getEvent() || null === $sheet->getUserParticipant($this->getUser())) {
             throw $this->createNotFoundException('The current User is not allowed to create an unavailibity');
         }
 
@@ -93,24 +91,24 @@ class ScheduleController extends Controller
         }
 
         return $this->render('EventBundle:Schedule:addUnavailability.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
      * @param Request        $request
-     * @param EventView      $eventView
+     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param Unavailability $unavailability
      *
      * @return RedirectResponse|Response
      */
-    public function updateUnavailabilityAction(Request $request, EventView $eventView, Sheet $sheet, Unavailability $unavailability)
+    public function updateUnavailabilityAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Unavailability $unavailability)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventView->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to edit this unavailibity');
@@ -135,23 +133,23 @@ class ScheduleController extends Controller
         }
 
         return $this->render('EventBundle:Schedule:updateUnavailability.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
-     * @param EventView      $eventView
+     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param Unavailability $unavailability
      *
      * @return RedirectResponse|Response
      */
-    public function removeUnavailabilityAction(EventView $eventView, Sheet $sheet, Unavailability $unavailability)
+    public function removeUnavailabilityAction(EventDomain $eventDomain, Sheet $sheet, Unavailability $unavailability)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventView->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to remove this unavailibity');
@@ -166,18 +164,18 @@ class ScheduleController extends Controller
 
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      * @param Happening $happening
      *
      * @return RedirectResponse|Response
      */
-    public function participateHappeningAction(Request $request, EventView $eventView, Sheet $sheet, Happening $happening)
+    public function participateHappeningAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($happening->getEvent()->getId() !== $eventView->getId()
-            || $sheet->getEvent()->getId() !== $eventView->getId()
+        if ($happening->getEvent()->getId() !== $eventDomain->getId()
+            || $sheet->getEvent()->getId() !== $eventDomain->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('Event not linked to this happening');
@@ -207,7 +205,7 @@ class ScheduleController extends Controller
         }
 
         return $this->render('EventBundle:Schedule:participateHappening.html.twig', [
-            'eventView' => $eventView,
+            'event' => $eventDomain->getEvent(),
             'sheet'     => $sheet,
             'happening' => $happening,
             'form'      => $form->createView(),
@@ -215,19 +213,19 @@ class ScheduleController extends Controller
     }
 
     /**
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Sheet       $sheet
      * @param Happening   $happening
      * @param Participant $participant
      *
      * @return RedirectResponse
      */
-    public function unparticipateHappeningAction(EventView $eventView, Sheet $sheet, Happening $happening, Participant $participant)
+    public function unparticipateHappeningAction(EventDomain $eventDomain, Sheet $sheet, Happening $happening, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($happening->getEvent()->getId() !== $eventView->getId()
-            || $sheet->getEvent()->getId() !== $eventView->getId()
+        if ($happening->getEvent()->getId() !== $eventDomain->getId()
+            || $sheet->getEvent()->getId() !== $eventDomain->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('Event not linked to this happening');

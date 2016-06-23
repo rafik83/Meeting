@@ -1,27 +1,27 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block body %}
-    {% if is_granted('ROLE_PREVIOUS_ADMIN') and eventView is defined %}
-        {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
+        {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
     {% endif %}
 
     <div class="wrapper profile">
         <div class="header">
-            {% if eventView is defined %}
-                {% if eventView.logo != null %}
+            {% if event is defined %}
+                {% if event.logo != null %}
                 <a href="{{ path('event') }}">
-                    <img src="{{ eventView.logo|imagine_filter('event_header_logo') }}" class="logo">
+                    <img src="{{ event.logo|imagine_filter('event_header_logo') }}" class="logo">
                 </a>
                 {% endif %}
                 <div class="header__info">
-                    <p>{{ eventView.title }}</p>
-                    <p>{{ eventView.description }}</p>
+                    <p>{{ event.title }}</p>
+                    <p>{{ event.description(app.request.locale) }}</p>
                 </div>
             {% endif %}
             <ul class="header__navigation">
                 <li>
-                    {% if eventView is defined %}
-                        {% for locale in eventView.locales if locale != app.request.locale %}
+                    {% if event is defined %}
+                        {% for locale in event.locales if locale != app.request.locale %}
                             <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
                         {% endfor %}
                     {% endif %}
