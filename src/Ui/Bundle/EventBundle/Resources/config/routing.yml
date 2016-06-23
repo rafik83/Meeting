@@ -430,3 +430,7 @@ event_package_step:
         sheet: \d+
         step: \d+
     methods:  [GET, POST]
+event_package_step_1:
+    path: /step/1
+    defaults: { _controller: EventBundle:Product:step3 }
+    methods: [GET]

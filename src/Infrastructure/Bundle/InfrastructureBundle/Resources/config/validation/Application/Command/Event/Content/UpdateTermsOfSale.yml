@@ -1,0 +1,8 @@
+Proximum\Vimeet\Application\Command\Event\Content\UpdateTermsOfSale:
+    properties:
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        value:
+                            - NotBlank: ~

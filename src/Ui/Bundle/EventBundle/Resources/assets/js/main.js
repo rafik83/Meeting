@@ -7,7 +7,8 @@ var $                     = require('jquery'),
     SelectParent          = require('./components/_SelectParent'),
     UploadPreview         = require('./components/_UploadPreview'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
-    ProductSelector       = require('./components/_ProductSelector');
+    ProductSelector       = require('./components/_ProductSelector'),
+    QuantitySelector      = require('./components/_QuantitySelector');
 
 require('bootstrap');
 require('elao-form.js');
@@ -65,6 +66,7 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('[data-check-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-check-all-button'), true) });
     [].forEach.call(target.querySelectorAll('[data-uncheck-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false) });
     [].forEach.call(target.querySelectorAll('[data-product-selector]'), function (element) { new ProductSelector(element) });
+    [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) { new QuantitySelector(element) });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

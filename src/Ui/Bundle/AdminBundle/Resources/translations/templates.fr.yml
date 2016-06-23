@@ -7,7 +7,7 @@ template:
         image: Image
         media: Media
         nomenclature: Nomenclature
-        tag: Tag
+        tag: Contenu affiché par défaut
         participant: Participant
     tag:
         sheet_title: Titre de fiche

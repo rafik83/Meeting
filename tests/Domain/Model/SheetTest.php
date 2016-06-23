@@ -30,8 +30,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
         $user2 = new User('user2@test.com', '', '', 'fr');
         $user3 = new User('user3@test.com', '', '', 'fr');
 
-        $sheet->addParticpant(new Participant($sheet, $user1, [], true, true));
-        $sheet->addParticpant(new Participant($sheet, $user2, [], false, true));
+        $sheet->addParticipant(new Participant($sheet, $user1, [], true, true));
+        $sheet->addParticipant(new Participant($sheet, $user2, [], false, true));
 
         $this->assertTrue($sheet->hasUser($user1));
         $this->assertTrue($sheet->hasUser($user2));
@@ -50,8 +50,8 @@ class SheetTest extends \PHPUnit_Framework_TestCase
         $participant3 = new Participant($sheet, new User('user3@test.com', '', '', 'fr'), [], true, true);
 
 
-        $sheet->addParticpant($participant1);
-        $sheet->addParticpant($participant2);
+        $sheet->addParticipant($participant1);
+        $sheet->addParticipant($participant2);
 
         $this->assertTrue($sheet->hasParticipant($participant1));
         $this->assertTrue($sheet->hasParticipant($participant2));
@@ -74,9 +74,9 @@ class SheetTest extends \PHPUnit_Framework_TestCase
         $participant3 = new Participant($sheet, $user3, [], true, true);
 
 
-        $sheet->addParticpant($participant1);
-        $sheet->addParticpant($participant2);
-        $sheet->addParticpant($participant3);
+        $sheet->addParticipant($participant1);
+        $sheet->addParticipant($participant2);
+        $sheet->addParticipant($participant3);
 
         $this->assertEquals($participant1, $sheet->getUserParticipant($user1));
         $this->assertEquals($participant2, $sheet->getUserParticipant($user2));

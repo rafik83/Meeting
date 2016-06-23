@@ -175,11 +175,19 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return int
+     */
+    public function countParticipant()
+    {
+        return $this->participants->count();
+    }
+
+    /**
      * @param Participant $participant
      *
      * @return Sheet
      */
-    public function addParticpant(Participant $participant)
+    public function addParticipant(Participant $participant)
     {
         $this->participants->add($participant);
 
@@ -267,12 +275,11 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @deprecated
+     * @return Product
      */
-    public function getBillingData()
+    public function getPackageParticipant()
     {
-        return [];
+        return $this->getPackage()->getParticipant();
     }
 
     /**

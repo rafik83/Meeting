@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
+use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template;
@@ -59,14 +61,20 @@ class AddHandler
     private $eventDispatcher;
 
     /**
+     * @var Cart
+     */
+    private $cartManager;
+
+    /**
      * AddHandler constructor.
      *
-     * @param UserRepositoryInterface                 $userRepository
-     * @param ParticipantRepositoryInterface          $participantRepository
-     * @param SheetRepositoryInterface                $sheetRepository
-     * @param TemplateDataFactory                     $templateDataFactory
-     * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param EventDispatcherInterface                $eventDispatcher
+     * @param UserRepositoryInterface        $userRepository
+     * @param ParticipantRepositoryInterface $participantRepository
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param TemplateDataFactory            $templateDataFactory
+     * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
+     * @param EventDispatcherInterface       $eventDispatcher
+     * @param CartManager                    $cartManager
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -74,14 +82,16 @@ class AddHandler
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        CartManager $cartManager
     ) {
-        $this->userRepository                 = $userRepository;
-        $this->participantRepository          = $participantRepository;
-        $this->sheetRepository                = $sheetRepository;
-        $this->templateDataFactory            = $templateDataFactory;
-        $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->eventDispatcher                = $eventDispatcher;
+        $this->userRepository                = $userRepository;
+        $this->participantRepository         = $participantRepository;
+        $this->sheetRepository               = $sheetRepository;
+        $this->templateDataFactory           = $templateDataFactory;
+        $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
+        $this->eventDispatcher               = $eventDispatcher;
+        $this->cartManager                   = $cartManager;
     }
 
     /**
@@ -108,7 +118,11 @@ class AddHandler
             throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
         }
 
+        // Create participant
         $participant = $this->createAndFillParticipant($add, $user);
+
+        // Update cart
+        $this->cartManager->updateParticipantsQuantity($add->sheet);
 
         if (!$add->sheet->isOwner($user)) {
             if ($user->isActive()) {
@@ -122,7 +136,7 @@ class AddHandler
     }
 
     /**
-     * @param Add $add
+     * @param Add  $add
      * @param User $user
      */
     private function sendActivationEvent(Add $add, User $user)
@@ -176,6 +190,8 @@ class AddHandler
 
         $participant = new Participant($add->sheet, $user, $templateData->getData(), false);
         $this->participantRepository->add($participant);
+
+        $add->sheet->addParticipant($participant);
 
         return $participant;
     }

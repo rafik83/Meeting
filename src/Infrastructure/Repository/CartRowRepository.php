@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
@@ -41,6 +40,33 @@ class CartRowRepository implements CartRowRepositoryInterface
     }
 
     /**
+     * @param CartRow $cartRow
+     */
+    public function set(CartRow $cartRow)
+    {
+        $this->entityManager->flush($cartRow);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $cartRows
+     */
+    public function deleteWhereNotIn(Sheet $sheet, array $cartRows)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(CartRow::class, 'cartRow')
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->andWhere('cartRow NOT IN (:cartRows)')
+            ->setParameter('cartRows', $cartRows);
+
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function findBySheet(Sheet $sheet)
@@ -50,29 +76,10 @@ class CartRowRepository implements CartRowRepositoryInterface
             ->createQueryBuilder()
             ->select('cartRow')
             ->from(CartRow::class, 'cartRow')
-            ->join('cartRow.sheet', 'sheet', 'WITH', 'sheet.id = :id')
-            ->setParameter('id', $sheet->getId());
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findCartRowPlanBySheet(Sheet $sheet)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('cartRow')
-            ->from(CartRow::class, 'cartRow')
-            ->join('cartRow.sheet', 'sheet', 'WITH', 'sheet.id = :id')
-            ->setParameter('id', $sheet->getId())
-            ->join('cartRow.product', 'product', 'WITH', 'product.type = :type')
-            ->setParameter('type', Product::TYPE_PLAN)
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

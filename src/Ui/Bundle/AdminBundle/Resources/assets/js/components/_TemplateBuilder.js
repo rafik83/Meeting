@@ -520,6 +520,7 @@ EditableTextObject.prototype.fill = function ()
     this.form.set('required', this.config.required);
     this.form.set('translatable', this.config.translatable);
     this.form.set('hideLabel', this.config.hideLabel);
+    this.form.set('tag', this.config.tag);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -535,6 +536,7 @@ EditableTextObject.prototype.save = function ()
     this.config.required                 = this.form.get('required');
     this.config.translatable             = this.form.get('translatable');
     this.config.hideLabel                = this.form.get('hideLabel');
+    this.config.tag                      = this.form.get('tag');
 
     this.form.bind('label', this.config.label[this.locale]);
 };

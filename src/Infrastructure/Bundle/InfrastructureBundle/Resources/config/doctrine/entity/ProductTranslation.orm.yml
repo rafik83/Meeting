@@ -20,6 +20,9 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
             nullable: true
         locale:
             type: string
+        subjectedToValidationHelp:
+            type: string
+            nullable: true
     manyToOne:
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Package;
+namespace Proximum\Vimeet\Application\Query\Package\Feature;
 
 use Proximum\Vimeet\Domain\Model\Product\Feature;
 

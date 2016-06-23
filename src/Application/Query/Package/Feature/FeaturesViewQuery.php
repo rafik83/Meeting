@@ -8,12 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Package;
+namespace Proximum\Vimeet\Application\Query\Package\Feature;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 
-class PlanViewQuery
+class FeaturesViewQuery
 {
     /**
      * @var Product
@@ -26,18 +25,11 @@ class PlanViewQuery
     public $locale;
 
     /**
-     * @var Event
-     */
-    public $event;
-
-    /**
-     * @param Event   $event
      * @param Product $product
      * @param string  $locale
      */
-    public function __construct(Event $event, Product $product, $locale)
+    public function __construct(Product $product, $locale)
     {
-        $this->event   = $event;
         $this->product = $product;
         $this->locale  = $locale;
     }

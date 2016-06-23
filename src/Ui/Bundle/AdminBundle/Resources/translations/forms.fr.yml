@@ -910,6 +910,10 @@ form:
                             label: Description
                         addon:
                             label: Texte optionnel sous le prix
+                        subjectedToValidationHelp:
+                            label: Message si soumis à validation
+            subjectedToValidation:
+                label: Ce produit est soumis à validation
     product_create_plan:
         children:
             name:
@@ -972,6 +976,8 @@ form:
                     children:
                         title:
                             label: Titre
+                        description:
+                            label: Description
     product_create_planning:
         children:
             name:
@@ -987,6 +993,8 @@ form:
                     children:
                         title:
                             label: Titre
+                        description:
+                            label: Description
     billing_info_update:
         children:
             lastname:
@@ -1013,6 +1021,10 @@ form:
                 label: Pays
             vatNumber:
                 label: N° de TVA
+            submit:
+                label: Enregistrer
+    content_update:
+        children:
             submit:
                 label: Enregistrer
     promotion_code_create:
@@ -1086,7 +1098,7 @@ form:
                         end:
                             label: à
                         interval:
-                            label: Interval (en minutes)
+                            label: Intervalle (en minutes)
                         duration:
                             label: Durée (en minutes)
                 label_add: Ajouter une plage

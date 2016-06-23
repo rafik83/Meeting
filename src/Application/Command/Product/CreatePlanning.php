@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
-class CreatePlanning extends CreateParticipant
+class CreatePlanning extends AbstractCreate
 {
 }

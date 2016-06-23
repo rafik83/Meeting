@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -33,15 +34,19 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], $owner, $date);
         $participant1 = new Participant($sheet, $owner, [], true);
         $participant2 = new Participant($sheet, $user2, [], true);
-        $sheet->addParticpant($participant1);
-        $sheet->addParticpant($participant2);
+        $sheet->addParticipant($participant1);
+        $sheet->addParticipant($participant2);
 
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $cartManager = $this->prophesize(CartManager::class);
+
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
-        $expectedSheet->addParticpant($participant2);
+        $expectedSheet->addParticipant($participant2);
+
+        $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
 
         // Command
         $remove = new Remove($sheet);
@@ -50,7 +55,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Handle
-        $handler = new RemoveHandler($participantRepository->reveal());
+        $handler = new RemoveHandler($participantRepository->reveal(), $cartManager->reveal());
         $handler->handle($remove);
 
         $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
@@ -69,16 +74,17 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], $owner, $date);
         $participant1 = new Participant($sheet, $owner, [], true);
         $participant2 = new Participant($sheet, $user2, [], true);
-        $sheet->addParticpant($participant1);
-        $sheet->addParticpant($participant2);
+        $sheet->addParticipant($participant1);
+        $sheet->addParticipant($participant2);
 
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $cartManager = $this->prophesize(CartManager::class);
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
-        $expectedSheet->addParticpant($participant1);
-        $expectedSheet->addParticpant($participant2);
+        $expectedSheet->addParticipant($participant1);
+        $expectedSheet->addParticipant($participant2);
 
         // Command
         $remove = new Remove($sheet);
@@ -88,7 +94,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Handle
-        $handler = new RemoveHandler($participantRepository->reveal());
+        $handler = new RemoveHandler($participantRepository->reveal(), $cartManager->reveal());
         $handler->handle($remove);
 
         $this->assertEquals($expectedSheet, $sheet);

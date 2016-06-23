@@ -295,6 +295,7 @@ admin:
         unitPrice: Prix unitaire
         quantityMax: Quantité max
         availabilityCurrentMax: Disponibilité courante / max
+        subjectedToValidation: Soumis à validation
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
     promotion_code:
@@ -605,6 +606,10 @@ admin:
         name: Nom
         unitPrice: Prix unitaire
         productIncluded: Produits inclus
+    update_content:
+        terms-of-sale:
+            title: Modifier les conditions générales de vente
+            link: Conditions générales de vente
     schedule:
         link: Agenda
         title: Agenda

@@ -11,10 +11,23 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Proximum\Vimeet\Application\Command\Product\CreatePlanning;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreatePlanningType extends CreateParticipantType
+class CreatePlanningType extends AbstractCreateType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        foreach ($view->children['translations'] as $translation) {
+            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
+        }
+    }
+
     /**
      * {@inheritdoc}
      */

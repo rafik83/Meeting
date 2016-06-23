@@ -3,7 +3,11 @@
     {% if true != item.hideLabel|default %}
         {% if item.option('type') == 'title' %}
             <header>
-                <h2>{{ item.data['text'][locale]|default(item.label(locale, fallback)) }}</h2>
+                {% if item.tag %}
+                    <h2>{{ item.data['text'][locale]|default(taggedData[item.tag]|join(', ')) }}</h2>
+                {% else %}
+                    <h2>{{ item.data['text'][locale]|default(item.label(locale, fallback)) }}</h2>
+                {% endif %}
             </header>
         {% elseif item.option('type') == 'text' %}
             <header>
