@@ -13,6 +13,24 @@ class UpdateOptionHandler extends AbstractHandler
      */
     public function handle(UpdateOption $updateOption)
     {
-        
+        $product = $updateOption->product->updateOption(
+            $updateOption->name,
+            $this->fileStorageInterface->upload($updateOption->file),
+            $updateOption->unitPrice,
+            $updateOption->quantityMax,
+            $updateOption->availabilityCurrent,
+            $updateOption->availabilityMax,
+            $updateOption->updatable,
+            $updateOption->updatableUntil,
+            $updateOption->subjectedToValidation
+        );
+
+        foreach ($updateOption->translations as $locale => $translation)
+        {
+            $product->translate($locale, $translation['title'], null, $translation['description'],
+                $translation['addon'], $translation['subjectedToValidationHelp']);
+        }
+
+        $this->productRepository->update($product);
     }
 }
