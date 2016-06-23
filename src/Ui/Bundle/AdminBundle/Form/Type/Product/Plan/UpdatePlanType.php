@@ -1,20 +1,32 @@
 <?php
 
 
-namespace Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
 
 
-use Application\Command\Product\UpdatePlan;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\AbstractPlanType;
+use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdatePlanType extends AbstractPlanType
+class UpdatePlanType extends AbstractUpdateType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        parent::buildForm($builder, $options);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => UpdatePlan::class,
         ]);

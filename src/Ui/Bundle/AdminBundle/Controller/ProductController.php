@@ -21,17 +21,17 @@ use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\CreatePlanningType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\UpdatePlanningType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\CreatePlanType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType;
-use Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType;
-use Ui\Bundle\AdminBundle\Form\Type\Product\UpdatePlanningType;
 
 class ProductController extends Controller
 {
@@ -63,7 +63,11 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreateOption($event);
-        $form   = $this->createForm(CreateOptionType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreateOptionType::class, $create, [
+            'event'  => $event,
+            'locale' => $request->getLocale(),
+            'submit' => true,
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
@@ -176,7 +180,11 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreateParticipant($event);
-        $form   = $this->createForm(CreateParticipantType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreateParticipantType::class, $create, [
+            'event'  => $event,
+            'locale' => $request->getLocale(),
+            'submit' => true,
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);

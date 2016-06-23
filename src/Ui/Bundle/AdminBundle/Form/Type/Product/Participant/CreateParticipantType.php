@@ -12,9 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Intl\Intl;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateParticipantType extends AbstractCreateType
@@ -22,12 +20,9 @@ class CreateParticipantType extends AbstractCreateType
     /**
      * {@inheritdoc}
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        foreach ($view->children['translations'] as $translation)
-        {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
-        }
+        parent::buildForm($builder, $options);
     }
 
     /**
@@ -35,6 +30,8 @@ class CreateParticipantType extends AbstractCreateType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => CreateParticipant::class,
         ]);

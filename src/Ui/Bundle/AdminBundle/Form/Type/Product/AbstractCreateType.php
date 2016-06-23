@@ -10,34 +10,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\TranslationsType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractCreateType extends AbstractType
+abstract class AbstractCreateType extends AbstractProductType
 {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $builder
-            ->add('name', TextType::class)
-            ->add('unitPrice', NumberType::class)
-            ->add('translations', CollectionType::class, [
-                'entry_type' => TranslationsType::class,
-                'label'      => false,
-            ])
-            ->add('quantityMax', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
-            ]);
+        $resolver->setRequired(['event', 'locale']);
+        $resolver->setAllowedTypes('event', Event::class);
     }
 
     /**
