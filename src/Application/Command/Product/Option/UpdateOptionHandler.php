@@ -9,10 +9,10 @@ use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 class UpdateOptionHandler extends AbstractHandler
 {
     /**
-     * @param UpdateOption $createOption
+     * @param UpdateOption $updateOption
      */
-    public function handle(UpdateOption $createOption)
+    public function handle(UpdateOption $updateOption)
     {
-
+        
     }
 }

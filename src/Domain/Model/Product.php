@@ -540,6 +540,26 @@ class Product
     }
 
     /**
+     * @param $name
+     * @param $image
+     * @param $unitPrice
+     * @param $availabilityCurrent
+     * @param $availabilityMax
+     *
+     * @return Product
+     */
+    public function updatePlan($name, $image, $unitPrice, $availabilityCurrent, $availabilityMax)
+    {
+        $this->name                  = $name;
+        $this->image                 = $image;
+        $this->unitPrice             = $unitPrice;
+        $this->availabilityCurrent   = $availabilityCurrent;
+        $this->availabilityMax       = $availabilityMax;
+
+        return $this;
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param int    $unitPrice
@@ -564,6 +584,22 @@ class Product
     }
 
     /**
+     * @param $name
+     * @param $unitPrice
+     * @param $quantityMax
+     *
+     * @return Product
+     */
+    public function updateParticipant($name, $unitPrice, $quantityMax)
+    {
+        $this->name = $name;
+        $this->unitPrice = $unitPrice;
+        $this->quantityMax = $quantityMax;
+
+        return $this;
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param int    $unitPrice
@@ -585,6 +621,22 @@ class Product
             true,
             null
         );
+    }
+
+    /**
+     * @param string $name
+     * @param int $unitPrice
+     * @param int $quantityMax
+     *
+     * @return Product
+     */
+    public function updatePlanning($name, $unitPrice, $quantityMax)
+    {
+        $this->name = $name;
+        $this->unitPrice = $unitPrice;
+        $this->quantityMax = $quantityMax;
+
+        return $this;
     }
 
     /**
@@ -616,6 +668,34 @@ class Product
             $updatableUntil,
             $subjectedToValidation
         );
+    }
+
+    /**
+     * @param $name
+     * @param $image
+     * @param $unitPrice
+     * @param $quantityMax
+     * @param $availabilityCurrent
+     * @param $availabilityMax
+     * @param $updatable
+     * @param \DateTimeInterface|null $updatableUntil
+     * @param bool $subjectedToValidation
+     *
+     * @return Product
+     */
+    public function updateOption($name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null, $subjectedToValidation = false)
+    {
+        $this->name                  = $name;
+        $this->image                 = $image;
+        $this->unitPrice             = $unitPrice;
+        $this->quantityMax           = $quantityMax;
+        $this->availabilityCurrent   = $availabilityCurrent;
+        $this->availabilityMax       = $availabilityMax;
+        $this->updatable             = $updatable;
+        $this->updatableUntil        = $updatableUntil;
+        $this->subjectedToValidation = $subjectedToValidation;
+
+        return $this;
     }
 
     /**

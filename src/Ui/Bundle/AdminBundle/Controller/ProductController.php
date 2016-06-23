@@ -93,7 +93,11 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $update = new UpdateOption($product);
-        $form = $this->createForm(UpdateOptionType::class, $update, ['submit' => true]);
+        $form = $this->createForm(UpdateOptionType::class, $update, [
+            'submit' => true,
+            'product'  => $product,
+            'locale' => $request->getLocale(),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
@@ -152,7 +156,7 @@ class ProductController extends Controller
         $update = new UpdatePlan($product);
         $form   = $this->createForm(UpdatePlanType::class, $update, [
             'submit' => true,
-            'event'  => $event,
+            'product'  => $product,
             'locale' => $request->getLocale(),
         ]);
 
