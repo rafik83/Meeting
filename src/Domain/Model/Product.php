@@ -285,6 +285,16 @@ class Product
      *
      * @return string
      */
+    public function getAddon($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
     public function getHeading($locale)
     {
         return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getHeading() : '';

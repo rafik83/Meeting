@@ -10,55 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
+use Application\Command\Product\AbstractPlan;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class CreatePlan
+class CreatePlan extends AbstractPlan
 {
     /**
      * @var Event
      */
     public $event;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var UploadedFile
-     */
-    public $file;
-
-    /**
-     * @var float
-     */
-    public $unitPrice;
-
-    /**
-     * @var int
-     */
-    public $availabilityCurrent;
-
-    /**
-     * @var int
-     */
-    public $availabilityMax;
-
-    /**
-     * @var array
-     */
-    public $features = [];
-
-    /**
-     * @var array
-     */
-    public $productIncluded = [];
 
     /**
      * @param Event $event
@@ -67,7 +27,8 @@ class CreatePlan
     {
         $this->event = $event;
 
-        foreach ($event->getLocales() as $locale) {
+        foreach ($event->getLocales() as $locale)
+        {
             $this->translations[$locale] = [
                 'title'       => null,
                 'heading'     => null,

@@ -757,6 +757,13 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateOption }
+    command.product.update_option_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Option\UpdateOptionHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Option\UpdateOption }
     command.product.create_plan_handler:
         class: Proximum\Vimeet\Application\Command\Product\CreatePlanHandler
         arguments:

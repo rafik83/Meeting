@@ -10,22 +10,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
-use Proximum\Vimeet\Application\Command\Product\CreatePlan;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Ui\Bundle\AdminBundle\Form\Type\Product\AbstractPlanType;
 
-class CreatePlanType extends AbstractPlanType
+class UpdateOptionType extends AbstractOptionType
 {
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale']);
-        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
-            'data_class' => CreatePlan::class,
+            'data_class' => UpdateOption::class,
         ]);
     }
 
@@ -34,6 +30,6 @@ class CreatePlanType extends AbstractPlanType
      */
     public function getBlockPrefix()
     {
-        return 'product_create_plan';
+        return 'product_update_option';
     }
 }

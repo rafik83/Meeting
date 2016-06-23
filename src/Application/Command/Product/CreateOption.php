@@ -10,65 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
+use Application\Command\Product\Option\AbstractOption;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class CreateOption
+class CreateOption extends AbstractOption
 {
     /**
      * @var Event
      */
     public $event;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var UploadedFile
-     */
-    public $file;
-
-    /**
-     * @var float
-     */
-    public $unitPrice;
-
-    /**
-     * @var int
-     */
-    public $quantityMax;
-
-    /**
-     * @var int
-     */
-    public $availabilityCurrent;
-
-    /**
-     * @var int
-     */
-    public $availabilityMax;
-
-    /**
-     * @var bool
-     */
-    public $updatable;
-
-    /**
-     * @var \DateTimeInterface|null
-     */
-    public $updatableUntil;
-
-    /**
-     * @var bool
-     */
-    public $subjectedToValidation;
 
     /**
      * @param Event $event
@@ -77,7 +27,8 @@ class CreateOption
     {
         $this->event = $event;
 
-        foreach ($event->getLocales() as $locale) {
+        foreach ($event->getLocales() as $locale)
+        {
             $this->translations[$locale] = [
                 'title'                     => null,
                 'description'               => null,

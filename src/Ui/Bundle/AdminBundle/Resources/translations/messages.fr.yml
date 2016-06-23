@@ -298,6 +298,9 @@ admin:
         subjectedToValidation: Soumis à validation
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
+        actions: Actions
+        update:
+          action: Modifier
     promotion_code:
         link: Codes promos
         title: Codes promos
