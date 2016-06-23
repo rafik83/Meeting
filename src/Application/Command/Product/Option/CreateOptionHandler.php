@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Product;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 

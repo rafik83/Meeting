@@ -1,30 +1,12 @@
 <?php
 
 
-namespace Application\Command\Product;
+namespace Proximum\Vimeet\Application\Command\Product\Plan;
 
 
-use Proximum\Vimeet\Domain\Model\Product;
 
-class UpdatePlan extends AbstractPlan
+use Proximum\Vimeet\Application\Command\Product\AbstractUpdate;
+
+class UpdatePlan extends AbstractUpdate
 {
-    /**
-     * @var Product
-     */
-    private $product;
-
-    public function __construct(Product $product)
-    {
-        $this->product = $product;
-
-        foreach ($product->getEvent()->getLocales() as $locale)
-        {
-            $this->translations[$locale] = [
-                'title'                     => $product->getTitle($locale),
-                'description'               => $product->getDescription($locale),
-                'addon'                     => $product->getAddon($locale),
-                'subjectedToValidationHelp' => $product->getSubjectedToValidationHelp($locale),
-            ];
-        }
-    }
 }

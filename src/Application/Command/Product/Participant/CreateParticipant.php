@@ -8,7 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Product;
+namespace Proximum\Vimeet\Application\Command\Product\Participant;
+
+use Proximum\Vimeet\Application\Command\Product\AbstractCreate;
 
 class CreateParticipant extends AbstractCreate
 {

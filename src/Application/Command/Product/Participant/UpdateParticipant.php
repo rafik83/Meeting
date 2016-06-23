@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Application\Command\Product\Participant;
+namespace Proximum\Vimeet\Application\Command\Product\Participant;
 
 
 class UpdateParticipant

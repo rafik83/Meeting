@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Product\Option;
+namespace Proximum\Vimeet\Application\Command\Product;
 
-
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-abstract class AbstractOption
+abstract class AbstractProduct
 {
     /**
      * @var string
@@ -24,11 +24,6 @@ abstract class AbstractOption
      * @var array
      */
     public $translations = [];
-
-    /**
-     * @var UploadedFile
-     */
-    public $file;
 
     /**
      * @var float
@@ -56,12 +51,28 @@ abstract class AbstractOption
     public $updatable;
 
     /**
-     * @var \DateTimeInterface|null
+     * @var \DateTimeInterface
      */
     public $updatableUntil;
+
+    /**
+     * @var UploadedFile
+     */
+    public $file;
 
     /**
      * @var bool
      */
     public $subjectedToValidation;
+
+    /**
+     * @var array
+     */
+    public $features = [];
+
+    /**
+     * @var array
+     */
+    public $productIncluded = [];
+
 }

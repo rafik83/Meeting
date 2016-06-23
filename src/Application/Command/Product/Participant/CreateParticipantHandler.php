@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Product;
+namespace Proximum\Vimeet\Application\Command\Product\Participant;
 
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreatePlanningHandler
+class CreateParticipantHandler
 {
     /**
      * @var ProductRepositoryInterface
@@ -29,18 +29,18 @@ class CreatePlanningHandler
     }
 
     /**
-     * @param CreatePlanning $createPlanning
+     * @param CreateParticipant $createParticipant
      */
-    public function handle(CreatePlanning $createPlanning)
+    public function handle(CreateParticipant $createParticipant)
     {
-        $product = Product::createPlanning(
-            $createPlanning->event,
-            $createPlanning->name,
-            $createPlanning->unitPrice,
-            $createPlanning->quantityMax
+        $product = Product::createParticipant(
+            $createParticipant->event,
+            $createParticipant->name,
+            $createParticipant->unitPrice,
+            $createParticipant->quantityMax
         );
 
-        foreach ($createPlanning->translations as $locale => $translation) {
+        foreach ($createParticipant->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 

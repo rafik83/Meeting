@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Application\Command\Product\Planning;
+namespace Proximum\Vimeet\Application\Command\Product\Planning;
 
 
 class UpdatePlanningHandler
