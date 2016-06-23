@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option;
 
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -1,10 +1,11 @@
 <?php
 
 
-namespace Ui\Bundle\AdminBundle\Form\Type\Product;
+namespace Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
 
 
 use Application\Command\Product\UpdatePlan;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\AbstractPlanType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdatePlanType extends AbstractPlanType

@@ -8,9 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 
 use Proximum\Vimeet\Application\Command\Product\CreateParticipant;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
@@ -23,7 +24,8 @@ class CreateParticipantType extends AbstractCreateType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        foreach ($view->children['translations'] as $translation) {
+        foreach ($view->children['translations'] as $translation)
+        {
             $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
         }
     }
