@@ -237,7 +237,11 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreatePlanning($event);
-        $form   = $this->createForm(CreatePlanningType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreatePlanningType::class, $create, [
+            'submit' => true,
+            'event'  => $event,
+            'locale' => $request->getLocale(),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
