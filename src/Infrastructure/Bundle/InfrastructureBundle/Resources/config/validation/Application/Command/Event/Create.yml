@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Event\Update:
+Proximum\Vimeet\Application\Command\Event\Create:
     properties:
         title:
             - NotBlank: ~

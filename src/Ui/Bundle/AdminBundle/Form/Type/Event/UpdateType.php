@@ -29,7 +29,7 @@ class UpdateType extends AbstractEventType
 
         $builder
             ->add('translations', CollectionType::class, [
-                'entry_type' => EventUpdateTranslationType::class,
+                'entry_type' => UpdateTranslationType::class,
                 'label'      => false,
             ])
         ;
@@ -56,5 +56,13 @@ class UpdateType extends AbstractEventType
         $resolver->setDefaults([
             'data_class' => Update::class,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'event_update';
     }
 }
