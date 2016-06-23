@@ -424,6 +424,11 @@ class Product
      */
     public function includeProduct(Product $product, $quantity)
     {
+        if ($this->hasIncludedProduct($product))
+        {
+
+        }
+
         $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
 
         return $this;
@@ -714,5 +719,20 @@ class Product
                 'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
             ]
         );
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function hasIncludedProduct(Product $product)
+    {
+        $find = $this->productIncluded->exists(function (ProductIncluded $i) use ($product)
+        {
+            return $i->getIncluded() === $product;
+        });
+
+        return $find;
     }
 }

@@ -25,6 +25,7 @@ abstract class AbstractUpdate extends AbstractProduct
         {
             $this->translations[$locale] = [
                 'title'                     => $product->getTitle($locale),
+                'heading'                   => $product->getHeading($locale),
                 'description'               => $product->getDescription($locale),
                 'addon'                     => $product->getAddon($locale),
                 'subjectedToValidationHelp' => $product->getSubjectedToValidationHelp($locale),

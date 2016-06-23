@@ -29,6 +29,8 @@ class UpdatePlanHandler extends AbstractHandler
         foreach ($updatePlan->productIncluded as $productIncluded) {
             $product->includeProduct($productIncluded['product'], $productIncluded['quantity']);
         }
+        
+        // bouclé sur le productIncluded de la l'entité et supprmier de l'entité si pas dans la commande
 
         foreach ($updatePlan->features as $feature) {
             $object = new Feature($product);

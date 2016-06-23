@@ -604,6 +604,10 @@ admin:
     product_update:
         option:
             title: Modifier un produit
+        plan:
+          title: Modifier une formule
+        planning:
+          title: Modifier un planning
     plan_create:
         title: Ajouter une formule au catalogue
     plan:

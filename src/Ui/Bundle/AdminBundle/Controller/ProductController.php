@@ -11,27 +11,27 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
+use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
+use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
-use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
-use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\CreatePlanningType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\UpdatePlanningType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\CreatePlanType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\CreatePlanningType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\UpdatePlanningType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -54,7 +54,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return RedirectResponse|Response
      */
@@ -63,13 +63,14 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreateOption($event);
-        $form   = $this->createForm(CreateOptionType::class, $create, [
+        $form = $this->createForm(CreateOptionType::class, $create, [
             'event'  => $event,
             'locale' => $request->getLocale(),
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -78,7 +79,7 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:createOption.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -94,12 +95,13 @@ class ProductController extends Controller
 
         $update = new UpdateOption($product);
         $form = $this->createForm(UpdateOptionType::class, $update, [
-            'submit' => true,
-            'product'  => $product,
-            'locale' => $request->getLocale(),
+            'submit'  => true,
+            'product' => $product,
+            'locale'  => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.update.success');
 
@@ -108,13 +110,13 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:updateOption.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
      * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return RedirectResponse|Response
      */
@@ -123,13 +125,14 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreatePlan($event);
-        $form   = $this->createForm(CreatePlanType::class, $create, [
+        $form = $this->createForm(CreatePlanType::class, $create, [
             'submit' => true,
             'event'  => $event,
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -138,7 +141,7 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:createPlan.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -154,13 +157,15 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $update = new UpdatePlan($product);
-        $form   = $this->createForm(UpdatePlanType::class, $update, [
-            'submit' => true,
-            'product'  => $product,
-            'locale' => $request->getLocale(),
+        $form = $this->createForm(UpdatePlanType::class, $update, [
+            'submit'  => true,
+            'product' => $product,
+            'locale'  => $request->getLocale(),
+            'event'   => $event,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -169,13 +174,13 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:updatePlan.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
      * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return RedirectResponse|Response
      */
@@ -184,13 +189,14 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreateParticipant($event);
-        $form   = $this->createForm(CreateParticipantType::class, $create, [
+        $form = $this->createForm(CreateParticipantType::class, $create, [
             'event'  => $event,
             'locale' => $request->getLocale(),
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -199,7 +205,7 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:createParticipant.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -215,13 +221,14 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $update = new UpdateParticipant($product);
-        $form   = $this->createForm(UpdateParticipantType::class, $update, [
-            'submit' => true,
-            'product'  => $product,
-            'locale' => $request->getLocale(),
+        $form = $this->createForm(UpdateParticipantType::class, $update, [
+            'submit'  => true,
+            'product' => $product,
+            'locale'  => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -230,13 +237,13 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:updateParticipant.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
      * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return RedirectResponse|Response
      */
@@ -245,13 +252,14 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreatePlanning($event);
-        $form   = $this->createForm(CreatePlanningType::class, $create, [
+        $form = $this->createForm(CreatePlanningType::class, $create, [
             'submit' => true,
             'event'  => $event,
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -260,7 +268,7 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:createPlanning.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -276,9 +284,14 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $update = new UpdatePlanning($product);
-        $form   = $this->createForm(UpdatePlanningType::class, $update, ['submit' => true]);
+        $form = $this->createForm(UpdatePlanningType::class, $update, [
+            'submit' => true,
+            'product' => $product,
+            'locale'  => $request->getLocale(),
+        ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
+        {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -287,7 +300,7 @@ class ProductController extends Controller
 
         return $this->render('AdminBundle:Product:updatePlanning.html.twig', [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 }
