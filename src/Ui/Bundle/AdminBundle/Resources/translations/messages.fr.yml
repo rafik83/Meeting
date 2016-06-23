@@ -601,6 +601,9 @@ admin:
             title: Ajouter un produit participant
         planning:
             title: Ajouter un produit planning
+    product_update:
+        option:
+            title: Modifier un produit
     plan_create:
         title: Ajouter une formule au catalogue
     plan:
