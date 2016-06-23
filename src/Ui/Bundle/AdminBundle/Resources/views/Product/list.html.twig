@@ -61,7 +61,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ path('admin_product_update_option', {'event': event.id, 'product': product.id}) }}">
+                                <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}">
                                     {{ 'admin.product.update.action'|trans }}
                                 </a>
                             </li>
