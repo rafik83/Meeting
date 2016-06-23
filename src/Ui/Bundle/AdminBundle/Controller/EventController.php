@@ -10,12 +10,16 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType;
+use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,6 +57,44 @@ class EventController extends Controller
 
     /**
      * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function createAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        $create = new Create($this->getUser());
+
+        $form = $this->createForm(CreateType::class, $create, [
+            'currentLocale' => $request->getLocale(),
+            'method'        => 'POST',
+            'action'        => $this->generateUrl('admin_event_create'),
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($create);
+                $this->addFlash('success', 'flash.admin.event.create.success');
+
+                return $this->redirectToRoute('admin_event_list');
+            } catch (GuidelineAssetBuildFailedException $ex) {
+                $this->addFlash('error', 'flash.admin.event.update.asset.failed');
+            } catch (DomainAlreadyUsedException $ex) {
+                $form->get('domain')->addError(
+                    new FormError($this->get('translator')->trans('validators.event.domain.unique', [], 'validators'))
+                );
+            }
+        }
+
+        return $this->render('AdminBundle:Event:create.html.twig', [
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
      * @param Event   $event
      *
      * @return RedirectResponse|Response
@@ -63,7 +105,7 @@ class EventController extends Controller
 
         $update = new Update($event);
 
-        $form = $this->createForm(EventUpdateType::class, $update, [
+        $form = $this->createForm(UpdateType::class, $update, [
             'locales'       => $event->getLocales(),
             'currentLocale' => $request->getLocale(),
             'method'        => 'POST',
@@ -79,6 +121,10 @@ class EventController extends Controller
                 return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);
             } catch (GuidelineAssetBuildFailedException $ex) {
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');
+            } catch (DomainAlreadyUsedException $ex) {
+                $form->get('domain')->addError(
+                    new FormError($this->get('translator')->trans('validators.event.domain.unique', [], 'validators'))
+                );
             }
         }
 
