@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -23,7 +23,7 @@ class ObjectValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if ($value instanceof Object) {
+        if ($value instanceof Template\Object) {
             $this->checkRequired($value, $constraint);
             $this->checkMinLength($value, $constraint);
             $this->checkMaxLength($value, $constraint);
@@ -31,34 +31,34 @@ class ObjectValidator extends ConstraintValidator
     }
 
     /**
-     * @param Object     $object
-     * @param Constraint $constraint
+     * @param Template\Object $object
+     * @param Constraint      $constraint
      */
-    protected function checkRequired(Object $object, Constraint $constraint)
+    protected function checkRequired(Template\Object $object, Constraint $constraint)
     {
-        if (true === $object->getOption('required') && $object instanceof Object\ContentObjectInterface) {
+        if (true === $object->getOption('required') && $object instanceof Template\Object\ContentObjectInterface) {
             $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new NotBlank());
         }
     }
 
     /**
-     * @param Object     $object
-     * @param Constraint $constraint
+     * @param Template\Object $object
+     * @param Constraint      $constraint
      */
-    protected function checkMinLength(Object $object, Constraint $constraint)
+    protected function checkMinLength(Template\Object $object, Constraint $constraint)
     {
-        if (null !== $object->getOption('minLength') && $object instanceof Object\ContentObjectInterface) {
+        if (null !== $object->getOption('minLength') && $object instanceof Template\Object\ContentObjectInterface) {
             $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new Length(['min' => $object->getOption('minLength')]));
         }
     }
 
     /**
-     * @param Object     $object
-     * @param Constraint $constraint
+     * @param Template\Object $object
+     * @param Constraint      $constraint
      */
-    protected function checkMaxLength(Object $object, Constraint $constraint)
+    protected function checkMaxLength(Template\Object $object, Constraint $constraint)
     {
-        if (null !== $object->getOption('maxLength') && $object instanceof Object\ContentObjectInterface) {
+        if (null !== $object->getOption('maxLength') && $object instanceof Template\Object\ContentObjectInterface) {
             $this->context->getValidator()->inContext($this->context)->atPath($constraint->key)->validate($object->getContentValue(), new Length(['max' => $object->getOption('maxLength')]));
         }
     }

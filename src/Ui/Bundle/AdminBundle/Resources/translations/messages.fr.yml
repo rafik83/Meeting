@@ -610,6 +610,10 @@ admin:
         name: Nom
         unitPrice: Prix unitaire
         productIncluded: Produits inclus
+    update_content:
+        terms-of-sale:
+            title: Modifier les conditions générales de vente
+            link: Conditions générales de vente
     schedule:
         link: Agenda
         title: Agenda

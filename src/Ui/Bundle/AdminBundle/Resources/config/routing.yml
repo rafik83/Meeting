@@ -123,6 +123,16 @@ admin_event_configure_dates:
     defaults: { _controller: AdminBundle:Event:dates }
 
 #
+# Content
+#
+admin_content_update:
+    path: /event/{event}/content/{type}/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Content:update }
+
+#
 # Rule
 #
 

@@ -1023,6 +1023,10 @@ form:
                 label: N° de TVA
             submit:
                 label: Enregistrer
+    content_update:
+        children:
+            submit:
+                label: Enregistrer
     promotion_code_create:
         children:
             title:

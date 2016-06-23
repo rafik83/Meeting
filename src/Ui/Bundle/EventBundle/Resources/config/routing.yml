@@ -103,7 +103,6 @@ event_account_participant:
         participant: \d+
     defaults: { _controller: EventBundle:Participant:see }
 
-
 event_account_participant_profile:
     path: /account/sheet/{sheet}/participant/{participant}/profile
     methods: [GET, POST]
@@ -111,6 +110,14 @@ event_account_participant_profile:
         sheet: \d+
         participant: \d+
     defaults: { _controller: EventBundle:Participant:updateProfile }
+
+event_account_participant_company:
+    path: /account/sheet/{sheet}/participant/{participant}/company
+    methods: [GET, POST]
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: EventBundle:Participant:updateCompany }
 
 event_account_participant_avatar:
     path: /account/sheet/{sheet}/participant/{participant}/avatar/{key}
@@ -183,19 +190,6 @@ event_sheet_handle_remove_participant:
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
-
-
-#
-# Sheet - Participant
-#
-
-event_sheet_delete_participant:
-    path:     /sheet/{sheet}/delete_participant/{participant}
-    requirements:
-        sheet: \d+
-        participant: \d+
-    methods:  [DELETE]
-    defaults: { _controller: EventBundle:Participant:delete }
 
 
 #
