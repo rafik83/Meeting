@@ -137,8 +137,9 @@ class Event implements EventInterface
      */
     public function __construct()
     {
-        $this->translations  = new ArrayCollection();
-        $this->configuration = new Configuration('', '', '');
+        $this->translations   = new ArrayCollection();
+        $this->configuration  = new Configuration('', '', '');
+        $this->paymentAddress = new Address('', '', '', '');
     }
 
     /**
@@ -301,8 +302,10 @@ class Event implements EventInterface
      * @param float  $vat
      * @param string $country
      * @param string $currency
+     * @param string $timeZone
+     * @param string $domain
      */
-    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency)
+    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency, $timeZone, $domain)
     {
         $this->title    = $title;
         $this->locales  = $locales;
@@ -311,6 +314,8 @@ class Event implements EventInterface
         $this->vat      = $vat;
         $this->country  = $country;
         $this->currency = $currency;
+        $this->timeZone = $timeZone;
+        $this->domain   = $domain;
     }
 
     /**
