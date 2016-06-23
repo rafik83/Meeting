@@ -34,6 +34,8 @@ class PackageController extends Controller
      */
     public function redirectAction(Request $request, EventView $eventView)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         try {
             $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventView, $request->getLocale());
         } catch (\Exception $exception) {
@@ -52,7 +54,7 @@ class PackageController extends Controller
      * @param Sheet     $sheet
      * @param int       $step
      *
-     * @return Response
+     * @return RedirectResponse|Response
      */
     public function stepAction(Request $request, EventView $eventView, Sheet $sheet, $step)
     {
@@ -72,10 +74,19 @@ class PackageController extends Controller
             throw $this->createNotFoundException(sprintf('Unkown %s step for package of sheet %s', $step, $sheet->getId()));
         }
 
-        $currentStep     = $funnel->getStep($step);
+        $currentStep = $funnel->getStep($step);
+
+        if (FunnelStep::TYPE_OPTIONS === $currentStep->type) {
+            // Options step not implemented, redirect to sheet
+            return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
+        }
+
         $uncompletedStep = $funnel->getCurrentUncompletedStep();
 
-        if (!$currentStep->completed && null !== $uncompletedStep && $uncompletedStep !== $currentStep) {
+        if ($currentStep !== $uncompletedStep
+            && null !== $uncompletedStep
+            && FunnelStep::TYPE_PLAN === $uncompletedStep->type
+        ) {
             return $this->redirectToRoute(
                 'event_package_step',
                 [
@@ -88,23 +99,23 @@ class PackageController extends Controller
         $commandClass = $this->stepTypeAssociatedCommand($currentStep->type);
         $command      = new $commandClass($sheet);
         $this->assignProductsToCommand($command);
-        $form         = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
-            'action'  => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
-            'package' => $sheet->getPackage(),
+
+        $form = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
+            'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
+            'sheet'  => $sheet,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
 
-            return $this->redirectToRoute('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]);
+            return $this->redirectToRoute('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step+1]);
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(
             new PackageViewQuery(
                 $funnel,
                 $currentStep,
-                $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->getId()),
-                $sheet->getPackage(),
+                $sheet,
                 $request->getLocale()
             )
         );
@@ -125,7 +136,7 @@ class PackageController extends Controller
     {
         $commands = [
             FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
-            FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\ParticipantAndPlanning::class,
+            FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\SelectParticipantAndPlanning::class,
             FunnelStep::TYPE_OPTIONS              => Step\Options::class,
         ];
 
@@ -162,12 +173,27 @@ class PackageController extends Controller
      */
     private function assignProductsToCommand(Step\AbstractStep $command)
     {
-        if ($command instanceof Step\SelectPlan) {
-            $cartRow = $this->get('repository.cart_row_repository')->findCartRowPlanBySheet($command->sheet);
+        $cartManager = $this->get('cart_manager');
+        $cart        = $cartManager->getCart($command->sheet);
 
-            if (null !== $cartRow) {
-                $command->plan = $cartRow->getProduct();
+        if ($command instanceof Step\SelectPlan) {
+            $selectedPlan = $cart->getPlanRow();
+
+            if ($selectedPlan) {
+                $command->plan = $selectedPlan->getProduct();
             }
+
+            return;
+        }
+
+        if ($command instanceof Step\SelectParticipantAndPlanning) {
+            $planningRow = $cart->getPlanningRow();
+
+            if ($planningRow) {
+                $command->planningQuantity = $planningRow->getQuantity();
+            }
+
+            return;
         }
     }
 }

@@ -34,14 +34,16 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         $updatableUntil      = new \DateTime();
         $translations = [
             'fr' => [
-                'title'       => 'foo',
-                'description' => 'bar',
-                'addon'       => 'optional',
+                'title'                     => 'foo',
+                'description'               => 'bar',
+                'addon'                     => 'optional',
+                'subjectedToValidationHelp' => '',
             ],
             'en' => [
-                'title'       => 'enfoo',
-                'description' => 'enbar',
-                'addon'       => 'enoptional',
+                'title'                     => 'enfoo',
+                'description'               => 'enbar',
+                'addon'                     => 'enoptional',
+                'subjectedToValidationHelp' => '',
             ],
         ];
 
@@ -69,8 +71,8 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
             $updatable,
             $updatableUntil
         );
-        $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional');
-        $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional');
+        $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional', '');
+        $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional', '');
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);

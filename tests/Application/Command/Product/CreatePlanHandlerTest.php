@@ -45,8 +45,8 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
-        $product->translate('fr', 'foo', null, 'bar', 'optional');
-        $product->translate('en', 'enfoo', null, 'enbar', 'enoptional');
+        $product->translate('fr', 'foo', null, 'bar', 'optional', null);
+        $product->translate('en', 'enfoo', null, 'enbar', 'enoptional', null);
 
         $create                      = new CreatePlan($event);
         $create->name                = $name;
@@ -71,8 +71,8 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
             $availabilityCurrent,
             $availabilityMax
         );
-        $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional');
-        $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
+        $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional', null);
+        $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional', null);
         $expectedPlan->includeProduct($product, 2);
 
         // Mock
@@ -112,8 +112,8 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
-        $product->translate('fr', 'foo', null, 'bar', 'optional');
-        $product->translate('en', 'enfoo', null, 'enbar', 'enoptional');
+        $product->translate('fr', 'foo', null, 'bar', 'optional', null);
+        $product->translate('en', 'enfoo', null, 'enbar', 'enoptional', null);
 
         $create                      = new CreatePlan($event);
         $create->name                = $name;
@@ -146,8 +146,8 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
             $availabilityCurrent,
             $availabilityMax
         );
-        $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional');
-        $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional');
+        $expectedPlan->translate('fr', 'foo', 'bar', 'barContent', 'optional', null);
+        $expectedPlan->translate('en', 'enfoo', 'enbar', 'enbarContent', 'enoptional', null);
         $expectedPlan->includeProduct($product, 2);
 
         $feature = new Product\Feature($expectedPlan);

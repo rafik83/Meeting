@@ -66,6 +66,13 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 },
                 $sheet->getParticipants()->toArray()
             );
+
+            if ($sheet->hasUserParticipant($sheet->getOwner())) {
+                $participants[] = [
+                    'email'    => $sheet->getOwner()->getEmail(),
+                    'lastname' => $sheet->getOwner()->getAccount()->getLastName(),
+                ];
+            }
         }
 
         try {

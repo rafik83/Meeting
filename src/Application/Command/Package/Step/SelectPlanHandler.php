@@ -10,50 +10,38 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
-use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class SelectPlanHandler
 {
     /**
-     * @var CartRowRepositoryInterface
+     * @var CartManager
      */
-    private $cartRowRepository;
+    private $cartManager;
 
     /**
-     * @var \DateTimeInterface
+     * SelectPlanHandler constructor.
+     *
+     * @param CartManager $cartManager
      */
-    private $datetime;
-
-    /**
-     * @param CartRowRepositoryInterface $cartRowRepository
-     * @param \DateTimeInterface         $datetime
-     */
-    public function __construct(CartRowRepositoryInterface $cartRowRepository, \DateTimeInterface $datetime)
+    public function __construct(CartManager $cartManager)
     {
-        $this->cartRowRepository = $cartRowRepository;
-        $this->datetime          = $datetime;
+        $this->cartManager = $cartManager;
     }
 
     /**
-     * @param SelectPlan $plans
+     * @param SelectPlan $selectPlan
      */
-    public function handle(SelectPlan $plans)
+    public function handle(SelectPlan $selectPlan)
     {
-        $cartRow = $this->cartRowRepository->findCartRowPlanBySheet($plans->sheet);
+        $cart = $this->cartManager->getCart($selectPlan->sheet);
 
-        if (null === $cartRow || $cartRow->getProduct() !== $plans->plan) {
-            // remove if other plan selected previously
-            if ($cartRow) {
-                $this->cartRowRepository->delete($cartRow);
-            }
+        $previousPlan = $cart->getPlanRow();
 
-            $this->cartRowRepository->add(new CartRow(
-                $plans->sheet,
-                $plans->plan,
-                1,
-                $this->datetime
-            ));
+        if (!$previousPlan || $previousPlan->getProduct() !== $selectPlan->plan) {
+            $cart->clear();
+            $cart->setProduct($selectPlan->plan, 1);
+            $this->cartManager->save($cart);
         }
     }
 }

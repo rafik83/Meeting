@@ -53,7 +53,7 @@ class ParticipantManager
     public function isUserAllowedToEditParticipant(Sheet $sheet, Participant $participant, User $user)
     {
         return $sheet->hasParticipant($participant)
-            && ($sheet->getUserParticipant($user)->isOwner()|| $participant->getUser() === $user);
+            && ($sheet->getOwner() === $user || $participant->getUser() === $user);
     }
 
     /**
@@ -68,6 +68,7 @@ class ParticipantManager
     public function isUserAllowedToDeleteParticipant(Sheet $sheet, Participant $participant, User $user)
     {
         return $sheet->hasParticipant($participant)
-            && $sheet->getUserParticipant($user)->isOwner() && !$participant->isOwner();
+            && $participant->getUser() !== $user
+            && $sheet->getOwner() !== $user;
     }
 }

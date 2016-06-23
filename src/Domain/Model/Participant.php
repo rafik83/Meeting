@@ -38,11 +38,6 @@ class Participant
     /**
      * @var bool
      */
-    private $owner;
-
-    /**
-     * @var bool
-     */
     private $active;
 
     /**
@@ -54,15 +49,13 @@ class Participant
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
-     * @param bool  $owner
      * @param bool  $active
      */
-    public function __construct(Sheet $sheet, User $user, array $data, $owner, $active)
+    public function __construct(Sheet $sheet, User $user, array $data, $active)
     {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
-        $this->owner  = $owner;
         $this->active = $active;
     }
 
@@ -107,11 +100,22 @@ class Participant
     /**
      * Is owner.
      *
+     * @deprecated
      * @return bool
      */
     public function isOwner()
     {
-        return $this->owner;
+        return false;
+    }
+
+    /**
+     * Is owner.
+     *
+     * @return bool
+     */
+    public function isOwnerParticipant()
+    {
+        return $this->sheet->getOwner() === $this->user;
     }
 
     /**

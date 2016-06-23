@@ -9,8 +9,6 @@ Proximum\Vimeet\Domain\Model\Participant:
     fields:
         data:
             type: json_array
-        owner:
-            type: boolean
         active:
             type: boolean
     manyToOne:

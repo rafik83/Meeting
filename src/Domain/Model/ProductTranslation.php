@@ -50,21 +50,30 @@ class ProductTranslation
     private $addon;
 
     /**
+     * "Message d'aide si soumis à validation"
+     *
+     * @var string
+     */
+    private $subjectedToValidationHelp;
+
+    /**
      * @param Product $product
      * @param string  $locale
      * @param string  $title
      * @param string  $heading
      * @param string  $description
      * @param string  $addon
+     * @param string  $subjectedToValidationHelp
      */
-    public function __construct(Product $product, $locale, $title, $heading, $description, $addon)
+    public function __construct(Product $product, $locale, $title, $heading, $description, $addon, $subjectedToValidationHelp)
     {
-        $this->product     = $product;
-        $this->locale      = $locale;
-        $this->title       = $title;
-        $this->heading     = $heading;
-        $this->description = $description;
-        $this->addon       = $addon;
+        $this->product                   = $product;
+        $this->locale                    = $locale;
+        $this->title                     = $title;
+        $this->heading                   = $heading;
+        $this->description               = $description;
+        $this->addon                     = $addon;
+        $this->subjectedToValidationHelp = $subjectedToValidationHelp;
     }
 
     /**
@@ -72,13 +81,15 @@ class ProductTranslation
      * @param string $heading
      * @param string $description
      * @param string $addon
+     * @param string $subjectedToValidationHelp
      */
-    public function set($title, $heading, $description, $addon)
+    public function set($title, $heading, $description, $addon, $subjectedToValidationHelp)
     {
-        $this->title       = $title;
-        $this->heading     = $heading;
-        $this->description = $description;
-        $this->addon       = $addon;
+        $this->title                     = $title;
+        $this->heading                   = $heading;
+        $this->description               = $description;
+        $this->addon                     = $addon;
+        $this->subjectedToValidationHelp = $subjectedToValidationHelp;
     }
 
     /**
@@ -141,5 +152,15 @@ class ProductTranslation
     public function getAddon()
     {
         return $this->addon;
+    }
+
+    /**
+     * Get subjectedToValidationHelp
+     *
+     * @return string
+     */
+    public function getSubjectedToValidationHelp()
+    {
+        return $this->subjectedToValidationHelp;
     }
 }

@@ -11,8 +11,6 @@ Proximum\Vimeet\Domain\Model\CartRow:
             type: integer
         serializedProduct:
             type: json_array
-        createdAt:
-            type: datetime
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

@@ -88,6 +88,50 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
+     * @param string $givenLabel
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getKeyForLabel($givenLabel, $locale = null)
+    {
+        foreach ($this->nomenclature->getLastLevel() as $key => $nomenclatureItem) {
+            if (null !== $locale) {
+                if ($nomenclatureItem->getLabel($locale) === $givenLabel) {
+                    return $nomenclatureItem->getKey();
+                }
+            } else {
+                if ($nomenclatureItem->getLabel($this->getLocale()) === $givenLabel) {
+                    return $nomenclatureItem->getKey();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $givenKey
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getLabelForKey($givenKey, $locale = null)
+    {
+        foreach ($this->nomenclature->getLastLevel() as $key => $nomenclatureItem) {
+            if ($nomenclatureItem->getKey() === $givenKey) {
+                if (null !== $locale) {
+                    return $nomenclatureItem->getLabel($locale);
+                } else {
+                    return $nomenclatureItem->getLabel($this->getLocale());
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return int
      */
     public function getNomenclatureId()
@@ -102,6 +146,14 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     {
         $this->nomenclature       = $nomenclature;
         $this->nomenclatureLabels = $nomenclature->getLabels($this->locale) ? : [];
+    }
+
+    /**
+     * @return NomenclatureModel
+     */
+    public function getNomenclatureModel()
+    {
+        return $this->nomenclature;
     }
 
     /**

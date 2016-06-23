@@ -53,11 +53,15 @@ class EditableTextDataType extends AbstractType
             );
         }
 
+        $fallback = $object instanceof EditableText && $object->getLocale() !== $object->getFallback() ? $object->getFallbackContent() : false;
+
         $builder
             ->add('content', TextareaType::class, [
-                'placeholder' => $options['placeholder'],
-                'attr'        => $attributes,
-                'required'    => $object->getRequired(),
+                'placeholder'         => $options['placeholder'],
+                'label'               => false,
+                'attr'                => $attributes,
+                'required'            => $object->getRequired(),
+                'fallbackTranslation' => $fallback,
             ])
         ;
     }

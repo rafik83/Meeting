@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Package;
 
+use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\PackageView;
 use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
@@ -21,11 +23,20 @@ class PackageViewQueryHandler
     private $plansViewQueryHandler;
 
     /**
-     * @param PlansViewQueryHandler $plansViewQueryHandler
+     * @var ParticipantAndPlanningViewQueryHandler
      */
-    public function __construct(PlansViewQueryHandler $plansViewQueryHandler)
-    {
-        $this->plansViewQueryHandler = $plansViewQueryHandler;
+    private $participantAndPlanningViewQueryHandler;
+
+    /**
+     * @param PlansViewQueryHandler                  $plansViewQueryHandler
+     * @param ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler
+     */
+    public function __construct(
+        PlansViewQueryHandler $plansViewQueryHandler,
+        ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler
+    ) {
+        $this->plansViewQueryHandler                  = $plansViewQueryHandler;
+        $this->participantAndPlanningViewQueryHandler = $participantAndPlanningViewQueryHandler;
     }
 
     /**
@@ -38,8 +49,15 @@ class PackageViewQueryHandler
         if ($packageViewQuery->currentStep->type === Step::TYPE_PLAN) {
             $packageViewProducts = $this->plansViewQueryHandler->handle(
                 new PlansViewQuery(
-                    $packageViewQuery->event,
-                    $packageViewQuery->package,
+                    $packageViewQuery->sheet->getEvent(),
+                    $packageViewQuery->sheet->getPackage(),
+                    $packageViewQuery->locale
+                )
+            );
+        } elseif ($packageViewQuery->currentStep->type === Step::TYPE_PARTICIPANT_PLANNING) {
+            $packageViewProducts = $this->participantAndPlanningViewQueryHandler->handle(
+                new ParticipantAndPlanningViewQuery(
+                    $packageViewQuery->sheet,
                     $packageViewQuery->locale
                 )
             );

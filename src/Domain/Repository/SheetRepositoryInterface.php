@@ -62,6 +62,14 @@ interface SheetRepositoryInterface
     public function getSheetByUserAndEvent(User $user, EventInterface $event);
 
     /**
+     * @param User           $user
+     * @param EventInterface $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event);
+
+    /**
      * @param int $sheetId
      *
      * @return Sheet

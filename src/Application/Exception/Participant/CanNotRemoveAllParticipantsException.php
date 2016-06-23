@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Proximum Vimeet project.
  *
@@ -8,8 +7,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Package\Step;
+namespace Proximum\Vimeet\Application\Exception\Participant;
 
-class ParticipantAndPlanning extends AbstractStep
+class CanNotRemoveAllParticipantsException extends ParticipantException
 {
 }

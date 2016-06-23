@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 
 class Update extends AbstractCommand

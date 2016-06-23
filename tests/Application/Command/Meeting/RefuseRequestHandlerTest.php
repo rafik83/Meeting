@@ -33,10 +33,12 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $event     = new Event();
         $type      = new Type($event);
-        $sheetTo   = new Sheet($event, $type, [], [], new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], [], new \DateTime());
-        $dateTime  = new DateTime();
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
+        $user3     = new User('test3@test.fr', 'test', 'test', 'fr');
+        $sheetFrom = new Sheet($event, $type, [], $user2, new \DateTime());
+        $sheetTo   = new Sheet($event, $type, [], $user3, new \DateTime());
+        $dateTime  = new DateTime();
 
         // Request to refuse
 
@@ -44,11 +46,11 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $refuseRequest = new RefuseRequest($request, $user, $dateTime);
         $refuseRequest->message = 'this is a test';
 
-        // Expceted
+        // Expected
 
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
         $expectedRequest->refuse($dateTime);
-        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'this is a test', $dateTime);
+        $expectedMessage = new Message($expectedRequest, $sheetTo, 'this is a test', $dateTime);
         $exectedEvent    = new RequestRefusedEvent($user, $request, $dateTime, 'this is a test');
 
         // Dependencies

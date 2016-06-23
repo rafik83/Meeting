@@ -50,9 +50,9 @@ Pour consulter les emails, il faut se connecter sur: https://mailtrap.io/signin
 
 Avec les identifiants suivant:
 
-Email: `nicolas.dievart+mailtrap@elao.com`
+Email: `larose@proximumgroup.com`
 
-Mot de passe: `Uwg-ig(n0#CZh'`
+Mot de passe: `vimeet360`
 
 ### Fixtures
 
