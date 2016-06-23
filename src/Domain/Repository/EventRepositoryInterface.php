@@ -42,6 +42,8 @@ interface EventRepositoryInterface
     public function getAll();
 
     /**
+     * Save event
+     *
      * @param Event $event
      */
     public function set(Event $event);

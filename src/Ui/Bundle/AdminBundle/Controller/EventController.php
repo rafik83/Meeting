@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -83,6 +85,32 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event:update.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function datesAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $command = new ConfigureDates($event);
+        $form    = $this->createForm(ConfigureDatesType::class, $command, ['event' => $event, 'submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.admin.event.configure_dates.success');
+
+            return $this->redirectToRoute('admin_event_configure_dates', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Event:dates.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
         ]);

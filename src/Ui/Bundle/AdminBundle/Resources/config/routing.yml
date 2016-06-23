@@ -115,6 +115,13 @@ admin_event_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:update }
 
+admin_event_configure_dates:
+    path: /event/{event}/dates
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event:dates }
+
 #
 # Rule
 #
