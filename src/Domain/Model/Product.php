@@ -584,9 +584,9 @@ class Product
     }
 
     /**
-     * @param $name
-     * @param $unitPrice
-     * @param $quantityMax
+     * @param string $name
+     * @param int $unitPrice
+     * @param int $quantityMax
      *
      * @return Product
      */

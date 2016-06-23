@@ -4,7 +4,9 @@
 namespace Proximum\Vimeet\Application\Command\Product\Participant;
 
 
-class UpdateParticipant
+use Proximum\Vimeet\Application\Command\Product\AbstractUpdate;
+
+class UpdateParticipant extends AbstractUpdate
 {
 
 }

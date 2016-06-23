@@ -7,6 +7,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,6 +19,13 @@ class UpdatePlanType extends AbstractUpdateType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+
+        $builder
+            ->add('translations', CollectionType::class, [
+                'entry_type' => TranslationsType::class,
+                'label'      => false,
+            ])
+        ;
     }
 
     /**
