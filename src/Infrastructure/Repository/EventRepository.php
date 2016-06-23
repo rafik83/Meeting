@@ -33,6 +33,20 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Event $event)
+    {
+        $this->entityManager->persist($event);
+        $this->entityManager->flush($event);
+
+        foreach ($event->getTranslations() as $translation) {
+            $this->entityManager->persist($translation);
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(Event $event)
     {
         $this->entityManager->flush($event);
