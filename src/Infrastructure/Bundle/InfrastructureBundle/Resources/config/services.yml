@@ -868,6 +868,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
+    command.participant.update_company_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
 
     #
     # Security

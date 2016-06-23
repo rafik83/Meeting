@@ -13,16 +13,11 @@
                     <div class="preview">
                         <div class="object--participant">
                             <div class="list list--users">
-                                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': card}) }}
+                                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': card, 'editAvatar': true, 'avatarTemplate': avatarTemplate}) }}
                             </div>
-                            {% for key, avatar in avatarTemplate %}
-                                <a href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">
-                                    {{ 'account.profile.updateAvatar'|trans }}
-                                </a>
-                            {% endfor %}
                         </div>
-                        <div>
-                            <p>{{ 'account.profile.contactInformation'|trans }}:</p>
+                        <div class="coordinates">
+                            <strong>{{ 'account.profile.contactInformation'|trans }}:</strong>
                             <ul>
                             {% for object in profileTemplate %}
                                 <li>
@@ -33,10 +28,8 @@
                             </ul>
                         </div>
                         <div class="validation">
-                            <a href="{{ path('event_account_participant_profile', {sheet: sheet.id, participant: participant.id}) }}">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ 'common.update'|trans }}
-                                </button>
+                            <a href="{{ path('event_account_participant_profile', {sheet: sheet.id, participant: participant.id}) }}" class="btn btn-primary">
+                                <i class="icon-Editer_1"></i> {{ 'common.update'|trans }}
                             </a>
                         </div>
                     </div>
@@ -44,15 +37,16 @@
                 {% if participant.user == app.user %}
                 <ul>
                     <li>
-                        <a href="{{ path('event_change_password') }}">{{ 'account.change_password.title'|trans }}</a>
+                        <a href="{{ path('event_change_password') }}"><span class="icon-Verouiller_1"></span> {{ 'account.change_password.title'|trans }}</a>
                     </li>
                     <li>
-                        <a href="{{ path('event_account_change_mail') }}">{{ 'account.update_email.title'|trans }}</a>
+                        <a href="{{ path('event_account_change_mail') }}"><span class="icon-Message_1"></span> {{ 'account.update_email.title'|trans }}</a>
                     </li>
                 </ul>
                 {% endif %}
             </section>
         </div>
+        {% if companyTemplate %}
         <div class="profile__box">
             <section class="main">
                 <header>
@@ -60,18 +54,22 @@
                 </header>
                 <div class="main__content">
                     <div class="preview">
-                        <div>
-                            <ul>
-                                {% for object in companyTemplate %}
-                                    <li>
-                                        {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                        <ul class="company">
+                            {% for object in companyTemplate %}
+                                <li>
+                                   {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% if companyTemplate %}
+                            <a href="{{ path('event_account_participant_company', {sheet: sheet.id, participant: participant.id}) }}" class="btn btn-primary">
+                                <i class="icon-Editer_1"></i> {{ 'common.update'|trans }}
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </section>
         </div>
+        {% endif %}
     </div>
 {% endblock %}
