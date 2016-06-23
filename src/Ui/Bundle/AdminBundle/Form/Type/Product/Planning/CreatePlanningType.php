@@ -8,9 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning;
 
-use Proximum\Vimeet\Application\Command\Product\CreatePlanning;
+use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Intl\Intl;

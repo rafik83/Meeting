@@ -10,24 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Planning;
 
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreatePlanningHandler
+class CreatePlanningHandler extends AbstractHandler
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     */
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
-    }
-
     /**
      * @param CreatePlanning $createPlanning
      */

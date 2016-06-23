@@ -10,34 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Plan;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreatePlanHandler
+class CreatePlanHandler extends AbstractHandler
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var FileStorageInterface
-     */
-    private $fileStorageInterface;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param FileStorageInterface       $fileStorageInterface
-     */
-    public function __construct(
-        ProductRepositoryInterface $productRepository,
-        FileStorageInterface $fileStorageInterface
-    ) {
-        $this->productRepository    = $productRepository;
-        $this->fileStorageInterface = $fileStorageInterface;
-    }
-
     /**
      * @param CreatePlan $createPlan
      */

@@ -4,7 +4,9 @@
 namespace Proximum\Vimeet\Application\Command\Product\Plan;
 
 
-class UpdatePlanHandler
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
+
+class UpdatePlanHandler extends AbstractHandler
 {
 
 }

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option;
 
-use Proximum\Vimeet\Application\Command\Product\CreateOption;
+use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateOptionType extends AbstractOptionType

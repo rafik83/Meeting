@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 
-use Proximum\Vimeet\Application\Command\Product\CreateParticipant;
+use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;

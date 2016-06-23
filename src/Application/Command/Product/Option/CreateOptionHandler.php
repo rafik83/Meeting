@@ -8,37 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Product;
+namespace Proximum\Vimeet\Application\Command\Product\Option;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreateOptionHandler
+class CreateOptionHandler extends AbstractHandler
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var FileStorageInterface
-     */
-    private $fileStorageInterface;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param FileStorageInterface       $fileStorageInterface
-     */
-    public function __construct(
-        ProductRepositoryInterface $productRepository,
-        FileStorageInterface $fileStorageInterface
-    ) {
-        $this->productRepository    = $productRepository;
-        $this->fileStorageInterface = $fileStorageInterface;
-    }
-
     /**
      * @param CreateOption $createOption
      */
@@ -57,8 +33,10 @@ class CreateOptionHandler
             $createOption->subjectedToValidation
         );
 
-        foreach ($createOption->translations as $locale => $translation) {
-            $product->translate($locale, $translation['title'], null, $translation['description'], $translation['addon'], $translation['subjectedToValidationHelp']);
+        foreach ($createOption->translations as $locale => $translation)
+        {
+            $product->translate($locale, $translation['title'], null, $translation['description'],
+                $translation['addon'], $translation['subjectedToValidationHelp']);
         }
 
         $this->productRepository->add($product);

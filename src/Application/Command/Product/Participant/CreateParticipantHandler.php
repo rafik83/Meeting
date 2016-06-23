@@ -10,24 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Participant;
 
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class CreateParticipantHandler
+class CreateParticipantHandler extends AbstractHandler
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     */
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
-    }
-
     /**
      * @param CreateParticipant $createParticipant
      */
@@ -40,7 +27,8 @@ class CreateParticipantHandler
             $createParticipant->quantityMax
         );
 
-        foreach ($createParticipant->translations as $locale => $translation) {
+        foreach ($createParticipant->translations as $locale => $translation)
+        {
             $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 
