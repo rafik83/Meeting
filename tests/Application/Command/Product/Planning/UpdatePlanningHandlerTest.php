@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Application\Command\Product\Planning;
+namespace Proximum\Vimeet\Tests\Application\Command\Product\Planning;
 
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
