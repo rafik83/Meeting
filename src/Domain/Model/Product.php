@@ -180,7 +180,7 @@ class Product
         $this->updatable             = $updatable;
         $this->updatableUntil        = $updatableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
-        $this->buyableUntil = $buyableUntil;
+        $this->buyableUntil          = $buyableUntil;
     }
 
     /**

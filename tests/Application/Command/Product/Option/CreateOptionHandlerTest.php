@@ -85,4 +85,38 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateOptionHandler($productRepository->reveal(), $fileStorage->reveal());
         $handler->handle($create);
     }
+
+    public function testOptionBuyable()
+    {
+        $event = new Event();
+        $event->setLocales(['fr', 'en'], 'fr');
+
+        $now = new \DateTime();
+
+        $name = 'Name';
+        $image = 'Image';
+        $unitPrice = 100;
+        $quantityMax = 4;
+        $availabilityCurrent = 10;
+        $availabilityMax = 50;
+        $updatable = true;
+        $updatableUntil = new \DateTime();
+        $buyableUntil = $now->modify('-1 day');
+
+        $product = Product::createOption(
+            $event,
+            $name,
+            $image,
+            $unitPrice,
+            $quantityMax,
+            $availabilityCurrent,
+            $availabilityMax,
+            $updatable,
+            $updatableUntil,
+            false,
+            $buyableUntil
+        );
+
+        $this->assertEquals(false, $product->isBuyable(new \DateTime()));
+    }
 }
