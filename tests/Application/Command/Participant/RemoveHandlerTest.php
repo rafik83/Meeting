@@ -20,13 +20,14 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         // Required
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $owner = new User('email@email.fr', 'password', 'salt', 'fr');
         $user2 = new User('user@email.fr', 'password', 'salt', 'fr');
@@ -66,7 +67,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(CanNotRemoveAllParticipantsException::class);
 
         // Required
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $owner = new User('email@email.fr', 'password', 'salt', 'fr');
         $user2 = new User('user@email.fr', 'password', 'salt', 'fr');

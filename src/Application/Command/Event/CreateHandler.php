@@ -66,12 +66,10 @@ class CreateHandler
             throw new DomainAlreadyUsedException(sprintf('Given domain %s', $create->domain));
         }
 
-        $event = new Event();
-
-        $event->update(
+        $event = new Event(
             $create->title,
-            $create->locales,
             $create->fallback,
+            $create->locales,
             $create->mode,
             $create->vat,
             $create->country,
@@ -79,6 +77,7 @@ class CreateHandler
             $create->timeZone,
             $create->domain
         );
+
         $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
 
         if (null !== $create->logo) {

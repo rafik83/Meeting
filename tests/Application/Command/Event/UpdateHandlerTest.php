@@ -18,13 +18,14 @@ use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         // Actual event
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update(
             'foobar',
@@ -63,7 +64,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone     = 'Europe/Paris';
 
         // Expected event
-        $expectedEvent = new Event();
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update(
             'barfoo',
@@ -98,7 +99,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleAddLocale()
     {
         // Actual event
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update(
             'foobar',
@@ -135,7 +136,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone     = 'Europe/Paris';
 
         // Expected event
-        $expectedEvent = new Event();
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update(
             'foobar',
@@ -168,7 +169,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleRemoveLocale()
     {
         // Actual event
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $event->update(
             'foobar',
@@ -206,7 +207,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         // Expected event
-        $expectedEvent = new Event();
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update(
             'foobar',
@@ -238,7 +239,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(DomainAlreadyUsedException::class);
         // Actual event
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->update(
             'foobar',
@@ -277,7 +278,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->timeZone     = 'Europe/Paris';
 
         // Expected event
-        $expectedEvent = new Event();
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->update(
             'barfoo',
@@ -297,7 +298,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(new Event());
+        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(EventFactory::createEvent());
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate($event)->shouldNotBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);

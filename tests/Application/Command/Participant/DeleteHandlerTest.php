@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Application\Exception\Participant\DeleteNotAllowedException;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +28,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], $user1, new \DateTime());
         $participant1 = new Participant($sheet, $user1, [], true, true);
@@ -52,7 +53,7 @@ class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(DeleteNotAllowedException::class);
         $user1        = new User('test1@test.com', '__SALT__', 'password', 'fr');
         $user2        = new User('test2@test.com', '__SALT__', 'password', 'fr');
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $type         = new Type($event);
         $sheet        = new Sheet($event, $type, [], $user1, new \DateTime());
         $participant1 = new Participant($sheet, $user1, [], true, true);

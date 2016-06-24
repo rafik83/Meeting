@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -26,9 +27,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $dateTime  = new \DateTime();
-        $event     = new Event();
-        $event2    = new Event();
-        $event3    = new Event();
+        $event     = EventFactory::createEvent();
+        $event2    = EventFactory::createEvent();
+        $event3    = EventFactory::createEvent();
         $operator  = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $operator->addEvent($event);
         $operator->addEvent($event2);
@@ -77,9 +78,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithNewMail()
     {
         $dateTime  = new \DateTime();
-        $event     = new Event();
-        $event2    = new Event();
-        $event3    = new Event();
+        $event     = EventFactory::createEvent();
+        $event2    = EventFactory::createEvent();
+        $event3    = EventFactory::createEvent();
         $operator  = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $operator->addEvent($event);
         $operator->addEvent($event2);

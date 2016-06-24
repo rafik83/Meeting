@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,12 +54,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->timeZone   = 'Europe/Paris';
 
         // Expected event
-        $expectedEvent = new Event();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update(
+        $expectedEvent = new Event(
             'barfoo',
-            ['fr', 'en'],
             'en',
+            ['fr', 'en'],
             Event::VAT_MODE_ATI,
             20,
             'FR',
@@ -66,6 +65,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev'
         );
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpg');
@@ -135,12 +135,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->timeZone   = 'Europe/Paris';
 
         // Expected event
-        $expectedEvent = new Event();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update(
+        $expectedEvent = new Event(
             'barfoo',
-            ['fr', 'en'],
             'en',
+            ['fr', 'en'],
             Event::VAT_MODE_ATI,
             20,
             'FR',
@@ -148,6 +146,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev'
         );
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpg');
@@ -225,12 +224,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->timeZone   = 'Europe/Paris';
 
         // Expected event
-        $expectedEvent = new Event();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->update(
+        $expectedEvent = new Event(
             'barfoo',
-            ['fr', 'en'],
             'en',
+            ['fr', 'en'],
             Event::VAT_MODE_ATI,
             20,
             'FR',
@@ -238,6 +235,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev'
         );
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpg');
@@ -260,7 +258,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(new Event());
+        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(EventFactory::createEvent());
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();

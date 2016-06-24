@@ -134,12 +134,40 @@ class Event implements EventInterface
 
     /**
      * Constructor.
+     *
+     * @param string $title
+     * @param string $fallback
+     * @param array  $locales
+     * @param string $mode
+     * @param float  $vat
+     * @param string $country
+     * @param string $currency
+     * @param string $timeZone
+     * @param string $domain
      */
-    public function __construct()
-    {
+    public function __construct(
+        $title,
+        $fallback,
+        array $locales,
+        $mode,
+        $vat,
+        $country,
+        $currency,
+        $timeZone,
+        $domain
+    ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
         $this->paymentAddress = new Address('', '', '', '');
+        $this->title          = $title;
+        $this->fallback       = $fallback;
+        $this->locales        = $locales;
+        $this->mode           = $mode;
+        $this->vat            = $vat;
+        $this->country        = $country;
+        $this->currency       = $currency;
+        $this->timeZone       = $timeZone;
+        $this->domain         = $domain;
     }
 
     /**

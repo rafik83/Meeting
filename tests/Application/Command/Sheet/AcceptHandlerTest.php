@@ -21,13 +21,14 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AcceptHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event   = new Event();
+        $event   = EventFactory::createEvent();
         $type    = new Type($event);
         $user    = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet   = new Sheet($event, $type, [], $user, new \DateTime());

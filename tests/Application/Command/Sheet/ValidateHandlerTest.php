@@ -15,20 +15,20 @@ use Proximum\Vimeet\Application\Command\Sheet\Validate;
 use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
-use Proximum\Vimeet\Application\Event\TraceEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event   = new Event();
+        $event   = EventFactory::createEvent();
         $type    = new Type($event);
         $user    = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet   = new Sheet($event, $type, [], $user, new \DateTime());

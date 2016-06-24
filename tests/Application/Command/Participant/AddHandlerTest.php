@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AddHandlerTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +39,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWhenUserNotExists()
     {
         $now   = new \DateTime();
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $user  = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, $type, [], $user, $now);
@@ -142,7 +143,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWhenUserExists()
     {
         $now   = new \DateTime();
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $user2 = new User('test2@test.com', '__SALT__', 'password', 'fr');

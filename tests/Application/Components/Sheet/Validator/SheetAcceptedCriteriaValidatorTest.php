@@ -16,12 +16,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testWithoutValidatorCriteria()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $type->getValidationCriteria()->setSheetAccepted(false);
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
@@ -34,7 +35,7 @@ class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testWithValidatorCriteriaNo()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $type->getValidationCriteria()->setSheetAccepted(true);
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
@@ -47,7 +48,7 @@ class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testWithValidatorCriteriaYes()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $type->getValidationCriteria()->setSheetAccepted(true);
         $user  = new User('test@test.com', 'salt', 'password', 'fr');

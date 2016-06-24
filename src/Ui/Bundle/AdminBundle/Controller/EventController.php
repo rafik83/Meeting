@@ -68,10 +68,9 @@ class EventController extends Controller
 
         $form = $this->createForm(CreateType::class, $create, [
             'currentLocale' => $request->getLocale(),
-            'method'        => 'POST',
+            'submit'        => true,
             'action'        => $this->generateUrl('admin_event_create'),
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -108,10 +107,9 @@ class EventController extends Controller
         $form = $this->createForm(UpdateType::class, $update, [
             'locales'       => $event->getLocales(),
             'currentLocale' => $request->getLocale(),
-            'method'        => 'POST',
+            'submit'        => true,
             'action'        => $this->generateUrl('admin_event_update', ['event' => $event->getId()]),
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
