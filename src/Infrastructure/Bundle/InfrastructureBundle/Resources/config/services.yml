@@ -199,6 +199,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.event.content_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Event\ContentRepository
+        arguments:
+            - '@doctrine'
     repository.promotion_code_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
         arguments:
@@ -818,6 +822,12 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Billing\UpdateInfo }
+    command.event.content.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\Content\UpdateHandler
+        arguments:
+            - '@repository.event.content_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Content\Update }
     command.participant.remove_handler:
         class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
         arguments:
@@ -864,6 +874,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
+    command.participant.update_company_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@account.synchronizer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
 
     #
     # Security

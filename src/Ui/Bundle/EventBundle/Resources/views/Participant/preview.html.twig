@@ -24,6 +24,13 @@
     <div class="user__infos">
         <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
         <p class="job">{{ participant.position }}</p>
+        {% if editAvatar is defined and editAvatar == true %}
+            {% for key, avatar in avatarTemplate %}
+                <a class="edit" href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">
+                    {{ 'account.profile.updateAvatar'|trans }}
+                </a>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 

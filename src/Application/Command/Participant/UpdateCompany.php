@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-class UpdateProfile extends AbstractUpdate
+class UpdateCompany extends AbstractUpdate
 {
 }

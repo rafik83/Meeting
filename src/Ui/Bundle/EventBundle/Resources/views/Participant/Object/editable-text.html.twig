@@ -1,1 +1,5 @@
-{{ object.content }}
+{% if object.hasTag('sheet_organization')%}
+    <strong>{{ object.content }}</strong>
+{% else %}
+    {{ object.content }}
+{% endif %}

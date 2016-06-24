@@ -127,6 +127,8 @@
   float: left;
   margin: 15px;
 
+  h1 { left: 0 !important; }
+
   .identity { text-align: center; }
 
   .avatar {
@@ -143,6 +145,13 @@
       width: 48px;
     }
   }
+
+  .company {
+    margin-bottom: 10px;
+    .url { font-weight: bold; }
+  }
+
+  .edit { text-decoration: underline; }
 
   .sub-form { overflow: hidden; }
 
