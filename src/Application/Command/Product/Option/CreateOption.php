@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Product\Option;
 
 use Proximum\Vimeet\Application\Command\Product\AbstractCreate;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class CreateOption extends AbstractCreate
 {

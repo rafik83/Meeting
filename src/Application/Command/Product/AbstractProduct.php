@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractProduct

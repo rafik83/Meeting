@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
 
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Feature\FeatureType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductIncludedType;
