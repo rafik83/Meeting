@@ -896,9 +896,11 @@ form:
             availabilityMax:
                 label: Stock max
             updatable:
-                label: Ce produit peut être modifiable après une commande
+                label: Produit supprimable (Oui/Non)
             updatableUntil:
-                label: Ce produit peut être modifiable jusqu'au
+                label: Supprimable jusqu'aù
+            buyableUntil:
+                label: Achetable jusqu'aù
             submit:
                 label: Enregistrer
             translations:
@@ -931,9 +933,11 @@ form:
             availabilityMax:
                 label: Stock max
             updatable:
-                label: Ce produit peut être modifiable après une commande
+                label: Produit supprimable (Oui/Non)
             updatableUntil:
-                label: Ce produit peut être modifiable jusqu'au
+                label: Supprimable jusqu'aù
+            buyableUntil:
+                label: Achetable jusqu'aù
             submit:
                 label: Enregistrer
             translations:

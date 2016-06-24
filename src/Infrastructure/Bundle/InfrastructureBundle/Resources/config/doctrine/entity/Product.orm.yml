@@ -30,6 +30,9 @@ Proximum\Vimeet\Domain\Model\Product:
         updatableUntil:
             type: datetime
             nullable: true
+        buyableUntil:
+            type: datetime
+            nullable: true
         subjectedToValidation:
             type: boolean
     oneToMany:

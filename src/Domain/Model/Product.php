@@ -111,6 +111,13 @@ class Product
     private $updatableUntil;
 
     /**
+     * Date how far the product can be sold
+     *
+     * @var \DateTimeInterface
+     */
+    private $buyableUntil;
+
+    /**
      * Product features.
      *
      * @var ArrayCollection
@@ -362,6 +369,14 @@ class Product
     public function getUpdatableUntil()
     {
         return $this->updatableUntil;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getBuyableUntil()
+    {
+        return $this->buyableUntil;
     }
 
     /**
