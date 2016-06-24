@@ -140,6 +140,12 @@ services:
             - '@package.planning.quantity_max_guesser'
         tags:
             - { name: form.type }
+    form_type_package.options_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: form.type }
 
     #
     # Event Listener
@@ -243,6 +249,12 @@ services:
     #
     validator.package.planning_quantity_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\PlanningQuantityValidator
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: validator.constraint_validator, alias: alias_name }
+    validator.package.options_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
         tags:

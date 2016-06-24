@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Package\Step;
+use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\View\EventView;
@@ -76,11 +78,6 @@ class PackageController extends Controller
 
         $currentStep = $funnel->getStep($step);
 
-        if (FunnelStep::TYPE_OPTIONS === $currentStep->type) {
-            // Options step not implemented, redirect to sheet
-            return $this->redirectToRoute('event_sheet', ['sheet' => $sheet->getId()]);
-        }
-
         $uncompletedStep = $funnel->getCurrentUncompletedStep();
 
         if ($currentStep !== $uncompletedStep
@@ -108,7 +105,16 @@ class PackageController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
 
-            return $this->redirectToRoute('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step+1]);
+            $nextStep = $funnel->getNextStep($step);
+
+            if ($nextStep) {
+                return $this->redirectToRoute(
+                    'event_package_step',
+                    ['sheet' => $sheet->getId(), 'step' => $nextStep->index]
+                );
+            }
+
+            return $this->redirectToRoute('event_sheet');
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(
@@ -137,7 +143,7 @@ class PackageController extends Controller
         $commands = [
             FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
             FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\SelectParticipantAndPlanning::class,
-            FunnelStep::TYPE_OPTIONS              => Step\Options::class,
+            FunnelStep::TYPE_OPTIONS              => Step\SelectOptions::class,
         ];
 
         if (isset($commands[$type])) {
@@ -194,6 +200,34 @@ class PackageController extends Controller
             }
 
             return;
+        }
+
+        if ($command instanceof Step\SelectOptions) {
+            /** @var CartRow[] $optionRows */
+            $optionRows = array_combine(
+                array_map(
+                    function (CartRow $cartRow) {
+                        return $cartRow->getProduct()->getId();
+                    },
+                    $cart->getOptionsRow()->toArray()
+                ),
+                $cart->getOptionsRow()->toArray()
+            );
+
+            $availableOptionsId = array_map(
+                function (Product $product) {
+                    return $product->getId();
+                },
+                $command->sheet->getPackage()->getAvailablesOptions()
+            );
+
+            $options = [];
+
+            foreach ($availableOptionsId as $optionId) {
+                $options[$optionId] = isset($optionRows[$optionId]) ? $optionRows[$optionId]->getQuantity() : 0;
+            }
+
+            $command->options = $options;
         }
     }
 }

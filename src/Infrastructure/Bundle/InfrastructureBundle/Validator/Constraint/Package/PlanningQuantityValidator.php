@@ -3,7 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
-use Proximum\Vimeet\Domain\Package\Planning\QuantityMaxGuesser;
+use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
