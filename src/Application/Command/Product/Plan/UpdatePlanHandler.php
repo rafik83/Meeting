@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Product\Plan;
 
 
 use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
-use Proximum\Vimeet\Domain\Model\Product\Feature;
+use Proximum\Vimeet\Domain\Model\Product;
 
 class UpdatePlanHandler extends AbstractHandler
 {
@@ -14,7 +14,7 @@ class UpdatePlanHandler extends AbstractHandler
      */
     public function handle(UpdatePlan $updatePlan)
     {
-        $product = $updatePlan->product->updatePlan(
+        $updatePlan->product->updatePlan(
             $updatePlan->name,
             $this->fileStorageInterface->upload($updatePlan->file),
             $updatePlan->unitPrice,
@@ -23,25 +23,44 @@ class UpdatePlanHandler extends AbstractHandler
         );
 
         foreach ($updatePlan->translations as $locale => $translation) {
-            $product->translate($locale, $translation['title'], $translation['heading'], $translation['description'], $translation['addon'], null);
+            $updatePlan->product->translate(
+                $locale,
+                $translation['title'],
+                $translation['heading'],
+                $translation['description'],
+                $translation['addon'],
+                null
+            );
         }
 
+        // Add products
         foreach ($updatePlan->productIncluded as $productIncluded) {
-            $product->includeProduct($productIncluded['product'], $productIncluded['quantity']);
+            $updatePlan->product->includeProduct($productIncluded['product'], $productIncluded['quantity']);
         }
-        
-        // bouclé sur le productIncluded de la l'entité et supprmier de l'entité si pas dans la commande
 
-        foreach ($updatePlan->features as $feature) {
-            $object = new Feature($product);
-
-            foreach ($feature['translations'] as $locale => $translation) {
-                $object->translate($locale, $translation['title'], $translation['description']);
+        // Remove products
+        foreach ($updatePlan->product->getIncludedProducts() as $includedProduct) {
+            if(!$updatePlan->hasProduct($includedProduct->getIncluded())) {
+                $updatePlan->product->removeIncludeProduct($includedProduct);
             }
-
-            $product->addFeature($object);
         }
 
-        $this->productRepository->update($product);
+        // Add features
+        foreach ($updatePlan->features as $key => $feature) {
+            foreach ($feature['translations'] as $locale => $translation) {
+                $updatePlan->product->getFeature($key)->translate($locale, $translation['title'], $translation['description']);
+            }
+        }
+
+        // Remove features
+        foreach ($updatePlan->product->getFeatures() as $key => $feature) {
+            if (!isset($updatePlan->features[$key])) {
+                $updatePlan->product->removeFeature($feature);
+            }
+        }
+
+        // update product on database
+        $this->productRepository->update($updatePlan->product);
     }
+
 }

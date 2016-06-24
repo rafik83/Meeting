@@ -29,7 +29,21 @@ class UpdatePlan extends AbstractUpdate
                 'quantity' => $includedProduct->getQuantity(),
             ];
         }
+    }
 
-        dump($this->productIncluded);
+    /**
+     * @param Product $product
+     * 
+     * @return bool
+     */
+    public function hasProduct(Product $product)
+    {
+        foreach ($this->productIncluded as $includeProduct) {
+            if ($includeProduct['product'] === $product) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

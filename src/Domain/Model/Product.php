@@ -407,6 +407,14 @@ class Product
     }
 
     /**
+     * @param Feature $feature
+     */
+    public function removeFeature(Feature $feature)
+    {
+        $this->features->removeElement($feature);
+    }
+
+    /**
      * @deprecated Use getIncludedProducts instead
      *
      * @return ProductIncluded[]
@@ -424,11 +432,25 @@ class Product
      */
     public function includeProduct(Product $product, $quantity)
     {
-        if (($includedProduct = $this->getIncludedProduct($product)) !== null) {
+        $includedProduct = $this->getIncludedProduct($product);
+
+        if ($includedProduct instanceof ProductIncluded) {
             $includedProduct->setQuantity($quantity);
         } else {
             $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param ProductIncluded $product
+     *
+     * @return Product
+     */
+    public function removeIncludeProduct(ProductIncluded $product)
+    {
+        $this->productIncluded->removeElement($product);
 
         return $this;
     }
@@ -743,14 +765,26 @@ class Product
      */
     public function getIncludedProduct(Product $product)
     {
-        $product = $this->productIncluded->filter(
-            function (ProductIncluded $productIncluded) use ($product) {
-                if ($productIncluded->getIncluded() === $product) {
-                    return true;
-                }
+        foreach ($this->getIncludedProducts() as $productIncluded) {
+            if ($productIncluded->getIncluded() === $product) {
+                return $productIncluded;
             }
-        )->first();
+        }
 
-        return $product;
+        return null;
+    }
+
+    /**
+     * @param int $key
+     *
+     * @return Feature
+     */
+    public function getFeature($key)
+    {
+        if (!$this->features->containsKey($key)) {
+            $this->features->set($key, new Feature($this));
+        }
+
+        return $this->features->get($key);
     }
 }
