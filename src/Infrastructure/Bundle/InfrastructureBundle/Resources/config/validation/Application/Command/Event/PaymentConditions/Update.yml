@@ -1,0 +1,11 @@
+Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update:
+    properties:
+        minimumForDeposit:
+            - Range:
+                min: 0
+        deposit:
+            - Range:
+                min: 0
+                max: 100
+        depositUntil:
+            - DateTime: ~
