@@ -230,7 +230,7 @@ class ProductController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
         {
             $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.product.create.success');
+            $this->addFlash('success', 'flash.admin.product.update.success');
 
             return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
         }
@@ -293,7 +293,7 @@ class ProductController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
         {
             $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.product.create.success');
+            $this->addFlash('success', 'flash.admin.product.update.success');
 
             return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
         }
