@@ -1,5 +1,9 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
+<div class="content-header">
+    <h2>{{ 'package.select'|trans }} {{ view.currentStep.title }}</h2>
+</div>
+
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
@@ -19,7 +23,11 @@
                                 {% if participant.included %}
                                     {{ 'package.participants.included'|trans }}
                                 {% else %}
-                                    {{ participant.price }} <sup>€ {{ ('package.vatMode.' ~ participant.vatMode)|trans }}</sup>
+                                    {{ 'package.product.unitPrice'|trans({
+                                        '%price%': participant.price,
+                                        '%currency%': participant.currency|currency_symbol,
+                                        '%vatMode%': ('package.vatMode.' ~ participant.vatMode)|trans
+                                    })|html }}
                                 {% endif %}
                             </h2>
                         </div>

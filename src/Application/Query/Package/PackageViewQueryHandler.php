@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Package;
 
+use Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\PackageView;
@@ -28,19 +30,28 @@ class PackageViewQueryHandler
     private $participantAndPlanningViewQueryHandler;
 
     /**
+     * @var GroupsViewQueryHandler
+     */
+    private $groupsViewQueryHandler;
+
+    /**
      * @param PlansViewQueryHandler                  $plansViewQueryHandler
      * @param ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler
+     * @param GroupsViewQueryHandler                 $groupsViewQueryHandler
      */
     public function __construct(
         PlansViewQueryHandler $plansViewQueryHandler,
-        ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler
+        ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler,
+        GroupsViewQueryHandler $groupsViewQueryHandler
     ) {
         $this->plansViewQueryHandler                  = $plansViewQueryHandler;
         $this->participantAndPlanningViewQueryHandler = $participantAndPlanningViewQueryHandler;
+        $this->groupsViewQueryHandler                 = $groupsViewQueryHandler;
     }
 
     /**
      * @param PackageViewQuery $packageViewQuery
+     *
      * @return PackageView
      * @throws \Exception
      */
@@ -62,7 +73,12 @@ class PackageViewQueryHandler
                 )
             );
         } else {
-            throw new \Exception(sprintf('Step type %s not implemented', $packageViewQuery->currentStep->type));
+            $packageViewProducts = $this->groupsViewQueryHandler->handle(
+                new GroupsViewQuery(
+                    $packageViewQuery->sheet,
+                    $packageViewQuery->locale
+                )
+            );
         }
 
         return new PackageView(

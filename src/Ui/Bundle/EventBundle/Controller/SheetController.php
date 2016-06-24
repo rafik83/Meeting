@@ -206,26 +206,30 @@ class SheetController extends Controller
         $form         = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($object instanceof Template\Object\Image) {
-                $file = $form->get('file')->getData();
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                if ($object instanceof Template\Object\Image) {
+                    $file = $form->get('file')->getData();
 
-                if ($file instanceof UploadedFile) {
-                    $image        = $object->getImage();
-                    $fileStorage  = $this->get('adapter.local_file_storage');
+                    if ($file instanceof UploadedFile) {
+                        $image       = $object->getImage();
+                        $fileStorage = $this->get('adapter.local_file_storage');
 
-                    if (null !== $image) {
-                        $fileStorage->remove($image);
+                        if (null !== $image) {
+                            $fileStorage->remove($image);
+                        }
+
+                        $newImage = $fileStorage->upload($file);
+                        $object->setImage($newImage);
                     }
-
-                    $newImage = $fileStorage->upload($file);
-                    $object->setImage($newImage);
                 }
+
+                $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
+
+                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+            } else {
+                $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
             }
-
-            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
-
-            return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form

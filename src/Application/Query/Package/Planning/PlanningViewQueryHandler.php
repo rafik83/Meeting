@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Package\Planning;
 
-use Proximum\Vimeet\Application\View\Package\PlanningView;
+use Proximum\Vimeet\Application\View\Package\ProductView;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class PlanningViewQueryHandler
@@ -31,7 +31,7 @@ class PlanningViewQueryHandler
     /**
      * @param PlanningViewQuery $planningViewQuery
      *
-     * @return PlanningView
+     * @return ProductView
      */
     public function handle(PlanningViewQuery $planningViewQuery)
     {
@@ -39,24 +39,32 @@ class PlanningViewQueryHandler
         $locale          = $planningViewQuery->locale;
         $planningProduct = $planningViewQuery->sheet->getPackage()->getPlanning();
         $selectedPlan    = $cart->getPlanRow();
-        $numberIncluded  = 0;
+        $included        = 0;
 
         if ($selectedPlan) {
             $planningProductIncluded = $selectedPlan->getProduct()->getIncludedPlanningProduct();
-            
+
             if ($planningProductIncluded) {
-                $numberIncluded = $planningProductIncluded->getQuantity();
+                $included = $planningProductIncluded->getQuantity();
             }
         }
 
-        return new PlanningView(
+        return new ProductView(
             $planningProduct->getId(),
             $planningProduct->getTitle($locale),
-            $planningProduct->getDescription($locale),
             $planningProduct->getUnitPrice(),
+            $planningProduct->getHeading($locale),
+            $planningProduct->getDescription($locale),
+            $planningProduct->getAddon($locale),
+            $planningProduct->getImage(),
+            $planningProduct->getAvailabilityCurrent(),
+            $planningProduct->getAvailabilityMax(),
+            $planningProduct->isOutOfStock(),
             $planningProduct->getVatMode(),
-            $planningProduct->getQuantityMax(),
-            $numberIncluded
+            $planningProduct->getEvent()->getCurrency(),
+            $planningProduct->getSubjectedToValidationHelp($planningViewQuery->locale),
+            $planningProduct->isSubjectedToValidation(),
+            $included
         );
     }
 }

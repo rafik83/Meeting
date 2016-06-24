@@ -6,3 +6,11 @@ register:
     register_as: Register as:
     already_registered: Already registered?
     register: Register
+
+package:
+    vatMode:
+        et: excl. VAT
+        ati: incl. VAT
+    product:
+        unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
+        totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'
