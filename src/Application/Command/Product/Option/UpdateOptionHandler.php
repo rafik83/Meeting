@@ -24,7 +24,7 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->updatableUntil,
             $updateOption->subjectedToValidation
         );
-
+        
         foreach ($updateOption->translations as $locale => $translation)
         {
             $product->translate($locale, $translation['title'], null, $translation['description'],
