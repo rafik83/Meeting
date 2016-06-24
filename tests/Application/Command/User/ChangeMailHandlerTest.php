@@ -16,23 +16,23 @@ use Proximum\Vimeet\Application\Command\User\ChangeMailHandler;
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ChangeMailHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $date = new DateTime();
-        $user = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $eventView = new EventView(1, 'TESTEVENT', '', 'TOTO', 'fr', 'fr', [], 'EUROPE/PARIS', '', 'FR');
+        $date  = new DateTime();
+        $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
+        $event = new Event();
 
         // Expected
         $expectedChangeMailToken = new ChangeMailToken($user, 'toto@toto.fr', '1234567890', $date);
-        $expectedEvent = new ChangeMailAddressEvent($user, $eventView, $expectedChangeMailToken);
+        $expectedEvent = new ChangeMailAddressEvent($user, $event, $expectedChangeMailToken);
 
         // Mock
         $tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
@@ -49,7 +49,7 @@ class ChangeMailHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch('change_mail', $expectedEvent)->shouldBeCalled();
 
         // Base
-        $changeMail = new ChangeMail($user, $eventView);
+        $changeMail = new ChangeMail($user, $event);
         $changeMail->mail = 'toto@toto.fr';
 
         // Handler

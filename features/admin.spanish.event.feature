@@ -1,3 +1,5 @@
+@admin
+
 Feature: Update spanish event
   I need to be able to update spanish event configuration
 

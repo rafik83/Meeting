@@ -251,7 +251,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestsByEventAndUser($event, User $user)
+    public function getRequestsByEventAndUser(Event $event, User $user)
     {
         $queryBuilder = $this
             ->entityManager

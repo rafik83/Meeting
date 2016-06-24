@@ -1,3 +1,5 @@
+@admin
+
 Feature: Update a participation category
   I need to be able to update category title and types
 

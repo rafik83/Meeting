@@ -1,3 +1,5 @@
+@admin
+
 Feature: See and update event
   I need to be able to see and update an event
 

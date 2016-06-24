@@ -41,12 +41,12 @@ interface TypeRepositoryInterface
     public function set(Type $type);
 
     /**
-     * @param int    $eventId
+     * @param Event  $event
      * @param string $locale
      *
      * @return TypeView[]
      */
-    public function getTypeViewsByEvent($eventId, $locale);
+    public function getTypeViewsByEvent(Event $event, $locale);
 
     /**
      * @param int    $typeId
@@ -58,12 +58,12 @@ interface TypeRepositoryInterface
 
     /**
      * @param int    $typeId
-     * @apram int    $eventId
+     * @apram Event  $event
      * @param string $locale
      *
      * @return TypeView
      */
-    public function getTypeViewByIdAndEvent($typeId, $eventId, $locale);
+    public function getTypeViewByIdAndEvent($typeId, Event $event, $locale);
 
     /**
      * @param int $typeId
@@ -110,11 +110,11 @@ interface TypeRepositoryInterface
     public function getTypesTitleByEventAndLocale(Event $event, $locale);
 
     /**
-     * @param User|int $user
+     * @param User $user
      *
      * @return array
      */
-    public function getSeeableTypeIdsByUser($user);
+    public function getSeeableTypeIdsByUser(User $user);
 
     /**
      * @param Sheet $sheet

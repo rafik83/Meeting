@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ForgottenPassword
 {
@@ -20,9 +20,9 @@ class ForgottenPassword
     public $email;
 
     /**
-     * @var EventView
+     * @var Event
      */
-    public $eventView;
+    public $event;
 
     /**
      * @var string
@@ -30,12 +30,12 @@ class ForgottenPassword
     public $locale;
 
     /**
-     * @param EventView $eventView
-     * @param string    $locale
+     * @param Event  $event
+     * @param string $locale
      */
-    public function __construct(EventView $eventView, $locale)
+    public function __construct(Event $event, $locale)
     {
-        $this->eventView = $eventView;
-        $this->locale    = $locale;
+        $this->event  = $event;
+        $this->locale = $locale;
     }
 }

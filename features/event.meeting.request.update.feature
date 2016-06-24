@@ -1,3 +1,5 @@
+@event
+
 Feature: Meeting Request Update
   I need to be able update my meeting request and proposition when they are sent or approved
 

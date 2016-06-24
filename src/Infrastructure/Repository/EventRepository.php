@@ -129,36 +129,6 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getEventViewByDomain($domain, $locale)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventView(
-                event.id,
-                event.title,
-                event.logo,
-                translations.description,
-                translations.locale,
-                event.fallback,
-                event.locales,
-                event.timeZone,
-                event.assetPath,
-                event.country
-            )')
-            ->from(Event::class, 'event')
-            ->join('event.translations', 'translations', 'WITH', 'translations.locale = :locale')
-            ->setParameter('locale', $locale)
-            ->where('event.domain = :domain')
-            ->setParameter('domain', $domain)
-            ->setMaxResults(1);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getById($id)
     {
         $queryBuilder = $this
