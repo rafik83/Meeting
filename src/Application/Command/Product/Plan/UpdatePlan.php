@@ -9,6 +9,9 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class UpdatePlan extends AbstractUpdate
 {
+    /**
+     * @param Product $product
+     */
     public function __construct(Product $product)
     {
         parent::__construct($product);
@@ -33,7 +36,7 @@ class UpdatePlan extends AbstractUpdate
 
     /**
      * @param Product $product
-     * 
+     *
      * @return bool
      */
     public function hasProduct(Product $product)

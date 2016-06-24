@@ -9,6 +9,9 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class UpdateOption extends AbstractUpdate
 {
+    /**
+     * @param Product $product
+     */
     public function __construct(Product $product)
     {
         parent::__construct($product);
@@ -19,4 +22,3 @@ class UpdateOption extends AbstractUpdate
         $this->updatableUntil = $product->getUpdatableUntil();
     }
 }
-

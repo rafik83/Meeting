@@ -9,8 +9,4 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class UpdatePlanning extends AbstractUpdate
 {
-    public function __construct(Product $product)
-    {
-        parent::__construct($product);
-    }
 }

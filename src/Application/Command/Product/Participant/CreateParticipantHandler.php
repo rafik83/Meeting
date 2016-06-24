@@ -27,8 +27,7 @@ class CreateParticipantHandler extends AbstractHandler
             $createParticipant->quantityMax
         );
 
-        foreach ($createParticipant->translations as $locale => $translation)
-        {
+        foreach ($createParticipant->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 
