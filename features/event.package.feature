@@ -25,7 +25,8 @@ Feature: Complete my package
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "Packs de rendez-vous"
-    And the ".user__formule" element should contain "195"
+    # This needs to be redefined as it doesn't show the price anymore
+    And the ".user__formule" element should contain "package.product.unitPrice"
     And the ".product-price" element should contain "package.product.unitPrice"
     When I fill in "participant_and_planning[planningQuantity]" with "1"
     And I press "package.participant_planning.validate"
