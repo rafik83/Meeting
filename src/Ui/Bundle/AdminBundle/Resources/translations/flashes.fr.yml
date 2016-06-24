@@ -172,6 +172,8 @@ flash:
         product:
             create:
                 success: Le produit a bien été créé
+            update:
+                success: Le produit a été modifié avec succès
         package:
             create:
                 success: La formule a bien été créée

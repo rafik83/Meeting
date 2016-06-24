@@ -424,12 +424,11 @@ class Product
      */
     public function includeProduct(Product $product, $quantity)
     {
-        if ($this->hasIncludedProduct($product))
-        {
-
+        if (($includedProduct = $this->getIncludedProduct($product)) !== null) {
+            $includedProduct->setQuantity($quantity);
+        } else {
+            $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
         }
-
-        $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
 
         return $this;
     }
@@ -630,8 +629,8 @@ class Product
 
     /**
      * @param string $name
-     * @param int $unitPrice
-     * @param int $quantityMax
+     * @param int    $unitPrice
+     * @param int    $quantityMax
      *
      * @return Product
      */
@@ -676,15 +675,15 @@ class Product
     }
 
     /**
-     * @param $name
-     * @param $image
-     * @param $unitPrice
-     * @param $quantityMax
-     * @param $availabilityCurrent
-     * @param $availabilityMax
-     * @param $updatable
+     * @param                         $name
+     * @param                         $image
+     * @param                         $unitPrice
+     * @param                         $quantityMax
+     * @param                         $availabilityCurrent
+     * @param                         $availabilityMax
+     * @param                         $updatable
      * @param \DateTimeInterface|null $updatableUntil
-     * @param bool $subjectedToValidation
+     * @param bool                    $subjectedToValidation
      *
      * @return Product
      */
@@ -728,11 +727,30 @@ class Product
      */
     public function hasIncludedProduct(Product $product)
     {
-        $find = $this->productIncluded->exists(function (ProductIncluded $i) use ($product)
-        {
-            return $i->getIncluded() === $product;
-        });
+        $find = $this->productIncluded->exists(
+            function (ProductIncluded $productIncluded) use ($product) {
+                return $productIncluded->getIncluded() === $product;
+            }
+        );
 
         return $find;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return ProductIncluded|null
+     */
+    public function getIncludedProduct(Product $product)
+    {
+        $product = $this->productIncluded->filter(
+            function (ProductIncluded $productIncluded) use ($product) {
+                if ($productIncluded->getIncluded() === $product) {
+                    return true;
+                }
+            }
+        )->first();
+
+        return $product;
     }
 }

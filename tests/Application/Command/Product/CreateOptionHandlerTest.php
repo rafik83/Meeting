@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Product;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Command\Product\CreateOption;
-use Proximum\Vimeet\Application\Command\Product\CreateOptionHandler;
+use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
+use Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;

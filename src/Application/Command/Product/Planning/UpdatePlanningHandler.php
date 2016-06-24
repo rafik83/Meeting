@@ -4,7 +4,25 @@
 namespace Proximum\Vimeet\Application\Command\Product\Planning;
 
 
-class UpdatePlanningHandler
-{
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 
+class UpdatePlanningHandler extends AbstractHandler
+{
+    /**
+     * @param UpdatePlanning $updatePlanning
+     */
+    public function handle(UpdatePlanning $updatePlanning)
+    {
+        $product = $updatePlanning->product->updatePlanning(
+            $updatePlanning->name,
+            $updatePlanning->unitPrice,
+            $updatePlanning->quantityMax
+        );
+
+        foreach ($updatePlanning->translations as $locale => $translation) {
+            $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
+        }
+
+        $this->productRepository->update($product);
+    }
 }

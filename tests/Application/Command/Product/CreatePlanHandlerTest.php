@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Plan;
 
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Command\Product\CreatePlan;
-use Proximum\Vimeet\Application\Command\Product\CreatePlanHandler;
+use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
+use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlanHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
