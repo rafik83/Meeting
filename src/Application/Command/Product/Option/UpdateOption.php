@@ -20,5 +20,6 @@ class UpdateOption extends AbstractUpdate
         $this->availabilityMax = $product->getAvailabilityMax();
         $this->updatable = $product->isUpdatable();
         $this->updatableUntil = $product->getUpdatableUntil();
+        $this->buyableUntil = $product->getBuyableUntil();
     }
 }

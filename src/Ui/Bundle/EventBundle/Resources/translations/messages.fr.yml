@@ -112,5 +112,6 @@ package:
         availability: '%availabilityCurrent% sur %availabilityMax%'
         outOfStock: Epuisé
         subjectedToValidationHelp: Sous réserve de validation
+        unavailable: Non disponible
 billing_info:
     title: Info de facturation

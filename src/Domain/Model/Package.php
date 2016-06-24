@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class Package
 {
@@ -197,12 +198,14 @@ class Package
     /**
      * Get options not out of stock
      *
+     * @param \DateTimeInterface $now
+     *
      * @return Product[]
      */
-    public function getAvailablesOptions()
+    public function getAvailablesOptions(\DateTimeInterface $now)
     {
-        return array_filter($this->getOptions(), function (Product $product) {
-            return !$product->isOutOfStock();
+        return array_filter($this->getOptions(), function (Product $product) use ($now) {
+            return !$product->isOutOfStock() && $product->isBuyable($now);
         });
     }
 

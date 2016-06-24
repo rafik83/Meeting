@@ -19,13 +19,19 @@ class OptionViewQueryHandler
      * @var CartManager
      */
     private $cartManager;
+    /**
+     * @var \DateTimeInterface
+     */
+    private $now;
 
     /**
-     * @param CartManager $cartManager
+     * @param CartManager        $cartManager
+     * @param \DateTimeInterface $now
      */
-    public function __construct(CartManager $cartManager)
+    public function __construct(CartManager $cartManager, \DateTimeInterface $now)
     {
         $this->cartManager = $cartManager;
+        $this->now = $now;
     }
 
     /**
@@ -62,7 +68,8 @@ class OptionViewQueryHandler
             $optionViewQuery->sheet->getEvent()->getCurrency(),
             $optionViewQuery->product->getSubjectedToValidationHelp($optionViewQuery->locale),
             $optionViewQuery->product->isSubjectedToValidation(),
-            $included
+            $included,
+            $optionViewQuery->product->isBuyable($this->now)
         );
     }
 }

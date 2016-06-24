@@ -88,6 +88,11 @@ class ProductView
     public $included;
 
     /**
+     * @var bool
+     */
+    public $isBuyable;
+
+    /**
      * @param int    $id
      * @param string $title
      * @param float  $unitPrice
@@ -119,7 +124,8 @@ class ProductView
         $currency,
         $subjectedToValidationHelp,
         $isSubjectedToValidation,
-        $included
+        $included,
+        $isBuyable
     ) {
         $this->id                        = $id;
         $this->title                     = $title;
@@ -136,5 +142,6 @@ class ProductView
         $this->subjectedToValidationHelp = $subjectedToValidationHelp;
         $this->isSubjectedToValidation   = $isSubjectedToValidation;
         $this->included                  = $included;
+        $this->isBuyable                   = $isBuyable;
     }
 }
