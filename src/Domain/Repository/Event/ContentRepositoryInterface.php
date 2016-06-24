@@ -18,6 +18,11 @@ interface ContentRepositoryInterface
     /**
      * @param Content $content
      */
+    public function add(Content $content);
+
+    /**
+     * @param Content $content
+     */
     public function set(Content $content);
 
     /**

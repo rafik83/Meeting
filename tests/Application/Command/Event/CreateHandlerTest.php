@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -96,10 +97,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
 
+        $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
+        $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
+            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+        }))->shouldBeCalled();
+
         // Handle
         $handler = new CreateHandler(
             $adminRepository->reveal(),
             $eventRepository->reveal(),
+            $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
             $fileStorage->reveal()
         );
@@ -183,10 +190,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
 
+        $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
+        $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
+            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+        }))->shouldBeCalled();
+
         // Handle
         $handler = new CreateHandler(
             $adminRepository->reveal(),
             $eventRepository->reveal(),
+            $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
             $fileStorage->reveal()
         );
@@ -266,10 +279,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled()->willReturn('toto.jpg');
 
+        $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
+        $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
+            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+        }))->shouldNotBeCalled();
+
         // Handle
         $handler = new CreateHandler(
             $adminRepository->reveal(),
             $eventRepository->reveal(),
+            $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
             $fileStorage->reveal()
         );

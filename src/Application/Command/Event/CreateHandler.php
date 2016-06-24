@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class CreateHandler
@@ -32,6 +33,11 @@ class CreateHandler
     private $adminRepository;
 
     /**
+     * @var ContentRepositoryInterface
+     */
+    private $contentRepository;
+
+    /**
      * @var Generator
      */
     private $guidelinesGenerator;
@@ -42,19 +48,22 @@ class CreateHandler
     private $fileStorage;
 
     /**
-     * @param AdminRepositoryInterface $adminRepository,
-     * @param EventRepositoryInterface $eventRepository
-     * @param Generator                $guidelinesGenerator
-     * @param FileStorageInterface     $fileStorage
+     * @param AdminRepositoryInterface   $adminRepository
+     * @param EventRepositoryInterface   $eventRepository
+     * @param ContentRepositoryInterface $contentRepository
+     * @param Generator                  $guidelinesGenerator
+     * @param FileStorageInterface       $fileStorage
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         EventRepositoryInterface $eventRepository,
+        ContentRepositoryInterface $contentRepository,
         Generator $guidelinesGenerator,
         FileStorageInterface $fileStorage
     ) {
         $this->adminRepository     = $adminRepository;
         $this->eventRepository     = $eventRepository;
+        $this->contentRepository   = $contentRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
         $this->fileStorage         = $fileStorage;
     }
@@ -102,5 +111,16 @@ class CreateHandler
             $create->admin->addEvent($event);
             $this->adminRepository->set($create->admin);
         }
+
+        $this->generateContent($event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    private function generateContent(Event $event)
+    {
+        $termsOfSale = new Event\Content($event, Event\Content::TYPE_TERMS_OF_SALE);
+        $this->contentRepository->add($termsOfSale);
     }
 }
