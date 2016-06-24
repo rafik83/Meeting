@@ -9,3 +9,14 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
         scheduleScale:
             type: integer
+        allowDeposit:
+            type: boolean
+        depositUntil:
+            type: datetime
+            nullable: true
+        minimumForDeposit:
+            type: float
+            nullable: true
+        deposit:
+            type: integer
+            nullable: true
