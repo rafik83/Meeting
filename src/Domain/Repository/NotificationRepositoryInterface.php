@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -26,10 +27,10 @@ interface NotificationRepositoryInterface
     public function set(Notification $notification);
 
     /**
-     * @param int  $eventId
-     * @param User $user
+     * @param Event $event
+     * @param User  $user
      *
      * @return Notification[]
      */
-    public function getNotificationsByEventAndUser($eventId, User $user);
+    public function getNotificationsByEventAndUser(Event $event, User $user);
 }

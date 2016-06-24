@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,15 +27,15 @@ class AccountController extends Controller
 {
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
      */
-    public function updateEmailAction(Request $request, EventView $eventView)
+    public function updateEmailAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $changeMail = new ChangeMail($this->getUser(), $eventView);
+        $changeMail = new ChangeMail($this->getUser(), $eventDomain->getEvent());
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [
             'action' => $this->generateUrl('event_account_change_mail'),
         ]);
@@ -54,18 +54,18 @@ class AccountController extends Controller
         }
 
         return $this->render('EventBundle:User:update_account.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param ChangeMailToken $changeMailToken
      *
      * @return RedirectResponse
      */
-    public function activateNewMailAction(EventView $eventView, ChangeMailToken $changeMailToken)
+    public function activateNewMailAction(EventDomain $eventDomain, ChangeMailToken $changeMailToken)
     {
         if ($changeMailToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');

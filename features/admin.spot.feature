@@ -1,3 +1,5 @@
+@admin
+
 Feature: Spot feature
   I need to be able to create, list, filter, a spot and disable and remove them in batch
 

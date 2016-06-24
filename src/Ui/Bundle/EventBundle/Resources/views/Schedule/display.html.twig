@@ -1,12 +1,12 @@
 {% extends 'EventBundle::base.html.twig' %}
 
-{% block title eventView.title %}
+{% block title event.title %}
 
 {% block content %}
     {% for participantSchedule in participantSchedules %}
         {{ include('EventBundle:Schedule:participantSchedule.html.twig', {
             'participantSchedule': participantSchedule,
-            'eventView': eventView,
+            'event': event,
             'sheet': sheet
         }, false) }}
     {% endfor %}

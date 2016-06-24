@@ -47,6 +47,7 @@ class ParticipantViewQueryHandler
             $cardView,
             $participantViewQuery->participantProduct->getUnitPrice(),
             $participantViewQuery->participant->getSheet()->getEvent()->getMode(),
+            $participantViewQuery->participant->getSheet()->getEvent()->getCurrency(),
             $participantViewQuery->included
         );
     }

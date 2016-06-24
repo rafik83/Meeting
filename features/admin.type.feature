@@ -1,3 +1,5 @@
+@admin
+
 Feature: add type
   I need to be able to add a type
 

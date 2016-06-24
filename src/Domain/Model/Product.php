@@ -308,6 +308,16 @@ class Product
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getAddon($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -336,7 +346,7 @@ class Product
      */
     public function getQuantityMax()
     {
-        return $this->quantityMax;
+        return null === $this->quantityMax ? INF : $this->quantityMax;
     }
 
     /**
@@ -353,6 +363,14 @@ class Product
     public function getAvailabilityMax()
     {
         return $this->availabilityMax;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAvailability()
+    {
+        return $this->getAvailabilityMax() ? $this->getAvailabilityCurrent() : INF;
     }
 
     /**
@@ -499,6 +517,18 @@ class Product
     }
 
     /**
+     * @param Product $product
+     *
+     * @return false|ProductIncluded
+     */
+    public function getIncludedProduct(Product $product)
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) use ($product) {
+            return $productIncluded->getIncluded() == $product;
+        })->first();
+    }
+
+    /**
      * @return ProductIncluded[]
      */
     public function getIncludedProducts()
@@ -544,6 +574,14 @@ class Product
     public function getVatMode()
     {
         return $this->getEvent()->getMode();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOutOfStock()
+    {
+        return $this->getAvailabilityMax() && !$this->getAvailabilityCurrent();
     }
 
     /**

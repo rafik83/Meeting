@@ -11,12 +11,7 @@
         <div class="product">
             <div class="step-number-title"> {{ view.currentStep.index }} </div>
 
-            <div class="content-header">
-                <h2>{{ 'package.select'|trans }} {{ view.currentStep.title }}</h2>
-            </div>
-
             {{ include('EventBundle:Package/Step:' ~ view.currentStep.type ~ '.html.twig', {view: view, form: form}) }}
-
         </div>
     </div>
 </section>

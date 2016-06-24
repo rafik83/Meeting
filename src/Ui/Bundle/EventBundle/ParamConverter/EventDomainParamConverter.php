@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\View\EventView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class EventViewDomainParamConverter implements ParamConverterInterface
+class EventDomainParamConverter implements ParamConverterInterface
 {
     /**
      * @var EventRepositoryInterface
@@ -37,16 +37,17 @@ class EventViewDomainParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $domain = $request->getHost();
-        $locale = $request->getLocale();
-
-        $event = $this->eventRepository->getEventViewByDomain($domain, $locale);
+        $event = $this->eventRepository->getEventByDomain($request->getHost());
 
         if (null === $event) {
             throw new NotFoundHttpException('Event not found');
         }
 
-        $request->attributes->set($configuration->getName(), $event);
+        if (!$event->hasLocale($request->getLocale())) {
+            throw new NotFoundHttpException('Locale not found');
+        }
+
+        $request->attributes->set($configuration->getName(), new EventDomain($event));
 
         return true;
     }
@@ -56,6 +57,6 @@ class EventViewDomainParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === EventView::class;
+        return $configuration->getClass() === EventDomain::class;
     }
 }

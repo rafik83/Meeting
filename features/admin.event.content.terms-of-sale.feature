@@ -1,3 +1,5 @@
+@admin
+
 Feature: Update terms of sale
   I need to be able to update the terms of sale of my event
 

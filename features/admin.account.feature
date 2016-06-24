@@ -1,3 +1,5 @@
+@admin
+
 Feature: Admin Account
   I need to be able to manage the Admin account
 

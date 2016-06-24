@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,36 +23,36 @@ class NotificationController extends Controller
      * List user notifications
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function listAction(Request $request, EventView $eventView)
+    public function listAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $notifications = $this
             ->get('notification.notification_view_factory')
-            ->getNotificationsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
+            ->getNotificationsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
 
         return $this->render('EventBundle:Notification:list.html.twig', [
-            'eventView'     => $eventView,
+            'event'         => $eventDomain->getEvent(),
             'notifications' => $notifications,
         ]);
     }
 
     /**
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function unreadNumberAction(EventView $eventView)
+    public function unreadNumberAction(EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $count = $this
             ->get('notification.notification_view_factory')
-            ->countUnreadNotificationByEventAndUser($eventView->id, $this->getUser());
+            ->countUnreadNotificationByEventAndUser($eventDomain->getEvent(), $this->getUser());
 
         return $this->render('EventBundle:Notification:unreadNumber.html.twig', [
             'unreadNumber' => $count,

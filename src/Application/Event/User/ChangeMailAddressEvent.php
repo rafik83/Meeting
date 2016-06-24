@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Event\User;
 
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
+use Proximum\Vimeet\Domain\Model\Event as EventModel;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\Event;
 
 class ChangeMailAddressEvent extends Event
@@ -23,9 +23,9 @@ class ChangeMailAddressEvent extends Event
     private $user;
 
     /**
-     * @var EventView
+     * @var EventModel
      */
-    private $eventView;
+    private $event;
 
     /**
      * @var ChangeMailToken
@@ -34,13 +34,13 @@ class ChangeMailAddressEvent extends Event
 
     /**
      * @param User            $user
-     * @param EventView       $eventView
+     * @param EventModel      $event
      * @param ChangeMailToken $changeMailToken
      */
-    public function __construct(User $user, EventView $eventView, ChangeMailToken $changeMailToken)
+    public function __construct(User $user, EventModel $event, ChangeMailToken $changeMailToken)
     {
         $this->user            = $user;
-        $this->eventView       = $eventView;
+        $this->event           = $event;
         $this->changeMailToken = $changeMailToken;
     }
 
@@ -53,11 +53,11 @@ class ChangeMailAddressEvent extends Event
     }
 
     /**
-     * @return EventView
+     * @return EventModel
      */
-    public function getEventView()
+    public function getEvent()
     {
-        return $this->eventView;
+        return $this->event;
     }
 
     /**

@@ -1,3 +1,5 @@
+@event
+
 Feature: Change my mail
   I need to be able to change my account
 

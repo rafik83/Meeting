@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
@@ -47,7 +48,7 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent($event)
+    public function findByEvent(Event $event)
     {
         $queryBuilder = $this
             ->entityManager

@@ -1,3 +1,5 @@
+@event
+
 Feature: Update participant profile
   As a participant, I need to be able to update my profile
 
