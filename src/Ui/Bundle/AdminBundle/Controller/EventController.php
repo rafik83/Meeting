@@ -11,13 +11,16 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\Create;
-use Proximum\Vimeet\Application\Command\Event\Update;
+use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,7 +104,7 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $update = new Update($event);
+        $update = new EventUpdate($event);
 
         $form = $this->createForm(UpdateType::class, $update, [
             'locales'       => $event->getLocales(),
@@ -129,5 +132,31 @@ class EventController extends Controller
             'form'  => $form->createView(),
             'event' => $event,
         ]);
+    }
+
+    public function practicalInfoAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $update = new PracticalInfoUpdate($event);
+
+        $form = $this->createForm(PracticalInfo\UpdateType::class, $update, [
+            'method' => 'POST',
+            'event' => $event,
+            'action' => $this->generateUrl('admin_event_practical_info_update', ['event' => $event->getId()])
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($update);
+            $this->addFlash('success', 'flash.admin.event.practicalInfo.update.success');
+
+            return $this->redirectToRoute('admin_event_practical_info_update', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Event/PracticalInfo:update.html.twig', [
+            'form'  => $form->createView(),
+        ]);
+
     }
 }
