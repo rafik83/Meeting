@@ -639,3 +639,8 @@ admin:
                 title: Créer une nomenclature
                 close: Fermer
             button: Nouvelle nomenclature
+        read:
+            configuration:
+                title: Configuration
+            import:
+                title: Import/export
