@@ -666,3 +666,7 @@ admin_nomenclature_read:
     path: /template/nomenclature/{nomenclature}
     defaults: { _controller: AdminBundle:Nomenclature:read }
     methods: [GET, POST]
+admin_nomenclature_export:
+    path: /template/nomenclature/{nomenclature}/export
+    defaults: { _controller: AdminBundle:Nomenclature:export }
+    methods: [GET]

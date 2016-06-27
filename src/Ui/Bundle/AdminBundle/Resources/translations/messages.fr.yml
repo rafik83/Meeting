@@ -643,4 +643,7 @@ admin:
             configuration:
                 title: Configuration
             import:
-                title: Import/export
+                title: Import
+            export:
+                title: Export
+                button: Exporter

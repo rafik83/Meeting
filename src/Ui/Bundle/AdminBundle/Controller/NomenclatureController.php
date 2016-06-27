@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Behat\Transliterator\Transliterator;
 use Proximum\Vimeet\Application\Command\Nomenclature\Create;
 use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
@@ -22,10 +23,12 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class NomenclatureController extends Controller
 {
@@ -129,5 +132,21 @@ class NomenclatureController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     *
+     * @return BinaryFileResponse
+     */
+    public function exportAction(Nomenclature $nomenclature)
+    {
+        $filepath = sys_get_temp_dir() . '/nomenclature_' . uniqid();
+        $file     = $this->get('application.nomenclature.export.csv_exporter')->export($nomenclature, $filepath);
+        $filename = sprintf('nomenclature-%s.csv', Transliterator::urlize($nomenclature->getTitle()));
+        $response = new BinaryFileResponse($file);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        return $response;
     }
 }

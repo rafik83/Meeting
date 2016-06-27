@@ -34,6 +34,10 @@
                 <h3>{{ 'admin.nomenclature.read.import.title'|trans }}</h3>
                 {{ form(import_form) }}
             </div>
+            <div class="well">
+                <h3>{{ 'admin.nomenclature.read.export.title'|trans }}</h3>
+                <a href="{{ path('admin_nomenclature_export', { 'nomenclature': nomenclature.id }) }}" class="btn btn-primary">{{ 'admin.nomenclature.read.export.button'|trans }}</a>
+            </div>
         </div>
     </div>
 

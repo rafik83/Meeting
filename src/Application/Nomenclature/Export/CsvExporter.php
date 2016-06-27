@@ -1,0 +1,65 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Nomenclature\Export;
+
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+
+class CsvExporter implements ExporterInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function export(Nomenclature $nomenclature, $output)
+    {
+        $file    = new \SplFileObject($output, 'w+');
+        $locales = [];
+        $rows    = [];
+        $data    = $nomenclature->getValue();
+
+        // Append rows
+        $this->append($data, 1, $rows, $locales);
+
+        // Preprend header with locales
+        array_unshift($rows, array_merge([''], array_unique($locales)));
+
+        $max = max(array_map('count', $rows));
+
+        foreach ($rows as $row) {
+            $file->fputcsv(array_pad($row, $max, ''), ';');
+        }
+
+        return $file;
+    }
+
+    /**
+     * @param array $data
+     * @param int   $depth
+     * @param array $rows
+     * @param array $locales
+     */
+    private function append($data, $depth, array &$rows, array &$locales)
+    {
+        foreach ($data as $id => $child) {
+            $row = array_pad([$id], $depth, '');
+
+            foreach ($child['label'] as $locale => $label) {
+                $locales[] = $locale;
+                $row[]     = $label;
+            }
+
+            $rows[] = $row;
+
+            if (isset($child['children'])) {
+                $this->append($child['children'], $depth + 1, $rows, $locales);
+            }
+        }
+    }
+}
