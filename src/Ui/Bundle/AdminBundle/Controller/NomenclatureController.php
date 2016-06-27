@@ -21,6 +21,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,16 +66,52 @@ class NomenclatureController extends Controller
         $update     = new Update($nomenclature);
         $updateForm = $this->createForm(UpdateType::class, $update, ['submit' => true]);
 
-        if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.nomenclature.update.success');
-
-            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+        if ($response = $this->handleUpdate($request, $updateForm, $update)) {
+            return $response;
         }
 
         // Handle import
         $importForm = $this->createForm(ImportType::class, [], ['submit' => true]);
 
+        if ($response = $this->handleImport($request, $importForm, $nomenclature)) {
+            return $response;
+        }
+
+        return $this->render('AdminBundle:Nomenclature:read.html.twig', [
+            'update_form'  => $updateForm->createView(),
+            'import_form'  => $importForm->createView(),
+            'nomenclature' => $nomenclature,
+        ]);
+    }
+
+    /**
+     * @param Request       $request
+     * @param FormInterface $updateForm
+     * @param Update        $update
+     *
+     * @return null|RedirectResponse
+     */
+    private function handleUpdate(Request $request, FormInterface $updateForm, Update $update)
+    {
+        if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
+            $this->get('tactician.commandbus')->handle($update);
+            $this->addFlash('success', 'flash.admin.nomenclature.update.success');
+
+            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $update->nomenclature->getId()]);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Request       $request
+     * @param FormInterface $importForm
+     * @param Nomenclature  $nomenclature
+     *
+     * @return null|RedirectResponse
+     */
+    private function handleImport(Request $request, FormInterface $importForm, Nomenclature $nomenclature)
+    {
         if ($importForm->handleRequest($request)->isSubmitted() && $importForm->isValid()) {
 
             /** @var UploadedFile $file */
@@ -91,10 +128,6 @@ class NomenclatureController extends Controller
             }
         }
 
-        return $this->render('AdminBundle:Nomenclature:read.html.twig', [
-            'update_form'  => $updateForm->createView(),
-            'import_form'  => $importForm->createView(),
-            'nomenclature' => $nomenclature,
-        ]);
+        return null;
     }
 }
