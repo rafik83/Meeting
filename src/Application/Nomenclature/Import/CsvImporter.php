@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\EmptyOrMalformedFileException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class CsvImporter implements ImporterInterface
@@ -35,36 +38,28 @@ class CsvImporter implements ImporterInterface
      */
     public function import(Nomenclature $nomenclature, $value)
     {
-        $csv   = array_map(function ($line) { return str_getcsv($line, ';'); }, file($value));
-        $value = [];
-
-        $locales = $this->getLocales($csv);
-
-        $pointers = [];
+        $csv     = $this->parseFile($value);
+        $locales = $this->parseLocales($csv);
+        $values  = [];
+        $depths  = [];
 
         foreach (array_slice($csv, 1) as $row) {
 
             $id    = $this->getId($row);
             $depth = $this->getDepth($row);
 
-            $pointers[$depth] = $id;
-            
+            $depths[$depth] = $id;
+
             if ($depth === 1) {
-                $value[$id] = [
-                    'label' => $this->getLabels($locales, $row, $depth),
-                ];
+                $values[$id] = $this->parseLabels($locales, $row, $depth);
             } elseif ($depth === 2) {
-                $value[$pointers[1]]['children'][$id] = [
-                    'label' => $this->getLabels($locales, $row, $depth),
-                ];
+                $values[$depths[1]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
             } elseif ($depth === 3) {
-                $value[$pointers[1]]['children'][$pointers[2]]['children'][$id] = [
-                    'label' => $this->getLabels($locales, $row, $depth),
-                ];
+                $values[$depths[1]]['children'][$depths[2]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
             }
         }
 
-        $nomenclature->update(max(array_keys($pointers)), $value);
+        $nomenclature->update(max(array_keys($depths)), $values);
     }
 
     /**
@@ -101,10 +96,17 @@ class CsvImporter implements ImporterInterface
      * @param array $csv
      *
      * @return array
+     * @throws NoLocaleSpecifiedException
      */
-    private function getLocales(array $csv)
+    private function parseLocales(array $csv)
     {
-        return $this->filterEmpty(array_slice($csv[0], 1));
+        $locales = $this->filterEmpty(array_slice($csv[0], 1));
+
+        if (empty($locales)) {
+            throw new NoLocaleSpecifiedException('No locale specified.');
+        }
+
+        return $locales;
     }
 
     /**
@@ -126,8 +128,34 @@ class CsvImporter implements ImporterInterface
      *
      * @return array
      */
-    protected function getLabels($locales, $row, $depth)
+    private function parseLabels($locales, $row, $depth)
     {
-        return array_combine($locales, array_map('trim', array_slice($row, $depth, count($locales))));
+        return [
+            'label' => array_combine($locales, array_map('trim', array_slice($row, $depth, count($locales)))),
+        ];
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return array
+     * @throws EmptyOrMalformedFileException
+     * @throws FileNotFoundException
+     */
+    private function parseFile($filename)
+    {
+        if (!is_file($filename) || !is_readable($filename)) {
+            throw new FileNotFoundException('File not found.');
+        }
+
+        $csv = array_map(function ($line) {
+            return str_getcsv($line, ';');
+        }, file($filename));
+
+        if (empty($csv)) {
+            throw new EmptyOrMalformedFileException('Empty or malformed file.');
+        }
+
+        return $csv;
     }
 }

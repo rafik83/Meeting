@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Nomenclature;
 
-use Proximum\Vimeet\Application\Nomenclature\ImporterInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\ImporterInterface;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
 class ImportHandler
