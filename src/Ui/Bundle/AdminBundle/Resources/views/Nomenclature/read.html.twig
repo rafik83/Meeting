@@ -3,23 +3,34 @@
 {% block content %}
     <h1 class="page-header">{{ nomenclature.title }}</h1>
 
-    <ul>
-        {% for child_one in nomenclature.children %}
-            <li>
-                {{ child_one.label(app.request.locale) }}
-                <ul>
-                    {% for child_two in child_one.children %}
-                        <li>
-                            {{ child_two.label(app.request.locale) }}
-                            <ul>
-                                {% for child_three in child_two.children %}
-                                    <li>{{ child_three.label(app.request.locale) }}</li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <ul>
+                {% for child_one in nomenclature.children %}
+                    <li>
+                        {{ child_one.label(app.request.locale) }}
+                        <ul>
+                            {% for child_two in child_one.children %}
+                                <li>
+                                    {{ child_two.label(app.request.locale) }}
+                                    <ul>
+                                        {% for child_three in child_two.children %}
+                                            <li>{{ child_three.label(app.request.locale) }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="well">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

@@ -10,23 +10,68 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Nomenclature\Create;
+use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
+use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class NomenclatureController extends Controller
 {
-    public function listAction()
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function listAction(Request $request)
     {
+        $command = new Create();
+        $form    = $this->createForm(CreateType::class, $command, ['submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            /** @var CreateResult $result */
+            $result = $this->get('tactician.commandbus')->handle($command);
+
+            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
+        }
+
         $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
 
         return $this->render('AdminBundle:Nomenclature:list.html.twig', [
+            'form'          => $form->createView(),
             'nomenclatures' => $nomenclatures,
         ]);
     }
 
-    public function readAction(Nomenclature $nomenclature)
+    /**
+     * @param Request      $request
+     * @param Nomenclature $nomenclature
+     *
+     * @return RedirectResponse|Response
+     */
+    public function readAction(Request $request, Nomenclature $nomenclature)
     {
+        $form = $this->createForm(ImportType::class, [], ['submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $file */
+            $file    = $form->get('file')->getData();
+            $command = new Import($nomenclature, $file->getPathInfo());
+
+            $this->get('tactician.commandbus')->handle($command);
+
+            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+        }
+
         return $this->render('AdminBundle:Nomenclature:read.html.twig', [
+            'form'         => $form->createView(),
             'nomenclature' => $nomenclature,
         ]);
     }

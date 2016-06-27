@@ -634,3 +634,8 @@ admin:
             depth: %depth% niveau|%depth% niveaux
             read: Voir
         link: Nomenclatures
+        create:
+            modal:
+                title: Créer une nomenclature
+                close: Fermer
+            button: Nouvelle nomenclature

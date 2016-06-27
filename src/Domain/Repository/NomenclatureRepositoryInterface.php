@@ -33,4 +33,14 @@ interface NomenclatureRepositoryInterface
      * @return Nomenclature
      */
     public function findById($id);
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function add(Nomenclature $nomenclature);
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function set(Nomenclature $nomenclature);
 }

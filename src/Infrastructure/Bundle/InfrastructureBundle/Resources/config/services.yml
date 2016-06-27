@@ -881,6 +881,19 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
+    command.nomenclature.create_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\CreateHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Create }
+    command.nomenclature.import_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@application.nomenclature.csv_importer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Import }
 
     #
     # Security
@@ -1345,3 +1358,13 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # Nomenclature
+    #
+    application.nomenclature.id.uniqu_id_generator:
+        class: Proximum\Vimeet\Application\Nomenclature\Id\UniquIdGenerator
+    application.nomenclature.csv_importer:
+        class: Proximum\Vimeet\Application\Nomenclature\CsvImporter
+        arguments:
+            - '@application.nomenclature.id.uniqu_id_generator'

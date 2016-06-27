@@ -1111,3 +1111,15 @@ form:
                 label: Echelle (en minutes)
             submit:
                 label: Enregistrer
+    nomenclature_create_type:
+        children:
+            title:
+                label: Titre
+            submit:
+                label: Enregistrer
+    nomenclature_import_type:
+        children:
+            file:
+                label: Fichier
+            submit:
+                label: Importer

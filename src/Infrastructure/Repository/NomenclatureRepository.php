@@ -74,4 +74,21 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function add(Nomenclature $nomenclature)
+    {
+        $this->entityManager->persist($nomenclature);
+        $this->entityManager->flush($nomenclature);
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function set(Nomenclature $nomenclature)
+    {
+        $this->entityManager->flush($nomenclature);
+    }
 }
