@@ -1,0 +1,45 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Event\PaymentConditions;
+
+use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update;
+use Proximum\Vimeet\Application\Command\Event\PracticalInfo\UpdateHandler;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $event = EventFactory::createEvent();
+        $event->setOrganiserName('baseOrganiserName')->setOrganiserEmail('baseOrganiserEmail');
+        $event->getConfiguration()->updatePracticalInfo('baseContactFirstName', 'baseContactLastName', 'basePhone', 'baseWebsite');
+
+        $update = new Update($event);
+        $update->organiserName    = 'newOrganiserName';
+        $update->organiserEmail   = 'newOrganiserEmail';
+        $update->phone            = 'newPhone';
+        $update->website          = 'newWebsite';
+        $update->contactLastName  = 'newContactLastName';
+        $update->contactFirstName = 'newContactFirstName';
+
+        $expectedEvent = EventFactory::createEvent();
+        $expectedEvent->setOrganiserEmail('newOrganiserEmail')->setOrganiserName('newOrganiserName');
+        $expectedEvent->getConfiguration()->updatePracticalInfo('newContactFirstName', 'newContactLastName', 'newPhone', 'newWebsite');
+
+        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
+        $eventRepository->set($expectedEvent)->shouldBeCalled();
+
+        $handler = new UpdateHandler($eventRepository->reveal());
+        $handler->handle($update);
+    }
+}
