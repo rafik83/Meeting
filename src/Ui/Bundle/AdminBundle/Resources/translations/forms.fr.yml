@@ -161,6 +161,8 @@ form:
                 label: Couleur habillage de droite
             submit:
                 label: Enregistrer
+            organiserName:
+                label: Organisateur
     event_update:
         children:
             title:
@@ -197,6 +199,9 @@ form:
                             label: Description
             submit:
                 label: Enregistrer
+            organiserName:
+                label: Organisateur
+
     who_see_who:
         children:
             seer:
@@ -1145,5 +1150,21 @@ form:
         children:
             scale:
                 label: Echelle (en minutes)
+            submit:
+                label: Enregistrer
+    event_practical_info_update:
+        children:
+            organiserName:
+                label: Organisateur
+            contactFirstName:
+                label: Prénom du contact
+            contactLastName:
+                label: Nom du contact
+            phone:
+                label: Téléphone
+            organiserEmail:
+                label: E-mail
+            website:
+                label: Site internet
             submit:
                 label: Enregistrer

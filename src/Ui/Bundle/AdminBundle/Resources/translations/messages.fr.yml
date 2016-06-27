@@ -377,6 +377,10 @@ admin:
         title: Titre
         languages: Langues
         fallback: Par défaut
+        practicalInfo:
+          link: Informations Pratiques
+          update:
+            title: Modifier les informations pratiques
     rule:
         link: Qui voit qui
     type:
