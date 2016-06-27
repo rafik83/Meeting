@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="page-header">{{ nomenclature.title }}</h1>
 
-    <div class="row">
+    <div class="row with-submit-section">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <ul>
                 {% for child_one in nomenclature.children %}
@@ -35,5 +35,18 @@
         </div>
     </div>
 
+    <div class="form">
+        <div class="form-group submit-section">
+            <div class="col-sm-3">
+                <a href="{{ path('admin_nomenclature_list') }}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ 'admin.goback.link'|trans }}
+                </a>
+            </div>
+            <div class="col-sm-9 text-right">
+
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
