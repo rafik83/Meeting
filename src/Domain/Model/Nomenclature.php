@@ -42,7 +42,7 @@ class Nomenclature
      * @param int    $depth
      * @param array  $value
      */
-    public function __construct($title, $depth, array $value)
+    public function __construct($title, $depth = 1, array $value = [])
     {
         $this->title = $title;
         $this->depth = $depth;
@@ -298,5 +298,21 @@ class Nomenclature
         return !empty(array_filter($this->getChildren(), function (NomenclatureItem $item) use ($keys) {
             return in_array($item->getKey(), $keys) || $item->any($keys);
         }));
+    }
+
+    /**
+     * Set value
+     *
+     * @param int   $depth
+     * @param array $value
+     *
+     * @return Nomenclature
+     */
+    public function update($depth, $value)
+    {
+        $this->depth = $depth;
+        $this->value = $value;
+
+        return $this;
     }
 }

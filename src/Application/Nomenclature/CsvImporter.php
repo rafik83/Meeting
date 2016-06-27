@@ -33,7 +33,7 @@ class CsvImporter implements ImporterInterface
     /**
      * {@inheritdoc}
      */
-    public function import($title, $value)
+    public function import(Nomenclature $nomenclature, $value)
     {
         $csv   = array_map(function ($line) { return str_getcsv($line, ';'); }, file($value));
         $value = [];
@@ -64,7 +64,7 @@ class CsvImporter implements ImporterInterface
             }
         }
 
-        return new Nomenclature($title, 1, $value);
+        $nomenclature->update(max(array_keys($pointers)), $value);
     }
 
     /**

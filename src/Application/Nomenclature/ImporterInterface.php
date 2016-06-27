@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature;
 
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+
 interface ImporterInterface
 {
     /**
-     * @param string $title
-     * @param mixed  $value
+     * @param Nomenclature $nomenclature
+     * @param mixed        $value
      */
-    public function import($title, $value);
+    public function import(Nomenclature $nomenclature, $value);
 }
