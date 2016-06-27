@@ -34,6 +34,15 @@ class ContentRepository implements ContentRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Content $content)
+    {
+        $this->manager->persist($content);
+        $this->manager->flush($content);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(Content $content)
     {
         $this->manager->flush($content);

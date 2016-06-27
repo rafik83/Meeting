@@ -1,7 +1,6 @@
 @admin
-
-Feature: See and update event
-  I need to be able to see and update an event
+Feature: See, create and update event
+  I need to be able to see, create and update an event
 
   Scenario: See event
     Given the database is empty
@@ -15,6 +14,32 @@ Feature: See and update event
     When I go to this page "/admin/en/event"
     Then I should see "Les rendez-vous CARNOT 2016"
 
+  Scenario: create event
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/en/event"
+    And I should see "admin.event.create.title"
+    Then I follow "admin.event.create.title"
+    Then the response status code should be 200
+    And I should be on this page "/admin/en/event/create"
+    And I fill in the following:
+      | form.event_create.children.title.label       | Super Event                     |
+      | form.event_create.children.domain.label      | super-event.vimeet.proximum.dev |
+      | form.event_create.children.vat.label         | 20                              |
+      | form.event_create.children.leftColor.label   | #123456                         |
+      | form.event_create.children.rightColor.label  | #123456                         |
+      | form.event_create.children.textColor.label   | #123456                         |
+    And I select "Europe/Paris" from "form.event_create.children.timeZone.label"
+    And I select "fr" from "form.event_create.children.fallback.label"
+    And I select "fr" from "form.event_create.children.locales.label"
+    And I check the "form.vatMode.ati" radio
+    And I select "FR" from "form.event_create.children.country.label"
+    And I select "EUR" from "form.event_create.children.currency.label"
+    And I press "form.event_create.children.submit.label"
+    Then the response status code should be 200
+    And I should see "flash.admin.event.create.success"
+    And I should be on this page "/admin/en/event"
+    And I should see "Super Event"
+
   Scenario: update event
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/en/event/1"
@@ -25,7 +50,6 @@ Feature: See and update event
       | event_update_title                       | Other event                                                                    |
       | event_update_translations_fr_description | LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE                                  |
       | event_update_translations_en_description | In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion. |
-    And I select "en" from "event_update_fallback"
     And I select "fr" from "event_update_fallback"
     And I select "EUR" from "event_update_currency"
     And I press "form.event_update.children.submit.label"

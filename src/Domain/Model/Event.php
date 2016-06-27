@@ -134,11 +134,40 @@ class Event implements EventInterface
 
     /**
      * Constructor.
+     *
+     * @param string $title
+     * @param string $fallback
+     * @param array  $locales
+     * @param string $mode
+     * @param float  $vat
+     * @param string $country
+     * @param string $currency
+     * @param string $timeZone
+     * @param string $domain
      */
-    public function __construct()
-    {
-        $this->translations  = new ArrayCollection();
-        $this->configuration = new Configuration('', '', '');
+    public function __construct(
+        $title,
+        $fallback,
+        array $locales,
+        $mode,
+        $vat,
+        $country,
+        $currency,
+        $timeZone,
+        $domain
+    ) {
+        $this->translations   = new ArrayCollection();
+        $this->configuration  = new Configuration('', '', '');
+        $this->paymentAddress = new Address('', '', '', '');
+        $this->title          = $title;
+        $this->fallback       = $fallback;
+        $this->locales        = $locales;
+        $this->mode           = $mode;
+        $this->vat            = $vat;
+        $this->country        = $country;
+        $this->currency       = $currency;
+        $this->timeZone       = $timeZone;
+        $this->domain         = $domain;
     }
 
     /**
@@ -311,8 +340,10 @@ class Event implements EventInterface
      * @param float  $vat
      * @param string $country
      * @param string $currency
+     * @param string $timeZone
+     * @param string $domain
      */
-    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency)
+    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency, $timeZone, $domain)
     {
         $this->title    = $title;
         $this->locales  = $locales;
@@ -321,6 +352,8 @@ class Event implements EventInterface
         $this->vat      = $vat;
         $this->country  = $country;
         $this->currency = $currency;
+        $this->timeZone = $timeZone;
+        $this->domain   = $domain;
     }
 
     /**

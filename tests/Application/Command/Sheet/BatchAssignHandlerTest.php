@@ -19,12 +19,13 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $dateTime = new \DateTime();
         $user1    = new User('test@test.com', 'salt', 'password', 'fr');

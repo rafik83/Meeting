@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RuleManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +65,7 @@ class RuleManagerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, new Type($event), $data, $user, new \DateTime());
         $rule  = new Rule($event, new Type($event), $sheet->getType(), $what);
@@ -82,7 +83,7 @@ class RuleManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetRule()
     {
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $sheet = new Sheet($event, new Type($event), [], $user, new \DateTime());
 
         $types = [

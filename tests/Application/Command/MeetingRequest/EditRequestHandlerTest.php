@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +34,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithStateSentForSheetFrom()
     {
         // Context
-        $event     = new Event();
+        $event     = EventFactory::createEvent();
         $type      = new Type($event);
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
@@ -97,7 +98,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithStateApprovedForSheetFrom()
     {
         // Context
-        $event     = new Event();
+        $event     = EventFactory::createEvent();
         $type      = new Type($event);
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
@@ -163,7 +164,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithStateSentForSheetTo()
     {
         // Context
-        $event     = new Event();
+        $event     = EventFactory::createEvent();
         $type      = new Type($event);
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
@@ -227,7 +228,7 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithStateApprovedForSheetTo()
     {
         // Context
-        $event     = new Event();
+        $event     = EventFactory::createEvent();
         $type      = new Type($event);
         $user1     = new User('email@email.com', 'salt', 'password', 'fr');
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');

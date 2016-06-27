@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Package\CreateResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $dateTime = new \DateTimeImmutable();
 
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en']);
 
         $expected = new Package($event, 'Lorem ipsum', $dateTime);
