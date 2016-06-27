@@ -63,7 +63,7 @@ class NomenclatureController extends Controller
 
             /** @var UploadedFile $file */
             $file    = $form->get('file')->getData();
-            $command = new Import($nomenclature, $file->getPathInfo());
+            $command = new Import($nomenclature, $file->getPathname());
 
             $this->get('tactician.commandbus')->handle($command);
 
