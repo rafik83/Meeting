@@ -40,51 +40,94 @@ class CsvImporter implements ImporterInterface
 
         $locales = $this->getLocales($csv);
 
+        $pointers = [];
+
         foreach (array_slice($csv, 1) as $row) {
 
-            $id   = $this->getId($row);
-            $deep = $this->getDeep($row);
+            $id    = $this->getId($row);
+            $depth = $this->getDepth($row);
 
-            if ($deep === 1) {
+            $pointers[$depth] = $id;
+            
+            if ($depth === 1) {
                 $value[$id] = [
-                    'label' => array_combine($locales, array_slice($row, $deep, count($locales))),
+                    'label' => $this->getLabels($locales, $row, $depth),
+                ];
+            } elseif ($depth === 2) {
+                $value[$pointers[1]]['children'][$id] = [
+                    'label' => $this->getLabels($locales, $row, $depth),
+                ];
+            } elseif ($depth === 3) {
+                $value[$pointers[1]]['children'][$pointers[2]]['children'][$id] = [
+                    'label' => $this->getLabels($locales, $row, $depth),
                 ];
             }
-
         }
 
         return new Nomenclature($title, 1, $value);
     }
 
-    private function getDeep(array &$row)
+    /**
+     * @param array $row
+     *
+     * @return int
+     */
+    private function getDepth(array &$row)
     {
-        $deep = 1;
+        $depth = 1;
 
         foreach (array_slice($row, 1) as $columns) {
             if (empty($columns)) {
-                $deep++;
+                $depth++;
             } else {
-                return $deep;
+                return $depth;
             }
         }
 
-        return $deep;
+        return $depth;
     }
 
+    /**
+     * @param array $row
+     *
+     * @return string
+     */
     private function getId(array &$row)
     {
         return empty($row[0]) ? $this->generator->generate() : $row[0];
     }
 
+    /**
+     * @param array $csv
+     *
+     * @return array
+     */
     private function getLocales(array $csv)
     {
         return $this->filterEmpty(array_slice($csv[0], 1));
     }
 
+    /**
+     * @param array $array
+     *
+     * @return array
+     */
     private function filterEmpty(array $array)
     {
         return array_filter($array, function ($value) {
             return !empty($value);
         });
+    }
+
+    /**
+     * @param array $locales
+     * @param array $row
+     * @param int   $depth
+     *
+     * @return array
+     */
+    protected function getLabels($locales, $row, $depth)
+    {
+        return array_combine($locales, array_map('trim', array_slice($row, $depth, count($locales))));
     }
 }
