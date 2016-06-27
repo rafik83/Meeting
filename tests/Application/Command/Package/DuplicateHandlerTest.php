@@ -20,6 +20,21 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $defaultLabels = [
+            'plans' => [
+                'fr' => 'Forfait',
+                'en' => 'Plans',
+            ],
+            'participant_and_planning' => [
+                'fr' => 'Participant et planning',
+                'en' => 'Participant and Planning',
+            ],
+            'options' => [
+                'fr' => 'Options',
+                'en' => 'Options',
+            ],
+        ];
+
         $dateTime = new \DateTimeImmutable();
 
         $event = EventFactory::createEvent();
@@ -30,6 +45,8 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $package->translate('en', 'Plans', 'Participant and Planning', 'Options');
 
         $expectedPackage = new Package($event, 'Duplicate event', $dateTime);
+        $expectedPackage->translate('fr', 'Forfait', 'Participant et planning', 'Options');
+        $expectedPackage->translate('en', 'Plans', 'Participant and Planning', 'Options');
 
         $command        = new Duplicate($package);
         $command->event = $event;
@@ -38,7 +55,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $packageRepository = $this->prophesize(PackageRepositoryInterface::class);
         $packageRepository->add($expectedPackage)->shouldBeCalled();
 
-        $handler = new DuplicateHandler($packageRepository->reveal(), $dateTime);
+        $handler = new DuplicateHandler($packageRepository->reveal(), $dateTime, $defaultLabels);
         $result = $handler->handle($command);
 
         $this->assertEquals($expectedPackage, $result);

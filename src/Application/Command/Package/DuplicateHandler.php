@@ -27,15 +27,22 @@ class DuplicateHandler
     private $dateTime;
 
     /**
+     * @var array
+     */
+    private $defaultLabels;
+
+    /**
      * UpdateHandler constructor.
      *
      * @param PackageRepositoryInterface $packageRepository
      * @param \DateTimeInterface         $dateTime
+     * @param array                      $defaultLabels
      */
-    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime)
+    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime, array $defaultLabels)
     {
         $this->packageRepository = $packageRepository;
         $this->dateTime          = $dateTime;
+        $this->defaultLabels = $defaultLabels;
     }
 
     /**
@@ -46,6 +53,15 @@ class DuplicateHandler
     public function handle(Duplicate $duplicate)
     {
         $package = new Package($duplicate->event, $duplicate->title, $this->dateTime);
+
+        foreach ($duplicate->event->getLocales() as $locale) {
+            $package->translate(
+                $locale,
+                isset($this->defaultLabels['plans'][$locale]) ? $this->defaultLabels['plans'][$locale] : '',
+                isset($this->defaultLabels['participant_and_planning'][$locale]) ? $this->defaultLabels['participant_and_planning'][$locale] : '',
+                isset($this->defaultLabels['options'][$locale]) ? $this->defaultLabels['options'][$locale] : ''
+            );
+        }
 
         $groupOptions = [];
         $groupLabels = [];

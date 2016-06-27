@@ -749,6 +749,7 @@ services:
         arguments:
             - '@repository.package_repository'
             - '@datetime'
+            - '%infrastructure.package.default_labels%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Duplicate }
     command.sheet.update_data_handler:
