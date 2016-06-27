@@ -891,7 +891,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler
         arguments:
             - '@repository.nomenclature_repository'
-            - '@application.nomenclature.csv_importer'
+            - '@application.nomenclature.import.csv_importer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Import }
 
@@ -1364,7 +1364,7 @@ services:
     #
     application.nomenclature.id.uniqu_id_generator:
         class: Proximum\Vimeet\Application\Nomenclature\Id\UniquIdGenerator
-    application.nomenclature.csv_importer:
-        class: Proximum\Vimeet\Application\Nomenclature\CsvImporter
+    application.nomenclature.import.csv_importer:
+        class: Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter
         arguments:
             - '@application.nomenclature.id.uniqu_id_generator'

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Nomenclature;
+namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
