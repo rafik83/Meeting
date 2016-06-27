@@ -9,3 +9,15 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
         scheduleScale:
             type: integer
+        contactFirstName:
+            type: string
+            nullable: true
+        contactLastName:
+            type: string
+            nullable: true
+        phone:
+            type: string
+            nullable: true
+        website:
+            type: string
+            nullable: true
