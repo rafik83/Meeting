@@ -80,6 +80,5 @@ class UpdateOptionType extends AbstractUpdateType
     {
         return 'product_update_option';
     }
-
-
+    
 }

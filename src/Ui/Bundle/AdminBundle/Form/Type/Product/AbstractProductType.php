@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
-
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -28,7 +34,8 @@ class AbstractProductType extends AbstractType
                 'attr'     => [
                     'min' => 0,
                 ],
-            ]);
+            ])
+        ;
     }
 
     /**
@@ -36,8 +43,7 @@ class AbstractProductType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        foreach ($view->children['translations'] as $translation)
-        {
+        foreach ($view->children['translations'] as $translation) {
             $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
         }
     }

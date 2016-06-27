@@ -54,7 +54,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
@@ -69,8 +69,7 @@ class ProductController extends Controller
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -85,8 +84,9 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      * @param Product $product
+     *
      * @return RedirectResponse|Response
      */
     public function updateOptionAction(Request $request, Event $event, Product $product)
@@ -100,8 +100,7 @@ class ProductController extends Controller
             'locale'  => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.update.success');
 
@@ -116,7 +115,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
@@ -131,8 +130,7 @@ class ProductController extends Controller
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -147,9 +145,9 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
-     *
+     * @param Event   $event
      * @param Product $product
+     *
      * @return RedirectResponse|Response
      */
     public function updatePlanAction(Request $request, Event $event, Product $product)
@@ -164,8 +162,7 @@ class ProductController extends Controller
             'event'   => $event,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -180,7 +177,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
@@ -195,8 +192,7 @@ class ProductController extends Controller
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -211,9 +207,9 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
-     *
+     * @param Event   $event
      * @param Product $product
+     *
      * @return RedirectResponse|Response
      */
     public function updateParticipantAction(Request $request, Event $event, Product $product)
@@ -227,8 +223,7 @@ class ProductController extends Controller
             'locale'  => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.update.success');
 
@@ -243,7 +238,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
@@ -258,8 +253,7 @@ class ProductController extends Controller
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.product.create.success');
 
@@ -274,9 +268,9 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @param Event $event
-     *
+     * @param Event   $event
      * @param Product $product
+     *
      * @return RedirectResponse|Response
      */
     public function updatePlanningAction(Request $request, Event $event, Product $product)
@@ -285,13 +279,12 @@ class ProductController extends Controller
 
         $update = new UpdatePlanning($product);
         $form = $this->createForm(UpdatePlanningType::class, $update, [
-            'submit' => true,
+            'submit'  => true,
             'product' => $product,
             'locale'  => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid())
-        {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.product.update.success');
 
