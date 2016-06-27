@@ -46,6 +46,7 @@ Feature: Complete my package
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     And I should see "package.product.quantityNotMatch"
+    And I should see "package.product.unavailable"
     When I fill in the following:
       | options_10 | 1 |
       | options_11 | 3 |

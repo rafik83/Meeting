@@ -142,6 +142,6 @@ class ProductView
         $this->subjectedToValidationHelp = $subjectedToValidationHelp;
         $this->isSubjectedToValidation   = $isSubjectedToValidation;
         $this->included                  = $included;
-        $this->isBuyable                   = $isBuyable;
+        $this->isBuyable                 = $isBuyable;
     }
 }
