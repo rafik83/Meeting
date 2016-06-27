@@ -33,6 +33,21 @@ class EventTranslation
     private $description;
 
     /**
+     * @var string
+     */
+    private $billingAddress;
+
+    /**
+     * @var string
+     */
+    private $paymentCondition;
+
+    /**
+     * @var string
+     */
+    private $footers;
+
+    /**
      * @param Event  $event
      * @param string $locale
      * @param string $description
@@ -78,9 +93,74 @@ class EventTranslation
 
     /**
      * @param $description
+     *
+     * @return EventTranslation
      */
     public function update($description)
     {
         $this->description = $description;
+
+        return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * @param string $billingAddress
+     *
+     * @return EventTranslation
+     */
+    public function setBillingAddress($billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentCondition()
+    {
+        return $this->paymentCondition;
+    }
+
+    /**
+     * @param string $paymentCondition
+     *
+     * @return EventTranslation
+     */
+    public function setPaymentCondition($paymentCondition)
+    {
+        $this->paymentCondition = $paymentCondition;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFooters()
+    {
+        return $this->footers;
+    }
+
+    /**
+     * @param string $footers
+     *
+     * @return EventTranslation
+     */
+    public function setFooters($footers)
+    {
+        $this->footers = $footers;
+
+        return $this;
+    }
+
 }

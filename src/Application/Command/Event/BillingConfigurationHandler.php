@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class BillingConfigurationHandler
@@ -29,15 +30,29 @@ class BillingConfigurationHandler
 
     /**
      * @param BillingConfiguration $billingConfiguration
+     *
+     * @return \Proximum\Vimeet\Domain\Model\Event
      */
     public function handle(BillingConfiguration $billingConfiguration)
     {
-        $billingConfiguration->event->getConfiguration()->setIban($billingConfiguration->iban);
-        $billingConfiguration->event->getConfiguration()->setBillingAddress($billingConfiguration->billingAddress);
-        $billingConfiguration->event->getConfiguration()->setPaymentCondition($billingConfiguration->paymentCondition);
-        $billingConfiguration->event->getConfiguration()->setLegalInfo($billingConfiguration->legalInfo);
-        $billingConfiguration->event->getConfiguration()->setFooters($billingConfiguration->footers);
+        $billingConfiguration->event->getConfiguration()->setBillingConfiguration(
+            $billingConfiguration->iban,
+            $billingConfiguration->billingAddress,
+            $billingConfiguration->paymentCondition,
+            $billingConfiguration->footers,
+            $billingConfiguration->legalInfo
+        );
+
+        foreach ($billingConfiguration->event->getLocales() as $locale) {
+            if (!$billingConfiguration->event->getTranslations()->get($locale)) {
+                $eventTranslation = new EventTranslation($billingConfiguration->event, $locale, '');
+
+                $billingConfiguration->event->getTranslations()->set($locale, $eventTranslation);
+            }
+        }
 
         $this->eventRepository->add($billingConfiguration->event);
+
+        return $billingConfiguration->event;
     }
 }

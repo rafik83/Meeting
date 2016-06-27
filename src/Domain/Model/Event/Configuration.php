@@ -84,6 +84,26 @@ class Configuration
     }
 
     /**
+     * @param string $iban
+     * @param string $billingAddress
+     * @param string $paymentCondition
+     * @param string $footers
+     * @param string $legalInfo
+     *
+     * @return Configuration
+     */
+    public function setBillingConfiguration($iban, $billingAddress, $paymentCondition, $footers, $legalInfo)
+    {
+        $this->iban             = $iban;
+        $this->billingAddress   = $billingAddress;
+        $this->paymentCondition = $paymentCondition;
+        $this->footers          = $footers;
+        $this->legalInfo        = $legalInfo;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getLeftColor()

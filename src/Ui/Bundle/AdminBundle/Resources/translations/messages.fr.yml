@@ -379,7 +379,7 @@ admin:
         fallback: Par défaut
         billing:
           configuration:
-            link: Configuration information facturation
+            link: Information facturation
             title: Configuration des informations de facturation
     rule:
         link: Qui voit qui
