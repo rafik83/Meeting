@@ -35,6 +35,31 @@ class Configuration
     private $scheduleScale = 30;
 
     /**
+     * @var string
+     */
+    private $contactLastName;
+
+    /**
+     * @var string
+     */
+    private $contactFirstName;
+
+    /**
+     * @var string
+     */
+    private $phone;
+
+    /**
+     * @var string
+     */
+    private $mail;
+
+    /**
+     * @var string
+     */
+    private $website;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
@@ -46,6 +71,20 @@ class Configuration
         $this->textColor  = $textColor;
     }
 
+    /**
+     * @param string $contactFirstName
+     * @param string $contactLastName
+     * @param string $phone
+     * @param string $website
+     */
+    public function updatePracticalInfo($contactFirstName, $contactLastName, $phone, $website)
+    {
+        $this->contactFirstName = $contactFirstName;
+        $this->contactLastName  = $contactLastName;
+        $this->phone            = $phone;
+        $this->website          = $website;
+    }
+    
     /**
      * @param string $leftColor
      * @param string $rightColor
@@ -104,5 +143,45 @@ class Configuration
         $this->scheduleScale = $scheduleScale;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactLastName()
+    {
+        return $this->contactLastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactFirstName()
+    {
+        return $this->contactFirstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite()
+    {
+        return $this->website;
     }
 }
