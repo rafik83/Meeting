@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 
 class ErrorFactory
@@ -21,11 +22,20 @@ class ErrorFactory
     private $translator;
 
     /**
-     * @param SymfonyTranslatorInterface $translator
+     * @var RequestStack
      */
-    public function __construct(SymfonyTranslatorInterface $translator)
+    private $requestStack;
+
+    /**
+     * ErrorFactory constructor.
+     *
+     * @param SymfonyTranslatorInterface $translator
+     * @param RequestStack               $requestStack
+     */
+    public function __construct(SymfonyTranslatorInterface $translator, RequestStack $requestStack)
     {
-        $this->translator = $translator;
+        $this->translator   = $translator;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -37,8 +47,12 @@ class ErrorFactory
      *
      * @return FormError
      */
-    public function create($messageKey, $locale, $domain = 'validators', $parameters = [], $pluralization = null)
+    public function create($messageKey, $locale = null, $domain = 'validators', $parameters = [], $pluralization = null)
     {
+        if ($locale === null) {
+            $locale = $this->requestStack->getMasterRequest()->getLocale();
+        }
+
         return new FormError($this->translator->transChoice($messageKey, $pluralization, $parameters, $domain, $locale));
     }
 }

@@ -234,6 +234,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
         arguments:
             - '@translator'
+            - '@request_stack'
 
     filter_summary:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
