@@ -13,10 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Nomenclature\Create;
 use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,9 +67,13 @@ class NomenclatureController extends Controller
             $file    = $form->get('file')->getData();
             $command = new Import($nomenclature, $file->getPathname());
 
-            $this->get('tactician.commandbus')->handle($command);
+            try {
+                $this->get('tactician.commandbus')->handle($command);
 
-            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+                return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+            } catch (ImportException $exception) {
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+            }
         }
 
         return $this->render('AdminBundle:Nomenclature:read.html.twig', [
