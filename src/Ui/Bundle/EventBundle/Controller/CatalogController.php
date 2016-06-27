@@ -109,4 +109,16 @@ class CatalogController extends Controller
             throw $this->createNotFoundException($exception->getMessage(), $exception);
         }
     }
+
+    /**
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function catalogAction(EventDomain $eventDomain)
+    {
+        return $this->render('EventBundle:Catalog:catalog.html.twig', [
+            'event' => $eventDomain->getEvent(),
+        ]);
+    }
 }
