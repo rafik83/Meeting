@@ -197,6 +197,19 @@ form:
                             label: Description
             submit:
                 label: Enregistrer
+    event_billing_configuration:
+        children:
+            iban:
+                label: Iban
+            billingAddress:
+                label: Adresse de paiement
+            paymentCondition:
+                label: Conditions de paiement
+            footers:
+                label: Pied de page
+                placeholder: Exemple adresse, siret, capital ...
+            submit:
+                label: Enregistrer
     who_see_who:
         children:
             seer:

@@ -148,7 +148,10 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($billingConfiguration);
+            $this->addFlash('success', 'flash.admin.event.billing.configuration.success');
 
+            return $this->redirectToRoute('admin_event_list');
         }
 
         return $this->render('AdminBundle:Event:billingConfiguration.html.twig', [

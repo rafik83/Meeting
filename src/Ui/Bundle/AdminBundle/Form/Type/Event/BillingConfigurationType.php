@@ -29,6 +29,7 @@ class BillingConfigurationType extends AbstractType
             ])
             ->add('footers', TextType::class, [
                 'required' => false,
+                'placeholder' => 'form.event_billing_configuration.children.footers.placeholder'
             ])
         ;
     }

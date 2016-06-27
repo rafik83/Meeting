@@ -82,6 +82,9 @@ flash:
                     failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
+            billing:
+                configuration:
+                    success: La configuration de facturation a bien été mis à jour
         type:
             create:
                 success: Le type a bien été créé

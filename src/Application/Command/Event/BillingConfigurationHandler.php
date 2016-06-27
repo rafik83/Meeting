@@ -27,8 +27,17 @@ class BillingConfigurationHandler
         $this->eventRepository = $eventRepository;
     }
 
+    /**
+     * @param BillingConfiguration $billingConfiguration
+     */
     public function handle(BillingConfiguration $billingConfiguration)
     {
+        $billingConfiguration->event->getConfiguration()->setIban($billingConfiguration->iban);
+        $billingConfiguration->event->getConfiguration()->setBillingAddress($billingConfiguration->billingAddress);
+        $billingConfiguration->event->getConfiguration()->setPaymentCondition($billingConfiguration->paymentCondition);
+        $billingConfiguration->event->getConfiguration()->setLegalInfo($billingConfiguration->legalInfo);
+        $billingConfiguration->event->getConfiguration()->setFooters($billingConfiguration->footers);
 
+        $this->eventRepository->add($billingConfiguration->event);
     }
 }

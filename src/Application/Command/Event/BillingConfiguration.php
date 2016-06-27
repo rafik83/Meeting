@@ -52,5 +52,11 @@ class BillingConfiguration
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        $this->iban             = $event->getConfiguration()->getIban();
+        $this->billingAddress   = $event->getConfiguration()->getBillingAddress();
+        $this->paymentCondition = $event->getConfiguration()->getPaymentCondition();
+        $this->footers          = $event->getConfiguration()->getFooters();
+        $this->legalInfo        = $event->getConfiguration()->getLegalInfo();
     }
 }
