@@ -10,7 +10,40 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
+
 class DuplicateHandler
 {
-    
+    /**
+     * @var PackageRepositoryInterface
+     */
+    private $packageRepository;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
+     * UpdateHandler constructor.
+     *
+     * @param PackageRepositoryInterface $packageRepository
+     * @param \DateTimeInterface         $dateTime
+     */
+    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime)
+    {
+        $this->packageRepository = $packageRepository;
+        $this->dateTime          = $dateTime;
+    }
+
+    /**
+     * @param Duplicate $duplicate
+     */
+    public function handle(Duplicate $duplicate)
+    {
+        $package = new Package($duplicate->event, $duplicate->title, $this->dateTime);
+
+        $this->packageRepository->add($package);
+    }
 }

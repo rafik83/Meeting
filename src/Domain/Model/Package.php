@@ -97,6 +97,13 @@ class Package
         $this->translations = new ArrayCollection();
     }
 
+    public static function duplicatePackage(Event $event, $title, Package $duplicatePackage, \DateTimeInterface $createdAt)
+    {
+
+
+        return $package;
+    }
+
     /**
      * Get id
      *

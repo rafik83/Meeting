@@ -863,6 +863,8 @@ form:
         children:
             title:
                 label: Titre du template
+            event:
+                label: Titre de l'evénément
             plans:
                 children:
                     enabled:
