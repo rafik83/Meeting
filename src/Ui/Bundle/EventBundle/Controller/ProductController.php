@@ -51,4 +51,11 @@ class ProductController extends Controller
             'event' => $eventDomain->getEvent(),
         ]);
     }
+
+    public function recapAction(EventView $eventView)
+    {
+        return $this->render('EventBundle:Product:recap.html.twig', [
+            'eventView' => $eventView,
+        ]);
+    }
 }

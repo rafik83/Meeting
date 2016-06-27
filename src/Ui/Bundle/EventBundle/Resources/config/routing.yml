@@ -430,7 +430,27 @@ event_package_step:
         sheet: \d+
         step: \d+
     methods:  [GET, POST]
+
+#
+# Inte product
+#
 event_package_step_1:
     path: /step/1
     defaults: { _controller: EventBundle:Product:step3 }
+    methods: [GET]
+event_product_step_1:
+    path: /product/step/1
+    defaults: { _controller: EventBundle:Product:step1 }
+    methods: [GET]
+event_product_step_2:
+    path: /product/step/2
+    defaults: { _controller: EventBundle:Product:step2 }
+    methods: [GET]
+event_product_step_3:
+    path: /product/step/3
+    defaults: { _controller: EventBundle:Product:step3 }
+    methods: [GET]
+event_product_recap:
+    path: /product/recap
+    defaults: { _controller: EventBundle:Product:recap }
     methods: [GET]
