@@ -1,4 +1,7 @@
 form:
+    vatMode:
+        et: Ext. Tax
+        ati: Incl. Tax
     field:
         private: Private field
     register:

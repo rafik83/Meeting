@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ChangeMailHandlerTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +29,7 @@ class ChangeMailHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $date  = new DateTime();
         $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $event = new Event();
+        $event = EventFactory::createEvent();
 
         // Expected
         $expectedChangeMailToken = new ChangeMailToken($user, 'toto@toto.fr', '1234567890', $date);

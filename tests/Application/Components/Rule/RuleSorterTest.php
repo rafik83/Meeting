@@ -15,12 +15,13 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RuleSorterTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideRules()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
 
         return [
             [

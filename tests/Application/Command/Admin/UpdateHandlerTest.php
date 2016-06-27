@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,9 +73,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithEvents()
     {
         $dateTime = new \DateTime();
-        $event    = new Event();
-        $event2   = new Event();
-        $event3   = new Event();
+        $event    = EventFactory::createEvent();
+        $event2   = EventFactory::createEvent();
+        $event3   = EventFactory::createEvent();
         $admin    = new Admin(
             'test@test.com',
             '__salt__',

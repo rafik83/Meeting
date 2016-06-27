@@ -3,29 +3,26 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
-use Proximum\Vimeet\Application\Command\Event\Update;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EventUpdateType extends AbstractType
+abstract class AbstractEventType extends AbstractType
 {
     /**
      * @var array
@@ -54,12 +51,12 @@ class EventUpdateType extends AbstractType
                 'multiple'          => true,
                 'preferred_choices' => $prefered,
             ])
+            ->add('domain', TextType::class, [
+                'placeholder' => 'form.event_create.children.domain.placeholder',
+            ])
+            ->add('timeZone', TimezoneType::class)
             ->add('fallback', LocaleType::class, [
                 'preferred_choices' => $prefered,
-            ])
-            ->add('translations', CollectionType::class, [
-                'entry_type' => EventUpdateTranslationType::class,
-                'label'      => false,
             ])
             ->add('logo', FileType::class, [
                 'required' => false,
@@ -89,21 +86,8 @@ class EventUpdateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        foreach ($view->children['translations'] as $translation) {
-            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locales', 'currentLocale']);
-        $resolver->setDefaults([
-            'data_class' => Update::class,
-        ]);
+        $resolver->setRequired(['currentLocale']);
     }
 }

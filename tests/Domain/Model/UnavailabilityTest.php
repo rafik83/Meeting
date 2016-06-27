@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UnavailabilityTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,7 +62,7 @@ class UnavailabilityTest extends \PHPUnit_Framework_TestCase
      */
     public function testMerge(\DateTime $a, \DateTime $b, \DateTime $c, \DateTime $d, \DateTime $e, \DateTime $f)
     {
-        $event                 = new Event();
+        $event                 = EventFactory::createEvent();
         $type                  = new Type($event);
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());
