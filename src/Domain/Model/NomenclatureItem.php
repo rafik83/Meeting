@@ -33,13 +33,19 @@ class NomenclatureItem
     private $parent;
 
     /**
+     * @var boolean
+     */
+    private $sort = true;
+
+    /**
      * NomenclatureItem constructor.
      *
      * @param string             $key
      * @param string             $label
      * @param NomenclatureItem[] $children
+     * @param bool               $sort
      */
-    public function __construct($key, $label, array $children = [])
+    public function __construct($key, $label, array $children = [], $sort = true)
     {
         $this->key      = $key;
         $this->label    = $label;
@@ -103,7 +109,9 @@ class NomenclatureItem
     {
         $children = $this->getChildren();
 
-        Nomenclature::sort($children, $locale);
+        if ($this->sort) {
+            Nomenclature::sort($children, $locale);
+        }
 
         return $children;
     }

@@ -13,3 +13,5 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             type: integer
         value:
             type: json_array
+        sort:
+            type: boolean

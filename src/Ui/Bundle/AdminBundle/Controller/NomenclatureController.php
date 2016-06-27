@@ -13,10 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Nomenclature\Create;
 use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
+use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -59,25 +61,39 @@ class NomenclatureController extends Controller
      */
     public function readAction(Request $request, Nomenclature $nomenclature)
     {
-        $form = $this->createForm(ImportType::class, [], ['submit' => true]);
+        // Handle update
+        $update     = new Update($nomenclature);
+        $updateForm = $this->createForm(UpdateType::class, $update, ['submit' => true]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
+            $this->get('tactician.commandbus')->handle($update);
+            $this->addFlash('success', 'flash.admin.nomenclature.update.success');
+
+            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+        }
+
+        // Handle import
+        $importForm = $this->createForm(ImportType::class, [], ['submit' => true]);
+
+        if ($importForm->handleRequest($request)->isSubmitted() && $importForm->isValid()) {
 
             /** @var UploadedFile $file */
-            $file    = $form->get('file')->getData();
-            $command = new Import($nomenclature, $file->getPathname());
+            $file   = $importForm->get('file')->getData();
+            $import = new Import($nomenclature, $file ? $file->getPathname() : null);
 
             try {
-                $this->get('tactician.commandbus')->handle($command);
+                $this->get('tactician.commandbus')->handle($import);
+                $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
                 return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
             } catch (ImportException $exception) {
-                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+                $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
         }
 
         return $this->render('AdminBundle:Nomenclature:read.html.twig', [
-            'form'         => $form->createView(),
+            'update_form'  => $updateForm->createView(),
+            'import_form'  => $importForm->createView(),
             'nomenclature' => $nomenclature,
         ]);
     }

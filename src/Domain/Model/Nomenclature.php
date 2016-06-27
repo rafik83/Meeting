@@ -36,17 +36,24 @@ class Nomenclature
     private $value = [];
 
     /**
+     * @var bool
+     */
+    private $sort = true;
+
+    /**
      * Nomenclature constructor.
      *
      * @param string $title
      * @param int    $depth
      * @param array  $value
+     * @param bool   $sort
      */
-    public function __construct($title, $depth = 1, array $value = [])
+    public function __construct($title, $depth = 1, array $value = [], $sort = true)
     {
         $this->title = $title;
         $this->depth = $depth;
         $this->value = $value;
+        $this->sort  = $sort;
     }
 
     /**
@@ -165,7 +172,9 @@ class Nomenclature
     {
         $children = $this->getChildren();
 
-        Nomenclature::sort($children, $locale);
+        if ($this->sort) {
+            Nomenclature::sort($children, $locale);
+        }
 
         return $children;
     }
@@ -298,6 +307,34 @@ class Nomenclature
         return !empty(array_filter($this->getChildren(), function (NomenclatureItem $item) use ($keys) {
             return in_array($item->getKey(), $keys) || $item->any($keys);
         }));
+    }
+
+    /**
+     * @return Nomenclature
+     */
+    public function enableSort()
+    {
+        $this->sort = true;
+
+        return $this;
+    }
+
+    /**
+     * @return Nomenclature
+     */
+    public function disableSort()
+    {
+        $this->sort = false;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSorted()
+    {
+        return $this->sort;
     }
 
     /**

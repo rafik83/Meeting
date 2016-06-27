@@ -887,6 +887,12 @@ services:
             - '@repository.nomenclature_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Create }
+    command.nomenclature.update_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\UpdateHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Update }
     command.nomenclature.import_handler:
         class: Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler
         arguments:

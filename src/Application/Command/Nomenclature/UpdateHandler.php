@@ -1,0 +1,42 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Nomenclature;
+
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+
+class UpdateHandler
+{
+    /**
+     * @var NomenclatureRepositoryInterface
+     */
+    private $nomenclatureRepository;
+
+    /**
+     * UpdateHandler constructor.
+     *
+     * @param NomenclatureRepositoryInterface $nomenclatureRepository
+     */
+    public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
+    {
+        $this->nomenclatureRepository = $nomenclatureRepository;
+    }
+
+    /**
+     * @var Update $command
+     */
+    public function handle(Update $command)
+    {
+        $nomenclature = $command->sort ? $command->nomenclature->enableSort() : $command->nomenclature->disableSort();
+
+        $this->nomenclatureRepository->set($nomenclature);
+    }
+}
+

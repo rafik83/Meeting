@@ -1117,6 +1117,15 @@ form:
                 label: Titre
             submit:
                 label: Enregistrer
+    nomenclature_update_type:
+        children:
+            sort:
+                label: Tri
+                choice:
+                    sort_alpha: Trier la nomenclature par ordre alphabétique
+                    sort_file: Conserver l'ordre du fichier
+            submit:
+                label: Enregistrer
     nomenclature_import_type:
         children:
             file:
