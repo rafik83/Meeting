@@ -99,7 +99,7 @@ class FeatureTranslation
      */
     public function set($title, $description)
     {
-        $this->title = $title;
+        $this->title       = $title;
         $this->description = $description;
 
         return $this;

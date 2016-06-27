@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
 
 namespace Proximum\Vimeet\Application\Command\Product;
-
 
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -20,8 +26,7 @@ abstract class AbstractCreate extends AbstractProduct
     {
         $this->event = $event;
 
-        foreach ($event->getLocales() as $locale)
-        {
+        foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
                 'title'                     => null,
                 'description'               => null,
