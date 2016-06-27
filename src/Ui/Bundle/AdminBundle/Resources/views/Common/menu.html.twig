@@ -43,6 +43,11 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
+                                        <a href="{{ path('admin_nomenclature_list') }}">
+                                            {{ 'admin.nomenclature.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{{ path('admin_template_registration_list') }}">
                                             {{ 'admin.template.registration.link'|trans }}
                                         </a>
@@ -99,6 +104,11 @@
                                     </a>
                                 </li>
                                 {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('admin_nomenclature_list') }}">
+                                            {{ 'admin.nomenclature.link'|trans }}
+                                        </a>
+                                    </li>
                                     <li>
                                         <a href="{{ path('admin_list_admin') }}">
                                             {{ 'admin.admin_list.link'|trans }}

@@ -627,3 +627,9 @@ admin:
             unlock: Débloquer
             locked: Bloqué
             unlocked: Débloqué
+    nomenclature:
+        title: Nomenclatures
+        table:
+            title: Titre
+            depth: %depth% niveau|%depth% niveaux
+        link: Nomenclatures

@@ -654,3 +654,11 @@ admin_schedule_slot_unlock:
     requirements:
         event: \d+
         meetingSlot: \d+
+
+#
+# Nomenclature
+#
+admin_nomenclature_list:
+    path: /template/nomenclature
+    defaults: { _controller: AdminBundle:Nomenclature:list }
+    methods: [GET, POST]
