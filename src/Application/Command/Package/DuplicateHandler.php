@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Package;
 
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\PackageGroup;
+use Proximum\Vimeet\Domain\Model\PackagePlanRank;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class DuplicateHandler
@@ -43,6 +45,17 @@ class DuplicateHandler
     public function handle(Duplicate $duplicate)
     {
         $package = new Package($duplicate->event, $duplicate->title, $this->dateTime);
+
+        $groupOptions = [];
+        $groupLabels = [];
+        /** @var PackageGroup $group */
+        foreach($duplicate->package->getGroups() as $group) {
+            $groupOptions[] = $group->getOptions();
+            $groupLabels[]  = $group->getLabels();
+        }
+
+        $package->setGroups($groupOptions, $groupLabels);
+        $package->setPlans($duplicate->package->getPlans());
 
         $this->packageRepository->add($package);
     }

@@ -29,4 +29,12 @@ class Duplicate
      * @var Package
      */
     public $package;
+
+    /**
+     * @param Package $package
+     */
+    public function __construct(Package $package)
+    {
+        $this->package = $package;
+    }
 }

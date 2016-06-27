@@ -98,7 +98,7 @@ class PackageController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $duplicate = new Duplicate();
+        $duplicate = new Duplicate($package);
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
             'action' => $this->generateUrl('admin_package_duplicate', ['package' => $package->getId()]),
             'submit' => true, 'user' => $this->getUser(),

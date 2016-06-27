@@ -97,13 +97,6 @@ class Package
         $this->translations = new ArrayCollection();
     }
 
-    public static function duplicatePackage(Event $event, $title, Package $duplicatePackage, \DateTimeInterface $createdAt)
-    {
-
-
-        return $package;
-    }
-
     /**
      * Get id
      *
@@ -384,6 +377,18 @@ class Package
     public function setParticipant($participant)
     {
         $this->participant = $participant;
+
+        return $this;
+    }
+
+    /**
+     * @param $event
+     *
+     * @return Package
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
 
         return $this;
     }
