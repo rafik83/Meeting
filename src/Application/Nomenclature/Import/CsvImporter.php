@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\EmptyOrMalformedFileException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
@@ -59,7 +60,11 @@ class CsvImporter implements ImporterInterface
             }
         }
 
-        $nomenclature->update(max(array_keys($depths)), $values);
+        $depth = max(array_keys($depths));
+
+        $this->checkDepth($values, $depth);
+
+        $nomenclature->update($depth, $values);
     }
 
     /**
@@ -148,14 +153,39 @@ class CsvImporter implements ImporterInterface
             throw new FileNotFoundException('File not found.');
         }
 
+        // Parse csv to array
         $csv = array_map(function ($line) {
             return str_getcsv($line, ';');
         }, file($filename));
+
+        // Filter empty line
+        $csv = array_filter($csv, function ($line) {
+            return count($this->filterEmpty($line)) > 0;
+        });
 
         if (empty($csv)) {
             throw new EmptyOrMalformedFileException('Empty or malformed file.');
         }
 
         return $csv;
+    }
+
+    /**
+     * @param array $values
+     * @param int   $depth
+     *
+     * @throws DepthException
+     */
+    private function checkDepth(array $values, $depth)
+    {
+        foreach ($values as $value) {
+            if ($depth > 1 && !isset($value['children'])) {
+                throw new DepthException('Missing children.');
+            }
+
+            if (isset($value['children'])) {
+                $this->checkDepth($value['children'], $depth - 1);
+            }
+        }
     }
 }
