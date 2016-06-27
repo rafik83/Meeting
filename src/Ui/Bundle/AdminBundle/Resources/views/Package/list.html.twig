@@ -10,36 +10,37 @@
     </p>
 
     {{ form_start(form) }}
-        <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="create-modal-label">{{ 'admin.package.create'|trans }}</h4>
-                    </div>
-                    <div class="modal-body">
-                        {{ form_errors(form) }}
-                        {{ form_row(form.title) }}
-                        {{ form_row(form.event) }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            {{ 'admin.cancel'|trans }}
-                        </button>
-                        {{ form_widget(form.submit) }}
-                    </div>
+    <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="create-modal-label">{{ 'admin.package.create'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_errors(form) }}
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.event) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {{ 'admin.cancel'|trans }}
+                    </button>
+                    {{ form_widget(form.submit) }}
                 </div>
             </div>
         </div>
+    </div>
     {{ form_end(form) }}
 
     <table class="table">
         <thead>
-            <tr>
-                <th>{{ 'admin.package.table.column.title'|trans }}</th>
-                <th>{{ 'admin.package.table.column.event'|trans }}</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>{{ 'admin.package.table.column.title'|trans }}</th>
+            <th>{{ 'admin.package.table.column.event'|trans }}</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
         {% for package in packages %}
@@ -47,7 +48,11 @@
                 <td>{{ package.title }}</td>
                 <td>{{ package.event.title }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_package_update', { 'package': package.id }) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ path('admin_package_duplicate', { 'package': package.id }) }}" class="btn btn-primary btn-sm" data-target="#duplicate-modal" data-toggle="modal">
+                        {{ 'admin.package.duplicate'|trans }}
+                    </a>
+                    <a href="{{ path('admin_package_update', { 'package': package.id }) }}"
+                       class="btn btn-primary btn-sm">
                         {{ 'admin.package.update'|trans }}
                     </a>
                 </td>
@@ -61,4 +66,12 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="modal fade clear-on-hidden-modal" id="duplicate-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    
 {% endblock %}
