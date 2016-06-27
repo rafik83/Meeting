@@ -31,7 +31,7 @@ class SelectOptionsHandler
     public function __construct(CartManager $cartManager, \DateTimeInterface $now)
     {
         $this->cartManager = $cartManager;
-        $this->now = $now;
+        $this->now         = $now;
     }
 
     /**

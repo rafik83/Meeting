@@ -27,7 +27,7 @@ class OptionsValidator extends ConstraintValidator
     public function __construct(QuantityMaxGuesser $quantityMaxGuesser, \DateTimeInterface $now)
     {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
-        $this->now = $now;
+        $this->now                = $now;
     }
 
     /**
