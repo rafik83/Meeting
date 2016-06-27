@@ -3,10 +3,10 @@
 {% block form_title 'admin.event.billing.configuration.title'|trans %}
 
 {% block form_content %}
-    {{ form_row(form.iban) }}
-    {{ form_row(form.billingAddress) }}
-    {{ form_row(form.paymentCondition) }}
-    {{ form_row(form.footers) }}
+    {{ form_row(form.ibanTranslations) }}
+    {{ form_row(form.billingAddressTranslations) }}
+    {{ form_row(form.paymentConditionTranslations) }}
+    {{ form_row(form.footerTranslations) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

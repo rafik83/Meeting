@@ -13,10 +13,13 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
             type: string
         billingAddress:
             type: string
+            nullable: true
         paymentCondition:
             type: string
-        footers:
+            nullable: true
+        footer:
             type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

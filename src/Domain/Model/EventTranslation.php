@@ -45,7 +45,7 @@ class EventTranslation
     /**
      * @var string
      */
-    private $footers;
+    private $footer;
 
     /**
      * @param Event  $event
@@ -148,17 +148,17 @@ class EventTranslation
      */
     public function getFooters()
     {
-        return $this->footers;
+        return $this->footer;
     }
 
     /**
-     * @param string $footers
+     * @param string $footer
      *
      * @return EventTranslation
      */
-    public function setFooters($footers)
+    public function setFooters($footer)
     {
-        $this->footers = $footers;
+        $this->footer = $footer;
 
         return $this;
     }

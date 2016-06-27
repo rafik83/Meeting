@@ -22,27 +22,27 @@ class BillingConfiguration
     /**
      * @var string
      */
-    public $iban;
-
-    /**
-     * @var string
-     */
-    public $billingAddress;
-
-    /**
-     * @var string
-     */
-    public $paymentCondition;
-
-    /**
-     * @var string
-     */
-    public $footers;
-
-    /**
-     * @var string
-     */
     public $legalInfo;
+
+    /**
+     * @var array
+     */
+    public $ibanTranslations = [];
+
+    /**
+     * @var array
+     */
+    public $billingAddressTranslations = [];
+
+    /**
+     * @var array
+     */
+    public $paymentConditionTranslations = [];
+
+    /**
+     * @var array
+     */
+    public $footerTranslations = [];
 
     /**
      * BillingConfiguration constructor.
@@ -53,10 +53,24 @@ class BillingConfiguration
     {
         $this->event = $event;
 
-        $this->iban             = $event->getConfiguration()->getIban();
-        $this->billingAddress   = $event->getConfiguration()->getBillingAddress();
-        $this->paymentCondition = $event->getConfiguration()->getPaymentCondition();
-        $this->footers          = $event->getConfiguration()->getFooters();
-        $this->legalInfo        = $event->getConfiguration()->getLegalInfo();
+        $this->legalInfo = $event->getConfiguration()->getLegalInfo();
+
+        foreach ($event->getLocales() as $locale) {
+            $this->ibanTranslations[$locale] = [
+                'iban' => null,
+            ];
+
+            $this->billingAddressTranslations[$locale] = [
+                'address' => null,
+            ];
+
+            $this->paymentConditionTranslations[$locale] = [
+                'paymentCondition' => null,
+            ];
+
+            $this->footerTranslations[$locale] = [
+                'footer' => null,
+            ];
+        }
     }
 }

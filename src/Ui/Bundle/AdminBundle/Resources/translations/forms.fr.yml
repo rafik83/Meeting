@@ -208,6 +208,26 @@ form:
             footers:
                 label: Pied de page
                 placeholder: Exemple adresse, siret, capital ...
+            billingAddressTranslations:
+                prototype:
+                    children:
+                        address:
+                            label: Adresse de paiement
+            paymentConditionTranslations:
+                prototype:
+                    children:
+                        paymentCondition:
+                            label: Condition de paiement
+            footerTranslations:
+                prototype:
+                    children:
+                        footer:
+                            label: Pied de page
+            ibanTranslations:
+                prototype:
+                    children:
+                        iban:
+                            label: Iban
             submit:
                 label: Enregistrer
     who_see_who:
