@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class NomenclatureController extends Controller
@@ -20,6 +21,13 @@ class NomenclatureController extends Controller
 
         return $this->render('AdminBundle:Nomenclature:list.html.twig', [
             'nomenclatures' => $nomenclatures,
+        ]);
+    }
+
+    public function readAction(Nomenclature $nomenclature)
+    {
+        return $this->render('AdminBundle:Nomenclature:read.html.twig', [
+            'nomenclature' => $nomenclature,
         ]);
     }
 }

@@ -632,4 +632,5 @@ admin:
         table:
             title: Titre
             depth: %depth% niveau|%depth% niveaux
+            read: Voir
         link: Nomenclatures
