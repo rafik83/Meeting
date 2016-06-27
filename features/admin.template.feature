@@ -1,3 +1,5 @@
+@admin
+
 Feature: Manage templates
   As an Admin, I need to be able to add, update, duplicate, see templates
 

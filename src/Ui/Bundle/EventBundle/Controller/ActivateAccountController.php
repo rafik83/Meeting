@@ -14,7 +14,8 @@ use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,12 +25,12 @@ class ActivateAccountController extends Controller
 {
     /**
      * @param Request              $request
-     * @param EventView            $eventView
+     * @param EventDomain          $eventDomain
      * @param ActivateAccountToken $activateAccountToken
      *
      * @return RedirectResponse|Response
      */
-    public function passwordAction(Request $request, EventView $eventView, ActivateAccountToken $activateAccountToken)
+    public function passwordAction(Request $request, EventDomain $eventDomain, ActivateAccountToken $activateAccountToken)
     {
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();
@@ -59,8 +60,8 @@ class ActivateAccountController extends Controller
         }
 
         return $this->render('EventBundle:ActivateAccount:password.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView()
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView()
         ]);
     }
 

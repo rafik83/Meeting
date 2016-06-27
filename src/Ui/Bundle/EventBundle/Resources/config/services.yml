@@ -3,11 +3,11 @@ services:
     # Params converters
     #
     vimeet_app.param_converter.event_domain_param_converter:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventViewDomainParamConverter
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomainParamConverter
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
-            - { name: 'request.param_converter', priority: 2, converter: 'event_domain_param_converter' }
+            - { name: 'request.param_converter', priority: -1, converter: 'event_domain_param_converter' }
     vimeet_app.param_converter.participant_type_view_param_converter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\TypeViewParamConverter
         arguments:
@@ -140,6 +140,12 @@ services:
             - '@package.planning.quantity_max_guesser'
         tags:
             - { name: form.type }
+    form_type_package.options_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: form.type }
 
     #
     # Event Listener
@@ -243,6 +249,12 @@ services:
     #
     validator.package.planning_quantity_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\PlanningQuantityValidator
+        arguments:
+            - '@package.planning.quantity_max_guesser'
+        tags:
+            - { name: validator.constraint_validator, alias: alias_name }
+    validator.package.options_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
         tags:

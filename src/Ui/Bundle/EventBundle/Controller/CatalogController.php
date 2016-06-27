@@ -12,9 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,21 +25,21 @@ class CatalogController extends Controller
     /**
      * Display catalog categories of an event.
      *
-     * @param Request   $request
-     * @param EventView $eventView
+     * @param Request     $request
+     * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function categoriesAction(Request $request, EventView $eventView)
+    public function categoriesAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
-            ->getCategoryViewsByEventAndUser($eventView->id, $this->getUser(), $request->getLocale());
+            ->getCategoryViewsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
 
         return $this->render('EventBundle:Catalog:categories.html.twig', [
-            'eventView'  => $eventView,
+            'event'      => $eventDomain->getEvent(),
             'categories' => $categories,
         ]);
     }
@@ -46,12 +47,12 @@ class CatalogController extends Controller
     /**
      * Display sheets matching category.
      *
-     * @param EventView    $eventView
+     * @param EventDomain  $eventDomain
      * @param CategoryView $categoryView
      *
      * @return Response
      */
-    public function categoryAction(EventView $eventView, CategoryView $categoryView)
+    public function categoryAction(EventDomain $eventDomain, CategoryView $categoryView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -70,7 +71,7 @@ class CatalogController extends Controller
         });
 
         return $this->render('EventBundle:Catalog:category.html.twig', [
-            'eventView'    => $eventView,
+            'event'        => $eventDomain->getEvent(),
             'categoryView' => $categoryView,
             'sheets'       => $sheets,
         ]);
@@ -79,13 +80,13 @@ class CatalogController extends Controller
     /**
      * Display a sheet.
      *
-     * @param EventView    $eventView
+     * @param EventDomain  $eventDomain
      * @param CategoryView $categoryView
      * @param Sheet        $sheet
      *
      * @return Response
      */
-    public function sheetAction(EventView $eventView, CategoryView $categoryView, Sheet $sheet)
+    public function sheetAction(EventDomain $eventDomain, CategoryView $categoryView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -99,7 +100,7 @@ class CatalogController extends Controller
                 ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
 
             return $this->render('EventBundle:Catalog:sheet.html.twig', [
-                'eventView'                     => $eventView,
+                'event'                         => $eventDomain->getEvent(),
                 'categoryView'                  => $categoryView,
                 'sheet'                         => $sheetView,
                 'sheetAllowedForMeetingRequest' => $sheetAllowedForMeetingRequest,

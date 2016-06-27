@@ -1,3 +1,5 @@
+@admin
+
 Feature: Login admin
   I need to be able to login to my admin account
 

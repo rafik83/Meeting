@@ -1,3 +1,5 @@
+@admin
+
 Feature: Handle Operator
   I need to be able to create, list and update an Operator
 

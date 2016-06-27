@@ -1,3 +1,5 @@
+@event
+
 Feature: Meeting Request / Proposition
   I need to be able to see the meeting request and proposition
 

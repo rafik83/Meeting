@@ -17,11 +17,12 @@ use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThi
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -37,23 +38,23 @@ class SheetController extends Controller
      * Display the sheet in the choosen locale (independently from the interface locale).
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      *
      * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventView $eventView, $locale = null)
+    public function sheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $locale        = $locale ? : $request->getLocale();
-        $sheet         = $this->getUserSheet($eventView, $locale);
+        $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'eventView'     => $eventView,
+            'event'         => $eventDomain->getEvent(),
             'sheet'         => $sheet,
             'taggedData'    => $taggedData,
             'locale'        => $locale,
@@ -64,21 +65,17 @@ class SheetController extends Controller
     }
 
     /**
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     * @param string    $locale
+     * @param Event  $event
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
      * @return array
      */
-    private function sheetInfos(EventView $eventView, Sheet $sheet, $locale)
+    private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
-        $nomenclatures = $this->get('repository.nomenclature_repository')->findByEvent($eventView->getId());
-        $participants  = $this->get('tactician.commandbus.query')->handle(
-            new CardListViewQuery(
-                $sheet,
-                $this->getUser(),
-                $locale
-            )
-        );
+        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
+        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale);
+        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
 
         $registrationTemplateData = $this
             ->get('template.template_data_factory')
@@ -86,24 +83,20 @@ class SheetController extends Controller
 
         $taggedData = $registrationTemplateData->getAllTaggedDatas();
 
-        return [
-            $nomenclatures,
-            $participants,
-            $taggedData,
-        ];
+        return [$nomenclatures, $participants, $taggedData];
     }
 
     /**
-     * @param EventView $eventView
-     * @param string    $locale
+     * @param Event  $event
+     * @param string $locale
      *
      * @return Sheet
      */
-    private function getUserSheet(EventView $eventView, $locale)
+    private function getUserSheet(Event $event, $locale)
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($this->getUser(), $eventView);
+            ->getSheetByUserAndEvent($this->getUser(), $event);
 
         if (empty($sheets)) {
             throw $this->createNotFoundException('Sheet not found.');
@@ -115,7 +108,7 @@ class SheetController extends Controller
             throw $this->createNotFoundException('Sheet not found.');
         }
 
-        if ($sheet->getEvent()->getId() !== $eventView->getId()) {
+        if ($sheet->getEvent() !== $event) {
             throw $this->createNotFoundException('Sheet not found');
         }
 
@@ -123,7 +116,7 @@ class SheetController extends Controller
             throw $this->createNotFoundException('No participant for this user is attached on this sheet');
         }
 
-        if (!$eventView->hasLocale($locale)) {
+        if (!$event->hasLocale($locale)) {
             throw $this->createNotFoundException('Locale not available for this event.');
         }
 
@@ -133,18 +126,18 @@ class SheetController extends Controller
     /**
      * Render the form of an object. Loaded by ajax from the sheet.
      *
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      * @param string    $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function formAction(EventView $eventView, $locale, $key)
+    public function formAction(EventDomain $eventDomain, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventView, $locale);
+        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
@@ -195,48 +188,52 @@ class SheetController extends Controller
     /**
      * Update an object and display the sheet with the modal in case of form error.
      *
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param string    $locale
-     * @param string    $key
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param string      $locale
+     * @param string      $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function updateAction(Request $request, EventView $eventView, $locale, $key)
+    public function updateAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventView, $locale);
+        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($object instanceof Template\Object\Image) {
-                $file = $form->get('file')->getData();
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                if ($object instanceof Template\Object\Image) {
+                    $file = $form->get('file')->getData();
 
-                if ($file instanceof UploadedFile) {
-                    $image        = $object->getImage();
-                    $fileStorage  = $this->get('adapter.local_file_storage');
+                    if ($file instanceof UploadedFile) {
+                        $image       = $object->getImage();
+                        $fileStorage = $this->get('adapter.local_file_storage');
 
-                    if (null !== $image) {
-                        $fileStorage->remove($image);
+                        if (null !== $image) {
+                            $fileStorage->remove($image);
+                        }
+
+                        $newImage = $fileStorage->upload($file);
+                        $object->setImage($newImage);
                     }
-
-                    $newImage = $fileStorage->upload($file);
-                    $object->setImage($newImage);
                 }
+
+                $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
+
+                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+            } else {
+                $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
             }
-
-            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
-
-            return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $twig = $object->getType() === 'nomenclature'
@@ -244,7 +241,7 @@ class SheetController extends Controller
             : 'EventBundle:Sheet:sheet.html.twig';
 
         return $this->render($twig, [
-            'eventView'     => $eventView,
+            'event'         => $eventDomain->getEvent(),
             'sheet'         => $sheet,
             'templateData'  => $templateData,
             'locale'        => $locale,
@@ -260,22 +257,22 @@ class SheetController extends Controller
     /**
      * Render the form of the addition of a participant. Loaded by ajax from the sheet.
      *
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      * @param string    $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function addParticipantAction(EventView $eventView, $locale, $key)
+    public function addParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventView, $locale);
+        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        $addParticipant = new Add($sheet, $eventView, $locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
@@ -291,20 +288,20 @@ class SheetController extends Controller
      * Add a participant and display the sheet with the modal in case of form error.
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      * @param string    $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function handleAddParticipantAction(Request $request, EventView $eventView, $locale, $key)
+    public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet = $this->getUserSheet($eventView, $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
-        $addParticipant = new Add($sheet, $eventView, $locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
@@ -323,12 +320,12 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'eventView'        => $eventView,
+            'event'            => $eventDomain->getEvent(),
             'sheet'            => $sheet,
             'templateData'     => $templateData,
             'locale'           => $locale,
@@ -342,18 +339,18 @@ class SheetController extends Controller
     }
 
     /**
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      * @param string    $key
      *
      * @throws \Exception
      * @return array
      */
-    private function removeParticipantData($eventView, $locale, $key)
+    private function removeParticipantData($eventDomain, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet = $this->getUserSheet($eventView, $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -375,27 +372,21 @@ class SheetController extends Controller
     /**
      * Render the form to remove participant. Loaded by ajax from the sheet.
      *
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      * @param string    $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function removeParticipantAction(EventView $eventView, $locale, $key)
+    public function removeParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
-        list ($form, $sheet) = $this->removeParticipantData($eventView, $locale, $key);
+        list ($form, $sheet) = $this->removeParticipantData($eventDomain, $locale, $key);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
-        $participants = $this->get('tactician.commandbus.query')->handle(
-            new CardListViewQuery(
-                $sheet,
-                $this->getUser(),
-                $locale,
-                false
-            )
-        );
+        $templateData      = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $label             = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
+        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
 
         return $this->render('EventBundle:Participant:remove.html.twig', [
             'uid'          => $key,
@@ -409,16 +400,16 @@ class SheetController extends Controller
      * Remove a participant and display the sheet with the modal in case of form error.
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param string    $locale
      * @param string    $key
      *
      * @return Response
      * @throws \Exception
      */
-    public function handleRemoveParticipantAction(Request $request, EventView $eventView, $locale, $key)
+    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        list ($form, $sheet, $remove) = $this->removeParticipantData($eventView, $locale, $key);
+        list ($form, $sheet, $remove) = $this->removeParticipantData($eventDomain, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -432,12 +423,12 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the remove participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventView, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'eventView'        => $eventView,
+            'event'        => $eventDomain->getEvent(),
             'sheet'            => $sheet,
             'templateData'     => $templateData,
             'locale'           => $locale,

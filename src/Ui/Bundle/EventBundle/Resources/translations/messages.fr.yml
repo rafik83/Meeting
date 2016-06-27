@@ -97,6 +97,20 @@ package:
         validate: Valider
     options:
         included: inclus
-
+    product:
+        selectOptions: Sélectionner vos options
+        unitPriceLabel: Prix unitaire
+        unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
+        totalPrice: '<span class="product-total-price">%price%</span> <sup>%currency% %vatMode%</sup>'
+        label: Intitulé & descriptions
+        quantity: Quantité
+        total: Total
+        quantityMax: Quantité maximum atteinte
+        quantityMin: Quantité minimum atteinte
+        validate: Valider
+        available: Disponible
+        availability: '%availabilityCurrent% sur %availabilityMax%'
+        outOfStock: Epuisé
+        subjectedToValidationHelp: Sous réserve de validation
 billing_info:
     title: Info de facturation

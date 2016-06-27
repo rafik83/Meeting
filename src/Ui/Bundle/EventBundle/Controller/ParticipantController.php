@@ -18,10 +18,10 @@ use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template;
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AvatarType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\CompanyType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,13 +32,13 @@ class ParticipantController extends Controller
 {
     /**
      * @param Request     $request
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      *
      * @return Response
      */
-    public function seeAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    public function seeAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -66,7 +66,7 @@ class ParticipantController extends Controller
             'avatarTemplate'  => $avatarTemplate,
             'card'            => $card,
             'companyTemplate' => $companyTemplate,
-            'eventView'       => $eventView,
+            'event'           => $eventDomain->getEvent(),
             'participant'     => $participant,
             'profileTemplate' => $profileTemplate,
             'sheet'           => $sheet,
@@ -75,13 +75,13 @@ class ParticipantController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      *
      * @return Response|RedirectResponse
      */
-    public function updateProfileAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    public function updateProfileAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -102,7 +102,7 @@ class ParticipantController extends Controller
         $form = $this->createForm(ProfileType::class, $profileTemplate, [
             'locale'   => $locale,
             'template' => $profileTemplate,
-            'country'  => $eventView->country,
+            'country'  => $eventDomain->getEvent()->getCountry(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -120,21 +120,21 @@ class ParticipantController extends Controller
         }
 
         return $this->render('EventBundle:Participant:updateProfile.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView()
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView()
         ]);
     }
 
     /**
      * @param Request     $request
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      * @param string      $key
      *
      * @return Response|RedirectResponse
      */
-    public function updateAvatarAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant, $key)
+    public function updateAvatarAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant, $key)
     {
         // to do: voter with sheet and user
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -198,22 +198,22 @@ class ParticipantController extends Controller
         }
 
         return $this->render('EventBundle:Participant:updateAvatar.html.twig', [
-            'eventView' => $eventView,
-            'card'      => $card,
-            'form'      => $form->createView(),
-            'key'       => $key,
+            'event' => $eventDomain->getEvent(),
+            'card'  => $card,
+            'form'  => $form->createView(),
+            'key'   => $key,
         ]);
     }
 
     /**
      * @param Request     $request
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      *
      * @return Response|RedirectResponse
      */
-    public function updateCompanyAction(Request $request, EventView $eventView, Sheet $sheet, Participant $participant)
+    public function updateCompanyAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -234,7 +234,7 @@ class ParticipantController extends Controller
         $form = $this->createForm(CompanyType::class, $template, [
             'locale'   => $locale,
             'template' => $template,
-            'country'  => $eventView->country,
+            'country'  => $eventDomain->getEvent()->getCountry(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -252,8 +252,8 @@ class ParticipantController extends Controller
         }
 
         return $this->render('EventBundle:Participant:updateCompany.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView()
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView()
         ]);
     }
 }

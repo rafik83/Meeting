@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -58,12 +59,12 @@ interface ParticipantRepositoryInterface
     public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 
     /**
-     * @param int $eventId
-     * @param int $userId
+     * @param Event $event
+     * @param User  $user
      *
      * @return array
      */
-    public function getAllParticipantForUser($eventId, $userId);
+    public function getAllParticipantForUser(Event $event, User $user);
 
     /**
      * @param int            $userId
