@@ -106,8 +106,11 @@ class PackageController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($duplicate);
+            $this->addFlash('success', 'flash.admin.template.package.duplicate.success');
 
-            return $this->redirectToRoute('admin_package_list');
+            return $this->redirectToRoute('admin_package_list', [
+                'package' => $result
+            ]);
         }
 
         return $this->render('AdminBundle:Package:duplicate.html.twig', [

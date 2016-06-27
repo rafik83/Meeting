@@ -54,6 +54,7 @@ class DuplicateHandler
     {
         $package = new Package($duplicate->event, $duplicate->title, $this->dateTime);
 
+        // handle translations
         foreach ($duplicate->event->getLocales() as $locale) {
             $package->translate(
                 $locale,
@@ -63,6 +64,7 @@ class DuplicateHandler
             );
         }
 
+        // handle package group
         $groupOptions = [];
         $groupLabels = [];
         /** @var PackageGroup $group */
@@ -72,6 +74,8 @@ class DuplicateHandler
         }
 
         $package->setGroups($groupOptions, $groupLabels);
+
+        // handle package plans
         $package->setPlans($duplicate->package->getPlans());
 
         $this->packageRepository->add($package);

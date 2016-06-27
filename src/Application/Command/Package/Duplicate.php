@@ -36,5 +36,6 @@ class Duplicate
     public function __construct(Package $package)
     {
         $this->package = $package;
+        $this->event   = $package->getEvent();
     }
 }

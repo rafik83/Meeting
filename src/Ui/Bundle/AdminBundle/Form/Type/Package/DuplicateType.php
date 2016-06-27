@@ -11,9 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Duplicate;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,12 +26,6 @@ class DuplicateType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-            ])
-            ->add('event', EventChoiceType::class, [
-                'required'         => true,
-                'repositoryMethod' => function (EventRepositoryInterface $eventRepository) use ($options) {
-                    return $eventRepository->getEventsByAdmin($options['user']);
-                },
             ])
         ;
     }
