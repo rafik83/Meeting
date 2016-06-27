@@ -9,3 +9,18 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
         scheduleScale:
             type: integer
+        iban:
+            type: string
+            nullable: true
+        billingAddress:
+            type: string
+            nullable: true
+        paymentCondition:
+            type: string
+            nullable: true
+        footers:
+            type: string
+            nullable: true
+        legalInfo:
+            type: string
+            nullable: true

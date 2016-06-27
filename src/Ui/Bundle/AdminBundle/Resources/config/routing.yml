@@ -120,6 +120,13 @@ admin_event_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:update }
 
+admin_event_billing_configuration:
+    path: /event/{event}/billing/configuration
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event:billingConfiguration }
+
 #
 # Content
 #

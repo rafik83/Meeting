@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -33,8 +35,7 @@ class EventController extends Controller
         $events = $this
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($this->getUser());
-
-
+        
         return $this->render('AdminBundle:Event:list.html.twig', [
             'events' => $events,
         ]);
@@ -128,6 +129,30 @@ class EventController extends Controller
         return $this->render('AdminBundle:Event:update.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function billingConfigurationAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $billingConfiguration = new BillingConfiguration($event);
+        $form = $this->createForm(BillingConfigurationType::class, $billingConfiguration, [
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+        }
+
+        return $this->render('AdminBundle:Event:billingConfiguration.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }
