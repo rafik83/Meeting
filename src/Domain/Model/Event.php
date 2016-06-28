@@ -219,6 +219,46 @@ class Event implements EventInterface
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getIban($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getIban() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getBillingAddress($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBillingAddress() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getPaymentCondition($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentCondition() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getFooter($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getFooter() : '';
+    }
+
+    /**
      * @return string
      */
     public function getTimeZone()

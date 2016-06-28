@@ -35,6 +35,11 @@ class EventTranslation
     /**
      * @var string
      */
+    private $iban;
+
+    /**
+     * @var string
+     */
     private $billingAddress;
 
     /**
@@ -106,6 +111,26 @@ class EventTranslation
     /**
      * @return string
      */
+    public function getIban()
+    {
+        return $this->iban;
+    }
+
+    /**
+     * @param string $iban
+     *
+     * @return EventTranslation
+     */
+    public function setIban($iban)
+    {
+        $this->iban = $iban;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getBillingAddress()
     {
         return $this->billingAddress;
@@ -146,7 +171,7 @@ class EventTranslation
     /**
      * @return string
      */
-    public function getFooters()
+    public function getFooter()
     {
         return $this->footer;
     }
@@ -156,7 +181,7 @@ class EventTranslation
      *
      * @return EventTranslation
      */
-    public function setFooters($footer)
+    public function setFooter($footer)
     {
         $this->footer = $footer;
 

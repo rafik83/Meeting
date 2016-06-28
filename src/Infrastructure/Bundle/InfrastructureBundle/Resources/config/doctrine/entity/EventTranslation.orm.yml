@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
             type: text
         locale:
             type: string
+        iban:
+            type: string
+            nullable: true
         billingAddress:
             type: string
             nullable: true

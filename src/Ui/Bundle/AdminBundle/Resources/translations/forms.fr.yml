@@ -199,35 +199,18 @@ form:
                 label: Enregistrer
     event_billing_configuration:
         children:
-            iban:
-                label: Iban
-            billingAddress:
-                label: Adresse de paiement
-            paymentCondition:
-                label: Conditions de paiement
-            footers:
-                label: Pied de page
-                placeholder: Exemple adresse, siret, capital ...
-            billingAddressTranslations:
-                prototype:
-                    children:
-                        address:
-                            label: Adresse de paiement
-            paymentConditionTranslations:
-                prototype:
-                    children:
-                        paymentCondition:
-                            label: Condition de paiement
-            footerTranslations:
-                prototype:
-                    children:
-                        footer:
-                            label: Pied de page
-            ibanTranslations:
+            translations:
                 prototype:
                     children:
                         iban:
                             label: Iban
+                        billingAddress:
+                            label: Adresse de paiement
+                        paymentCondition:
+                            label: Conditions de paiement
+                        footer:
+                            label: Pied de page
+                            placeholder: Exemple adresse, siret, capital ...
             submit:
                 label: Enregistrer
     who_see_who:

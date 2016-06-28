@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class FootersTranslationType extends AbstractType
+class TranslationType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -22,6 +22,15 @@ class FootersTranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('iban', TextType::class, [
+                'required' => false,
+            ])
+            ->add('billingAddress', TextType::class, [
+                'required' => true,
+            ])
+            ->add('paymentCondition', TextType::class, [
+                'required' => false
+            ])
             ->add('footer', TextType::class, [
                 'required'    => false,
                 'placeholder' => 'form.event_billing_configuration.children.footers.placeholder',
@@ -34,6 +43,7 @@ class FootersTranslationType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'event_footers_address_translation';
+        return 'event_billing_configuration_translations';
     }
+
 }

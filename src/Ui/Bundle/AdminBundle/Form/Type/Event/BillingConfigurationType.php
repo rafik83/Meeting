@@ -11,10 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\AddressTranslationType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\FootersTranslationType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\IbanTranslationType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\PaymentConditionTranslationType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\TranslationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,20 +28,8 @@ class BillingConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ibanTranslations', CollectionType::class, [
-                'entry_type' => IbanTranslationType::class,
-                'label'      => false,
-            ])
-            ->add('billingAddressTranslations', CollectionType::class, [
-                'entry_type' => AddressTranslationType::class,
-                'label'      => false,
-            ])
-            ->add('paymentConditionTranslations', CollectionType::class, [
-                'entry_type' => PaymentConditionTranslationType::class,
-                'label'      => false,
-            ])
-            ->add('footerTranslations', CollectionType::class, [
-                'entry_type' => FootersTranslationType::class,
+            ->add('translations', CollectionType::class, [
+                'entry_type' => TranslationType::class,
                 'label'      => false,
             ])
         ;
@@ -55,19 +40,7 @@ class BillingConfigurationType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        foreach ($view->children['billingAddressTranslations'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
-        }
-
-        foreach ($view->children['paymentConditionTranslations'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
-        }
-
-        foreach ($view->children['footerTranslations'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
-        }
-
-        foreach ($view->children['ibanTranslations'] as $translation) {
+        foreach ($view->children['translations'] as $translation) {
             $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
         }
     }

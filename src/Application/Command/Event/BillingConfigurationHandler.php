@@ -35,13 +35,8 @@ class BillingConfigurationHandler
      */
     public function handle(BillingConfiguration $billingConfiguration)
     {
-        $billingConfiguration->event->getConfiguration()->setBillingConfiguration(
-            $billingConfiguration->iban,
-            $billingConfiguration->billingAddress,
-            $billingConfiguration->paymentCondition,
-            $billingConfiguration->footers,
-            $billingConfiguration->legalInfo
-        );
+        $billingConfiguration->event->getConfiguration()
+                                    ->setLegalInfo($billingConfiguration->legalInfo);
 
         foreach ($billingConfiguration->event->getLocales() as $locale) {
             if (!$billingConfiguration->event->getTranslations()->get($locale)) {
@@ -51,6 +46,16 @@ class BillingConfigurationHandler
             }
         }
 
+        foreach ($billingConfiguration->translations as $locale => $translation) {
+            /** @var EventTranslation $eventTranslation */
+            $eventTranslation = $billingConfiguration->event->getTranslations()->get($locale);
+
+            $eventTranslation->setIban($billingConfiguration->translations[$locale]['iban']);
+            $eventTranslation->setPaymentCondition($billingConfiguration->translations[$locale]['paymentCondition']);
+            $eventTranslation->setBillingAddress($billingConfiguration->translations[$locale]['billingAddress']);
+            $eventTranslation->setFooter($billingConfiguration->translations[$locale]['footer']);
+        }
+        
         $this->eventRepository->add($billingConfiguration->event);
 
         return $billingConfiguration->event;
