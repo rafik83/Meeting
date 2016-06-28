@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\PaymentConditions;
 
-use Proximum\Vimeet\Domain\Model;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class Update
 {
     /**
-     * @var Model\Event
+     * @var Event
      */
     public $event;
 
@@ -41,9 +41,9 @@ class Update
 
     /**
      * Update constructor.
-     * @param Model\Event $event
+     * @param Event $event
      */
-    public function __construct(Model\Event $event)
+    public function __construct(Event $event)
     {
         $this->event             = $event;
         $this->allowDeposit      = $event->getConfiguration()->isAllowDeposit();

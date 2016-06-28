@@ -19,9 +19,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $dateTime = new \DateTime();
+        $dateTime  = new \DateTime();
         $dateTime2 = new \DateTime();
-        $event = new Event();
+        $event     = new Event();
         $event->getConfiguration()->updatePaymentConditions(false, $dateTime, 500, 50);
 
         $update = new Update($event);

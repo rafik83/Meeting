@@ -22,13 +22,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractType
 {
+    /**
+     * @{inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /**
          * @var Event
          */
         $event = $options['event'];
-        
+
         $builder
             ->add('allowDeposit', CheckboxType::class)
             ->add('depositUntil', DateTimePickerType::class, [
@@ -44,6 +47,9 @@ class UpdateType extends AbstractType
         ;
     }
 
+    /**
+     * @{inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
