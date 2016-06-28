@@ -207,6 +207,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.cart_step_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\CartStepRepository
+        arguments:
+            - '@doctrine'
 
     #
     # Fixture providers
