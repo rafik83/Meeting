@@ -1281,6 +1281,41 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
 
+    query.package.summary.product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler
+        arguments:
+            - '@cart_manager'
+    query.package.summary.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.planning_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.plan_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.participant_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler
+        arguments:
+            - '@query.package.summary.plan_group_view_query_handler'
+            - '@query.package.summary.participant_group_view_query_handler'
+            - '@query.package.summary.planning_group_view_query_handler'
+            - '@query.package.summary.group_view_query_handler'
+    query.package.summary.summary_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQueryHandler
+        arguments:
+            - '@query.package.summary.groups_view_query_handler'
+            - '@package.specification.vat_applicable'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
+
     #
     # Elastic Transformer
     #
