@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
@@ -77,10 +76,7 @@ class CreateHandler
             if ($this->typeRepository->typeExists($create->event, $locale, $translation['title'])) {
                 $localesTitleAlreadyExists[] = $locale;
             } else {
-                $type->getTranslations()->set(
-                    $locale,
-                    new TypeTranslation($type, $locale, $translation['title'], $translation['description'])
-                );
+                $type->translate($locale, $translation['title'], $translation['description']);
             }
         }
 
@@ -92,6 +88,23 @@ class CreateHandler
             $type->getValidationCriteria()->setSheetAccepted($create->validationCriteria['sheetAccepted']);
         }
 
+        $type->setSheetTemplate($this->getSheetTemplate($create, $type));
+        $type->setRegistrationTemplate($this->getRegistrationTemplate($create, $type));
+        $type->setPackage($create->package);
+
+        $this->typeRepository->add($type);
+
+        $create->type = $type;
+    }
+
+    /**
+     * @param Create $create
+     * @param Type   $type
+     *
+     * @return SheetTemplate
+     */
+    private function getSheetTemplate(Create $create, Type $type)
+    {
         if ($create->sheetTemplate->getEvent() === $create->event) {
             $sheetTemplate = $create->sheetTemplate;
         } else {
@@ -107,6 +120,17 @@ class CreateHandler
             $this->sheetTemplateRepository->add($sheetTemplate);
         }
 
+        return $sheetTemplate;
+    }
+
+    /**
+     * @param Create $create
+     * @param Type   $type
+     *
+     * @return RegistrationTemplate
+     */
+    private function getRegistrationTemplate(Create $create, Type $type)
+    {
         if ($create->registrationTemplate->getEvent() === $create->event) {
             $registrationTemplate = $create->registrationTemplate;
         } else {
@@ -122,12 +146,6 @@ class CreateHandler
             $this->registrationTemplateRepository->add($registrationTemplate);
         }
 
-        $type->setSheetTemplate($sheetTemplate);
-        $type->setRegistrationTemplate($registrationTemplate);
-        $type->setPackage($create->package);
-
-        $this->typeRepository->add($type);
-
-        $create->type = $type;
+        return $registrationTemplate;
     }
 }
