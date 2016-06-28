@@ -47,17 +47,12 @@ class Configuration
     /**
      * @var string
      */
-    private $phone;
-
+    private $organiserPhone;
+    
     /**
      * @var string
      */
-    private $mail;
-
-    /**
-     * @var string
-     */
-    private $website;
+    private $organiserWebsite;
 
     /**
      * @param string $leftColor
@@ -74,15 +69,15 @@ class Configuration
     /**
      * @param string $contactFirstName
      * @param string $contactLastName
-     * @param string $phone
-     * @param string $website
+     * @param string $organiserPhone
+     * @param string $organiserWebsite
      */
-    public function updatePracticalInfo($contactFirstName, $contactLastName, $phone, $website)
+    public function updatePracticalInfo($contactFirstName, $contactLastName, $organiserPhone, $organiserWebsite)
     {
         $this->contactFirstName = $contactFirstName;
         $this->contactLastName  = $contactLastName;
-        $this->phone            = $phone;
-        $this->website          = $website;
+        $this->organiserPhone   = $organiserPhone;
+        $this->organiserWebsite = $organiserWebsite;
     }
     
     /**
@@ -164,24 +159,16 @@ class Configuration
     /**
      * @return string
      */
-    public function getPhone()
+    public function getOrganiserPhone()
     {
-        return $this->phone;
+        return $this->organiserPhone;
     }
-
+    
     /**
      * @return string
      */
-    public function getMail()
+    public function getOrganiserWebsite()
     {
-        return $this->mail;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebsite()
-    {
-        return $this->website;
+        return $this->organiserWebsite;
     }
 }

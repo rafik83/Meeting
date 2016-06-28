@@ -42,12 +42,12 @@ class Update
     /**
      * @var string
      */
-    public $phone;
+    public $organiserPhone;
 
     /**
      * @var string
      */
-    public $website;
+    public $organiserWebsite;
 
     /**
      * Update constructor.
@@ -60,7 +60,7 @@ class Update
         $this->organiserEmail   = $event->getOrganiserEmail();
         $this->contactFirstName = $event->getConfiguration()->getContactFirstName();
         $this->contactLastName  = $event->getConfiguration()->getContactLastName();
-        $this->phone            = $event->getConfiguration()->getPhone();
-        $this->website          = $event->getConfiguration()->getWebsite();
+        $this->phone            = $event->getConfiguration()->getOrganiserPhone();
+        $this->website          = $event->getConfiguration()->getOrganiserWebsite();
     }
 }

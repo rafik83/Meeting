@@ -6,9 +6,9 @@
     {{ form_row(form.organiserName, {widget_columns: 3}) }}<br>
     {{ form_row(form.contactFirstName, {widget_columns: 3}) }}
     {{ form_row(form.contactLastName, {widget_columns: 3}) }}
-    {{ form_row(form.phone, {widget_columns: 3}) }}
+    {{ form_row(form.organiserPhone, {widget_columns: 3}) }}
     {{ form_row(form.organiserEmail, {widget_columns: 3}) }}
-    {{ form_row(form.website, {widget_columns: 3}) }}
+    {{ form_row(form.organiserWebsite, {widget_columns: 3}) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

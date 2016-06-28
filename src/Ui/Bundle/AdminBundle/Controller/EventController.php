@@ -134,6 +134,12 @@ class EventController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * 
+     * @return RedirectResponse|Response
+     */
     public function practicalInfoAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);

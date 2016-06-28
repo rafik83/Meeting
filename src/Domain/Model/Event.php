@@ -367,7 +367,7 @@ class Event implements EventInterface
      */
     public function updateOrganiserInfo($organiserName, $organiserEmail)
     {
-        $this->organiserName = $organiserName;
+        $this->organiserName  = $organiserName;
         $this->organiserEmail = $organiserEmail;
     }
 
@@ -381,11 +381,13 @@ class Event implements EventInterface
 
     /**
      * @param string $organiserName
-     * @return $this
+     *
+     * @return Event
      */
     public function setOrganiserName($organiserName)
     {
         $this->organiserName = $organiserName;
+
         return $this;
     }
 
@@ -407,11 +409,13 @@ class Event implements EventInterface
 
     /**
      * @param string $organiserEmail
+     * 
      * @return $this
      */
     public function setOrganiserEmail($organiserEmail)
     {
         $this->organiserEmail = $organiserEmail;
+
         return $this;
     }
 

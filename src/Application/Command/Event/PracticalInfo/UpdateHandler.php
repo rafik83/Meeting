@@ -39,8 +39,8 @@ class UpdateHandler
             ->updatePracticalInfo(
                 $update->contactFirstName,
                 $update->contactLastName,
-                $update->phone,
-                $update->website
+                $update->organiserPhone,
+                $update->organiserWebsite
             )
         ;
 

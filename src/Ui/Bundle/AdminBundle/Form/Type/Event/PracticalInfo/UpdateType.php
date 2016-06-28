@@ -19,6 +19,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractType
 {
+    /**
+     * @{inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,18 +34,21 @@ class UpdateType extends AbstractType
             ->add('contactFirstName', TextType::class, [
                 'required' => false,
             ])
-            ->add('phone', TextType::class, [
+            ->add('organiserPhone', TextType::class, [
                 'required' => false,
             ])
             ->add('organiserEmail', TextType::class, [
                 'required' => false,
             ])
-            ->add('website', TextType::class, [
+            ->add('organiserWebsite', TextType::class, [
                 'required' => false,
             ])
         ;
     }
 
+    /**
+     * @{inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);

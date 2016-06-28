@@ -15,9 +15,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         contactLastName:
             type: string
             nullable: true
-        phone:
+        organiserPhone:
             type: string
             nullable: true
-        website:
+        organiserWebsite:
             type: string
             nullable: true
