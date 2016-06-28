@@ -53,15 +53,23 @@ class EventTranslation
     private $footer;
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param string $description
+     * @param Event       $event
+     * @param string      $locale
+     * @param string      $description
+     * @param string|null $iban
+     * @param string|null $billingAddress
+     * @param string|null $paymentCondition
+     * @param string|null $footer
      */
-    public function __construct(Event $event, $locale, $description)
+    public function __construct(Event $event, $locale, $description, $iban = null, $billingAddress = null, $paymentCondition = null, $footer = null)
     {
-        $this->event       = $event;
-        $this->locale      = $locale;
-        $this->description = $description;
+        $this->event            = $event;
+        $this->locale           = $locale;
+        $this->description      = $description;
+        $this->iban             = $iban;
+        $this->billingAddress   = $billingAddress;
+        $this->paymentCondition = $paymentCondition;
+        $this->footer           = $footer;
     }
 
     /**
