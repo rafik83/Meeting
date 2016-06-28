@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Template\Object\Item;
-
 class NomenclatureItem
 {
     /**
