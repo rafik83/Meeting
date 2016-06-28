@@ -1322,6 +1322,7 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@cart_manager'
+            - '@repository.cart_step_repository'
 
     #
     # Package
@@ -1338,6 +1339,7 @@ services:
         class: Proximum\Vimeet\Domain\Cart\CartManager
         arguments:
             - '@repository.cart_row_repository'
+            - '@repository.cart_step_repository'
 
     #
     # Promotion
