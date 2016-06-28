@@ -11,12 +11,15 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Behat\Transliterator\Transliterator;
+use Proximum\Vimeet\Application\Command\Nomenclature\Assign;
+use Proximum\Vimeet\Application\Command\Nomenclature\AssignResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Create;
 use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\AssignType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\UpdateType;
@@ -87,9 +90,18 @@ class NomenclatureController extends Controller
             return $response;
         }
 
+        // Handle assign
+        $assign     = new Assign($nomenclature);
+        $assignForm = $this->createForm(AssignType::class, $assign, ['submit' => true, 'admin' => $this->getUser()]);
+
+        if ($response = $this->handleAssign($request, $assignForm, $assign)) {
+            return $response;
+        }
+
         return $this->render('AdminBundle:Nomenclature:read.html.twig', [
             'update_form'  => $updateForm->createView(),
             'import_form'  => $importForm->createView(),
+            'assign_form'  => $assignForm->createView(),
             'nomenclature' => $nomenclature,
         ]);
     }
@@ -140,6 +152,28 @@ class NomenclatureController extends Controller
             } catch (ImportException $exception) {
                 $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * Assign a nomenclature to an event
+     *
+     * @param Request       $request
+     * @param FormInterface $assignForm
+     * @param Assign        $assign
+     *
+     * @return null|RedirectResponse
+     */
+    private function handleAssign(Request $request, FormInterface $assignForm, Assign $assign)
+    {
+        if ($assignForm->handleRequest($request)->isSubmitted() && $assignForm->isValid()) {
+            /** @var AssignResult $result */
+            $result = $this->get('tactician.commandbus')->handle($assign);
+            $this->addFlash('success', 'flash.admin.nomenclature.assign.success');
+
+            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
         }
 
         return null;

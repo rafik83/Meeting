@@ -1,7 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1 class="page-header">{{ nomenclature.title }}</h1>
+    <h1 class="page-header">{{ nomenclature.title }} <small>{{ nomenclature.event ? nomenclature.event.title : '' }}</small></h1>
 
     {% set locales = nomenclature.locales %}
 
@@ -50,6 +50,28 @@
         </div>
     </div>
 
+    {% if not nomenclature.event %}
+        <div class="modal fade" id="assignModal">
+            {{ form_start(assign_form) }}
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="configure-modal-label">{{ 'admin.nomenclature.assign.modal.title'|trans }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_row(assign_form.event) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.nomenclature.create.modal.close'|trans }}</button>
+                            {{ form_row(assign_form.submit) }}
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(assign_form) }}
+        </div>
+    {% endif %}
+
     <div class="form">
         <div class="form-group submit-section">
             <div class="col-sm-3">
@@ -59,7 +81,9 @@
                 </a>
             </div>
             <div class="col-sm-9 text-right">
-
+                {% if not nomenclature.event %}
+                    <a href="#assignModal" data-toggle="modal" class="btn btn-primary">{{ 'admin.nomenclature.read.assign.button'|trans }}</a>
+                {% endif %}
             </div>
         </div>
     </div>

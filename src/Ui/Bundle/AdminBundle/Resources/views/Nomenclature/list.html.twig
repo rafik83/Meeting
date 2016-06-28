@@ -33,6 +33,7 @@
         <thead>
             <tr>
                 <th>{{ 'admin.nomenclature.table.title'|trans }}</th>
+                <th>{{ 'admin.nomenclature.table.event'|trans }}</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -44,6 +45,9 @@
                         <a href="{{ path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}">
                             {{ nomenclature.title }}
                         </a>
+                    </td>
+                    <td>
+                        {{ nomenclature.event ? nomenclature.event.title : '' }}
                     </td>
                     <td>
                         {{ 'admin.nomenclature.table.depth'|transchoice(nomenclature.depth, { '%depth%': nomenclature.depth }) }}

@@ -25,7 +25,7 @@ class AssignType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('event', AdminEventChoiceType::class, ['admin' => $options['admin']])
+            ->add('event', AdminEventChoiceType::class, ['admin' => $options['admin'], 'help' => true])
         ;
     }
 

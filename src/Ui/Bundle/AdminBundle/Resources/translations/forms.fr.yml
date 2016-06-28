@@ -1133,3 +1133,10 @@ form:
             file:
                 label: Fichier
                 help: Un import réinitialisera la nomenclature sauf si le fichier importé provient d'un export.
+    nomenclature_assign_type:
+        children:
+            event:
+                label: Événement
+                help: La nomenclature sera dupliqué pour être assigné à cet événement
+            submit:
+                label: Assigner
