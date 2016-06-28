@@ -101,16 +101,14 @@ class PackageController extends Controller
         $duplicate = new Duplicate($package);
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
             'action' => $this->generateUrl('admin_package_duplicate', ['package' => $package->getId()]),
-            'submit' => true, 'user' => $this->getUser(),
+            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $result = $this->get('tactician.commandbus')->handle($duplicate);
+            $this->get('tactician.commandbus')->handle($duplicate);
             $this->addFlash('success', 'flash.admin.template.package.duplicate.success');
 
-            return $this->redirectToRoute('admin_package_list', [
-                'package' => $result
-            ]);
+            return $this->redirectToRoute('admin_package_list');
         }
 
         return $this->render('AdminBundle:Package:duplicate.html.twig', [

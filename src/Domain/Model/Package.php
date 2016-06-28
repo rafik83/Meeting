@@ -380,19 +380,7 @@ class Package
 
         return $this;
     }
-
-    /**
-     * @param $event
-     *
-     * @return Package
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-
-        return $this;
-    }
-
+    
     /**
      * @param string $locale
      *
