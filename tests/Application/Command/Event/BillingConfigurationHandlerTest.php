@@ -76,9 +76,6 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->add($expectedEvent)->shouldBeCalled();
 
         $handler = new BillingConfigurationHandler($eventRepository->reveal());
-        $result = $handler->handle($billingConfiguration);
-
-        // Test
-        $this->assertEquals($expectedEvent, $result);
+        $handler->handle($billingConfiguration);
     }
 }
