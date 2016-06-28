@@ -42,22 +42,14 @@
       font-size: 15px;
       margin-left: 8px;
 
-      &:last-child {
-        i[class^='icon-'] { margin-right: 0; }
-      }
-
       i[class^='icon-'] {
         float: left;
         font-size: 20px;
-        margin-right: 5px;
-        margin-top: 6px;
+        margin-top: 7px;
       }
 
-      img {
-        max-width: 20px;
-        max-height: 20px;
-        margin-left: 1px;
-        margin-top: -2px;
+      &.notifs {
+        i[class^='icon-'] { margin-right: 5px; }
       }
 
       a {
@@ -66,7 +58,7 @@
         height: 35px;
         line-height: 36px;
         color: $gradient-text-color;
-        padding: 0 9px 0 8px;
+        padding: 0 9px;
         border-radius: 15px;
         background: rgba(#FFFFFF, .15);
         transition: background .2s ease-in-out;
