@@ -338,6 +338,20 @@ class Nomenclature
     }
 
     /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Nomenclature
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
      * Set value
      *
      * @param int   $depth

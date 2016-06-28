@@ -20,6 +20,11 @@ class Update
     public $nomenclature;
 
     /**
+     * @var string
+     */
+    public $title;
+
+    /**
      * @var bool
      */
     public $sort;
@@ -32,6 +37,7 @@ class Update
     public function __construct(Nomenclature $nomenclature)
     {
         $this->nomenclature = $nomenclature;
+        $this->title        = $nomenclature->getTitle();
         $this->sort         = $nomenclature->isSorted();
     }
 }

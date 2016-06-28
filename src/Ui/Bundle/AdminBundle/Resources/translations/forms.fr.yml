@@ -1119,6 +1119,8 @@ form:
                 label: Enregistrer
     nomenclature_update_type:
         children:
+            title:
+                label: Titre
             sort:
                 label: Tri
                 choice:

@@ -35,6 +35,7 @@ class UpdateHandler
     public function handle(Update $command)
     {
         $nomenclature = $command->sort ? $command->nomenclature->enableSort() : $command->nomenclature->disableSort();
+        $nomenclature->setTitle($command->title);
 
         $this->nomenclatureRepository->set($nomenclature);
     }
