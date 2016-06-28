@@ -42,9 +42,6 @@ class ImportHandler
      */
     public function handle(Import $command)
     {
-        // @todo
-        $value = array_keys($command->nomenclature->getLastLevel());
-
         $this->importer->import($command->nomenclature, $command->filename);
         $this->nomenclatureRepository->set($command->nomenclature);
     }
