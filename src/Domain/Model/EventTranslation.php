@@ -73,6 +73,20 @@ class EventTranslation
     }
 
     /**
+     * @param string $iban
+     * @param string $billingAddress
+     * @param string $paymentCondition
+     * @param string $footer
+     */
+    public function setBillingConfiguration($iban, $billingAddress, $paymentCondition, $footer)
+    {
+        $this->iban             = $iban;
+        $this->billingAddress   = $billingAddress;
+        $this->paymentCondition = $paymentCondition;
+        $this->footer           = $footer;
+    }
+
+    /**
      * @return Event
      */
     public function getEvent()

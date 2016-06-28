@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\TranslationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -31,6 +32,9 @@ class BillingConfigurationType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,
                 'label'      => false,
+            ])
+            ->add('legalInfo', TextType::class, [
+                'required' => false,
             ])
         ;
     }

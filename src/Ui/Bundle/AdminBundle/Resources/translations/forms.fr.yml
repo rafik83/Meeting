@@ -199,6 +199,8 @@ form:
                 label: Enregistrer
     event_billing_configuration:
         children:
+            legalInfo:
+                label: Informations légales
             translations:
                 prototype:
                     children:

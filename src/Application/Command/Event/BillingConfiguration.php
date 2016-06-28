@@ -28,8 +28,7 @@ class BillingConfiguration
      * @var array
      */
     public $translations = [];
-
-
+    
     /**
      * BillingConfiguration constructor.
      *
