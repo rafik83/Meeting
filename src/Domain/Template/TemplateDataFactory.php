@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
@@ -144,6 +145,20 @@ class TemplateDataFactory
             : $this->nomenclatureRepository->findGlobals();
 
         return $this->create($sheetTemplate->getValue());
+    }
+
+    /**
+     * @param RegistrationTemplate $registrationTemplate
+     *
+     * @return TemplateData
+     */
+    public function createFromRegistrationTemplate(RegistrationTemplate $registrationTemplate)
+    {
+        $this->nomenclatures = $registrationTemplate->getEvent()
+            ? $this->nomenclatureRepository->findByEvent($registrationTemplate->getEvent())
+            : $this->nomenclatureRepository->findGlobals();
+
+        return $this->create($registrationTemplate->getValue());
     }
 
     /**

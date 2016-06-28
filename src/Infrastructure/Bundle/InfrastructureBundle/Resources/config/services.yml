@@ -1168,6 +1168,8 @@ services:
         class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
         arguments:
             - '@repository.template.registration_template_repository'
+            - '@template.template_data_factory'
+            - '@application.nomenclature.nomenclature_cloner'
             - '@datetime'
 
 
