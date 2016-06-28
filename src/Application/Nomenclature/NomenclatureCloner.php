@@ -39,7 +39,7 @@ class NomenclatureCloner
      *
      * @return Nomenclature
      */
-    public function dublicate(Nomenclature $nomenclature, Event $event)
+    public function duplicate(Nomenclature $nomenclature, Event $event)
     {
         $clone = new Nomenclature(
             $nomenclature->getTitle(),
@@ -61,12 +61,12 @@ class NomenclatureCloner
      *
      * @return Nomenclature
      */
-    public function dublicateIfNotExists(Nomenclature $nomenclature, Event $event)
+    public function duplicateIfNotExists(Nomenclature $nomenclature, Event $event)
     {
         $clone = $this->nomenclatureRepository->findClone($nomenclature, $event);
 
         if (null === $clone) {
-            $clone = $this->dublicate($nomenclature, $event);
+            $clone = $this->duplicate($nomenclature, $event);
         }
 
         return $clone;

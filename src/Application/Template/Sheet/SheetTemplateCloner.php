@@ -110,7 +110,7 @@ class SheetTemplateCloner
         foreach ($objects as $object) {
             if ($object->getNomenclatureModel()->getEvent() !== $event) {
                 $original = $object->getNomenclatureModel();
-                $clone    = $this->nomenclatureCloner->dublicateIfNotExists($original, $event);
+                $clone    = $this->nomenclatureCloner->duplicateIfNotExists($original, $event);
 
                 $object->setNomenclature($clone);
             }

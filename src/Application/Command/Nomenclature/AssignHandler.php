@@ -37,7 +37,7 @@ class AssignHandler
      */
     public function handle(Assign $command)
     {
-        $nomenclature = $this->nomenclatureCloner->dublicate($command->nomenclature, $command->event);
+        $nomenclature = $this->nomenclatureCloner->duplicate($command->nomenclature, $command->event);
 
         return new AssignResult($nomenclature);
     }
