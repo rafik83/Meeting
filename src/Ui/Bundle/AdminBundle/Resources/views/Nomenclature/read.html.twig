@@ -6,7 +6,7 @@
     {% set locales = nomenclature.locales %}
 
     <div class="row with-submit-section">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
             <ul class="nav nav-tabs" role="tablist">
                 {% for locale in locales %}
@@ -23,7 +23,7 @@
             </div>
 
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="well">
                 <h3>{{ 'admin.nomenclature.read.configuration.title'|trans }}</h3>
                 {{ form(update_form) }}
