@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class NomenclatureController extends Controller
 {
     /**
+     * List nomenclatures
+     *
      * @param Request $request
      *
      * @return RedirectResponse|Response
@@ -59,6 +61,8 @@ class NomenclatureController extends Controller
     }
 
     /**
+     * Display the Nomenclature, update form and import/export feature
+     *
      * @param Request      $request
      * @param Nomenclature $nomenclature
      *
@@ -91,6 +95,8 @@ class NomenclatureController extends Controller
     }
 
     /**
+     * Handle Nomenclature update
+     *
      * @param Request       $request
      * @param FormInterface $updateForm
      * @param Update        $update
@@ -110,6 +116,8 @@ class NomenclatureController extends Controller
     }
 
     /**
+     * Handle csv import of a Nomenclature
+     *
      * @param Request       $request
      * @param FormInterface $importForm
      * @param Nomenclature  $nomenclature
@@ -138,6 +146,8 @@ class NomenclatureController extends Controller
     }
 
     /**
+     * Exports Nomenclature data to csv
+     *
      * @param Nomenclature $nomenclature
      *
      * @return BinaryFileResponse
