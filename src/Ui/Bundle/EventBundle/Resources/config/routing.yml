@@ -417,6 +417,14 @@ event_notification_read:
     defaults: { _controller: EventBundle:Notification:read }
 
 #
+# Content
+#
+event_content_terms_of_sale:
+    path: /terms-of-sale
+    defaults: { _controller: EventBundle:Content:termsOfSale }
+    methods: [GET]
+
+#
 # Package
 #
 event_package:
