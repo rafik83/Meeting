@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Package\Summary;
 
 use Proximum\Vimeet\Application\View\Package\Summary\GroupsView;
-use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
 
 class GroupsViewQueryHandler

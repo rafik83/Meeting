@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Package\Summary;
 
 use Proximum\Vimeet\Domain\Cart\Cart;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class PlanGroupViewQuery

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Package\Summary;
 
-use Proximum\Vimeet\Application\View\Package\Summary\IncludedView;
 use Proximum\Vimeet\Application\View\Package\Summary\PlanGroupView;
 
 class PlanGroupViewQueryHandler
