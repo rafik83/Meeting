@@ -900,6 +900,12 @@ services:
             - '@application.nomenclature.import.csv_importer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Import }
+    command.nomenclature.assign_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\AssignHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
 
     #
     # Security

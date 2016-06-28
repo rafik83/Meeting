@@ -15,3 +15,8 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             type: json_array
         sort:
             type: boolean
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE

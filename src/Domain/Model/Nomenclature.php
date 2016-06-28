@@ -41,19 +41,26 @@ class Nomenclature
     private $sort = true;
 
     /**
+     * @var Event
+     */
+    private $event;
+
+    /**
      * Nomenclature constructor.
      *
      * @param string $title
      * @param int    $depth
      * @param array  $value
      * @param bool   $sort
+     * @param Event  $event
      */
-    public function __construct($title, $depth = 1, array $value = [], $sort = true)
+    public function __construct($title, $depth = 1, array $value = [], $sort = true, Event $event = null)
     {
         $this->title = $title;
         $this->depth = $depth;
         $this->value = $value;
         $this->sort  = $sort;
+        $this->event = $event;
     }
 
     /**
@@ -377,5 +384,15 @@ class Nomenclature
         $this->value = $value;
 
         return $this;
+    }
+
+    /**
+     * Get event
+     *
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 }
