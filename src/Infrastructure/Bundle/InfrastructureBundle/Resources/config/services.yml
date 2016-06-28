@@ -275,6 +275,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@repository.template.sheet_template_repository'
+            - '@repository.template.registration_template_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Create }

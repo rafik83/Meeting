@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 
 class CreateHandler
 {
@@ -25,6 +27,16 @@ class CreateHandler
     private $typeRepository;
 
     /**
+     * @var SheetTemplateRepositoryInterface
+     */
+    private $sheetTemplateRepository;
+
+    /**
+     * @var RegistrationTemplateRepositoryInterface
+     */
+    private $registrationTemplateRepository;
+
+    /**
      * @var \DateTimeInterface
      */
     private $dateTime;
@@ -32,13 +44,21 @@ class CreateHandler
     /**
      * CreateHandler constructor.
      *
-     * @param TypeRepositoryInterface $typeRepository
-     * @param \DateTimeInterface      $dateTime
+     * @param TypeRepositoryInterface                 $typeRepository
+     * @param SheetTemplateRepositoryInterface        $sheetTemplateRepository
+     * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
+     * @param \DateTimeInterface                      $dateTime
      */
-    public function __construct(TypeRepositoryInterface $typeRepository, \DateTimeInterface $dateTime)
-    {
-        $this->typeRepository = $typeRepository;
-        $this->dateTime       = $dateTime;
+    public function __construct(
+        TypeRepositoryInterface $typeRepository,
+        SheetTemplateRepositoryInterface $sheetTemplateRepository,
+        RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->typeRepository                 = $typeRepository;
+        $this->sheetTemplateRepository        = $sheetTemplateRepository;
+        $this->registrationTemplateRepository = $registrationTemplateRepository;
+        $this->dateTime                       = $dateTime;
     }
 
     /**
@@ -83,6 +103,8 @@ class CreateHandler
                 $this->dateTime
             );
             $sheetTemplate->setEvent($create->event);
+
+            $this->sheetTemplateRepository->add($sheetTemplate);
         }
 
         if ($create->registrationTemplate->getEvent() === $create->event) {
@@ -96,6 +118,8 @@ class CreateHandler
                 $this->dateTime
             );
             $registrationTemplate->setEvent($create->event);
+
+            $this->registrationTemplateRepository->add($registrationTemplate);
         }
 
         $type->setSheetTemplate($sheetTemplate);

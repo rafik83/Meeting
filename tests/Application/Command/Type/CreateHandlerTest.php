@@ -19,6 +19,8 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -60,8 +62,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $typeRepository->add($expectedType)->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'toto')->willReturn(false);
 
+        $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
+        $sheetTemplateRepository->add($expectedSheetTemplate)->shouldBeCalled();
+
+        $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
+        $registrationTemplateRepository->add($expectedRegistrationTemplate)->shouldBeCalled();
+
         //Handler
-        $handler = new CreateHandler($typeRepository->reveal(), $dateTime);
+        $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateRepository->reveal(), $registrationTemplateRepository->reveal(), $dateTime);
         $handler->handle($create);
     }
 }
