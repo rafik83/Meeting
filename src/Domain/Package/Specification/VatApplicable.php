@@ -72,7 +72,6 @@ class VatApplicable
      */
     private function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber)
     {
-        // todo Verify this rule ? Strange in my opinion
         if ($mode === Event::VAT_MODE_ATI) {
             return false;
         }
