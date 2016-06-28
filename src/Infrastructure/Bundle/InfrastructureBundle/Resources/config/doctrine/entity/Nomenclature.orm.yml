@@ -20,3 +20,7 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+        original:
+            targetEntity: Proximum\Vimeet\Domain\Model\Nomenclature
+            joinColumn:
+                onDelete: SET NULL

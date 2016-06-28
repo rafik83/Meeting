@@ -46,21 +46,30 @@ class Nomenclature
     private $event;
 
     /**
+     * The nomenclature from this nomenclature has been clone
+     *
+     * @var Nomenclature
+     */
+    private $original;
+
+    /**
      * Nomenclature constructor.
      *
-     * @param string $title
-     * @param int    $depth
-     * @param array  $value
-     * @param bool   $sort
-     * @param Event  $event
+     * @param string       $title
+     * @param int          $depth
+     * @param array        $value
+     * @param bool         $sort
+     * @param Event        $event
+     * @param Nomenclature $original
      */
-    public function __construct($title, $depth = 1, array $value = [], $sort = true, Event $event = null)
+    public function __construct($title, $depth = 1, array $value = [], $sort = true, Event $event = null, Nomenclature $original)
     {
-        $this->title = $title;
-        $this->depth = $depth;
-        $this->value = $value;
-        $this->sort  = $sort;
-        $this->event = $event;
+        $this->title    = $title;
+        $this->depth    = $depth;
+        $this->value    = $value;
+        $this->sort     = $sort;
+        $this->event    = $event;
+        $this->original = $original;
     }
 
     /**
@@ -394,5 +403,15 @@ class Nomenclature
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * Get original
+     *
+     * @return Nomenclature
+     */
+    public function getOriginal()
+    {
+        return $this->original;
     }
 }

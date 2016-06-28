@@ -41,16 +41,17 @@ class NomenclatureCloner
      */
     public function dublicate(Nomenclature $nomenclature, Event $event)
     {
-        $nomenclature = new Nomenclature(
+        $clone = new Nomenclature(
             $nomenclature->getTitle(),
             $nomenclature->getDepth(),
             $nomenclature->getValue(),
             $nomenclature->isSorted(),
-            $event
+            $event,
+            $nomenclature
         );
 
-        $this->nomenclatureRepository->add($nomenclature);
+        $this->nomenclatureRepository->add($clone);
 
-        return $nomenclature;
+        return $clone;
     }
 }
