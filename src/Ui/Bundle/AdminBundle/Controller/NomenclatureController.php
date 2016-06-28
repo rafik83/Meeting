@@ -38,6 +38,8 @@ class NomenclatureController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
         $command = new Create();
         $form    = $this->createForm(CreateType::class, $command, ['submit' => true]);
 
@@ -64,6 +66,8 @@ class NomenclatureController extends Controller
      */
     public function readAction(Request $request, Nomenclature $nomenclature)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
         // Handle update
         $update     = new Update($nomenclature);
         $updateForm = $this->createForm(UpdateType::class, $update, ['submit' => true]);
@@ -140,6 +144,8 @@ class NomenclatureController extends Controller
      */
     public function exportAction(Nomenclature $nomenclature)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
         $filepath = sys_get_temp_dir() . '/nomenclature_' . uniqid();
         $file     = $this->get('application.nomenclature.export.csv_exporter')->export($nomenclature, $filepath);
         $filename = sprintf('nomenclature-%s.csv', Transliterator::urlize($nomenclature->getTitle()));
