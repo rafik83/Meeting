@@ -50,6 +50,7 @@ class NomenclatureItem
         $this->key      = $key;
         $this->label    = $label;
         $this->children = $children;
+        $this->sort     = $sort;
 
         foreach ($children as $child) {
             $child->setParent($this);
