@@ -11,12 +11,12 @@
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 
 class CreateHandler
 {
@@ -26,14 +26,14 @@ class CreateHandler
     private $typeRepository;
 
     /**
-     * @var SheetTemplateRepositoryInterface
+     * @var SheetTemplateCloner
      */
-    private $sheetTemplateRepository;
+    private $sheetTemplateCloner;
 
     /**
-     * @var RegistrationTemplateRepositoryInterface
+     * @var RegistrationTemplateCloner
      */
-    private $registrationTemplateRepository;
+    private $registrationTemplateCloner;
 
     /**
      * @var \DateTimeInterface
@@ -43,22 +43,23 @@ class CreateHandler
     /**
      * CreateHandler constructor.
      *
-     * @param TypeRepositoryInterface                 $typeRepository
-     * @param SheetTemplateRepositoryInterface        $sheetTemplateRepository
-     * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
-     * @param \DateTimeInterface                      $dateTime
+     * @param TypeRepositoryInterface    $typeRepository
+     * @param SheetTemplateCloner        $sheetTemplateCloner
+     * @param RegistrationTemplateCloner $registrationTemplateCloner
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
-        SheetTemplateRepositoryInterface $sheetTemplateRepository,
-        RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
+        SheetTemplateCloner $sheetTemplateCloner,
+        RegistrationTemplateCloner $registrationTemplateCloner,
         \DateTimeInterface $dateTime
     ) {
-        $this->typeRepository                 = $typeRepository;
-        $this->sheetTemplateRepository        = $sheetTemplateRepository;
-        $this->registrationTemplateRepository = $registrationTemplateRepository;
-        $this->dateTime                       = $dateTime;
+        $this->typeRepository             = $typeRepository;
+        $this->sheetTemplateCloner        = $sheetTemplateCloner;
+        $this->registrationTemplateCloner = $registrationTemplateCloner;
+        $this->dateTime                   = $dateTime;
     }
+
 
     /**
      * @param Create $create
@@ -105,22 +106,13 @@ class CreateHandler
      */
     private function getSheetTemplate(Create $create, Type $type)
     {
-        if ($create->sheetTemplate->getEvent() === $create->event) {
-            $sheetTemplate = $create->sheetTemplate;
-        } else {
-            $sheetTemplate = new SheetTemplate(
-                $type->getTitle($create->event->getAvailableLocale($create->locale)),
-                $create->sheetTemplate->getValue(),
-                $create->sheetTemplate->getLocales(),
-                $create->sheetTemplate->getFallback(),
-                $this->dateTime
+        return $create->sheetTemplate->getEvent() === $create->event
+            ? $create->sheetTemplate
+            : $this->sheetTemplateCloner->duplicate(
+                $create->sheetTemplate,
+                $create->event,
+                $type->getTitle($create->event->getAvailableLocale($create->locale))
             );
-            $sheetTemplate->setEvent($create->event);
-
-            $this->sheetTemplateRepository->add($sheetTemplate);
-        }
-
-        return $sheetTemplate;
     }
 
     /**
@@ -131,21 +123,12 @@ class CreateHandler
      */
     private function getRegistrationTemplate(Create $create, Type $type)
     {
-        if ($create->registrationTemplate->getEvent() === $create->event) {
-            $registrationTemplate = $create->registrationTemplate;
-        } else {
-            $registrationTemplate = new RegistrationTemplate(
-                $type->getTitle($create->event->getAvailableLocale($create->locale)),
-                $create->registrationTemplate->getValue(),
-                $create->registrationTemplate->getLocales(),
-                $create->registrationTemplate->getFallback(),
-                $this->dateTime
+        return $create->registrationTemplate->getEvent() === $create->event
+            ? $create->registrationTemplate
+            : $this->registrationTemplateCloner->duplicate(
+                $create->registrationTemplate,
+                $create->event,
+                $type->getTitle($create->event->getAvailableLocale($create->locale))
             );
-            $registrationTemplate->setEvent($create->event);
-
-            $this->registrationTemplateRepository->add($registrationTemplate);
-        }
-
-        return $registrationTemplate;
     }
 }

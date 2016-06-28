@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\CreateHandler;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Template;
@@ -19,8 +21,6 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
-use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -62,14 +62,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $typeRepository->add($expectedType)->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'toto')->willReturn(false);
 
-        $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
-        $sheetTemplateRepository->add($expectedSheetTemplate)->shouldBeCalled();
+        $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
+        $sheetTemplateCloner->duplicate($sheetTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedSheetTemplate);
 
-        $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
-        $registrationTemplateRepository->add($expectedRegistrationTemplate)->shouldBeCalled();
+        $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
+        $registrationTemplateCloner->duplicate($registrationTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedRegistrationTemplate);
 
         //Handler
-        $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateRepository->reveal(), $registrationTemplateRepository->reveal(), $dateTime);
+        $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateCloner->reveal(), $registrationTemplateCloner->reveal(), $dateTime);
         $handler->handle($create);
     }
 }
