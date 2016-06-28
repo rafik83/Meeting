@@ -1091,14 +1091,6 @@ services:
             - '@mailer'
             - '@twig'
 
-    #
-    # Order component
-    #
-    components.sheet.specification.vat_applicable:
-        class: Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable
-        arguments:
-            - '@components.sheet.billing_info_guesser'
-            - '%infrastructure.eu_countries%'
 
     #
     # Proforma component
@@ -1331,6 +1323,11 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+    package.specification.vat_applicable:
+        class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
+        arguments:
+            - '@repository.billing_info_repository'
+            - '%infrastructure.eu_countries%'
 
     #
     # Cart
