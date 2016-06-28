@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Assign;
 use Proximum\Vimeet\Application\Command\Nomenclature\AssignResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Create;
 use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
+use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
@@ -151,6 +152,8 @@ class NomenclatureController extends Controller
                 return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
             } catch (ImportException $exception) {
                 $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+            } catch (MissingKeysException $exception) {
+                $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
             }
         }
 

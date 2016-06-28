@@ -63,3 +63,4 @@ validators:
     nomenclature:
         import:
             error: Votre fichier comporte des erreurs
+            missing_keys: Vous ne pouvez plus supprimer d'élément de cette nomenclature car il y a déjà des inscriptions
