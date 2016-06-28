@@ -81,7 +81,7 @@ class NomenclatureController extends Controller
         }
 
         // Handle import
-        $importForm = $this->createForm(ImportType::class, [], ['submit' => true]);
+        $importForm = $this->createForm(ImportType::class, []);
 
         if ($response = $this->handleImport($request, $importForm, $nomenclature)) {
             return $response;

@@ -1132,5 +1132,4 @@ form:
         children:
             file:
                 label: Fichier
-            submit:
-                label: Importer
+                help: Un import réinitialisera la nomenclature sauf si le fichier importé provient d'un export.
