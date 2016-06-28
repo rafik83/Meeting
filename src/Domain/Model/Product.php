@@ -600,21 +600,21 @@ class Product
     }
 
     /**
-     * @param $name
-     * @param $image
-     * @param $unitPrice
-     * @param $availabilityCurrent
-     * @param $availabilityMax
+     * @param string $name
+     * @param string $image
+     * @param int $unitPrice
+     * @param int $availabilityCurrent
+     * @param int $availabilityMax
      *
      * @return Product
      */
     public function updatePlan($name, $image, $unitPrice, $availabilityCurrent, $availabilityMax)
     {
-        $this->name                  = $name;
-        $this->image                 = $image;
-        $this->unitPrice             = $unitPrice;
-        $this->availabilityCurrent   = $availabilityCurrent;
-        $this->availabilityMax       = $availabilityMax;
+        $this->name                = $name;
+        $this->image               = $image;
+        $this->unitPrice           = $unitPrice;
+        $this->availabilityCurrent = $availabilityCurrent;
+        $this->availabilityMax     = $availabilityMax;
 
         return $this;
     }
@@ -645,15 +645,15 @@ class Product
 
     /**
      * @param string $name
-     * @param int $unitPrice
-     * @param int $quantityMax
+     * @param int    $unitPrice
+     * @param int    $quantityMax
      *
      * @return Product
      */
     public function updateParticipant($name, $unitPrice, $quantityMax)
     {
-        $this->name = $name;
-        $this->unitPrice = $unitPrice;
+        $this->name        = $name;
+        $this->unitPrice   = $unitPrice;
         $this->quantityMax = $quantityMax;
 
         return $this;
@@ -692,8 +692,8 @@ class Product
      */
     public function updatePlanning($name, $unitPrice, $quantityMax)
     {
-        $this->name = $name;
-        $this->unitPrice = $unitPrice;
+        $this->name        = $name;
+        $this->unitPrice   = $unitPrice;
         $this->quantityMax = $quantityMax;
 
         return $this;
@@ -733,13 +733,13 @@ class Product
     }
 
     /**
-     * @param                         $name
-     * @param                         $image
-     * @param                         $unitPrice
-     * @param                         $quantityMax
-     * @param                         $availabilityCurrent
-     * @param                         $availabilityMax
-     * @param                         $updatable
+     * @param string                  $name
+     * @param string                  $image
+     * @param int                     $unitPrice
+     * @param int                     $quantityMax
+     * @param int                     $availabilityCurrent
+     * @param int                     $availabilityMax
+     * @param bool                    $updatable
      * @param \DateTimeInterface|null $updatableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil

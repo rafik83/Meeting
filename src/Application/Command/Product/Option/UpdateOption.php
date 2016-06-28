@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
 
 namespace Proximum\Vimeet\Application\Command\Product\Option;
-
 
 use Proximum\Vimeet\Application\Command\Product\AbstractUpdate;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -15,11 +21,11 @@ class UpdateOption extends AbstractUpdate
     public function __construct(Product $product)
     {
         parent::__construct($product);
-        
+
         $this->availabilityCurrent = $product->getAvailabilityCurrent();
-        $this->availabilityMax = $product->getAvailabilityMax();
-        $this->updatable = $product->isUpdatable();
-        $this->updatableUntil = $product->getUpdatableUntil();
-        $this->buyableUntil = $product->getBuyableUntil();
+        $this->availabilityMax     = $product->getAvailabilityMax();
+        $this->updatable           = $product->isUpdatable();
+        $this->updatableUntil      = $product->getUpdatableUntil();
+        $this->buyableUntil        = $product->getBuyableUntil();
     }
 }

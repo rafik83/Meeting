@@ -608,6 +608,8 @@ admin:
           title: Modifier une formule
         planning:
           title: Modifier un planning
+        participant:
+          title: Modifier un participant
     plan_create:
         title: Ajouter une formule au catalogue
     plan:

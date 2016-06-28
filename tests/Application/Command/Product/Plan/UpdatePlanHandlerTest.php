@@ -60,4 +60,5 @@ class UpdatePlanHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new UpdatePlanHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
         $handler->handle($updateCommand);
     }
+    
 }

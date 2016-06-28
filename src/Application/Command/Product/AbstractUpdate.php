@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
 
 namespace Proximum\Vimeet\Application\Command\Product;
-
 
 use Proximum\Vimeet\Domain\Model\Product;
 
@@ -20,12 +26,11 @@ abstract class AbstractUpdate extends AbstractProduct
     {
         $this->product = $product;
 
-        $this->name = $product->getName();
-        $this->unitPrice = $product->getUnitPrice();
+        $this->name        = $product->getName();
+        $this->unitPrice   = $product->getUnitPrice();
         $this->quantityMax = $product->getQuantityMax();
 
-        foreach ($product->getEvent()->getLocales() as $locale)
-        {
+        foreach ($product->getEvent()->getLocales() as $locale) {
             $this->translations[$locale] = [
                 'title'                     => $product->getTitle($locale),
                 'heading'                   => $product->getHeading($locale),

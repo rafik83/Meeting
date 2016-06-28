@@ -26,8 +26,7 @@ abstract class AbstractCreate extends AbstractProduct
     {
         $this->event = $event;
 
-        foreach ($event->getLocales() as $locale)
-        {
+        foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
                 'title'                     => null,
                 'description'               => null,

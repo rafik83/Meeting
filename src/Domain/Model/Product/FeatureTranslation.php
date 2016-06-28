@@ -45,9 +45,9 @@ class FeatureTranslation
      */
     public function __construct(Feature $feature, $locale, $title, $description)
     {
-        $this->feature = $feature;
-        $this->locale = $locale;
-        $this->title = $title;
+        $this->feature     = $feature;
+        $this->locale      = $locale;
+        $this->title       = $title;
         $this->description = $description;
     }
 
@@ -99,7 +99,7 @@ class FeatureTranslation
      */
     public function set($title, $description)
     {
-        $this->title = $title;
+        $this->title       = $title;
         $this->description = $description;
 
         return $this;
