@@ -54,4 +54,21 @@ class NomenclatureCloner
 
         return $clone;
     }
+
+    /**
+     * @param Nomenclature $nomenclature
+     * @param Event        $event
+     *
+     * @return Nomenclature
+     */
+    public function dublicateIfNotExists(Nomenclature $nomenclature, Event $event)
+    {
+        $clone = $this->nomenclatureRepository->findClone($nomenclature, $event);
+
+        if (null === $clone) {
+            $clone = $this->dublicate($nomenclature, $event);
+        }
+
+        return $clone;
+    }
 }

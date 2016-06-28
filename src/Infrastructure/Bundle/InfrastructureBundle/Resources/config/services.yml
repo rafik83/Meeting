@@ -1161,6 +1161,8 @@ services:
         class: Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner
         arguments:
             - '@repository.template.sheet_template_repository'
+            - '@template.template_data_factory'
+            - '@application.nomenclature.nomenclature_cloner'
             - '@datetime'
     template.registration.registration_template_cloner:
         class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner

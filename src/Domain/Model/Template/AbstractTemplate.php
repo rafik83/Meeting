@@ -105,13 +105,15 @@ abstract class AbstractTemplate
     /**
      * @param Event $event
      */
-    public function setEvent(Event $event)
+    public function setEvent(Event $event = null)
     {
         $this->event = $event;
 
         // Add event locales
-        foreach ($event->getLocales() as $locale) {
-            $this->addLocale($locale);
+        if ($event) {
+            foreach ($event->getLocales() as $locale) {
+                $this->addLocale($locale);
+            }
         }
     }
 

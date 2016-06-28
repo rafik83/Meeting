@@ -111,4 +111,27 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     {
         $this->entityManager->flush($nomenclature);
     }
+
+    /**
+     * @param Nomenclature $nomenclature
+     * @param Event        $event
+     *
+     * @return Nomenclature|null
+     */
+    public function findClone($nomenclature, $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('nomenclature')
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->andWhere('nomenclature.original = :nomenclature')
+            ->setParameter('nomenclature', $nomenclature)
+            ->andWhere('nomenclature.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }
