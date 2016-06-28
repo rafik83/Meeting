@@ -11,25 +11,23 @@
 
 namespace Proximum\Vimeet\Application\Command\Nomenclature;
 
-
-use Proximum\Vimeet\Domain\Model\Nomenclature;
-use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 
 class AssignHandler
 {
     /**
-     * @var NomenclatureRepositoryInterface
+     * @var NomenclatureCloner
      */
-    private $nomenclatureRepository;
+    private $nomenclatureCloner;
 
     /**
-     * CreateHandler constructor.
+     * AssignHandler constructor.
      *
-     * @param NomenclatureRepositoryInterface $nomenclatureRepository
+     * @param NomenclatureCloner $nomenclatureCloner
      */
-    public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
+    public function __construct(NomenclatureCloner $nomenclatureCloner)
     {
-        $this->nomenclatureRepository = $nomenclatureRepository;
+        $this->nomenclatureCloner = $nomenclatureCloner;
     }
 
     /**
@@ -39,15 +37,7 @@ class AssignHandler
      */
     public function handle(Assign $command)
     {
-        $nomenclature = new Nomenclature(
-            $command->nomenclature->getTitle(),
-            $command->nomenclature->getDepth(),
-            $command->nomenclature->getValue(),
-            $command->nomenclature->isSorted(),
-            $command->event
-        );
-
-        $this->nomenclatureRepository->add($nomenclature);
+        $nomenclature = $this->nomenclatureCloner->dublicate($command->nomenclature, $command->event);
 
         return new AssignResult($nomenclature);
     }

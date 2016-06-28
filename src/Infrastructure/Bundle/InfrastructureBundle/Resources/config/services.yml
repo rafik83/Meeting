@@ -905,7 +905,7 @@ services:
     command.nomenclature.assign_handler:
         class: Proximum\Vimeet\Application\Command\Nomenclature\AssignHandler
         arguments:
-            - '@repository.nomenclature_repository'
+            - '@application.nomenclature.nomenclature_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
 
@@ -1395,3 +1395,7 @@ services:
             - '@application.nomenclature.id.uniqu_id_generator'
     application.nomenclature.export.csv_exporter:
         class: Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter
+    application.nomenclature.nomenclature_cloner:
+        class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
+        arguments:
+            - '@repository.nomenclature_repository'
