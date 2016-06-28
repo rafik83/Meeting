@@ -190,7 +190,7 @@ TemplateBuilder.prototype.save = function ()
 
         if (xhr.readyState === DONE) {
             if (xhr.status === OK) {
-
+                var config = JSON.parse(xhr.response);
             } else {
                 alert('error');
             }

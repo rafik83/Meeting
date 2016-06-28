@@ -309,7 +309,7 @@ class SheetTemplateController extends Controller
         $config = json_decode($request->getContent(), true);
         $this->get('tactician.commandbus')->handle(new Save($template, $config));
 
-        return new JsonResponse();
+        return new JsonResponse($config);
     }
 
     /**
