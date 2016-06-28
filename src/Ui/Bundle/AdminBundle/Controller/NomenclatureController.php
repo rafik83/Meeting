@@ -79,23 +79,23 @@ class NomenclatureController extends Controller
         $update     = new Update($nomenclature);
         $updateForm = $this->createForm(UpdateType::class, $update, ['submit' => true]);
 
-        if ($response = $this->handleUpdate($request, $updateForm, $update)) {
-            return $response;
+        if ($url = $this->handleUpdate($request, $updateForm, $update)) {
+            return $this->redirect($url);
         }
 
         // Handle import
         $importForm = $this->createForm(ImportType::class, []);
 
-        if ($response = $this->handleImport($request, $importForm, $nomenclature)) {
-            return $response;
+        if ($url = $this->handleImport($request, $importForm, $nomenclature)) {
+            return $this->redirect($url);
         }
 
         // Handle assign
         $assign     = new Assign($nomenclature);
         $assignForm = $this->createForm(AssignType::class, $assign, ['submit' => true, 'admin' => $this->getUser()]);
 
-        if ($response = $this->handleAssign($request, $assignForm, $assign)) {
-            return $response;
+        if ($url = $this->handleAssign($request, $assignForm, $assign)) {
+            return $this->redirect($url);
         }
 
         return $this->render('AdminBundle:Nomenclature:read.html.twig', [
@@ -113,7 +113,7 @@ class NomenclatureController extends Controller
      * @param FormInterface $updateForm
      * @param Update        $update
      *
-     * @return null|RedirectResponse
+     * @return null|string
      */
     private function handleUpdate(Request $request, FormInterface $updateForm, Update $update)
     {
@@ -121,7 +121,7 @@ class NomenclatureController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.nomenclature.update.success');
 
-            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $update->nomenclature->getId()]);
+            return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $update->nomenclature->getId()]);
         }
 
         return null;
@@ -134,7 +134,7 @@ class NomenclatureController extends Controller
      * @param FormInterface $importForm
      * @param Nomenclature  $nomenclature
      *
-     * @return null|RedirectResponse
+     * @return null|string
      */
     private function handleImport(Request $request, FormInterface $importForm, Nomenclature $nomenclature)
     {
@@ -148,7 +148,7 @@ class NomenclatureController extends Controller
                 $this->get('tactician.commandbus')->handle($import);
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
-                return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+                return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
             } catch (ImportException $exception) {
                 $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             }
@@ -164,7 +164,7 @@ class NomenclatureController extends Controller
      * @param FormInterface $assignForm
      * @param Assign        $assign
      *
-     * @return null|RedirectResponse
+     * @return null|string
      */
     private function handleAssign(Request $request, FormInterface $assignForm, Assign $assign)
     {
@@ -173,7 +173,7 @@ class NomenclatureController extends Controller
             $result = $this->get('tactician.commandbus')->handle($assign);
             $this->addFlash('success', 'flash.admin.nomenclature.assign.success');
 
-            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
+            return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
         }
 
         return null;
