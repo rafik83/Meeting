@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class Package
 {
