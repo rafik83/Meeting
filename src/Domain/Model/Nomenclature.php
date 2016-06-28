@@ -352,6 +352,18 @@ class Nomenclature
     }
 
     /**
+     * Get locales available in the nomenclature
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return array_unique(array_reduce($this->getChildren(), function (array $carry, NomenclatureItem $item) {
+            return array_merge($carry, $item->getLocales());
+        }, []));
+    }
+
+    /**
      * Set value
      *
      * @param int   $depth

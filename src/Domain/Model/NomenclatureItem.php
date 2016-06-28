@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Template\Object\Item;
+
 class NomenclatureItem
 {
     /**
@@ -148,5 +150,18 @@ class NomenclatureItem
         return !empty (array_filter($this->children, function (NomenclatureItem $child) use ($keys) {
             return in_array($child->getKey(), $keys) || $child->any($keys);
         }));
+    }
+
+    /**
+     * @return array
+     */
+    public function getLocales()
+    {
+        return array_unique(array_merge(
+            array_keys($this->label),
+            array_reduce($this->getChildren(), function (array $carry, NomenclatureItem $item) {
+                return array_merge($carry, $item->getLocales());
+            }, []))
+        );
     }
 }
