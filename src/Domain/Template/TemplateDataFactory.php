@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
@@ -132,6 +133,20 @@ class TemplateDataFactory
     }
 
     /**
+     * @param SheetTemplate $sheetTemplate
+     *
+     * @return TemplateData
+     */
+    public function createFromSheetTemplate(SheetTemplate $sheetTemplate)
+    {
+        $this->nomenclatures = $sheetTemplate->getEvent()
+            ? $this->nomenclatureRepository->findByEvent($sheetTemplate->getEvent())
+            : $this->nomenclatureRepository->findGlobals();
+
+        return $this->create($sheetTemplate->getValue());
+    }
+
+    /**
      * @param Participant $participant
      * @param string      $locale
      *
@@ -158,7 +173,7 @@ class TemplateDataFactory
      * @return TemplateData
      * @throws \Exception
      */
-    public function create(array $template, array $data, $locale, $fallback)
+    public function create(array $template, array $data = [], $locale = null, $fallback = null)
     {
         $templateData = new TemplateData('root', [], $locale, $fallback);
 

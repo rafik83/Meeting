@@ -67,6 +67,21 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findGlobals()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('nomenclature')
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->where('nomenclature.event IS NULL');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findById($id)
     {
         $queryBuilder = $this

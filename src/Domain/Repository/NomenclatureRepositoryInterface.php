@@ -43,4 +43,9 @@ interface NomenclatureRepositoryInterface
      * @param Nomenclature $nomenclature
      */
     public function set(Nomenclature $nomenclature);
+
+    /**
+     * @return Nomenclature[]
+     */
+    public function findGlobals();
 }
