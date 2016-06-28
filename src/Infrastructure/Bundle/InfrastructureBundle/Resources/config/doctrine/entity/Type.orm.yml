@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\Type:
     fields:
         position:
             type: integer
+            nullable: true
         previewTemplate:
             type: text
         viewTemplate:
