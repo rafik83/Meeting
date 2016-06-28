@@ -112,9 +112,9 @@ class CreateHandler
         } else {
             $registrationTemplate = new RegistrationTemplate(
                 $type->getTitle($create->event->getAvailableLocale($create->locale)),
-                $create->sheetTemplate->getValue(),
-                $create->sheetTemplate->getLocales(),
-                $create->sheetTemplate->getFallback(),
+                $create->registrationTemplate->getValue(),
+                $create->registrationTemplate->getLocales(),
+                $create->registrationTemplate->getFallback(),
                 $this->dateTime
             );
             $registrationTemplate->setEvent($create->event);
