@@ -62,7 +62,7 @@ class Nomenclature
      * @param Event        $event
      * @param Nomenclature $original
      */
-    public function __construct($title, $depth = 1, array $value = [], $sort = true, Event $event = null, Nomenclature $original)
+    public function __construct($title, $depth = 1, array $value = [], $sort = true, Event $event = null, Nomenclature $original = null)
     {
         $this->title    = $title;
         $this->depth    = $depth;
