@@ -21,11 +21,6 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     private $nomenclature;
 
     /**
-     * @var null|array
-     */
-    private $nomenclatureLabels;
-
-    /**
      * @param string $nomenclature
      *
      * @return Nomenclature
