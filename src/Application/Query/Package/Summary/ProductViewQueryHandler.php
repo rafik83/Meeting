@@ -59,10 +59,12 @@ class ProductViewQueryHandler
              */
             $planView = reset($productViewQuery->planGroupView->options);
 
-            foreach ($planView->included as $key => $includedView) {
-                if (null !== $includedView && $includedView->id === $productView->id) {
-                    $productView->addIncludedProduct($includedView);
-                    unset($planView->included[$key]);
+            if (null !== $planView && !empty($planView->included)) {
+                foreach ($planView->included as $key => $includedView) {
+                    if (null !== $includedView && $includedView->id === $productView->id) {
+                        $productView->addIncludedProduct($includedView);
+                        unset($planView->included[$key]);
+                    }
                 }
             }
         }
