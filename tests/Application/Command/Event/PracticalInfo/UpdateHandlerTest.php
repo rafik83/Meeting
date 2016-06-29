@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Event\PaymentConditions;
+namespace Proximum\Vimeet\Tests\Application\Command\Event\PracticalInfo;
 
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\UpdateHandler;
