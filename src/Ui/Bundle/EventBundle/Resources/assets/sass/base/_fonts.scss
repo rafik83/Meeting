@@ -22,9 +22,9 @@
   font-family: 'PictoOutline';
   src: url($font-path + '/PictoOutline.eot?4nyk96');
   src: url($font-path + '/PictoOutline.eot?4nyk96#iefix') format('embedded-opentype'),
-       url($font-path + '/PictoOutline.ttf?4nyk96') format('truetype'),
-       url($font-path + '/PictoOutline.woff?4nyk96') format('woff'),
-       url($font-path + '/PictoOutline.svg?4nyk96#PictoOutline') format('svg');
+  url($font-path + '/PictoOutline.ttf?4nyk96') format('truetype'),
+  url($font-path + '/PictoOutline.woff?4nyk96') format('woff'),
+  url($font-path + '/PictoOutline.svg?4nyk96#PictoOutline') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -41,30 +41,38 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-FMZ:before { content: "\5f"; }
+.icon-DemandeRDV:before { content: "\e0"; }
+.icon-Rechercher:before { content: "\35"; }
+.icon-Disconnect:before { content: "\21"; }
+.icon-Societe:before { content: "\7d"; }
+.icon-Profil_1:before { content: "\7b"; }
+.icon-OMZ:before { content: "\64"; }
+.icon-Preferences_1:before { content: "\66"; }
+.icon-Menu_12:before { content: "\68"; }
+.icon-Clef:before { content: "\6b"; }
+.icon-Travail:before { content: "\6f"; }
+.icon-Envellope:before { content: "\73"; }
+.icon-Image:before { content: "\77"; }
+.icon-Langue:before { content: "\48"; }
+.icon-Photo:before { content: "\4b"; }
+.icon-Video_1:before { content: "\4e"; }
+.icon-Video_2:before { content: "\56"; }
 .icon-Badge_1:before { content: "\61"; }
 .icon-Badge_2:before { content: "\62"; }
 .icon-Contact_1:before { content: "\63"; }
-.icon-Home_1:before { content: "\64"; }
 .icon-Info_1:before { content: "\65"; }
-.icon-Info_2:before { content: "\66"; }
 .icon-Menu_1:before { content: "\67"; }
-.icon-Menu_2:before { content: "\68"; }
 .icon-Alerter_1:before { content: "\69"; }
 .icon-Fermer_1:before { content: "\6a"; }
-.icon-Fermer_2:before { content: "\6b"; }
 .icon-Fermer_3:before { content: "\6c"; }
 .icon-Fermer_4:before { content: "\6d"; }
 .icon-Ouvrir_1:before { content: "\6e"; }
-.icon-Ouvrir_2:before { content: "\6f"; }
 .icon-Ouvrir_3:before { content: "\70"; }
 .icon-Ouvrir_4:before { content: "\71"; }
 .icon-Reduire_1:before { content: "\72"; }
-.icon-Reduire_2:before { content: "\73"; }
 .icon-Reduire_3:before { content: "\74"; }
 .icon-Reduire_4:before { content: "\75"; }
 .icon-Valider_1:before { content: "\76"; }
-.icon-Valider_2:before { content: "\77"; }
 .icon-Valider_3:before { content: "\78"; }
 .icon-Valider_4:before { content: "\79"; }
 .icon-Deverouiller_1:before { content: "\7a"; }
@@ -75,13 +83,10 @@
 .icon-Dejeuner:before { content: "\45"; }
 .icon-RDV:before { content: "\46"; }
 .icon-Conference:before { content: "\47"; }
-.icon-PresFlash_1:before { content: "\48"; }
 .icon-PresFlash_2:before { content: "\49"; }
 .icon-Precedent_1:before { content: "\4a"; }
-.icon-Precedent_2:before { content: "\4b"; }
 .icon-Precedent_3:before { content: "\4c"; }
 .icon-Suivant_1:before { content: "\4d"; }
-.icon-Suivant_2:before { content: "\4e"; }
 .icon-Suivant_3:before { content: "\4f"; }
 .icon-Cafe_1:before { content: "\50"; }
 .icon-Editer_1:before { content: "\51"; }
@@ -89,7 +94,6 @@
 .icon-Voir_1:before { content: "\53"; }
 .icon-Calendrier:before { content: "\54"; }
 .icon-Document_1:before { content: "\55"; }
-.icon-Document_2:before { content: "\56"; }
 .icon-Inserer_1:before { content: "\57"; }
 .icon-Inserer_2:before { content: "\58"; }
 .icon-Note_1:before { content: "\59"; }
@@ -97,8 +101,6 @@
 .icon-Paiement_1:before { content: "\31"; }
 .icon-Panier_1:before { content: "\32"; }
 .icon-Panier_2:before { content: "\33"; }
-.icon-ZoomMoins_1:before { content: "\34"; }
-.icon-ZoomPlus_1:before { content: "\35"; }
 .icon-Horaire:before { content: "\36"; }
 .icon-Localiser:before { content: "\37"; }
 .icon-Effacer:before { content: "\38"; }
@@ -114,4 +116,3 @@
 .icon-Etoile:before { content: "\2d"; }
 .icon-Retour:before { content: "\28"; }
 .icon-Suivant:before { content: "\29"; }
-.icon-Actualiser_2:before { content: "\21"; }
