@@ -30,17 +30,9 @@ class CreatePlanType extends AbstractCreateType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('availabilityCurrent', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ]
-            ])
-            ->add('availabilityMax', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ]
+            ->add('translations', CollectionType::class, [
+                'entry_type' => TranslationsType::class,
+                'label'      => false,
             ])
             ->add('features', CollectionType::class, [
                 'entry_type'    => FeatureType::class,
@@ -67,9 +59,17 @@ class CreatePlanType extends AbstractCreateType
                     'data-shared-choices-collection' => 'products',
                 ],
             ])
-            ->add('translations', CollectionType::class, [
-                'entry_type' => TranslationsType::class,
-                'label'      => false,
+            ->add('availabilityCurrent', IntegerType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ]
+            ])
+            ->add('availabilityMax', IntegerType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ]
             ])
         ;
     }
