@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -49,7 +51,7 @@ class TemplateDataFactory
     /**
      * @var Nomenclature[]
      */
-    private $nomenclatures;
+    private $nomenclatures = [];
 
     /**
      * @param NomenclatureRepositoryInterface $nomenclatureRepository
@@ -67,14 +69,14 @@ class TemplateDataFactory
      */
     public function createFromSheet(Sheet $sheet, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
-
-        return $this->create(
-            $sheet->getType()->getSheetTemplate()->getValue(),
-            $sheet->getData(),
-            $locale,
-            $sheet->getType()->getSheetTemplate()->getFallback()
-        );
+        return $this
+            ->loadNomenclatures($sheet->getEvent())
+            ->create(
+                $sheet->getType()->getSheetTemplate()->getValue(),
+                $sheet->getData(),
+                $locale,
+                $sheet->getType()->getSheetTemplate()->getFallback()
+            );
     }
 
     /**
@@ -85,14 +87,14 @@ class TemplateDataFactory
      */
     public function createRegistrationFromType(Type $type, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($type->getEvent());
-
-        return $this->create(
-            $type->getRegistrationTemplate()->getValue(),
-            [],
-            $locale,
-            $type->getRegistrationTemplate()->getFallback()
-        );
+        return $this
+            ->loadNomenclatures($type->getEvent())
+            ->create(
+                $type->getRegistrationTemplate()->getValue(),
+                [],
+                $locale,
+                $type->getRegistrationTemplate()->getFallback()
+            );
     }
 
     /**
@@ -103,14 +105,14 @@ class TemplateDataFactory
      */
     public function createRegistrationFromSheet(Sheet $sheet, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
-
-        return $this->create(
-            $sheet->getType()->getRegistrationTemplate()->getValue(),
-            $sheet->getRegistrationData(),
-            $locale,
-            $sheet->getType()->getRegistrationTemplate()->getFallback()
-        );
+        return $this
+            ->loadNomenclatures($sheet->getEvent())
+            ->create(
+                $sheet->getType()->getRegistrationTemplate()->getValue(),
+                $sheet->getRegistrationData(),
+                $locale,
+                $sheet->getType()->getRegistrationTemplate()->getFallback()
+            );
     }
 
     /**
@@ -121,16 +123,16 @@ class TemplateDataFactory
      */
     public function createRegistrationFromParticipant(Participant $participant, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
-
         $datas = array_merge($participant->getData(), $participant->getSheet()->getRegistrationData());
 
-        return $this->create(
-            $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
-            $datas,
-            $locale,
-            $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
-        );
+        return $this
+            ->loadNomenclatures($participant->getSheet()->getEvent())
+            ->create(
+                $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
+                $datas,
+                $locale,
+                $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+            );
     }
 
     /**
@@ -140,11 +142,9 @@ class TemplateDataFactory
      */
     public function createFromSheetTemplate(SheetTemplate $sheetTemplate)
     {
-        $this->nomenclatures = $sheetTemplate->getEvent()
-            ? $this->nomenclatureRepository->findByEvent($sheetTemplate->getEvent())
-            : $this->nomenclatureRepository->findGlobals();
-
-        return $this->create($sheetTemplate->getValue());
+        return $this
+            ->loadNomenclatures($sheetTemplate->getEvent())
+            ->create($sheetTemplate->getValue());
     }
 
     /**
@@ -154,11 +154,9 @@ class TemplateDataFactory
      */
     public function createFromRegistrationTemplate(RegistrationTemplate $registrationTemplate)
     {
-        $this->nomenclatures = $registrationTemplate->getEvent()
-            ? $this->nomenclatureRepository->findByEvent($registrationTemplate->getEvent())
-            : $this->nomenclatureRepository->findGlobals();
-
-        return $this->create($registrationTemplate->getValue());
+        return $this
+            ->loadNomenclatures($registrationTemplate->getEvent())
+            ->create($registrationTemplate->getValue());
     }
 
     /**
@@ -169,14 +167,29 @@ class TemplateDataFactory
      */
     public function createProfileTemplate(Participant $participant, $locale)
     {
-        $this->nomenclatures = $this->nomenclatureRepository->findByEvent($participant->getSheet()->getEvent());
+        return $this
+            ->loadNomenclatures($participant->getSheet()->getEvent())
+            ->create(
+                $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
+                $participant->getData(),
+                $locale,
+                $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+            );
+    }
 
-        return $this->create(
-            $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
-            $participant->getData(),
-            $locale,
-            $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
-        );
+    /**
+     * @param AbstractTemplate $template
+     * @param array            $data
+     * @param string|null      $locale
+     * @param string|null      $fallback
+     *
+     * @return TemplateData
+     */
+    public function createFromTemplate(AbstractTemplate $template, array $data = [], $locale = null, $fallback = null)
+    {
+        return $this
+            ->loadNomenclatures($template->getEvent())
+            ->create($template->getValue(), $data, $locale, $fallback);
     }
 
     /**
@@ -283,21 +296,13 @@ class TemplateDataFactory
         $class  = $this->objects[$config['type']];
         $object = new $class($config['type'], $config['config'], $locale, $fallback);
 
-        if ($object instanceof Object\Nomenclature && $this->hasNomenclature($object->getNomenclatureId())) {
-            $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+        if ($object instanceof Object\Nomenclature) {
+            if ($object->getNomenclatureId()) {
+                $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+            }
         }
 
         return $object;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool
-     */
-    private function hasNomenclature($id)
-    {
-        return null !== $this->nomenclatures && isset($this->nomenclatures[$id]);
     }
 
     /**
@@ -307,6 +312,24 @@ class TemplateDataFactory
      */
     private function getNomenclature($id)
     {
+        if (!isset($this->nomenclatures[$id])) {
+            throw new \RuntimeException(sprintf('Nomenclature "%s" not found. Available nomenclatures are "%s"', $id, implode('", "', array_keys($this->nomenclatures))));
+        }
+
         return $this->nomenclatures[$id];
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return TemplateDataFactory
+     */
+    private function loadNomenclatures(Event $event = null)
+    {
+        $this->nomenclatures = $event
+            ? $this->nomenclatureRepository->findByEvent($event)
+            : $this->nomenclatureRepository->findGlobals();
+
+        return $this;
     }
 }
