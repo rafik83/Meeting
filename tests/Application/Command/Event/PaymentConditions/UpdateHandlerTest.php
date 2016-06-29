@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $dateTime  = new \DateTime();
         $dateTime2 = new \DateTime();
-        $event     = new Event();
+        $event = EventFactory::createEvent();
         $event->getConfiguration()->updatePaymentConditions(false, $dateTime, 500, 50);
 
         $update = new Update($event);
@@ -30,7 +31,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->minimumForDeposit  = 200;
         $update->deposit            = 90;
 
-        $expectedEvent = new Event();
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->updatePaymentConditions(true, $dateTime2, 200, 90);
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);

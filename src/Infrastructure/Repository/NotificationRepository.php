@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
@@ -50,7 +51,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getNotificationsByEventAndUser($eventId, User $user)
+    public function getNotificationsByEventAndUser(Event $event, User $user)
     {
         $queryBuilder = $this
             ->entityManager
@@ -59,8 +60,8 @@ class NotificationRepository implements NotificationRepositoryInterface
             ->from(Notification::class, 'notification')
             ->andWhere('notification.recipient = :user')
             ->setParameter('user', $user)
-            ->andWhere('notification.event = :eventId')
-            ->setParameter('eventId', $eventId)
+            ->andWhere('notification.event = :event')
+            ->setParameter('event', $event)
             ->orderBy('notification.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();

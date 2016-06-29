@@ -14,18 +14,18 @@ use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\AddHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Schedule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event                 = new Event();
+        $event                 = EventFactory::createEvent();
         $type                  = new Type($event);
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());
@@ -51,7 +51,7 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithMerge()
     {
-        $event                 = new Event();
+        $event                 = EventFactory::createEvent();
         $type                  = new Type($event);
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());

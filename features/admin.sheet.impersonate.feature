@@ -1,3 +1,5 @@
+@admin
+
 Feature: Impersonation
   As an admin, I can connect to a sheet owner on front
 

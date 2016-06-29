@@ -1,3 +1,5 @@
+@event
+
 Feature: Activate Account
   I need to be able to activate my account
 

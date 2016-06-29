@@ -19,13 +19,14 @@ use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class AddCommentHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $dateTime);

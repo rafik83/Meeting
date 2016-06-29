@@ -16,13 +16,14 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
     public function testAdd()
     {
         $datetime = new \DateTime();
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);

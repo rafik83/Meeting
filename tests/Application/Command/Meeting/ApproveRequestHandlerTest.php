@@ -20,12 +20,13 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $type         = new Type($event);
         $user1        = new User('test@test.fr', 'test', 'test', 'fr');
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');

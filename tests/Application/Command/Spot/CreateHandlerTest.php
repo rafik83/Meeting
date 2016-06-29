@@ -15,13 +15,14 @@ use Proximum\Vimeet\Application\Command\Spot\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         //Context
-        $event = new Event();
+        $event = EventFactory::createEvent();
 
         //Command
         $command = new Create($event);

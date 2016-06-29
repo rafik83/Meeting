@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +31,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $now   = new \DateTime();
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
 
         $template = [
@@ -169,7 +170,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         $now   = new \DateTime();
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2 = new User('test2@test.com', 'salt2', 'password2', 'fr');
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
 
         $template = [

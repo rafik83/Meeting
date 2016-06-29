@@ -17,12 +17,13 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SheetTest extends \PHPUnit_Framework_TestCase
 {
     public function testHasUser()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $user1 = new User('user1@test.com', '', '', 'fr');
         $sheet = new Sheet($event, $type, [], $user1, new \DateTime());
@@ -40,7 +41,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
     public function testHasParticipant()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, $type, [], $user, new \DateTime());
@@ -60,7 +61,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserParticipant()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
         $user1 = new User('user1@test.com', '', '', 'fr');
         $sheet = new Sheet($event, $type, [], $user1, new \DateTime());
@@ -86,7 +87,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignOrganizer()
     {
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, new \DateTime());
@@ -99,7 +100,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignOperator()
     {
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, new \DateTime());
@@ -114,7 +115,7 @@ class SheetTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(SheetException::class);
 
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, new \DateTime());

@@ -10,17 +10,17 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PackageTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetGroups()
     {
         // Context
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $dateTime = new \DateTime();
 
         $package = new Package($event, 'my event', $dateTime);

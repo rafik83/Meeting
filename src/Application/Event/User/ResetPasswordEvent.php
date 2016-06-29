@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\Event\User;
 
 use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\Event;
+use Proximum\Vimeet\Domain\Model\Event as EventModel;
 
 class ResetPasswordEvent extends Event
 {
@@ -23,9 +23,9 @@ class ResetPasswordEvent extends Event
     private $user;
 
     /**
-     * @var EventView
+     * @var EventModel
      */
-    private $eventView;
+    private $event;
 
     /**
      * @var ForgottenPasswordToken
@@ -39,14 +39,14 @@ class ResetPasswordEvent extends Event
 
     /**
      * @param User                   $user
-     * @param EventView              $eventView
+     * @param EventModel             $event
      * @param ForgottenPasswordToken $forgottenPasswordToken
      * @param string                 $locale
      */
-    public function __construct(User $user, EventView $eventView, ForgottenPasswordToken $forgottenPasswordToken, $locale)
+    public function __construct(User $user, EventModel $event, ForgottenPasswordToken $forgottenPasswordToken, $locale)
     {
         $this->user                   = $user;
-        $this->eventView              = $eventView;
+        $this->event                  = $event;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
         $this->locale                 = $locale;
     }
@@ -60,11 +60,11 @@ class ResetPasswordEvent extends Event
     }
 
     /**
-     * @return EventView
+     * @return EventModel
      */
-    public function getEventView()
+    public function getEvent()
     {
-        return $this->eventView;
+        return $this->event;
     }
 
     /**

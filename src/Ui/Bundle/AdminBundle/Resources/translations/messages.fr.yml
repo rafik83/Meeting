@@ -376,6 +376,11 @@ admin:
             link: Conditions de paiement
             update:
                 title: Modifier les conditions de paiement
+        create:
+            title: Créer un événement
+        title: Titre
+        languages: Langues
+        fallback: Par défaut
     rule:
         link: Qui voit qui
     type:

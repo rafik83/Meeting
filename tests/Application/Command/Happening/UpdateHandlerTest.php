@@ -17,12 +17,13 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
         $begin = new \DateTime('2016-01-27 00:00:00');

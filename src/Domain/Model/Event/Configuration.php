@@ -28,6 +28,8 @@ class Configuration
     private $textColor;
 
     /**
+     * In Minutes
+     *
      * @var int
      */
     private $scheduleScale = 30;

@@ -15,15 +15,16 @@ use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\View\EventView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -38,12 +39,12 @@ class RegisterController extends Controller
      * Register an account.
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param TypeView  $typeView
      *
      * @return RedirectResponse|Response
      */
-    public function registerAction(Request $request, EventView $eventView, TypeView $typeView)
+    public function registerAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event');
@@ -56,7 +57,7 @@ class RegisterController extends Controller
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
 
             if ($user) {
-                if ($this->hasSheets($user, $eventView)) {
+                if ($this->hasSheets($user, $eventDomain->getEvent())) {
                     $this->addFlash('success', 'flash.event.register.already_known.login');
                 } else {
                     $this->setFlashRegisterType($typeView->id);
@@ -74,9 +75,9 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:register.html.twig', [
-            'form'      => $form->createView(),
-            'eventView' => $eventView,
-            'typeView'  => $typeView,
+            'form'     => $form->createView(),
+            'event'    => $eventDomain->getEvent(),
+            'typeView' => $typeView,
         ]);
     }
 
@@ -84,12 +85,12 @@ class RegisterController extends Controller
      * Register an account.
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param TypeView  $typeView
      *
      * @return RedirectResponse|Response
      */
-    public function registerNewUserAction(Request $request, EventView $eventView, TypeView $typeView)
+    public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
         $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale());
 
@@ -115,10 +116,10 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:registerNewUser.html.twig', [
-            'email'     => $command->email,
-            'form'      => $form->createView(),
-            'eventView' => $eventView,
-            'typeView'  => $typeView,
+            'email'    => $command->email,
+            'form'     => $form->createView(),
+            'event'    => $eventDomain->getEvent(),
+            'typeView' => $typeView,
         ]);
     }
 
@@ -126,18 +127,18 @@ class RegisterController extends Controller
      * Create a participation to an event.
      *
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param TypeView  $typeView
      *
      * @return RedirectResponse|Response
      */
-    public function participateAction(Request $request, EventView $eventView, TypeView $typeView)
+    public function participateAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->hasUserAlreadyCreatedParticipant($eventView->getId(), $this->getUser()->getId());
+        $this->hasUserAlreadyCreatedParticipant($eventDomain->getEvent(), $this->getUser());
 
         $locale               = $request->getLocale();
-        $event                = $this->get('vimeet_infrastructure.repository.event_repository')->getById($eventView->id);
+        $event                = $eventDomain->getEvent();
         $type                 = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
         $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromType($type, $locale);
         $user                 = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
@@ -163,7 +164,7 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
-            'eventView'  => $eventView,
+            'event'      => $eventDomain->getEvent(),
             'typeView'   => $typeView,
             'form'       => $form->createView(),
             'stepTitle'  => $participantBlock->getTitle($locale),
@@ -173,16 +174,16 @@ class RegisterController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Participant $participant
      * @param int         $step
      *
      * @return RedirectResponse|Response
      */
-    public function participantStepAction(Request $request, EventView $eventView, Participant $participant, $step)
+    public function participantStepAction(Request $request, EventDomain $eventDomain, Participant $participant, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessIfWrongParticipant($eventView, $participant);
+        $this->denyAccessIfWrongParticipant($eventDomain, $participant);
 
         $locale               = $request->getLocale();
         $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromParticipant($participant, $locale);
@@ -193,7 +194,7 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $data = ['block' => $participantBlock, 'locale' => $locale, 'country' => $eventView->country];
+        $data = ['block' => $participantBlock, 'locale' => $locale, 'country' => $eventDomain->getEvent()->getCountry()];
         $form = $this->createForm(BlockType::class, $participantBlock, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -211,7 +212,7 @@ class RegisterController extends Controller
         $participantCard = $this->get('tactician.commandbus.query')->handle(new CardViewQuery($participant, $locale));
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
-            'eventView'       => $eventView,
+            'event'           => $eventDomain->getEvent(),
             'form'            => $form->createView(),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
@@ -223,14 +224,14 @@ class RegisterController extends Controller
     /**
      * Check if the user has already created a participate
      *
-     * @param int $eventId
-     * @param int $userId
+     * @param Event $event
+     * @param User  $user
      */
-    private function hasUserAlreadyCreatedParticipant($eventId, $userId)
+    private function hasUserAlreadyCreatedParticipant($event, $user)
     {
         $participants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getAllParticipantForUser($eventId, $userId);
+            ->getAllParticipantForUser($event, $user);
 
         if (1 <= count($participants)) {
             throw $this->createAccessDeniedException('Participation already created');
@@ -353,16 +354,16 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param User      $user
-     * @param EventView $eventView
+     * @param User  $user
+     * @param Event $event
      *
      * @return bool
      */
-    protected function hasSheets(User $user, EventView $eventView)
+    protected function hasSheets(User $user, Event $event)
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($user, $eventView);
+            ->getSheetByUserAndEvent($user, $event);
 
         return !empty($sheets);
     }
@@ -370,12 +371,12 @@ class RegisterController extends Controller
     /**
      * Deny access if the participant does not match the user and the event
      *
-     * @param EventView   $eventView
+     * @param EventDomain   $eventDomain
      * @param Participant $participant
      */
-    protected function denyAccessIfWrongParticipant(EventView $eventView, Participant $participant)
+    protected function denyAccessIfWrongParticipant(EventDomain $eventDomain, Participant $participant)
     {
-        if ($participant->getSheet()->getEvent()->getId() !== $eventView->getId()) {
+        if ($participant->getSheet()->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createAccessDeniedException('Participation does not exist');
         }
 
