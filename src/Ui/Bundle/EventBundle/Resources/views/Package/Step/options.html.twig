@@ -1,0 +1,39 @@
+{% form_theme form '@Ui/default.html.twig' %}
+
+{{ form_start(form, {attr: {class: 'form--table--head'}}) }}
+    {{ form_errors(form) }}
+    {% for group in view.products.groups %}
+        <div class="content-header clearfix">
+            <h2 class="pull-left">{{ 'package.product.selectOptions'|trans }}</h2>
+            <p class="category-option pull-left">{{ group.label }}</p>
+        </div>
+
+        <section class="object object--collection style--style-1 section">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ 'package.product.unitPriceLabel'|trans }}</th>
+                        <th>{{ 'package.product.label'|trans }}</th>
+                        <th class="text-center">{{ 'package.product.quantity'|trans }}</th>
+                        <th class="text-center">{{ 'package.product.total'|trans }}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for option in group.options %}
+                        {{ include('EventBundle:Package/Step:product_row.html.twig', {
+                            product: option,
+                            quantityForm: form.children[option.id] is defined ? form.children[option.id] : null
+                        }) }}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary pull-right"><i class="icon-Valider_3"></i>{{ 'package.product.validate'|trans }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

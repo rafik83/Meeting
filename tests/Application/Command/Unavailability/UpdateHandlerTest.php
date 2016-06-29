@@ -19,13 +19,14 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         // Context
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet       = new Sheet($event, $type, [], $user, new \DateTime());
@@ -57,7 +58,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithMerge()
     {
         // Context
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet       = new Sheet($event, $type, [], $user, new \DateTime());

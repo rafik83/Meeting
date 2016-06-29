@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +45,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleOrganizer()
     {
         $dateTime = new \DateTime();
-        $event  = new Event();
+        $event  = EventFactory::createEvent();
         $event->setLocales(['fr'], 'fr');
         $template = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
         $template->setEvent($event);

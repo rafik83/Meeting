@@ -14,3 +14,6 @@ package:
         notBlank: Vous devez sélectionner une formule.
     planning:
         quantity: La quantité doit être comprise entre %min% et %max%
+    product:
+        quantityNotMatch: La quantité doit être comprise entre %min% et %max%
+        notAvailable: Vous avez sélectionné un produit qui n'est plus disponible

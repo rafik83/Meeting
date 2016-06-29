@@ -16,25 +16,26 @@ use Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler;
 use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $eventView      = new EventView(1, 'test', '', 'test', 'fr', 'fr', [], 'Europe/Paris', '', 'FR');
-        $command        = new ForgottenPassword($eventView, 'fr');
+        $event          = EventFactory::createEvent();
+        $command        = new ForgottenPassword($event, 'fr');
         $command->email = 'test@test.fr';
 
         $dateTime               = new DateTime();
         $user                   = new User('test@test.fr', 'test', 'test', 'fr');
         $forgottenPasswordToken = new ForgottenPasswordToken($user, 'token', $dateTime);
-        $event                  = new ResetPasswordEvent($user, $command->eventView, $forgottenPasswordToken, $command->locale);
+        $event                  = new ResetPasswordEvent($user, $event, $forgottenPasswordToken, $command->locale);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findByEmail($command->email)->shouldBeCalled()->willReturn($user);
@@ -67,13 +68,13 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailDoesNotExistException::class);
 
-        $eventView      = new EventView(1, 'test', '', 'test', 'fr', 'fr', [], 'Europe/Paris', '', 'FR');
-        $command        = new ForgottenPassword($eventView, 'fr');
+        $event          = EventFactory::createEvent();
+        $command        = new ForgottenPassword($event, 'fr');
         $command->email = 'test2@test.fr';
 
         $user                   = new User('test@test.fr', 'test', 'test', 'fr');
         $forgottenPasswordToken = new ForgottenPasswordToken($user, 'token', new DateTime());
-        $event                  = new ResetPasswordEvent($user, $command->eventView, $forgottenPasswordToken, $command->locale);
+        $event                  = new ResetPasswordEvent($user, $event, $forgottenPasswordToken, $command->locale);
 
         $forgottenPasswordTokenGenerator = $this->prophesize(UserForgottenPasswordTokenGenerator::class);
         $forgottenPasswordTokenGenerator->generate($user)->shouldNotBeCalled();

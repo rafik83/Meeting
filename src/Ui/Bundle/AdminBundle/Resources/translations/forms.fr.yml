@@ -129,6 +129,38 @@ form:
         children:
             submit:
                 label: Enregistrer
+    event_create:
+        children:
+            title:
+                label: Titre
+            locales:
+                label: Langues
+            domain:
+                label: Domaine (complet)
+                placeholder: "Nom de domaine complet de l'événement: *.vimeet.events"
+            timeZone:
+                label: Fuseau horaire
+            fallback:
+                label: Langue par défaut
+            logo:
+                label: Logo
+            country:
+                label: Pays
+            mode:
+                label: Mode
+            vat:
+                label: TVA
+            currency:
+                label: Devise
+                placeholder: -- Choisir une devise pour l'événement --
+            textColor:
+                label: Couleur du texte
+            leftColor:
+                label: Couleur habillage de gauche
+            rightColor:
+                label: Couleur habillage de droite
+            submit:
+                label: Enregistrer
     event_update:
         children:
             title:
@@ -141,6 +173,10 @@ form:
                 label: Logo
             country:
                 label: Pays
+            domain:
+                label: Domaine (complet)
+            timeZone:
+                label: Fuseau horaire
             mode:
                 label: Mode
             vat:

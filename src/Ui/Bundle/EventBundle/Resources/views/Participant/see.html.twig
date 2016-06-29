@@ -1,13 +1,13 @@
 {% extends 'EventBundle::base.html.twig' %}
 
-{% block title eventView.title %}
+{% block title event.title %}
 
 {% block content %}
     <div class="profile__center">
         <div class="profile__box">
             <section class="main">
                 <header>
-                    <h1>{{ 'account.profile.profile'|trans }}</h1>
+                    <h1><i class="icon-Profil_1"></i> {{ 'account.profile.profile'|trans }}</h1>
                 </header>
                 <div class="main__content">
                     <div class="preview">
@@ -29,7 +29,7 @@
                         </div>
                         <div class="validation">
                             <a href="{{ path('event_account_participant_profile', {sheet: sheet.id, participant: participant.id}) }}" class="btn btn-primary">
-                                <i class="icon-Editer_1"></i> {{ 'common.update'|trans }}
+                                <i class="icon-Profil_1"></i> {{ 'common.update'|trans }}
                             </a>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
         <div class="profile__box">
             <section class="main">
                 <header>
-                    <h1>{{ 'account.profile.company'|trans }}</h1>
+                    <h1><i class="icon-Societe"></i> {{ 'account.profile.company'|trans }}</h1>
                 </header>
                 <div class="main__content">
                     <div class="preview">
@@ -63,7 +63,7 @@
                         </ul>
                         {% if companyTemplate %}
                             <a href="{{ path('event_account_participant_company', {sheet: sheet.id, participant: participant.id}) }}" class="btn btn-primary">
-                                <i class="icon-Editer_1"></i> {{ 'common.update'|trans }}
+                                <i class="icon-Societe"></i> {{ 'common.update'|trans }}
                             </a>
                         {% endif %}
                     </div>

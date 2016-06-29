@@ -1,0 +1,43 @@
+Proximum\Vimeet\Application\Command\Event\Create:
+    properties:
+        title:
+            - NotBlank: ~
+        mode:
+            - NotBlank: ~
+        domain:
+            - NotBlank: ~
+            - Length:
+                max: 63
+            - Regex:
+                pattern: '/^\S*$/'
+                message: validators.whitespace
+        timeZone:
+            - NotBlank: ~
+        locales:
+            - NotBlank: ~
+        fallback:
+            - NotBlank: ~
+        country:
+            - NotBlank: ~
+        vat:
+            - NotBlank: ~
+        currency:
+            - NotBlank: ~
+        logo:
+            - Image:
+                mimeTypes: ["image/jpeg", "image/pjpeg", "image/png", "image/x-png"]
+        textColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        leftColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        rightColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal

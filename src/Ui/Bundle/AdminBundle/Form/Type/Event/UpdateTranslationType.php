@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class EventUpdateTranslationType extends AbstractType
+class UpdateTranslationType extends AbstractType
 {
     /**
      * {@inheritdoc}

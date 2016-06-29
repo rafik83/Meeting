@@ -162,7 +162,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             'MailBundle:Mail:User/resetPassword.html.twig',
             'user_forgot_password',
             $event->getLocale(),
-            $event->getEventView()->title,
+            $event->getEvent()->getTitle(),
             $event->getForgottenPasswordToken()->getToken()
         );
 
@@ -180,7 +180,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             'MailBundle:Mail:User/completeProfile.html.twig',
             'user_complete_profile',
             $event->getLocale(),
-            $event->getEventView()->title,
+            $event->getEvent()->getTitle(),
             $event->getParticipant()->getId()
         );
 

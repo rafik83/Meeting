@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Package\Step;
+namespace Proximum\Vimeet\Application\Exception\Event;
 
-class Options extends AbstractStep
+class EventException extends \Exception
 {
 }

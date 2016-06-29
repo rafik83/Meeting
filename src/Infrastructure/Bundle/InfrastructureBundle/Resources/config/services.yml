@@ -836,6 +836,12 @@ services:
             - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
+    command.package.step.select_options_handler:
+        class: Proximum\Vimeet\Application\Command\Package\Step\SelectOptionsHandler
+        arguments:
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
         class: Proximum\Vimeet\Application\Command\Billing\UpdateInfoHandler
         arguments:
@@ -901,6 +907,16 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
+    command.event.create_handler:
+        class: Proximum\Vimeet\Application\Command\Event\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.content_repository'
+            - '@guideline.generator'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
 
     #
     # Security
@@ -1247,6 +1263,7 @@ services:
         arguments:
             - '@query.package.plans_view_query_handler'
             - '@query.package.participant_and_planning_view_query_handler'
+            - '@query.package.groups_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PackageViewQuery }
     query.package.participant_and_planning_view_query_handler:
@@ -1275,6 +1292,24 @@ services:
             - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
+    query.package.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQueryHandler
+        arguments:
+            - '@query.package.group_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQuery }
+    query.package.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Option\GroupViewQueryHandler
+        arguments:
+            - '@query.package.option_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\GroupViewQuery }
+    query.package.option_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
+        arguments:
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
 
     #
     # Elastic Transformer
@@ -1314,7 +1349,7 @@ services:
     # Package
     #
     package.planning.quantity_max_guesser:
-        class: Proximum\Vimeet\Domain\Package\Planning\QuantityMaxGuesser
+        class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
 

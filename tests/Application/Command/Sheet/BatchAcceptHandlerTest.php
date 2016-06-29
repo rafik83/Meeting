@@ -21,12 +21,13 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
         $type  = new Type($event);
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');

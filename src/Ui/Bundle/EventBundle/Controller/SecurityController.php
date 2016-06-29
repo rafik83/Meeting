@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,12 +26,12 @@ use Symfony\Component\Security\Core\Role\SwitchUserRole;
 class SecurityController extends Controller
 {
     /**
-     * @param Request   $request
-     * @param EventView $eventView
+     * @param Request     $request
+     * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
      */
-    public function loginFirstStepAction(Request $request, EventView $eventView)
+    public function loginFirstStepAction(Request $request, EventDomain $eventDomain)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event');
@@ -66,19 +67,19 @@ class SecurityController extends Controller
             [];
 
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
-            'users'     => $users,
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
+            'users' => $users,
         ]);
     }
 
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
      */
-    public function loginSecondStepAction(Request $request, EventView $eventView)
+    public function loginSecondStepAction(Request $request, EventDomain $eventDomain)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event');
@@ -118,27 +119,28 @@ class SecurityController extends Controller
         }
 
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
-            'username'  => $email,
-            'error'     => $error,
-            'typeId'    => $typeId,
-            'type'      => $type,
+            'event'    => $eventDomain->getEvent(),
+            'form'     => $form->createView(),
+            'username' => $email,
+            'error'    => $error,
+            'typeId'   => $typeId,
+            'type'     => $type,
         ]);
     }
 
     /**
-     * @param Request   $request
-     * @param EventView $eventView
+     * @param Request     $request
+     * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
      */
-    public function logoutConfirmationAction(Request $request, EventView $eventView)
+    public function logoutConfirmationAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         return $this->render('EventBundle:Security:logout_confirmation.html.twig', [
-            'eventView' => $eventView,
+            'event'  => $eventDomain->getEvent(),
+            'locale' => $request->getLocale(),
         ]);
     }
 
@@ -155,11 +157,11 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param EventView $eventView
+     * @param Event $event
      *
      * @return Response
      */
-    public function impersonatingUserAction(EventView $eventView)
+    public function impersonatingUserAction(Event $event)
     {
         $impersonatingUser = null;
 
@@ -177,7 +179,7 @@ class SecurityController extends Controller
 
         return $this->render('EventBundle:Security:impersonating.html.twig', [
             'impersonatingUser' => $impersonatingUser,
-            'eventView'         => $eventView,
+            'event'             => $event,
         ]);
     }
 }

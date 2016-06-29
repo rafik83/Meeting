@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,26 +24,26 @@ class HomeController extends Controller
     /**
      * Event home.
      *
-     * @param Request   $request
-     * @param EventView $eventView
+     * @param Request     $request
+     * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
      */
-    public function indexAction(Request $request, EventView $eventView)
+    public function indexAction(Request $request, EventDomain $eventDomain)
     {
         $locale = $request->getLocale();
 
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventView->id, $locale);
+                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventDomain->getEvent(), $locale);
         } else {
             $sheets = [];
         }
 
         $form = $this->createForm(TypeChoiceType::class, null, [
-            'locale'  => $locale,
-            'eventId' => $eventView->id,
+            'locale' => $locale,
+            'event'  => $eventDomain->getEvent(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -62,7 +63,7 @@ class HomeController extends Controller
         }
 
         return $this->render('EventBundle:Home:index.html.twig', [
-            'eventView' => $eventView,
+            'event' => $eventDomain->getEvent(),
             'sheets'    => $sheets,
             'form'      => $form->createView(),
         ]);

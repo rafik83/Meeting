@@ -1,3 +1,5 @@
+@admin
+
 Feature: add rule who see who
   I need to be able to add a rule for categories and types
 

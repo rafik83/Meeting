@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -28,8 +29,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithEvents()
     {
         $dateTime  = new \DateTime();
-        $event     = new Event();
-        $event2    = new Event();
+        $event     = EventFactory::createEvent();
+        $event2    = EventFactory::createEvent();
         $organizer = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
         $organizer->addEvent($event);
         $organizer->addEvent($event2);

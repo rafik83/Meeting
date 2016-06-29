@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveTestHandler extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class RemoveTestHandler extends \PHPUnit_Framework_TestCase
     {
 
         // Context
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $user        = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet       = new Sheet($event, $type, [], $user, new \DateTime());
