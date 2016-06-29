@@ -64,3 +64,4 @@ validators:
     event:
         domain:
             unique: Ce nom de domaine est déjà utilisé sur un autre événement
+    allowDepositMissingData: Si vous activez l'accompte, vous devez ajouter un accompte minimum, une date et un pourcentage

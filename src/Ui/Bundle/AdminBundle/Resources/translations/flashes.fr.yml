@@ -82,6 +82,9 @@ flash:
                     failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
+            paymentConditions:
+                update:
+                    success: Les conditions de paiement ont été modifiées avec succès
         type:
             create:
                 success: Le type a bien été créé

@@ -127,6 +127,13 @@ admin_event_practical_info_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:practicalInfo }
 
+admin_event_payment_conditions:
+    path: /event/{event}/payment-conditions
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event:paymentConditions }
+
 #
 # Content
 #

@@ -55,6 +55,26 @@ class Configuration
     private $organiserWebsite;
 
     /**
+     * @var bool
+     */
+    private $allowDeposit = false;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $depositUntil;
+
+    /**
+     * @var float
+     */
+    private $minimumForDeposit;
+
+    /**
+     * @var int
+     */
+    private $deposit;
+
+    /**
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
@@ -78,6 +98,56 @@ class Configuration
         $this->contactLastName  = $contactLastName;
         $this->organiserPhone   = $organiserPhone;
         $this->organiserWebsite = $organiserWebsite;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowDeposit()
+    {
+        return $this->allowDeposit;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getDepositUntil()
+    {
+        return $this->depositUntil;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinimumForDeposit()
+    {
+        return $this->minimumForDeposit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeposit()
+    {
+        return $this->deposit;
+    }
+
+    /**
+     * @param bool                    $allowDeposit
+     * @param \DateTimeInterface|null $depositUntil
+     * @param float|null              $minimumForDeposit
+     * @param int|null                $deposit
+     */
+    public function updatePaymentConditions(
+        $allowDeposit,
+        \DateTimeInterface $depositUntil = null,
+        $minimumForDeposit = null,
+        $deposit = null
+    ) {
+        $this->allowDeposit      = $allowDeposit;
+        $this->depositUntil      = $depositUntil;
+        $this->minimumForDeposit = $minimumForDeposit;
+        $this->deposit           = $deposit;
     }
     
     /**
