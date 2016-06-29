@@ -27,5 +27,5 @@ final class Events
     const REQUEST_UPDATE_MESSAGE      = 'meeting_request.update.message';
     const MEETING_UPDATE_MESSAGE      = 'meeting.update.message';
     const USER_REGISTERED             = 'user.registered';
-    const USER_PRE_REGISTERED         = 'user.preregistered';
+    const EVENT_PRE_REGISTERED        = 'event.preregistered';
 }

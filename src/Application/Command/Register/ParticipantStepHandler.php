@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Register;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipantStepHandler
 {
@@ -33,18 +35,26 @@ class ParticipantStepHandler
     private $accountSynchronizer;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
+     * @param EventDispatcherInterface       $eventDispatcher
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
-        Synchronizer $accountSynchronizer
+        Synchronizer $accountSynchronizer,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer   = $accountSynchronizer;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -57,7 +67,9 @@ class ParticipantStepHandler
         $templateData    = $participantStep->templateData;
 
         foreach ($participantStep->data as $key => $value) {
-            if ($templateData->getBlock(intval($participantStep->step))->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
+            if ($templateData->getBlock(intval($participantStep->step))->getObject($key)
+                             ->hasTag(Tag::PARTICIPANT_DATA)
+            ) {
                 $participantData = array_merge($participantData, [$key => $value]);
             }
 
@@ -75,5 +87,23 @@ class ParticipantStepHandler
         $this->sheetRepository->set($participantStep->sheet);
 
         $this->accountSynchronizer->set($templateData, $participantStep->participant->getUser());
+
+        $this->triggerEvent($participantStep);
+    }
+
+    /**
+     * @param ParticipantStep $participantStep
+     */
+    private function triggerEvent(ParticipantStep $participantStep)
+    {
+        if ($participantStep->step == 3) {
+            $preRegisteredEvent = new PreRegisterEvent(
+                $participantStep->sheet->getEvent(),
+                $participantStep->participant->getUser(),
+                $participantStep->locale
+            );
+
+            $this->eventDispatcher->dispatch('event.preregistered', $preRegisteredEvent);
+        }
     }
 }

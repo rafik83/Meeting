@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
+use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as Admin
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\SheetValidatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
@@ -191,9 +193,22 @@ class MailEventSubscriber implements EventSubscriberInterface
         $this->mailer->send($mail);
     }
 
-    public function onUserPreRegistered()
+    /**
+     * @param PreRegisterEvent $event
+     */
+    public function onUserPreRegistered(PreRegisterEvent $event)
     {
+        $mail = new PreRegisteredMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'MailBundle:Mail:Event/preregister.html.twig',
+            'event_pre_registered',
+            $event->getLocale(),
+            $event->getEvent(),
+            $event->getUser()
+        );
 
+        $this->mailer->send($mail);
     }
 
     /**
@@ -220,15 +235,15 @@ class MailEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_VALIDATED     => 'onSheetValidated',
-            Events::USER_MAIL_CHANGED   => 'onChangeMailAddressEvent',
-            'admin_activate_account'    => 'onAdminActivateAccount',
-            'admin_reset_password'      => 'onAdminResetPassword',
-            'user_activate_account'     => 'onUserActivateAccount',
-            'user_reset_password'       => 'onUserResetPassword',
-            'user_complete_profile'     => 'onUserCompleteProfile',
-            Events::USER_REGISTERED     => 'onUserRegistered',
-            Events::USER_PRE_REGISTERED => 'onUserPreRegistered',
+            Events::SHEET_VALIDATED      => 'onSheetValidated',
+            Events::USER_MAIL_CHANGED    => 'onChangeMailAddressEvent',
+            'admin_activate_account'     => 'onAdminActivateAccount',
+            'admin_reset_password'       => 'onAdminResetPassword',
+            'user_activate_account'      => 'onUserActivateAccount',
+            'user_reset_password'        => 'onUserResetPassword',
+            'user_complete_profile'      => 'onUserCompleteProfile',
+            Events::USER_REGISTERED      => 'onUserRegistered',
+            Events::EVENT_PRE_REGISTERED => 'onUserPreRegistered',
         ];
     }
 }

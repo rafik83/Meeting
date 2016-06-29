@@ -1,0 +1,30 @@
+{% block subject %}
+    {{ 'mail.event.preregister.subject'|trans({
+        '%event%': mail.event.title
+    }, 'mail', mail.locale)|html }}
+{% endblock %}
+
+{% block body %}
+    {{ 'mail.event.preregister.body'|trans({
+        '%event%': mail.event.title,
+        '%firstname%': mail.receiverUser.account.firstname|upper,
+        '%lastname%': mail.receiverUser.account.lastname|humanize
+    }, 'mail', mail.locale|html|nl2br) }}
+    <ul>
+        <li>Company</li>
+        <li>{{ mail.receiverUser.account.lastname|upper }}</li>
+        <li>{{ mail.receiverUser.account.firstname|humanize }}</li>
+        <li>Job</li>
+        <li>Address</li>
+        <li>Phone</li>
+        <li>{{ mail.receiverUser.email }}</li>
+    </ul>
+{% endblock %}
+
+{% block end %}
+    {{ 'mail.event.preregister.end'|trans({
+        '%event%': mail.event.title,
+        '%eventPhone%': mail.event.phone,
+        '%eventMail%': mail.event.organiserEmail
+    }, 'mail', mail.locale|html) }}
+{% endblock %}

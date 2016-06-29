@@ -70,21 +70,14 @@ mail:
             Cher(e) utilisateur
             Félicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté ViMeet.
             Vous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.
-    preregister:
-        subject:
+    event.preregister:
+        subject: Vous êtes pré-enregistré à %event%
         body: |
-            Cher(e) M/Mme %firstname% %lastname%
-            Votre demande d'inscription à [nom événement] a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%
+            Cher(e) M/Mme %firstname% %lastname%,
+            Votre demande d'inscription à %event% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.
             Vous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur.
             Pour vous identifier sur notre site lors de vos prochaines visites, cliquez sur [espace membre] en haut de toutes les pages de notre site.
             Vous trouverez ci-dessous le récapitulatif des informations saisies:
-            %company%
-            %lastname%
-            %firstname%
-            %job%
-            Adresse professionnelle : %address%
-            Téléphone : %phone%
-            E-mail : %email%
         end: |
             Bien cordialement
             L’équipe %event%
