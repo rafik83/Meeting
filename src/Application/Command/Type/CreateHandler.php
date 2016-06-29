@@ -36,28 +36,20 @@ class CreateHandler
     private $registrationTemplateCloner;
 
     /**
-     * @var \DateTimeInterface
-     */
-    private $dateTime;
-
-    /**
      * CreateHandler constructor.
      *
      * @param TypeRepositoryInterface    $typeRepository
      * @param SheetTemplateCloner        $sheetTemplateCloner
      * @param RegistrationTemplateCloner $registrationTemplateCloner
-     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
         SheetTemplateCloner $sheetTemplateCloner,
-        RegistrationTemplateCloner $registrationTemplateCloner,
-        \DateTimeInterface $dateTime
+        RegistrationTemplateCloner $registrationTemplateCloner
     ) {
         $this->typeRepository             = $typeRepository;
         $this->sheetTemplateCloner        = $sheetTemplateCloner;
         $this->registrationTemplateCloner = $registrationTemplateCloner;
-        $this->dateTime                   = $dateTime;
     }
 
 

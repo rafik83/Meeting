@@ -69,7 +69,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplateCloner->duplicate($registrationTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedRegistrationTemplate);
 
         //Handler
-        $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateCloner->reveal(), $registrationTemplateCloner->reveal(), $dateTime);
+        $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateCloner->reveal(), $registrationTemplateCloner->reveal());
         $handler->handle($create);
     }
 }
