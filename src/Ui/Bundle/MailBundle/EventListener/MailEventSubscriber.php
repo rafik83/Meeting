@@ -264,6 +264,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new UserActivateAccountMail(
             $this->sender,
+            $event->getSender(),
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/activateAccount.html.twig',
             Events::USER_ACCOUNT_ACTIVATED,
