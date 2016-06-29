@@ -26,23 +26,17 @@ class DuplicateHandler
      */
     private $dateTime;
 
-    /**
-     * @var array
-     */
-    private $defaultLabels;
 
     /**
      * UpdateHandler constructor.
      *
      * @param PackageRepositoryInterface $packageRepository
      * @param \DateTimeInterface         $dateTime
-     * @param array                      $defaultLabels
      */
-    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime, array $defaultLabels)
+    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime)
     {
         $this->packageRepository = $packageRepository;
         $this->dateTime          = $dateTime;
-        $this->defaultLabels = $defaultLabels;
     }
 
     /**
@@ -58,9 +52,9 @@ class DuplicateHandler
         foreach ($duplicate->event->getLocales() as $locale) {
             $package->translate(
                 $locale,
-                isset($this->defaultLabels['plans'][$locale]) ? $this->defaultLabels['plans'][$locale] : '',
-                isset($this->defaultLabels['participant_and_planning'][$locale]) ? $this->defaultLabels['participant_and_planning'][$locale] : '',
-                isset($this->defaultLabels['options'][$locale]) ? $this->defaultLabels['options'][$locale] : ''
+                $duplicate->package->getPlansLabel($locale),
+                $duplicate->package->getParticipantAndPlanningLabel($locale),
+                $duplicate->package->getOptionsLabel($locale)
             );
         }
 
@@ -68,7 +62,7 @@ class DuplicateHandler
         $groupOptions = [];
         $groupLabels = [];
         /** @var PackageGroup $group */
-        foreach($duplicate->package->getGroups() as $group) {
+        foreach ($duplicate->package->getGroups() as $group) {
             $groupOptions[] = $group->getOptions();
             $groupLabels[]  = $group->getLabels();
         }
@@ -79,7 +73,5 @@ class DuplicateHandler
         $package->setPlans($duplicate->package->getPlans());
 
         $this->packageRepository->add($package);
-
-        return $package;
     }
 }
