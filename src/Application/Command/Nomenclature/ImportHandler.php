@@ -75,4 +75,3 @@ class ImportHandler
         }, $nomenclature->getLastLevel());
     }
 }
-
