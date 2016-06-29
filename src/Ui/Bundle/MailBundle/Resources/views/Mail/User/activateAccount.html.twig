@@ -6,7 +6,8 @@
 {{ 'mail.activateAccount.body'|trans({
     '%event%': mail.event.title,
     '%firstname%': mail.senderUser.account.firstname,
-    '%lastname%': mail.senderUser.account.lastname
+    '%lastname%': mail.senderUser.account.lastname,
+    '%linkInvitation%': ''
 }, 'mail', mail.locale)|html|nl2br }}
 <a href="{{ url('event_activate_account', {'token': mail.token}) }}">
     {{ url('event_activate_account', {'token': mail.token}) }}

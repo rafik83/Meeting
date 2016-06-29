@@ -27,27 +27,31 @@ class ActivateAccountMail extends Mail
     private $token;
 
     /**
-     * @var User
-     */
-    private $senderUser;
-
-    /**
      * @param string $sender
-     * @param string $senderUser
      * @param string $receiver
      * @param string $template
      * @param string $messageId
      * @param string $locale
      * @param Event  $event
      * @param string $token
+     * @param User   $senderUser
+     * @param User   $receiverUser
      */
-    public function __construct($sender, $senderUser, $receiver, $template, $messageId, $locale, Event $event, $token)
-    {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
+    public function __construct(
+        $sender,
+        $receiver,
+        $template,
+        $messageId,
+        $locale,
+        Event $event,
+        $token,
+        $senderUser,
+        $receiverUser
+    ) {
+        parent::__construct($sender, $receiver, $template, $messageId, $locale, $senderUser, $receiverUser);
 
-        $this->event      = $event;
-        $this->token      = $token;
-        $this->senderUser = $senderUser;
+        $this->event = $event;
+        $this->token = $token;
     }
 
     /**

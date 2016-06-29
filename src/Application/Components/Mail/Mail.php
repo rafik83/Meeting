@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Mail;
 
+use Proximum\Vimeet\Domain\Model\User;
+
 class Mail
 {
     /**
@@ -21,6 +23,16 @@ class Mail
      * @var string
      */
     private $receiver;
+
+    /**
+     * @var User
+     */
+    private $senderUser;
+
+    /**
+     * @var User
+     */
+    private $receiverUser;
 
     /**
      * @var string
@@ -43,14 +55,18 @@ class Mail
      * @param string $template
      * @param string $messageId
      * @param string $locale
+     * @param User   $senderUser
+     * @param User   $receiverUser
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, User $senderUser = null, User $receiverUser = null)
     {
-        $this->sender    = $sender;
-        $this->receiver  = $receiver;
-        $this->template  = $template;
-        $this->messageId = $messageId;
-        $this->locale    = $locale;
+        $this->sender       = $sender;
+        $this->receiver     = $receiver;
+        $this->template     = $template;
+        $this->messageId    = $messageId;
+        $this->locale       = $locale;
+        $this->receiverUser = $receiverUser;
+        $this->senderUser   = $senderUser;
     }
 
     /**
@@ -91,5 +107,21 @@ class Mail
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return User
+     */
+    public function getSenderUser()
+    {
+        return $this->senderUser;
+    }
+
+    /**
+     * @return User
+     */
+    public function getReceiverUser()
+    {
+        return $this->receiverUser;
     }
 }

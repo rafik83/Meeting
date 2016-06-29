@@ -13,20 +13,22 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
-use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
-use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
-use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
+use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
+use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
+use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\SheetValidatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MailEventSubscriber implements EventSubscriberInterface
@@ -60,7 +62,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $owner = $event->getSheet()->getOwner();
 
-        $mail  = new SheetValidatedMail(
+        $mail = new SheetValidatedMail(
             $event->getSheet(),
             $this->sender,
             $owner->getEmail(),
@@ -140,13 +142,14 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new UserActivateAccountMail(
             $this->sender,
-            $event->getSender(),
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/activateAccount.html.twig',
             'user_activate_account',
             $event->getUser()->getLocale(),
             $event->getEvent(),
-            $event->getActivateAccountToken()->getToken()
+            $event->getActivateAccountToken()->getToken(),
+            $event->getSender(),
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -188,19 +191,44 @@ class MailEventSubscriber implements EventSubscriberInterface
         $this->mailer->send($mail);
     }
 
+    public function onUserPreRegistered()
+    {
+
+    }
+
+    /**
+     * @param UserRegisteredEvent $event
+     */
+    public function onUserRegistered(UserRegisteredEvent $event)
+    {
+        $mail = new RegisterAccountMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'MailBundle:User/register.html.twig',
+            'user_registered',
+            $event->getLocale(),
+            $event->getEvent(),
+            $event->getUser()
+        );
+
+        $this->mailer->send($mail);
+    }
+
     /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_VALIDATED   => 'onSheetValidated',
-            Events::USER_MAIL_CHANGED => 'onChangeMailAddressEvent',
-            'admin_activate_account'  => 'onAdminActivateAccount',
-            'admin_reset_password'    => 'onAdminResetPassword',
-            'user_activate_account'   => 'onUserActivateAccount',
-            'user_reset_password'     => 'onUserResetPassword',
-            'user_complete_profile'   => 'onUserCompleteProfile',
+            Events::SHEET_VALIDATED     => 'onSheetValidated',
+            Events::USER_MAIL_CHANGED   => 'onChangeMailAddressEvent',
+            'admin_activate_account'    => 'onAdminActivateAccount',
+            'admin_reset_password'      => 'onAdminResetPassword',
+            'user_activate_account'     => 'onUserActivateAccount',
+            'user_reset_password'       => 'onUserResetPassword',
+            'user_complete_profile'     => 'onUserCompleteProfile',
+            Events::USER_REGISTERED     => 'onUserRegistered',
+            Events::USER_PRE_REGISTERED => 'onUserPreRegistered',
         ];
     }
 }

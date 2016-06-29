@@ -6,7 +6,7 @@
     {{ 'mail.register.body'|trans({
         '%event%': mail.event.title,
         '%url%': url('event_account_participant', {'sheet': mail.participant.sheet.id,'participant': mail.participant.id}),
-        '%firstname%': mail.user.firstname|humanize,
-        '%lastname%': mail.user.lastname|upper
+        '%firstname%': mail.receiverUser.firstname|humanize,
+        '%lastname%': mail.receiverUser.lastname|upper
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

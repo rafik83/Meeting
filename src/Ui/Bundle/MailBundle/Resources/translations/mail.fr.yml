@@ -31,9 +31,9 @@ mail:
     invitation_close_to_expiration:
         subject: Votre invitation arrive à expiration
         body: |
-        Bonjour,
-        Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event% et nous vous informons que votre invitation expire dans 12h.
-        Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous
+            Bonjour,
+            Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event% et nous vous informons que votre invitation expire dans 12h.
+            Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous
         end: |
             Bien cordialement
             L’équipe %event%
@@ -75,17 +75,14 @@ mail:
         body: |
             Cher(e) M/Mme %firstname% %lastname%
             Votre demande d'inscription à [nom événement] a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%
-
             Vous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur.
-
             Pour vous identifier sur notre site lors de vos prochaines visites, cliquez sur [espace membre] en haut de toutes les pages de notre site.
-
             Vous trouverez ci-dessous le récapitulatif des informations saisies:
             %company%
             %lastname%
             %firstname%
             %job%
-            Adresse professionnelle :  %address%
+            Adresse professionnelle : %address%
             Téléphone : %phone%
             E-mail : %email%
         end: |
@@ -97,9 +94,7 @@ mail:
         subject: Votre inscription en tant que %participationType% à l'événement %event% est validée
         body: |
             Cher(e) M/Mme %firstname% %lastname%,
-
             Nous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.
-
             Nous vous rappelons ci-dessous les prochaines étapes de votre participation :
             <ul>
             <li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>
@@ -107,7 +102,6 @@ mail:
             <li>Le %scheduleDate% votre planning provisoire sera disponible en ligne. Vous aurez ensuite jusqu’au [date fin optimisation] pour compléter votre sélection et optimiser votre participation.</li>
             <li>Le %eventOpenDate% à %eventCloseDate%, nous aurons le plaisir de vous accueillir à %eventPlace% pour l’ouverture de [nom event]. Toute notre équipe sera à votre disposition pour faire de votre participation un succès.</li>
             </ul>
-
             Pour toute question sur l'événement, vous pouvez contacter l'équipe %event% à %eventMail%
         end: |
           PROXIMUM Group
