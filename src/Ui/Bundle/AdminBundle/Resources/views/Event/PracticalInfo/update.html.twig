@@ -1,5 +1,9 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.event.practicalInfo.update.title'|trans  }}
+{% endblock %}
+
 {% block form_title 'admin.event.practicalInfo.update.title'|trans %}
 
 {% block form_content %}

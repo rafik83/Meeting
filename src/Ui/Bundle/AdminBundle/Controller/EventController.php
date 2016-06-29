@@ -161,6 +161,7 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event/PracticalInfo:update.html.twig', [
+            'event' => $event,
             'form'  => $form->createView(),
         ]);
 
