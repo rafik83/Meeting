@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\PracticalInfo;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class UpdateHandler
