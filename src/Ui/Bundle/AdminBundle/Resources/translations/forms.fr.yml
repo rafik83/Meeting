@@ -1147,3 +1147,15 @@ form:
                 label: Echelle (en minutes)
             submit:
                 label: Enregistrer
+    event_payment_conditions_update:
+        children:
+            allowDeposit:
+                label: Accompte autorisé
+            minimumForDeposit:
+                label: Accompte minimum
+            depositUntil:
+                label: Date de fin d'autorisation des accomptes
+            deposit:
+                label: Pourcentage de l'accompte
+            submit:
+                label: Enregistrer

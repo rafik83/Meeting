@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Event\Create;
-use Proximum\Vimeet\Application\Command\Event\Update;
+use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
+use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -101,7 +103,7 @@ class EventController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $update = new Update($event);
+        $update = new EventUpdate($event);
 
         $form = $this->createForm(UpdateType::class, $update, [
             'locales'       => $event->getLocales(),
@@ -128,6 +130,37 @@ class EventController extends Controller
         return $this->render('AdminBundle:Event:update.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function paymentConditionsAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $update = new PaymentConditionsUpdate($event);
+
+        $form = $this->createForm(PaymentConditions\UpdateType::class, $update, [
+            'action' => $this->generateUrl('admin_event_payment_conditions', ['event' => $event->getId()]),
+            'event'  => $event,
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($update);
+            $this->addFlash('success', 'flash.admin.event.paymentConditions.update.success');
+
+            return $this->redirectToRoute('admin_event_payment_conditions', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Event/PaymentConditions:update.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
         ]);
     }
 }
