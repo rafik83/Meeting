@@ -1,0 +1,24 @@
+Proximum\Vimeet\Application\Command\Product\UpdateOption:
+    properties:
+        name:
+            - NotBlank: ~
+        file:
+            - Image: ~
+        quantityMax:
+            - Range:
+                min: 0
+        availabilityCurrent:
+            - Range:
+                min: 0
+        availabilityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~
