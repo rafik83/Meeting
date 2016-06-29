@@ -75,7 +75,6 @@ class Notification
         $this->action    = $action;
         $this->message   = $message;
         $this->view      = false;
-        $this->message   = $message;
         $this->url       = $url;
     }
 
