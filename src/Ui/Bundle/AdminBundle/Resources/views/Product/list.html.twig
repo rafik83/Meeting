@@ -1,5 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.product.title'|trans }}
+{% endblock %}
+
 {% block list_title 'admin.product.title'|trans %}
 
 {% block content %}
