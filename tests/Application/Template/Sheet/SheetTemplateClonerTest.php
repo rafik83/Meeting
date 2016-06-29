@@ -11,7 +11,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Template\Sheet;
 
-
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Nomenclature;
 
-
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
