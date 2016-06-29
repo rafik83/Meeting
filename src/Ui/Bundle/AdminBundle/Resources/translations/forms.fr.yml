@@ -1160,11 +1160,11 @@ form:
                 label: Prénom du contact
             contactLastName:
                 label: Nom du contact
-            phone:
-                label: Téléphone
+            organiserPhone:
+                label: Téléphone de contact
             organiserEmail:
-                label: E-mail
-            website:
+                label: E-mail de contact
+            organiserWebsite:
                 label: Site internet
             submit:
                 label: Enregistrer
