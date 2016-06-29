@@ -159,7 +159,8 @@ class EventController extends Controller
         }
 
         return $this->render('AdminBundle:Event/PaymentConditions:update.html.twig', [
-            'form' => $form->createView(),
+            'event' => $event,
+            'form'  => $form->createView(),
         ]);
     }
 }

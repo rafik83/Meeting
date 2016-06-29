@@ -25,7 +25,7 @@ class Update
     public $allowDeposit;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      */
     public $depositUntil;
 

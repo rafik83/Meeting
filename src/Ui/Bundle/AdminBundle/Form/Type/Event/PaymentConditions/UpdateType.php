@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UpdateType extends AbstractType
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -33,13 +33,19 @@ class UpdateType extends AbstractType
         $event = $options['event'];
 
         $builder
-            ->add('allowDeposit', CheckboxType::class)
+            ->add('allowDeposit', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('depositUntil', DateTimePickerType::class, [
                 'view_timezone' => $event->getTimeZone(),
+                'required'      => false,
             ])
-            ->add('minimumForDeposit', NumberType::class)
+            ->add('minimumForDeposit', NumberType::class, [
+                'required' => false,
+            ])
             ->add('deposit', IntegerType::class, [
-                'attr' => [
+                'required' => false,
+                'attr'     => [
                     'min' => 0,
                     'max' => 100,
                 ],
@@ -48,7 +54,7 @@ class UpdateType extends AbstractType
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -60,7 +66,7 @@ class UpdateType extends AbstractType
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {

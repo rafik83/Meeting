@@ -104,7 +104,7 @@ class Configuration
      * @param float|null              $minimumForDeposit
      * @param int|null                $deposit
      */
-    public function updatePaymentConditions($allowDeposit, \DateTimeInterface $depositUntil, $minimumForDeposit, $deposit)
+    public function updatePaymentConditions($allowDeposit, \DateTimeInterface $depositUntil = null, $minimumForDeposit = null, $deposit = null)
     {
         $this->allowDeposit      = $allowDeposit;
         $this->depositUntil      = $depositUntil;
