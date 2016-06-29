@@ -3,7 +3,11 @@
 {% endblock %}
 
 {% block body %}
-{{ 'mail.activateAccount.body'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html|nl2br }}
+{{ 'mail.activateAccount.body'|trans({
+    '%event%': mail.event.title,
+    '%firstname%': mail.senderUser.account.firstname,
+    '%lastname%': mail.senderUser.account.lastname
+}, 'mail', mail.locale)|html|nl2br }}
 <a href="{{ url('event_activate_account', {'token': mail.token}) }}">
     {{ url('event_activate_account', {'token': mail.token}) }}
 </a><br>

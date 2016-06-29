@@ -272,7 +272,7 @@ class SheetController extends Controller
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new Add($this->getUser(), $sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
@@ -301,7 +301,7 @@ class SheetController extends Controller
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new Add($this->getUser(), $sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);

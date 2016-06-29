@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Event\User;
 
-use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Event as ProximumEvent;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Symfony\Component\EventDispatcher\Event;
 
 class ActivateAccountEvent extends Event
@@ -21,6 +21,11 @@ class ActivateAccountEvent extends Event
      * @var User
      */
     private $user;
+
+    /**
+     * @var User
+     */
+    private $sender;
 
     /**
      * @var ProximumEvent
@@ -39,16 +44,18 @@ class ActivateAccountEvent extends Event
 
     /**
      * @param User                 $user
+     * @param User                 $sender
      * @param ProximumEvent        $event
      * @param ActivateAccountToken $activateAccountToken
      * @param string               $locale
      */
-    public function __construct(User $user, ProximumEvent $event, ActivateAccountToken $activateAccountToken, $locale)
+    public function __construct(User $user, User $sender, ProximumEvent $event, ActivateAccountToken $activateAccountToken, $locale)
     {
         $this->user                 = $user;
         $this->event                = $event;
         $this->activateAccountToken = $activateAccountToken;
         $this->locale               = $locale;
+        $this->sender               = $sender;
     }
 
     /**
@@ -81,5 +88,13 @@ class ActivateAccountEvent extends Event
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return User
+     */
+    public function getSender()
+    {
+        return $this->sender;
     }
 }

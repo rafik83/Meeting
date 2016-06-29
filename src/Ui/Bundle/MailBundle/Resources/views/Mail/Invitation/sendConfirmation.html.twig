@@ -6,7 +6,7 @@
     {{ 'mail.invitation_send_confirm.body'|trans({
         '%firstname%': mail.user.firstname|humanize,
         '%lastname%': mail.user.lastname|upper,
-        '%guestMail%': '',
+        '%guestMail%': mail.participant.user.email,
         '%event%': mail.event.title
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

@@ -6,7 +6,6 @@
     {{ 'mail.invitation_close_to_expiration.body'|trans({
         '%firstname%': mail.user.firstname|humanize,
         '%lastname%': mail.user.lastname|upper,
-        '%guestMail%': '',
         '%event%': mail.event.title
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
