@@ -2,4 +2,3 @@ Proximum\Vimeet\Application\Command\Package\Create:
     properties:
         title:
             - NotBlank: ~
-            
