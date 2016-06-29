@@ -1,0 +1,64 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum Vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Nomenclature;
+
+
+use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+
+class NomenclatureClonerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testDuplicate()
+    {
+        $event        = new Event();
+        $nomenclature = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true);
+        $clone        = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true, $event, $nomenclature);
+
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+        $nomenclatureRepository->add($clone)->shouldBeCalled();
+
+        $cloner = new NomenclatureCloner($nomenclatureRepository->reveal());
+
+        $this->assertEquals($clone, $cloner->duplicate($nomenclature, $event));
+    }
+
+    public function testDuplicateIfNotExistWhenCloneExists()
+    {
+        $event        = new Event();
+        $nomenclature = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true);
+        $clone        = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true, $event, $nomenclature);
+
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+        $nomenclatureRepository->findClone($nomenclature, $event)->willReturn($clone);
+        $nomenclatureRepository->add()->shouldNotBeCalled();
+
+        $cloner = new NomenclatureCloner($nomenclatureRepository->reveal());
+
+        $this->assertEquals($clone, $cloner->duplicateIfNotExists($nomenclature, $event));
+    }
+
+    public function testDuplicateIfNotExistWhenCloneNotExists()
+    {
+        $event        = new Event();
+        $nomenclature = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true);
+        $clone        = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true, $event, $nomenclature);
+
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+        $nomenclatureRepository->findClone($nomenclature, $event)->willReturn(null);
+        $nomenclatureRepository->add($clone)->shouldBeCalled();
+
+        $cloner = new NomenclatureCloner($nomenclatureRepository->reveal());
+
+        $this->assertEquals($clone, $cloner->duplicateIfNotExists($nomenclature, $event));
+    }
+}
