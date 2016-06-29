@@ -22,19 +22,23 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $event->setOrganiserName('baseOrganiserName')->setOrganiserEmail('baseOrganiserEmail');
-        $event->getConfiguration()->updatePracticalInfo('baseContactFirstName', 'baseContactLastName', 'basePhone', 'baseWebsite');
+        $event
+            ->getConfiguration()
+            ->updatePracticalInfo('baseContactFirstName', 'baseContactLastName', 'basePhone', 'baseWebsite');
 
-        $update = new Update($event);
+        $update                   = new Update($event);
         $update->organiserName    = 'newOrganiserName';
         $update->organiserEmail   = 'newOrganiserEmail';
-        $update->phone            = 'newPhone';
-        $update->website          = 'newWebsite';
+        $update->organiserPhone   = 'newPhone';
+        $update->organiserWebsite = 'newWebsite';
         $update->contactLastName  = 'newContactLastName';
         $update->contactFirstName = 'newContactFirstName';
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->setOrganiserEmail('newOrganiserEmail')->setOrganiserName('newOrganiserName');
-        $expectedEvent->getConfiguration()->updatePracticalInfo('newContactFirstName', 'newContactLastName', 'newPhone', 'newWebsite');
+        $expectedEvent
+            ->getConfiguration()
+            ->updatePracticalInfo('newContactFirstName', 'newContactLastName', 'newPhone', 'newWebsite');
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->set($expectedEvent)->shouldBeCalled();
