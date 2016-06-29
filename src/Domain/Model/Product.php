@@ -264,7 +264,18 @@ class Product
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($title, $heading, $description, $addon, $subjectedToValidationHelp);
         } else {
-            $this->translations->set($locale, new ProductTranslation($this, $locale, $title, $heading, $description, $addon, $subjectedToValidationHelp));
+            $this->translations->set(
+                $locale,
+                new ProductTranslation(
+                    $this,
+                    $locale,
+                    $title,
+                    $heading,
+                    $description,
+                    $addon,
+                    $subjectedToValidationHelp
+                )
+            );
         }
 
         return $this;
@@ -602,17 +613,15 @@ class Product
     /**
      * @param string $name
      * @param string $image
-     * @param int $unitPrice
      * @param int $availabilityCurrent
      * @param int $availabilityMax
      *
      * @return Product
      */
-    public function updatePlan($name, $image, $unitPrice, $availabilityCurrent, $availabilityMax)
+    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax)
     {
         $this->name                = $name;
         $this->image               = $image;
-        $this->unitPrice           = $unitPrice;
         $this->availabilityCurrent = $availabilityCurrent;
         $this->availabilityMax     = $availabilityMax;
 
@@ -645,15 +654,13 @@ class Product
 
     /**
      * @param string $name
-     * @param int    $unitPrice
      * @param int    $quantityMax
      *
      * @return Product
      */
-    public function updateParticipant($name, $unitPrice, $quantityMax)
+    public function updateParticipant($name, $quantityMax)
     {
         $this->name        = $name;
-        $this->unitPrice   = $unitPrice;
         $this->quantityMax = $quantityMax;
 
         return $this;
@@ -685,15 +692,13 @@ class Product
 
     /**
      * @param string $name
-     * @param int    $unitPrice
      * @param int    $quantityMax
      *
      * @return Product
      */
-    public function updatePlanning($name, $unitPrice, $quantityMax)
+    public function updatePlanning($name, $quantityMax)
     {
         $this->name        = $name;
-        $this->unitPrice   = $unitPrice;
         $this->quantityMax = $quantityMax;
 
         return $this;
@@ -714,8 +719,19 @@ class Product
      *
      * @return Product
      */
-    public static function createOption(Event $event, $name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null, $subjectedToValidation = false, \DateTimeInterface $buyableUntil = null)
-    {
+    public static function createOption(
+        Event $event,
+        $name,
+        $image,
+        $unitPrice,
+        $quantityMax,
+        $availabilityCurrent,
+        $availabilityMax,
+        $updatable,
+        \DateTimeInterface $updatableUntil = null,
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
+    ) {
         return new self(
             $event,
             Product::TYPE_OPTION,
@@ -735,7 +751,6 @@ class Product
     /**
      * @param string                  $name
      * @param string                  $image
-     * @param int                     $unitPrice
      * @param int                     $quantityMax
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
@@ -746,11 +761,19 @@ class Product
      *
      * @return Product
      */
-    public function updateOption($name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null, $subjectedToValidation = false, \DateTimeInterface $buyableUntil = null)
-    {
+    public function updateOption(
+        $name,
+        $image,
+        $quantityMax,
+        $availabilityCurrent,
+        $availabilityMax,
+        $updatable,
+        \DateTimeInterface $updatableUntil = null,
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
+    ) {
         $this->name                  = $name;
         $this->image                 = $image;
-        $this->unitPrice             = $unitPrice;
         $this->quantityMax           = $quantityMax;
         $this->availabilityCurrent   = $availabilityCurrent;
         $this->availabilityMax       = $availabilityMax;

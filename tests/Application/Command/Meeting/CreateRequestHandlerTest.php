@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +32,7 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         // Context
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $type         = new Type($event);
         $user1        = new User('test@test.fr', 'test', 'test', 'fr');
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');

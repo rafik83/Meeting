@@ -22,12 +22,13 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $datetime    = new \DateTime();
         $user        = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
@@ -68,7 +69,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testWithSeveralParticipantsAndNoPlanningHandle()
     {
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $datetime    = new \DateTime();
 

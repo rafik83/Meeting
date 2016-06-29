@@ -1,0 +1,36 @@
+<?php
+/**
+ * This file is part of the proximum-vimeet.
+ *
+ * Copyright (C) 2016 <client-name>
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
+
+use Proximum\Vimeet\Application\Command\Event\Create;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class CreateType extends AbstractEventType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults([
+            'data_class' => Create::class,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'event_create';
+    }
+}

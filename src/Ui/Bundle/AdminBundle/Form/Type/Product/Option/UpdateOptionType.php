@@ -30,6 +30,12 @@ class UpdateOptionType extends AbstractUpdateType
         parent::buildForm($builder, $options);
 
         $builder
+            ->add('quantityMax', IntegerType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
+            ])
             ->add('availabilityCurrent', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
@@ -83,5 +89,4 @@ class UpdateOptionType extends AbstractUpdateType
     {
         return 'product_update_option';
     }
-    
 }

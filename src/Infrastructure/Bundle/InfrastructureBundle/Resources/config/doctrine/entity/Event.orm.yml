@@ -15,24 +15,30 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         logo:
             type: string
+            nullable: true
         locales:
             type: json_array
         fallback:
             type: string
         organiserName:
             type: string
+            nullable: true
         organiserEmail:
             type: string
+            nullable: true
         bankInfo:
             type: string
+            nullable: true
         legalInformation:
             type: string
+            nullable: true
         mode:
             type: string
         vat:
             type: float
         elementToJoinWithInvoice:
             type: string
+            nullable: true
         assetPath:
             type: string
         country:

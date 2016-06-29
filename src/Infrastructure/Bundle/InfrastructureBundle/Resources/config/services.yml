@@ -908,6 +908,16 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
+    command.event.create_handler:
+        class: Proximum\Vimeet\Application\Command\Event\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.content_repository'
+            - '@guideline.generator'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
 
     #
     # Security

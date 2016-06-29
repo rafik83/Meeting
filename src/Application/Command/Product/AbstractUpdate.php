@@ -27,7 +27,6 @@ abstract class AbstractUpdate extends AbstractProduct
         $this->product = $product;
 
         $this->name        = $product->getName();
-        $this->unitPrice   = $product->getUnitPrice();
         $this->quantityMax = $product->getQuantityMax();
 
         foreach ($product->getEvent()->getLocales() as $locale) {

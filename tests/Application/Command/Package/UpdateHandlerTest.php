@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $packageRepository = $this->prophesize(PackageRepositoryInterface::class);
 
         $dateTime = new \DateTimeImmutable();
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $event->setLocales(['fr', 'en']);
         $package  = new Package($event, 'Lorem ipsum', $dateTime);
 

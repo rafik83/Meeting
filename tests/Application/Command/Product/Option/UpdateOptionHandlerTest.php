@@ -16,21 +16,22 @@ use Proximum\Vimeet\Application\Command\Product\Option\UpdateOptionHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateOptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
-        $name = 'Name';
-        $image = 'Image';
-        $unitPrice = 100;
-        $quantityMax = 4;
+        $name                = 'Name';
+        $image               = 'Image';
+        $unitPrice           = 100;
+        $quantityMax         = 4;
         $availabilityCurrent = 10;
-        $availabilityMax = 50;
-        $updatable = true;
+        $availabilityMax     = 50;
+        $updatable           = true;
 
         $option = Product::createOption(
             $event,
@@ -48,7 +49,7 @@ class UpdateOptionHandlerTest extends \PHPUnit_Framework_TestCase
             'my option updated',
             $image,
             $unitPrice,
-            $quantityMax,
+            2,
             $availabilityCurrent,
             $availabilityMax,
             $updatable
@@ -62,6 +63,7 @@ class UpdateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         // Command
         $updateOptionCommand = new UpdateOption($option);
         $updateOptionCommand->name = 'my option updated';
+        $updateOptionCommand->quantityMax = 2;
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);

@@ -43,6 +43,11 @@ interface EventRepositoryInterface
     /**
      * @param Event $event
      */
+    public function add(Event $event);
+
+    /**
+     * @param Event $event
+     */
     public function set(Event $event);
 
     /**

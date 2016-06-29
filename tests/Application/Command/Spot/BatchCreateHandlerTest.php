@@ -18,13 +18,14 @@ use Proximum\Vimeet\Application\Command\Spot\CreateHandler;
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchCreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         //Context
-        $event   = new Event();
+        $event   = EventFactory::createEvent();
         $recipes = [new Recipe('A', 1, 3), new Recipe('B', 1, 3)];
 
         //Command

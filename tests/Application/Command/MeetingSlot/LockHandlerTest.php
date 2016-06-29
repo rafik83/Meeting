@@ -15,12 +15,13 @@ use Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class LockHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $begin = new \DateTime();
         $end   = new \DateTime();
 

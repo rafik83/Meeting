@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -28,13 +26,6 @@ class AbstractProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('unitPrice', NumberType::class)
-            ->add('quantityMax', IntegerType::class, [
-                'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                ],
-            ])
         ;
     }
 

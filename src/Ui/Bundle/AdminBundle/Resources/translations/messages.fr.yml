@@ -296,8 +296,8 @@ admin:
         quantityMax: Quantité max
         availabilityCurrentMax: Disponibilité courante / max
         subjectedToValidation: Soumis à validation
-        updatable: Modifiable
-        updatableUntil: Modifiable jusqu'à
+        updatable: Supprimable
+        updatableUntil: Supprimable jusqu'à
         actions: Actions
         update:
           action: Modifier
@@ -375,6 +375,11 @@ admin:
             title: Modifier l'évènement
         settings:
             link: Paramétrages de l'évènement
+        create:
+            title: Créer un événement
+        title: Titre
+        languages: Langues
+        fallback: Par défaut
     rule:
         link: Qui voit qui
     type:

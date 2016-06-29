@@ -22,7 +22,6 @@ class UpdatePlanningHandler extends AbstractHandler
     {
         $product = $updatePlanning->product->updatePlanning(
             $updatePlanning->name,
-            $updatePlanning->unitPrice,
             $updatePlanning->quantityMax
         );
 

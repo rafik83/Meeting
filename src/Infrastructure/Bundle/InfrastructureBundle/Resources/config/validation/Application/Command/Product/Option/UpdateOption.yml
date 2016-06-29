@@ -1,11 +1,7 @@
-Proximum\Vimeet\Application\Command\Product\CreateOption:
+Proximum\Vimeet\Application\Command\Product\Option\UpdateOption:
     properties:
         name:
             - NotBlank: ~
-        unitPrice:
-            - NotBlank: ~
-            - Range:
-                min: 0
         file:
             - Image: ~
         quantityMax:
@@ -23,6 +19,7 @@ Proximum\Vimeet\Application\Command\Product\CreateOption:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
                         addon: ~
                         subjectedToValidationHelp: ~

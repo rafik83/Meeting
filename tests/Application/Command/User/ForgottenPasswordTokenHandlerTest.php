@@ -21,13 +21,14 @@ use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event          = new Event();
+        $event          = EventFactory::createEvent();
         $command        = new ForgottenPassword($event, 'fr');
         $command->email = 'test@test.fr';
 
@@ -67,7 +68,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailDoesNotExistException::class);
 
-        $event          = new Event();
+        $event          = EventFactory::createEvent();
         $command        = new ForgottenPassword($event, 'fr');
         $command->email = 'test2@test.fr';
 

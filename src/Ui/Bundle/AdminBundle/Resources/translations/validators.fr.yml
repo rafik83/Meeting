@@ -8,6 +8,7 @@ validators:
             telephone: Le format du champ téléphone n'est pas correct
             image: Le format de l'image n'est pas valide, les formats autorisés sont le jpeg, le png et le gif
             url: Le format du champ url n'est pas valide
+    whitespace: Ce champ ne doit pas contenir d'espace
     email: L'adresse e-mail saisie n'est pas valide
     required:
         email: L'adresse e-mail ne peut pas être vide
@@ -60,3 +61,6 @@ validators:
         slot:
             recipe:
                 date_range: La date de début doit être antérieure à la date de fin
+    event:
+        domain:
+            unique: Ce nom de domaine est déjà utilisé sur un autre événement

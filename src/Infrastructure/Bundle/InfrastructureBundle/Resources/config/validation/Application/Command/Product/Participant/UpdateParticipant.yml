@@ -1,11 +1,7 @@
-Proximum\Vimeet\Application\Command\Product\CreatePlanning:
+Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant:
     properties:
         name:
             - NotBlank: ~
-        unitPrice:
-            - NotBlank: ~
-            - Range:
-                min: 0
         quantityMax:
             - Range:
                 min: 0
@@ -15,4 +11,7 @@ Proximum\Vimeet\Application\Command\Product\CreatePlanning:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

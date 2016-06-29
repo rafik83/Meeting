@@ -20,6 +20,11 @@ abstract class AbstractCreate extends AbstractProduct
     public $event;
 
     /**
+     * @var float
+     */
+    public $unitPrice;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -29,6 +34,7 @@ abstract class AbstractCreate extends AbstractProduct
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
                 'title'                     => null,
+                'heading'                   => null,
                 'description'               => null,
                 'addon'                     => null,
                 'subjectedToValidationHelp' => null,
@@ -36,5 +42,4 @@ abstract class AbstractCreate extends AbstractProduct
 
         }
     }
-
 }
