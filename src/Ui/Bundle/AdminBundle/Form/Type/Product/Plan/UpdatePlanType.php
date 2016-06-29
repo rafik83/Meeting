@@ -44,6 +44,9 @@ class UpdatePlanType extends AbstractUpdateType
                     'min' => 0,
                 ]
             ])
+            ->add('file', FileType::class, [
+                'required' => false,
+            ])
             ->add('features', CollectionType::class, [
                 'entry_type'    => FeatureType::class,
                 'allow_add'     => true,
@@ -52,9 +55,6 @@ class UpdatePlanType extends AbstractUpdateType
                     'label' => false,
                     'event' => $options['event'],
                 ],
-            ])
-            ->add('file', FileType::class, [
-                'required' => false,
             ])
             ->add('productIncluded', CollectionType::class, [
                 'entry_type'    => ProductIncludedType::class,
