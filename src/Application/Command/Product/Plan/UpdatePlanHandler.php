@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Product\Plan;
 
 use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
-use Proximum\Vimeet\Domain\Model\Product;
 
 class UpdatePlanHandler extends AbstractHandler
 {

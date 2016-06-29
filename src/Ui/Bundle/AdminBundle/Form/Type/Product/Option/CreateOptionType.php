@@ -30,6 +30,10 @@ class CreateOptionType extends AbstractCreateType
         parent::buildForm($builder, $options);
 
         $builder
+            ->add('translations', CollectionType::class, [
+                'entry_type' => TranslationsType::class,
+                'label'      => false,
+            ])
             ->add('availabilityCurrent', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
@@ -45,24 +49,20 @@ class CreateOptionType extends AbstractCreateType
             ->add('file', FileType::class, [
                 'required' => false,
             ])
-            ->add('updatable', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('updatableUntil', DateTimePickerType::class, [
-                'required' => false,
-            ])
             ->add('subjectedToValidation', CheckboxType::class, [
                 'required' => false,
-            ])
-            ->add('translations', CollectionType::class, [
-                'entry_type' => TranslationsType::class,
-                'label'      => false,
             ])
             ->add('quantityMax', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
                 ],
+            ])
+            ->add('updatable', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('updatableUntil', DateTimePickerType::class, [
+                'required' => false,
             ])
         ;
     }
