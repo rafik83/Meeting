@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
 class RegisterAccountMail extends Mail

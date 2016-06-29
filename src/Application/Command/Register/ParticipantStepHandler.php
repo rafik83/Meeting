@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipantStepHandler
@@ -40,21 +41,29 @@ class ParticipantStepHandler
     private $eventDispatcher;
 
     /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
      * @param EventDispatcherInterface       $eventDispatcher
+     * @param ParticipantInfoGuesser         $participantInfoGuesser
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
-        $this->sheetRepository       = $sheetRepository;
-        $this->participantRepository = $participantRepository;
-        $this->accountSynchronizer   = $accountSynchronizer;
-        $this->eventDispatcher       = $eventDispatcher;
+        $this->sheetRepository        = $sheetRepository;
+        $this->participantRepository  = $participantRepository;
+        $this->accountSynchronizer    = $accountSynchronizer;
+        $this->eventDispatcher        = $eventDispatcher;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
@@ -98,9 +107,12 @@ class ParticipantStepHandler
     {
         if ($participantStep->step == 3) {
             $preRegisteredEvent = new PreRegisterEvent(
+                $this->participantInfoGuesser,
                 $participantStep->sheet->getEvent(),
                 $participantStep->participant->getUser(),
-                $participantStep->locale
+                $participantStep->locale,
+                $participantStep->participant,
+                $participantStep->sheet
             );
 
             $this->eventDispatcher->dispatch('event.preregistered', $preRegisteredEvent);

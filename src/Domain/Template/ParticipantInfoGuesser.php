@@ -147,4 +147,28 @@ class ParticipantInfoGuesser
             $locale
         );
     }
+
+    /**
+     * @param Participant $participant
+     * @param             $locale
+     *
+     * @return array
+     */
+    public function guessParticipantInfoForMail(Participant $participant, $locale)
+    {
+        $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+
+        $mailBuildedInfo = [];
+        foreach ($templateData->getAllTaggedDatas() as $tag => $values) {
+            if ($tag == Tag::SHEET_ORGANIZATION) {
+                $mailBuildedInfo['organisation'] = (!empty($values)) ? reset($values) : '';
+            }
+
+            if ($tag == Tag::PARTICIPANT_POSITION) {
+                $mailBuildedInfo['position'] = (!empty($values)) ? reset($values) : '';
+            }
+        }
+
+        return $mailBuildedInfo;
+    }
 }

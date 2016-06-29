@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Event\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
 {
@@ -26,22 +29,53 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
     private $user;
 
     /**
+     * @var Participant
+     */
+    private $participant;
+
+    /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * @var string
      */
     private $locale;
 
     /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * PreRegisterEvent constructor.
      *
-     * @param $event
-     * @param $user
-     * @param $locale
+     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param                   $event
+     * @param                   $user
+     * @param                   $locale
+     * @param Participant       $participant
+     * @param Sheet             $sheet
      */
-    public function __construct($event, $user, $locale)
-    {
-        $this->event  = $event;
-        $this->user   = $user;
-        $this->locale = $locale;
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        $event,
+        $user,
+        $locale,
+        Participant $participant,
+        Sheet $sheet
+    ) {
+        $this->event             = $event;
+        $this->user              = $user;
+        $this->locale            = $locale;
+        $this->participant       = $participant;
+        $this->sheet             = $sheet;
+        $this->participantInfoGuesser = $participantInfoGuesser;
+
+        $data = $this->participantInfoGuesser->guessParticipantInfoForMail($participant, $locale);
+
+        dump($data);die();
     }
 
     /**
@@ -66,6 +100,22 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
+    }
+
+    /**
+     * @return Participant
+     */
+    public function getParticipant()
+    {
+        return $this->participant;
     }
 
 }
