@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Product\UpdateOption:
+Proximum\Vimeet\Application\Command\Product\Option\UpdateOption:
     properties:
         name:
             - NotBlank: ~
@@ -19,6 +19,7 @@ Proximum\Vimeet\Application\Command\Product\UpdateOption:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
                         addon: ~
                         subjectedToValidationHelp: ~

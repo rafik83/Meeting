@@ -58,6 +58,12 @@ class CreateOptionType extends AbstractCreateType
                 'entry_type' => TranslationsType::class,
                 'label'      => false,
             ])
+            ->add('quantityMax', IntegerType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
+            ])
         ;
     }
 

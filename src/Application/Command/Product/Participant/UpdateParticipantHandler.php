@@ -21,7 +21,6 @@ class UpdateParticipantHandler extends AbstractHandler
     {
         $product = $updateParticipant->product->updateParticipant(
             $updateParticipant->name,
-            $updateParticipant->unitPrice,
             $updateParticipant->quantityMax
         );
 

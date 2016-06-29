@@ -11,10 +11,24 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractCreateType extends AbstractProductType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        parent::buildForm($builder, $options);
+        
+        $builder
+            ->add('unitPrice', NumberType::class)
+        ;
+    }
+
     /**
      * {@inheritdoc}
      */

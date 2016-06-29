@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Product\CreateParticipant:
+Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant:
     properties:
         name:
             - NotBlank: ~
@@ -15,4 +15,7 @@ Proximum\Vimeet\Application\Command\Product\CreateParticipant:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

@@ -23,7 +23,6 @@ class UpdateOptionHandler extends AbstractHandler
         $product = $updateOption->product->updateOption(
             $updateOption->name,
             $this->fileStorageInterface->upload($updateOption->file),
-            $updateOption->unitPrice,
             $updateOption->quantityMax,
             $updateOption->availabilityCurrent,
             $updateOption->availabilityMax,

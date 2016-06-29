@@ -1,7 +1,5 @@
-Proximum\Vimeet\Application\Command\Product\CreatePlan:
+Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan:
     properties:
-        event:
-            - NotBlank: ~
         name:
             - NotBlank: ~
         file:
@@ -22,6 +20,7 @@ Proximum\Vimeet\Application\Command\Product\CreatePlan:
                             - NotBlank: ~
                         description: ~
                         addon: ~
+                        subjectedToValidationHelp: ~
         features:
             - All:
                 - Collection:

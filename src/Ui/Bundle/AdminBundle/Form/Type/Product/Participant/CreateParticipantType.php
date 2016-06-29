@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -29,6 +30,12 @@ class CreateParticipantType extends AbstractCreateType
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationsType::class,
                 'label'      => false,
+            ])
+            ->add('quantityMax', IntegerType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
             ])
         ;
     }

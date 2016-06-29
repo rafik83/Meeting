@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Product\UpdateParticipant:
+Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant:
     properties:
         name:
             - NotBlank: ~
@@ -11,4 +11,7 @@ Proximum\Vimeet\Application\Command\Product\UpdateParticipant:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

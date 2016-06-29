@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Product\CreateOption:
+Proximum\Vimeet\Application\Command\Product\Option\CreateOption:
     properties:
         name:
             - NotBlank: ~
@@ -23,6 +23,7 @@ Proximum\Vimeet\Application\Command\Product\CreateOption:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
                         addon: ~
                         subjectedToValidationHelp: ~

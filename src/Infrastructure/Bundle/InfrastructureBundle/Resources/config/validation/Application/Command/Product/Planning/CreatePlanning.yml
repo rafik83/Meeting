@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Product\CreatePlanning:
+Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning:
     properties:
         name:
             - NotBlank: ~
@@ -15,4 +15,7 @@ Proximum\Vimeet\Application\Command\Product\CreatePlanning:
                     fields:
                         title:
                             - NotBlank: ~
+                        heading: ~
                         description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

@@ -23,7 +23,6 @@ class UpdatePlanHandler extends AbstractHandler
         $updatePlan->product->updatePlan(
             $updatePlan->name,
             $this->fileStorageInterface->upload($updatePlan->file),
-            $updatePlan->unitPrice,
             $updatePlan->availabilityCurrent,
             $updatePlan->availabilityMax
         );
@@ -46,7 +45,7 @@ class UpdatePlanHandler extends AbstractHandler
 
         // Remove products
         foreach ($updatePlan->product->getIncludedProducts() as $includedProduct) {
-            if(!$updatePlan->hasProduct($includedProduct->getIncluded())) {
+            if (!$updatePlan->hasProduct($includedProduct->getIncluded())) {
                 $updatePlan->product->removeIncludeProduct($includedProduct);
             }
         }
@@ -54,7 +53,10 @@ class UpdatePlanHandler extends AbstractHandler
         // Add features
         foreach ($updatePlan->features as $key => $feature) {
             foreach ($feature['translations'] as $locale => $translation) {
-                $updatePlan->product->getFeature($key)->translate($locale, $translation['title'], $translation['description']);
+                $updatePlan
+                    ->product
+                    ->getFeature($key)
+                    ->translate($locale, $translation['title'], $translation['description']);
             }
         }
 
@@ -68,5 +70,4 @@ class UpdatePlanHandler extends AbstractHandler
         // update product on database
         $this->productRepository->update($updatePlan->product);
     }
-
 }

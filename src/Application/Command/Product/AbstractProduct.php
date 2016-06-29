@@ -25,11 +25,6 @@ abstract class AbstractProduct
     public $translations = [];
 
     /**
-     * @var float
-     */
-    public $unitPrice;
-
-    /**
      * @var int
      */
     public $quantityMax;
@@ -73,5 +68,4 @@ abstract class AbstractProduct
      * @var array
      */
     public $productIncluded = [];
-
 }
