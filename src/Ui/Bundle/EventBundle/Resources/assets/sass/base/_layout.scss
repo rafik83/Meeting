@@ -4,6 +4,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: $bg-body-color;
+
+  &.grey { background: $bg-container-color; }
 }
 
 .wrapper {
