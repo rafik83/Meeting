@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Package\Create:
+Proximum\Vimeet\Application\Command\Package\Duplicate:
     properties:
         title:
             - NotBlank: ~
