@@ -900,6 +900,7 @@ services:
         arguments:
             - '@repository.nomenclature_repository'
             - '@application.nomenclature.import.csv_importer'
+            - '@domain.event.has_sheet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Import }
     command.nomenclature.assign_handler:
@@ -1402,3 +1403,11 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
         arguments:
             - '@repository.nomenclature_repository'
+
+    #
+    # Event
+    #
+    domain.event.has_sheet:
+        class: Proximum\Vimeet\Domain\Event\HasSheet
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
