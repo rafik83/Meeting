@@ -16,8 +16,8 @@ Feature: See and update practical information
     And I fill in the following:
       | event_practical_info_update_organiserName    | proximum           |
       | event_practical_info_update_organiserEmail   | ceo@proximum.com   |
-      | event_practical_info_update_phone            | 0102030405         |
-      | event_practical_info_update_website          | proximum-group.com |
+      | event_practical_info_update_organiserPhone   | 0102030405         |
+      | event_practical_info_update_organiserWebsite | proximum-group.com |
       | event_practical_info_update_contactFirstName | jean               |
       | event_practical_info_update_contactLastName  | dupont             |
     And I press "event_practical_info_update_submit"
@@ -29,7 +29,7 @@ Feature: See and update practical information
     Then the response status code should be 200
     And the "event_practical_info_update_organiserName" field should contain "proximum"
     And the "event_practical_info_update_organiserEmail" field should contain "ceo@proximum.com"
-    And the "event_practical_info_update_phone" field should contain "0102030405"
-    And the "event_practical_info_update_website" field should contain "proximum-group.com"
+    And the "event_practical_info_update_organiserPhone" field should contain "0102030405"
+    And the "event_practical_info_update_organiserWebsite" field should contain "proximum-group.com"
     And the "event_practical_info_update_contactFirstName" field should contain "jean"
     And the "event_practical_info_update_contactLastName" field should contain "dupont"

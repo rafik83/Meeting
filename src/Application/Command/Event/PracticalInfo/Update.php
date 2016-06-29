@@ -60,7 +60,7 @@ class Update
         $this->organiserEmail   = $event->getOrganiserEmail();
         $this->contactFirstName = $event->getConfiguration()->getContactFirstName();
         $this->contactLastName  = $event->getConfiguration()->getContactLastName();
-        $this->phone            = $event->getConfiguration()->getOrganiserPhone();
-        $this->website          = $event->getConfiguration()->getOrganiserWebsite();
+        $this->organiserPhone   = $event->getConfiguration()->getOrganiserPhone();
+        $this->organiserWebsite = $event->getConfiguration()->getOrganiserWebsite();
     }
 }
