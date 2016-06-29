@@ -9,6 +9,18 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
         scheduleScale:
             type: integer
+        contactFirstName:
+            type: string
+            nullable: true
+        contactLastName:
+            type: string
+            nullable: true
+        organiserPhone:
+            type: string
+            nullable: true
+        organiserWebsite:
+            type: string
+            nullable: true
         allowDeposit:
             type: boolean
         depositUntil:

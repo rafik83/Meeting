@@ -35,6 +35,26 @@ class Configuration
     private $scheduleScale = 30;
 
     /**
+     * @var string
+     */
+    private $contactLastName;
+
+    /**
+     * @var string
+     */
+    private $contactFirstName;
+
+    /**
+     * @var string
+     */
+    private $organiserPhone;
+    
+    /**
+     * @var string
+     */
+    private $organiserWebsite;
+
+    /**
      * @var bool
      */
     private $allowDeposit = false;
@@ -64,6 +84,20 @@ class Configuration
         $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
         $this->textColor  = $textColor;
+    }
+
+    /**
+     * @param string $contactFirstName
+     * @param string $contactLastName
+     * @param string $organiserPhone
+     * @param string $organiserWebsite
+     */
+    public function updatePracticalInfo($contactFirstName, $contactLastName, $organiserPhone, $organiserWebsite)
+    {
+        $this->contactFirstName = $contactFirstName;
+        $this->contactLastName  = $contactLastName;
+        $this->organiserPhone   = $organiserPhone;
+        $this->organiserWebsite = $organiserWebsite;
     }
 
     /**
@@ -104,8 +138,12 @@ class Configuration
      * @param float|null              $minimumForDeposit
      * @param int|null                $deposit
      */
-    public function updatePaymentConditions($allowDeposit, \DateTimeInterface $depositUntil = null, $minimumForDeposit = null, $deposit = null)
-    {
+    public function updatePaymentConditions(
+        $allowDeposit,
+        \DateTimeInterface $depositUntil = null,
+        $minimumForDeposit = null,
+        $deposit = null
+    ) {
         $this->allowDeposit      = $allowDeposit;
         $this->depositUntil      = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
@@ -170,5 +208,37 @@ class Configuration
         $this->scheduleScale = $scheduleScale;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactLastName()
+    {
+        return $this->contactLastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactFirstName()
+    {
+        return $this->contactFirstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganiserPhone()
+    {
+        return $this->organiserPhone;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getOrganiserWebsite()
+    {
+        return $this->organiserWebsite;
     }
 }
