@@ -301,16 +301,6 @@ class Product
     }
 
     /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getAddon($locale)
-    {
-        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
-    }
-
-    /**
      * @return string
      */
     public function getName()
@@ -499,18 +489,6 @@ class Product
     public function hasIncludedProducts()
     {
         return !$this->productIncluded->isEmpty();
-    }
-
-    /**
-     * @param Product $product
-     *
-     * @return false|ProductIncluded
-     */
-    public function getIncludedProduct(Product $product)
-    {
-        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) use ($product) {
-            return $productIncluded->getIncluded() == $product;
-        })->first();
     }
 
     /**
