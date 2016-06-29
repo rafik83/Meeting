@@ -908,6 +908,12 @@ services:
             - '@application.nomenclature.nomenclature_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
+    command.event.payment_conditions.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update }
     command.event.create_handler:
         class: Proximum\Vimeet\Application\Command\Event\CreateHandler
         arguments:
@@ -918,6 +924,12 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
+    command.event.practical_info.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\PracticalInfo\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
 
     #
     # Security

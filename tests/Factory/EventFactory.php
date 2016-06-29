@@ -28,7 +28,8 @@ class EventFactory
             'FR',
             'EUR',
             'Europe/Paris',
-            'super-event.vimeet.proximum.dev'
+            'super-event.vimeet.proximum.dev',
+            'proximum'
         );
     }
 }

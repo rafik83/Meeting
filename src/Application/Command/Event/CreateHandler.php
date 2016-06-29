@@ -84,7 +84,8 @@ class CreateHandler
             $create->country,
             $create->currency,
             $create->timeZone,
-            $create->domain
+            $create->domain,
+            $create->organiserName
         );
 
         $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
