@@ -204,11 +204,12 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new RegisterAccountMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:User/register.html.twig',
+            'MailBundle:Mail:User/register.html.twig',
             'user_registered',
             $event->getLocale(),
             $event->getEvent(),
-            $event->getUser()
+            $event->getUser(),
+            $event->getParticipant()
         );
 
         $this->mailer->send($mail);

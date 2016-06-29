@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
 class RegisterAccountMail extends Mail
@@ -22,21 +23,36 @@ class RegisterAccountMail extends Mail
     private $event;
 
     /**
+     * @var Participant
+     */
+    private $participant;
+
+    /**
      * RegisterAccountMail constructor.
      *
-     * @param string $sender
-     * @param string $receiver
-     * @param string $template
-     * @param string $messageId
-     * @param string $locale
-     * @param Event  $event
-     * @param User   $receiverUser
+     * @param string      $sender
+     * @param string      $receiver
+     * @param string      $template
+     * @param string      $messageId
+     * @param string      $locale
+     * @param Event       $event
+     * @param User        $receiverUser
+     * @param Participant $participant
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, User $receiverUser)
-    {
+    public function __construct(
+        $sender,
+        $receiver,
+        $template,
+        $messageId,
+        $locale,
+        Event $event,
+        User $receiverUser,
+        Participant $participant
+    ) {
         parent::__construct($sender, $receiver, $template, $messageId, $locale, null, $receiverUser);
 
         $this->event = $event;
+        $this->participant = $participant;
     }
 
     /**
@@ -46,5 +62,12 @@ class RegisterAccountMail extends Mail
     {
         return $this->event;
     }
-    
+
+    /**
+     * @return Participant
+     */
+    public function getParticipant()
+    {
+        return $this->participant;
+    }
 }
