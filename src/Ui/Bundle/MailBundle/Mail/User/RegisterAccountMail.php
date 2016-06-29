@@ -23,21 +23,15 @@ class RegisterAccountMail extends Mail
     private $event;
 
     /**
-     * @var Participant
-     */
-    private $participant;
-
-    /**
      * RegisterAccountMail constructor.
      *
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $template
-     * @param string      $messageId
-     * @param string      $locale
-     * @param Event       $event
-     * @param User        $receiverUser
-     * @param Participant $participant
+     * @param string $sender
+     * @param string $receiver
+     * @param string $template
+     * @param string $messageId
+     * @param string $locale
+     * @param Event  $event
+     * @param User   $receiverUser
      */
     public function __construct(
         $sender,
@@ -46,13 +40,11 @@ class RegisterAccountMail extends Mail
         $messageId,
         $locale,
         Event $event,
-        User $receiverUser,
-        Participant $participant
+        User $receiverUser
     ) {
         parent::__construct($sender, $receiver, $template, $messageId, $locale, null, $receiverUser);
 
         $this->event = $event;
-        $this->participant = $participant;
     }
 
     /**
@@ -61,13 +53,5 @@ class RegisterAccountMail extends Mail
     public function getEvent()
     {
         return $this->event;
-    }
-
-    /**
-     * @return Participant
-     */
-    public function getParticipant()
-    {
-        return $this->participant;
     }
 }

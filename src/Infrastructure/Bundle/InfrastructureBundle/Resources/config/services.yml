@@ -236,7 +236,6 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
             - '@datetime'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
@@ -717,6 +716,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:

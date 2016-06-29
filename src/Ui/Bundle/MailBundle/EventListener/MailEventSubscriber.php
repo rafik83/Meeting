@@ -208,8 +208,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             'user_registered',
             $event->getLocale(),
             $event->getEvent(),
-            $event->getUser(),
-            $event->getParticipant()
+            $event->getUser()
         );
 
         $this->mailer->send($mail);

@@ -11,13 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipateHandler
 {
@@ -42,29 +40,21 @@ class ParticipateHandler
     private $dateTime;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
      * @param \DateTimeInterface             $dateTime
-     * @param EventDispatcherInterface       $eventDispatcher
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        \DateTimeInterface $dateTime,
-        EventDispatcherInterface $eventDispatcher
+        \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer   = $accountSynchronizer;
         $this->dateTime              = $dateTime;
-        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -102,14 +92,5 @@ class ParticipateHandler
         $participate->participant = $participant;
 
         $this->accountSynchronizer->set($templateData, $participant->getUser());
-
-        // trigger registered event
-        $registeredEvent = new RegisteredEvent(
-            $participate->event,
-            $participate->user,
-            $participant,
-            $participate->locale
-        );
-        $this->eventDispatcher->dispatch('user.registered', $registeredEvent);
     }
 }

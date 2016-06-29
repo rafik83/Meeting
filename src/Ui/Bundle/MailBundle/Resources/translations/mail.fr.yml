@@ -67,9 +67,9 @@ mail:
     register:
         subject: Votre compte d'accès à l'espace membre de %event% est créé
         body: |
-            Cher(e) M/Mme %firstname% %lastname%
+            Cher(e) utilisateur
             Félicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté ViMeet.
-            Vous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de <a href="%url%">%event%</a>.
+            Vous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.
     preregister:
         subject:
         body: |

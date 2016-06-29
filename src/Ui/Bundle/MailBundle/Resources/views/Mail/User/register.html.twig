@@ -4,12 +4,6 @@
 
 {% block body %}
     {{ 'mail.register.body'|trans({
-        '%event%': mail.event.title,
-        '%url%': url('event_account_participant', {
-            'sheet': mail.participant.sheet.id,
-            'participant': mail.participant.id
-        }),
-        '%firstname%': mail.receiverUser.account.firstname|humanize,
-        '%lastname%': mail.receiverUser.account.lastname|upper
+        '%event%': mail.event.title
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
