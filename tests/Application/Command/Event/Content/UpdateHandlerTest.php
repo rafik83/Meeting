@@ -14,12 +14,13 @@ use Proximum\Vimeet\Application\Command\Event\Content\Update;
 use Proximum\Vimeet\Application\Command\Event\Content\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event   = new Event();
+        $event   = EventFactory::createEvent();
         $content = new Event\Content($event, Event\Content::TYPE_TERMS_OF_SALE);
         $content->translate('fr', 'test');
         $content->translate('en', 'foo');

@@ -108,6 +108,11 @@ admin_event_read:
     methods: [GET]
     defaults: { _controller: AdminBundle:Event:read }
 
+admin_event_create:
+    path: /event/create
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event:create }
+
 admin_event_update:
     path: /event/{event}/update
     requirements:

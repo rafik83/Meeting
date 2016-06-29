@@ -14,9 +14,9 @@
     <section class="main">
         <header>
             {% if type %}
-                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'register.register'|trans }} <span>"{{ type.title }}"</span></h1>
+                <h1><i class="icon-Clef"></i> {{ 'register.register'|trans }} <span>"{{ type.title }}"</span></h1>
             {% else %}
-                <h1><img src="{{ asset('assets/images/icons/icon-key.svg') }}"> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
+                <h1><i class="icon-Clef"></i> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
             {% endif %}
         </header>
 

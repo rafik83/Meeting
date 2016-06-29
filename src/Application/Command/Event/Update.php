@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Model;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Update
+class Update extends AbstractEvent
 {
     /**
      * @var Model\Event
@@ -21,64 +20,9 @@ class Update
     public $event;
 
     /**
-     * @var string
-     */
-    public $title;
-
-    /**
-     * @var UploadedFile
-     */
-    public $logo;
-
-    /**
-     * @var array
-     */
-    public $locales;
-
-    /**
-     * @var string
-     */
-    public $fallback;
-
-    /**
-     * @var string
-     */
-    public $country;
-
-    /**
      * @var array
      */
     public $translations;
-
-    /**
-     * @var string
-     */
-    public $mode;
-
-    /**
-     * @var float
-     */
-    public $vat;
-
-    /**
-     * @var string
-     */
-    public $currency;
-
-    /**
-     * @var string
-     */
-    public $leftColor;
-
-    /**
-     * @var string
-     */
-    public $rightColor;
-
-    /**
-     * @var string
-     */
-    public $textColor;
 
     /**
      * @param Model\Event $event
@@ -91,6 +35,8 @@ class Update
         $this->fallback     = $event->getFallback();
         $this->translations = [];
         $this->mode         = $event->getMode();
+        $this->domain       = $event->getDomain();
+        $this->timeZone     = $event->getTimeZone();
         $this->country      = $event->getCountry();
         $this->vat          = $event->getVat();
         $this->currency     = $event->getCurrency();

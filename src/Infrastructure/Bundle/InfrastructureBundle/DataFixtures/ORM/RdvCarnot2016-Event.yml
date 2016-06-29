@@ -15,6 +15,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
 
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
+        __construct: false
         title: Les rendez-vous CARNOT 2016
         domain: rdv-carnot-2016.<domain()>
         timeZone: 'Europe/Paris'

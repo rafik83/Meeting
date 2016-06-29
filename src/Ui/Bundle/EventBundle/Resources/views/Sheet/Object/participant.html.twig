@@ -11,7 +11,7 @@
         </div>
     </div>
     <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal">
-        <img src="{{ asset('assets/images/icons/icon-user.png') }}">{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
+        <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
     </a>
     <footer>
         {% if participants.cardViews|length > 1 %}

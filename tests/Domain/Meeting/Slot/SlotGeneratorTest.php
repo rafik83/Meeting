@@ -14,12 +14,13 @@ use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SlotGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testGenerate()
     {
-        $event     = new Event();
+        $event     = EventFactory::createEvent();
         $generator = new SlotGenerator();
         $actual    = $generator->generate($event, [
             new Recipe(new \DateTime('2016-06-15 09:00:00'), new \DateTime('2016-06-15 12:00:00'), 5, 25),

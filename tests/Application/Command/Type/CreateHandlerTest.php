@@ -22,13 +22,14 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         //Context
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $dateTime = new \DateTime();
         $package  = new Package($event, 'title', $dateTime);
         $event->setLocales(['fr'], 'fr');

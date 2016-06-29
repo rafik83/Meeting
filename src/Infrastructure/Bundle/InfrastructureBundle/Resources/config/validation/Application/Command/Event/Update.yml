@@ -2,7 +2,26 @@ Proximum\Vimeet\Application\Command\Event\Update:
     properties:
         title:
             - NotBlank: ~
+        mode:
+            - NotBlank: ~
+        domain:
+            - NotBlank: ~
+            - Length:
+                max: 63
+            - Regex:
+                pattern: '/^\S*$/'
+                message: validators.whitespace
+        timeZone:
+            - NotBlank: ~
+        locales:
+            - NotBlank: ~
+        fallback:
+            - NotBlank: ~
+        country:
+            - NotBlank: ~
         vat:
+            - NotBlank: ~
+        currency:
             - NotBlank: ~
         logo:
             - Image:

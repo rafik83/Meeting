@@ -1,5 +1,6 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
+        __construct: false
         title: Evento en español
         domain: spanish-event.<domain()>
         timeZone: 'Europe/Paris'
