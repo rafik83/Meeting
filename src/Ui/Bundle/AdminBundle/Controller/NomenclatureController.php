@@ -141,20 +141,20 @@ class NomenclatureController extends Controller
      * Handle Nomenclature update
      *
      * @param Request       $request
-     * @param FormInterface $updateForm
-     * @param Update        $update
+     * @param FormInterface $form
+     * @param Update        $data
      *
      * @return null|string
      */
-    private function handleUpdate(Request $request, FormInterface $updateForm, Update $update)
+    private function handleUpdate(Request $request, FormInterface $form, Update $data)
     {
-        if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
-            $this->denyAccessUnlessNomenclatureAccess($update->nomenclature);
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
 
-            $this->get('tactician.commandbus')->handle($update);
+            $this->get('tactician.commandbus')->handle($data);
             $this->addFlash('success', 'flash.admin.nomenclature.update.success');
 
-            return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $update->nomenclature->getId()]);
+            return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $data->nomenclature->getId()]);
         }
 
         return null;
@@ -164,14 +164,14 @@ class NomenclatureController extends Controller
      * Handle csv import of a Nomenclature
      *
      * @param Request       $request
-     * @param FormInterface $importForm
+     * @param FormInterface $form
      * @param ImportData    $data
      *
      * @return null|string
      */
-    private function handleImport(Request $request, FormInterface $importForm, ImportData $data)
+    private function handleImport(Request $request, FormInterface $form, ImportData $data)
     {
-        if ($importForm->handleRequest($request)->isSubmitted() && $importForm->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
 
             try {
@@ -182,9 +182,9 @@ class NomenclatureController extends Controller
 
                 return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $data->nomenclature->getId()]);
             } catch (ImportException $exception) {
-                $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             } catch (MissingKeysException $exception) {
-                $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
+                $form->addError($this->get('error_factory')->create('validators.nomenclature.import.missing_keys'));
             }
         }
 
@@ -195,18 +195,18 @@ class NomenclatureController extends Controller
      * Assign a nomenclature to an event
      *
      * @param Request       $request
-     * @param FormInterface $assignForm
-     * @param Assign        $assign
+     * @param FormInterface $form
+     * @param Assign        $data
      *
      * @return null|string
      */
-    private function handleAssign(Request $request, FormInterface $assignForm, Assign $assign)
+    private function handleAssign(Request $request, FormInterface $form, Assign $data)
     {
-        if ($assignForm->handleRequest($request)->isSubmitted() && $assignForm->isValid()) {
-            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $assign->event);
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $data->event);
 
             /** @var AssignResult $result */
-            $result = $this->get('tactician.commandbus')->handle($assign);
+            $result = $this->get('tactician.commandbus')->handle($data);
             $this->addFlash('success', 'flash.admin.nomenclature.assign.success');
 
             return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
