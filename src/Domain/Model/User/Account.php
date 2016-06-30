@@ -72,7 +72,7 @@ class Account
      */
     private $country;
 
-//    private $gender;
+    private $gender;
 
     /**
      * @return string
