@@ -268,7 +268,14 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        if (!$sheet->canBuyParticipant()) {
+            throw $this->createNotFoundException(
+                sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
+            );
+        }
+
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         try {
@@ -311,6 +318,11 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        if (!$sheet->canBuyParticipant()) {
+            throw $this->createNotFoundException(
+                sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
+            );
+        }
 
         $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [

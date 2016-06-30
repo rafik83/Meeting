@@ -263,6 +263,12 @@ class PackageController extends Controller
             );
         }
 
+        if (!$sheet->canBuyParticipant()) {
+            throw $this->createNotFoundException(
+                sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
+            );
+        }
+
         $locale         = $request->getLocale();
         $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
         $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);

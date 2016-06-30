@@ -16,6 +16,7 @@ Proximum\Vimeet\Domain\Model\Product:
         image: ~
         availabilityCurrent: ~
         availabilityMax: ~
+        quantityMax: 4
         updatable: false
         updatableUntil: ~
     # plannings
