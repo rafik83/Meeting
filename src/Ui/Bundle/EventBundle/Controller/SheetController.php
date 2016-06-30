@@ -333,16 +333,7 @@ class SheetController extends Controller
         // If the form is not valid, render the sheet and force the popin with the participant form
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-
-        try {
-            $object = $templateData->getObject($key);
-        } catch (Template\Exception\ObjectNotFoundException $exception) {
-            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
-        }
-
-        if ($object->getType() !== 'participant') {
-            throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
-        }
+        $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
@@ -457,18 +448,9 @@ class SheetController extends Controller
         // If the form is not valid, render the sheet and force the popin with the remove participant form
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $object       = $this->getParticipantObject($templateData, $key);
+        $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        try {
-            $object = $templateData->getObject($key);
-        } catch (Template\Exception\ObjectNotFoundException $exception) {
-            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
-        }
-
-        if ($object->getType() !== 'participant') {
-            throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
-        }
-
-        $label = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'        => $eventDomain->getEvent(),
@@ -482,5 +464,26 @@ class SheetController extends Controller
             'uid'              => $key,
             'participants'     => $participants,
         ]);
+    }
+
+    /**
+     * @param Template\TemplateData $templateData
+     * @param string                $key
+     *
+     * @return Template\Object
+     */
+    private function getParticipantObject(Template\TemplateData $templateData, $key)
+    {
+        try {
+            $object = $templateData->getObject($key);
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
+        }
+
+        if ($object->getType() !== 'participant') {
+            throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
+        }
+
+        return $object;
     }
 }

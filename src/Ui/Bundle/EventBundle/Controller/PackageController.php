@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
-use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
