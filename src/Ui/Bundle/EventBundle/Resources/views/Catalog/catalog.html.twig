@@ -5,7 +5,13 @@
 {% block body_attributes 'class="grey"' %}
 
 {% block content %}
+
+
 <div class="catalog">
+  <div class="catalog__research">
+
+  </div>
+
   <div class="catalog__filters">
     <div class="select-all">
       <label class="checkbox-inline" for="select-all-catalog">
@@ -39,7 +45,7 @@
     </div>
   </div>
 
-  <div class="catalog__list">
+  <div class="catalog__list catalog__list--block">
     <div class="row">
       <div class="col-md-4">
         <div class="catalog__item catalog__item--checked">
@@ -57,7 +63,9 @@
               <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
               <a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>
             </div>
-            <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander un RDV</button>
+            <div class="button">
+              <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander un RDV</button>
+            </div>
           </footer>
         </div>
       </div>
@@ -72,12 +80,14 @@
             <p>Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen. Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen.</p>
           </div>
           <footer>
-            <p class="tags">Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
+            <p class="tags"><i class="icon-LienTag"></i> Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
             <div class="actions">
               <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
               <a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>
             </div>
-            <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander un RDV</button>
+            <div class="button">
+              <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander un RDV</button>
+            </div>
           </footer>
         </div>
       </div>
@@ -92,12 +102,15 @@
             <p>Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen. Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen.</p>
           </div>
           <footer>
-            <p class="tags">Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
+            <p class="tags"><i class="icon-LienTag"></i> Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
             <div class="actions">
               <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
               <a href=""><i class="icon-Etoile"></i> <span>Ajouter aux favoris</span></a>
             </div>
-            <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander un RDV</button>
+            <div class="button">
+              <button type="button" class="btn btn-gray reject"><i class="icon-Fermer_4"></i> Refuser</button>
+              <button type="button" class="btn btn-primary accept"><i class="icon-Valider_4"></i> Accepter la proposition</button>
+            </div>
           </footer>
         </div>
       </div>
@@ -114,18 +127,86 @@
             <p>Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen. Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen.</p>
           </div>
           <footer>
-            <p class="tags">Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
+            <p class="tags"><i class="icon-LienTag"></i> Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
             <div class="actions">
               <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
               <a href=""><i class="icon-Etoile"></i> <span>Ajouter aux favoris</span></a>
             </div>
-            <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander un RDV</button>
+            <div class="button">
+              <button type="button" class="btn btn-gray reject"><i class="icon-Fermer_4"></i> Demande refusée</button>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="catalog__item">
+          <header>
+            <input type="checkbox">
+            <img src={{ asset('assets/images/dummy/airbus-logo.png') }}>
+          </header>
+          <div class="content">
+            <p><strong>quo mollius primos decere nec ut perferens statuas protectoribus adimenda.</strong></p>
+            <p>Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen. Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque ductores concitat cum habitus cum in ordinibus consurgentem haut certamen.</p>
+          </div>
+          <footer>
+            <p class="tags"><i class="icon-LienTag"></i> Exposant / Répondre à mes besoins / Laboratoire privé / Lyon - FRANCE</p>
+            <div class="actions">
+              <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
+              <a href=""><i class="icon-Etoile"></i> <span>Ajouter aux favoris</span></a>
+            </div>
+            <div class="button">
+              <button type="button" class="btn btn-gray accept"><i class="icon-Valider_4"></i> Demande acceptée</button>
+            </div>
           </footer>
         </div>
       </div>
       <div class="col-md-4"></div>
-      <div class="col-md-4"></div>
     </div>
+  </div>
+
+  <div class="catalog__list catalog__list--inline">
+    <ul class="inline-list">
+      <li class="catalog__item">
+        <div class="name">
+          <input type="checkbox">
+          <strong>Adhetec</strong>
+        </div>
+        <span class="country">FR</span>
+        <span class="tag">Donneur d'ordre</span>
+      </li>
+      <li class="catalog__item">
+        <div class="name">
+          <input type="checkbox">
+          <strong>Agusta</strong>
+        </div>
+        <span class="country">IT</span>
+        <span class="tag">Exposant</span>
+      </li>
+      <li class="catalog__item">
+        <div class="name">
+          <input type="checkbox">
+          <strong>Airbus</strong>
+        </div>
+        <span class="country">FR</span>
+        <span class="tag">Donneur d'ordre</span>
+      </li>
+      <li class="catalog__item">
+        <div class="name">
+          <input type="checkbox">
+          <strong>BBAA</strong>
+        </div>
+        <span class="country">FR</span>
+        <span class="tag">Exposant</span>
+      </li>
+      <li class="catalog__item">
+        <div class="name">
+          <input type="checkbox">
+          <strong>Cetim</strong>
+        </div>
+        <span class="country">FR</span>
+        <span class="tag">Congressiste</span>
+      </li>
+    </ul>
   </div>
 </div>
 {% endblock %}

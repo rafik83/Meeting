@@ -40,6 +40,10 @@ function init (target) {
         });
     });
 
+    $('.display-catalog-research').on('click', function (e) {
+        $('.catalog').toggleClass('catalog--advanced');
+    });
+
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
