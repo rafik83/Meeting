@@ -83,6 +83,7 @@ class PackageViewQueryHandler
 
         return new PackageView(
             $packageViewProducts,
+            $packageViewQuery->sheet,
             $packageViewQuery->funnel,
             $packageViewQuery->currentStep
         );
