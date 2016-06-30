@@ -677,9 +677,13 @@ admin_schedule_slot_unlock:
 #
 # Nomenclature
 #
-admin_nomenclature_list:
+admin_nomenclature_globals:
     path: /template/nomenclature
-    defaults: { _controller: AdminBundle:Nomenclature:list }
+    defaults: { _controller: AdminBundle:Nomenclature:globals }
+    methods: [GET, POST]
+admin_nomenclature_event:
+    path: /template/nomenclature/event/{event}
+    defaults: { _controller: AdminBundle:Nomenclature:event }
     methods: [GET, POST]
 admin_nomenclature_read:
     path: /template/nomenclature/{nomenclature}

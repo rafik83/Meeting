@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysExcept
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\AssignType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
@@ -36,13 +37,13 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class NomenclatureController extends Controller
 {
     /**
-     * List nomenclatures
+     * List globals nomenclatures
      *
      * @param Request $request
      *
      * @return RedirectResponse|Response
      */
-    public function listAction(Request $request)
+    public function globalsAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
@@ -56,10 +57,29 @@ class NomenclatureController extends Controller
             return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
         }
 
-        $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
+        $repository    = $this->get('repository.nomenclature_repository');
+        $nomenclatures = $repository->findGlobals();
 
-        return $this->render('AdminBundle:Nomenclature:list.html.twig', [
+        return $this->render('AdminBundle:Nomenclature:globals.html.twig', [
             'form'          => $form->createView(),
+            'nomenclatures' => $nomenclatures,
+        ]);
+    }
+
+    /**
+     * List event nomenclature
+     *
+     * @param Event $event
+     *
+     * @return Response
+     */
+    public function eventAction(Event $event)
+    {
+        $repository    = $this->get('repository.nomenclature_repository');
+        $nomenclatures = $repository->findByEvent($event);
+
+        return $this->render('AdminBundle:Nomenclature:event.html.twig', [
+            'event'         => $event,
             'nomenclatures' => $nomenclatures,
         ]);
     }

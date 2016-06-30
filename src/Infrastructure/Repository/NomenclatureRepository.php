@@ -58,7 +58,7 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
             ->where('nomenclature.event = :event')
             ->setParameter('event', $event)
-            ->addOrderBy('nomenclature.title', 'ASC')
+            ->orderBy('nomenclature.title', 'ASC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -74,7 +74,9 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->createQueryBuilder()
             ->select('nomenclature')
             ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
-            ->where('nomenclature.event IS NULL');
+            ->where('nomenclature.event IS NULL')
+            ->orderBy('nomenclature.title', 'ASC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

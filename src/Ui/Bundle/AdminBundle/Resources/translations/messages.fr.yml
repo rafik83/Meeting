@@ -646,7 +646,6 @@ admin:
             title: Titre
             depth: %depth% niveau|%depth% niveaux
             read: Voir
-            event: Événement
         link: Nomenclatures
         create:
             modal:

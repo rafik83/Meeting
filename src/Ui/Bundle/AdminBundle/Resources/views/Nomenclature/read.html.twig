@@ -75,7 +75,7 @@
     <div class="form">
         <div class="form-group submit-section">
             <div class="col-sm-3">
-                <a href="{{ path('admin_nomenclature_list') }}" class="btn btn-link">
+                <a href="{{ nomenclature.event ? path('admin_nomenclature_event', { 'event': nomenclature.event.id }) : path('admin_nomenclature_globals') }}" class="btn btn-link">
                     <span class="glyphicon glyphicon-arrow-left"></span>
                     {{ 'admin.goback.link'|trans }}
                 </a>
