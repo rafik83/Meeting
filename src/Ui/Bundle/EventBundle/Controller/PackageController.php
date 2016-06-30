@@ -10,18 +10,28 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Add;
+use Proximum\Vimeet\Application\Command\Participant\Remove;
+use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
+use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Package\Step;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
+use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -117,6 +127,30 @@ class PackageController extends Controller
             return $this->redirectToRoute('event_sheet');
         }
 
+        $displayAddParticipantForm    = false;
+        $displayRemoveParticipantForm = false;
+        $form_add                     = null;
+        $form_remove                  = null;
+        $participants                 = [];
+
+        if ($currentStep->type === FunnelStep::TYPE_PARTICIPANT_PLANNING) {
+            list (
+                $displayAddParticipantForm,
+                $displayRemoveParticipantForm,
+                $form_add,
+                $form_remove,
+                $participants,
+                $redirect
+            ) = $this->handleStepParticipant($request, $eventDomain, $sheet, $step);
+
+            if ($redirect) {
+                return $this->redirectToRoute('event_package_step', [
+                    'sheet' => $sheet->getId(),
+                    'step'  => $step,
+                ]);
+            }
+        }
+
         $view = $this->get('tactician.commandbus.query')->handle(
             new PackageViewQuery(
                 $funnel,
@@ -127,9 +161,168 @@ class PackageController extends Controller
         );
 
         return $this->render('EventBundle:Package:step.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'view'  => $view,
+            'event'                        => $eventDomain->getEvent(),
+            'view'                         => $view,
+            'form'                         => $form->createView(),
+            'form_add'                     => null !== $form_add ? $form_add->createView() : $form_add,
+            'form_remove'                  => null !== $form_remove ? $form_remove->createView() : $form_remove,
+            'displayAddParticipantForm'    => $displayAddParticipantForm,
+            'displayRemoveParticipantForm' => $displayRemoveParticipantForm,
+            'participants'                 => $participants,
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param int         $step
+     *
+     * @return array|RedirectResponse
+     */
+    private function handleStepParticipant(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
+    {
+        $locale = $request->getLocale();
+        $displayAddParticipantForm    = false;
+        $displayRemoveParticipantForm = false;
+        $redirect                     = false;
+
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $form_add       = $this->createForm(AddType::class, $addParticipant, [
+            'action' => $this->generateUrl('event_package_step', [
+                'sheet' => $sheet->getId(),
+                'step'  => $step,
+            ]),
+        ]);
+
+        $removeParticipant = new Remove($sheet);
+        $form_remove       = $this->createForm(RemoveType::class, $removeParticipant, [
+            'action'       => $this->generateUrl('event_package_step', [
+                'sheet' => $sheet->getId(),
+                'step'  => $step,
+            ]),
+            'participants' => $sheet->getParticipants(),
+        ]);
+
+        if ($form_add->handleRequest($request)->isSubmitted() && $form_add->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($addParticipant);
+
+                $redirect = true;
+            } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
+                $form_add->get('email')->addError(new FormError('validators.participant.alreadyLinkedToASheet'));
+            } catch (ParticipantAlreadyExistException $exception) {
+                $form_add->get('email')->addError(new FormError('validators.participant.alreadyLinkedToThisSheet'));
+            }
+
+            $displayAddParticipantForm = true;
+        }
+
+        if ($form_remove->handleRequest($request)->isSubmitted() && $form_remove->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($removeParticipant);
+
+                $redirect = true;
+            } catch (CanNotRemoveAllParticipantsException $exception) {
+                $form_remove->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
+            }
+
+            $displayRemoveParticipantForm = true;
+        }
+
+        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
+        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
+
+        return [
+            $displayAddParticipantForm,
+            $displayRemoveParticipantForm,
+            $form_add,
+            $form_remove,
+            $participants,
+            $redirect,
+        ];
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param int         $step
+     *
+     * @return Response
+     */
+    public function addParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The current user %s is not associated with this sheet %s',
+                    $this->getUser()->getId(),
+                    $sheet->getId()
+                )
+            );
+        }
+
+        $locale         = $request->getLocale();
+        $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $form           = $this->createForm(AddType::class, $addParticipant, [
+            'action' => $this->generateUrl('event_package_step', [
+                'sheet' => $sheet->getId(),
+                'step'  => $step,
+            ]),
+        ]);
+
+        return $this->render('EventBundle:Participant:addFromPackage.html.twig', [
+            'label' => $label,
             'form'  => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @param Sheet   $sheet
+     * @param int     $step
+     *
+     * @return Response
+     */
+    public function removeParticipantAction(Request $request, Sheet $sheet, $step)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if (!$sheet->hasUser($this->getUser())) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The current user %s is not associated with this sheet %s',
+                    $this->getUser()->getId(),
+                    $sheet->getId()
+                )
+            );
+        }
+
+        if ($sheet->countParticipants() === 1) {
+            throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
+        }
+
+        $remove = new Remove($sheet);
+        $form   = $this->createForm(RemoveType::class, $remove, [
+            'action'       => $this->generateUrl('event_package_step', [
+                'sheet' => $sheet->getId(),
+                'step'  => $step,
+            ]),
+            'participants' => $sheet->getParticipants(),
+        ]);
+
+        $locale            = $request->getLocale();
+        $label             = $sheet->getPackage()->getParticipant()->getTitle($locale);
+        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
+        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
+
+        return $this->render('EventBundle:Participant:removeFromPackage.html.twig', [
+            'form'         => $form->createView(),
+            'label'        => $label,
+            'participants' => $participants,
         ]);
     }
 
