@@ -52,26 +52,29 @@ class Account
      */
     private $website;
 
-        /**
+    /**
      * @var string
      */
     private $address;
 
-        /**
+    /**
      * @var string
      */
     private $zipCode;
 
-        /**
+    /**
      * @var string
      */
     private $city;
 
-        /**
+    /**
      * @var string
      */
     private $country;
 
+    /**
+     * @var bool
+     */
     private $gender;
 
     /**
@@ -267,7 +270,7 @@ class Account
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getGender()
     {
@@ -275,7 +278,7 @@ class Account
     }
 
     /**
-     * @param mixed $gender
+     * @param bool $gender
      */
     public function setGender($gender)
     {
