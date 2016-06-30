@@ -51,6 +51,8 @@ class NomenclatureController extends Controller
         $form    = $this->createForm(CreateType::class, $command, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
             /** @var CreateResult $result */
             $result = $this->get('tactician.commandbus')->handle($command);
 
@@ -75,6 +77,9 @@ class NomenclatureController extends Controller
      */
     public function eventAction(Event $event)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $repository    = $this->get('repository.nomenclature_repository');
         $nomenclatures = $repository->findByEvent($event);
 
@@ -95,6 +100,10 @@ class NomenclatureController extends Controller
     public function readAction(Request $request, Nomenclature $nomenclature)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        if ($nomenclature->getEvent()) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $nomenclature->getEvent());
+        }
 
         // Handle update
         $update     = new Update($nomenclature);
@@ -139,6 +148,8 @@ class NomenclatureController extends Controller
     private function handleUpdate(Request $request, FormInterface $updateForm, Update $update)
     {
         if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
+            $this->denyAccessUnlessNomenclatureAccess($update->nomenclature);
+
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.nomenclature.update.success');
 
@@ -160,6 +171,7 @@ class NomenclatureController extends Controller
     private function handleImport(Request $request, FormInterface $importForm, Nomenclature $nomenclature)
     {
         if ($importForm->handleRequest($request)->isSubmitted() && $importForm->isValid()) {
+            $this->denyAccessUnlessNomenclatureAccess($nomenclature);
 
             /** @var UploadedFile $file */
             $file   = $importForm->get('file')->getData();
@@ -192,6 +204,8 @@ class NomenclatureController extends Controller
     private function handleAssign(Request $request, FormInterface $assignForm, Assign $assign)
     {
         if ($assignForm->handleRequest($request)->isSubmitted() && $assignForm->isValid()) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $assign->event);
+
             /** @var AssignResult $result */
             $result = $this->get('tactician.commandbus')->handle($assign);
             $this->addFlash('success', 'flash.admin.nomenclature.assign.success');
@@ -220,5 +234,17 @@ class NomenclatureController extends Controller
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
 
         return $response;
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    private function denyAccessUnlessNomenclatureAccess(Nomenclature $nomenclature)
+    {
+        if ($nomenclature->getEvent()) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $nomenclature->getEvent());
+        } else {
+            $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        }
     }
 }
