@@ -14,12 +14,13 @@ use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class NomenclatureClonerTest extends \PHPUnit_Framework_TestCase
 {
     public function testDuplicate()
     {
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $nomenclature = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true);
         $clone        = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true, $event, $nomenclature);
 
@@ -33,7 +34,7 @@ class NomenclatureClonerTest extends \PHPUnit_Framework_TestCase
 
     public function testDuplicateIfNotExistWhenCloneExists()
     {
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $nomenclature = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true);
         $clone        = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true, $event, $nomenclature);
 
@@ -48,7 +49,7 @@ class NomenclatureClonerTest extends \PHPUnit_Framework_TestCase
 
     public function testDuplicateIfNotExistWhenCloneNotExists()
     {
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $nomenclature = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true);
         $clone        = new Nomenclature('title', 1, ['foobar' => ['label' => ['fr' => 'Foobar']]], true, $event, $nomenclature);
 

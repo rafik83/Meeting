@@ -15,8 +15,6 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
-use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
-use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
@@ -133,30 +131,6 @@ class TemplateDataFactory
                 $locale,
                 $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
             );
-    }
-
-    /**
-     * @param SheetTemplate $sheetTemplate
-     *
-     * @return TemplateData
-     */
-    public function createFromSheetTemplate(SheetTemplate $sheetTemplate)
-    {
-        return $this
-            ->loadNomenclatures($sheetTemplate->getEvent())
-            ->create($sheetTemplate->getValue());
-    }
-
-    /**
-     * @param RegistrationTemplate $registrationTemplate
-     *
-     * @return TemplateData
-     */
-    public function createFromRegistrationTemplate(RegistrationTemplate $registrationTemplate)
-    {
-        return $this
-            ->loadNomenclatures($registrationTemplate->getEvent())
-            ->create($registrationTemplate->getValue());
     }
 
     /**

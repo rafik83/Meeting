@@ -13,28 +13,18 @@ namespace Proximum\Vimeet\Application\Template\Registration;
 
 
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
+use Proximum\Vimeet\Application\Template\TemplateCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
-class RegistrationTemplateCloner
+class RegistrationTemplateCloner extends TemplateCloner
 {
     /**
      * @var RegistrationTemplateRepositoryInterface
      */
     private $registrationTemplateRepository;
-
-    /**
-     * @var TemplateDataFactory
-     */
-    private $templateDataFactory;
-
-    /**
-     * @var NomenclatureCloner
-     */
-    private $nomenclatureCloner;
 
     /**
      * @var \DateTimeInterface
@@ -55,68 +45,34 @@ class RegistrationTemplateCloner
         NomenclatureCloner $nomenclatureCloner,
         \DateTimeInterface $dateTime
     ) {
+        parent::__construct($templateDataFactory, $nomenclatureCloner);
+
         $this->registrationTemplateRepository = $registrationTemplateRepository;
-        $this->templateDataFactory            = $templateDataFactory;
-        $this->nomenclatureCloner             = $nomenclatureCloner;
         $this->dateTime                       = $dateTime;
     }
 
     /**
-     * @param RegistrationTemplate $registrationTemplate
+     * @param RegistrationTemplate $template
      * @param Event                $event
      * @param string               $title
      *
      * @return RegistrationTemplate
      */
-    public function duplicate(RegistrationTemplate $registrationTemplate, Event $event, $title)
+    public function duplicate(RegistrationTemplate $template, Event $event, $title)
     {
-        // Clone template
-        $registrationTemplate = new RegistrationTemplate(
+        $clone = new RegistrationTemplate(
             $title,
-            $registrationTemplate->getValue(),
-            $registrationTemplate->getLocales(),
-            $registrationTemplate->getFallback(),
-            $this->dateTime
+            $template->getValue(),
+            $template->getLocales(),
+            $template->getFallback(),
+            $this->dateTime,
+            $template->getEvent()
         );
 
-        // We have to keep the original event to find the right nomenclatures in the template data builder
-        $registrationTemplate->setEvent($registrationTemplate->getEvent());
+        $this->switchEvent($event, $clone);
 
-        // Clone nomenclature
-        $template = $this->cloneNomenclatures($event, $registrationTemplate);
+        $this->registrationTemplateRepository->add($clone);
 
-        // Update template
-        $registrationTemplate->setValue($template->getConfig());
-
-        // Now we can set the proper event
-        $registrationTemplate->setEvent($event);
-
-        // Save
-        $this->registrationTemplateRepository->add($registrationTemplate);
-
-        return $registrationTemplate;
-    }
-
-    /**
-     * @param Event         $event
-     * @param RegistrationTemplate $registrationTemplate
-     *
-     * @return TemplateData
-     */
-    private function cloneNomenclatures(Event $event, RegistrationTemplate $registrationTemplate)
-    {
-        $template = $this->templateDataFactory->createFromRegistrationTemplate($registrationTemplate);
-        $objects  = $template->getNomenclatureObjects();
-
-        foreach ($objects as $object) {
-            if ($object->getNomenclatureModel()->getEvent() !== $event) {
-                $original = $object->getNomenclatureModel();
-                $clone    = $this->nomenclatureCloner->duplicateIfNotExists($original, $event);
-
-                $object->setNomenclature($clone);
-            }
-        }
-
-        return $template;
+        return $clone;
     }
 }

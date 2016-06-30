@@ -23,12 +23,13 @@ use Proximum\Vimeet\Domain\Template\Object\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\Object\Nomenclature as NomenclatureObject;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
 {
     public function testDuplicate()
     {
-        $event         = new Event();
+        $event         = EventFactory::createEvent();
         $dateTime      = new \DateTimeImmutable();
         $sheetTemplate = new SheetTemplate('foobar', [
             'poiuyt' => [
@@ -81,7 +82,7 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
         $block->addChild(0, 'azerty', new EditableText('editable-text', [], 'fr', 'fr'));
         $templateData->addChild(0, 'poiuyt', $block);
 
-        $templateDataFactory->createFromSheetTemplate(Argument::that(function (SheetTemplate $sheetTemplate) use ($clone) {
+        $templateDataFactory->createFromTemplate(Argument::that(function (SheetTemplate $sheetTemplate) use ($clone) {
             $this->assertEquals($clone->getTitle(), $sheetTemplate->getTitle());
             $this->assertEquals($clone->getValue(), $sheetTemplate->getValue());
 
@@ -101,7 +102,7 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicateWithNomenclature()
     {
-        $event         = new Event();
+        $event         = EventFactory::createEvent();
         $dateTime      = new \DateTimeImmutable();
         $sheetTemplate = new SheetTemplate('foobar', [
             'poiuyt' => [
@@ -163,7 +164,7 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
         $block->addChild(0, 'azerty', $object);
         $templateData->addChild(0, 'poiuyt', $block);
 
-        $templateDataFactory->createFromSheetTemplate(Argument::that(function (SheetTemplate $sheetTemplate) use ($clone) {
+        $templateDataFactory->createFromTemplate(Argument::that(function (SheetTemplate $sheetTemplate) use ($clone) {
             $this->assertEquals($clone->getTitle(), $sheetTemplate->getTitle());
 
             return true;

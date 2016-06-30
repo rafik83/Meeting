@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Event\HasSheet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,7 +53,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $hasSheet               = $this->prophesize(HasSheet::class);
 
         $value        = ['a' => ['label' => ['fr' => 'aaaa']], 'b' => ['label' => ['fr' => 'bbbb']], 'c' => ['label' => ['fr' => 'cccc']]];
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $nomenclature = new Nomenclature('foobar', 1, [], true, $event);
         $expected     = new Nomenclature('foobar', 1, $value, true, $event);
 
@@ -76,7 +77,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $hasSheet               = $this->prophesize(HasSheet::class);
 
         $value        = ['a' => ['label' => ['fr' => 'aaaa']], 'b' => ['label' => ['fr' => 'bbbb']], 'c' => ['label' => ['fr' => 'cccc']]];
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $nomenclature = new Nomenclature('foobar', 1, [], true, $event);
         $expected     = new Nomenclature('foobar', 1, $value, true, $event);
 
@@ -102,7 +103,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $hasSheet               = $this->prophesize(HasSheet::class);
 
         $value        = ['a' => ['label' => ['fr' => 'aaaa']], 'b' => ['label' => ['fr' => 'bbbb']]];
-        $event        = new Event();
+        $event        = EventFactory::createEvent();
         $nomenclature = new Nomenclature('foobar', 1, ['a' => ['label' => ['fr' => 'aaaa']], 'b' => ['label' => ['fr' => 'bbbb']], 'c' => ['label' => ['fr' => 'cccc']]], true, $event);
         $expected     = new Nomenclature('foobar', 1, $value, true, $event);
 

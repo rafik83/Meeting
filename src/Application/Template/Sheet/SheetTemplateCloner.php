@@ -12,28 +12,18 @@
 namespace Proximum\Vimeet\Application\Template\Sheet;
 
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
+use Proximum\Vimeet\Application\Template\TemplateCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
-class SheetTemplateCloner
+class SheetTemplateCloner extends TemplateCloner
 {
     /**
      * @var SheetTemplateRepositoryInterface
      */
     private $sheetTemplateRepository;
-
-    /**
-     * @var TemplateDataFactory
-     */
-    private $templateDataFactory;
-
-    /**
-     * @var NomenclatureCloner
-     */
-    private $nomenclatureCloner;
 
     /**
      * @var \DateTimeInterface
@@ -54,68 +44,34 @@ class SheetTemplateCloner
         NomenclatureCloner $nomenclatureCloner,
         \DateTimeInterface $dateTime
     ) {
+        parent::__construct($templateDataFactory, $nomenclatureCloner);
+
         $this->sheetTemplateRepository = $sheetTemplateRepository;
-        $this->templateDataFactory     = $templateDataFactory;
-        $this->nomenclatureCloner      = $nomenclatureCloner;
         $this->dateTime                = $dateTime;
     }
 
     /**
-     * @param SheetTemplate $sheetTemplate
+     * @param SheetTemplate $template
      * @param Event         $event
      * @param string        $title
      *
      * @return SheetTemplate
      */
-    public function duplicate(SheetTemplate $sheetTemplate, Event $event, $title)
+    public function duplicate(SheetTemplate $template, Event $event, $title)
     {
-        // Clone tempalte
-        $sheetTemplateClone = new SheetTemplate(
+        $clone = new SheetTemplate(
             $title,
-            $sheetTemplate->getValue(),
-            $sheetTemplate->getLocales(),
-            $sheetTemplate->getFallback(),
-            $this->dateTime
+            $template->getValue(),
+            $template->getLocales(),
+            $template->getFallback(),
+            $this->dateTime,
+            $template->getEvent()
         );
 
-        // We have to keep the original event to find the right nomenclatures in the template data builder
-        $sheetTemplateClone->setEvent($sheetTemplate->getEvent());
+        $this->switchEvent($event, $clone);
 
-        // Clone nomenclature
-        $template = $this->cloneNomenclatures($event, $sheetTemplateClone);
+        $this->sheetTemplateRepository->add($clone);
 
-        // Update template
-        $sheetTemplateClone->setValue($template->getConfig());
-
-        // Now we can set the proper event
-        $sheetTemplateClone->setEvent($event);
-
-        // Save
-        $this->sheetTemplateRepository->add($sheetTemplateClone);
-
-        return $sheetTemplateClone;
-    }
-
-    /**
-     * @param Event         $event
-     * @param SheetTemplate $sheetTemplate
-     *
-     * @return TemplateData
-     */
-    private function cloneNomenclatures(Event $event, SheetTemplate $sheetTemplate)
-    {
-        $template = $this->templateDataFactory->createFromSheetTemplate($sheetTemplate);
-        $objects  = $template->getNomenclatureObjects();
-
-        foreach ($objects as $object) {
-            if ($object->getNomenclatureModel()->getEvent() !== $event) {
-                $original = $object->getNomenclatureModel();
-                $clone    = $this->nomenclatureCloner->duplicateIfNotExists($original, $event);
-
-                $object->setNomenclature($clone);
-            }
-        }
-
-        return $template;
+        return $clone;
     }
 }
