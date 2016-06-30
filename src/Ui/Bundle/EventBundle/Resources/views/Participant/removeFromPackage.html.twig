@@ -1,0 +1,32 @@
+{% form_theme form '@Ui/default.html.twig' %}
+
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        {{ 'sheet.object.action.remove'|trans }} {{ label }}
+    </h4>
+</div>
+<div class="modal-body object--participant">
+    {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+    {{ form_errors(form) }}
+    <div class="inputs list list--users row">
+        {% for participant in participants.cardViews %}
+            <div class="col-md-1">
+                {{ form_widget(form.participants[participant.id]) }}
+            </div>
+            <div class="col-md-11">
+                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+            </div>
+        {% endfor %}
+        <div class="validation">
+            <button type="submit" class="btn btn-primary">
+                <i class="icon-Effacer"></i> {{ 'sheet.participant.remove'|trans }}
+            </button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'common.backToPackage'|trans }}
+    </button>
+</div>
