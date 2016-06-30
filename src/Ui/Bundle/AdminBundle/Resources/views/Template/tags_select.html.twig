@@ -1,0 +1,5 @@
+<select class="form-control select2" name="tag">
+    {% for tag in tags %}
+        <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+    {% endfor %}
+</select>

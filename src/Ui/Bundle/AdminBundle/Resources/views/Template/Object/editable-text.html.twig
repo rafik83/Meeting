@@ -14,7 +14,7 @@
 }|merge(config|default({})) %}
 
 
-<div class="object" data-object="editable-text"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
+<div class="object" data-object="editable-text" {{ uid|default('__UID__') }} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.editable-text'|trans }}</li>
         <li>

@@ -101,9 +101,12 @@ TemplateBuilder.prototype.list = function (element, name)
     new Sortable(element, {
         group: { name: name, pull: 'clone', put: false },
         sort: false,
-        onStart: function () {
+        onStart: function (event) {
             this.closeMenu();
             this.drag = true;
+            var uid = guidGenerator();
+            event.item.innerHTML = event.item.innerHTML.replace('__UID__', uid);
+            event.item.setAttribute('data-uid', uid);
         }.bind(this),
         onEnd: function () {
             this.openMenu();
@@ -266,10 +269,10 @@ function TemplateBlock(element, builder)
     // UID
     this.uid = element.getAttribute('data-uid');
 
-    if (this.uid === null || this.uid === undefined) {
-        this.uid = guidGenerator();
-        this.element.setAttribute('data-uid', this.uid);
-    }
+    //if (this.uid === null || this.uid === undefined) {
+    //    this.uid = guidGenerator();
+    //    this.element.setAttribute('data-uid', this.uid);
+    //}
 
     // Init modal
     $(this.configureModal).modal({show: false});
@@ -354,6 +357,8 @@ TemplateBlock.prototype.sortable = function (element)
                 this.builder.addObject(event.item);
             }
 
+
+
         }.bind(this)
     });
 };
@@ -378,10 +383,10 @@ function TemplateObject(element, locale)
     // UID
     this.uid = element.getAttribute('data-uid');
 
-    if (this.uid === null || this.uid === undefined) {
-        this.uid = guidGenerator();
-        this.element.setAttribute('data-uid', this.uid);
-    }
+    //if (this.uid === null || this.uid === undefined) {
+    //    this.uid = guidGenerator();
+    //    this.element.setAttribute('data-uid', this.uid);
+    //}
 
     // Init modal
     $(this.configureModal).modal({show: false});

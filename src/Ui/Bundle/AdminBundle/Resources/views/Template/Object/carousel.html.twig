@@ -4,7 +4,7 @@
     style: ''
 }|merge(config|default({})) %}
 
-<div class="object" data-object="carousel"{% if uid is defined %} data-uid="{{ uid }}"{% endif %} data-config="{{ config|json_encode }}">
+<div class="object" data-object="carousel" {{ uid|default('__UID__') }} data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">Carousel</li>
         <li>
