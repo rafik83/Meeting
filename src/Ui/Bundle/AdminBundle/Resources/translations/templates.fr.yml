@@ -9,6 +9,7 @@ template:
         nomenclature: Nomenclature
         tag: Contenu affiché par défaut
         participant: Participant
+        tags: Multi tag
     tag:
         sheet_title: Titre de fiche
         sheet_organization: Nom de l'organisation
@@ -53,3 +54,5 @@ template:
         title: Type
     defaultElement:
         title: Élément par défaut
+    tags:
+        title: Tags
