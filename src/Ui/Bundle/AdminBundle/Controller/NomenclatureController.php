@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ImportData;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\AssignType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
@@ -28,7 +29,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,9 +114,10 @@ class NomenclatureController extends Controller
         }
 
         // Handle import
-        $importForm = $this->createForm(ImportType::class, []);
+        $import     = new ImportData($nomenclature);
+        $importForm = $this->createForm(ImportType::class, $import);
 
-        if ($url = $this->handleImport($request, $importForm, $nomenclature)) {
+        if ($url = $this->handleImport($request, $importForm, $import)) {
             return $this->redirect($url);
         }
 
@@ -164,24 +165,22 @@ class NomenclatureController extends Controller
      *
      * @param Request       $request
      * @param FormInterface $importForm
-     * @param Nomenclature  $nomenclature
+     * @param ImportData    $data
      *
      * @return null|string
      */
-    private function handleImport(Request $request, FormInterface $importForm, Nomenclature $nomenclature)
+    private function handleImport(Request $request, FormInterface $importForm, ImportData $data)
     {
         if ($importForm->handleRequest($request)->isSubmitted() && $importForm->isValid()) {
-            $this->denyAccessUnlessNomenclatureAccess($nomenclature);
-
-            /** @var UploadedFile $file */
-            $file   = $importForm->get('file')->getData();
-            $import = new Import($nomenclature, $file ? $file->getPathname() : null);
+            $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
 
             try {
+                $import = new Import($data->nomenclature, $data->file ? $data->file->getPathname() : null);
+
                 $this->get('tactician.commandbus')->handle($import);
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
-                return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
+                return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $data->nomenclature->getId()]);
             } catch (ImportException $exception) {
                 $importForm->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             } catch (MissingKeysException $exception) {

@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature;
 
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ImportData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImportType extends AbstractType
 {
@@ -24,6 +26,16 @@ class ImportType extends AbstractType
         $builder
             ->add('file', FileType::class, ['help' => true])
         ;
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => ImportData::class,
+        ]);
     }
 
     /**
