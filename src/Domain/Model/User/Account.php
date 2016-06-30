@@ -72,6 +72,8 @@ class Account
      */
     private $country;
 
+//    private $gender;
+
     /**
      * @return string
      */
@@ -262,5 +264,21 @@ class Account
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param mixed $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
     }
 }
