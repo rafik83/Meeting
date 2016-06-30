@@ -26,7 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminRe
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\SheetValidatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
@@ -58,6 +58,8 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Send email when admin validate user event participation
+     *
      * @param SheetValidatedEvent $event
      */
     public function onSheetValidated(SheetValidatedEvent $event)
@@ -174,7 +176,7 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $this->mailer->send($mail);
     }
-
+    
     /**
      * @param UserCompleteProfileEvent $event
      */
@@ -194,6 +196,8 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Send email when user finish step 3 of event registration funnel
+     *
      * @param PreRegisterEvent $event
      */
     public function onUserPreRegistered(PreRegisterEvent $event)

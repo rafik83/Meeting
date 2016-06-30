@@ -1,7 +1,27 @@
 {% block subject %}
-    {{ 'mail.sheet.sheetValidated.subject'|trans({}, 'mail', mail.locale)|html }}
+    {{ 'mail.sheet.validated.subject'|trans({'%event%': mail.sheet.event.title}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
 
 {% block body %}
-    {{ 'mail.sheet.sheetValidated.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.sheet.validated.body'|trans({
+        '%event%': mail.sheet.event.title,
+        '%eventSite%': '',
+        '%eventMail%': '',
+        '%eventPhone%': '',
+        '%catalogOnlineDate%': '',
+        '%meetingLimitDate%': '',
+        '%scheduleDate%': '',
+        '%eventOpenDate%': '',
+        '%firstname%': mail.sheet.owner.account.firstname|humanize,
+        '%lastname%': mail.sheet.owner.account.lastname|upper
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}
+
+{% block end %}
+    {{ 'mail.sheet.validated.body'|trans({
+        '%event%': mail.sheet.event,
+        '%eventSite%': '',
+        '%eventMail%': mail.sheet.event.organiserEmail,
+        '%eventPhone%': ''
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

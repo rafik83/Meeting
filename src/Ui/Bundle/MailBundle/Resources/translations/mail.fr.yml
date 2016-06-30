@@ -89,19 +89,24 @@ mail:
             L’équipe %event%
             %eventPhone%
             %eventMail%
-    registerConfirmation:
+    sheet.validated:
         subject: Votre inscription en tant que %participationType% à l'événement %event% est validée
         body: |
             Cher(e) M/Mme %firstname% %lastname%,
+
             Nous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.
+
             Nous vous rappelons ci-dessous les prochaines étapes de votre participation :
+
             <ul>
             <li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>
             <li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %meetingLimitDate%. Ensuite l’ensemble des participants auront jusqu’au [date premier calcul] pour valider les différentes propositions reçues.</li>
             <li>Le %scheduleDate% votre planning provisoire sera disponible en ligne. Vous aurez ensuite jusqu’au [date fin optimisation] pour compléter votre sélection et optimiser votre participation.</li>
             <li>Le %eventOpenDate% à %eventCloseDate%, nous aurons le plaisir de vous accueillir à %eventPlace% pour l’ouverture de [nom event]. Toute notre équipe sera à votre disposition pour faire de votre participation un succès.</li>
             </ul>
+
             Pour toute question sur l'événement, vous pouvez contacter l'équipe %event% à %eventMail%
+
         end: |
           PROXIMUM Group
           %event% Team

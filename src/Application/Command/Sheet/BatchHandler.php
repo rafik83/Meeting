@@ -52,7 +52,8 @@ class BatchHandler
     public function handle(Batch $batch)
     {
         if ($batch->validate) {
-            return $this->batchValidateHandler->handle(new BatchValidate($batch->ids, $batch->admin, $batch->date, $batch->validateComment));
+            return $this->batchValidateHandler->handle(new BatchValidate($batch->ids, $batch->admin, $batch->date,
+                $batch->validateComment));
         }
 
         if ($batch->assign && $batch->follower) {
