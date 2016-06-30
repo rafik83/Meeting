@@ -71,20 +71,32 @@ class NomenclatureController extends Controller
     /**
      * List event nomenclature
      *
-     * @param Event $event
+     * @param Request $request
+     * @param Event   $event
      *
      * @return Response
      */
-    public function eventAction(Event $event)
+    public function eventAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $command = new Create($event);
+        $form    = $this->createForm(CreateType::class, $command, ['submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            /** @var CreateResult $result */
+            $result = $this->get('tactician.commandbus')->handle($command);
+
+            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
+        }
 
         $repository    = $this->get('repository.nomenclature_repository');
         $nomenclatures = $repository->findByEvent($event);
 
         return $this->render('AdminBundle:Nomenclature:event.html.twig', [
             'event'         => $event,
+            'form'          => $form->createView(),
             'nomenclatures' => $nomenclatures,
         ]);
     }

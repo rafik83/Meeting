@@ -37,7 +37,7 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $nomenclature = new Nomenclature($command->title);
+        $nomenclature = new Nomenclature($command->title, 1, [], true, $command->event);
 
         $this->nomenclatureRepository->add($nomenclature);
 
