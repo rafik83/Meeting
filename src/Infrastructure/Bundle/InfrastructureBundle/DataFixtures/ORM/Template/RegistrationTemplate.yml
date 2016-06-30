@@ -108,6 +108,19 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 type: "text"
                                 translatable: false
                                 tags: ["participant_phone", "participant_data"]
+                        4b674gba:
+                            component: "object"
+                            type: "gender"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Sexe"
+                                help:
+                                    fr: ""
+                                required: true
+                                type: "text"
+                                translatable: false
+                                tags: ["participant_gender", "participant_data"]
             4bb4db28:
                 component: "block"
                 type: "12"
