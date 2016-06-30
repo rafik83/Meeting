@@ -37,6 +37,7 @@ class TemplateDataFactory
         'package'               => Object::class,
         'participants_planings' => Object::class,
         'options'               => Object::class,
+        'gender'                => Object\Gender::class,
     ];
 
     /**
