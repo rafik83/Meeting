@@ -35,7 +35,7 @@ class EventTranslation
     /**
      * @var string
      */
-    private $iban;
+    private $bankInfo;
 
     /**
      * @var string
@@ -48,42 +48,51 @@ class EventTranslation
     private $paymentCondition;
 
     /**
+     * Address, Siret, Capital ...
+     *
      * @var string
      */
-    private $footer;
+    private $paymentFooter;
 
     /**
      * @param Event       $event
      * @param string      $locale
      * @param string      $description
-     * @param string|null $iban
+     * @param string|null $bankInfo
      * @param string|null $billingAddress
      * @param string|null $paymentCondition
-     * @param string|null $footer
+     * @param string|null $paymentFooter
      */
-    public function __construct(Event $event, $locale, $description, $iban = null, $billingAddress = null, $paymentCondition = null, $footer = null)
-    {
+    public function __construct(
+        Event $event,
+        $locale,
+        $description,
+        $bankInfo = null,
+        $billingAddress = null,
+        $paymentCondition = null,
+        $paymentFooter = null
+    ) {
         $this->event            = $event;
         $this->locale           = $locale;
         $this->description      = $description;
-        $this->iban             = $iban;
+        $this->bankInfo         = $bankInfo;
         $this->billingAddress   = $billingAddress;
         $this->paymentCondition = $paymentCondition;
-        $this->footer           = $footer;
+        $this->paymentFooter    = $paymentFooter;
     }
 
     /**
-     * @param string $iban
+     * @param string $bankInfo
      * @param string $billingAddress
      * @param string $paymentCondition
-     * @param string $footer
+     * @param string $paymentFooter
      */
-    public function setBillingConfiguration($iban, $billingAddress, $paymentCondition, $footer)
+    public function setBillingConfiguration($bankInfo, $billingAddress, $paymentCondition, $paymentFooter)
     {
-        $this->iban             = $iban;
+        $this->bankInfo         = $bankInfo;
         $this->billingAddress   = $billingAddress;
         $this->paymentCondition = $paymentCondition;
-        $this->footer           = $footer;
+        $this->paymentFooter    = $paymentFooter;
     }
 
     /**
@@ -133,19 +142,19 @@ class EventTranslation
     /**
      * @return string
      */
-    public function getIban()
+    public function getBankInfo()
     {
-        return $this->iban;
+        return $this->bankInfo;
     }
 
     /**
-     * @param string $iban
+     * @param string $bankInfo
      *
      * @return EventTranslation
      */
-    public function setIban($iban)
+    public function setBankInfo($bankInfo)
     {
-        $this->iban = $iban;
+        $this->bankInfo = $bankInfo;
 
         return $this;
     }
@@ -193,19 +202,19 @@ class EventTranslation
     /**
      * @return string
      */
-    public function getFooter()
+    public function getPaymentFooter()
     {
-        return $this->footer;
+        return $this->paymentFooter;
     }
 
     /**
-     * @param string $footer
+     * @param string $paymentFooter
      *
      * @return EventTranslation
      */
-    public function setFooter($footer)
+    public function setPaymentFooter($paymentFooter)
     {
-        $this->footer = $footer;
+        $this->paymentFooter = $paymentFooter;
 
         return $this;
     }

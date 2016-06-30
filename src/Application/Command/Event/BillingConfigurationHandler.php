@@ -53,10 +53,10 @@ class BillingConfigurationHandler
             $eventTranslation = $billingConfiguration->event->getTranslations()->get($locale);
 
             $eventTranslation->setBillingConfiguration(
-                $billingConfiguration->translations[$locale]['iban'],
+                $billingConfiguration->translations[$locale]['bankInfo'],
                 $billingConfiguration->translations[$locale]['billingAddress'],
                 $billingConfiguration->translations[$locale]['paymentCondition'],
-                $billingConfiguration->translations[$locale]['footer']
+                $billingConfiguration->translations[$locale]['paymentFooter']
             );
         }
 

@@ -50,25 +50,27 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
             'hello.vimeet.proximum.dev'
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));
-        $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', '', 'FR14-000', 'billing address', 'condition', 'footers'));
+        $expectedEvent->getTranslations()->set('fr',
+            new EventTranslation($expectedEvent, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));
+        $expectedEvent->getTranslations()->set('en',
+            new EventTranslation($expectedEvent, 'en', '', 'FR14-000', 'billing address', 'condition', 'footers'));
         $expectedEvent->setLogo('toto.jpg');
 
         // Command
-        $billingConfiguration = new BillingConfiguration($event);
+        $billingConfiguration               = new BillingConfiguration($event);
         $billingConfiguration->translations = [
             'fr' => [
-                'iban'             => 'FR14-000',
+                'bankInfo'         => 'FR14-000',
                 'billingAddress'   => 'billing address',
                 'paymentCondition' => 'condition',
-                'footer'           => 'footers',
+                'paymentFooter'    => 'footers',
             ],
             'en' => [
-                'iban'             => 'FR14-000',
+                'bankInfo'         => 'FR14-000',
                 'billingAddress'   => 'billing address',
                 'paymentCondition' => 'condition',
-                'footer'           => 'footers',
-            ]
+                'paymentFooter'    => 'footers',
+            ],
         ];
 
         // Mock

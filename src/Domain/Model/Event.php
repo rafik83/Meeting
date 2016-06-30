@@ -225,7 +225,7 @@ class Event implements EventInterface
      */
     public function getIban($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getIban() : '';
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBankInfo() : '';
     }
 
     /**
@@ -253,9 +253,9 @@ class Event implements EventInterface
      *
      * @return string
      */
-    public function getFooter($locale)
+    public function getPaymentFooter($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getFooter() : '';
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentFooter() : '';
     }
 
     /**

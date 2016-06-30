@@ -28,7 +28,7 @@ class BillingConfiguration
      * @var array
      */
     public $translations = [];
-    
+
     /**
      * BillingConfiguration constructor.
      *
@@ -42,10 +42,10 @@ class BillingConfiguration
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
-                'iban'             => $event->getIban($locale),
+                'bankInfo'         => $event->getIban($locale),
                 'billingAddress'   => $event->getBillingAddress($locale),
                 'paymentCondition' => $event->getPaymentCondition($locale),
-                'footer'           => $event->getFooter($locale),
+                'paymentFooter'    => $event->getPaymentFooter($locale),
             ];
         }
     }

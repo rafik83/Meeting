@@ -46,9 +46,9 @@ class Configuration
      */
     public function __construct($leftColor, $rightColor, $textColor)
     {
-        $this->leftColor = $leftColor;
+        $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
-        $this->textColor = $textColor;
+        $this->textColor  = $textColor;
     }
 
     /**
@@ -58,9 +58,9 @@ class Configuration
      */
     public function setColors($leftColor, $rightColor, $textColor)
     {
-        $this->leftColor = $leftColor;
+        $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
-        $this->textColor = $textColor;
+        $this->textColor  = $textColor;
     }
 
     /**
@@ -110,7 +110,7 @@ class Configuration
 
         return $this;
     }
-    
+
     /**
      * @return string
      */
@@ -130,5 +130,4 @@ class Configuration
 
         return $this;
     }
-
 }
