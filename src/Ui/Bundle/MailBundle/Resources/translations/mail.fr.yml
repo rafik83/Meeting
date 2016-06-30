@@ -46,6 +46,17 @@ mail:
                 L’équipe %event%
                 %eventPhone%
                 %eventMail%
+        invitation_expired:
+            subject: Votre invitation est expirée
+            body: |
+                Votre invitation à %guestMail% pour l’événement %event% est expirée.
+
+                Vous avez la possibilité de renvoyer une nouvelle invitation depuis votre espace membre %linkProfile%
+            end: |
+                Bien cordialement
+                L’équipe %event%
+                %eventPhone%
+                %eventMail%
     changeMailOld:
         subject: Demande de changement d'email
         body: |

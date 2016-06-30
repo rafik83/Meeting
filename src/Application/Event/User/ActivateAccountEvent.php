@@ -49,8 +49,13 @@ class ActivateAccountEvent extends Event
      * @param ActivateAccountToken $activateAccountToken
      * @param string               $locale
      */
-    public function __construct(User $user, User $sender, ProximumEvent $event, ActivateAccountToken $activateAccountToken, $locale)
-    {
+    public function __construct(
+        User $user,
+        ProximumEvent $event,
+        ActivateAccountToken $activateAccountToken,
+        $locale,
+        User $sender
+    ) {
         $this->user                 = $user;
         $this->event                = $event;
         $this->activateAccountToken = $activateAccountToken;

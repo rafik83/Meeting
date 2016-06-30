@@ -52,7 +52,7 @@ class Add
     public $event;
 
     /**
-     * @var User
+     * @var User|null
      */
     public $sender;
 
@@ -62,7 +62,7 @@ class Add
      * @param Event  $event
      * @param string $locale
      */
-    public function __construct(User $sender, Sheet $sheet, Event $event, $locale)
+    public function __construct(Sheet $sheet, Event $event, $locale, User $sender)
     {
         $this->sheet  = $sheet;
         $this->event  = $event;

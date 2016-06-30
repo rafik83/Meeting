@@ -12,21 +12,23 @@ namespace Proximum\Vimeet\Application\Event;
 
 final class Events
 {
-    const SHEET_VALIDATED             = 'sheet.validated';
-    const SHEET_ACCEPTED              = 'sheet.accepted';
-    const SHEET_ADD_PARTICIPANT       = 'sheet.participant.add';
-    const USER_MAIL_CHANGED           = 'change_mail';
-    const MEETING_PARTICIPANT_ADDED   = 'meeting.participant.added';
-    const MEETING_PARTICIPANT_REMOVED = 'meeting.participant.removed';
-    const REQUEST_SENT                = 'meeting_request.sent';
-    const REQUEST_REFUSED             = 'meeting_request.refused';
-    const REQUEST_CANCELED            = 'meeting_request.canceled';
-    const REQUEST_ACCEPTED            = 'meeting_request.accepted';
-    const MEETING_CANCELED            = 'meeting.canceled';
-    const REQUEST_PARTICIPANT_ADDED   = 'meeting_request.participant.added';
-    const REQUEST_PARTICIPANT_REMOVED = 'meeting_request.participant.removed';
-    const REQUEST_UPDATE_MESSAGE      = 'meeting_request.update.message';
-    const MEETING_UPDATE_MESSAGE      = 'meeting.update.message';
-    const USER_REGISTERED             = 'user.registered';
-    const EVENT_PRE_REGISTERED        = 'event.preregistered';
+    const SHEET_VALIDATED                      = 'sheet.validated';
+    const SHEET_ACCEPTED                       = 'sheet.accepted';
+    const SHEET_INVITATION_CLOSE_TO_EXPIRATION = 'sheet.invitation.close_to_expiration';
+    const SHEET_ADD_PARTICIPANT                = 'sheet.participant.add';
+    const SHEET_INVITATION_EXPIRE              = 'sheet.invitation.expire';
+    const USER_MAIL_CHANGED                    = 'change_mail';
+    const MEETING_PARTICIPANT_ADDED            = 'meeting.participant.added';
+    const MEETING_PARTICIPANT_REMOVED          = 'meeting.participant.removed';
+    const REQUEST_SENT                         = 'meeting_request.sent';
+    const REQUEST_REFUSED                      = 'meeting_request.refused';
+    const REQUEST_CANCELED                     = 'meeting_request.canceled';
+    const REQUEST_ACCEPTED                     = 'meeting_request.accepted';
+    const MEETING_CANCELED                     = 'meeting.canceled';
+    const REQUEST_PARTICIPANT_ADDED            = 'meeting_request.participant.added';
+    const REQUEST_PARTICIPANT_REMOVED          = 'meeting_request.participant.removed';
+    const REQUEST_UPDATE_MESSAGE               = 'meeting_request.update.message';
+    const MEETING_UPDATE_MESSAGE               = 'meeting.update.message';
+    const USER_REGISTERED                      = 'user.registered';
+    const EVENT_PRE_REGISTERED                 = 'event.preregistered';
 }
