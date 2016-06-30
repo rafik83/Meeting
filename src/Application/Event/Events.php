@@ -31,4 +31,5 @@ final class Events
     const MEETING_UPDATE_MESSAGE               = 'meeting.update.message';
     const USER_REGISTERED                      = 'user.registered';
     const EVENT_PRE_REGISTERED                 = 'event.preregistered';
+    const USER_RESET_PASSWORD_CONFIRMED        = 'user.reset_password.confirm';
 }

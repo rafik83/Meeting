@@ -8,6 +8,17 @@ mail:
         end: |
             Cordialement,
             L'équipe Vimeet
+    confirmResetPassword:
+        subject: Votre mot de pase a bien été changé
+        body: |
+            Bonjour %firstname% %lastname%,
+
+            Votre mot de passe à bien été changé. Pour accéder à votre espace membre cliquez sur le lien ci-dessous %linkProfile%
+        end: |
+            Bien cordialement
+            L’équipe %event%
+            %eventPhone%
+            %eventMail%
     activateAccount:
         subject: '[%event%] Activer votre compte'
         body: |
@@ -134,13 +145,13 @@ mail:
 admin:
     mail:
         resetPassword:
-            subject: 'Mot de passe oublié'
+            subject: Mot de passe oublié ViMeet
             body: |
                 Bonjour,
-                Vous avez fait une demande de réinitialisation de mot de passe.
-                Rendez vous sur ce lien pour pouvoir créer un nouveau mot de passe:
+
+                Pour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:
             end: |
-                Cordialement,
+                Bien cordialement,
                 L'équipe Vimeet
         activateAccount:
             subject: 'Activer votre compte'

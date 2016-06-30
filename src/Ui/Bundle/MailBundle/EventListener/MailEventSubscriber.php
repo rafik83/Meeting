@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateA
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
+use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
@@ -36,6 +37,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -242,6 +244,25 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Send mail when user finished resetting his password
+     *
+     * @param ResetPasswordConfirmEvent $event
+     */
+    public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
+    {
+        $mail = new ResetPasswordConfirmMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            'MailBundle:Mail:User/resetPasswordConfirm.html.twig',
+            'user_reset_password_confirm',
+            $event->getLocale(),
+            $event->getEvent()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
      * @param UserCompleteProfileEvent $event
      */
     public function onUserCompleteProfile(UserCompleteProfileEvent $event)
@@ -317,6 +338,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             'user_reset_password'                        => 'onUserResetPassword',
             'user_complete_profile'                      => 'onUserCompleteProfile',
             Events::USER_REGISTERED                      => 'onUserRegistered',
+            Events::USER_RESET_PASSWORD_CONFIRMED        => 'onUserResetPasswordConfirm',
             Events::EVENT_PRE_REGISTERED                 => 'onUserPreRegistered',
         ];
     }
