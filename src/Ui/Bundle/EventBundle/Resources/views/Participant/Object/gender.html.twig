@@ -1,1 +1,3 @@
-{{ object.gender }}
+{% if object.gender != null %}
+    {{ ('gender.' ~ object.gender)|trans}}
+{% endif %}

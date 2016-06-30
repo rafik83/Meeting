@@ -1,5 +1,9 @@
 "Bad credentials.": Identifiants incorrects
 
+gender:
+    man: Homme
+    woman: Femme
+
 select2:
     no_results: Aucun résultat
 

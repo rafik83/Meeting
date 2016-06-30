@@ -14,8 +14,11 @@ use Proximum\Vimeet\Domain\Template\Object;
 
 class Gender extends EditableObject implements ContentObjectInterface
 {
+    const MAN   = 'man';
+    const WOMAN = 'woman';
+
     /**
-     * @param bool $gender
+     * @param string $gender
      *
      * @return gender
      */
@@ -27,7 +30,29 @@ class Gender extends EditableObject implements ContentObjectInterface
     }
 
     /**
-     * @return bool
+     * @return array
+     */
+    public function getGenders()
+    {
+        return [
+            self::MAN   => self::MAN,
+            self::WOMAN => self::WOMAN,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getGendersTranslation()
+    {
+        return [
+            'gender.man'   => self::MAN,
+            'gender.woman' => self::WOMAN,
+        ];
+    }
+
+    /**
+     * @return string
      */
     public function getGender()
     {

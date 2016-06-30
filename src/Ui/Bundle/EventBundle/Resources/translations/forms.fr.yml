@@ -1,3 +1,7 @@
+gender:
+    man: Homme
+    woman: Femme
+
 form:
     change_password_user:
         children:

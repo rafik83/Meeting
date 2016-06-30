@@ -168,6 +168,7 @@ class BlockType extends AbstractType
         $builder->add($key, GenderDataType::class, [
             'object'  => $object,
             'locale'  => $locale,
+            'label'   => false,
         ]);
     }
 }

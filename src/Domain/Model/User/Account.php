@@ -73,7 +73,7 @@ class Account
     private $country;
 
     /**
-     * @var bool
+     * @var string
      */
     private $gender;
 
@@ -270,7 +270,7 @@ class Account
     }
 
     /**
-     * @return bool
+     * @return string
      */
     public function getGender()
     {
@@ -278,7 +278,7 @@ class Account
     }
 
     /**
-     * @param bool $gender
+     * @param string $gender
      */
     public function setGender($gender)
     {

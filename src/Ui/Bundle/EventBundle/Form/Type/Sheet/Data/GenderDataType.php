@@ -19,9 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GenderDataType extends AbstractType
 {
-    const MAN   = 'man';
-    const WOMAN = 'woman';
-
     /**
      * {@inheritdoc}
      */
@@ -30,13 +27,10 @@ class GenderDataType extends AbstractType
         $gender    = $options['object'];
         $locale    = $options['locale'];
         $label     = $options['label'];
-        
+
         $builder
             ->add('gender', ChoiceType::class, [
-                'choices' => array(
-                    self::MAN   => true,
-                    self::WOMAN => false,
-                ),
+                'choices' => $gender->getGendersTranslation(),
                 'expanded' => true,
                 'multiple' => false,
                 'label'       => $label ? $gender->getOption('label')[$locale] : false,
