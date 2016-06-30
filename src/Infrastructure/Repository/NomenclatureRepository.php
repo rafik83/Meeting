@@ -39,10 +39,8 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('nomenclature')
-            ->from('Entity:Nomenclature', 'nomenclature')
-            ->leftJoin('nomenclature.event', 'event')
-            ->orderBy('event.title', 'ASC')
-            ->addOrderBy('nomenclature.title', 'ASC')
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->orderBy('nomenclature.title', 'ASC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -59,7 +57,9 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->select('nomenclature')
             ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
             ->where('nomenclature.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->addOrderBy('nomenclature.title', 'ASC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
