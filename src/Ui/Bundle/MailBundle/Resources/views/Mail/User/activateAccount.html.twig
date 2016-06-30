@@ -1,16 +1,25 @@
 {% block subject %}
-{{ 'mail.activateAccount.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html }}
+    {{ 'mail.activateAccount.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html }}
 {% endblock %}
 
 {% block body %}
-{{ 'mail.activateAccount.body'|trans({
-    '%event%': mail.event.title,
-    '%firstname%': mail.senderUser.account.firstname,
-    '%lastname%': mail.senderUser.account.lastname,
-    '%linkInvitation%': ''
-}, 'mail', mail.locale)|html|nl2br }}
-<a href="{{ url('event_activate_account', {'token': mail.token}) }}">
-    {{ url('event_activate_account', {'token': mail.token}) }}
-</a><br>
-{{ 'mail.activateAccount.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.activateAccount.body'|trans({
+        '%event%': mail.event.title,
+        '%firstname%': mail.senderUser.account.firstname,
+        '%lastname%': mail.senderUser.account.lastname,
+        '%linkInvitation%': ''
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    <a href="{{ url('event_activate_account', {'token': mail.token}) }}">
+        {{ url('event_activate_account', {'token': mail.token}) }}
+    </a><br>
+
+{% endblock %}
+
+{% block end %}
+    {{ 'mail.activateAccount.end'|trans({
+        '%event%': mail.event.title,
+        '%eventPhone%': '',
+        '%eventMail%': ''
+    }, 'mail', mail.locale) }}
 {% endblock %}

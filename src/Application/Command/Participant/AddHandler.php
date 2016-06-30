@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
@@ -21,10 +23,10 @@ use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -114,7 +116,9 @@ class AddHandler
             throw new ParticipantAlreadyExistException('User already linked to this sheet');
         }
 
-        if (!empty($this->sheetRepository->getSheetByUserAndEventWhereUserIsParticipant($user, $add->sheet->getEvent()))) {
+        if (!empty($this->sheetRepository->getSheetByUserAndEventWhereUserIsParticipant($user,
+            $add->sheet->getEvent()))
+        ) {
             throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');
         }
 
@@ -128,7 +132,8 @@ class AddHandler
             if ($user->isActive()) {
                 $this->sendCompleteProfileEvent($add, $user, $participant);
             } else {
-                $this->sendActivationEvent($add, $user);
+                $this->sendActivationEvent($add, $user); // send to the guest
+                $this->sendActivationConfirmEvent($add, $user); // send to the owner
             }
         }
 
@@ -136,6 +141,8 @@ class AddHandler
     }
 
     /**
+     * Send activation email to the guest with activation link
+     *
      * @param Add  $add
      * @param User $user
      */
@@ -144,6 +151,18 @@ class AddHandler
         $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
         $event = new ActivateAccountEvent($user, $add->sender, $add->sheet->getEvent(), $token, $add->locale);
         $this->eventDispatcher->dispatch('user_activate_account', $event);
+    }
+
+    /**
+     * Send confirm invitation email send to the sheet owner
+     *
+     * @param Add  $add
+     * @param User $guest
+     */
+    private function sendActivationConfirmEvent(Add $add, User $guest)
+    {
+        $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->sender);
+        $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT, $event);
     }
 
     /**

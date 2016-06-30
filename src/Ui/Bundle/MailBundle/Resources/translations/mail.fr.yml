@@ -12,33 +12,40 @@ mail:
         subject: '[%event%] Activer votre compte'
         body: |
             Bonjour,
-            Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event%. Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous %linkInvitation% Ce lien expirera dans 48h.
+
+            Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event%.
+
+            Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous %linkInvitation%. Ce lien expirera dans 48h.
         end: |
             Bien cordialement
             L’équipe %event%
             %eventPhone%
             %eventMail%
-    invitation_send_confirm:
-        subject: Invitation envoyée
-        body: |
-            Bonjour %firstname% %lastname%,
-            Votre invitation à %guestMail% pour l’événement %event% a bien été envoyée. L’invitation expirera dans 48H.
-        end: |
-            Bien cordialement
-            L’équipe %event%
-            %eventPhone%
-            %eventMail%
-    invitation_close_to_expiration:
-        subject: Votre invitation arrive à expiration
-        body: |
-            Bonjour,
-            Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event% et nous vous informons que votre invitation expire dans 12h.
-            Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous
-        end: |
-            Bien cordialement
-            L’équipe %event%
-            %eventPhone%
-            %eventMail%
+    sheet:
+        add_participant_confirmation:
+            subject: Invitation envoyée
+            body: |
+                Bonjour %firstname% %lastname%,
+
+                Votre invitation à %guestMail% pour l’événement %event% a bien été envoyée.
+
+                L’invitation expirera dans 48H.
+            end: |
+                Bien cordialement
+                L’équipe %event%
+                %eventPhone%
+                %eventMail%
+        invitation_close_to_expiration:
+            subject: Votre invitation arrive à expiration
+            body: |
+                Bonjour,
+                Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event% et nous vous informons que votre invitation expire dans 12h.
+                Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous
+            end: |
+                Bien cordialement
+                L’équipe %event%
+                %eventPhone%
+                %eventMail%
     changeMailOld:
         subject: Demande de changement d'email
         body: |

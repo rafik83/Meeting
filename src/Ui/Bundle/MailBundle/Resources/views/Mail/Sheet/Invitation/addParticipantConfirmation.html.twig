@@ -1,0 +1,20 @@
+{% block subject %}
+    {{ 'mail.sheet.add_participant_confirmation.subject'|trans({}, 'mail', mail.locale) }}
+{% endblock %}
+
+{% block body %}
+    {{ 'mail.sheet.add_participant_confirmation.body'|trans({
+        '%firstname%': mail.user.account.firstname|humanize,
+        '%lastname%': mail.user.account.lastname|upper,
+        '%guestMail%': mail.receiver,
+        '%event%': mail.event.title
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}
+
+{% block end %}
+    {{ 'mail.sheet.add_participant_confirmation.end'|trans({
+        '%event%': mail.event.title,
+        '%eventPhone%': '',
+        '%eventMail%': mail.event.organiserEmail
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}
