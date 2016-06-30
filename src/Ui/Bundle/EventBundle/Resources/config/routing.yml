@@ -199,6 +199,8 @@ event_sheet_handle_remove_participant:
 event_billing_info:
     path:     /sheet/{sheet}/billing-info
     methods:  [GET, POST]
+    requirements:
+        sheet: \d+
     defaults: { _controller: EventBundle:Billing:info }
 
 #

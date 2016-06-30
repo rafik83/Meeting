@@ -47,16 +47,16 @@ class BillingController extends Controller
         $command = new UpdateInfo($info);
         $form    = $this->createForm(UpdateInfoType::class, $command, ['submit' => true, 'country' => $country]);
 
-        $PackageCompleteBilling = $this->getPackageCompleteBilling();
-        if ($PackageCompleteBilling) {
-            $this->addFlash('package_complete_billing_info', $PackageCompleteBilling);
+        $packageCompleteBilling = $this->getPackageCompleteBilling();
+        if ($packageCompleteBilling) {
+            $this->addFlash('package_complete_billing_info', $packageCompleteBilling);
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
 
             // Redirect to package summary if coming from Package Summary
-            if ($PackageCompleteBilling) {
+            if ($packageCompleteBilling) {
                 return $this->redirectToRoute('event_package_summary', [
                     'sheet' => $sheet->getId(),
                 ]);

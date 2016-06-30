@@ -31,11 +31,7 @@ class ContentController extends Controller
             ->findByEventAndType($eventDomain->getEvent(), Content::TYPE_TERMS_OF_SALE)
         ;
 
-        if ('' === $termsOfSale->getValue($request->getLocale())) {
-            $content = $termsOfSale->getValue($eventDomain->getEvent()->getFallback());
-        } else {
-            $content = $termsOfSale->getValue($request->getLocale());
-        }
+        $content = $termsOfSale->getValue($request->getLocale(), $eventDomain->getEvent()->getFallback());
 
         return $this->render('EventBundle:Package:terms-of-sale.html.twig', [
             'content' => $content

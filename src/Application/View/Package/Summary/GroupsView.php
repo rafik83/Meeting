@@ -38,8 +38,12 @@ class GroupsView
      * @param PlanningGroupView    $planningGroup
      * @param GroupView[]          $groups
      */
-    public function __construct($planGroup, $participantGroup, $planningGroup, array $groups)
-    {
+    public function __construct(
+        PlanGroupView $planGroup = null,
+        ParticipantGroupView $participantGroup = null,
+        PlanningGroupView $planningGroup = null,
+        array $groups = []
+    ) {
         $this->planGroup        = $planGroup;
         $this->participantGroup = $participantGroup;
         $this->planningGroup    = $planningGroup;
