@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\GenderDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
@@ -45,6 +46,8 @@ class BlockType extends AbstractType
                 $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Url) {
                 $this->addUrl($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Gender) {
+                $this->addGender($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -151,6 +154,20 @@ class BlockType extends AbstractType
             'locale'      => $locale,
             'object'      => $object,
             'placeholder' => $object->getOption('label')[$locale],
+        ]);
+    }
+
+    /**
+     * @param string               $key
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addGender($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $builder->add($key, GenderDataType::class, [
+            'object'  => $object,
+            'locale'  => $locale,
         ]);
     }
 }
