@@ -207,7 +207,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getEvent(),
             $event->getUser(),
             $event->getParticipant(),
-            $event->getSheet()
+            $event->getSheet(),
+            $event->getParticipantData()
         );
 
         $this->mailer->send($mail);

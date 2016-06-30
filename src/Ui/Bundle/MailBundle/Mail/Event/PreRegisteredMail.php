@@ -34,6 +34,13 @@ class PreRegisteredMail extends Mail
     private $sheet;
 
     /**
+     * Array of Tag => String for participant and sheet data from PreRegisterEvent
+     *
+     * @var array
+     */
+    private $participantData;
+
+    /**
      * RegisterAccountMail constructor.
      *
      * @param string      $sender
@@ -45,6 +52,7 @@ class PreRegisteredMail extends Mail
      * @param User        $receiverUser
      * @param Participant $participant
      * @param Sheet       $sheet
+     * @param array       $participantData
      */
     public function __construct(
         $sender,
@@ -55,13 +63,15 @@ class PreRegisteredMail extends Mail
         Event $event,
         User $receiverUser,
         Participant $participant,
-        Sheet $sheet
+        Sheet $sheet,
+        $participantData
     ) {
         parent::__construct($sender, $receiver, $template, $messageId, $locale, null, $receiverUser);
 
-        $this->event       = $event;
-        $this->sheet       = $sheet;
-        $this->participant = $participant;
+        $this->event           = $event;
+        $this->sheet           = $sheet;
+        $this->participant     = $participant;
+        $this->participantData = $participantData;
     }
 
     /**
@@ -86,5 +96,13 @@ class PreRegisteredMail extends Mail
     public function getSheet()
     {
         return $this->sheet;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParticipantData()
+    {
+        return $this->participantData;
     }
 }

@@ -49,6 +49,13 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
     private $participantInfoGuesser;
 
     /**
+     * Array of Tag => String for participant and sheet data
+     *
+     * @var array
+     */
+    private $participantData;
+
+    /**
      * PreRegisterEvent constructor.
      *
      * @param ParticipantInfoGuesser $participantInfoGuesser
@@ -73,9 +80,7 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
         $this->sheet             = $sheet;
         $this->participantInfoGuesser = $participantInfoGuesser;
 
-        $data = $this->participantInfoGuesser->guessParticipantInfoForMail($participant, $locale);
-
-        dump($data);die();
+        $this->participantData = $this->participantInfoGuesser->guessParticipantInfoForMail($participant, $locale);
     }
 
     /**
@@ -118,4 +123,11 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
         return $this->participant;
     }
 
+    /**
+     * @return array
+     */
+    public function getParticipantData()
+    {
+        return $this->participantData;
+    }
 }

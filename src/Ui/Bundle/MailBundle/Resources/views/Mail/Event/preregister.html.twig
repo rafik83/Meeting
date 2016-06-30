@@ -11,12 +11,11 @@
         '%lastname%': mail.receiverUser.account.lastname|humanize
     }, 'mail', mail.locale|html|nl2br) }}
     <ul>
-        <li>Company</li>
-        <li>{{ mail.receiverUser.account.lastname|upper }}</li>
-        <li>{{ mail.receiverUser.account.firstname|humanize }}</li>
-        <li>Job</li>
-        <li>Address</li>
-        <li>Phone</li>
+        <li>{{ mail.participantData['sheet_organization'] }}</li>
+        <li>{{ mail.receiverUser.account.firstname|humanize ~ ' ' ~ mail.receiverUser.account.lastname|upper }}</li>
+        <li>{{ mail.participantData['participant_position'] }}</li>
+        <li>{{ mail.participantData['participant_address']|humanize ~ ', ' ~ mail.participantData['participant_zipcode'] ~ ', ' ~ mail.participantData['participant_city']|upper }}</li>
+        <li>{{ mail.participantData['participant_mobile'] }}</li>
         <li>{{ mail.receiverUser.email }}</li>
     </ul>
 {% endblock %}
