@@ -22,5 +22,5 @@ Feature: Register with participant step
       | Ville                        | Paris             |
       | block[e801edd4][country]     | FR                |
     When I press "register.finalize"
+    Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com"
     Then I should be on this page "/fr/sheet"
-

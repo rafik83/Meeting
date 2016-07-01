@@ -348,7 +348,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:Event/preregister.html.twig',
-            'event_pre_registered',
+            Events::EVENT_PRE_REGISTERED,
             $event->getLocale(),
             $event->getEvent(),
             $event->getUser(),
@@ -369,7 +369,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/register.html.twig',
-            'user_registered',
+            Events::USER_REGISTERED,
             $event->getLocale(),
             $event->getEvent(),
             $event->getUser()

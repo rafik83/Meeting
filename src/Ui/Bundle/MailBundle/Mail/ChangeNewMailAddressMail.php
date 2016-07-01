@@ -49,4 +49,12 @@ class ChangeNewMailAddressMail extends Mail
     {
         return $this->token;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }
