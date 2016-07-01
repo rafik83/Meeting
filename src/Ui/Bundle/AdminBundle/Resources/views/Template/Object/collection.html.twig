@@ -10,7 +10,7 @@
     style: ''
 }|merge(config|default({})) %}
 
-<div class="object" data-object="collection" {{ uid|default('__UID__') }} data-config="{{ config|json_encode }}">
+<div class="object" data-object="collection" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.collection'|trans }}</li>
         <li>

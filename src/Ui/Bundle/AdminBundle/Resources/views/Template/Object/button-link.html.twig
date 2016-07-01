@@ -7,7 +7,7 @@
     style: ''
 }|merge(config|default({})) %}
 
-<div class="object" data-object="button-link" {{ uid|default('__UID__') }} data-config="{{ config|json_encode }}">
+<div class="object" data-object="button-link" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.button-link'|trans }}</li>
         <li>
