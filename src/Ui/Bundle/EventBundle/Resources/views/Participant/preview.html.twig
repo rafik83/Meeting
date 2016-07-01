@@ -27,7 +27,7 @@
         {% if editAvatar is defined and editAvatar == true %}
             {% for key, avatar in avatarTemplate %}
                 <a class="edit" href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">
-                    {{ 'account.profile.updateAvatar'|trans }}
+                    <i class="icon-Image"></i> {{ 'account.profile.updateAvatar'|trans }}
                 </a>
             {% endfor %}
         {% endif %}

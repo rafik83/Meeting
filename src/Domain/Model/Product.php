@@ -240,6 +240,20 @@ class Product
     }
 
     /**
+     * @return array
+     */
+    public function getTranslationsSerializedData()
+    {
+        $data = [];
+
+        foreach ($this->translations->toArray() as $locale => $translation) {
+            $data[$locale] = $translation->getTranslationSerializedData();
+        }
+
+        return $data;
+    }
+
+    /**
      * @param string $locale
      * @param string $title
      * @param string $heading
@@ -647,6 +661,23 @@ class Product
     }
 
     /**
+     * @return array
+     */
+    private function getIncludedProductSerializedData()
+    {
+        $data = [];
+
+        foreach ($this->productIncluded->toArray() as $productIncluded) {
+            $data[] = [
+                'quantity' => $productIncluded->getQuantity(),
+                'included' => $productIncluded->getIncluded()->getSerializedData(),
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
      * @return string
      */
     public function getSerializedData()
@@ -655,11 +686,13 @@ class Product
             [
                 'name'                => $this->name,
                 'unitPrice'           => $this->unitPrice,
+                'translations'        => $this->getTranslationsSerializedData(),
                 'quantityMax'         => $this->quantityMax,
                 'availabilityCurrent' => $this->availabilityCurrent,
                 'availabilityMax'     => $this->availabilityMax,
                 'updatable'           => $this->updatable,
                 'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
+                'productsIncluded'    => $this->getIncludedProductSerializedData(),
             ]
         );
     }

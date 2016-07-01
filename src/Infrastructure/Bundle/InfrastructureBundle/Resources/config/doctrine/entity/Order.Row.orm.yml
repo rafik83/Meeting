@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Order\Row:
+    type:  entity
+    table: order_row
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        quantity:
+            type: integer
+        product:
+            type: json_array
+        price:
+            type: float
+    manyToOne:
+        order:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order
+            inversedBy: rows
+            joinColumn:
+                onDelete: "cascade"
+        linkedProduct:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product

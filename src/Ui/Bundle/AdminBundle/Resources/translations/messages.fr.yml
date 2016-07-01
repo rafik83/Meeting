@@ -371,11 +371,19 @@ admin:
             title: Modifier l'évènement
         settings:
             link: Paramétrages de l'évènement
+        paymentConditions:
+            link: Conditions de paiement
+            update:
+                title: Modifier les conditions de paiement
         create:
             title: Créer un événement
         title: Titre
         languages: Langues
         fallback: Par défaut
+        practicalInfo:
+          link: Informations Pratiques
+          update:
+            title: Modifier les informations pratiques
     rule:
         link: Qui voit qui
     type:
