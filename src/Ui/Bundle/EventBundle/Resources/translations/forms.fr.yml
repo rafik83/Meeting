@@ -51,7 +51,7 @@ form:
         children:
             medias:
                 label_add: Ajouter
-                label_delete: Supprimer
+                label_delete: "&times;"
                 prototype:
                     children:
                         title:
@@ -66,7 +66,7 @@ form:
         children:
             items:
                 label_add: Ajouter
-                label_delete: Supprimer
+                label_delete: "&times;"
                 prototype:
                     children:
                         title:
