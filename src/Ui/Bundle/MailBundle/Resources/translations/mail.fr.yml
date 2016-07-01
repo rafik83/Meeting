@@ -13,12 +13,14 @@ mail:
         body: |
             Bonjour %firstname% %lastname%,
 
-            Votre mot de passe à bien été changé. Pour accéder à votre espace membre cliquez sur le lien ci-dessous %linkProfile%
+            Votre mot de passe à bien été changé. Pour accéder à votre espace membre cliquez sur le lien ci-dessous
+
         end: |
-            Bien cordialement
+            Bien cordialement,
             L’équipe %event%
             %eventPhone%
             %eventMail%
+        link: Mon espace membre
     activateAccount:
         subject: '[%event%] Activer votre compte'
         body: |

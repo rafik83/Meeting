@@ -116,7 +116,7 @@ class AddHandler
             throw new ParticipantAlreadyExistException('User already linked to this sheet');
         }
 
-        if (!empty($this->sheetRepository->getSheetByUserAndEventWhereUserIsParticipant($user,
+        if (!empty($this->sheetRepository->getSheetsByUserAndEventWhereUserIsParticipant($user,
             $add->sheet->getEvent()))
         ) {
             throw new AlreadyLinkedToASheetOfThisEventException('User already linked to a sheet on this event');

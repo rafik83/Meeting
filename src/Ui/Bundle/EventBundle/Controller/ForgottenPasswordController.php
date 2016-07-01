@@ -72,8 +72,8 @@ class ForgottenPasswordController extends Controller
         if ($forgottenPasswordToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
         }
-
-        $newPassword = new NewPassword($forgottenPasswordToken->getUser());
+        
+        $newPassword = new NewPassword($forgottenPasswordToken->getUser(), $eventDomain->getEvent());
         $form        = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
                 'token' => $forgottenPasswordToken->getToken(),

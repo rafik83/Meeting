@@ -363,7 +363,7 @@ class RegisterController extends Controller
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($user, $event);
+            ->getSheetsByUserAndEvent($user, $event);
 
         return !empty($sheets);
     }

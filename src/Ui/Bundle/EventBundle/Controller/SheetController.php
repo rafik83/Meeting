@@ -96,7 +96,7 @@ class SheetController extends Controller
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($this->getUser(), $event);
+            ->getSheetsByUserAndEvent($this->getUser(), $event);
 
         if (empty($sheets)) {
             throw $this->createNotFoundException('Sheet not found.');

@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
@@ -54,15 +55,22 @@ class MailEventSubscriber implements EventSubscriberInterface
     private $sender;
 
     /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
      * MailEventSubscriber constructor.
      *
-     * @param MailerInterface $mailer
-     * @param string          $sender
+     * @param MailerInterface          $mailer
+     * @param string                   $sender
+     * @param SheetRepositoryInterface $sheetRepository
      */
-    public function __construct(MailerInterface $mailer, $sender)
+    public function __construct(MailerInterface $mailer, $sender, SheetRepositoryInterface $sheetRepository)
     {
-        $this->mailer = $mailer;
-        $this->sender = $sender;
+        $this->mailer          = $mailer;
+        $this->sender          = $sender;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -250,13 +258,18 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
     {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($event->getUser(), $event->getEvent());
+        $sheet = reset($sheets);
+
         $mail = new ResetPasswordConfirmMail(
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/resetPasswordConfirm.html.twig',
             'user_reset_password_confirm',
             $event->getLocale(),
-            $event->getEvent()
+            $event->getEvent(),
+            $event->getUser(),
+            $sheet
         );
 
         $this->mailer->send($mail);

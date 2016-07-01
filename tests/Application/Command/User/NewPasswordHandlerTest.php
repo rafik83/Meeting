@@ -17,14 +17,17 @@ use Proximum\Vimeet\Application\Command\User\NewPasswordHandler;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $event             = EventFactory::createEvent();
         $user              = new User('test@test.fr', 'test', 'test', 'fr');
         $expectedUser      = new User('test@test.fr', 'test', 'tatatata', 'fr');
-        $command           = new NewPassword($user);
+        $command           = new NewPassword($user, $event);
         $command->password = 'totototo';
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
@@ -32,6 +35,8 @@ class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldBeCalled()->willReturn('test');
+
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $encoder = $this->prophesize(PasswordEncoderInterface::class);
         $encoder->encode($user, $command->password)->shouldBeCalled()->willReturn('tatatata');
@@ -43,7 +48,8 @@ class NewPasswordHandlerTest extends \PHPUnit_Framework_TestCase
             $userRepository->reveal(),
             $encoder->reveal(),
             $saltGenerator->reveal(),
-            $forgottenPasswordToken->reveal()
+            $forgottenPasswordToken->reveal(),
+            $eventDispatcher->reveal()
         );
         $handler->handle($command);
     }

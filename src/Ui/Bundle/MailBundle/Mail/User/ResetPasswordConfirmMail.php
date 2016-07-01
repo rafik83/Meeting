@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ResetPasswordConfirmMail extends Mail
 {
@@ -21,18 +24,52 @@ class ResetPasswordConfirmMail extends Mail
     private $event;
 
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
+     * @var Participant|null
+     */
+    private $participant;
+
+    /**
      * @param string $sender
      * @param string $receiver
      * @param string $template
      * @param string $messageId
      * @param string $locale
      * @param Event  $event
+     * @param User   $user
+     * @param Sheet  $sheet
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event)
-    {
+    public function __construct(
+        $sender,
+        $receiver,
+        $template,
+        $messageId,
+        $locale,
+        Event $event,
+        User $user,
+        Sheet $sheet
+    ) {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
 
         $this->event = $event;
+        $this->sheet = $sheet;
+        $this->user  = $user;
+
+
+        $participant = $sheet->getUserParticipant($user);
+
+        if ($participant instanceof Participant) {
+            $this->participant = $participant;
+        }
     }
 
     /**
@@ -41,5 +78,29 @@ class ResetPasswordConfirmMail extends Mail
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
+    }
+
+    /**
+     * @return Participant|null
+     */
+    public function getParticipant()
+    {
+        return $this->participant;
     }
 }
