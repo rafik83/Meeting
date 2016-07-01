@@ -204,13 +204,13 @@ form:
             translations:
                 prototype:
                     children:
-                        iban:
+                        bankInfo:
                             label: Iban
                         billingAddress:
                             label: Adresse de paiement
                         paymentCondition:
                             label: Conditions de paiement
-                        footer:
+                        paymentFooter:
                             label: Pied de page
                             placeholder: Exemple adresse, siret, capital ...
             submit:

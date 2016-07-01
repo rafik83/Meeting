@@ -22,7 +22,7 @@ class TranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('iban', TextType::class, [
+            ->add('bankInfo', TextType::class, [
                 'required' => false,
             ])
             ->add('billingAddress', TextType::class, [
@@ -31,7 +31,7 @@ class TranslationType extends AbstractType
             ->add('paymentCondition', TextType::class, [
                 'required' => false
             ])
-            ->add('footer', TextType::class, [
+            ->add('paymentFooter', TextType::class, [
                 'required'    => false,
                 'placeholder' => 'form.event_billing_configuration.children.footers.placeholder',
             ])
