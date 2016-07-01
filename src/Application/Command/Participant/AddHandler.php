@@ -150,7 +150,7 @@ class AddHandler
     {
         $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
         $event = new ActivateAccountEvent($user, $add->sheet->getEvent(), $token, $add->locale, $add->sender);
-        $this->eventDispatcher->dispatch('user_activate_account', $event);
+        $this->eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $event);
     }
 
     /**
@@ -173,7 +173,7 @@ class AddHandler
     private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
     {
         $event = new CompleteProfileEvent($user, $add->event, $participant, $add->locale);
-        $this->eventDispatcher->dispatch('user_complete_profile', $event);
+        $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $event);
     }
 
     /**

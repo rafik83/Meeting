@@ -212,7 +212,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getAdmin()->getEmail(),
             'MailBundle:Mail:Admin/activateAccount.html.twig',
-            'admin_activate_account',
+            Events::ADMIN_ACCOUNT_ACTIVATED,
             $event->getLocale(),
             $event->getActivateAccountToken()->getToken()
         );
@@ -246,7 +246,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/activateAccount.html.twig',
-            'user_activate_account',
+            Events::USER_ACCOUNT_ACTIVATED,
             $event->getUser()->getLocale(),
             $event->getEvent(),
             $event->getActivateAccountToken()->getToken(),
@@ -308,7 +308,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:User/completeProfile.html.twig',
-            'user_complete_profile',
+            Events::USER_PROFILE_COMPLETED,
             $event->getLocale(),
             $event->getEvent()->getTitle(),
             $event->getParticipant()->getId()
@@ -369,11 +369,11 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::SHEET_INVITATION_CLOSE_TO_EXPIRATION => 'onInvitationCloseToExpiration',
             Events::SHEET_INVITATION_EXPIRE              => 'onInvitationExpire',
             Events::USER_MAIL_CHANGED                    => 'onChangeMailAddressEvent',
-            'admin_activate_account'                     => 'onAdminActivateAccount',
-            'admin_reset_password'                       => 'onAdminResetPassword',
-            'user_activate_account'                      => 'onUserActivateAccount',
-            'user_reset_password'                        => 'onUserResetPassword',
-            'user_complete_profile'                      => 'onUserCompleteProfile',
+            Events::ADMIN_ACCOUNT_ACTIVATED              => 'onAdminActivateAccount',
+            Events::ADMIN_PASSWORD_RESET                 => 'onAdminResetPassword',
+            Events::USER_ACCOUNT_ACTIVATED               => 'onUserActivateAccount',
+            Events::USER_PASSWORD_RESET                  => 'onUserResetPassword',
+            Events::USER_PROFILE_COMPLETED               => 'onUserCompleteProfile',
             Events::USER_REGISTERED                      => 'onUserRegistered',
             Events::USER_RESET_PASSWORD_CONFIRMED        => 'onUserResetPasswordConfirm',
             Events::EVENT_PRE_REGISTERED                 => 'onUserPreRegistered',
@@ -381,3 +381,10 @@ class MailEventSubscriber implements EventSubscriberInterface
         ];
     }
 }
+/**
+ * 'admin_activate_account'                     => 'onAdminActivateAccount',
+'admin_reset_password'                       => 'onAdminResetPassword',
+'user_activate_account'                      => 'onUserActivateAccount',
+'user_reset_password'                        => 'onUserResetPassword',
+'user_complete_profile'                      => 'onUserCompleteProfile',
+ */

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Components\Token\AdminForgottenPasswordTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -81,6 +82,6 @@ class ForgottenPasswordHandler
             $forgottenPassword->locale
         );
 
-        $this->eventDispatcher->dispatch('admin_reset_password', $event);
+        $this->eventDispatcher->dispatch(Events::ADMIN_PASSWORD_RESET, $event);
     }
 }
