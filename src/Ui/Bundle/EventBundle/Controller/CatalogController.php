@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
