@@ -78,4 +78,9 @@ abstract class AbstractEvent
      * @var string
      */
     public $textColor;
+
+    /**
+     * @var string
+     */
+    public $organiserName;
 }

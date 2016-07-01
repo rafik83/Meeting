@@ -22,12 +22,13 @@ Feature: See, create and update event
     Then the response status code should be 200
     And I should be on this page "/admin/en/event/create"
     And I fill in the following:
-      | form.event_create.children.title.label       | Super Event                     |
-      | form.event_create.children.domain.label      | super-event.vimeet.proximum.dev |
-      | form.event_create.children.vat.label         | 20                              |
-      | form.event_create.children.leftColor.label   | #123456                         |
-      | form.event_create.children.rightColor.label  | #123456                         |
-      | form.event_create.children.textColor.label   | #123456                         |
+      | form.event_create.children.title.label           | Super Event                     |
+      | form.event_create.children.domain.label          | super-event.vimeet.proximum.dev |
+      | form.event_create.children.vat.label             | 20                              |
+      | form.event_create.children.leftColor.label       | #123456                         |
+      | form.event_create.children.rightColor.label      | #123456                         |
+      | form.event_create.children.textColor.label       | #123456                         |
+      | form.event_create.children.organiserName.label   | Proximum                        |
     And I select "Europe/Paris" from "form.event_create.children.timeZone.label"
     And I select "fr" from "form.event_create.children.fallback.label"
     And I select "fr" from "form.event_create.children.locales.label"
