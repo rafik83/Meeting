@@ -212,9 +212,9 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new AddParticipantMail(
             $this->sender,
-            $event->getGuest()->getEmail(),
+            $event->getUser()->getEmail(),
             'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig',
-            'sheet_add_participant_confirmation',
+            Events::SHEET_ADD_PARTICIPANT,
             $event->getUser()->getLocale(),
             $event->getSheet()->getEvent(),
             $event->getUser()

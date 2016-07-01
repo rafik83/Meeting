@@ -43,8 +43,8 @@ mail:
                 Votre invitation à %guestMail% pour l’événement %event% a bien été envoyée.
 
                 L’invitation expirera dans 48H.
-            end: |
-                Bien cordialement
+
+                Bien cordialement,
                 L’équipe %event%
                 %eventPhone%
                 %eventMail%

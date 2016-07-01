@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 
 class MailerAdapter implements MailerInterface
 {
