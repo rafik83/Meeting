@@ -29,14 +29,6 @@
     {% endif %}
 {%- endblock form_errors -%}
 
-{%- block form_rows -%}
-    <div class="inputs">
-        {% for child in form %}
-            {{- form_row(child) -}}
-        {% endfor %}
-    </div>
-{%- endblock form_rows -%}
-
 {%- block submit_row -%}
     <div class="validation">
         {{- form_widget(form) -}}
