@@ -147,6 +147,13 @@ mail:
           %eventSite%
           %eventMail%
           %eventPhone%
+    transaction:
+        confirm:
+            subject: Votre paiement %transactionNumber% est validé
+            body: |
+                Bonjour %firstname% %lastname%,
+
+                - Votre paiement %transactionNumber% d’un montant de %transactionTotal% à bien été reçu. Veuillez trouver ci-dessous le récapitulatif de votre commande
 admin:
     mail:
         resetPassword:

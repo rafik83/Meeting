@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationCloseToExpiration;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationExpire;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
@@ -37,6 +38,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExpiredInvitationMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\InvitationCloseToExpirationMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
@@ -91,6 +93,24 @@ class MailEventSubscriber implements EventSubscriberInterface
             'MailBundle:Mail:Sheet/sheetValidated.html.twig',
             'sheet_validated',
             $owner->getLocale()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @param TransactionConfirmEvent $event
+     */
+    public function onTransactionConfirmed(TransactionConfirmEvent $event)
+    {
+        $mail = new TransactionConfirmMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            '',
+            'transaction_confirm',
+            $event->getUser()->getLocale(),
+            $event->getUser(),
+            $event->getTransaction()
         );
 
         $this->mailer->send($mail);
@@ -378,13 +398,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::USER_RESET_PASSWORD_CONFIRMED        => 'onUserResetPasswordConfirm',
             Events::EVENT_PRE_REGISTERED                 => 'onUserPreRegistered',
             Events::ORDER_CONFIRMED                      => 'onOrderConfirmed',
+            Events::TRANSACTION_CONFIRMED                => 'onTransactionConfirmed',
         ];
     }
 }
-/**
- * 'admin_activate_account'                     => 'onAdminActivateAccount',
-'admin_reset_password'                       => 'onAdminResetPassword',
-'user_activate_account'                      => 'onUserActivateAccount',
-'user_reset_password'                        => 'onUserResetPassword',
-'user_complete_profile'                      => 'onUserCompleteProfile',
- */

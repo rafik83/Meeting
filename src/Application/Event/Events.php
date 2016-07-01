@@ -38,4 +38,5 @@ final class Events
     const USER_ACCOUNT_ACTIVATED               = 'user.account_activated';
     const USER_PASSWORD_RESET                  = 'user.password_reset';
     const USER_PROFILE_COMPLETED               = 'user.profile_completed';
+    const TRANSACTION_CONFIRMED                = 'transaction.confirm';
 }
