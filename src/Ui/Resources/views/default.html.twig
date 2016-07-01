@@ -1,20 +1,5 @@
 {% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
 
-{%- block form_row -%}
-    <div class="form-row">
-        {{- form_label(form) -}}
-        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ (errors|length ? 'error' : '')|trim)}) %}
-
-        {% if 'select2' in attr.class %}
-            {% set attr = attr|merge({'data-no-results-label': 'select2.no_results'|trans}) %}
-        {% endif %}
-
-        {{- form_widget(form, {attr: attr}) -}}
-
-        {{ form_errors(form) }}
-    </div>
-{%- endblock form_row -%}
-
 {%- block telephone_widget -%}
     {%- set type = type|default('tel') -%}
     {{ block('form_widget_simple') }}
