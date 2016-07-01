@@ -991,7 +991,7 @@ form:
                         addon:
                             label: Texte optionnel sous le prix
                         subjectedToValidationHelp:
-                            label: Message si soumis à validation
+                            label: Sous réserve de validation
             subjectedToValidation:
                 label: Ce produit est soumis à validation
     product_create_plan:
