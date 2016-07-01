@@ -115,8 +115,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Sexe"
+                                    en: "Gender"
                                 help:
                                     fr: ""
+                                    en: ""
                                 required: true
                                 type: "text"
                                 translatable: false

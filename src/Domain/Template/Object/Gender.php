@@ -56,7 +56,7 @@ class Gender extends EditableObject implements ContentObjectInterface
      */
     public function getGender()
     {
-        return $this->data['gender'];
+        return isset($this->data['gender']) ? $this->data['gender'] : null;
     }
 
     /**
@@ -64,7 +64,7 @@ class Gender extends EditableObject implements ContentObjectInterface
      */
     public function getContentValue()
     {
-        return $this->getGender();
+        return $this->getGender() ? $this->getGender() : '';
     }
 
     /**
