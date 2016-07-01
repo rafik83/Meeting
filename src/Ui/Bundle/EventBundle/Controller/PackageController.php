@@ -229,6 +229,13 @@ class PackageController extends Controller
         }
     }
 
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return RedirectResponse|Response
+     */
     public function summaryAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
