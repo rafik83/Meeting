@@ -3,9 +3,15 @@
 {% endblock %}
 
 {% block body %}
-    {{ 'mail.changeMailNew.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.changeMailNew.body'|trans({
+        '%firstname%': mail.user.account.firstname,
+        '%lastname%': mail.user.account.lastname,
+        '%newMail%': mail.user.email
+    }, 'mail', mail.locale)|html|nl2br }}
+
     <a href="{{ url('event_activate_new_mail', {'token': mail.token}) }}">
         {{ url('event_activate_new_mail', {'token': mail.token}) }}
     </a><br>
+
     {{ 'mail.changeMailNew.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivat
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationCloseToExpiration;
 use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationExpire;
@@ -31,6 +32,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminRe
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExpiredInvitationMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\InvitationCloseToExpirationMail;
@@ -114,7 +116,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             'MailBundle:Mail:ChangeMail/newMail.html.twig',
             'change_mail_new',
             $event->getUser()->getLocale(),
-            $event->getChangeMailToken()->getToken()
+            $event->getChangeMailToken()->getToken(),
+            $event->getUser()
         );
 
         $this->mailer->send($oldMail);
@@ -156,6 +159,27 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getSheet()->getOwner()->getLocale(),
             $event->getSheet()->getEvent(),
             $event->getGuest()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * Send mail when order his confirmed to the buyer
+     *
+     * @param OrderConfirmEvent $event
+     */
+    public function onOrderConfirmed(OrderConfirmEvent $event)
+    {
+        $mail = new OrderConfirmMail(
+            $this->sender,
+            $event->getUser()->getEmail(),
+            '',
+            'order_confirm',
+            $event->getUser()->getLocale(),
+            $event->getOrder(),
+            $event->getUser(),
+            $event->getEvent()
         );
 
         $this->mailer->send($mail);
@@ -259,7 +283,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($event->getUser(), $event->getEvent());
-        $sheet = reset($sheets);
+        $sheet  = reset($sheets);
 
         $mail = new ResetPasswordConfirmMail(
             $this->sender,
@@ -353,6 +377,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::USER_REGISTERED                      => 'onUserRegistered',
             Events::USER_RESET_PASSWORD_CONFIRMED        => 'onUserResetPasswordConfirm',
             Events::EVENT_PRE_REGISTERED                 => 'onUserPreRegistered',
+            Events::ORDER_CONFIRMED                      => 'onOrderConfirmed',
         ];
     }
 }

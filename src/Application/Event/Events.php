@@ -32,4 +32,5 @@ final class Events
     const USER_REGISTERED                      = 'user.registered';
     const EVENT_PRE_REGISTERED                 = 'event.preregistered';
     const USER_RESET_PASSWORD_CONFIRMED        = 'user.reset_password.confirm';
+    const ORDER_CONFIRMED                      = 'order.confirm';
 }
