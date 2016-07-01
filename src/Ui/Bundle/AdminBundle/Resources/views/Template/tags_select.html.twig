@@ -1,5 +1,15 @@
-<select class="form-control select2" name="tag">
-    {% for tag in tags %}
-        <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-    {% endfor %}
-</select>
+<div id="tags-item-{{ uid|default('__UID__') }}-{{ index|default('__TAGS__') }}" class="row" style="margin-left:-15px;margin-bottom: 10px;">
+    <div class="col-md-5">
+        <input type="text" class="form-control" name="tags[{{ index|default('__TAGS__') }}][label][{{ locale }}]" value="{{ tag['label'][locale]|default }}" placeholder="Label" />
+    </div>
+    <div class="col-md-5">
+        <select class="form-control" name="tags[{{ index|default('__TAGS__') }}][tag]">
+            {% for tag in sheet_tags %}
+                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans({}, 'templates') }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2 text-right">
+        <button type="button" class="btn btn-danger btn-sm" data-collection-delete="tags-item-{{ uid|default('__UID__') }}-{{ index|default('__TAGS__') }}">&times;</button>
+    </div>
+</div>

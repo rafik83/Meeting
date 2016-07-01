@@ -11,7 +11,7 @@
     tags: []
 }|merge(config|default({})) %}
 
-<div class="object" data-object="tags" data-uid=" {{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+<div class="object" data-object="tags" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.tags'|trans }}</li>
         <li>
@@ -34,7 +34,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">{{ 'template.object.tags'|trans }} - __UID__</h4>
+                                <h4 class="modal-title">{{ 'template.object.tags'|trans }} - {{ uid|default('__UID__') }} __UID__</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
@@ -81,9 +81,18 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.tags.title'|trans }}</label>
-                                    <fieldset data-collection="tags-__UID__-__TOTO__" data-collection-add="add-__UID__-__TOTO__" data-prototype="{{ include('AdminBundle:Template:tags_select.html.twig', { 'tags': sheet_tags, 'collection': 'tags-__UID__-__TOTO__' }, false)|e }}">
-                                        <button type="button" id="add-__UID__-__TOTO__">Ajouter</button>
+                                    <fieldset
+                                        id="tags-{{ uid|default('__UID__') }}"
+                                        data-collection-bind="__TAGS__"
+                                        data-collection-add="tags-add-{{ uid|default('__UID__') }}"
+                                        data-collection-delete="tags-delete-{{ uid|default('__UID__') }}"
+                                        data-prototype="{{ include('AdminBundle:Template:tags_select.html.twig', { 'sheet_tags': sheet_tags, 'uid': uid|default('__UID__'), 'locale': locale }, false)|e }}"
+                                    >
+                                        {% for tag in config.tags %}
+                                            {{ include('AdminBundle:Template:tags_select.html.twig', { 'sheet_tags': sheet_tags, 'uid': uid|default('__UID__'), 'locale': locale, 'index': loop.index, 'tag': tag }, false) }}
+                                        {% endfor %}
                                     </fieldset>
+                                    <button type="button" id="tags-add-{{ uid|default('__UID__') }}" class="btn btn-success btn-sm">+</button>
                                 </div>
                             </div>
                             <div class="modal-footer">

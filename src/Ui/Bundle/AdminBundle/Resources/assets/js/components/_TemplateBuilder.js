@@ -105,7 +105,7 @@ TemplateBuilder.prototype.list = function (element, name)
             this.closeMenu();
             this.drag = true;
             var uid = guidGenerator();
-            event.item.innerHTML = event.item.innerHTML.replace('__UID__', uid);
+            event.item.innerHTML = event.item.innerHTML.replace(new RegExp('__UID__', 'g'), uid);
             event.item.setAttribute('data-uid', uid);
         }.bind(this),
         onEnd: function () {
@@ -418,7 +418,7 @@ function TemplateObject(element, locale)
     } else if (this.type === 'carousel') {
         this.object = new CarouselObject(this.element, this.locale)
     } else if (this.type === 'tags') {
-        this.object = new TagsObject(this.element, this.locale)
+        this.object = new TagsObject(this.uid, this.element, this.locale)
     }
 
     this.object.fill();
@@ -800,16 +800,23 @@ CollectionObject.prototype.save = function ()
 /**
  * TagsObject
  *
+ * @param uid
  * @param element
  * @param locale
  * @constructor
  */
-function TagsObject(element, locale)
+function TagsObject(uid, element, locale)
 {
+    this.uid     = uid;
     this.element = element;
     this.locale  = locale;
     this.form    = new Form(element);
     this.config  = JSON.parse(this.element.getAttribute('data-config'));
+
+    [].forEach.call(this.element.querySelectorAll('[data-collection-bind]'), function (element) {
+        element.setAttribute('data-collection', element.getAttribute('data-collection-bind'));
+        $(element).collection();
+    });
 }
 
 TagsObject.prototype.fill = function ()
