@@ -34,6 +34,8 @@ class ProfileType extends AbstractType
         foreach ($template->getProfileObjects() as $key => $object) {
             if ($object instanceof Template\Object\EditableText) {
                 $this->addText($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\Object\Gender) {
+                $this->addGender($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Telephone) {
@@ -42,8 +44,6 @@ class ProfileType extends AbstractType
                 $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\Object\Url) {
                 $this->addUrl($key, $builder, $object, $options['locale']);
-            } elseif ($object instanceof Template\Object\Gender) {
-                $this->addGender($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -74,6 +74,21 @@ class ProfileType extends AbstractType
         $builder->add($key, EditableTextInputDataType::class, [
             'object' => $object,
             'locale' => $locale,
+        ]);
+    }
+
+    /**
+     * @param string               $key
+     * @param FormBuilderInterface $builder
+     * @param Template\Object      $object
+     * @param string               $locale
+     */
+    private function addGender($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    {
+        $builder->add($key, GenderDataType::class, [
+            'object' => $object,
+            'locale' => $locale,
+            'label'  => false,
         ]);
     }
 
@@ -133,21 +148,6 @@ class ProfileType extends AbstractType
         $builder->add($key, CountryDataType::class, [
             'object' => $object,
             'locale' => $locale,
-        ]);
-    }
-
-    /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
-     */
-    private function addGender($key, FormBuilderInterface $builder, Template\Object $object, $locale)
-    {
-        $builder->add($key, GenderDataType::class, [
-            'object' => $object,
-            'locale' => $locale,
-            'label'  => false,
         ]);
     }
 }
