@@ -1,15 +1,18 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
-        __construct: false
-        title: "ASD Days"
-        domain: asddays-2016.<domain()>
-        timeZone: 'Europe/Paris'
-        locales: [fr, en]
+        __construct:
+            - "ASD Days"               #title
+            -  fr                      #fallback
+            - [fr, en]                 #locales
+            - 'et'                     #mode
+            - 20                       #vat
+            - 'FR'                     #country
+            -  'EUR'                   #currency
+            - 'Europe/Paris'           #timeZone
+            - asddays-2016.<domain()> #domain
+            - "PROXIMUM"               #organiserName
         logo: 'assets/images/asddays-logo.png'
-        fallback: fr
         assetPath: ''
-        country: 'FR'
-        organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
@@ -23,9 +26,6 @@ Proximum\Vimeet\Domain\Model\Event:
         # vat mode :
         # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
         # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-        mode: 'et'
-        vat: 20
-        currency: 'EUR'
         elementToJoinWithInvoice: |+
             - Numéro de la Facture
             - Nom de l'événement
