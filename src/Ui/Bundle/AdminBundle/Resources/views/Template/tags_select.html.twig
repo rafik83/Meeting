@@ -1,6 +1,6 @@
-<div id="tags-item-{{ uid|default('__UID__') }}-{{ index|default('__TAGS__') }}" class="row" style="margin-left:-15px;margin-bottom: 10px;">
+<div data-index="{{ index|default('__TAGS__') }}" id="tags-item-{{ uid|default('__UID__') }}-{{ index|default('__TAGS__') }}" class="tags-item-{{ uid|default('__UID__') }} row" style="margin-left:-15px;margin-bottom: 10px;">
     <div class="col-md-5">
-        <input type="text" class="form-control" name="tags[{{ index|default('__TAGS__') }}][label][{{ locale }}]" value="{{ tag['label'][locale]|default }}" placeholder="Label" />
+        <input type="text" class="form-control" name="tags[{{ index|default('__TAGS__') }}][label][{{ locale }}]" placeholder="{{ (locale != fallback|default(locale) and not tag['label'][locale]|default) ? tag['label'][fallback]|default('Label') : 'Label' }}" />
     </div>
     <div class="col-md-5">
         <select class="form-control" name="tags[{{ index|default('__TAGS__') }}][tag]">

@@ -43,6 +43,10 @@ Form.prototype.get = function (name)
 
 Form.prototype.set = function (name, value)
 {
+    if (value === undefined) {
+        return;
+    }
+
     var inputs = this.getByName(name);
 
     if (inputs.length === 1) {

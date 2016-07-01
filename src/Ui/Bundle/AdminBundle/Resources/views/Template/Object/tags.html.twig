@@ -89,7 +89,14 @@
                                         data-prototype="{{ include('AdminBundle:Template:tags_select.html.twig', { 'sheet_tags': sheet_tags, 'uid': uid|default('__UID__'), 'locale': locale }, false)|e }}"
                                     >
                                         {% for tag in config.tags %}
-                                            {{ include('AdminBundle:Template:tags_select.html.twig', { 'sheet_tags': sheet_tags, 'uid': uid|default('__UID__'), 'locale': locale, 'index': loop.index, 'tag': tag }, false) }}
+                                            {{ include('AdminBundle:Template:tags_select.html.twig', {
+                                                'sheet_tags': sheet_tags,
+                                                'uid': uid|default('__UID__'),
+                                                'locale': locale,
+                                                'fallback': fallback,
+                                                'index': loop.index0,
+                                                'tag': tag
+                                            }, false) }}
                                         {% endfor %}
                                     </fieldset>
                                     <button type="button" id="tags-add-{{ uid|default('__UID__') }}" class="btn btn-success btn-sm">+</button>

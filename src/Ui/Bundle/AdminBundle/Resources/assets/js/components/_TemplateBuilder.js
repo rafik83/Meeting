@@ -828,7 +828,11 @@ TagsObject.prototype.fill = function ()
     this.form.set('required', this.config.required);
     this.form.set('default', this.config.default);
     this.form.set('translatable', this.config.translatable);
-    this.form.set('tags', this.config.tags);
+
+    [].forEach.call(this.config.tags, function (tag, index) {
+        this.form.set('tags[' + index + '][tag]', this.config.tags[index].tag);
+        this.form.set('tags[' + index + '][label][' + this.locale + ']', this.config.tags[index].label[this.locale]);
+    }.bind(this));
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -842,7 +846,34 @@ TagsObject.prototype.save = function ()
     this.config.required                 = this.form.get('required');
     this.config.default                  = this.form.get('default');
     this.config.translatable             = this.form.get('translatable');
-    this.config.tags                     = this.form.get('tags');
+
+    var indexes = [];
+
+    [].forEach.call(this.element.querySelectorAll('.tags-item-' + this.uid), function (element) {
+        var index = parseInt(element.getAttribute('data-index'));
+        indexes.push(index);
+
+        if (this.config.tags[index] === undefined) {
+            this.config.tags[index] = {
+                tag: null,
+                label: {}
+            }
+        }
+
+        this.config.tags[index].tag                = this.form.get('tags[' + index + '][tag]');
+        this.config.tags[index].label[this.locale] = this.form.get('tags[' + index + '][label][' + this.locale + ']');
+
+    }.bind(this));
+
+    var tags = [];
+
+    [].forEach.call(this.config.tags, function (tag, index) {
+        if (-1 !== indexes.indexOf(index)) {
+            tags.push(tag);
+        }
+    }.bind(this));
+
+    this.config.tags = tags;
 
     this.form.bind('label', this.config.label[this.locale]);
 };
