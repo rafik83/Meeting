@@ -1,4 +1,3 @@
-
 var $             = require('jquery');
 var Sortable      = require('./_Sortable');
 var LoadingButton = require('./_LoadingButton');
@@ -269,11 +268,6 @@ function TemplateBlock(element, builder)
     // UID
     this.uid = element.getAttribute('data-uid');
 
-    //if (this.uid === null || this.uid === undefined) {
-    //    this.uid = guidGenerator();
-    //    this.element.setAttribute('data-uid', this.uid);
-    //}
-
     // Init modal
     $(this.configureModal).modal({show: false});
 
@@ -382,11 +376,6 @@ function TemplateObject(element, locale)
 
     // UID
     this.uid = element.getAttribute('data-uid');
-
-    //if (this.uid === null || this.uid === undefined) {
-    //    this.uid = guidGenerator();
-    //    this.element.setAttribute('data-uid', this.uid);
-    //}
 
     // Init modal
     $(this.configureModal).modal({show: false});
