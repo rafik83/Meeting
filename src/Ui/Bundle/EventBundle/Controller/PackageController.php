@@ -264,7 +264,11 @@ class PackageController extends Controller
         $form        = $this->createForm(TermsOfSaleType::class, $termsOfSale);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('event_sheet');
+            $this->addFlash('package_completed_payment', $sheet->getId());
+
+            return $this->redirectToRoute('event_package_payment', [
+                'sheet' => $sheet->getId(),
+            ]);
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(
