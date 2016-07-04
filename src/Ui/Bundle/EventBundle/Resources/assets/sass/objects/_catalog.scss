@@ -181,7 +181,78 @@
     top: 0;
     width: 300px;
     height: 100%;
+    padding: 25px;
     background: #FFFFFF;
     box-shadow: 0 0 10px 5px rgba(0,0,0,.3);
     transition: left 0.5s ease-in-out;
+
+    > form {
+      margin-bottom: 20px;
+
+      .btn {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    .filter {
+      margin-bottom: 20px;
+
+      h3 {
+        position: relative;
+        font-family: OpenSans;
+        font-size: 18px;
+        padding-left: 22px;
+
+        &.collapsed {
+          &:before { content: "\78"; }
+        }
+
+        &:before {
+          position: absolute;
+          left: 0;
+          font-family: 'PictoOutline' !important;
+          content: "\6c";
+        }
+      }
+    }
+
+      .filter__item {
+        position: relative;
+        z-index: 0;
+
+        .checkbox-inline { width: 100%; }
+
+        .filter-label {
+          padding-right: 3px;
+          background: #FFFFFF;
+        }
+
+        .details {
+          position: absolute;
+          right: 0;
+          top: 0;
+          padding-left: 3px;
+          background: #FFFFFF;
+        }
+
+        &:after {
+          content: '';
+          position: absolute;
+          left: 20px;
+          top: 50%;
+          width: calc(100% - 20px);
+          border-top: 2px dotted rgba(0, 0, 0, .3);
+          z-index: -2;
+        }
+      }
+
+    .actions {
+      a {
+        text-decoration: none;
+
+        > span { text-decoration: underline };
+      }
+    }
   }
