@@ -87,6 +87,17 @@ form:
                 placeholder: NOM
             email:
                 placeholder: E-mail
+    payment_choice:
+        children:
+            mode:
+                label: 'Choisissez votre mode de paiement:'
+            paymentMode:
+                bank_card: Carte bleu
+                bank_transfer: Transfert
+                bank_check: Chèque
+                deposit_bank_card: Accompte en carte bleu
+                deposit_bank_transfer: Accompte par transfert
+                deposit_bank_check: Accompte par chèque
     package_summary_terms_of_sale:
         children:
             termsOfSale:
