@@ -162,7 +162,7 @@ class AddHandler
     private function sendActivationConfirmEvent(Add $add, User $guest)
     {
         $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->sender);
-        $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT, $event);
+        $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $event);
     }
 
     /**

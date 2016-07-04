@@ -214,7 +214,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender,
             $event->getUser()->getEmail(),
             'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig',
-            Events::SHEET_ADD_PARTICIPANT,
+            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
             $event->getUser()->getLocale(),
             $event->getSheet()->getEvent(),
             $event->getUser()
@@ -385,7 +385,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         return [
             Events::SHEET_VALIDATED                      => 'onSheetValidated',
-            Events::SHEET_ADD_PARTICIPANT                => 'onSheetAddParticipant',
+            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION   => 'onSheetAddParticipant',
             Events::SHEET_INVITATION_CLOSE_TO_EXPIRATION => 'onInvitationCloseToExpiration',
             Events::SHEET_INVITATION_EXPIRE              => 'onInvitationExpire',
             Events::USER_MAIL_CHANGED                    => 'onChangeMailAddressEvent',

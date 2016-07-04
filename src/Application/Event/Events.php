@@ -15,7 +15,7 @@ final class Events
     const SHEET_VALIDATED                      = 'sheet.validated';
     const SHEET_ACCEPTED                       = 'sheet.accepted';
     const SHEET_INVITATION_CLOSE_TO_EXPIRATION = 'sheet.invitation.close_to_expiration';
-    const SHEET_ADD_PARTICIPANT                = 'sheet.participant.add';
+    const SHEET_ADD_PARTICIPANT_CONFIRMATION   = 'sheet.participant.add.confirmation';
     const SHEET_INVITATION_EXPIRE              = 'sheet.invitation.expire';
     const USER_MAIL_CHANGED                    = 'change_mail';
     const MEETING_PARTICIPANT_ADDED            = 'meeting.participant.added';

@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
@@ -95,11 +97,20 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $expectedUser,
             $event,
             $expectedActivateAccountToken,
-            'fr'
+            'fr',
+            $user
+        );
+
+        $sheetAddConfirmationEvent = new SheetAddParticipantEvent(
+            $expectedSheet,
+            $expectedUser,
+            $user
         );
 
         $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
-        $eventDispatcher->dispatch('user_activate_account', $activateAccountEvent)->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $sheetAddConfirmationEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
 
         $cartManager = $this->prophesize(CartManager::class);
         $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
@@ -120,7 +131,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
 
-        $add = new Add($sheet, $event, 'fr');
+        $add = new Add($sheet, $event, 'fr', $user);
         $add->email = 'test@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';
@@ -191,7 +202,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldNotBeCalled();
 
-        $add = new Add($sheet, $event, 'fr');
+        $add = new Add($sheet, $event, 'fr', $user);
         $add->email     = 'test2@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';

@@ -22,7 +22,7 @@ Feature: Manage participant
       | add_participant_lastName  | Test         |
       | add_participant_email     | truc@test.fr |
     Then I press "sheet.participant.sendInvite"
-    And the "sheet.participant.add" mail should be sent to "user_asddays_1@proximum.com"
+    And the "sheet.participant.add.confirmation" mail should be sent to "user_asddays_1@proximum.com"
     Then the "user.account_activated" mail should be sent to "truc@test.fr"
     And I should be on this page "/fr/sheet/fr"
     And I should see "Truc TEST"
