@@ -257,4 +257,16 @@ class Cart
 
         return $this;
     }
+
+    /**
+     * @return int|mixed
+     */
+    public function getTotal()
+    {
+        $rows = $this->rows->toArray();
+
+        return empty($rows) ? 0 : array_reduce($rows, function ($carry, CartRow $row) {
+            return $carry + ($row->getQuantity() * $row->getProduct()->getUnitPrice());
+        }, 0);
+    }
 }
