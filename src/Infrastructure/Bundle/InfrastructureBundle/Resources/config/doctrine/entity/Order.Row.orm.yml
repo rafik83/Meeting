@@ -9,7 +9,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
     fields:
         quantity:
             type: integer
-        product:
+        data:
             type: json_array
         price:
             type: float
@@ -19,5 +19,5 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             inversedBy: rows
             joinColumn:
                 onDelete: "cascade"
-        linkedProduct:
+        product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

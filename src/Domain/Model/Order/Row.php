@@ -28,12 +28,12 @@ class Row
     /**
      * @var string
      */
-    private $product;
+    private $data;
 
     /**
      * @var Product
      */
-    private $linkedProduct;
+    private $product;
 
     /**
      * @var int
@@ -49,16 +49,16 @@ class Row
      * Row constructor.
      *
      * @param Order   $order
-     * @param Product $linkedProduct
+     * @param Product $product
      * @param int     $quantity
      */
-    public function __construct(Order $order, Product $linkedProduct, $quantity)
+    public function __construct(Order $order, Product $product, $quantity)
     {
-        $this->order         = $order;
-        $this->quantity      = $quantity;
-        $this->linkedProduct = $linkedProduct;
-        $this->price         = $linkedProduct->getUnitPrice();
-        $this->product       = $linkedProduct->getSerializedData();
+        $this->order    = $order;
+        $this->quantity = $quantity;
+        $this->data     = $product->getSerializedData();
+        $this->product  = $product;
+        $this->price    = $product->getUnitPrice();
     }
 
     /**
@@ -78,7 +78,7 @@ class Row
     }
 
     /**
-     * @return string
+     * @return Product
      */
     public function getProduct()
     {
@@ -102,10 +102,10 @@ class Row
     }
 
     /**
-     * @return Product
+     * @return string
      */
-    public function getLinkedProduct()
+    public function getData()
     {
-        return $this->linkedProduct;
+        return $this->data;
     }
 }

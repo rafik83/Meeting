@@ -171,4 +171,30 @@ class Order
     {
         return $this->rows;
     }
+
+    /**
+     * @param Order\Row $row
+     *
+     * @return Order
+     */
+    public function addRow(Order\Row $row)
+    {
+        $this->rows[] = $row;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        $total = 0;
+
+        foreach ($this->rows as $row) {
+            $total += ($row->getQuantity() * $row->getPrice());
+        }
+
+        return $total;
+    }
 }

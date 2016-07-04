@@ -21,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Order:
         rows:
             targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
             mappedBy: order
+            cascade:
+                - persist
     embedded:
         billingInfo:
             class: Proximum\Vimeet\Domain\Model\Order\BillingInfo
