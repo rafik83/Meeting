@@ -38,6 +38,11 @@ interface CartRowRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     */
+    public function deleteForSheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
      *
      * @return CartRow[]
      */
