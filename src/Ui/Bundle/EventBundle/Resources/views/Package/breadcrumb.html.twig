@@ -16,14 +16,17 @@
             {% set remainingStep = step.index %}
         {% endfor %}
 
-        <li class="li {% if app.request.attributes.get('_route') ==  'event_package_summary' %}current{% endif %}" >
+        <li class="li
+        {% if app.request.attributes.get('_route') == 'event_package_summary' %}current{% endif %}
+        {% if app.request.attributes.get('_route') == 'event_package_payment' %}complete{% endif %}
+        " >
             <div class="number-step">{{ remainingStep + 1 }}</div>
             <div class="name-step">
                 <p>{{ 'package.funnel.summary'|trans }}</p>
             </div>
         </li>
 
-        <li class="li">
+        <li class="li {% if app.request.attributes.get('_route') == 'event_package_payment' %}current{% endif %}">
             <div class="number-step">{{ remainingStep + 2 }}</div>
             <div class="name-step">
                 <p>{{ 'package.funnel.payment'|trans }}</p>

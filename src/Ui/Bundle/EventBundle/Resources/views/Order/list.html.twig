@@ -1,0 +1,34 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'order.list.title'|trans }}
+{% endblock %}
+
+{% block content %}
+<section class="main">
+    <header>
+        <h1>
+            <i class="icon-Panier_2"></i>
+            {{ 'order.list.title'|trans }}
+        </h1>
+    </header>
+    <div class="main__container">
+        <table class="table">
+            <thead>
+                <th>Date</th>
+                <th>Pro Forma</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td><a href="">Pro Forma</a></td>
+                        <td>{{ order.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

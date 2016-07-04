@@ -1,0 +1,37 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form '@Ui/default.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'package.payment.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+    {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
+        <div class="profile__content">
+            <header>
+                <h1><i class="icon-Paiement_1"></i> {{ 'package.payment.title'|trans }}</h1>
+            </header>
+            <div class="main__content styled-form form-with-label">
+                <b>{{ 'package.payment.total.title'|trans }}</b>
+                {{ 'package.payment.total.toPay'|trans({'%total%': total|localizedcurrency(event.currency)}) }}<br>
+                {% if total != deposit %}
+                    <b>{{ 'package.payment.deposit.title'|trans }}</b>
+                    {{ 'package.payment.deposit.toPay'|trans({'%deposit%': deposit|localizedcurrency(event.currency) }) }}
+                {% endif %}
+                <hr>
+                {{ form_start(form) }}
+                {{ form_row(form.mode) }}
+                <div class="validation">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="icon-Paiement_1"></i> {{ 'package.payment.pay.label'|trans }}
+                    </button>
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
