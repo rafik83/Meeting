@@ -232,8 +232,6 @@ class Configuration
     }
 
     /**
-     * <<<<<<< HEAD
-     *
      * @return string
      */
     public function getContactLastName()

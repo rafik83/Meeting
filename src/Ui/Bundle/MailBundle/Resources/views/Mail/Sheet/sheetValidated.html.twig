@@ -8,10 +8,11 @@
         '%eventSite%': mail.sheet.event.configuration.organiserWebsite,
         '%eventMail%': mail.sheet.event.organiserEmail,
         '%eventPhone%': mail.sheet.event.configuration.organiserPhone,
-        '%catalogOnlineDate%': '',
-        '%meetingLimitDate%': '',
-        '%scheduleDate%': '',
-        '%eventOpenDate%': '',
+        '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate,
+        '%meetingLimitDate%': mail.sheet.event.configuration.happeningsOpenDate,
+        '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate,
+        '%eventOpenDate%': mail.sheet.event.configuration.happeningsOpenDate,
+        '%eventPlace%': '',
         '%firstname%': mail.sheet.owner.account.firstname|humanize,
         '%lastname%': mail.sheet.owner.account.lastname|upper
     }, 'mail', mail.locale)|html|nl2br }}
