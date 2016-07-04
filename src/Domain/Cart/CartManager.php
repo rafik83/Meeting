@@ -116,7 +116,7 @@ class CartManager
         // Save / add promotion code rows
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
             if ($promotionCodeRow->getId()) {
-                $this->promotionCodeRepository->set($promotionCodeRow);
+                $this->promotionCodeRowRepository->set($promotionCodeRow);
             } else {
                 $this->promotionCodeRowRepository->add($promotionCodeRow);
             }
@@ -179,6 +179,9 @@ class CartManager
             throw new PromotionCodeSoldOutException();
         }
 
-        $this->getCart($sheet)->setPromotionCode($promotionCode);
+        $cart = $this->getCart($sheet);
+        $cart->setPromotionCode($promotionCode);
+        
+        $this->save($cart);
     }
 }

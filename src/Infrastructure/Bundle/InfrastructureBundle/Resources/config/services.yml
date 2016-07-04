@@ -198,7 +198,7 @@ services:
     repository.promotion_code_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRowRepository
         arguments:
-            - '@doctrine.orm.entity_manager.abstract'
+            - '@doctrine.orm.entity_manager'
     repository.billing_info_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:

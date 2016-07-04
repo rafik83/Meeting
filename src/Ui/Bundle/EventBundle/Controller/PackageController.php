@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
@@ -277,7 +278,9 @@ class PackageController extends Controller
         }
 
         if ($formPromotionCode->handleRequest($request)->isSubmitted() && $formPromotionCode->isValid()) {
-            return $this->redirectToRoute('event_package_summary');
+            $this->validatePromotionCode($sheet, $promotionCode);
+
+            return $this->redirectToRoute('event_package_summary', ['sheet' => $sheet->getId()]);
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(
@@ -298,6 +301,10 @@ class PackageController extends Controller
         ]);
     }
 
+    /**
+     * @param Sheet         $sheet
+     * @param PromotionCode $promotionCode
+     */
     private function validatePromotionCode(Sheet $sheet, PromotionCode $promotionCode)
     {
         $command = new Add($sheet, $promotionCode);
@@ -310,8 +317,9 @@ class PackageController extends Controller
             $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.outDated');
         } catch (PromotionCodeSoldOutException $e) {
             $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.soldOut');
-        } 
-        
+        } catch (PromotionCodeAlreadyExistException $e) {
+            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.alreadyExist');
+        }
     }
 
     /**
