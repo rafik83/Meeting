@@ -129,10 +129,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.cart_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\CartRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -907,6 +903,13 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
+    command.payment.choice_handler:
+        class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
+        arguments:
+            - '@cart.convertor'
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\Choice }
 
     #
     # Security
@@ -1382,6 +1385,15 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
+    cart.convertor:
+        class: Proximum\Vimeet\Domain\Cart\Converter
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@repository.cart_row_repository'
+            - '@repository.cart_step_repository'
+            - '@repository.billing_info_repository'
+            - '@package.specification.vat_applicable'
+            - '@datetime'
 
     #
     # Promotion
@@ -1403,3 +1415,13 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # Payment
+    #
+    payment.total_to_pay:
+        class: Proximum\Vimeet\Domain\Payment\TotalToPay
+        arguments:
+            - '@cart_manager'
+            - '@package.specification.vat_applicable'
+
