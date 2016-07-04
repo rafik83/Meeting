@@ -1,0 +1,149 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Cart;
+
+use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Address;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
+use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+
+class Converter
+{
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var CartRowRepositoryInterface
+     */
+    private $cartRowRepository;
+
+    /**
+     * @var VatApplicable
+     */
+    private $vatApplicable;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
+     * @var BillingInfoRepositoryInterface
+     */
+    private $billingInfoRepository;
+
+    /**
+     * @var CartStepRepositoryInterface
+     */
+    private $cartStepRepository;
+
+    /**
+     * @param OrderRepositoryInterface       $orderRepository
+     * @param CartRowRepositoryInterface     $cartRowRepository
+     * @param CartStepRepositoryInterface    $cartStepRepository
+     * @param BillingInfoRepositoryInterface $billingInfoRepository
+     * @param VatApplicable                  $vatApplicable
+     * @param \DateTimeInterface             $datetime
+     */
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        CartRowRepositoryInterface $cartRowRepository,
+        CartStepRepositoryInterface $cartStepRepository,
+        BillingInfoRepositoryInterface $billingInfoRepository,
+        VatApplicable $vatApplicable,
+        \DateTimeInterface $datetime
+    ) {
+        $this->orderRepository       = $orderRepository;
+        $this->cartRowRepository     = $cartRowRepository;
+        $this->billingInfoRepository = $billingInfoRepository;
+        $this->vatApplicable         = $vatApplicable;
+        $this->datetime              = $datetime;
+        $this->cartStepRepository = $cartStepRepository;
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @throws MissingBillingInfoException
+     *
+     * @return Order
+     */
+    public function toOrder(Cart $cart)
+    {
+        $sheet = $cart->getSheet();
+
+        $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
+
+        if (null === $billingInfo) {
+            throw new MissingBillingInfoException('Can not convert cart to order, missing billing info');
+        }
+
+        $orderBillingInfo = new Order\BillingInfo(
+            $billingInfo->getLastname(),
+            $billingInfo->getFirstname(),
+            $billingInfo->getFunction(),
+            $billingInfo->getPhone(),
+            $billingInfo->getMobile(),
+            $billingInfo->getEmail(),
+            $billingInfo->getCompany(),
+            new Address(
+                $billingInfo->getAddress()->getStreet(),
+                $billingInfo->getAddress()->getZipcode(),
+                $billingInfo->getAddress()->getCity(),
+                $billingInfo->getAddress()->getCountry()
+            ),
+            $billingInfo->getVatNumber()
+        );
+
+        $order = new Order(
+            $sheet,
+            $this->vatApplicable->onCart($cart),
+            $orderBillingInfo,
+            $this->datetime
+        );
+
+        foreach ($cart->getRows() as $cartRow) {
+            $order->addRow($this->convertToRow($order, $cartRow));
+        }
+
+        $this->orderRepository->add($order);
+        $this->emptyCart($cart);
+
+        return $order;
+    }
+
+    /**
+     * @param Order   $order
+     * @param CartRow $cartRow
+     *
+     * @return Order\Row
+     */
+    private function convertToRow(Order $order, CartRow $cartRow)
+    {
+        return new Order\Row($order, $cartRow->getProduct(), $cartRow->getQuantity());
+    }
+
+    /**
+     * @param Cart $cart
+     */
+    private function emptyCart(Cart $cart)
+    {
+        $this->cartRowRepository->deleteForSheet($cart->getSheet());
+        $this->cartStepRepository->deleteForSheet($cart->getSheet());
+    }
+}
