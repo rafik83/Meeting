@@ -29,19 +29,22 @@ class AddHandler
      */
     public function __construct(CartManager $cartManager)
     {
-
         $this->cartManager = $cartManager;
     }
 
     /**
      * @param Add $add
-     * 
+     *
      * @throws PromotionCodeNotFoundException
      * @throws PromotionCodeOutDatedException
      * @throws PromotionCodeSoldOutException
      */
     public function handle(Add $add)
     {
+        $cart = $this->cartManager->getCart($add->sheet);
+
         $this->cartManager->apply($add->sheet, $add->promotionCodeForm->promotionCode);
+
+        $this->cartManager->save($cart);
     }
 }

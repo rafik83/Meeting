@@ -194,7 +194,11 @@ services:
     repository.cart_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
         arguments:
-        - '@doctrine.orm.entity_manager'
+            - '@doctrine.orm.entity_manager'
+    repository.promotion_code_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRowRepository
+        arguments:
+            - '@doctrine.orm.entity_manager.abstract'
     repository.billing_info_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
@@ -1389,6 +1393,8 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_repository'
+            - '@repository.promotion_code_row_repository'
+            - '@datetime'
 
     #
     # Promotion

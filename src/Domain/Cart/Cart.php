@@ -11,11 +11,12 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 
 class Cart
 {
@@ -44,13 +45,14 @@ class Cart
      *
      * @param Sheet     $sheet
      * @param CartRow[] $rows
+     * @param array     $promotionRows
      * @param int       $currentStep
      */
-    public function __construct(Sheet $sheet, array $rows, $currentStep = null)
+    public function __construct(Sheet $sheet, array $rows, array $promotionRows, $currentStep = null)
     {
         $this->sheet             = $sheet;
         $this->rows              = new ArrayCollection($rows);
-        $this->promotionCodeRows = new ArrayCollection();
+        $this->promotionCodeRows = new ArrayCollection($promotionRows);
         $this->currentStep       = $currentStep;
     }
 
@@ -91,10 +93,15 @@ class Cart
     /**
      * @param PromotionCode $promotionCode
      *
+     * @throws PromotionCodeAlreadyExistException
      * @return Cart
      */
     public function setPromotionCode(PromotionCode $promotionCode)
     {
+        if ($this->hasPromotionCode($promotionCode)) {
+            throw new PromotionCodeAlreadyExistException();
+        }
+
         $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
 
         return $this;
@@ -208,7 +215,7 @@ class Cart
         return $this->promotionCodeRows->exists(
             function ($key, PromotionCodeRow $promotionCodeRow) use ($promotionCode) {
                 return $promotionCodeRow->getPromotionCode() === $promotionCode;
-        });
+            });
     }
 
     /**

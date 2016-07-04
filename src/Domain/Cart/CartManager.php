@@ -13,12 +13,14 @@ namespace Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManager
 {
@@ -43,22 +45,29 @@ class CartManager
     private $dateTime;
 
     /**
-     * @param CartRowRepositoryInterface       $cartRowRepository
-     * @param CartStepRepositoryInterface      $cartStepRepository
-     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     * @param \DateTimeInterface               $dateTime
+     * @var PromotionCodeRowRepositoryInterface
+     */
+    private $promotionCodeRowRepository;
+
+    /**
+     * @param CartRowRepositoryInterface          $cartRowRepository
+     * @param CartStepRepositoryInterface         $cartStepRepository
+     * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
+     * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
+     * @param \DateTimeInterface                  $dateTime
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
+        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         \DateTimeInterface $dateTime
-    )
-    {
-        $this->cartRowRepository       = $cartRowRepository;
-        $this->cartStepRepository      = $cartStepRepository;
-        $this->promotionCodeRepository = $promotionCodeRepository;
-        $this->dateTime                = $dateTime;
+    ) {
+        $this->cartRowRepository          = $cartRowRepository;
+        $this->cartStepRepository         = $cartStepRepository;
+        $this->promotionCodeRepository    = $promotionCodeRepository;
+        $this->promotionCodeRowRepository = $promotionCodeRowRepository;
+        $this->dateTime                   = $dateTime;
     }
 
     /**
@@ -72,6 +81,7 @@ class CartManager
         return new Cart(
             $sheet,
             $this->cartRowRepository->findBySheet($sheet),
+            $this->promotionCodeRowRepository->findBySheet($sheet),
             $currentStep
         );
     }
@@ -100,6 +110,15 @@ class CartManager
                 $this->cartRowRepository->set($row);
             } else {
                 $this->cartRowRepository->add($row);
+            }
+        }
+
+        // Save / add promotion code rows
+        foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
+            if ($promotionCodeRow->getId()) {
+                $this->promotionCodeRepository->set($promotionCodeRow);
+            } else {
+                $this->promotionCodeRowRepository->add($promotionCodeRow);
             }
         }
 
@@ -136,6 +155,7 @@ class CartManager
      * @throws PromotionCodeNotFoundException
      * @throws PromotionCodeOutDatedException
      * @throws PromotionCodeSoldOutException
+     * @throws PromotionCodeAlreadyExistException
      */
     public function apply(Sheet $sheet, $code)
     {
@@ -158,7 +178,7 @@ class CartManager
         if ($promotionCode->isSoldOut()) {
             throw new PromotionCodeSoldOutException();
         }
-        
-        
+
+        $this->getCart($sheet)->setPromotionCode($promotionCode);
     }
 }
