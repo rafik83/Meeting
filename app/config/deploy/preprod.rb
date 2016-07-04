@@ -19,7 +19,7 @@ namespace :app_tasks do
 end
 
 # Scm
-set :branch, "master"
+set :branch, "preprod"
 
 # Tasks
 after :deploy, 'app_tasks:initdb'
