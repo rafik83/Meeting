@@ -10,12 +10,25 @@
 
 namespace Proximum\Vimeet\Domain\Package\Funnel;
 
+use Proximum\Vimeet\Domain\Model\CartStep;
+use Proximum\Vimeet\Domain\Cart\Cart;
+
 class Funnel
 {
     /**
      * @var Step[]
      */
     private $steps = [];
+
+    /**
+     * @var Cart
+     */
+    private $cart;
+
+    /**
+     * @var CartStep
+     */
+    private $cartStep;
 
     /**
      * @param int $currentIndex
@@ -75,6 +88,14 @@ class Funnel
     }
 
     /**
+     * @return int
+     */
+    public function countStep()
+    {
+        return count($this->steps);
+    }
+
+    /**
      * @param int $index
      *
      * @return bool
@@ -94,5 +115,51 @@ class Funnel
         });
 
         return reset($steps);
+    }
+
+    /**
+     * @return Cart
+     */
+    public function getCart()
+    {
+        return $this->cart;
+    }
+
+    /**
+     * @param Cart $cart
+     */
+    public function setCart($cart)
+    {
+        $this->cart = $cart;
+    }
+
+    /**
+     * @return CartStep
+     */
+    public function getCartStep()
+    {
+        return $this->cartStep;
+    }
+
+    /**
+     * @param CartStep $cartStep
+     */
+    public function setCartStep($cartStep)
+    {
+        $this->cartStep = $cartStep;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted()
+    {
+        if (null !== $this->cartStep) {
+            return $this->countStep() < $this->cartStep->getCurrentStep();
+        } elseif (null !== $this->cart) {
+            return $this->countStep() < $this->cart->getCurrentStep();
+        } else {
+            return false;
+        }
     }
 }

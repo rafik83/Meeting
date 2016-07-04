@@ -203,7 +203,7 @@ flash:
     schedule:
         slot:
             generate:
-                success: %count% créneau a été ajouté|%count% créneaux ont été ajoutés
+                success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
         configure:
             success: Votre configuration a bien été enregistrer
     admin.event.practicalInfo:

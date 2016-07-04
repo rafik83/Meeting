@@ -207,6 +207,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.cart_step_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\CartStepRepository
+        arguments:
+            - '@doctrine'
 
     #
     # Fixture providers
@@ -1099,14 +1103,6 @@ services:
             - '@mailer'
             - '@twig'
 
-    #
-    # Order component
-    #
-    components.sheet.specification.vat_applicable:
-        class: Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable
-        arguments:
-            - '@components.sheet.billing_info_guesser'
-            - '%infrastructure.eu_countries%'
 
     #
     # Proforma component
@@ -1297,6 +1293,39 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
 
+    query.package.summary.product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler
+    query.package.summary.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.planning_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.plan_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.participant_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler
+        arguments:
+            - '@query.package.summary.plan_group_view_query_handler'
+            - '@query.package.summary.participant_group_view_query_handler'
+            - '@query.package.summary.planning_group_view_query_handler'
+            - '@query.package.summary.group_view_query_handler'
+    query.package.summary.summary_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQueryHandler
+        arguments:
+            - '@query.package.summary.groups_view_query_handler'
+            - '@package.specification.vat_applicable'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
+
     #
     # Elastic Transformer
     #
@@ -1330,6 +1359,7 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@cart_manager'
+            - '@repository.cart_step_repository'
 
     #
     # Package
@@ -1338,6 +1368,11 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+    package.specification.vat_applicable:
+        class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
+        arguments:
+            - '@repository.billing_info_repository'
+            - '%infrastructure.eu_countries%'
 
     #
     # Cart
@@ -1346,6 +1381,7 @@ services:
         class: Proximum\Vimeet\Domain\Cart\CartManager
         arguments:
             - '@repository.cart_row_repository'
+            - '@repository.cart_step_repository'
 
     #
     # Promotion

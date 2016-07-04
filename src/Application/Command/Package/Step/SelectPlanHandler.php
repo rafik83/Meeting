@@ -34,12 +34,13 @@ class SelectPlanHandler
      */
     public function handle(SelectPlan $selectPlan)
     {
-        $cart = $this->cartManager->getCart($selectPlan->sheet);
+        $cart = $this->cartManager->getCart($selectPlan->sheet, $selectPlan->currentStep);
 
         $previousPlan = $cart->getPlanRow();
 
         if (!$previousPlan || $previousPlan->getProduct() !== $selectPlan->plan) {
             $cart->clear();
+            $this->cartManager->deleteCartStep($cart);
             $cart->setProduct($selectPlan->plan, 1);
             $this->cartManager->save($cart);
         }
