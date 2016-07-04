@@ -684,15 +684,8 @@ class Product
     {
         return json_encode(
             [
-                'name'                => $this->name,
-                'unitPrice'           => $this->unitPrice,
-                'translations'        => $this->getTranslationsSerializedData(),
-                'quantityMax'         => $this->quantityMax,
-                'availabilityCurrent' => $this->availabilityCurrent,
-                'availabilityMax'     => $this->availabilityMax,
-                'updatable'           => $this->updatable,
-                'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
-                'productsIncluded'    => $this->getIncludedProductSerializedData(),
+                'translations'     => $this->getTranslationsSerializedData(),
+                'productsIncluded' => $this->getIncludedProductSerializedData(),
             ]
         );
     }
