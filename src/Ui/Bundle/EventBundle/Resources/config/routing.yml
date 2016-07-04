@@ -411,6 +411,7 @@ event_notification_list:
     path:     /notification
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:list }
+
 event_notification_read:
     path:     /notification/{notification}/read
     requirements:
@@ -454,3 +455,28 @@ event_package_summary_fill_billing_info:
     requirements:
         sheet: \d+
     methods: [GET]
+
+event_package_payment:
+    path: /sheet/{sheet}/package/payment
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Payment:paymentChoice }
+
+#
+# Order
+#
+event_order_list:
+    path: /sheet/{sheet}/orders
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Order:list }
+
+event_pro_forma:
+    path: /sheet/{sheet}/order/{order}/pro-forma
+    requirements:
+        sheet: \d+
+        order: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Order:proForma }
