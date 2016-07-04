@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class PromotionCode
@@ -256,5 +257,23 @@ class PromotionCode
         $this->promotions->removeElement($promotion);
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSoldOut()
+    {
+        return $this->stock == 0;
+    }
+
+    /**
+     * @param DateTimeInterface $datetime
+     *
+     * @return bool
+     */
+    public function isOutDated(DateTimeInterface $datetime)
+    {
+        return $datetime <= $this->validUntil;
     }
 }

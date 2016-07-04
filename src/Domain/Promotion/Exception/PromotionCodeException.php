@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Promotion\Exception;
 
-class PromotionCodeExcetpion extends \DomainException
+class PromotionCodeException extends \DomainException
 {
 }

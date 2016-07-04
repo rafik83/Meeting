@@ -907,6 +907,12 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
+    command.event.promotion_code.add_handler:
+        class: Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler
+        arguments:
+           - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Add }
 
     #
     # Security
@@ -1382,6 +1388,7 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
+            - '@repository.promotion_code_repository'
 
     #
     # Promotion

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
@@ -18,10 +19,15 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
+use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\PromotionCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -260,11 +266,18 @@ class PackageController extends Controller
             ]);
         }
 
-        $termsOfSale = new TermsOfSale();
-        $form        = $this->createForm(TermsOfSaleType::class, $termsOfSale);
+        $termsOfSale     = new TermsOfSale();
+        $formTermsOfSale = $this->createForm(TermsOfSaleType::class, $termsOfSale);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        $promotionCode = new PromotionCode();
+        $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode);
+
+        if ($formTermsOfSale->handleRequest($request)->isSubmitted() && $formTermsOfSale->isValid()) {
             return $this->redirectToRoute('event_sheet');
+        }
+
+        if ($formPromotionCode->handleRequest($request)->isSubmitted() && $formPromotionCode->isValid()) {
+            return $this->redirectToRoute('event_package_summary');
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(
@@ -277,11 +290,28 @@ class PackageController extends Controller
         );
 
         return $this->render('EventBundle:Package:summary.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
-            'sheet' => $sheet,
-            'view'  => $view,
+            'event'              => $eventDomain->getEvent(),
+            'formTermsOfSale'    => $formTermsOfSale->createView(),
+            'formPromotionCode'  => $formPromotionCode->createView(),
+            'sheet'              => $sheet,
+            'view'               => $view,
         ]);
+    }
+
+    private function validatePromotionCode(Sheet $sheet, PromotionCode $promotionCode)
+    {
+        $command = new Add($sheet, $promotionCode);
+
+        try {
+            $this->get('tactician.commandbus')->handle($command);
+        } catch (PromotionCodeNotFoundException $e) {
+            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.notFound');
+        } catch (PromotionCodeOutDatedException $e) {
+            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.outDated');
+        } catch (PromotionCodeSoldOutException $e) {
+            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.soldOut');
+        } 
+        
     }
 
     /**

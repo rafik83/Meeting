@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\PromotionCodeRow:
+    type:  entity
+    table: promotion_code_row
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: "cascade"
+        promotionCode:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
+            joinColumn:
+                onDelete: "cascade"

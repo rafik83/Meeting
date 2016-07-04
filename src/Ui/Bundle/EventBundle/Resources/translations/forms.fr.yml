@@ -92,3 +92,9 @@ form:
             termsOfSale:
                 label: >
                     Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.
+    package_summary_promotion_code:
+        placeholder: Saisir votre code promotionnel
+        children:
+            submit:
+                label: Valider
+

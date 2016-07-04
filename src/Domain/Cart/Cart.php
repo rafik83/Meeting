@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\CartRow;
 
@@ -28,6 +30,11 @@ class Cart
     private $rows;
 
     /**
+     * @var ArrayCollection of PromotionCodeRow
+     */
+    private $promotionCodeRows;
+
+    /**
      * @var int
      */
     private $currentStep;
@@ -41,9 +48,10 @@ class Cart
      */
     public function __construct(Sheet $sheet, array $rows, $currentStep = null)
     {
-        $this->sheet       = $sheet;
-        $this->rows        = new ArrayCollection($rows);
-        $this->currentStep = $currentStep;
+        $this->sheet             = $sheet;
+        $this->rows              = new ArrayCollection($rows);
+        $this->promotionCodeRows = new ArrayCollection();
+        $this->currentStep       = $currentStep;
     }
 
     /**
@@ -76,6 +84,18 @@ class Cart
         } elseif ($quantity > 0) {
             $this->rows[] = new CartRow($this->sheet, $product, $quantity);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return Cart
+     */
+    public function setPromotionCode(PromotionCode $promotionCode)
+    {
+        $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
 
         return $this;
     }
@@ -179,6 +199,19 @@ class Cart
     }
 
     /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function hasPromotionCode(PromotionCode $promotionCode)
+    {
+        return $this->promotionCodeRows->exists(
+            function ($key, PromotionCodeRow $promotionCodeRow) use ($promotionCode) {
+                return $promotionCodeRow->getPromotionCode() === $promotionCode;
+        });
+    }
+
+    /**
      * @param Product $product
      *
      * @return CartRow
@@ -218,6 +251,14 @@ class Cart
     public function getRows()
     {
         return $this->rows->toArray();
+    }
+
+    /**
+     * @return PromotionCodeRow[]
+     */
+    public function getPromotionCodeRows()
+    {
+        return $this->promotionCodeRows->toArray();
     }
 
     /**

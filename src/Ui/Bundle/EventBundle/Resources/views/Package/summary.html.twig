@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'package.summary.pageTitle'|trans }}{% endblock %}
 
-{% form_theme form '@Ui/default.html.twig' %}
+{% form_theme formTermsOfSale '@Ui/default.html.twig' %}
 
 {% block content %}
     <section class="main">
@@ -17,8 +17,8 @@
                     <a class="btn btn-primary pull-right" href="{{ path('event_package_summary_fill_billing_info', {'sheet': sheet.id}) }}"><i class="icon-Paiement_1"></i> {{ 'package.summary.billingInfo.update'|trans }}</a>
                 </div>
 
-                <section class="object object--collection style--style-1 section">
-                    {{ form_start(form, {'attr': {'class': 'form--table--head'}}) }}
+                <section class="object object--collection style--style-1 section '">
+                    <div class="form--table--head">
                         <table class="table table--recap">
                             <thead>
                             <tr>
@@ -33,11 +33,13 @@
                             {{ include('EventBundle:Package/Summary:participant.html.twig', {participantGroup: view.groups.participantGroup}) }}
                             {{ include('EventBundle:Package/Summary:planning.html.twig', {planningGroup: view.groups.planningGroup}) }}
                             {{ include('EventBundle:Package/Summary:groups.html.twig', {groups: view.groups.groups}) }}
+                            {{ include('EventBundle:Package/Summary:promo-code.html.twig', {form: formPromotionCode}) }}
                             </tbody>
                         </table>
                         <div class="row end-table">
                             <div class="col-md-8 cgv">
-                                {{ form_row(form.termsOfSale) }}
+                                {{ form_start(formTermsOfSale) }}
+                                {{ form_row(formTermsOfSale.termsOfSale) }}
                                 <a href="{{ path('event_content_terms_of_sale') }}" target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
                             </div>
                             <div class="col-md-4 sum">
@@ -83,7 +85,8 @@
                                 </button>
                             </div>
                         </div>
-                    {{ form_end(form) }}
+                    </div>
+                    {{ form_end(formTermsOfSale) }}
                 </section>
             </div>
         </div>

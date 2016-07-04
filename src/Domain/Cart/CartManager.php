@@ -11,9 +11,14 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\CartStep;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 class CartManager
 {
@@ -28,15 +33,32 @@ class CartManager
     private $cartStepRepository;
 
     /**
-     * @param CartRowRepositoryInterface  $cartRowRepository
-     * @param CartStepRepositoryInterface $cartStepRepository
+     * @var PromotionCodeRepositoryInterface
+     */
+    private $promotionCodeRepository;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
+     * @param CartRowRepositoryInterface       $cartRowRepository
+     * @param CartStepRepositoryInterface      $cartStepRepository
+     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
+     * @param \DateTimeInterface               $dateTime
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
-        CartStepRepositoryInterface $cartStepRepository
-    ) {
-        $this->cartRowRepository  = $cartRowRepository;
-        $this->cartStepRepository = $cartStepRepository;
+        CartStepRepositoryInterface $cartStepRepository,
+        PromotionCodeRepositoryInterface $promotionCodeRepository,
+        \DateTimeInterface $dateTime
+    )
+    {
+        $this->cartRowRepository       = $cartRowRepository;
+        $this->cartStepRepository      = $cartStepRepository;
+        $this->promotionCodeRepository = $promotionCodeRepository;
+        $this->dateTime                = $dateTime;
     }
 
     /**
@@ -105,5 +127,38 @@ class CartManager
     public function deleteCartStep(Cart $cart)
     {
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $code
+     *
+     * @throws PromotionCodeNotFoundException
+     * @throws PromotionCodeOutDatedException
+     * @throws PromotionCodeSoldOutException
+     */
+    public function apply(Sheet $sheet, $code)
+    {
+        $promotionsCode = $this->promotionCodeRepository->findByEventAndCode(
+            $sheet->getEvent(),
+            $code
+        );
+
+        if (empty($promotionsCode)) {
+            throw new PromotionCodeNotFoundException();
+        }
+
+        /** @var PromotionCode $promotionCode */
+        $promotionCode = reset($promotionsCode);
+
+        if (!$promotionCode->isOutDated($this->dateTime)) {
+            throw new PromotionCodeOutDatedException();
+        }
+
+        if ($promotionCode->isSoldOut()) {
+            throw new PromotionCodeSoldOutException();
+        }
+        
+        
     }
 }
