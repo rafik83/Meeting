@@ -5,9 +5,9 @@
 {% block body %}
     {{ 'mail.sheet.validated.body'|trans({
         '%event%': mail.sheet.event.title,
-        '%eventSite%': '',
-        '%eventMail%': '',
-        '%eventPhone%': '',
+        '%eventSite%': mail.sheet.event.configuration.organiserWebsite,
+        '%eventMail%': mail.sheet.event.organiserEmail,
+        '%eventPhone%': mail.sheet.event.configuration.organiserPhone,
         '%catalogOnlineDate%': '',
         '%meetingLimitDate%': '',
         '%scheduleDate%': '',
@@ -20,8 +20,8 @@
 {% block end %}
     {{ 'mail.sheet.validated.body'|trans({
         '%event%': mail.sheet.event,
-        '%eventSite%': '',
+        '%eventSite%': mail.sheet.event.configuration.organiserWebsite,
         '%eventMail%': mail.sheet.event.organiserEmail,
-        '%eventPhone%': ''
+        '%eventPhone%': mail.sheet.event.configuration.organiserPhone
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

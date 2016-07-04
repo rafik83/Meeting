@@ -19,7 +19,7 @@
 {% block end %}
     {{ 'mail.activateAccount.end'|trans({
         '%event%': mail.event.title,
-        '%eventPhone%': '',
-        '%eventMail%': ''
+        '%eventPhone%': mail.event.configuration.organiserPhone,
+        '%eventMail%': mail.event.organiserEmail
     }, 'mail', mail.locale) }}
 {% endblock %}

@@ -13,7 +13,7 @@
 {% block end %}
     {{ 'mail.sheet.invitation_close_to_expiration.end'|trans({
         '%event%': mail.event.title,
-        '%eventPhone%': '',
-        '%eventMail%': ''
+        '%eventPhone%': mail.event.configuration.organiserPhone,
+        '%eventMail%': mail.event.organiserEmail
     }, 'mail', mail.locale) }}
 {% endblock %}
