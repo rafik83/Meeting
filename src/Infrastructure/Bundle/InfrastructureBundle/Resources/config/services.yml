@@ -1302,7 +1302,10 @@ services:
             - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
-
+    query.package.summary.promotion_code_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQuery }
     query.package.summary.product_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler
     query.package.summary.group_view_query_handler:
@@ -1333,6 +1336,7 @@ services:
         arguments:
             - '@query.package.summary.groups_view_query_handler'
             - '@package.specification.vat_applicable'
+            - '@query.package.summary.promotion_code_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
 

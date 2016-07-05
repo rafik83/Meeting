@@ -120,4 +120,26 @@ class Promotion
 
         return $this;
     }
+
+    /**
+     * @return float|int
+     */
+    public function getDiscount()
+    {
+        $discount = 0;
+
+        switch ($this->type) {
+            case self::TYPE_PERCENT_OFF:
+                $discount = round($this->product->getUnitPrice() * $this->getValue() / 100, 2);
+                break;
+            case self::TYPE_VALUE_OFF:
+                $discount = $this->product->getUnitPrice() - $this->getValue();
+                break;
+            case self::TYPE_FREE:
+                $discount = $this->product->getUnitPrice();
+                break;
+        }
+
+        return ($discount <= 0) ? $this->getValue() : $discount;
+    }
 }
