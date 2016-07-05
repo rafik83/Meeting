@@ -1,10 +1,15 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
+{% block title %}
+    {{ 'admin.event.create.title'|trans }}
+{% endblock %}
+
 {% block form_title 'admin.event.create.title'|trans %}
 
 {% block form_content %}
     {{ form_row(form.title) }}
     {{ form_row(form.domain) }}
+    {{ form_row(form.organiserName) }}
     {{ form_row(form.timeZone, {widget_columns: 4}) }}
     {{ form_row(form.locales, {widget_columns: 3}) }}
     {{ form_row(form.fallback, {widget_columns: 3}) }}

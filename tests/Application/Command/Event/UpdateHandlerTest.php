@@ -36,7 +36,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'EUR',
             'Europe/Madrid',
-            'old.vimeet.proximum.dev'
+            'old.vimeet.proximum.dev',
+            'oldProximum'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -55,13 +56,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
-        $update->currency     = 'USD';
-        $update->leftColor    = '#FFFFFF';
-        $update->rightColor   = '#000000';
-        $update->textColor    = '#CCCCCC';
-        $update->logo         = 'shouldBeUploadFile';
-        $update->domain       = 'hello.vimeet.proximum.dev';
-        $update->timeZone     = 'Europe/Paris';
+        $update->currency      = 'USD';
+        $update->leftColor     = '#FFFFFF';
+        $update->rightColor    = '#000000';
+        $update->textColor     = '#CCCCCC';
+        $update->logo          = 'shouldBeUploadFile';
+        $update->domain        = 'hello.vimeet.proximum.dev';
+        $update->timeZone      = 'Europe/Paris';
+        $update->organiserName = 'proximum';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -75,7 +77,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev'
+            'hello.vimeet.proximum.dev',
+            'proximum'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -110,7 +113,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'EUR',
             'Europe/Madrid',
-            'old.vimeet.proximum.dev'
+            'old.vimeet.proximum.dev',
+            'oldProximum'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -128,12 +132,13 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
-        $update->currency     = 'EUR';
-        $update->leftColor    = '#FFFFFF';
-        $update->rightColor   = '#000000';
-        $update->textColor    = '#CCCCCC';
-        $update->domain       = 'hello.vimeet.proximum.dev';
-        $update->timeZone     = 'Europe/Paris';
+        $update->currency      = 'EUR';
+        $update->leftColor     = '#FFFFFF';
+        $update->rightColor    = '#000000';
+        $update->textColor     = '#CCCCCC';
+        $update->domain        = 'hello.vimeet.proximum.dev';
+        $update->timeZone      = 'Europe/Paris';
+        $update->organiserName = 'proximum';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -147,7 +152,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'EUR',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev'
+            'hello.vimeet.proximum.dev',
+            'proximum'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -180,7 +186,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'EUR',
             'Europe/Madrid',
-            'old.vimeet.proximum.dev'
+            'old.vimeet.proximum.dev',
+            'oldProximum'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -198,12 +205,13 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
-        $update->currency     = 'EUR';
-        $update->leftColor    = '#FFFFFF';
-        $update->rightColor   = '#000000';
-        $update->textColor    = '#CCCCCC';
-        $update->domain       = 'hello.vimeet.proximum.dev';
-        $update->timeZone     = 'Europe/Paris';
+        $update->currency      = 'EUR';
+        $update->leftColor     = '#FFFFFF';
+        $update->rightColor    = '#000000';
+        $update->textColor     = '#CCCCCC';
+        $update->domain        = 'hello.vimeet.proximum.dev';
+        $update->timeZone      = 'Europe/Paris';
+        $update->organiserName = 'proximum';
 
 
         // Expected event
@@ -218,7 +226,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'EUR',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev'
+            'hello.vimeet.proximum.dev',
+            'proximum'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
@@ -250,7 +259,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'EUR',
             'Europe/Madrid',
-            'old.vimeet.proximum.dev'
+            'old.vimeet.proximum.dev',
+            'oldProximum'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -269,13 +279,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
                 'description' => 'Hello',
             ],
         ];
-        $update->currency     = 'USD';
-        $update->leftColor    = '#FFFFFF';
-        $update->rightColor   = '#000000';
-        $update->textColor    = '#CCCCCC';
-        $update->logo         = 'shouldBeUploadFile';
-        $update->domain       = 'hello.vimeet.proximum.dev';
-        $update->timeZone     = 'Europe/Paris';
+        $update->currency      = 'USD';
+        $update->leftColor     = '#FFFFFF';
+        $update->rightColor    = '#000000';
+        $update->textColor     = '#CCCCCC';
+        $update->logo          = 'shouldBeUploadFile';
+        $update->domain        = 'hello.vimeet.proximum.dev';
+        $update->timeZone      = 'Europe/Paris';
+        $update->organiserName = 'proximum';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -289,7 +300,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev'
+            'hello.vimeet.proximum.dev',
+            'proximum'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));

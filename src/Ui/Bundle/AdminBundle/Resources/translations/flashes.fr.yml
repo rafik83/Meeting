@@ -82,6 +82,9 @@ flash:
                     failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
+            paymentConditions:
+                update:
+                    success: Les conditions de paiement ont été modifiées avec succès
         type:
             create:
                 success: Le type a bien été créé
@@ -202,6 +205,9 @@ flash:
     schedule:
         slot:
             generate:
-                success: %count% créneau a été ajouté|%count% créneaux ont été ajoutés
+                success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
         configure:
             success: Votre configuration a bien été enregistrer
+    admin.event.practicalInfo:
+        update:
+            success: Les informations pratiques ont bien été mises à jour

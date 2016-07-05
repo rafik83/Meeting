@@ -17,3 +17,4 @@ package:
     product:
         quantityNotMatch: La quantité doit être comprise entre %min% et %max%
         notAvailable: Vous avez sélectionné un produit qui n'est plus disponible
+    terms-of-sale: Merci d'accepter les CGV de l'événement avant de passer à l'étape suivante

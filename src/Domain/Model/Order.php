@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,11 +15,8 @@ use DateTimeInterface;
 /**
  * "Commande"
  */
-class Order implements BillingInfoInterface
+class Order
 {
-    const STATE_UNPAID = 'unpaid';
-    const STATE_PAID   = 'paid';
-
     /**
      * @var int
      */
@@ -31,39 +28,14 @@ class Order implements BillingInfoInterface
     private $sheet;
 
     /**
-     * @var string
-     */
-    private $state;
-
-    /**
-     * @var array
-     */
-    private $packageData;
-
-    /**
-     * @var array
-     */
-    private $packageTemplate;
-
-    /**
-     * @var array
-     */
-    private $billingData;
-
-    /**
-     * @var array
-     */
-    private $billingTemplate;
-
-    /**
      * @var DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @var string
+     * @var bool
      */
-    private $paymentMode;
+    private $vatApplicable;
 
     /**
      * @var string
@@ -76,35 +48,40 @@ class Order implements BillingInfoInterface
     private $vatRate;
 
     /**
+     * @var string
+     */
+    private $currency;
+
+    /**
+     * @var Order\Row[]
+     */
+    private $rows = [];
+
+    /**
+     * @var Order\BillingInfo
+     */
+    private $billingInfo;
+
+    /**
      * @param Sheet             $sheet
-     * @param string            $state
-     * @param array             $packageData
-     * @param array             $packageTemplate
-     * @param array             $billingData
-     * @param array             $billingTemplate
+     * @param bool              $vatApplicable
+     * @param Order\BillingInfo $billingInfo
      * @param DateTimeInterface $createdAt
-     * @param string            $paymentMode
      */
     public function __construct(
         Sheet $sheet,
-        $state,
-        array $packageData,
-        array $packageTemplate,
-        array $billingData,
-        array $billingTemplate,
-        DateTimeInterface $createdAt,
-        $paymentMode
+        $vatApplicable,
+        Order\BillingInfo $billingInfo,
+        DateTimeInterface $createdAt
     ) {
-        $this->sheet            = $sheet;
-        $this->state            = $state;
-        $this->packageData      = $packageData;
-        $this->packageTemplate  = $packageTemplate;
-        $this->billingData      = $billingData;
-        $this->billingTemplate  = $billingTemplate;
-        $this->createdAt        = $createdAt;
-        $this->paymentMode      = $paymentMode;
-        $this->vatMode          = $sheet->getEvent()->getMode();
-        $this->vatRate          = $sheet->getEvent()->getVat();
+        $this->sheet         = $sheet;
+        $this->createdAt     = $createdAt;
+        $this->vatApplicable = $vatApplicable;
+        $this->billingInfo   = $billingInfo;
+        $this->vatMode       = $sheet->getEvent()->getMode();
+        $this->currency      = $sheet->getEvent()->getCurrency();
+        $this->vatRate       = $sheet->getEvent()->getVat();
+        $this->rows          = [];
     }
 
     /**
@@ -121,62 +98,6 @@ class Order implements BillingInfoInterface
     public function getSheet()
     {
         return $this->sheet;
-    }
-
-    /**
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPackageData()
-    {
-        return $this->packageData;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPackageTemplate()
-    {
-        return $this->packageTemplate;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBillingData()
-    {
-        return $this->billingData;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBillingTemplate()
-    {
-        return $this->billingTemplate;
-    }
-
-    /**
-     * @return DateTimeInterface
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPaymentMode()
-    {
-        return $this->paymentMode;
     }
 
     /**
@@ -202,6 +123,14 @@ class Order implements BillingInfoInterface
     }
 
     /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
      * Get vatRate
      *
      * @return float
@@ -209,5 +138,37 @@ class Order implements BillingInfoInterface
     public function getVatRate()
     {
         return $this->vatRate;
+    }
+
+    /**
+     * @return Order\BillingInfo
+     */
+    public function getBillingInfo()
+    {
+        return $this->billingInfo;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVatApplicable()
+    {
+        return $this->vatApplicable;
+    }
+
+    /**
+     * @return Order\Row[]
+     */
+    public function getRows()
+    {
+        return $this->rows;
     }
 }

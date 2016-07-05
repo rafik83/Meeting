@@ -1,0 +1,16 @@
+Proximum\Vimeet\Domain\Model\CartStep:
+    type:  entity
+    table: cart_step
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        currentStep:
+            type: integer
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: "cascade"
