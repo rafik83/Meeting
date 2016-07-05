@@ -40,8 +40,6 @@ class CsvImporter implements ImporterInterface
      */
     public function import(Nomenclature $nomenclature, $value)
     {
-        // @todo : http://stackoverflow.com/questions/13298353/php-fgetcsv-charset-encoding-problems
-
         $csv     = $this->parseFile($value);
         $locales = $this->parseLocales($csv);
         $values  = [];
