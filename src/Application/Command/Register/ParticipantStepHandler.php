@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Register;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -115,7 +116,7 @@ class ParticipantStepHandler
                 $participantStep->sheet
             );
 
-            $this->eventDispatcher->dispatch('event.preregistered', $preRegisteredEvent);
+            $this->eventDispatcher->dispatch(Events::EVENT_PRE_REGISTERED, $preRegisteredEvent);
         }
     }
 }

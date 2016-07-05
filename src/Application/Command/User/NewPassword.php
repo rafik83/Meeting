@@ -26,7 +26,7 @@ class NewPassword
     public $password;
 
     /**
-     * @var
+     * @var Event
      */
     public $event;
 

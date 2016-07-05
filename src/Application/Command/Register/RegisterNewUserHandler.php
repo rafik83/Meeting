@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Register;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\User;
@@ -83,7 +84,7 @@ class RegisterNewUserHandler
             $user,
             $register->locale
         );
-        $this->eventDispatcher->dispatch('user.registered', $registeredEvent);
+        $this->eventDispatcher->dispatch(Events::USER_REGISTERED, $registeredEvent);
 
         return new RegisterNewUserResult($user);
     }
