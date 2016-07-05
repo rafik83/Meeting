@@ -528,7 +528,12 @@ admin_package_update:
     methods: [GET, POST]
     requirements:
         package: \d+
-
+admin_package_duplicate:
+    path: /template/package/{package}/duplicate
+    defaults: { _controller: AdminBundle:Package:duplicate }
+    methods: [GET, POST]
+    requirements:
+        package: \d+
 #
 # SheetTemplate
 #

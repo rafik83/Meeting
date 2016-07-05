@@ -604,6 +604,7 @@ admin:
             column:
                 title: Titre
                 event: Evènement
+        duplicate: Dupliquer
     product_create:
         option:
             title: Ajouter un produit

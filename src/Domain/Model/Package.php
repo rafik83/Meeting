@@ -382,7 +382,7 @@ class Package
 
         return $this;
     }
-
+    
     /**
      * @param string $locale
      *

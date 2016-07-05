@@ -748,6 +748,13 @@ services:
             - '@repository.package_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Update }
+    command.package.duplicate_handler:
+        class: Proximum\Vimeet\Application\Command\Package\DuplicateHandler
+        arguments:
+            - '@repository.package_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Duplicate }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
