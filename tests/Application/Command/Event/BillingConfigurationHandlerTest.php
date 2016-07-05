@@ -15,40 +15,21 @@ use Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         // Data
-        $event = new Event(
-            'barfoo',
-            'en',
-            ['fr', 'en'],
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'USD',
-            'Europe/Paris',
-            'hello.vimeet.proximum.dev'
-        );
+        $event = EventFactory::createEvent();
 
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', ''));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', ''));
         $event->setLogo('toto.jpg');
 
-        $expectedEvent = new Event(
-            'barfoo',
-            'en',
-            ['fr', 'en'],
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'USD',
-            'Europe/Paris',
-            'hello.vimeet.proximum.dev'
-        );
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr',
             new EventTranslation($expectedEvent, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));

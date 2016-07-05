@@ -42,7 +42,7 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to see this schedule');

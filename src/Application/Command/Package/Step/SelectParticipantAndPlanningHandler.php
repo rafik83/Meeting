@@ -35,7 +35,7 @@ class SelectParticipantAndPlanningHandler
         $sheet   = $selectParticipantAndPlanning->sheet;
         $package = $sheet->getPackage();
 
-        $cart = $this->cartManager->getCart($sheet);
+        $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
         $cart->resolveParticipantsQuantity();
 
         if ($package && $package->getPlanning()) {

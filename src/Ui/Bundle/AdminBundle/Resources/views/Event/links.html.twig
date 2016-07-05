@@ -17,8 +17,18 @@
             </a>
         </li>
         <li>
+            <a href="{{ path('admin_event_payment_conditions', { 'event': event.id }) }}">
+                {{ 'admin.event.paymentConditions.link'|trans }}
+            </a>
+        </li>
+        <li>
             <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
                 {{ 'admin.spot.link'|trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">
+                {{ 'admin.event.practicalInfo.link'|trans }}
             </a>
         </li>
         <li>
