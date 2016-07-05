@@ -206,6 +206,20 @@ class PromotionCode
     }
 
     /**
+     * Decrease promotion code stock
+     *
+     * @return PromotionCode
+     */
+    public function decreaseStock()
+    {
+        if ($this->stock > 0) {
+            $this->stock--;
+        }
+
+        return $this;
+    }
+
+    /**
      * @param Product $product
      *
      * @return bool

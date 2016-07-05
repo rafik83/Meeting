@@ -31,7 +31,7 @@ class PromotionCodeQueryHandler
             $totalDiscount = 0;
             // foreach all promotion for one product
             foreach ($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
-                if (($cartRow = $cart->getCartRowForProduct($promotion->getProduct())) !== null) {
+                if ($cart->getCartRowForProduct($promotion->getProduct()) !== null) {
                     $totalDiscount += $promotion->getDiscount();
                 }
             }

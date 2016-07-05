@@ -10,11 +10,13 @@
 
         <div class="main__container">
             <div class="product product--recap">
-                <div class="step-number-title"> 4 </div>
+                <div class="step-number-title"> 4</div>
 
                 <div class="content-header clearfix">
                     <h2 class="pull-left">{{ 'package.summary.title'|trans }}</h2>
-                    <a class="btn btn-primary pull-right" href="{{ path('event_package_summary_fill_billing_info', {'sheet': sheet.id}) }}"><i class="icon-Paiement_1"></i> {{ 'package.summary.billingInfo.update'|trans }}</a>
+                    <a class="btn btn-primary pull-right"
+                       href="{{ path('event_package_summary_fill_billing_info', {'sheet': sheet.id}) }}"><i
+                                class="icon-Paiement_1"></i> {{ 'package.summary.billingInfo.update'|trans }}</a>
                 </div>
 
                 <section class="object object--collection style--style-1 section '">
@@ -37,11 +39,12 @@
                             {{ include('EventBundle:Package/Summary:promo-code-rows.html.twig', { promoRows: view.promotionCodes.promotionCodes }) }}
                             </tbody>
                         </table>
+                        {{ form_start(formTermsOfSale) }}
                         <div class="row end-table">
                             <div class="col-md-8 cgv">
-                                {{ form_start(formTermsOfSale) }}
                                 {{ form_row(formTermsOfSale.termsOfSale) }}
-                                <a href="{{ path('event_content_terms_of_sale') }}" target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
+                                <a href="{{ path('event_content_terms_of_sale') }}"
+                                   target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
                             </div>
                             <div class="col-md-4 sum">
                                 <ul>
@@ -86,8 +89,8 @@
                                 </button>
                             </div>
                         </div>
+                        {{ form_end(formTermsOfSale) }}
                     </div>
-                    {{ form_end(formTermsOfSale) }}
                 </section>
             </div>
         </div>

@@ -181,6 +181,9 @@ class CartManager
 
         $cart = $this->getCart($sheet);
         $cart->setPromotionCode($promotionCode);
+
+        // save data
         $this->save($cart);
+        $this->promotionCodeRepository->set($promotionCode);
     }
 }
