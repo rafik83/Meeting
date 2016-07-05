@@ -1,0 +1,21 @@
+Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant:
+    properties:
+        name:
+            - NotBlank: ~
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        quantityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        heading: ~
+                        description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

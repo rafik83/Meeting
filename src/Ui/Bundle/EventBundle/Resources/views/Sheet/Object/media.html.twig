@@ -7,8 +7,12 @@
         <ul class="list list--medias">
             {% for media in item.data['medias']|default([]) %}
                 <li>
-                    <i class="icon-Document_1"></i>
-                    <a href="{{ media['url'] }}">{{ media['title']|localize(locale, fallback) }}</a>
+                    {% if media['type'] is defined and media['type'] == 'video' %}
+                        <i class="icon-Video_1"></i>
+                    {% else %}
+                        <i class="icon-Document_1"></i>
+                    {% endif %}
+                    <a href="{{ media['url'] }}" target="_blank">{{ media['title']|localize(locale, fallback) }}</a>
                 </li>
             {% endfor %}
         </ul>

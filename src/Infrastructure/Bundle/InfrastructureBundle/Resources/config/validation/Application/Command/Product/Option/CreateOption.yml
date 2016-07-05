@@ -1,0 +1,29 @@
+Proximum\Vimeet\Application\Command\Product\Option\CreateOption:
+    properties:
+        name:
+            - NotBlank: ~
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        file:
+            - Image: ~
+        quantityMax:
+            - Range:
+                min: 0
+        availabilityCurrent:
+            - Range:
+                min: 0
+        availabilityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        heading: ~
+                        description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

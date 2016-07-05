@@ -101,6 +101,7 @@ package:
         selectOptions: Sélectionner vos options
         unitPriceLabel: Prix unitaire
         unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
+        priceWithCurrency: '%price% <sup>%currency%</sup>'
         totalPrice: '<span class="product-total-price">%price%</span> <sup>%currency% %vatMode%</sup>'
         label: Intitulé & descriptions
         quantity: Quantité
@@ -112,5 +113,26 @@ package:
         availability: '%availabilityCurrent% sur %availabilityMax%'
         outOfStock: Epuisé
         subjectedToValidationHelp: Sous réserve de validation
+        unavailable: Non disponible
+        includedProduct: 'Inclus:'
+    summary:
+        pageTitle: Récapitulatif de votre forfait de participation
+        title: Récapitulatif
+        pay: Régler le forfait de participation
+        totalOfSummary: Total de la commande
+        totalVat: '+ TVA applicable de %vat%%'
+        totalPlusVat: Total à régler
+        option: Option
+        billingInfo:
+            update: Modifier vos informations de facturation
+        columns:
+            title: Intitulé
+            unitPrice: Prix unitaire
+            quantity: Quantité
+            total: Total
+        seeTermsOfSale: Voir les conditions générales de vente
+    funnel:
+        summary: 'Récapitulatif & Facturation'
+        payment: Paiement
 billing_info:
     title: Info de facturation

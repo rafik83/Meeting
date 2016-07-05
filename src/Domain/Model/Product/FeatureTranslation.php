@@ -90,4 +90,18 @@ class FeatureTranslation
     {
         return $this->description;
     }
+
+    /**
+     * @param string $title
+     * @param string $description
+     *
+     * @return FeatureTranslation
+     */
+    public function set($title, $description)
+    {
+        $this->title       = $title;
+        $this->description = $description;
+
+        return $this;
+    }
 }

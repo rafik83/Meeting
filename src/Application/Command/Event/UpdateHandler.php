@@ -76,7 +76,8 @@ class UpdateHandler
             $update->country,
             $update->currency,
             $update->timeZone,
-            $update->domain
+            $update->domain,
+            $update->organiserName
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 

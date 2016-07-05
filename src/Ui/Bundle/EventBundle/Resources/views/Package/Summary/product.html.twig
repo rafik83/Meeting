@@ -1,0 +1,38 @@
+{% if null != product %}
+    <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
+        <td class="col-md-6">
+            <p>{{ product.title }}</p>
+        </td>
+        <td class="col-md-2">
+            <div class="product">
+                <span class="product-price text-center">
+                    {{ 'package.product.unitPrice'|trans({
+                        '%price%': product.unitPrice,
+                        '%currency%': product.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
+                    })|html }}
+                </span>
+            </div>
+        </td>
+        <td class="col-md-2">
+            <p class="text-center">{{ product.quantity }}</p>
+        </td>
+        <td class="col-md-2">
+            <div class="product">
+                <span class="product-price text-center">
+                    {{ 'package.product.unitPrice'|trans({
+                        '%price%': product.total,
+                        '%currency%': product.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
+                    })|html }}
+                </span>
+            </div>
+        </td>
+        {% if product.included is not empty %}
+            {% for included in product.included %}
+                {% set stripped = not stripped %}
+                {{ include('EventBundle:Package/Summary:included.html.twig', {included: included, stripped: stripped}) }}
+            {% endfor %}
+        {% endif %}
+    </tr>
+{% endif %}
