@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\EmptyOrMalformedFileException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
@@ -39,12 +40,18 @@ class CsvImporter implements ImporterInterface
      */
     public function import(Nomenclature $nomenclature, $value)
     {
+        // @todo : http://stackoverflow.com/questions/13298353/php-fgetcsv-charset-encoding-problems
+
         $csv     = $this->parseFile($value);
         $locales = $this->parseLocales($csv);
         $values  = [];
         $depths  = [];
 
         foreach (array_slice($csv, 1) as $row) {
+
+            if (!is_array($row)) {
+                continue;
+            }
 
             $id    = $this->getId($row);
             $depth = $this->getDepth($row);
@@ -60,7 +67,7 @@ class CsvImporter implements ImporterInterface
             }
         }
 
-        $depth = max(array_keys($depths));
+        $depth = count($depths) > 0 ? max(array_keys($depths)) : 0;
 
         $this->checkDepth($values, $depth);
 
@@ -153,21 +160,11 @@ class CsvImporter implements ImporterInterface
             throw new FileNotFoundException('File not found.');
         }
 
-        // Parse csv to array
-        $csv = array_map(function ($line) {
-            return str_getcsv($line, ';');
-        }, file($filename));
+        $file = $this->createFile($filename);
+        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE);
+        $file->setCsvControl(';');
 
-        // Filter empty line
-        $csv = array_filter($csv, function ($line) {
-            return count($this->filterEmpty($line)) > 0;
-        });
-
-        if (empty($csv)) {
-            throw new EmptyOrMalformedFileException('Empty or malformed file.');
-        }
-
-        return $csv;
+        return iterator_to_array($file);
     }
 
     /**
@@ -187,5 +184,51 @@ class CsvImporter implements ImporterInterface
                 $this->checkDepth($value['children'], $depth - 1);
             }
         }
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return \SplFileObject
+     * @throws BadCharsetException
+     */
+    private function createFile($filename)
+    {
+        $input   = file_get_contents($filename);
+        $charset = $this->getCharset($input);
+
+        if ($charset !== 'UTF-8') {
+
+            if ($charset === 'ISO-8859-1') {
+                // Force Windows-1252 charset because a php bug prevent to detect it
+                // Windows-1252 will be detected as ISO-8859-1
+                // https://bugs.php.net/bug.php?id=64667
+                $charset = 'Windows-1252';
+            }
+
+            $output   = iconv($charset, 'UTF-8', $input);
+            $filename = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'nomenclature-' . uniqid();
+
+            file_put_contents($filename, $output);
+        }
+
+        return new \SplFileObject($filename);
+    }
+
+    /**
+     * @param $input
+     *
+     * @return string
+     * @throws BadCharsetException
+     */
+    private function getCharset($input)
+    {
+        foreach (['UTF-8', 'Windows-1252', 'ISO-8859-1'] as $charset) {
+            if (false !== mb_detect_encoding($input, $charset, true)) {
+                return $charset;
+            }
+        }
+
+        throw new BadCharsetException('Unable to detect charset');
     }
 }
