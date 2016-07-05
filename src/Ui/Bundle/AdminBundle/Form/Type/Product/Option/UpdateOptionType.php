@@ -57,6 +57,9 @@ class UpdateOptionType extends AbstractUpdateType
             ->add('updatableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])
+            ->add('buyableUntil', DateTimePickerType::class, [
+                'required' => false,
+            ])
             ->add('subjectedToValidation', CheckboxType::class, [
                 'required' => false,
             ])

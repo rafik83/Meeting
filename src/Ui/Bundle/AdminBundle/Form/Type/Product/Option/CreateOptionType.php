@@ -64,6 +64,9 @@ class CreateOptionType extends AbstractCreateType
             ->add('updatableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])
+            ->add('buyableUntil', DateTimePickerType::class, [
+                'required' => false,
+            ])
         ;
     }
 

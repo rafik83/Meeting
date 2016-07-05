@@ -28,7 +28,8 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->availabilityMax,
             $updateOption->updatable,
             $updateOption->updatableUntil,
-            $updateOption->subjectedToValidation
+            $updateOption->subjectedToValidation,
+            $updateOption->buyableUntil
         );
 
         foreach ($updateOption->translations as $locale => $translation) {

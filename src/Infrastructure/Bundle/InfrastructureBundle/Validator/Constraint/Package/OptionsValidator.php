@@ -14,13 +14,20 @@ class OptionsValidator extends ConstraintValidator
      * @var QuantityMaxGuesser
      */
     private $quantityMaxGuesser;
+    
+    /**
+     * @var \DateTimeInterface
+     */
+    private $now;
 
     /**
      * @param QuantityMaxGuesser $quantityMaxGuesser
+     * @param \DateTimeInterface $now
      */
-    public function __construct(QuantityMaxGuesser $quantityMaxGuesser)
+    public function __construct(QuantityMaxGuesser $quantityMaxGuesser, \DateTimeInterface $now)
     {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
+        $this->now                = $now;
     }
 
     /**
@@ -29,7 +36,7 @@ class OptionsValidator extends ConstraintValidator
      */
     public function validate($selectOptions, Constraint $constraint)
     {
-        $options = $selectOptions->sheet->getPackage()->getAvailablesOptions();
+        $options = $selectOptions->sheet->getPackage()->getAvailablesOptions($this->now);
         $options = array_combine(
             array_map(
                 function (Product $product) {

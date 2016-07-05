@@ -50,6 +50,11 @@ abstract class AbstractProduct
     public $updatableUntil;
 
     /**
+     * @var \DateTimeInterface
+     */
+    public $buyableUntil;
+
+    /**
      * @var UploadedFile
      */
     public $file;

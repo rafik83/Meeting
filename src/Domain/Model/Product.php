@@ -111,6 +111,13 @@ class Product
     private $updatableUntil;
 
     /**
+     * Date how far the product can be sold
+     *
+     * @var \DateTimeInterface
+     */
+    private $buyableUntil;
+
+    /**
      * Product features.
      *
      * @var ArrayCollection
@@ -143,6 +150,7 @@ class Product
      * @param bool                    $updatable
      * @param \DateTimeInterface|null $updatableUntil
      * @param bool                    $subjectedToValidation
+     * @param \DateTimeInterface      $buyableUntil
      */
     private function __construct(
         Event $event,
@@ -155,7 +163,8 @@ class Product
         $availabilityMax,
         $updatable,
         \DateTimeInterface $updatableUntil = null,
-        $subjectedToValidation = false
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
     ) {
         $this->translations          = new ArrayCollection();
         $this->features              = new ArrayCollection();
@@ -171,6 +180,7 @@ class Product
         $this->updatable             = $updatable;
         $this->updatableUntil        = $updatableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
+        $this->buyableUntil          = $buyableUntil;
     }
 
     /**
@@ -395,6 +405,14 @@ class Product
     public function getUpdatableUntil()
     {
         return $this->updatableUntil;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getBuyableUntil()
+    {
+        return $this->buyableUntil;
     }
 
     /**
@@ -711,6 +729,7 @@ class Product
      * @param bool               $updatable
      * @param \DateTimeInterface $updatableUntil
      * @param bool               $subjectedToValidation
+     * @param \DateTimeInterface $buyableUntil
      *
      * @return Product
      */
@@ -724,7 +743,8 @@ class Product
         $availabilityMax,
         $updatable,
         \DateTimeInterface $updatableUntil = null,
-        $subjectedToValidation = false
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
     ) {
         return new self(
             $event,
@@ -737,7 +757,8 @@ class Product
             $availabilityMax,
             $updatable,
             $updatableUntil,
-            $subjectedToValidation
+            $subjectedToValidation,
+            $buyableUntil
         );
     }
 
@@ -750,6 +771,7 @@ class Product
      * @param bool                    $updatable
      * @param \DateTimeInterface|null $updatableUntil
      * @param bool                    $subjectedToValidation
+     * @param \DateTimeInterface      $buyableUntil
      *
      * @return Product
      */
@@ -761,9 +783,9 @@ class Product
         $availabilityMax,
         $updatable,
         \DateTimeInterface $updatableUntil = null,
-        $subjectedToValidation = false
-    )
-    {
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
+    ) {
         $this->name                  = $name;
         $this->image                 = $image;
         $this->quantityMax           = $quantityMax;
@@ -772,6 +794,7 @@ class Product
         $this->updatable             = $updatable;
         $this->updatableUntil        = $updatableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
+        $this->buyableUntil          = $buyableUntil;
 
         return $this;
     }
@@ -857,5 +880,15 @@ class Product
         }
 
         return $this->features->get($key);
+    }
+
+    /**
+     * @param \DateTimeInterface $now
+     *
+     * @return bool
+     */
+    public function isBuyable(\DateTimeInterface $now)
+    {
+        return ($this->buyableUntil === null) || ($now < $this->buyableUntil);
     }
 }

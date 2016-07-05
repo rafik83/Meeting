@@ -295,8 +295,8 @@ admin:
         quantityMax: Quantité max
         availabilityCurrentMax: Disponibilité courante / max
         subjectedToValidation: Soumis à validation
-        updatable: Modifiable
-        updatableUntil: Modifiable jusqu'à
+        updatable: Supprimable
+        updatableUntil: Supprimable jusqu'à
         actions: Actions
         update:
           action: Modifier
