@@ -1,0 +1,17 @@
+Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning:
+    properties:
+        name:
+            - NotBlank: ~
+        quantityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        heading: ~
+                        description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~

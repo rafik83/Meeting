@@ -74,4 +74,12 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param Product $product
+     */
+    public function update(Product $product)
+    {
+        $this->entityManager->flush($product);
+    }
 }

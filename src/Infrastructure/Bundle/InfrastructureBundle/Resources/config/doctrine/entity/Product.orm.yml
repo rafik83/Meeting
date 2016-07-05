@@ -42,10 +42,13 @@ Proximum\Vimeet\Domain\Model\Product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product\Feature
             mappedBy: product
             cascade: ["persist"]
+            orphanRemoval: true
+            orderBy: { id: ASC }
         productIncluded:
             targetEntity: Proximum\Vimeet\Domain\Model\Product\ProductIncluded
             mappedBy: product
             cascade: ["persist"]
+            orphanRemoval: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

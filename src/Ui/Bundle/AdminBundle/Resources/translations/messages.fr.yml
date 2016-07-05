@@ -297,6 +297,9 @@ admin:
         subjectedToValidation: Soumis à validation
         updatable: Modifiable
         updatableUntil: Modifiable jusqu'à
+        actions: Actions
+        update:
+          action: Modifier
     promotion_code:
         link: Codes promos
         title: Codes promos
@@ -610,6 +613,15 @@ admin:
             title: Ajouter un produit participant
         planning:
             title: Ajouter un produit planning
+    product_update:
+        option:
+            title: Modifier un produit
+        plan:
+          title: Modifier une formule
+        planning:
+          title: Modifier un planning
+        participant:
+          title: Modifier un participant
     plan_create:
         title: Ajouter une formule au catalogue
     plan:
