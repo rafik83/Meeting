@@ -1174,6 +1174,12 @@ form:
             file:
                 label: Fichier
                 help: Un import réinitialisera la nomenclature sauf si le fichier importé provient d'un export.
+            charset:
+                label: Encodage
+    nomenclature_export_type:
+        children:
+            charset:
+                label: Encodage
     nomenclature_assign_type:
         children:
             event:

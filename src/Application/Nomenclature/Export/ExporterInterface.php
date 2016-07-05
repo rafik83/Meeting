@@ -16,9 +16,10 @@ interface ExporterInterface
 {
     /**
      * @param Nomenclature $nomenclature
-     * @param mixed        $output
+     * @param string       $output
+     * @param string       $charset
      *
      * @return \SplFileInfo
      */
-    public function export(Nomenclature $nomenclature, $output);
+    public function export(Nomenclature $nomenclature, $output, $charset);
 }

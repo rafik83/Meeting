@@ -12,19 +12,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature;
 
 use Proximum\Vimeet\Domain\Model\Nomenclature;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class ImportData
+class ExportData
 {
     /**
      * @var Nomenclature
      */
     public $nomenclature;
-
-    /**
-     * @var UploadedFile
-     */
-    public $file;
 
     /**
      * @var string

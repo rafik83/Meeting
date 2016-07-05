@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
-use Proximum\Vimeet\Application\Nomenclature\Import\Exception\EmptyOrMalformedFileException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
@@ -38,9 +38,9 @@ class CsvImporter implements ImporterInterface
     /**
      * {@inheritdoc}
      */
-    public function import(Nomenclature $nomenclature, $value)
+    public function import(Nomenclature $nomenclature, $value, $charset)
     {
-        $csv     = $this->parseFile($value);
+        $csv     = $this->parseFile($value, $charset);
         $locales = $this->parseLocales($csv);
         $values  = [];
         $depths  = [];
@@ -147,18 +147,19 @@ class CsvImporter implements ImporterInterface
 
     /**
      * @param string $filename
+     * @param string $charset
      *
      * @return array
-     * @throws EmptyOrMalformedFileException
      * @throws FileNotFoundException
      */
-    private function parseFile($filename)
+    private function parseFile($filename, $charset)
     {
         if (!is_file($filename) || !is_readable($filename)) {
             throw new FileNotFoundException('File not found.');
         }
 
-        $file = $this->createFile($filename);
+        $filename = Charset::convert($filename, $charset, Charset::UTF_8);
+        $file     = new \SplFileObject($filename);
         $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE);
         $file->setCsvControl(';');
 
@@ -182,51 +183,5 @@ class CsvImporter implements ImporterInterface
                 $this->checkDepth($value['children'], $depth - 1);
             }
         }
-    }
-
-    /**
-     * @param string $filename
-     *
-     * @return \SplFileObject
-     * @throws BadCharsetException
-     */
-    private function createFile($filename)
-    {
-        $input   = file_get_contents($filename);
-        $charset = $this->getCharset($input);
-
-        if ($charset !== 'UTF-8') {
-
-            if ($charset === 'ISO-8859-1') {
-                // Force Windows-1252 charset because a php bug prevent to detect it
-                // Windows-1252 will be detected as ISO-8859-1
-                // https://bugs.php.net/bug.php?id=64667
-                $charset = 'Windows-1252';
-            }
-
-            $output   = iconv($charset, 'UTF-8', $input);
-            $filename = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'nomenclature-' . uniqid();
-
-            file_put_contents($filename, $output);
-        }
-
-        return new \SplFileObject($filename);
-    }
-
-    /**
-     * @param $input
-     *
-     * @return string
-     * @throws BadCharsetException
-     */
-    private function getCharset($input)
-    {
-        foreach (['UTF-8', 'Windows-1252', 'ISO-8859-1'] as $charset) {
-            if (false !== mb_detect_encoding($input, $charset, true)) {
-                return $charset;
-            }
-        }
-
-        throw new BadCharsetException('Unable to detect charset');
     }
 }

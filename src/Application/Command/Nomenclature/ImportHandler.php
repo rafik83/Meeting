@@ -59,7 +59,7 @@ class ImportHandler
     public function handle(Import $command)
     {
         $originalKeys = $this->getKeys($command->nomenclature);
-        $this->importer->import($command->nomenclature, $command->filename);
+        $this->importer->import($command->nomenclature, $command->filename, $command->charset);
         $this->checkMissingKeys($originalKeys, $command->nomenclature);
         $this->nomenclatureRepository->set($command->nomenclature);
     }

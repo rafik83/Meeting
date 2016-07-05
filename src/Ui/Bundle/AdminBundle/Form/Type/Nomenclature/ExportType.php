@@ -10,13 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature;
 
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ImportData;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ExportData;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ImportType extends AbstractType
+class ExportType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -24,18 +23,21 @@ class ImportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class, ['help' => true])
-            ->add('charset', CharsetChoiceType::class)
+            ->add('charset', CharsetChoiceType::class, [
+                'label' => 'form.nomenclature_export_type.children.charset.label'
+            ])
         ;
     }
 
     /**
-     * @param OptionsResolver $resolver
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ImportData::class,
+            'csrf_protection' => false,
+            'method'          => 'GET',
+            'data_class'      => ExportData::class,
         ]);
     }
 
@@ -44,6 +46,6 @@ class ImportType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'nomenclature_import_type';
+        return 'nomenclature_export_type';
     }
 }

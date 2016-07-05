@@ -14,6 +14,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Nomenclature;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler;
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\ImporterInterface;
 use Proximum\Vimeet\Domain\Event\HasSheet;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -33,7 +34,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $nomenclature = new Nomenclature('foobar');
         $expected     = new Nomenclature('foobar', 1, $value);
 
-        $importer->import($nomenclature, 'nomenclature.csv')->will(function (array $args) use ($value) {
+        $importer->import($nomenclature, 'nomenclature.csv', Charset::UTF_8)->will(function (array $args) use ($value) {
             $args[0]->update(1, $value);
         });
 
@@ -41,7 +42,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $nomenclatureRepository->set($expected)->shouldBeCalled();
 
-        $command = new Import($nomenclature, 'nomenclature.csv');
+        $command = new Import($nomenclature, 'nomenclature.csv', Charset::UTF_8);
         $handler = new ImportHandler($nomenclatureRepository->reveal(), $importer->reveal(), $hasSheet->reveal());
         $handler->handle($command);
     }
@@ -57,7 +58,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $nomenclature = new Nomenclature('foobar', 1, [], true, $event);
         $expected     = new Nomenclature('foobar', 1, $value, true, $event);
 
-        $importer->import($nomenclature, 'nomenclature.csv')->will(function (array $args) use ($value) {
+        $importer->import($nomenclature, 'nomenclature.csv', Charset::UTF_8)->will(function (array $args) use ($value) {
             $args[0]->update(1, $value);
         });
 
@@ -65,7 +66,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $nomenclatureRepository->set($expected)->shouldBeCalled();
 
-        $command = new Import($nomenclature, 'nomenclature.csv');
+        $command = new Import($nomenclature, 'nomenclature.csv', Charset::UTF_8);
         $handler = new ImportHandler($nomenclatureRepository->reveal(), $importer->reveal(), $hasSheet->reveal());
         $handler->handle($command);
     }
@@ -81,7 +82,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $nomenclature = new Nomenclature('foobar', 1, [], true, $event);
         $expected     = new Nomenclature('foobar', 1, $value, true, $event);
 
-        $importer->import($nomenclature, 'nomenclature.csv')->will(function (array $args) use ($value) {
+        $importer->import($nomenclature, 'nomenclature.csv', Charset::UTF_8)->will(function (array $args) use ($value) {
             $args[0]->update(1, $value);
         });
 
@@ -89,7 +90,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $nomenclatureRepository->set($expected)->shouldBeCalled();
 
-        $command = new Import($nomenclature, 'nomenclature.csv');
+        $command = new Import($nomenclature, 'nomenclature.csv', Charset::UTF_8);
         $handler = new ImportHandler($nomenclatureRepository->reveal(), $importer->reveal(), $hasSheet->reveal());
         $handler->handle($command);
     }
@@ -107,7 +108,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $nomenclature = new Nomenclature('foobar', 1, ['a' => ['label' => ['fr' => 'aaaa']], 'b' => ['label' => ['fr' => 'bbbb']], 'c' => ['label' => ['fr' => 'cccc']]], true, $event);
         $expected     = new Nomenclature('foobar', 1, $value, true, $event);
 
-        $importer->import($nomenclature, 'nomenclature.csv')->will(function (array $args) use ($value) {
+        $importer->import($nomenclature, 'nomenclature.csv', Charset::UTF_8)->will(function (array $args) use ($value) {
             $args[0]->update(1, $value);
         });
 
@@ -115,7 +116,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $nomenclatureRepository->set($expected)->shouldNotBeCalled();
 
-        $command = new Import($nomenclature, 'nomenclature.csv');
+        $command = new Import($nomenclature, 'nomenclature.csv', Charset::UTF_8);
         $handler = new ImportHandler($nomenclatureRepository->reveal(), $importer->reveal(), $hasSheet->reveal());
         $handler->handle($command);
     }

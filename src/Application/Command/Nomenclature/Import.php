@@ -25,14 +25,21 @@ class Import
     public $filename;
 
     /**
+     * @var string
+     */
+    public $charset;
+
+    /**
      * Import constructor.
      *
      * @param Nomenclature $nomenclature
      * @param string       $filename
+     * @param string       $charset
      */
-    public function __construct(Nomenclature $nomenclature, $filename)
+    public function __construct(Nomenclature $nomenclature, $filename, $charset)
     {
         $this->nomenclature = $nomenclature;
         $this->filename     = $filename;
+        $this->charset      = $charset;
     }
 }

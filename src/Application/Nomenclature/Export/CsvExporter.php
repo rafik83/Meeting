@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature\Export;
 
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class CsvExporter implements ExporterInterface
@@ -17,7 +18,7 @@ class CsvExporter implements ExporterInterface
     /**
      * {@inheritdoc}
      */
-    public function export(Nomenclature $nomenclature, $output)
+    public function export(Nomenclature $nomenclature, $output, $charset)
     {
         $file    = new \SplFileObject($output, 'w+');
         $locales = [];
@@ -36,7 +37,9 @@ class CsvExporter implements ExporterInterface
             $file->fputcsv(array_pad($row, $max, ''), ';');
         }
 
-        return $file;
+        $filename = Charset::convert($output, Charset::UTF_8, $charset, $output);
+
+        return new \SplFileObject($filename);
     }
 
     /**

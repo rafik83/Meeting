@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Nomenclature;
 
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Tests\Application\Nomenclature\Id\StaticIdGenerator;
@@ -117,7 +118,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/offres_besoins.csv');
+        $importer->import($nomenclature, __DIR__.'/offres_besoins.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -319,7 +320,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/competences.csv');
+        $importer->import($nomenclature, __DIR__.'/competences.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -521,7 +522,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/competences_windows1252.csv');
+        $importer->import($nomenclature, __DIR__.'/competences_windows1252.csv', Charset::WINDOWS_1252);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -915,7 +916,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/competences_update.csv');
+        $importer->import($nomenclature, __DIR__.'/competences_update.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
     }

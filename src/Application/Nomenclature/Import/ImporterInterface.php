@@ -16,7 +16,8 @@ interface ImporterInterface
 {
     /**
      * @param Nomenclature $nomenclature
-     * @param mixed        $value
+     * @param string       $value
+     * @param string       $charset
      */
-    public function import(Nomenclature $nomenclature, $value);
+    public function import(Nomenclature $nomenclature, $value, $charset);
 }

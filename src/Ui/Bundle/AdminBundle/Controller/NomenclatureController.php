@@ -21,12 +21,15 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ExportData;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ImportData;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\AssignType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -141,10 +144,15 @@ class NomenclatureController extends Controller
             return $this->redirect($url);
         }
 
+        // Handle export
+        $export     = new ExportData($nomenclature);
+        $exportForm = $this->createExportForm($export);
+
         return $this->render('AdminBundle:Nomenclature:read.html.twig', [
             'update_form'  => $updateForm->createView(),
             'import_form'  => $importForm->createView(),
             'assign_form'  => $assignForm->createView(),
+            'export_form'  => $exportForm->createView(),
             'nomenclature' => $nomenclature,
         ]);
     }
@@ -187,7 +195,7 @@ class NomenclatureController extends Controller
             $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
 
             try {
-                $import = new Import($data->nomenclature, $data->file ? $data->file->getPathname() : null);
+                $import = new Import($data->nomenclature, $data->file ? $data->file->getPathname() : null, $data->charset);
 
                 $this->get('tactician.commandbus')->handle($import);
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
@@ -230,21 +238,29 @@ class NomenclatureController extends Controller
     /**
      * Exports Nomenclature data to csv
      *
+     * @param Request      $request
      * @param Nomenclature $nomenclature
      *
      * @return BinaryFileResponse
      */
-    public function exportAction(Nomenclature $nomenclature)
+    public function exportAction(Request $request, Nomenclature $nomenclature)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
-        $filepath = sys_get_temp_dir() . '/nomenclature_' . uniqid();
-        $file     = $this->get('application.nomenclature.export.csv_exporter')->export($nomenclature, $filepath);
-        $filename = sprintf('nomenclature-%s.csv', Transliterator::urlize($nomenclature->getTitle()));
-        $response = new BinaryFileResponse($file);
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+        $export     = new ExportData($nomenclature);
+        $exportForm = $this->createExportForm($export);
 
-        return $response;
+        if ($exportForm->handleRequest($request)->isSubmitted() && $exportForm->isValid()) {
+            $filepath = sys_get_temp_dir() . '/nomenclature_' . uniqid();
+            $file     = $this->get('application.nomenclature.export.csv_exporter')->export($nomenclature, $filepath, $export->charset);
+            $filename = sprintf('nomenclature-%s.csv', Transliterator::urlize($nomenclature->getTitle()));
+            $response = new BinaryFileResponse($file);
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+            return $response;
+        }
+
+        throw $this->createNotFoundException();
     }
 
     /**
@@ -257,5 +273,17 @@ class NomenclatureController extends Controller
         } else {
             $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         }
+    }
+
+    /**
+     * @param ExportData $export
+     *
+     * @return Form
+     */
+    private function createExportForm(ExportData $export)
+    {
+        return $this->get('form.factory')->createNamed('', ExportType::class, $export, [
+            'action' => $this->generateUrl('admin_nomenclature_export', ['nomenclature' => $export->nomenclature->getId()])
+        ]);
     }
 }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Nomenclature\Export;
 
 
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
@@ -207,6 +208,6 @@ class CsvExporterTest extends \PHPUnit_Framework_TestCase
 
         $exporter = new CsvExporter();
         $output   = '/tmp/nomenclature_' . uniqid();
-        $exporter->export($nomenclature, $output);
+        $exporter->export($nomenclature, $output, Charset::UTF_8);
     }
 }

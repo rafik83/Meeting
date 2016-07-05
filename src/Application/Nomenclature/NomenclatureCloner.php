@@ -11,7 +11,6 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature;
 
-
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
