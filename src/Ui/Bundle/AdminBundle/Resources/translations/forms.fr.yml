@@ -209,7 +209,8 @@ form:
                 prototype:
                     children:
                         bankInfo:
-                            label: Iban
+                            label: Informations banque
+                            placeholder: Iban...
                         billingAddress:
                             label: Adresse de paiement
                         paymentCondition:

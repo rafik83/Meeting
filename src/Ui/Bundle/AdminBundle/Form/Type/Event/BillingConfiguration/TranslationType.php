@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class TranslationType extends AbstractType
@@ -22,16 +22,17 @@ class TranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('bankInfo', TextType::class, [
-                'required' => false,
+            ->add('bankInfo', TextareaType::class, [
+                'required'    => false,
+                'placeholder' => 'form.event_billing_configuration.children.translations.prototype.children.bankInfo.placeholder',
             ])
-            ->add('billingAddress', TextType::class, [
+            ->add('billingAddress', TextareaType::class, [
                 'required' => true,
             ])
-            ->add('paymentCondition', TextType::class, [
+            ->add('paymentCondition', TextareaType::class, [
                 'required' => false
             ])
-            ->add('paymentFooter', TextType::class, [
+            ->add('paymentFooter', TextareaType::class, [
                 'required'    => false,
                 'placeholder' => 'form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder',
             ])
