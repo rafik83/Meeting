@@ -20,6 +20,12 @@ namespace :app_tasks do
   end
 end
 
+namespace :deploy do
+  task :set_permissions, :roles => :app, :except => { :no_release => true } do
+    # do not set permissions on prod
+  end
+end
+
 # Scm
 set :branch, "prod"
 
