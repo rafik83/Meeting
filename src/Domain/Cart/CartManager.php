@@ -171,7 +171,7 @@ class CartManager
         /** @var PromotionCode $promotionCode */
         $promotionCode = reset($promotionsCode);
 
-        if (!$promotionCode->isOutDated($this->dateTime)) {
+        if ($promotionCode->isOutDated($this->dateTime)) {
             throw new PromotionCodeOutDatedException();
         }
 

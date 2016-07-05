@@ -36,7 +36,7 @@ class PromotionCode
     private $code;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection of Promotion
      */
     private $promotions;
 
@@ -288,6 +288,10 @@ class PromotionCode
      */
     public function isOutDated(DateTimeInterface $datetime)
     {
+        if (empty($this->validUntil)) {
+            return false;
+        }
+
         return $datetime <= $this->validUntil;
     }
 }
