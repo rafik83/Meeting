@@ -34,6 +34,7 @@
                             {{ include('EventBundle:Package/Summary:planning.html.twig', {planningGroup: view.groups.planningGroup}) }}
                             {{ include('EventBundle:Package/Summary:groups.html.twig', {groups: view.groups.groups}) }}
                             {{ include('EventBundle:Package/Summary:promo-code.html.twig', {form: formPromotionCode}) }}
+                            {{ include('EventBundle:Package/Summary:promo-code-rows.html.twig', { promoRows: view.promotionCodes.promotionCodes }) }}
                             </tbody>
                         </table>
                         <div class="row end-table">
