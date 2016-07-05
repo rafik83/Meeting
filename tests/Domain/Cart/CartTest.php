@@ -31,7 +31,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 3, 3, 3, true);
         $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 3, 3, 3, true);
 
-        $cart = new Cart($sheet, []);
+        $cart = new Cart($sheet, [], []);
         $cart->setProduct($optionA, 1);
         $this->assertCount(1, $cart->getRows());
         $this->assertEquals(1, $cart->getRow($optionA)->getQuantity());
