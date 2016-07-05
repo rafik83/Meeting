@@ -163,4 +163,17 @@ class ProductTranslation
     {
         return $this->subjectedToValidationHelp;
     }
+
+    /**
+     * @return array
+     */
+    public function getTranslationSerializedData()
+    {
+        return json_encode([
+            'title'       => $this->title,
+            'heading'     => $this->heading,
+            'description' => $this->description,
+            'addon'       => $this->addon,
+        ]);
+    }
 }

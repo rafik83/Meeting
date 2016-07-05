@@ -41,7 +41,7 @@ class SelectOptionsHandler
     {
         $sheet   = $selectOptions->sheet;
         $package = $sheet->getPackage();
-        $cart    = $this->cartManager->getCart($sheet);
+        $cart    = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
 
         $ids = array_map(
             function (Product $product) {
