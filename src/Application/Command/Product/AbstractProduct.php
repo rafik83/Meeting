@@ -1,0 +1,76 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Product;
+
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+abstract class AbstractProduct
+{
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var array
+     */
+    public $translations = [];
+
+    /**
+     * @var int
+     */
+    public $quantityMax;
+
+    /**
+     * @var int
+     */
+    public $availabilityCurrent;
+
+    /**
+     * @var int
+     */
+    public $availabilityMax;
+
+    /**
+     * @var bool
+     */
+    public $updatable;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $updatableUntil;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    public $buyableUntil;
+
+    /**
+     * @var UploadedFile
+     */
+    public $file;
+
+    /**
+     * @var bool
+     */
+    public $subjectedToValidation;
+
+    /**
+     * @var array
+     */
+    public $features = [];
+
+    /**
+     * @var array
+     */
+    public $productIncluded = [];
+}

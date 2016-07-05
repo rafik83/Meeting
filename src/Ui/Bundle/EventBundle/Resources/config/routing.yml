@@ -197,8 +197,10 @@ event_sheet_handle_remove_participant:
 #
 
 event_billing_info:
-    path:     /billing-info
+    path:     /sheet/{sheet}/billing-info
     methods:  [GET, POST]
+    requirements:
+        sheet: \d+
     defaults: { _controller: EventBundle:Billing:info }
 
 #
@@ -417,6 +419,14 @@ event_notification_read:
     defaults: { _controller: EventBundle:Notification:read }
 
 #
+# Content
+#
+event_content_terms_of_sale:
+    path: /terms-of-sale
+    defaults: { _controller: EventBundle:Content:termsOfSale }
+    methods: [GET]
+
+#
 # Package
 #
 event_package:
@@ -447,3 +457,18 @@ event_package_remove_participant:
         sheet: \d+
         step: \d+
     methods:  [GET]
+
+event_package_summary:
+    path: /sheet/{sheet}/package/summary
+    defaults: { _controller: EventBundle:Package:summary }
+    requirements:
+        sheet: \d+
+        step: \d+
+    methods: [GET, POST]
+
+event_package_summary_fill_billing_info:
+    path: /sheet/{sheet}/package/summary/fill-billing-info
+    defaults: { _controller: EventBundle:Package:fillBillingInfo }
+    requirements:
+        sheet: \d+
+    methods: [GET]

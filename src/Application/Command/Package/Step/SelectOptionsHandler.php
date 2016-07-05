@@ -19,13 +19,19 @@ class SelectOptionsHandler
      * @var CartManager
      */
     private $cartManager;
+    /**
+     * @var \DateTimeInterface
+     */
+    private $now;
 
     /**
-     * @param CartManager $cartManager
+     * @param CartManager        $cartManager
+     * @param \DateTimeInterface $now
      */
-    public function __construct(CartManager $cartManager)
+    public function __construct(CartManager $cartManager, \DateTimeInterface $now)
     {
         $this->cartManager = $cartManager;
+        $this->now         = $now;
     }
 
     /**
@@ -35,16 +41,16 @@ class SelectOptionsHandler
     {
         $sheet   = $selectOptions->sheet;
         $package = $sheet->getPackage();
-        $cart    = $this->cartManager->getCart($sheet);
+        $cart    = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
 
         $ids = array_map(
             function (Product $product) {
                 return $product->getId();
             },
-            $package->getAvailablesOptions()
+            $package->getAvailablesOptions($this->now)
         );
 
-        $options = array_combine($ids, $package->getAvailablesOptions());
+        $options = array_combine($ids, $package->getAvailablesOptions($this->now));
 
         $cart->clearOptions();
 

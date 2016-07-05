@@ -3,7 +3,6 @@ greetings: Hello!
 login:
     title: Login
     link: Login
-    logged_as: Hello %email%
 
 logout:
     title: Logout
@@ -27,7 +26,7 @@ event:
             message: Your conversation
             state: State
     link:
-        see_my_sheet: See my %type% sheet
+        see_my_sheet: 'See my %type% sheet'
     sheet:
         participant:
             already_exists: This participant has already been added

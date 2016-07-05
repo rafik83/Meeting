@@ -47,11 +47,12 @@ Feature: Complete my package
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     And I should see "package.product.quantityNotMatch"
+    And I should see "package.product.unavailable"
     When I fill in the following:
       | options_10 | 1 |
       | options_11 | 3 |
     And I press "package.product.validate"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1/billing-info"
     When I go to this page "/fr/sheet/1/package/step/3"
     Then the "options_10" field should contain "1"
     Then the "options_11" field should contain "3"
@@ -70,3 +71,39 @@ Feature: Complete my package
       And I should be on this page "/fr/sheet/1/package/step/2"
       And I should see "Truc TEST"
       And I should see "TT"
+
+  Scenario: I can fill my billing-info
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/step/3"
+    And I press "package.product.validate"
+    Then I should be on this page "/fr/sheet/1/billing-info"
+    And I fill in the following:
+      | form.billing_info_update.children.lastname.label  | Jean         |
+      | form.billing_info_update.children.firstname.label | Test         |
+      | form.billing_info_update.children.function.label  | DG           |
+      | form.billing_info_update.children.phone.label     | +33456789    |
+      | form.billing_info_update.children.mobile.label    | +33456789    |
+      | form.billing_info_update.children.email.label     | jean@test.fr |
+      | form.billing_info_update.children.company.label   | ELAO-TEST    |
+      | form.billing_info_update.children.street.label    | 10 Rue test  |
+      | form.billing_info_update.children.zipcode.label   | 75002        |
+      | form.billing_info_update.children.city.label      | PARIS        |
+      | form.billing_info_update.children.country.label   | FR           |
+      | form.billing_info_update.children.vatNumber.label | 123456789    |
+    And I press "form.billing_info_update.children.submit.label"
+    Then I should be on this page "/fr/sheet/1/package/summary"
+
+  Scenario: I can see my package summary
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/summary"
+    Then I should see "package.summary.title"
+    And I should see "Formule Exposant"
+    And I should see "Participant supplémentaire"
+    And I should see "Packs de rendez-vous"
+    And I should see "Packs de rendez-vous"
+    And I should see "Option D"
+    And I should see "Option E"
+    And I should see "package.summary.pay"
+    Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
+    And I press "package.summary.pay"
+    Then I should be on this page "/fr/sheet"

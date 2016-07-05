@@ -22,8 +22,8 @@ Proximum\Vimeet\Domain\Model\Product:
     # plannings
     product_planning_1_rdv_carnot:
         __construct: { createPlanning: [ '@event_rdv_carnot_2016', 'Planning supplémentaire Fournisseur', 495, 1O ] }
-        availabilityCurrent: ~
-        availabilityMax: ~
+        availabilityCurrent: 0
+        availabilityMax: 0
         updatable: false
         updatableUntil: ~
     # options

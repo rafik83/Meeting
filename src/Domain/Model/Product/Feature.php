@@ -83,4 +83,24 @@ class Feature
 
         return $this;
     }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getTitle($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
+    }
 }
