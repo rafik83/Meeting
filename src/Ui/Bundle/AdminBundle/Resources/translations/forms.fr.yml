@@ -955,9 +955,48 @@ form:
             availabilityMax:
                 label: Stock max
             updatable:
-                label: Ce produit peut être modifiable après une commande
+                label: Produit supprimable
             updatableUntil:
-                label: Ce produit peut être modifiable jusqu'au
+                label: Supprimable jusqu'aù
+            buyableUntil:
+                label: Achetable jusqu'aù
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+                        addon:
+                            label: Texte optionnel sous le prix
+                        subjectedToValidationHelp:
+                            label: Message si soumis à validation
+            subjectedToValidation:
+                label: Ce produit est soumis à validation
+    product_update_option:
+        children:
+            name:
+                label: Nom backoffice du produit
+            file:
+                label: Image
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMin:
+                label: Quantité min
+            quantityMax:
+                label: Quantité max
+            availabilityCurrent:
+                label: Stock actuel
+            availabilityMax:
+                label: Stock max
+            updatable:
+                label: Produit supprimable
+            updatableUntil:
+                label: Supprimable jusqu'aù
+            buyableUntil:
+                label: Achetable jusqu'aù
             submit:
                 label: Enregistrer
             translations:
@@ -974,6 +1013,53 @@ form:
             subjectedToValidation:
                 label: Ce produit est soumis à validation
     product_create_plan:
+        children:
+            name:
+                label: Nom backoffice de la formule
+            file:
+                label: Image
+            unitPrice:
+                label: Prix unitaire (HT)
+            availabilityCurrent:
+                label: Stock actuel
+            availabilityMax:
+                label: Stock Max
+            submit:
+                label: Enregistrer
+            participantIncluded:
+                label: Nombre de participants inclus avec cette formule
+            productIncluded:
+                label: Produits liés à la formule
+                label_add: Ajouter un produit lié à cette formule
+                label_delete: Supprimer ce produit de la formule
+                prototype:
+                    label: Produits liés à la formule
+                    children:
+                        product:
+                            label: Produit
+                            placeholder: --- Choissisez un produit ---
+                        quantity:
+                            label: Quantité liée
+            features:
+                label: Prestations incluses avec cette formule
+                label_add: Ajouter une prestation incluse
+                label_delete: Supprimer cette prestation
+                prototype:
+                    children:
+                        title: Titre de la prestation
+                        description: Description de la prestation
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre de la formule
+                        heading:
+                            label: Titre de la description
+                        description:
+                            label: Contenu de la description
+                        addon:
+                            label: Texte optionnel sous le prix
+    product_update_plan:
         children:
             name:
                 label: Nom backoffice de la formule
@@ -1037,7 +1123,41 @@ form:
                             label: Titre
                         description:
                             label: Description
+    product_update_participant:
+        children:
+            name:
+                label: Nom backoffice du participant
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMax:
+                label: Quantité max
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
     product_create_planning:
+        children:
+            name:
+                label: Nom backoffice du planning
+            unitPrice:
+                label: Prix unitaire (HT)
+            quantityMax:
+                label: Quantité max
+            submit:
+                label: Enregistrer
+            translations:
+                prototype:
+                    children:
+                        title:
+                            label: Titre
+                        description:
+                            label: Description
+    product_update_planning:
         children:
             name:
                 label: Nom backoffice du planning

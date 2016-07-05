@@ -329,15 +329,15 @@ Proximum\Vimeet\Domain\Model\Product:
     product_participant_1_spanish_event:
         __construct: { createParticipant: [ '@event_spanish', 'Participant supplémentaire Fournisseur', 195, 1O ] }
         image: ~
-        availabilityCurrent: ~
-        availabilityMax: ~
+        availabilityCurrent: 0
+        availabilityMax: 0
         updatable: false
         updatableUntil: ~
     # plannings
     product_planning_1_spanish_event:
         __construct: { createPlanning: [ '@event_spanish', 'Planning supplémentaire Fournisseur', 495, 1O ] }
-        availabilityCurrent: ~
-        availabilityMax: ~
+        availabilityCurrent: 0
+        availabilityMax: 0
         updatable: false
         updatableUntil: ~
     # options

@@ -177,9 +177,13 @@ flash:
             package:
                 update:
                     success: Template de forfait modifié avec succès
+                duplicate:
+                    success: Template de forfait dupliqué avec succès
         product:
             create:
                 success: Le produit a bien été créé
+            update:
+                success: Le produit a été modifié avec succès
         package:
             create:
                 success: La formule a bien été créée

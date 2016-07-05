@@ -113,6 +113,7 @@ package:
         availability: '%availabilityCurrent% sur %availabilityMax%'
         outOfStock: Epuisé
         subjectedToValidationHelp: Sous réserve de validation
+        unavailable: Non disponible
         includedProduct: 'Inclus:'
     summary:
         pageTitle: Récapitulatif de votre forfait de participation
