@@ -33,7 +33,7 @@ class TranslationType extends AbstractType
             ])
             ->add('paymentFooter', TextType::class, [
                 'required'    => false,
-                'placeholder' => 'form.event_billing_configuration.children.footers.placeholder',
+                'placeholder' => 'form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder',
             ])
         ;
     }
