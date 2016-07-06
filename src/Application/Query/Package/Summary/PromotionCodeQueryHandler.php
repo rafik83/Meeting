@@ -37,6 +37,7 @@ class PromotionCodeQueryHandler
             }
 
             $promotionsCodeView[] = new PromotionCodeView(
+                $promotionCodeRow->getId(),
                 $promotionCodeRow->getPromotionCode()->getTitle(),
                 $promotionCodeRow->getPromotionCode()->getDescription($promotionCodeQuery->locale),
                 $totalDiscount,

@@ -31,4 +31,9 @@ interface PromotionCodeRowRepositoryInterface
      * @return PromotionCodeRow[]
      */
     public function findBySheet($sheet);
+
+    /**
+     * @param $promotionCodeRow
+     */
+    public function delete($promotionCodeRow);
 }

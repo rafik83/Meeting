@@ -13,6 +13,13 @@ namespace Proximum\Vimeet\Application\View\Package\Summary;
 class PromotionCodeView
 {
     /**
+     * PromotionCodeRow ID
+     *
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var string
      */
     public $title;
@@ -45,15 +52,17 @@ class PromotionCodeView
     /**
      * PromotionCodeView constructor.
      *
+     * @param int    $id
      * @param string $title
      * @param string $description
      * @param int    $total
-     * @param int    $quantity
      * @param string $currency
      * @param string $vatMode
+     * @param int    $quantity
      */
-    public function __construct($title, $description, $total, $currency, $vatMode, $quantity = 1)
+    public function __construct($id, $title, $description, $total, $currency, $vatMode, $quantity = 1)
     {
+        $this->id          = $id;
         $this->title       = $title;
         $this->description = $description;
         $this->total       = $total;

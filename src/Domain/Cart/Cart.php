@@ -103,7 +103,6 @@ class Cart
         }
 
         $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
-        $promotionCode->decreaseStock();
 
         return $this;
     }

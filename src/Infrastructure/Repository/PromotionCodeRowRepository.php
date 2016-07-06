@@ -64,4 +64,13 @@ class PromotionCodeRowRepository implements PromotionCodeRowRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param $promotionCodeRow
+     */
+    public function delete($promotionCodeRow)
+    {
+        $this->entityManager->remove($promotionCodeRow);
+        $this->entityManager->flush();
+    }
 }

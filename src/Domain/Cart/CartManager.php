@@ -184,6 +184,5 @@ class CartManager
 
         // save data
         $this->save($cart);
-        $this->promotionCodeRepository->set($promotionCode);
     }
 }

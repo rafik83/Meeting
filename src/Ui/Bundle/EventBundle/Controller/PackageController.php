@@ -11,11 +11,14 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
-use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
+use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
 use Proximum\Vimeet\Application\Command\Package\Step;
+use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\PromotionCode as PromotionCodeModel;
+use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
@@ -33,9 +36,9 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleT
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PackageController extends Controller
 {
@@ -50,7 +53,8 @@ class PackageController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         try {
-            $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
+            $sheet = $this->get('sheet.sheet_guesser')
+                          ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
         } catch (\Exception $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
@@ -62,10 +66,10 @@ class PackageController extends Controller
     }
 
     /**
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
-     * @param int       $step
+     * @param Sheet       $sheet
+     * @param int         $step
      *
      * @return RedirectResponse|Response
      */
@@ -76,7 +80,8 @@ class PackageController extends Controller
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if (!$funnel->hasStep($step)) {
-            throw $this->createNotFoundException(sprintf('Unkown %s step for package of sheet %s', $step, $sheet->getId()));
+            throw $this->createNotFoundException(sprintf('Unkown %s step for package of sheet %s', $step,
+                $sheet->getId()));
         }
 
         $currentStep = $funnel->getStep($step);
@@ -140,6 +145,7 @@ class PackageController extends Controller
 
     /**
      * @param $type
+     *
      * @return Step\AbstractStep
      * @throws \Exception
      */
@@ -160,6 +166,7 @@ class PackageController extends Controller
 
     /**
      * @param $type
+     *
      * @return AbstractType
      *
      * @throws \Exception
@@ -270,7 +277,7 @@ class PackageController extends Controller
         $termsOfSale     = new TermsOfSale();
         $formTermsOfSale = $this->createForm(TermsOfSaleType::class, $termsOfSale);
 
-        $promotionCode = new PromotionCode();
+        $promotionCode     = new PromotionCode();
         $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode);
 
         if ($formTermsOfSale->handleRequest($request)->isSubmitted() && $formTermsOfSale->isValid()) {
@@ -293,12 +300,35 @@ class PackageController extends Controller
         );
 
         return $this->render('EventBundle:Package:summary.html.twig', [
-            'event'              => $eventDomain->getEvent(),
-            'formTermsOfSale'    => $formTermsOfSale->createView(),
-            'formPromotionCode'  => $formPromotionCode->createView(),
-            'sheet'              => $sheet,
-            'view'               => $view,
+            'event'             => $eventDomain->getEvent(),
+            'formTermsOfSale'   => $formTermsOfSale->createView(),
+            'formPromotionCode' => $formPromotionCode->createView(),
+            'sheet'             => $sheet,
+            'view'              => $view,
         ]);
+    }
+
+    /**
+     * @param Request          $request
+     * @param EventDomain      $eventDomain
+     * @param Sheet            $sheet
+     * @param PromotionCodeRow $promotionCodeRow
+     *
+     * @return RedirectResponse
+     */
+    public function removePromotionCodeAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        PromotionCodeRow $promotionCodeRow
+    ) {
+        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+
+        $remove = new Remove($sheet, $promotionCodeRow);
+        $this->get('tactician.commandbus')->handle($remove);
+        $this->addFlash('success', 'flash.package.promotion.delete.success');
+
+        return $this->redirectToRoute('event_package_summary', ['sheet' => $sheet->getId()]);
     }
 
     /**
@@ -359,7 +389,8 @@ class PackageController extends Controller
         }
 
         if (!$sheet->hasUser($user)) {
-            throw $this->createNotFoundException(sprintf('The user %s is not participant on the sheet %s', $user->getId(), $sheet->getId()));
+            throw $this->createNotFoundException(sprintf('The user %s is not participant on the sheet %s',
+                $user->getId(), $sheet->getId()));
         }
     }
 }

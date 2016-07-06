@@ -447,10 +447,16 @@ event_package_summary:
         sheet: \d+
         step: \d+
     methods: [GET, POST]
-
 event_package_summary_fill_billing_info:
     path: /sheet/{sheet}/package/summary/fill-billing-info
     defaults: { _controller: EventBundle:Package:fillBillingInfo }
     requirements:
         sheet: \d+
     methods: [GET]
+event_package_remove_promotion_code:
+    path: /sheet/{sheet}/package/promotion/{promotion}/remove
+    defaults: { _controller: EventBundle:Package:removePromotionCode }
+    requirements:
+        sheet: \d+
+        promotion: \d+
+    methods: [DELETE]
