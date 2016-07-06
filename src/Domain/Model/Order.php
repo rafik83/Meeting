@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * "Commande"
@@ -63,25 +64,33 @@ class Order
     private $billingInfo;
 
     /**
+     * @var string
+     */
+    private $groupsData;
+
+    /**
      * @param Sheet             $sheet
      * @param bool              $vatApplicable
      * @param Order\BillingInfo $billingInfo
+     * @param string            $groupsData
      * @param DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
         $vatApplicable,
         Order\BillingInfo $billingInfo,
+        $groupsData,
         DateTimeInterface $createdAt
     ) {
         $this->sheet         = $sheet;
         $this->createdAt     = $createdAt;
         $this->vatApplicable = $vatApplicable;
         $this->billingInfo   = $billingInfo;
+        $this->groupsData    = $groupsData;
         $this->vatMode       = $sheet->getEvent()->getMode();
         $this->currency      = $sheet->getEvent()->getCurrency();
         $this->vatRate       = $sheet->getEvent()->getVat();
-        $this->rows          = [];
+        $this->rows          = new ArrayCollection();
     }
 
     /**
@@ -165,11 +174,19 @@ class Order
     }
 
     /**
+     * @return array
+     */
+    public function getGroupsData()
+    {
+        return $this->groupsData;
+    }
+
+    /**
      * @return Order\Row[]
      */
     public function getRows()
     {
-        return $this->rows;
+        return $this->rows->toArray();
     }
 
     /**
@@ -179,7 +196,7 @@ class Order
      */
     public function addRow(Order\Row $row)
     {
-        $this->rows[] = $row;
+        $this->rows->add($row);
 
         return $this;
     }
@@ -191,7 +208,7 @@ class Order
     {
         $total = 0;
 
-        foreach ($this->rows as $row) {
+        foreach ($this->rows->toArray() as $row) {
             $total += ($row->getQuantity() * $row->getPrice());
         }
 
@@ -200,5 +217,94 @@ class Order
         }
 
         return $total;
+    }
+
+    /**
+     * @param int         $groupId
+     * @param string      $locale
+     * @param string|null $fallback
+     *
+     * @return string
+     */
+    public function getGroupLabel($groupId, $locale, $fallback = null)
+    {
+        $data = json_decode($this->groupsData, true);
+
+        if (!isset($data[$groupId]) || !isset($data[$groupId]['translations'])) {
+            return '';
+        }
+
+        if (isset($data[$groupId]['translations'][$locale])
+            && isset($data[$groupId]['translations'][$locale]['label'])
+        ) {
+            return $data[$groupId]['translations'][$locale]['label'];
+        }
+
+        if (null !== $fallback
+            && isset($data[$groupId]['translations'][$fallback])
+            && isset($data[$groupId]['translations'][$fallback]['label'])
+        ) {
+            return $data[$groupId]['translations'][$fallback]['label'];
+        }
+
+        return '';
+    }
+
+    /**
+     * @param int $groupId
+     *
+     * @return int|null
+     */
+    public function getGroupRank($groupId)
+    {
+        $data = json_decode($this->groupsData, true);
+
+        return (isset($data[$groupId]) && isset($data[$groupId]['rank'])) ? $data[$groupId]['rank'] : null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroupsIds()
+    {
+        return array_keys(json_decode($this->groupsData, true));
+    }
+
+    /**
+     * @param $groupId
+     *
+     * @return array
+     */
+    public function getRowForGroupId($groupId)
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+            return $row->getGroupId() === $groupId;
+        });
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function hasType($type)
+    {
+        return null !== $this->getProductOfType($type) ? true : false;
+    }
+
+    /**
+     * @param $type
+     *
+     * @return null|Order\Row
+     */
+    public function getProductOfType($type)
+    {
+        foreach ($this->rows->toArray() as $row) {
+            if ($row->getType() === $type) {
+                return $row;
+            }
+        }
+
+        return null;
     }
 }

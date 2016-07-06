@@ -11,6 +11,8 @@ Proximum\Vimeet\Domain\Model\Order:
             type: datetime
         vatMode:
             type: string
+        groupsData:
+            type: json_array
         vatApplicable:
             type: boolean
         vatRate:
