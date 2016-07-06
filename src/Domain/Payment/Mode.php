@@ -59,4 +59,14 @@ class Mode
     {
         return array_merge(self::getPaymentModes(), self::getDepositPaymentModes());
     }
+
+    /**
+     * @param $mode
+     *
+     * @return bool
+     */
+    public static function isDeposit($mode)
+    {
+        return in_array($mode, self::getDepositPaymentModes());
+    }
 }
