@@ -55,7 +55,9 @@ class PaymentController extends Controller
             $this->get('tactician.commandbus')->handle($paymentChoice);
 
             // This will have to redirect to payment when needed
-            return $this->redirectToRoute('event_sheet');
+            return $this->redirectToRoute('event_order_list', [
+                'sheet' => $sheet->getId(),
+            ]);
         }
 
         return $this->render('EventBundle:Payment:choice.html.twig', [
