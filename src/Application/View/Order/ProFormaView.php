@@ -57,9 +57,15 @@ class ProFormaView
     public $billingInfo;
 
     /**
+     * @var SummaryView
+     */
+    public $summary;
+
+    /**
      * @param Sheet       $sheet
      * @param Order       $order
      * @param BillingInfo $billingInfo
+     * @param SummaryView $summary
      * @param string      $legalInfo
      * @param string      $bankInfo
      * @param string      $billingAddress
@@ -70,6 +76,7 @@ class ProFormaView
         Sheet $sheet,
         Order $order,
         BillingInfo $billingInfo,
+        SummaryView $summary,
         $legalInfo,
         $bankInfo,
         $billingAddress,
@@ -79,6 +86,7 @@ class ProFormaView
         $this->sheet            = $sheet;
         $this->order            = $order;
         $this->billingInfo      = $billingInfo;
+        $this->summary          = $summary;
         $this->legalInfo        = $legalInfo;
         $this->bankInfo         = $bankInfo;
         $this->billingAddress   = $billingAddress;

@@ -15,6 +15,19 @@ use Proximum\Vimeet\Application\View\Order\ProFormaView;
 class ProFormaQueryHandler
 {
     /**
+     * @var SummaryQueryHandler
+     */
+    private $summaryQueryHandler;
+
+    /**
+     * @param SummaryQueryHandler $summaryQueryHandler
+     */
+    public function __construct(SummaryQueryHandler $summaryQueryHandler)
+    {
+        $this->summaryQueryHandler = $summaryQueryHandler;
+    }
+
+    /**
      * @param ProFormaQuery $proFormaQuery
      *
      * @return ProFormaView
@@ -27,6 +40,7 @@ class ProFormaQueryHandler
             $proFormaQuery->sheet,
             $proFormaQuery->order,
             $proFormaQuery->order->getBillingInfo(),
+            $this->summaryQueryHandler->handle(new SummaryQuery($proFormaQuery->sheet, $proFormaQuery->order, $locale)),
             $proFormaQuery->sheet->getEvent()->getLegalInformation(),
             $proFormaQuery->sheet->getEvent()->getBankInfo($locale),
             $proFormaQuery->sheet->getEvent()->getBillingAddress($locale),
