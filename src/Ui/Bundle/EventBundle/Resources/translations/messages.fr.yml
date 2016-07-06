@@ -150,3 +150,16 @@ billing_info:
 order:
     list:
         title: Liste de vos commandes
+
+pro_forma:
+    summary:
+        total: 'Total de la commande:'
+        vatRate: 'TVA applicable %vatRate%%:'
+        totalToPay: 'Total à régler:'
+
+summary:
+    group:
+        option:
+            title: Options
+    product:
+        included: 'Inclus:'
