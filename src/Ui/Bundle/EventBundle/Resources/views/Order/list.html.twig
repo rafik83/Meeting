@@ -23,8 +23,8 @@
                 {% for order in orders %}
                     <tr>
                         <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                        <td><a href="">Pro Forma</a></td>
-                        <td>{{ order.total }}</td>
+                        <td><a href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}">Pro Forma</a></td>
+                        <td>{{ order.total|localizedcurrency(order.currency) }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
