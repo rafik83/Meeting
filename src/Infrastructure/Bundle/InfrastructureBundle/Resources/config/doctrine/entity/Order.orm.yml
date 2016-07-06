@@ -11,8 +11,12 @@ Proximum\Vimeet\Domain\Model\Order:
             type: datetime
         vatMode:
             type: string
+        vatApplicable:
+            type: boolean
         vatRate:
             type: float
+        currency:
+            type: string
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

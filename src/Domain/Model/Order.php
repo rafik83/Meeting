@@ -195,6 +195,10 @@ class Order
             $total += ($row->getQuantity() * $row->getPrice());
         }
 
+        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
+            $total += (($total * $this->vatRate) / 100);
+        }
+
         return $total;
     }
 }
