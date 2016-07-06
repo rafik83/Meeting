@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Product;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-abstract class AbstractCreate
+abstract class AbstractCreate extends AbstractProduct
 {
     /**
      * @var Event
@@ -20,24 +20,9 @@ abstract class AbstractCreate
     public $event;
 
     /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
      * @var float
      */
     public $unitPrice;
-
-    /**
-     * @var int
-     */
-    public $quantityMax;
 
     /**
      * @param Event $event
@@ -47,7 +32,14 @@ abstract class AbstractCreate
         $this->event = $event;
 
         foreach ($event->getLocales() as $locale) {
-            $this->translations[$locale] = ['title' => null, 'description' => null];
+            $this->translations[$locale] = [
+                'title'                     => null,
+                'heading'                   => null,
+                'description'               => null,
+                'addon'                     => null,
+                'subjectedToValidationHelp' => null,
+            ];
+
         }
     }
 }

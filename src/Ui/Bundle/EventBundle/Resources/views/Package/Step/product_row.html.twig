@@ -45,7 +45,7 @@
 
         {% if product.isOutOfStock %}
             <h3 class="out-of-stock text-center">{{ 'package.product.outOfStock'|trans }}</h3>
-        {% elseif quantityForm is defined %}
+        {% elseif quantityForm is defined and quantityForm != null %}
             {{ form_widget(quantityForm, {attr: {
                 'data-selected-line-class': 'selected-line',
                 'data-unit-price': product.unitPrice,
@@ -55,6 +55,8 @@
             <div class="message-error text-danger text-center">
                 {{ form_errors(quantityForm) }}
             </div>
+        {% elseif product.isBuyable == false %}
+            <h3 class="out-of-stock text-center">{{ 'package.product.unavailable'|trans }}</h3>
         {% endif %}
     </td>
     <td class="col-md-2">

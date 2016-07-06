@@ -80,4 +80,16 @@ class ProductIncluded
     {
         return $this->quantity;
     }
+
+    /**
+     * @param $quantity
+     *
+     * @return ProductIncluded
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
 }

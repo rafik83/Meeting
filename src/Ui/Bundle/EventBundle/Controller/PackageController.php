@@ -216,7 +216,7 @@ class PackageController extends Controller
                 function (Product $product) {
                     return $product->getId();
                 },
-                $command->sheet->getPackage()->getAvailablesOptions()
+                $command->sheet->getPackage()->getAvailablesOptions(new \DateTime())
             );
 
             $options = [];

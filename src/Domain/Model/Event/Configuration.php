@@ -37,6 +37,11 @@ class Configuration
     /**
      * @var string
      */
+    private $legalInfo;
+
+    /**
+     * @var string
+     */
     private $contactLastName;
 
     /**
@@ -214,6 +219,26 @@ class Configuration
     public function setScheduleScale($scheduleScale)
     {
         $this->scheduleScale = $scheduleScale;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLegalInfo()
+    {
+        return $this->legalInfo;
+    }
+
+    /**
+     * @param string $legalInfo
+     *
+     * @return Configuration
+     */
+    public function setLegalInfo($legalInfo)
+    {
+        $this->legalInfo = $legalInfo;
 
         return $this;
     }

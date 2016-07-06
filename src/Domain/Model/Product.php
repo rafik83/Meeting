@@ -111,6 +111,13 @@ class Product
     private $updatableUntil;
 
     /**
+     * Date how far the product can be sold
+     *
+     * @var \DateTimeInterface
+     */
+    private $buyableUntil;
+
+    /**
      * Product features.
      *
      * @var ArrayCollection
@@ -143,6 +150,7 @@ class Product
      * @param bool                    $updatable
      * @param \DateTimeInterface|null $updatableUntil
      * @param bool                    $subjectedToValidation
+     * @param \DateTimeInterface      $buyableUntil
      */
     private function __construct(
         Event $event,
@@ -155,7 +163,8 @@ class Product
         $availabilityMax,
         $updatable,
         \DateTimeInterface $updatableUntil = null,
-        $subjectedToValidation = false
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
     ) {
         $this->translations          = new ArrayCollection();
         $this->features              = new ArrayCollection();
@@ -171,6 +180,7 @@ class Product
         $this->updatable             = $updatable;
         $this->updatableUntil        = $updatableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
+        $this->buyableUntil          = $buyableUntil;
     }
 
     /**
@@ -268,7 +278,18 @@ class Product
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($title, $heading, $description, $addon, $subjectedToValidationHelp);
         } else {
-            $this->translations->set($locale, new ProductTranslation($this, $locale, $title, $heading, $description, $addon, $subjectedToValidationHelp));
+            $this->translations->set(
+                $locale,
+                new ProductTranslation(
+                    $this,
+                    $locale,
+                    $title,
+                    $heading,
+                    $description,
+                    $addon,
+                    $subjectedToValidationHelp
+                )
+            );
         }
 
         return $this;
@@ -299,9 +320,9 @@ class Product
      *
      * @return string
      */
-    public function getHeading($locale)
+    public function getAddon($locale)
     {
-        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getHeading() : '';
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
     }
 
     /**
@@ -309,9 +330,9 @@ class Product
      *
      * @return string
      */
-    public function getAddon($locale)
+    public function getHeading($locale)
     {
-        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getHeading() : '';
     }
 
     /**
@@ -387,6 +408,14 @@ class Product
     }
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getBuyableUntil()
+    {
+        return $this->buyableUntil;
+    }
+
+    /**
      * Get subjectedToValidation
      *
      * @return boolean
@@ -429,6 +458,14 @@ class Product
     }
 
     /**
+     * @param Feature $feature
+     */
+    public function removeFeature(Feature $feature)
+    {
+        $this->features->removeElement($feature);
+    }
+
+    /**
      * @deprecated Use getIncludedProducts instead
      *
      * @return ProductIncluded[]
@@ -446,7 +483,25 @@ class Product
      */
     public function includeProduct(Product $product, $quantity)
     {
-        $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
+        $includedProduct = $this->getIncludedProduct($product);
+
+        if ($includedProduct instanceof ProductIncluded) {
+            $includedProduct->setQuantity($quantity);
+        } else {
+            $this->productIncluded->add(new ProductIncluded($this, $product, $quantity));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ProductIncluded $product
+     *
+     * @return Product
+     */
+    public function removeIncludeProduct(ProductIncluded $product)
+    {
+        $this->productIncluded->removeElement($product);
 
         return $this;
     }
@@ -477,18 +532,6 @@ class Product
     public function hasIncludedProducts()
     {
         return !$this->productIncluded->isEmpty();
-    }
-
-    /**
-     * @param Product $product
-     *
-     * @return false|ProductIncluded
-     */
-    public function getIncludedProduct(Product $product)
-    {
-        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) use ($product) {
-            return $productIncluded->getIncluded() == $product;
-        })->first();
     }
 
     /**
@@ -582,6 +625,24 @@ class Product
     }
 
     /**
+     * @param string $name
+     * @param string $image
+     * @param int $availabilityCurrent
+     * @param int $availabilityMax
+     *
+     * @return Product
+     */
+    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax)
+    {
+        $this->name                = $name;
+        $this->image               = $image;
+        $this->availabilityCurrent = $availabilityCurrent;
+        $this->availabilityMax     = $availabilityMax;
+
+        return $this;
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param int    $unitPrice
@@ -603,6 +664,20 @@ class Product
             true,
             null
         );
+    }
+
+    /**
+     * @param string $name
+     * @param int    $quantityMax
+     *
+     * @return Product
+     */
+    public function updateParticipant($name, $quantityMax)
+    {
+        $this->name        = $name;
+        $this->quantityMax = $quantityMax;
+
+        return $this;
     }
 
     /**
@@ -630,6 +705,20 @@ class Product
     }
 
     /**
+     * @param string $name
+     * @param int    $quantityMax
+     *
+     * @return Product
+     */
+    public function updatePlanning($name, $quantityMax)
+    {
+        $this->name        = $name;
+        $this->quantityMax = $quantityMax;
+
+        return $this;
+    }
+
+    /**
      * @param Event              $event
      * @param string             $name
      * @param string             $image
@@ -640,11 +729,23 @@ class Product
      * @param bool               $updatable
      * @param \DateTimeInterface $updatableUntil
      * @param bool               $subjectedToValidation
+     * @param \DateTimeInterface $buyableUntil
      *
      * @return Product
      */
-    public static function createOption(Event $event, $name, $image, $unitPrice, $quantityMax, $availabilityCurrent, $availabilityMax, $updatable, \DateTimeInterface $updatableUntil = null, $subjectedToValidation = false)
-    {
+    public static function createOption(
+        Event $event,
+        $name,
+        $image,
+        $unitPrice,
+        $quantityMax,
+        $availabilityCurrent,
+        $availabilityMax,
+        $updatable,
+        \DateTimeInterface $updatableUntil = null,
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
+    ) {
         return new self(
             $event,
             Product::TYPE_OPTION,
@@ -656,8 +757,46 @@ class Product
             $availabilityMax,
             $updatable,
             $updatableUntil,
-            $subjectedToValidation
+            $subjectedToValidation,
+            $buyableUntil
         );
+    }
+
+    /**
+     * @param string                  $name
+     * @param string                  $image
+     * @param int                     $quantityMax
+     * @param int                     $availabilityCurrent
+     * @param int                     $availabilityMax
+     * @param bool                    $updatable
+     * @param \DateTimeInterface|null $updatableUntil
+     * @param bool                    $subjectedToValidation
+     * @param \DateTimeInterface      $buyableUntil
+     *
+     * @return Product
+     */
+    public function updateOption(
+        $name,
+        $image,
+        $quantityMax,
+        $availabilityCurrent,
+        $availabilityMax,
+        $updatable,
+        \DateTimeInterface $updatableUntil = null,
+        $subjectedToValidation = false,
+        \DateTimeInterface $buyableUntil = null
+    ) {
+        $this->name                  = $name;
+        $this->image                 = $image;
+        $this->quantityMax           = $quantityMax;
+        $this->availabilityCurrent   = $availabilityCurrent;
+        $this->availabilityMax       = $availabilityMax;
+        $this->updatable             = $updatable;
+        $this->updatableUntil        = $updatableUntil;
+        $this->subjectedToValidation = $subjectedToValidation;
+        $this->buyableUntil          = $buyableUntil;
+
+        return $this;
     }
 
     /**
@@ -688,5 +827,61 @@ class Product
                 'productsIncluded' => $this->getIncludedProductSerializedData(),
             ]
         );
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function hasIncludedProduct(Product $product)
+    {
+        $find = $this->productIncluded->exists(
+            function (ProductIncluded $productIncluded) use ($product) {
+                return $productIncluded->getIncluded() === $product;
+            }
+        );
+
+        return $find;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return ProductIncluded|null
+     */
+    public function getIncludedProduct(Product $product)
+    {
+        foreach ($this->getIncludedProducts() as $productIncluded) {
+            if ($productIncluded->getIncluded() === $product) {
+                return $productIncluded;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param int $key
+     *
+     * @return Feature
+     */
+    public function getFeature($key)
+    {
+        if (!$this->features->containsKey($key)) {
+            $this->features->set($key, new Feature($this));
+        }
+
+        return $this->features->get($key);
+    }
+
+    /**
+     * @param \DateTimeInterface $now
+     *
+     * @return bool
+     */
+    public function isBuyable(\DateTimeInterface $now)
+    {
+        return ($this->buyableUntil === null) || ($now < $this->buyableUntil);
     }
 }

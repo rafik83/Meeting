@@ -295,8 +295,11 @@ admin:
         quantityMax: Quantité max
         availabilityCurrentMax: Disponibilité courante / max
         subjectedToValidation: Soumis à validation
-        updatable: Modifiable
-        updatableUntil: Modifiable jusqu'à
+        updatable: Supprimable
+        updatableUntil: Supprimable jusqu'à
+        actions: Actions
+        update:
+          action: Modifier
     promotion_code:
         link: Codes promos
         title: Codes promos
@@ -380,6 +383,10 @@ admin:
         title: Titre
         languages: Langues
         fallback: Par défaut
+        billing:
+          configuration:
+            link: Information facturation
+            title: Configuration des informations de facturation
         practicalInfo:
           link: Informations Pratiques
           update:
@@ -601,6 +608,7 @@ admin:
             column:
                 title: Titre
                 event: Evènement
+        duplicate: Dupliquer
     product_create:
         option:
             title: Ajouter un produit
@@ -610,6 +618,15 @@ admin:
             title: Ajouter un produit participant
         planning:
             title: Ajouter un produit planning
+    product_update:
+        option:
+            title: Modifier un produit
+        plan:
+          title: Modifier une formule
+        planning:
+          title: Modifier un planning
+        participant:
+          title: Modifier un participant
     plan_create:
         title: Ajouter une formule au catalogue
     plan:
