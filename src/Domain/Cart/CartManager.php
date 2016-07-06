@@ -147,42 +147,4 @@ class CartManager
     {
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
     }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $code
-     *
-     * @throws PromotionCodeNotFoundException
-     * @throws PromotionCodeOutDatedException
-     * @throws PromotionCodeSoldOutException
-     * @throws PromotionCodeAlreadyExistException
-     */
-    public function apply(Sheet $sheet, $code)
-    {
-        $promotionsCode = $this->promotionCodeRepository->findByEventAndCode(
-            $sheet->getEvent(),
-            $code
-        );
-
-        if (empty($promotionsCode)) {
-            throw new PromotionCodeNotFoundException();
-        }
-
-        /** @var PromotionCode $promotionCode */
-        $promotionCode = reset($promotionsCode);
-
-        if ($promotionCode->isOutDated($this->dateTime)) {
-            throw new PromotionCodeOutDatedException();
-        }
-
-        if ($promotionCode->isSoldOut()) {
-            throw new PromotionCodeSoldOutException();
-        }
-
-        $cart = $this->getCart($sheet);
-        $cart->setPromotionCode($promotionCode);
-
-        // save data
-        $this->save($cart);
-    }
 }

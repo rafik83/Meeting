@@ -337,7 +337,7 @@ class PackageController extends Controller
      */
     private function validatePromotionCode(Sheet $sheet, PromotionCode $promotionCode)
     {
-        $command = new Add($sheet, $promotionCode);
+        $command = new Add($sheet, $promotionCode->promotionCode);
 
         try {
             $this->get('tactician.commandbus')->handle($command);

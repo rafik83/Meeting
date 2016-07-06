@@ -278,6 +278,6 @@ class PromotionCode
             return false;
         }
 
-        return $datetime <= $this->validUntil;
+        return $datetime >= $this->validUntil;
     }
 }

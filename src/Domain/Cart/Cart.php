@@ -17,6 +17,8 @@ use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 
 class Cart
 {
@@ -86,23 +88,6 @@ class Cart
         } elseif ($quantity > 0) {
             $this->rows[] = new CartRow($this->sheet, $product, $quantity);
         }
-
-        return $this;
-    }
-
-    /**
-     * @param PromotionCode $promotionCode
-     *
-     * @throws PromotionCodeAlreadyExistException
-     * @return Cart
-     */
-    public function setPromotionCode(PromotionCode $promotionCode)
-    {
-        if ($this->hasPromotionCode($promotionCode)) {
-            throw new PromotionCodeAlreadyExistException();
-        }
-
-        $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
 
         return $this;
     }
@@ -304,5 +289,46 @@ class Cart
         $this->currentStep = $currentStep;
 
         return $this;
+    }
+
+    /**
+     * @param PromotionCode      $promotionCode
+     * @param \DateTimeInterface $dateTime
+     *
+     * @throws PromotionCodeOutDatedException
+     * @throws PromotionCodeSoldOutException
+     * @throws PromotionCodeAlreadyExistException
+     *
+     * @return Cart
+     */
+    public function apply(PromotionCode $promotionCode, \DateTimeInterface $dateTime)
+    {
+        if ($promotionCode->isOutDated($dateTime)) {
+            throw new PromotionCodeOutDatedException();
+        }
+
+        if ($promotionCode->isSoldOut()) {
+            throw new PromotionCodeSoldOutException();
+        }
+
+        if ($this->hasPromotionCode($promotionCode)) {
+            throw new PromotionCodeAlreadyExistException();
+        }
+
+        // check si au moins un produit du code est dans le panier
+
+        $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
+
+        return $this;
+    }
+
+    public function getPromotionTotal()
+    {
+
+    }
+
+    public function getTotal()
+    {
+
     }
 }

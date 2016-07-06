@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Package\PromotionCode;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 
 class Add
 {
@@ -21,20 +20,20 @@ class Add
     public $sheet;
 
     /**
-     * @var PromotionCode
+     * @var string
      */
-    public $promotionCodeForm;
+    public $promotionCode;
 
     /**
      * Add constructor.
      *
-     * @param Sheet         $sheet
-     * @param PromotionCode $promotionCodeForm
+     * @param Sheet  $sheet
+     * @param string $promotionCode
      */
-    public function __construct(Sheet $sheet, PromotionCode $promotionCodeForm)
+    public function __construct(Sheet $sheet, $promotionCode)
     {
-        $this->sheet             = $sheet;
-        $this->promotionCodeForm = $promotionCodeForm;
+        $this->sheet         = $sheet;
+        $this->promotionCode = $promotionCode;
     }
 
 }
