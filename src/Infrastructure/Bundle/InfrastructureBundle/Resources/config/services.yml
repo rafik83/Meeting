@@ -915,6 +915,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler
         arguments:
            - '@cart_manager'
+           - '@repository.promotion_code_repository'
+           - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Add }
     command.event.promotion_code.remove_handler:
