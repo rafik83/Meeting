@@ -945,6 +945,34 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 mode: "singles"
                                 nomenclature: "@nomenclature_company_category->id"
                                 tags: ["sheet_organization_category", "sheet_data"]
+                        adc97e8d:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Chiffre d'affaires"
+                                    en: "Turnover"
+                                help:
+                                    fr: ""
+                                    en: ""
+                                mode: "singles"
+                                nomenclature: "@nomenclature_company_turnover->id"
+                                tags: ["sheet_organization_turnover", "sheet_data"]
+                        efa6712a:
+                            component: "object"
+                            type: "nomenclature"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Nombre de salariés"
+                                    en: "Staff"
+                                help:
+                                    fr: ""
+                                    en: ""
+                                mode: "singles"
+                                nomenclature: "@nomenclature_company_staff->id"
+                                tags: ["sheet_organization_staff", "sheet_data"]
                         9ef18c06:
                             component: "object"
                             type: "url"
