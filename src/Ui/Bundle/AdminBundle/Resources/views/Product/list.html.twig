@@ -58,19 +58,9 @@
                 <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
                 <td class="text-right">{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
                 <td>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            {{ 'admin.product.actions'|trans }} <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}">
-                                    {{ 'admin.product.update.action'|trans }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.product.update.action'|trans }}
+                    </a>
                 </td>
             </tr>
         {% else %}
