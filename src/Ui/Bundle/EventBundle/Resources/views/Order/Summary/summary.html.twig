@@ -2,10 +2,10 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th class="col-md-6">Intitulé</th>
-            <th class="text-center col-md-2">Prix unitaire</th>
-            <th class="text-center col-md-2">quantité</th>
-            <th class="text-center col-md-2">Total</th>
+            <th class="col-md-6">{{ 'summary.column.title'|trans }}</th>
+            <th class="text-center col-md-2">{{ 'summary.column.unitPrice'|trans }}</th>
+            <th class="text-center col-md-2">{{ 'summary.column.quantity'|trans }}</th>
+            <th class="text-center col-md-2">{{ 'summary.column.total'|trans }}</th>
         </tr>
     </thead>
     <tbody>
@@ -13,18 +13,18 @@
     {% if summary.vatApplicable %}
         <tr>
             <td colspan="2"></td>
-            <td>{{ 'pro_forma.summary.total'|trans }}</td>
+            <td>{{ 'summary.total'|trans }}</td>
             <td class="text-center">{{ summary.total|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.vatMode)|trans }}</td>
         </tr>
         <tr>
             <td colspan="2"></td>
-            <td>{{ 'pro_forma.summary.vatRate'|trans({'%vatRate%': summary.vatRate }) }}</td>
+            <td>{{ 'summary.vatRate'|trans({'%vatRate%': summary.vatRate }) }}</td>
             <td class="text-center">{{ summary.vat|localizedcurrency(summary.currency) }}</td>
         </tr>
     {% endif %}
     <tr>
         <td colspan="2"></td>
-        <td>{{ 'pro_forma.summary.totalToPay'|trans }}</td>
+        <td>{{ 'summary.totalToPay'|trans }}</td>
         <td class="text-center">{{ summary.totalPlusVat|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.totalVatMode)|trans }}</td>
     </tr>
     </tbody>

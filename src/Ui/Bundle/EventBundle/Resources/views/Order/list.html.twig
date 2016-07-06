@@ -15,15 +15,15 @@
     <div class="main__container">
         <table class="table">
             <thead>
-                <th>Date</th>
-                <th>Pro Forma</th>
-                <th>Total</th>
+                <th>{{ 'order.list.column.date'|trans }}</th>
+                <th>{{ 'order.list.column.pro_forma'|trans }}</th>
+                <th>{{ 'order.list.column.total'|trans }}</th>
             </thead>
             <tbody>
                 {% for order in orders %}
                     <tr>
                         <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                        <td><a href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}">Pro Forma</a></td>
+                        <td><a href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}">{{ 'order.list.column.pro_forma'|trans }}</a></td>
                         <td>{{ order.total|localizedcurrency(order.currency) }}</td>
                     </tr>
                 {% endfor %}

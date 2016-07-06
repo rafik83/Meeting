@@ -147,19 +147,35 @@ package:
 billing_info:
     title: Info de facturation
 
-order:
-    list:
-        title: Liste de vos commandes
-
 pro_forma:
-    summary:
-        total: 'Total de la commande:'
-        vatRate: 'TVA applicable %vatRate%%:'
-        totalToPay: 'Total à régler:'
-
+    title: 'Pro Forma - %date%'
+    bankInfo:
+        title: Coordonnées bancaires:
+    vatNumber:
+        title: 'TVA Intracommunautaire:'
+    date:
+        title: 'Date:'
 summary:
+    total: 'Total de la commande:'
+    vatRate: 'TVA applicable %vatRate%%:'
+    totalToPay: 'Total à régler:'
     group:
         option:
             title: Options
     product:
         included: 'Inclus:'
+    column:
+        title: Intitulé
+        unitPrice: Prix unitaire
+        quantity: Quantité
+        total: Total
+
+
+
+order:
+    list:
+        title: Liste de vos commandes
+        column:
+            date: Date
+            pro_forma: Pro Forma
+            total: Total
