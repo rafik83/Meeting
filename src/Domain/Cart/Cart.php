@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
@@ -300,6 +301,7 @@ class Cart
      * @throws PromotionCodeSoldOutException
      * @throws PromotionCodeAlreadyExistException
      * @throws PromotionCodeNotUsedException
+     * @throws PromotionCodeConflictException
      *
      * @return Cart
      */
@@ -321,6 +323,10 @@ class Cart
             throw new PromotionCodeNotUsedException();
         }
 
+        if($this->isPromotionHaveConflict($promotionCode)) {
+            throw new PromotionCodeConflictException();
+        }
+
         $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
 
         return $this;
@@ -336,6 +342,26 @@ class Cart
         foreach ($promotionCode->getPromotions() as $promotion) {
             if ($this->getCartRowForProduct($promotion->getProduct()) != null) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Conflict when two promotion code offer promotion on the same product
+     *
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function isPromotionHaveConflict(PromotionCode $promotionCode)
+    {
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            foreach ($this->getPromotionCodeRows() as $promotionCodeRow) {
+                if ($promotionCodeRow->getPromotionCode()->hasPromotion($promotion->getProduct())) {
+                    return true;
+                }
             }
         }
 

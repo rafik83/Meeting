@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
@@ -352,6 +353,8 @@ class PackageController extends Controller
             $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.alreadyExist');
         } catch (PromotionCodeNotUsedException $e) {
             $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.notUsed');
+        } catch(PromotionCodeConflictException $e) {
+            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.codeConflict');
         }
     }
 

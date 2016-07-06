@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Package\PromotionCode;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
@@ -58,6 +59,7 @@ class AddHandler
      * @throws PromotionCodeOutDatedException
      * @throws PromotionCodeSoldOutException
      * @throws PromotionCodeAlreadyExistException
+     * @throws PromotionCodeConflictException
      */
     public function handle(Add $add)
     {
@@ -71,7 +73,7 @@ class AddHandler
         if (null === $promotionCode) {
             throw new PromotionCodeNotFoundException();
         }
-        
+
         $cart->apply($promotionCode, $this->datetime);
 
         $this->cartManager->save($cart);
