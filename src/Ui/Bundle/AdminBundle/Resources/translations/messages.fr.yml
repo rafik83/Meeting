@@ -200,26 +200,6 @@ event:
     activateAccount:
         password: Définir votre mot de passe
 
-template:
-    name:
-        participant: Participant
-        sheet: Fiche de participation
-        package: Forfait
-    updateOrder: Enregistrer l'ordre
-    field:
-        add: Ajouter un champ
-        update: Modifier
-        type:
-            lib_country: Pays
-            lib_text: Texte
-            lib_choice: Choix
-            lib_textarea: Zone de texte
-            lib_participant: Ajout de participant
-            lib_planning: Ajout de planning
-            lib_option: Options
-            upload_with_choices: Upload avec options
-            choice_with_description: Choix avec description
-
 who:
     see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
     the:
