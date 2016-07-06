@@ -392,6 +392,14 @@ class Product
     }
 
     /**
+     * @return bool
+     */
+    public function isAvailabilityManaged()
+    {
+        return $this->getAvailabilityMax() > 0;
+    }
+
+    /**
      * @return boolean
      */
     public function isUpdatable()

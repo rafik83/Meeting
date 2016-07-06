@@ -292,11 +292,12 @@ admin:
         title: Catalogue de produits
         name: Nom
         unitPrice: Prix unitaire
-        quantityMax: Quantité max
+        quantityMax: Qté max
         availabilityCurrentMax: Disponibilité courante / max
         subjectedToValidation: Soumis à validation
+        buyableUntil: Achetable jusqu'au
         updatable: Supprimable
-        updatableUntil: Supprimable jusqu'à
+        updatableUntil: Supprimable jusqu'au
         actions: Actions
         update:
           action: Modifier
