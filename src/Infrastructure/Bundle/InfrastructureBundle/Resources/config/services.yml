@@ -946,8 +946,11 @@ services:
     command.payment.choice_handler:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
         arguments:
+            - '@repository.transaction'
             - '@cart.convertor'
             - '@cart_manager'
+            - '@payment.total_to_pay'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\Choice }
 
@@ -1369,6 +1372,10 @@ services:
             - '@package.specification.vat_applicable'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
+    query.order.pro_forma_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\ProFormaQuery }
 
     #
     # Elastic Transformer
