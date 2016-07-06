@@ -16,10 +16,6 @@ Proximum\Vimeet\Domain\Model\Event:
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
-        bankInfo: |+
-            HSBC Issy les Moulineaux
-            IBAN: FR76 3005 6006 4306 4332 4153 439
-            SWIFT (BIC): CCFRFRPP
         legalInformation: |+
             TVA acquittée sur les encaissements
             Pas d'escompte pour paiement anticipé
@@ -44,11 +40,39 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         description: "ASD Days, le Rdv international dédié à l'Aéronautique, le Spatial, la Défense, la Sécurité et les Drones."
         locale: fr
         event: '@event_asddays_2016'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
+        billingAddress: |+
+            PROXIMUM
+            855 avenue Roger Salengro
+            92370 CHAVILLE
+            mail: acounts@proximumgroup.com
+        paymentFooter: 'Proximum: 855 avenue Roger Salengro 92370 CHAVILLE - France - Tél: +33 (0) 1 46 90 00 00 - www.proximumgroup.com - S.a.r.l au capital de 60000 Euros - RCS Nanterres B 424 540 441 - N° TVA Intracommunautaire: FR83424540441 00047'
+        paymentCondition: |+
+            A joindre à votre règlement:
+            Numéro de facture
+            Net à payer
     event_asddays_2016_en:
         __construct: false
         description: "ASD Days, the international meeting dedicated to: Aerospace, Defence, Security & UAVs."
         locale: en
         event: '@event_asddays_2016'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
+        billingAddress: |+
+            PROXIMUM
+            855 avenue Roger Salengro
+            92370 CHAVILLE
+            mail: acounts@proximumgroup.com
+        paymentFooter: 'Proximum: 855 avenue Roger Salengro 92370 CHAVILLE - France - Tél: +33 (0) 1 46 90 00 00 - www.proximumgroup.com - S.a.r.l au capital de 60000 Euros - RCS Nanterres B 424 540 441 - N° TVA Intracommunautaire: FR83424540441 00047'
+        paymentCondition: |+
+            A joindre à votre règlement:
+            Numéro de facture
+            Net à payer
 
 Proximum\Vimeet\Domain\Model\Address (local):
     payment_address_event_asddays_2016:

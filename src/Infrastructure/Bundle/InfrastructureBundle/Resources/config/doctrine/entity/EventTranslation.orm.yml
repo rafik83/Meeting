@@ -12,16 +12,16 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         locale:
             type: string
         bankInfo:
-            type: string
+            type: text
             nullable: true
         billingAddress:
-            type: string
+            type: text
             nullable: true
         paymentCondition:
-            type: string
+            type: text
             nullable: true
         paymentFooter:
-            type: string
+            type: text
             nullable: true
     manyToOne:
         event:

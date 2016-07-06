@@ -42,7 +42,7 @@ class BillingConfiguration
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
-                'bankInfo'         => $event->getIban($locale),
+                'bankInfo'         => $event->getBankInfo($locale),
                 'billingAddress'   => $event->getBillingAddress($locale),
                 'paymentCondition' => $event->getPaymentCondition($locale),
                 'paymentFooter'    => $event->getPaymentFooter($locale),

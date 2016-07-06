@@ -17,10 +17,6 @@ Proximum\Vimeet\Domain\Model\Event:
         paymentAddress: '@payment_address_event_spanish'
         configuration: '@configuration_event_spanish'
         organiserEmail: accounts@proximumgroup.com
-        bankInfo: |+
-            HSBC Issy les Moulineaux
-            IBAN: FR76 3005 6006 4306 4332 4153 439
-            SWIFT (BIC): CCFRFRPP
         legalInformation: |+
             IVA pagado en los recibos
             No hay descuento por pronto pago
@@ -38,6 +34,10 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         description: "Descripción de mi evento en español"
         locale: es
         event: '@event_spanish'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
 
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
     configuration_event_spanish:

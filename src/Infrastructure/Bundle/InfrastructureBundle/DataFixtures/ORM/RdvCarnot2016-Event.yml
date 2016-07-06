@@ -30,10 +30,6 @@ Proximum\Vimeet\Domain\Model\Event:
         configuration: '@event_rdv_carnot_2016_configuration'
         paymentAddress: '@event_rdv_carnot_2016_payment_address_event'
         organiserEmail: accounts@proximumgroup.com
-        bankInfo: |+
-            'HSBC Issy les Moulineaux
-            IBAN: FR76 3005 6006 4306 4332 4153 439
-            SWIFT (BIC): CCFRFRPP'
         legalInformation: |+
             TVA acquittée sur les encaissements
             Pas d'escompte pour paiement anticipé
@@ -49,11 +45,19 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         description: LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISES
         locale: fr
         event: '@event_rdv_carnot_2016'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
     event_translation_rdv_carnot_2016_en:
         __construct: false
         description: In 7 editions, les Rendez-vous CARNOT became the major R&D event for innovation.
         locale: en
         event: '@event_rdv_carnot_2016'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
 
 Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
     template_sheet_carnot:
