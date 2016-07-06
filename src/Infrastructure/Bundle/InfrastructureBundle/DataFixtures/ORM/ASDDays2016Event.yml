@@ -328,6 +328,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             fr: "Effectifs"
                                             en: "Staff"
                                 required: false
+                                collection: true
                                 default: 3
                                 translatable: true
                         a9271999:
@@ -671,6 +672,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             fr: "Effectifs"
                                             en: "Staff"
                                 required: false
+                                collection: true
                                 default: 3
                                 translatable: true
                         a9271999:

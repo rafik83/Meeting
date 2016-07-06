@@ -46,6 +46,8 @@ template:
         title: Aide
     required:
         title: Requis
+    collection:
+        title: Champs collection activés
     translatable:
         title: Traduisible
     maxLength:

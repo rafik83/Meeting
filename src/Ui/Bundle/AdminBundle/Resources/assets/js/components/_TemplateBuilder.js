@@ -812,6 +812,7 @@ TagsObject.prototype.fill = function ()
 {
     this.form.set('style', this.config.style);
     this.form.set('label', this.config.label[this.locale]);
+    this.form.set('collection', this.config.collection);
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
@@ -830,6 +831,7 @@ TagsObject.prototype.save = function ()
 {
     this.config.style                    = this.form.get('style');
     this.config.label[this.locale]       = this.form.get('label');
+    this.config.collection               = this.form.get('collection');
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');

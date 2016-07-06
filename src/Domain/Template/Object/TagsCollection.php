@@ -29,4 +29,12 @@ class TagsCollection extends ItemCollection
     {
         return $this->getOption('tags');
     }
+
+    /**
+     * @return bool
+     */
+    public function isCollectionEnabled()
+    {
+        return (bool) $this->getOption('collection');
+    }
 }
