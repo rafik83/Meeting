@@ -1372,8 +1372,26 @@ services:
             - '@package.specification.vat_applicable'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
+    query.order.summary.product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\ProductViewQueryHandler
+        arguments:
+            - '@order.row.product_included_info_guesser'
+    query.order.summary.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler
+        arguments:
+            - '@query.order.summary.product_view_query_handler'
+    query.order.summary.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
+        arguments:
+            - '@query.order.summary.group_view_query_handler'
+    query.order.summary_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
+        arguments:
+            - '@query.order.summary.groups_view_query_handler'
     query.order.pro_forma_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
+        arguments:
+            - '@query.order.summary_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\ProFormaQuery }
 
@@ -1473,3 +1491,8 @@ services:
             - '@cart_manager'
             - '@package.specification.vat_applicable'
 
+    #
+    # Order
+    #
+    order.row.product_included_info_guesser:
+        class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
