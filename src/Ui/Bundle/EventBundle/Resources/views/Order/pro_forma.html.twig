@@ -5,7 +5,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="col-md-12">
+        <div class="row">
             <div class="col-md-offset-8 col-md-4">
                 <b>{{ pro_forma.billingInfo.company }}</b><br>
                 {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>
@@ -17,31 +17,26 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-md-12">
-            <b>Date:</b> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+        <div class="row">
+            <div class="col-md-12">
+                <b>Date:</b> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+            </div>
         </div>
-        <table class="table table-stripped">
-            <thead>
-                <th>bb</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>aa</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="col-md-12">
+        {{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary}) }}
+        <div class="row">
             <div class="col-md-4">
-                {{ pro_forma.bankInfo|nl2br }}<br>
-                <b>Coordonnées bancaires:</b><br>
                 {{ pro_forma.billingAddress|nl2br }}<br>
+                <b>Coordonnées bancaires:</b><br>
+                {{ pro_forma.bankInfo|nl2br }}<br>
             </div>
             <div class="col-md-offset-4 col-md-4">
                 {{ pro_forma.paymentCondition|nl2br }}<br>
             </div>
         </div>
-        <div class="col-md-12 text-center">
-            {{ pro_forma.footer|nl2br }}
+        <div class="row text-center">
+            <div class="col-md-12">
+                {{ pro_forma.footer|nl2br }}
+            </div>
         </div>
     </div>
 </body>

@@ -1,0 +1,8 @@
+{% if included is defined %}
+    <tr>
+        <td><b>{{ 'summary.product.included'|trans }}</b> {{ included.label }}</td>
+        <td class="text-center"></td>
+        <td class="text-center">{{ included.quantity }}</td>
+        <td class="text-center">{{ included.total|localizedcurrency(included.currency) }} {{ ('package.vatMode.' ~ included.vatMode)|trans }}</td>
+    </tr>
+{% endif %}
