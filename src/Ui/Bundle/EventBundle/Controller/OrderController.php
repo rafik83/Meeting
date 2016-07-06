@@ -40,8 +40,6 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        //$view = $this->get('')->handle();
-
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'  => $eventDomain->getEvent(),
             'orders' => $orders,
