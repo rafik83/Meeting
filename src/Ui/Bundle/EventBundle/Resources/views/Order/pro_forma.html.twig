@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Pro Forma - {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-12">
+            <div class="col-md-offset-8 col-md-4">
+                <b>{{ pro_forma.billingInfo.company }}</b><br>
+                {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>
+                {{ pro_forma.billingInfo.address.street }}<br>
+                {{ pro_forma.billingInfo.address.zipCode }} {{ pro_forma.billingInfo.address.city }}<br>
+                {{ pro_forma.billingInfo.address.country|country }}<br>
+                {% if pro_forma.billingInfo.vatNumber %}
+                    <b>TVA Intracommunautaire:</b> {{ pro_forma.billingInfo.vatNumber }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <b>Date:</b> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+        </div>
+        <table class="table table-stripped">
+            <thead>
+                <th>bb</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>aa</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-md-12">
+            <div class="col-md-4">
+                {{ pro_forma.bankInfo|nl2br }}<br>
+                <b>Coordonnées bancaires:</b><br>
+                {{ pro_forma.billingAddress|nl2br }}<br>
+            </div>
+            <div class="col-md-offset-4 col-md-4">
+                {{ pro_forma.paymentCondition|nl2br }}<br>
+            </div>
+        </div>
+        <div class="col-md-12 text-center">
+            {{ pro_forma.footer|nl2br }}
+        </div>
+    </div>
+</body>
+</html>
