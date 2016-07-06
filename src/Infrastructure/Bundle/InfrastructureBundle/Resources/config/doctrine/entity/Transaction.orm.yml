@@ -16,6 +16,8 @@ Proximum\Vimeet\Domain\Model\Transaction:
         reference:
             type: string
             nullable: true
+        state:
+            type: string
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

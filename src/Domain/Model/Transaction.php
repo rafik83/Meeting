@@ -15,6 +15,9 @@ namespace Proximum\Vimeet\Domain\Model;
  */
 class Transaction
 {
+    const STATE_PENDING = 'pending';
+    const STATE_PAID    = 'paid';
+
     /**
      * @var int
      */
@@ -46,6 +49,11 @@ class Transaction
     private $reference;
 
     /**
+     * @var string
+     */
+    private $state;
+
+    /**
      * Transaction constructor.
      *
      * @param Sheet              $sheet
@@ -53,14 +61,16 @@ class Transaction
      * @param \DateTimeInterface $date
      * @param string             $mode
      * @param string             $reference
+     * @param string             $state
      */
-    public function __construct(Sheet $sheet, $amount, \DateTimeInterface $date, $mode, $reference)
+    public function __construct(Sheet $sheet, $amount, \DateTimeInterface $date, $mode, $reference, $state)
     {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
         $this->date      = $date;
         $this->mode      = $mode;
         $this->reference = $reference;
+        $this->state     = $state;
     }
 
     /**
@@ -141,5 +151,13 @@ class Transaction
     public function getReference()
     {
         return $this->reference;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }
