@@ -1305,7 +1305,7 @@ Proximum\Vimeet\Domain\Model\Product:
     product_option_7_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option E', '', 199, 4, 5, 10, true, null] }
     product_option_8_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option F', '', 199, 4, 5, 10, true, null, false, "<dateTimeBetween('-10days', '-2days')>"] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option F', '', 59, 4, 5, 10, true, null, false, "<dateTimeBetween('-10days', '-2days')>"] }
 
 Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     product_included_plan_1_asddays_fr:
