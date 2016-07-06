@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -171,6 +172,39 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $promotionCodeRow = new PromotionCodeRow($this->sheet, $promotionCode);
         $actualCart       = new Cart($this->sheet, [$planRow], [$promotionCodeRow], 1);
         $expectedCart     = new Cart($this->sheet, [$planRow], [$promotionCodeRow], 1);
+
+        $cartManager             = $this->prophesize(CartManager::class);
+        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+
+        $add = new Add($this->sheet, 'PROMOCODE50');
+
+        $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
+
+        $promotionCodeRepository
+            ->findByEventAndCode($this->event, 'PROMOCODE50')
+            ->shouldBeCalled()
+            ->willReturn($promotionCode);
+
+        $cartManager->save($expectedCart)->shouldNotBeCalled();
+
+        // Handler
+        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler->handle($add);
+    }
+
+    public function testHandleNotUsedCode()
+    {
+        $this->expectException(PromotionCodeNotUsedException::class);
+
+        $promotionCode = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE50', 10,
+            $this->datetime->modify('+1 month'));
+        $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
+
+        $otherProductNotConcerned = Product::createOption($this->event, 'Option B', 'a.jpg', 100, 2, 4, 3, false);
+
+        $planRow          = new CartRow($this->sheet, $otherProductNotConcerned, 5);
+        $actualCart       = new Cart($this->sheet, [$planRow], [], 1);
+        $expectedCart     = new Cart($this->sheet, [$planRow], [], 1);
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);

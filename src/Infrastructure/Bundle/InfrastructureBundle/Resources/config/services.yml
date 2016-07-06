@@ -1404,7 +1404,6 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_repository'
             - '@repository.promotion_code_row_repository'
-            - '@datetime'
 
     #
     # Promotion

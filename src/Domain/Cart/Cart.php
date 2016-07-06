@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 
@@ -298,6 +299,7 @@ class Cart
      * @throws PromotionCodeOutDatedException
      * @throws PromotionCodeSoldOutException
      * @throws PromotionCodeAlreadyExistException
+     * @throws PromotionCodeNotUsedException
      *
      * @return Cart
      */
@@ -315,11 +317,29 @@ class Cart
             throw new PromotionCodeAlreadyExistException();
         }
 
-        // check si au moins un produit du code est dans le panier
+        if (!$this->cartRowProductInPromotionCode($promotionCode)) {
+            throw new PromotionCodeNotUsedException();
+        }
 
         $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
 
         return $this;
+    }
+
+    /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function cartRowProductInPromotionCode(PromotionCode $promotionCode)
+    {
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            if ($this->getCartRowForProduct($promotion->getProduct()) != null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getPromotionTotal()

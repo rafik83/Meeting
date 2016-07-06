@@ -11,12 +11,7 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\CartStep;
-use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
@@ -40,11 +35,6 @@ class CartManager
     private $promotionCodeRepository;
 
     /**
-     * @var \DateTimeInterface
-     */
-    private $dateTime;
-
-    /**
      * @var PromotionCodeRowRepositoryInterface
      */
     private $promotionCodeRowRepository;
@@ -54,20 +44,17 @@ class CartManager
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
-     * @param \DateTimeInterface                  $dateTime
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
-        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
-        \DateTimeInterface $dateTime
+        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
     ) {
         $this->cartRowRepository          = $cartRowRepository;
         $this->cartStepRepository         = $cartStepRepository;
         $this->promotionCodeRepository    = $promotionCodeRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
-        $this->dateTime                   = $dateTime;
     }
 
     /**
