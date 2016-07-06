@@ -20,6 +20,10 @@ use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
+/**
+ * Cart Converter to:
+ * - Order
+ */
 class Converter
 {
     /**
@@ -110,10 +114,13 @@ class Converter
             $billingInfo->getVatNumber()
         );
 
+        $groupsData = $sheet->getPackage()->serializeData();
+
         $order = new Order(
             $sheet,
             $this->vatApplicable->onCart($cart),
             $orderBillingInfo,
+            $groupsData,
             $this->datetime
         );
 
@@ -135,7 +142,19 @@ class Converter
      */
     private function convertToRow(Order $order, CartRow $cartRow)
     {
-        return new Order\Row($order, $cartRow->getProduct(), $cartRow->getQuantity());
+        $group   = $order->getSheet()->getPackage()->getGroupOfProduct($cartRow->getProduct());
+        $groupId = null;
+
+        if (null !== $group) {
+            $groupId = $group->getId();
+        }
+
+        return new Order\Row(
+            $order,
+            $cartRow->getProduct(),
+            $cartRow->getQuantity(),
+            $groupId
+        );
     }
 
     /**
