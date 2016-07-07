@@ -81,7 +81,7 @@ abstract class AbstractEventType extends AbstractType
             ->add('rightColor', TextType::class)
             ->add('textColor', TextType::class)
             ->add('organiserName', TextType::class, [
-                'required'=> true
+                'required'=> true,
             ])
         ;
     }
