@@ -1766,6 +1766,12 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
     promotion_code_02_asddays_2016:
         __construct: ['@event_asddays_2016', 'Assdays Promotion Code 2', 'ASDDAYS20', 50]
 
+Proximum\Vimeet\Domain\Model\PromotionCodeTranslation:
+    promotion_code_assdays_2016_translation:
+        __construct: ['@promotion_code_asddays_2016', 'fr', 'Assdays Promotion Code', 'Assdays Promotion Code Description']
+    promotion_code_02_assdays_2016_translation:
+        __construct: ['@promotion_code_02_asddays_2016', 'fr', 'Assdays Promotion Code 2', 'Assdays Promotion Code Description 2']
+
 Proximum\Vimeet\Domain\Model\Promotion:
     promotion_01_asddays_2016:
         __construct: false
