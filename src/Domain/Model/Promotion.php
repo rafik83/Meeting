@@ -42,6 +42,11 @@ class Promotion
     private $value;
 
     /**
+     * @var int
+     */
+    private $quantity = 1;
+
+    /**
      * Promotion constructor.
      *
      * @param PromotionCode $promotionCode
@@ -105,6 +110,14 @@ class Promotion
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 
     /**

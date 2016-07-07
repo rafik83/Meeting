@@ -38,7 +38,7 @@ class PromotionCodeQueryHandler
 
             $promotionsCodeView[] = new PromotionCodeView(
                 $promotionCodeRow->getId(),
-                $promotionCodeRow->getPromotionCode()->getTitle(),
+                $promotionCodeRow->getPromotionCode()->getLabel($promotionCodeQuery->locale),
                 $promotionCodeRow->getPromotionCode()->getDescription($promotionCodeQuery->locale),
                 $totalDiscount,
                 $promotionCodeQuery->sheet->getEvent()->getCurrency(),
