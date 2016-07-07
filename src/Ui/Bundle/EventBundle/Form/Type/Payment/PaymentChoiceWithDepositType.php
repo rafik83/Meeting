@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment;
 
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
-use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

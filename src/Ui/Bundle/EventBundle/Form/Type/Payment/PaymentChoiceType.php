@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment;
 
 use Proximum\Vimeet\Application\Command\Payment\Choice;
-use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PaymentChoiceType extends AbstractPaymentChoiceType
