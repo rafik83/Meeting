@@ -929,8 +929,6 @@ class Product
             ? 0
             : 100 * ($this->availabilityMax - $bought) / $this->availabilityMax;
 
-        dump($percentageBought);
-
         if ($percentageBought < self::AVAILABILITY_CEIL_ALERT) {
             return self::AVAILABILITY_STATUS_ALERT;
         }
