@@ -90,4 +90,16 @@ Feature: Complete my package
     And I should see "package.summary.pay"
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/1/package/payment"
+
+  Scenario: I can my payment method
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/summary"
+    Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
+    And I press "package.summary.pay"
+    Then I should be on this page "/fr/sheet/1/package/payment"
+    And I should see "package.payment.total.toPay"
+    And I check the "form.payment_choice.children.paymentMode.bank_card" radio
+    Then I press "package.payment.pay.label"
+    Then I should be on this page "/fr/sheet/1/orders"
+    And I should see "order.transaction.state.pending"
