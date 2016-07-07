@@ -21,7 +21,7 @@ class GroupViewQuery
     public $order;
 
     /**
-     * @var int
+     * @var null|int
      */
     public $groupId;
 
@@ -36,7 +36,7 @@ class GroupViewQuery
     public $locale;
 
     /**
-     * @var ProductView
+     * @var null|ProductView
      */
     public $planView;
 

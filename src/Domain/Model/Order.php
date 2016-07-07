@@ -209,11 +209,11 @@ class Order
         $total = 0;
 
         foreach ($this->rows->toArray() as $row) {
-            $total += ($row->getQuantity() * $row->getPrice());
+            $total += $row->getQuantity() * $row->getPrice();
         }
 
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            $total += (($total * $this->vatRate) / 100);
+            $total += $total * $this->vatRate / 100;
         }
 
         return $total;

@@ -32,13 +32,10 @@ class GroupView
      * @param string $type
      * @param array  $products
      */
-    public function __construct(
-        $label,
-        $type,
-        array $products = []
-    ) {
-        $this->label = $label;
-        $this->type  = $type;
+    public function __construct($label, $type, array $products = [])
+    {
+        $this->label    = $label;
+        $this->type     = $type;
         $this->products = $products;
     }
 

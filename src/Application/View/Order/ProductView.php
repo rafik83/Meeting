@@ -72,7 +72,7 @@ class ProductView
         $this->label    = $label;
         $this->price    = $price;
         $this->quantity = $quantity;
-        $this->total    = ($price * $quantity);
+        $this->total    = $price * $quantity;
         $this->vatMode  = $vatMode;
         $this->currency = $currency;
     }

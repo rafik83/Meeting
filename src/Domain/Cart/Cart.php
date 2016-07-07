@@ -259,7 +259,7 @@ class Cart
     }
 
     /**
-     * @return int|mixed
+     * @return float
      */
     public function getTotal()
     {

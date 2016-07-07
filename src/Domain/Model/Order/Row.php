@@ -46,7 +46,7 @@ class Row
     private $price;
 
     /**
-     * @var int
+     * @var null|int
      */
     private $groupId;
 
@@ -56,16 +56,16 @@ class Row
      * @param Order    $order
      * @param Product  $product
      * @param int      $quantity
-     * @param int|null $group
+     * @param int|null $groupId
      */
-    public function __construct(Order $order, Product $product, $quantity, $group = null)
+    public function __construct(Order $order, Product $product, $quantity, $groupId = null)
     {
         $this->order    = $order;
         $this->quantity = $quantity;
         $this->data     = $product->getSerializedData();
         $this->product  = $product;
         $this->price    = $product->getUnitPrice();
-        $this->groupId  = $group;
+        $this->groupId  = $groupId;
     }
 
     /**
@@ -117,7 +117,7 @@ class Row
     }
 
     /**
-     * @return int
+     * @return null|int
      */
     public function getGroupId()
     {
