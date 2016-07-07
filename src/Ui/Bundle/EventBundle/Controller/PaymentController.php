@@ -11,9 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Payment\Choice;
+use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
+use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,22 +45,37 @@ class PaymentController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $funnel        = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
-        $total         = $this->get('payment.total_to_pay')->getTotal($sheet);
-        $deposit       = DepositApplicable::calculateDeposit($eventDomain->getEvent(), new \DateTime(), $total);
-        $paymentChoice = new Choice($sheet);
-        $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
-            'event' => $eventDomain->getEvent(),
-            'total' => $total,
-        ]);
+        $now            = new \DateTime();
+        $funnel         = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+        $total          = $this->get('payment.total_to_pay')->getTotal($sheet);
+        $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
+        $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
+
+        if ($depositAllowed) {
+            $paymentChoice = new ChoiceWithDeposit($sheet);
+            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
+            ]);
+        } else {
+            $paymentChoice = new Choice($sheet);
+            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
+            ]);
+        }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($paymentChoice);
+            try {
+                $this->get('tactician.commandbus')->handle($paymentChoice);
 
-            // This will have to redirect to payment when needed
-            return $this->redirectToRoute('event_order_list', [
-                'sheet' => $sheet->getId(),
-            ]);
+                // This will have to redirect to payment when needed
+                return $this->redirectToRoute('event_order_list', [
+                    'sheet' => $sheet->getId(),
+                ]);
+            } catch (DepositNotAvailableException $exception) {
+                $this->addFlash('error', 'flash.payment.deposit.notAvailable');
+
+                return $this->redirectToRoute('event_package_payment', [
+                    'sheet' => $sheet->getId(),
+                ]);
+            }
         }
 
         return $this->render('EventBundle:Payment:choice.html.twig', [

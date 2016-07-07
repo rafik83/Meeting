@@ -170,8 +170,6 @@ summary:
         quantity: Quantité
         total: Total
 
-
-
 order:
     list:
         title: Liste de vos commandes
@@ -179,3 +177,14 @@ order:
             date: Date
             pro_forma: Pro Forma
             total: Total
+        remainingToPay: Reste à payer
+    transaction:
+        list:
+            title: Liste de vos transactions
+            column:
+                date: Date
+                state: Êtat
+                total: Somme
+        state:
+            pending: En attente
+            paid: Réglé

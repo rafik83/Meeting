@@ -23,6 +23,9 @@
                 <hr>
                 {{ form_start(form) }}
                 {{ form_row(form.mode) }}
+                {% if form.deposit is defined  %}
+                    {{ form_row(form.deposit) }}
+                {% endif %}
                 <div class="validation">
                     <button type="submit" class="btn btn-primary">
                         <i class="icon-Paiement_1"></i> {{ 'package.payment.pay.label'|trans }}

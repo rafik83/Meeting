@@ -216,3 +216,6 @@ flash:
     admin.event.practicalInfo:
         update:
             success: Les informations pratiques ont bien été mises à jour
+    payment:
+        deposit:
+            notAvailable: "Nous sommes désolé, l'accompte n'est plus disponible"

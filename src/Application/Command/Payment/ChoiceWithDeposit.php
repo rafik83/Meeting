@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Payment;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-
-class Choice extends AbstractChoice
+class ChoiceWithDeposit extends AbstractChoice
 {
+    /**
+     * @var bool
+     */
+    public $deposit;
 }

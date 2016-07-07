@@ -54,6 +54,11 @@ class Transaction
     private $state;
 
     /**
+     * @var string
+     */
+    private $currency;
+
+    /**
      * Transaction constructor.
      *
      * @param Sheet              $sheet
@@ -62,15 +67,24 @@ class Transaction
      * @param string             $mode
      * @param string             $reference
      * @param string             $state
+     * @param                    $currency
      */
-    public function __construct(Sheet $sheet, $amount, \DateTimeInterface $date, $mode, $reference, $state)
-    {
+    public function __construct(
+        Sheet $sheet,
+        $amount,
+        \DateTimeInterface $date,
+        $mode,
+        $reference,
+        $state,
+        $currency
+    ) {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
         $this->date      = $date;
         $this->mode      = $mode;
         $this->reference = $reference;
         $this->state     = $state;
+        $this->currency  = $currency;
     }
 
     /**
@@ -159,5 +173,21 @@ class Transaction
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending()
+    {
+        return $this->state === self::STATE_PENDING;
     }
 }

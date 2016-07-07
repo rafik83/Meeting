@@ -953,6 +953,16 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\Choice }
+    command.payment.choice_with_deposit_handler:
+        class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
+        arguments:
+            - '@repository.transaction'
+            - '@cart.convertor'
+            - '@cart_manager'
+            - '@payment.total_to_pay'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
 
     #
     # Security

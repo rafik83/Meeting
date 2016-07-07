@@ -8,10 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Payment;
+namespace Proximum\Vimeet\Application\Exception\Payment;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-
-class Choice extends AbstractChoice
+class PaymentException extends \Exception
 {
+
 }

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Query\Order\ProFormaQuery;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,8 @@ class OrderController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $orders = $this->get('vimeet_infrastructure.repository.order_repository')->findBySheet($sheet);
+        $orders       = $this->get('vimeet_infrastructure.repository.order_repository')->findBySheet($sheet);
+        $transactions = $this->get('repository.transaction')->findBySheet($sheet);
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
@@ -40,10 +42,27 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
+        $total = array_reduce($orders, function ($carry, Order $order) {
+            return $carry + $order->getTotal();
+        }, 0);
+
+        $remainingToPay = array_reduce($transactions, function ($carry, Transaction $transaction) {
+            if ($transaction->isPending()) {
+                return $carry;
+            }
+            if ($carry < 0) {
+                return 0;
+            }
+
+            return $carry - $transaction->getAmount();
+        }, $total);
+
         return $this->render('EventBundle:Order:list.html.twig', [
-            'event'  => $eventDomain->getEvent(),
-            'orders' => $orders,
-            'sheet'  => $sheet,
+            'event'          => $eventDomain->getEvent(),
+            'orders'         => $orders,
+            'sheet'          => $sheet,
+            'transactions'   => $transactions,
+            'remainingToPay' => $remainingToPay,
         ]);
     }
 

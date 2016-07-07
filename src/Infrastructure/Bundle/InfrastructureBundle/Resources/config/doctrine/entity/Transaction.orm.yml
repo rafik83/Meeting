@@ -18,6 +18,8 @@ Proximum\Vimeet\Domain\Model\Transaction:
             nullable: true
         state:
             type: string
+        currency:
+            type: string
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

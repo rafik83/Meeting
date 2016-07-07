@@ -58,7 +58,8 @@ class ChoiceHandlerTest extends \PHPUnit_Framework_TestCase
             $datetime,
             Mode::PAYMENT_BANK_CARD,
             null,
-            Transaction::STATE_PENDING
+            Transaction::STATE_PENDING,
+            'EUR'
         );
 
         // Mock

@@ -95,9 +95,15 @@ form:
                 bank_card: Carte bleu
                 bank_transfer: Transfert
                 bank_check: Chèque
-                deposit_bank_card: Accompte en carte bleu
-                deposit_bank_transfer: Accompte par transfert
-                deposit_bank_check: Accompte par chèque
+    payment_choice_with_deposit:
+        children:
+            mode:
+                label: 'Choisissez votre mode de paiement:'
+            deposit:
+                label: "Choisissez si vous souhaitez payer le total ou l'accompte"
+            depositMode:
+                deposit: Accompte
+                total: Total
     package_summary_terms_of_sale:
         children:
             termsOfSale:
