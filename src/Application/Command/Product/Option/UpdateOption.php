@@ -22,10 +22,11 @@ class UpdateOption extends AbstractUpdate
     {
         parent::__construct($product);
 
-        $this->availabilityCurrent = $product->getAvailabilityCurrent();
-        $this->availabilityMax     = $product->getAvailabilityMax();
-        $this->updatable           = $product->isUpdatable();
-        $this->updatableUntil      = $product->getUpdatableUntil();
-        $this->buyableUntil        = $product->getBuyableUntil();
+        $this->availabilityCurrent   = $product->getAvailabilityCurrent();
+        $this->availabilityMax       = $product->getAvailabilityMax();
+        $this->updatable             = $product->isUpdatable();
+        $this->updatableUntil        = $product->getUpdatableUntil();
+        $this->buyableUntil          = $product->getBuyableUntil();
+        $this->subjectedToValidation = $product->isSubjectedToValidation();
     }
 }
