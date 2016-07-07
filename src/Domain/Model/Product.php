@@ -29,6 +29,20 @@ class Product
     const TYPE_PLANNING    = 'planning';
 
     /**
+     * Ceil in percentage
+     */
+    const AVAILABILITY_CEIL_WARNING = 30;
+
+    /**
+     * Ceil in percentage
+     */
+    const AVAILABILITY_CEIL_ALERT = 10;
+
+    const AVAILABILITY_STATUS_DEFAULT = 'default';
+    const AVAILABILITY_STATUS_WARNING = 'warning';
+    const AVAILABILITY_STATUS_ALERT   = 'alert';
+
+    /**
      * @var int
      */
     private $id;
@@ -898,5 +912,33 @@ class Product
     public function isBuyable(\DateTimeInterface $now)
     {
         return ($this->buyableUntil === null) || ($now < $this->buyableUntil);
+    }
+
+    /**
+     * @param int $bought
+     *
+     * @return string
+     */
+    public function getAvailabilityStatus($bought = 0)
+    {
+        if (!$this->isAvailabilityManaged()) {
+            return self::AVAILABILITY_STATUS_DEFAULT;
+        }
+
+        $percentageBought = !$this->availabilityMax
+            ? 0
+            : 100 * ($this->availabilityMax - $bought) / $this->availabilityMax;
+
+        dump($percentageBought);
+
+        if ($percentageBought < self::AVAILABILITY_CEIL_ALERT) {
+            return self::AVAILABILITY_STATUS_ALERT;
+        }
+
+        if ($percentageBought < self::AVAILABILITY_CEIL_WARNING) {
+            return self::AVAILABILITY_STATUS_WARNING;
+        }
+
+        return self::AVAILABILITY_STATUS_DEFAULT;
     }
 }
