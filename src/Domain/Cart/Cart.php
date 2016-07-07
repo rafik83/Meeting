@@ -379,7 +379,13 @@ class Cart
     {
         $total = 0;
         foreach ($promotionCode->getPromotions() as $promotion) {
-            $total = $promotion->getDiscount();
+            if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
+                if ($cartRow->getQuantity() < $promotion->getQuantity()) {
+                    $total += $cartRow->getQuantity() * $promotion->getDiscount();
+                } else {
+                    $total += $promotion->getQuantity() * $promotion->getDiscount();
+                }
+            }
         }
 
         return $total;
