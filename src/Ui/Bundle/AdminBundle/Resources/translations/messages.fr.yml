@@ -298,6 +298,7 @@ admin:
         buyableUntil: Achetable jusqu'au
         updatable: Supprimable
         updatableUntil: Supprimable jusqu'au
+        bought: Nombre achetés
         actions: Actions
         update:
           action: Modifier

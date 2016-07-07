@@ -42,10 +42,32 @@
         </thead>
         <tbody>
         {% for product in products %}
+            {% set bought = product.bought %}
+            {% set product = product[0] %}
             <tr>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                     {{ product.name }}
+
+                    {% if product.subjectedToValidation %}
+                        <span class="label label-warning">
+                            {{ 'admin.product.subjectedToValidation'|trans }}
+                        </span>
+                        &nbsp;
+                    {% endif %}
+
+                    {% if bought > 0 %}
+                        <span class="label label-default" data-toggle="tooltip" data-placement="top" title="{{ 'admin.product.bought'|trans }}">
+                            {{ bought }}
+                        </span>
+                        &nbsp;
+                    {% endif %}
+
+                    {% if product.availabilityManaged %}
+                        <span class="label label-default" data-toggle="tooltip" data-placement="top" title="{{ 'admin.product.availabilityCurrentMax'|trans }}">
+                            {{ product.availabilityCurrent }} / {{ product.availabilityMax }}
+                        </span>
+                    {% endif %}
 
                     {% if product.hasIncludedProducts %}
                         <ul>
@@ -54,21 +76,6 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-
-                    <p>
-                        {% if product.subjectedToValidation %}
-                            <span class="label label-warning">
-                                {{ 'admin.product.subjectedToValidation'|trans }}
-                            </span>
-                            &nbsp;
-                        {% endif %}
-
-                        {% if product.availabilityManaged %}
-                            <span class="label label-default" data-toggle="tooltip" data-placement="top" title="{{ 'admin.product.availabilityCurrentMax'|trans }}">
-                                {{ product.availabilityCurrent }} / {{ product.availabilityMax }}
-                            </span>
-                        {% endif %}
-                    </p>
                 </td>
                 <td class="text-right">{{ product.unitPrice|localizedcurrency(event.currency) }}</td>
                 <td class="text-right">{{ product.quantityMax }}</td>
