@@ -323,7 +323,7 @@ class Cart
             throw new PromotionCodeNotUsedException();
         }
 
-        if($this->isPromotionHaveConflict($promotionCode)) {
+        if ($this->isPromotionHaveConflict($promotionCode)) {
             throw new PromotionCodeConflictException();
         }
 
@@ -368,13 +368,48 @@ class Cart
         return false;
     }
 
-    public function getPromotionTotal()
+    /**
+     * Get total discount for a specific promotion code
+     *
+     * @param PromotionCode $promotionCode
+     *
+     * @return float|int
+     */
+    public function getDiscount(PromotionCode $promotionCode)
     {
+        $total = 0;
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            $total = $promotion->getDiscount();
+        }
 
+        return $total;
     }
 
+    /**
+     * Get total discount of all promotion code on the cart
+     *
+     * @return float|int
+     */
+    public function getTotalDiscount()
+    {
+        $total = 0;
+        foreach ($this->getPromotionCodeRows() as $promotionCodeRow) {
+            $total += $this->getDiscount($promotionCodeRow->getPromotionCode());
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return float|int
+     */
     public function getTotal()
     {
+        $total = 0;
+        foreach ($this->getRows() as $cartRow) {
+            $total += $cartRow->getProduct()->getUnitPrice() * $cartRow->getQuantity();
+        }
 
+        return $total;
     }
 }
