@@ -65,7 +65,7 @@ class PackageController extends Controller
     public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
-
+        
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if (!$funnel->hasStep($step)) {
