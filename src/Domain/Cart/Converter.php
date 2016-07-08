@@ -13,13 +13,14 @@ namespace Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Address;
+use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 /**
  * Cart Converter to:
@@ -56,36 +57,37 @@ class Converter
      * @var CartStepRepositoryInterface
      */
     private $cartStepRepository;
-    /**
-     * @var PromotionCodeRepositoryInterface
-     */
-    private $promotionCodeRepository;
 
     /**
-     * @param OrderRepositoryInterface         $orderRepository
-     * @param CartRowRepositoryInterface       $cartRowRepository
-     * @param CartStepRepositoryInterface      $cartStepRepository
-     * @param BillingInfoRepositoryInterface   $billingInfoRepository
-     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     * @param VatApplicable                    $vatApplicable
-     * @param \DateTimeInterface               $datetime
+     * @var PromotionCodeRowRepositoryInterface
+     */
+    private $promotionCodeRowRepository;
+
+    /**
+     * @param OrderRepositoryInterface            $orderRepository
+     * @param CartRowRepositoryInterface          $cartRowRepository
+     * @param CartStepRepositoryInterface         $cartStepRepository
+     * @param BillingInfoRepositoryInterface      $billingInfoRepository
+     * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
+     * @param VatApplicable                       $vatApplicable
+     * @param \DateTimeInterface                  $datetime
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         BillingInfoRepositoryInterface $billingInfoRepository,
-        PromotionCodeRepositoryInterface $promotionCodeRepository,
+        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         VatApplicable $vatApplicable,
         \DateTimeInterface $datetime
     ) {
-        $this->orderRepository         = $orderRepository;
-        $this->cartRowRepository       = $cartRowRepository;
-        $this->cartStepRepository      = $cartStepRepository;
-        $this->billingInfoRepository   = $billingInfoRepository;
-        $this->promotionCodeRepository = $promotionCodeRepository;
-        $this->vatApplicable           = $vatApplicable;
-        $this->datetime                = $datetime;
+        $this->orderRepository            = $orderRepository;
+        $this->cartRowRepository          = $cartRowRepository;
+        $this->cartStepRepository         = $cartStepRepository;
+        $this->billingInfoRepository      = $billingInfoRepository;
+        $this->promotionCodeRowRepository = $promotionCodeRowRepository;
+        $this->vatApplicable              = $vatApplicable;
+        $this->datetime                   = $datetime;
     }
 
     /**
@@ -136,6 +138,12 @@ class Converter
             $order->addRow($this->convertToRow($order, $cartRow));
         }
 
+        foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
+            $order->addPromotionCode(
+                $this->convertToPromotionCode($order, $cart, $promotionCodeRow)
+            );
+        }
+
         $this->orderRepository->add($order);
         $this->emptyCart($cart);
 
@@ -166,11 +174,31 @@ class Converter
     }
 
     /**
+     * @param Order            $order
+     * @param Cart             $cart
+     * @param PromotionCodeRow $promotionCodeRow
+     *
+     * @return Order\PromotionCode
+     */
+    private function convertToPromotionCode(Order $order, Cart $cart, PromotionCodeRow $promotionCodeRow)
+    {
+        $discount = $cart->getDiscount($promotionCodeRow->getPromotionCode());
+
+        return new Order\PromotionCode(
+            $order,
+            $promotionCodeRow->getPromotionCode(),
+            1,
+            $discount
+        );
+    }
+
+    /**
      * @param Cart $cart
      */
     private function emptyCart(Cart $cart)
     {
         $this->cartRowRepository->deleteForSheet($cart->getSheet());
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
+        $this->promotionCodeRowRepository->deleteForSheet($cart->getSheet());
     }
 }

@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Order\PromotionCode:
+    type:  entity
+    table: order_promotion_code
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        quantity:
+            type: integer
+        data:
+            type: json_array
+        price:
+            type: float
+    manyToOne:
+        order:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order
+            inversedBy: promotionCodes
+            joinColumn:
+                onDelete: "cascade"
+        promotionCode:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode

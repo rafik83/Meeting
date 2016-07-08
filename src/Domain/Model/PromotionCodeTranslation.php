@@ -112,4 +112,23 @@ class PromotionCodeTranslation
     {
         return $this->description;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'label'       => $this->label,
+            'description' => $this->description,
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslationSerializedData()
+    {
+        return json_encode($this->getData());
+    }
 }

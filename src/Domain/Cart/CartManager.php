@@ -94,7 +94,12 @@ class CartManager
         // Save / add promotion code rows
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
             if ($promotionCodeRow->getId()) {
-                $this->promotionCodeRowRepository->set($promotionCodeRow);
+                // Remove promotionCodeRow if the discount is not usable anymore
+                if (0 > $cart->getDiscount($promotionCodeRow->getPromotionCode())) {
+                    $this->promotionCodeRowRepository->set($promotionCodeRow);
+                } else {
+                    $this->promotionCodeRowRepository->delete($promotionCodeRow);
+                }
             } else {
                 $this->promotionCodeRowRepository->add($promotionCodeRow);
             }

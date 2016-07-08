@@ -44,7 +44,7 @@ class TotalToPayTest extends \PHPUnit_Framework_TestCase
         $planRow  = new CartRow($sheet, $plan, 1);
         $chairRow = new CartRow($sheet, $chair, 2);
         $currentStep = 4;
-        $cart  = new Cart($sheet, [$planRow, $chairRow], $currentStep);
+        $cart  = new Cart($sheet, [$planRow, $chairRow], [], $currentStep);
 
 
         // Mock

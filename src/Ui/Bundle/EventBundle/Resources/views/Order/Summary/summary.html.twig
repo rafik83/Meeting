@@ -10,6 +10,7 @@
     </thead>
     <tbody>
     {{ include('EventBundle:Order/Summary:groups.html.twig', {groups: summary.groups}) }}
+    {{ include('EventBundle:Order/Summary:promotion_codes.html.twig', {promotionCodes: summary.promotionCodes}) }}
     {% if summary.vatApplicable %}
         <tr>
             <td colspan="2"></td>

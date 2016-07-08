@@ -1417,10 +1417,17 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
         arguments:
             - '@query.order.summary.group_view_query_handler'
+    query.order.summary.promotion_code_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodeViewQueryHandler
+    query.order.summary.promotion_codes_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler
+        arguments:
+            - '@query.order.summary.promotion_code_view_query_handler'
     query.order.summary_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
         arguments:
             - '@query.order.summary.groups_view_query_handler'
+            - '@query.order.summary.promotion_codes_view_query_handler'
     query.order.pro_forma_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
         arguments:

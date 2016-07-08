@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Order;
 
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQuery;
+use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;
+use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\SummaryView;
 
 class SummaryQueryHandler
@@ -22,11 +24,20 @@ class SummaryQueryHandler
     private $groupsViewQueryHandler;
 
     /**
-     * @param GroupsViewQueryHandler $groupsViewQueryHandler
+     * @var PromotionCodesViewQueryHandler
      */
-    public function __construct(GroupsViewQueryHandler $groupsViewQueryHandler)
-    {
-        $this->groupsViewQueryHandler = $groupsViewQueryHandler;
+    private $promotionCodesViewQueryHandler;
+
+    /**
+     * @param GroupsViewQueryHandler         $groupsViewQueryHandler
+     * @param PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
+     */
+    public function __construct(
+        GroupsViewQueryHandler $groupsViewQueryHandler,
+        PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
+    ) {
+        $this->groupsViewQueryHandler         = $groupsViewQueryHandler;
+        $this->promotionCodesViewQueryHandler = $promotionCodesViewQueryHandler;
     }
     /**
      * @param SummaryQuery $summaryQuery
@@ -38,6 +49,12 @@ class SummaryQueryHandler
         return new SummaryView(
             $this->groupsViewQueryHandler->handle(
                 new GroupsViewQuery(
+                    $summaryQuery->order,
+                    $summaryQuery->locale
+                )
+            ),
+            $this->promotionCodesViewQueryHandler->handle(
+                new PromotionCodesViewQuery(
                     $summaryQuery->order,
                     $summaryQuery->locale
                 )

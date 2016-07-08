@@ -47,7 +47,7 @@ class TotalToPay
     {
         $cart          = $this->cartManager->getCart($sheet);
         $vatApplicable = $this->vatApplicable->onCart($cart);
-        $total         = $cart->getTotal();
+        $total         = $cart->getTotal() + $cart->getTotalDiscount();
         $vatToPay      = 0;
 
         if ($vatApplicable) {

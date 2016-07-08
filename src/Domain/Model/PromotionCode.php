@@ -280,4 +280,37 @@ class PromotionCode
 
         return $datetime >= $this->validUntil;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'id'           => $this->getId(),
+            'translations' => $this->getTranslationsData(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getTranslationsData()
+    {
+        $data = [];
+
+        foreach ($this->translations->toArray() as $locale => $translation) {
+            $data[$locale] = $translation->getData();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerializedData()
+    {
+        return json_encode($this->getData());
+    }
 }

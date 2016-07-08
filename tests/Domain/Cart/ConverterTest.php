@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
@@ -63,7 +64,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $planRow  = new CartRow($sheet, $plan, 1);
         $chairRow = new CartRow($sheet, $chair, 2);
         $currentStep = 4;
-        $cart  = new Cart($sheet, [$planRow, $chairRow], $currentStep);
+        $cart  = new Cart($sheet, [$planRow, $chairRow], [], $currentStep);
 
         // Expected
         $orderBillingInfo = new Order\BillingInfo(
@@ -86,11 +87,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $order->addRow($chairOrderRow);
 
         // Mock
-        $orderRepository       = $this->prophesize(OrderRepositoryInterface::class);
-        $cartRowRepository     = $this->prophesize(CartRowRepositoryInterface::class);
-        $vatApplicable         = $this->prophesize(VatApplicable::class);
-        $billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-        $cartStepRepository    = $this->prophesize(CartStepRepositoryInterface::class);
+        $orderRepository            = $this->prophesize(OrderRepositoryInterface::class);
+        $cartRowRepository          = $this->prophesize(CartRowRepositoryInterface::class);
+        $vatApplicable              = $this->prophesize(VatApplicable::class);
+        $billingInfoRepository      = $this->prophesize(BillingInfoRepositoryInterface::class);
+        $cartStepRepository         = $this->prophesize(CartStepRepositoryInterface::class);
+        $promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
 
         $orderRepository->add(Argument::that(function (Order $givenOrder) use ($order) {
             return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotal() === $order->getTotal();
@@ -105,6 +107,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             $cartRowRepository->reveal(),
             $cartStepRepository->reveal(),
             $billingInfoRepository->reveal(),
+            $promotionCodeRowRepository->reveal(),
             $vatApplicable->reveal(),
             $datetime
         );

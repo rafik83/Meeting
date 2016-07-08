@@ -31,7 +31,7 @@ class PromotionCodeRowRepository implements PromotionCodeRowRepositoryInterface
     }
 
     /**
-     * @param PromotionCodeRow $promotionCodeRow
+     * {@inheritdoc}
      */
     public function add(PromotionCodeRow $promotionCodeRow)
     {
@@ -40,7 +40,7 @@ class PromotionCodeRowRepository implements PromotionCodeRowRepositoryInterface
     }
 
     /**
-     * @param PromotionCodeRow $promotionCodeRow
+     * {@inheritdoc}
      */
     public function set(PromotionCodeRow $promotionCodeRow)
     {
@@ -48,11 +48,9 @@ class PromotionCodeRowRepository implements PromotionCodeRowRepositoryInterface
     }
 
     /**
-     * @param Sheet $sheet
-     *
-     * @return PromotionCodeRow[]
+     * {@inheritdoc}
      */
-    public function findBySheet($sheet)
+    public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this
             ->entityManager
@@ -66,11 +64,27 @@ class PromotionCodeRowRepository implements PromotionCodeRowRepositoryInterface
     }
 
     /**
-     * @param $promotionCodeRow
+     * {@inheritdoc}
      */
-    public function delete($promotionCodeRow)
+    public function delete(PromotionCodeRow $promotionCodeRow)
     {
         $this->entityManager->remove($promotionCodeRow);
         $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteForSheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(PromotionCodeRow::class, 'promotionCodeRow')
+            ->where('promotionCodeRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        $queryBuilder->getQuery()->execute();
     }
 }

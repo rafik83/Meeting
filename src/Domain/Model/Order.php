@@ -59,6 +59,11 @@ class Order
     private $rows = [];
 
     /**
+     * @var Order\PromotionCode[]
+     */
+    private $promotionCodes = [];
+
+    /**
      * @var Order\BillingInfo
      */
     private $billingInfo;
@@ -82,15 +87,16 @@ class Order
         $groupsData,
         DateTimeInterface $createdAt
     ) {
-        $this->sheet         = $sheet;
-        $this->createdAt     = $createdAt;
-        $this->vatApplicable = $vatApplicable;
-        $this->billingInfo   = $billingInfo;
-        $this->groupsData    = $groupsData;
-        $this->vatMode       = $sheet->getEvent()->getMode();
-        $this->currency      = $sheet->getEvent()->getCurrency();
-        $this->vatRate       = $sheet->getEvent()->getVat();
-        $this->rows          = new ArrayCollection();
+        $this->sheet          = $sheet;
+        $this->createdAt      = $createdAt;
+        $this->vatApplicable  = $vatApplicable;
+        $this->billingInfo    = $billingInfo;
+        $this->groupsData     = $groupsData;
+        $this->vatMode        = $sheet->getEvent()->getMode();
+        $this->currency       = $sheet->getEvent()->getCurrency();
+        $this->vatRate        = $sheet->getEvent()->getVat();
+        $this->rows           = new ArrayCollection();
+        $this->promotionCodes = new ArrayCollection();
     }
 
     /**
@@ -202,6 +208,18 @@ class Order
     }
 
     /**
+     * @param Order\PromotionCode $promotionCode
+     *
+     * @return Order
+     */
+    public function addPromotionCode(Order\PromotionCode $promotionCode)
+    {
+        $this->promotionCodes->add($promotionCode);
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getTotal()
@@ -210,6 +228,10 @@ class Order
 
         foreach ($this->rows->toArray() as $row) {
             $total += $row->getQuantity() * $row->getPrice();
+        }
+
+        foreach ($this->promotionCodes->toArray() as $promotionCode) {
+            $total += $promotionCode->getPrice() * $promotionCode->getQuantity();
         }
 
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
@@ -306,5 +328,13 @@ class Order
         }
 
         return null;
+    }
+
+    /**
+     * @return Order\PromotionCode[]
+     */
+    public function getPromotionCodes()
+    {
+        return $this->promotionCodes->toArray();
     }
 }
