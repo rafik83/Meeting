@@ -264,7 +264,7 @@ class PromotionCode
      */
     public function isSoldOut()
     {
-        return $this->stock == 0;
+        return $this->stock === 0;
     }
 
     /**

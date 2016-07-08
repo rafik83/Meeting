@@ -33,8 +33,8 @@ class PromotionCodeRow
      */
     public function __construct(Sheet $sheet, PromotionCode $promotionCode)
     {
-        $this->sheet             = $sheet;
-        $this->promotionCode     = $promotionCode;
+        $this->sheet         = $sheet;
+        $this->promotionCode = $promotionCode;
     }
 
     /**
