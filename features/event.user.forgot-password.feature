@@ -1,5 +1,5 @@
 @event
-
+@account
 Feature: Forgot Password
   I need to be able to change my password if I forgot it
 

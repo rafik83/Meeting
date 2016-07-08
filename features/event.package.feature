@@ -1,5 +1,5 @@
 @event
-
+@package
 Feature: Complete my package
   I need to be able to buy plan, participants, planning and options
 
@@ -27,6 +27,7 @@ Feature: Complete my package
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "Packs de rendez-vous"
+    And I should see "sheet.object.action.add"
     # This needs to be redefined as it doesn't show the price anymore
     And the ".user__formule" element should contain "package.product.unitPrice"
     And the ".product-price" element should contain "package.product.unitPrice"
@@ -55,6 +56,21 @@ Feature: Complete my package
     When I go to this page "/fr/sheet/1/package/step/3"
     Then the "options_10" field should contain "1"
     Then the "options_11" field should contain "3"
+
+    Scenario: I can add a participant at step 2
+      Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+      When I am on this page "/fr/sheet/1/package/step/2"
+      Then I should see "sheet.object.action.add"
+      And I follow "sheet.object.action.add"
+      And I should see "sheet.participant.sendInvite"
+      And I fill in the following:
+        | add_participant_firstName | Truc         |
+        | add_participant_lastName  | Test         |
+        | add_participant_email     | truc@test.fr |
+      Then I press "sheet.participant.sendInvite"
+      And I should be on this page "/fr/sheet/1/package/step/2"
+      And I should see "Truc TEST"
+      And I should see "TT"
 
   Scenario: I can fill my billing-info
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
