@@ -190,7 +190,11 @@ services:
     repository.cart_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
         arguments:
-        - '@doctrine.orm.entity_manager'
+            - '@doctrine.orm.entity_manager'
+    repository.promotion_code_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRowRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.billing_info_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
@@ -963,6 +967,21 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
+    command.event.promotion_code.add_handler:
+        class: Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler
+        arguments:
+           - '@cart_manager'
+           - '@repository.promotion_code_repository'
+           - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Add }
+    command.event.promotion_code.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Package\PromotionCode\RemoveHandler
+        arguments:
+           - '@repository.promotion_code_row_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
+
 
     #
     # Security
@@ -1349,7 +1368,10 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
-
+    query.package.summary.promotion_code_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQuery }
     query.package.summary.product_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler
     query.package.summary.group_view_query_handler:
@@ -1380,6 +1402,7 @@ services:
         arguments:
             - '@query.package.summary.groups_view_query_handler'
             - '@package.specification.vat_applicable'
+            - '@query.package.summary.promotion_code_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
     query.order.summary.product_view_query_handler:
@@ -1461,6 +1484,7 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
+            - '@repository.promotion_code_row_repository'
     cart.convertor:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:
@@ -1468,6 +1492,7 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.billing_info_repository'
+            - '@repository.promotion_code_row_repository'
             - '@package.specification.vat_applicable'
             - '@datetime'
 

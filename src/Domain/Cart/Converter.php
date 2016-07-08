@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 /**
  * Cart Converter to:
@@ -55,29 +56,36 @@ class Converter
      * @var CartStepRepositoryInterface
      */
     private $cartStepRepository;
+    /**
+     * @var PromotionCodeRepositoryInterface
+     */
+    private $promotionCodeRepository;
 
     /**
-     * @param OrderRepositoryInterface       $orderRepository
-     * @param CartRowRepositoryInterface     $cartRowRepository
-     * @param CartStepRepositoryInterface    $cartStepRepository
-     * @param BillingInfoRepositoryInterface $billingInfoRepository
-     * @param VatApplicable                  $vatApplicable
-     * @param \DateTimeInterface             $datetime
+     * @param OrderRepositoryInterface         $orderRepository
+     * @param CartRowRepositoryInterface       $cartRowRepository
+     * @param CartStepRepositoryInterface      $cartStepRepository
+     * @param BillingInfoRepositoryInterface   $billingInfoRepository
+     * @param PromotionCodeRepositoryInterface $promotionCodeRepository
+     * @param VatApplicable                    $vatApplicable
+     * @param \DateTimeInterface               $datetime
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         BillingInfoRepositoryInterface $billingInfoRepository,
+        PromotionCodeRepositoryInterface $promotionCodeRepository,
         VatApplicable $vatApplicable,
         \DateTimeInterface $datetime
     ) {
-        $this->orderRepository       = $orderRepository;
-        $this->cartRowRepository     = $cartRowRepository;
-        $this->billingInfoRepository = $billingInfoRepository;
-        $this->vatApplicable         = $vatApplicable;
-        $this->datetime              = $datetime;
-        $this->cartStepRepository = $cartStepRepository;
+        $this->orderRepository         = $orderRepository;
+        $this->cartRowRepository       = $cartRowRepository;
+        $this->cartStepRepository      = $cartStepRepository;
+        $this->billingInfoRepository   = $billingInfoRepository;
+        $this->promotionCodeRepository = $promotionCodeRepository;
+        $this->vatApplicable           = $vatApplicable;
+        $this->datetime                = $datetime;
     }
 
     /**

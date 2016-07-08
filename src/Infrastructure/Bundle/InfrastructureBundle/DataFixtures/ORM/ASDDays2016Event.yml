@@ -1806,3 +1806,34 @@ Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
             contracts between us and our clients. Any differing conditions or terms of
             buyer are herewith objected to and shall not apply. Any agreement affecting
             the execution of this contract must be in writing.
+
+Proximum\Vimeet\Domain\Model\PromotionCode:
+    promotion_code_asddays_2016:
+        __construct: ['@event_asddays_2016', 'Assdays Promotion Code', 'ASDDAYS10', 50]
+    promotion_code_02_asddays_2016:
+        __construct: ['@event_asddays_2016', 'Assdays Promotion Code 2', 'ASDDAYS20', 50]
+
+Proximum\Vimeet\Domain\Model\PromotionCodeTranslation:
+    promotion_code_assdays_2016_translation:
+        __construct: ['@promotion_code_asddays_2016', 'fr', 'Assdays Promotion Code', 'Assdays Promotion Code Description']
+    promotion_code_02_assdays_2016_translation:
+        __construct: ['@promotion_code_02_asddays_2016', 'fr', 'Assdays Promotion Code 2', 'Assdays Promotion Code Description 2']
+
+Proximum\Vimeet\Domain\Model\Promotion:
+    promotion_01_asddays_2016:
+        __construct: false
+        promotionCode: '@promotion_code_asddays_2016'
+        product: '@product_plan_2_asddays'
+        type: 'percent_off'
+        value: 50
+    promotion_02_asddays_2016:
+        __construct: false
+        promotionCode: '@promotion_code_asddays_2016'
+        product: '@product_option_2_asddays'
+        type: 'value_off'
+        value: 5
+    promotion_03_asddays_2016:
+        __construct: false
+        promotionCode: '@promotion_code_02_asddays_2016'
+        product: '@product_participant_1_asddays'
+        type: 'free'

@@ -21,6 +21,11 @@ class SummaryView
     public $groups;
 
     /**
+     * @var PromotionCodesView
+     */
+    public $promotionCodes;
+
+    /**
      * @var string
      */
     public $vatMode;
@@ -56,15 +61,16 @@ class SummaryView
     public $funnel;
 
     /**
-     * @param Funnel     $funnel
-     * @param GroupsView $groupsView
-     * @param string     $vatMode
-     * @param float      $vat
-     * @param float      $total
-     * @param string     $currency
-     * @param bool       $mustPayVat
+     * @param Funnel             $funnel
+     * @param GroupsView         $groupsView
+     * @param string             $vatMode
+     * @param float              $vat
+     * @param float              $total
+     * @param string             $currency
+     * @param bool               $mustPayVat
+     * @param PromotionCodesView $promotionCodesView
      */
-    public function __construct(Funnel $funnel, GroupsView $groupsView, $vatMode, $vat, $total, $currency, $mustPayVat)
+    public function __construct(Funnel $funnel, GroupsView $groupsView, PromotionCodesView $promotionCodesView, $vatMode, $vat, $total, $currency, $mustPayVat)
     {
         $this->funnel       = $funnel;
         $this->groups       = $groupsView;
@@ -73,6 +79,7 @@ class SummaryView
         $this->total        = $total;
         $this->mustPayVat   = $mustPayVat;
         $this->currency     = $currency;
+
         if ($mustPayVat) {
             $this->totalVat     = ($total * $vat) / 100;
             $this->totalPlusVat = $total + $this->totalVat;
@@ -80,5 +87,7 @@ class SummaryView
             $this->totalVat     = 0;
             $this->totalPlusVat = $total;
         }
+
+        $this->promotionCodes = $promotionCodesView;
     }
 }

@@ -434,6 +434,7 @@ event_package:
     path: /package
     defaults: { _controller: EventBundle:Package:redirect }
     methods: [GET]
+
 event_package_step:
     path: /sheet/{sheet}/package/step/{step}
     defaults: { _controller: EventBundle:Package:step }
@@ -441,6 +442,7 @@ event_package_step:
         sheet: \d+
         step: \d+
     methods:  [GET, POST]
+
 event_package_summary:
     path: /sheet/{sheet}/package/summary
     defaults: { _controller: EventBundle:Package:summary }
@@ -455,6 +457,14 @@ event_package_summary_fill_billing_info:
     requirements:
         sheet: \d+
     methods: [GET]
+
+event_package_remove_promotion_code:
+    path: /sheet/{sheet}/package/promotion/{promotion}/remove
+    requirements:
+        sheet: \d+
+        promotion: \d+
+    methods: [DELETE]
+    defaults: { _controller: EventBundle:Package:removePromotionCode }
 
 event_package_payment:
     path: /sheet/{sheet}/package/payment

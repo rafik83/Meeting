@@ -92,6 +92,20 @@ Feature: Complete my package
     And I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/package/payment"
 
+  Scenario: I can add multiple promotion code
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/summary"
+    Then I should see "package.summary.title"
+    And I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS10"
+    And I press "package_summary_promotion_code.children.submit.label"
+    Then I should be on this page "/fr/sheet/1/package/summary"
+    And I should see "Assdays Promotion Code"
+    Then I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS20"
+    And I press "package_summary_promotion_code.children.submit.label"
+    Then I should be on this page "/fr/sheet/1/package/summary"
+    And I should see "Assdays Promotion Code"
+    And I should see "Assdays Promotion Code 2"
+
   Scenario: I can my payment method
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr/sheet/1/package/summary"

@@ -34,8 +34,8 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $product  = Product::createPlan($event, 'plan', '', 100, 10, 40);
 
-        $emptyCart    = new Cart($sheet, [], 1);
-        $expectedCart = new Cart($sheet, [new CartRow($sheet, $product, 1)], 1);
+        $emptyCart    = new Cart($sheet, [], [], 1);
+        $expectedCart = new Cart($sheet, [new CartRow($sheet, $product, 1)], [], 1);
 
         // Mock
         $cartManager = $this->prophesize(CartManager::class);
@@ -60,8 +60,8 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
 
-        $actualCart   = new Cart($sheet, [new CartRow($sheet, $product1, 1)], 1);
-        $expectedCart = new Cart($sheet, [new CartRow($sheet, $product2, 1)], 1);
+        $actualCart   = new Cart($sheet, [new CartRow($sheet, $product1, 1)], [], 1);
+        $expectedCart = new Cart($sheet, [new CartRow($sheet, $product2, 1)], [], 1);
 
         // Mock
         $cartManager = $this->prophesize(CartManager::class);

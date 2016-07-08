@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
-use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeExcetpion;
+use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 abstract class AbstractCommandHandler
@@ -47,7 +47,7 @@ abstract class AbstractCommandHandler
     protected function checkUniqueCode(PromotionCode $promotionCode)
     {
         if (!$this->uniqueCodeChecker->hasUniqueCode($promotionCode)) {
-            throw new NonUniqueCodeExcetpion('This code already exists.');
+            throw new NonUniqueCodeException('This code already exists.');
         }
     }
 

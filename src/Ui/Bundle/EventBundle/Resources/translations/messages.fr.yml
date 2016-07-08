@@ -123,6 +123,10 @@ package:
         totalVat: '+ TVA applicable de %vat%%'
         totalPlusVat: Total à régler
         option: Option
+        promotion:
+            label: Offres de réductions
+            button:
+                label: Valider
         billingInfo:
             update: Modifier vos informations de facturation
         columns:

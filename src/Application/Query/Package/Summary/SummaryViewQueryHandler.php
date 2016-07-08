@@ -26,13 +26,23 @@ class SummaryViewQueryHandler
     public $vatApplicable;
 
     /**
-     * @param GroupsViewQueryHandler $groupsViewQueryHandler
-     * @param VatApplicable          $vatApplicable
+     * @var PromotionCodeQueryHandler
      */
-    public function __construct(GroupsViewQueryHandler $groupsViewQueryHandler, VatApplicable $vatApplicable)
-    {
-        $this->groupsViewQueryHandler = $groupsViewQueryHandler;
-        $this->vatApplicable          = $vatApplicable;
+    public $promotionCodeQueryHandler;
+
+    /**
+     * @param GroupsViewQueryHandler    $groupsViewQueryHandler
+     * @param VatApplicable             $vatApplicable
+     * @param PromotionCodeQueryHandler $promotionCodeQueryHandler
+     */
+    public function __construct(
+        GroupsViewQueryHandler $groupsViewQueryHandler,
+        VatApplicable $vatApplicable,
+        PromotionCodeQueryHandler $promotionCodeQueryHandler
+    ) {
+        $this->groupsViewQueryHandler    = $groupsViewQueryHandler;
+        $this->vatApplicable             = $vatApplicable;
+        $this->promotionCodeQueryHandler = $promotionCodeQueryHandler;
     }
 
     /**
@@ -48,12 +58,21 @@ class SummaryViewQueryHandler
             $summaryViewQuery->locale
         ));
 
+        $promoCodes = $this->promotionCodeQueryHandler->handle(new PromotionCodeQuery(
+            $summaryViewQuery->sheet,
+            $summaryViewQuery->cart,
+            $summaryViewQuery->locale
+        ));
+
+        $total = $groups->getTotal() + $promoCodes->getTotal();
+
         return new SummaryView(
             $summaryViewQuery->funnel,
             $groups,
+            $promoCodes,
             $summaryViewQuery->sheet->getEvent()->getMode(),
             $summaryViewQuery->sheet->getEvent()->getVat(),
-            $groups->getTotal(),
+            $total,
             $summaryViewQuery->sheet->getEvent()->getCurrency(),
             $this->vatApplicable->onCart($summaryViewQuery->cart)
         );
