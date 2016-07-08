@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManager
@@ -30,11 +29,6 @@ class CartManager
     private $cartStepRepository;
 
     /**
-     * @var PromotionCodeRepositoryInterface
-     */
-    private $promotionCodeRepository;
-
-    /**
      * @var PromotionCodeRowRepositoryInterface
      */
     private $promotionCodeRowRepository;
@@ -42,18 +36,15 @@ class CartManager
     /**
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
-     * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
-        PromotionCodeRepositoryInterface $promotionCodeRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
     ) {
         $this->cartRowRepository          = $cartRowRepository;
         $this->cartStepRepository         = $cartStepRepository;
-        $this->promotionCodeRepository    = $promotionCodeRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
     }
 

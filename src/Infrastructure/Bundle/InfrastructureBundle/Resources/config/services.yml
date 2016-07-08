@@ -1404,7 +1404,6 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
-            - '@repository.promotion_code_repository'
             - '@repository.promotion_code_row_repository'
 
     #

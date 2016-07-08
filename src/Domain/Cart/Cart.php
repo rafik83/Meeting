@@ -340,7 +340,7 @@ class Cart
     public function cartRowProductInPromotionCode(PromotionCode $promotionCode)
     {
         foreach ($promotionCode->getPromotions() as $promotion) {
-            if ($this->getCartRowForProduct($promotion->getProduct()) != null) {
+            if (null !== $this->getCartRowForProduct($promotion->getProduct())) {
                 return true;
             }
         }
