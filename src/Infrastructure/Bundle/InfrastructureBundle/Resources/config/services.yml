@@ -1407,6 +1407,7 @@ services:
     query.navigation.category_package_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQueryHandler
         arguments:
+            - '@package.funnel.funnel_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQuery }
     query.navigation.category_planning_view_query_handler:

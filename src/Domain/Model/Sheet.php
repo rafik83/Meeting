@@ -339,11 +339,11 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Order[]
      */
     public function getOrders()
     {
-        return $this->orders;
+        return $this->orders->toArray();
     }
 
     /**

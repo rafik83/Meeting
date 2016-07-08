@@ -136,3 +136,26 @@ package:
         payment: Paiement
 billing_info:
     title: Info de facturation
+
+navigation:
+    category:
+        member_space: Espace membre
+        billing: Facturation
+        sheet: Fiche de présentation
+        package: Forfait de participation
+        catalog: Catalogue des participants
+        happening: Gestion de rdv
+        planning: Agenda provisoire
+    links:
+        member_space:
+            profile: Profil
+            avatar: Photo
+            company: Société / Organisme
+        billing:
+            billing_info: Informations de facturation
+            order_history: Historique des commandes
+        sheet:
+            locale: Version
+        package:
+            summary: Récapitulatif
+            payment: Paiement

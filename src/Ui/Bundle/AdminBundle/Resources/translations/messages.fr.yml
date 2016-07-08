@@ -652,18 +652,3 @@ admin:
             unlock: Débloquer
             locked: Bloqué
             unlocked: Débloqué
-
-navigation:
-    category:
-        member_space: Espace membre
-        billing: Facturation
-        sheet: Fiche de présentation
-        package: Forfait de participation
-        catalog: Catalogue des participants
-        happening: Gestion de rdv
-        planning: Agenda provisoire
-    links:
-        member_space:
-            profile: Profil
-            avatar: Photo
-            company: Société / Organisme

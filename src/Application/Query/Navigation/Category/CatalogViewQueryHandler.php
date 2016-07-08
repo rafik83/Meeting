@@ -15,6 +15,11 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 
 class CatalogViewQueryHandler
 {
+    /**
+     * @param CatalogViewQuery $catalogViewQuery
+     *
+     * @return CategoryView
+     */
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
         return new CategoryView(

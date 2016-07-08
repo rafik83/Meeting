@@ -108,10 +108,18 @@ class CategoryViewQueryHandler
                 ));
                 break;
             case Category::BILLING:
-                return $this->billingViewQueryHandler->handle(new BillingViewQuery());
+                return $this->billingViewQueryHandler->handle(new BillingViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
                 break;
             case Category::SHEET:
-                return $this->sheetViewQueryHandler->handle(new SheetViewQuery());
+                return $this->sheetViewQueryHandler->handle(new SheetViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
                 break;
             case Category::CATALOG:
                 return $this->catalogViewQueryHandler->handle(new CatalogViewQuery());
@@ -123,7 +131,11 @@ class CategoryViewQueryHandler
                 return $this->happeningViewQueryHandler->handle(new HappeningViewQuery());
                 break;
             case Category::PACKAGE:
-                return $this->packageViewQueryHandler->handle(new PackageViewQuery());
+                return $this->packageViewQueryHandler->handle(new PackageViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
                 break;
         }
     }
