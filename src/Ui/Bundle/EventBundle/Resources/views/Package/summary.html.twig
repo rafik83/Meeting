@@ -55,7 +55,7 @@
                                             {{ 'package.summary.totalOfSummary'|trans }}
                                             <span>
                                                 {{ 'package.product.unitPrice'|trans({
-                                                    '%price%': view.total,
+                                                    '%price%': view.total|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                     '%vatMode%': ('package.vatMode.' ~ view.vatMode)|trans
                                                 })|html }}
@@ -64,7 +64,7 @@
                                         <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vat }) }}
                                             <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
-                                                    '%price%': view.totalVat,
+                                                    '%price%': view.totalVat|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
@@ -74,7 +74,7 @@
                                         {% set totalVatMode = (view.mustPayVat ? 'ati' :  view.vatMode) %}
                                         <span>
                                             {{ 'package.product.unitPrice'|trans({
-                                                '%price%': view.totalPlusVat,
+                                                '%price%': view.totalPlusVat|localizednumber,
                                                 '%currency%': view.currency|currency_symbol,
                                                 '%vatMode%': ('package.vatMode.' ~ totalVatMode)|trans
                                             })|html }}
