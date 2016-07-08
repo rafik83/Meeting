@@ -1,0 +1,75 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Order;
+
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\View\Order\OrderListView;
+use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+
+class PaginatedOrderListViewQueryHandler
+{
+    /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SheetInfoGuesser         $sheetInfoGuesser
+     */
+    public function __construct(OrderRepositoryInterface $orderRepository, SheetInfoGuesser $sheetInfoGuesser)
+    {
+        $this->orderRepository  = $orderRepository;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    }
+
+    /**
+     * @param PaginatedOrderListViewQuery $query
+     *
+     * @return PaginatedResult
+     */
+    public function handle(PaginatedOrderListViewQuery $query)
+    {
+        $orders = $this->orderRepository->findByEvent(
+            $query->event,
+            $query->filters,
+            $query->page,
+            $query->limit,
+            $query->locale
+        );
+
+        $orders->results = array_map(
+            function (Order $order) use ($query) {
+                return new OrderListView(
+                    $order->getId(),
+                    $this->sheetInfoGuesser->guessSheetName($order->getSheet(), $query->locale),
+                    $order->getSheet()->getType()->getTitle($query->locale),
+                    $order->getSheet()->getFollower() ? $order->getSheet()->getFollower()->getDisplayName() : '',
+                    $order->getCreatedAt(),
+                    $order->getTotal(),
+                    $order->getVatMode(),
+                    $order->getCurrency()
+                );
+            },
+            $orders->results
+        );
+
+        return $orders;
+    }
+}

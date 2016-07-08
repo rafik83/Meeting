@@ -286,7 +286,14 @@ admin:
         update_password:
             title: Modifier mon mot de passe
     order:
-        link: Commandes et transactions
+        link: Commandes
+        title: Liste des commandes
+        id: Id
+        sheet: Fiche
+        type: Type de participation
+        follower: Suivi commercial
+        createdAt: Créée le
+        total: Total
     product:
         link: Catalogue de produits
         title: Catalogue de produits
@@ -386,13 +393,16 @@ admin:
         languages: Langues
         fallback: Par défaut
         billing:
-          configuration:
-            link: Information facturation
-            title: Configuration des informations de facturation
+            configuration:
+                link: Information facturation
+                title: Configuration des informations de facturation
         practicalInfo:
-          link: Informations Pratiques
-          update:
-            title: Modifier les informations pratiques
+            link: Informations Pratiques
+            update:
+                title: Modifier les informations pratiques
+        vatMode:
+            et: HT
+            ati: TTC
     rule:
         link: Qui voit qui
     type:
