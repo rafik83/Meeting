@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Order\AddRow;
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
+use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -24,6 +25,30 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function listAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        $query = new PaginatedOrderListViewQuery(
+            $event,
+            [],
+            $request->query->getInt('page', 1),
+            20,
+            $request->getLocale()
+        );
+        $orders = $this->get('tactician.commandbus.query')->handle($query);
+
+        return $this->render('AdminBundle:Order:list.html.twig', [
+            'event' =>  $event,
+            'orders' => $orders,
+        ]);
+    }
+
     /**
      * @param Request $request
      * @param Event   $event
