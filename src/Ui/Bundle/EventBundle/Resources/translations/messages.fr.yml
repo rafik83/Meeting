@@ -136,5 +136,3 @@ package:
         payment: Paiement
 billing_info:
     title: Info de facturation
-subjected_to_valitation:
-    help: Sous réserve de validation
