@@ -103,6 +103,14 @@ class PromotionCode
     }
 
     /**
+     * @return Model\PromotionCode
+     */
+    public function getPromotionCode()
+    {
+        return $this->promotionCode;
+    }
+
+    /**
      * @param string      $locale
      * @param string|null $fallback
      *
