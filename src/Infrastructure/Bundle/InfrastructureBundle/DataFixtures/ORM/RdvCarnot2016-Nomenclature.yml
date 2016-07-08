@@ -175,3 +175,29 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             category6: { label: { fr: "Structure de recherche", en: "Research structure" }}
             category6: { label: { fr: "Association", en: "Association" }}
             category6: { label: { fr: "Pôle de compétitivité", en: "Cluster" }}
+    nomenclature_company_staff_rdvcarnot2016:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        original: '@nomenclature_company_staff'
+        title: "Effectifs"
+        depth: 1
+        value:
+            staff1: { label: { fr: "NC.", en: "NC." }}
+            staff2: { label: { fr: "0 - 9", en: "0 - 9" }}
+            staff3: { label: { fr: "10 - 99", en: "10 - 99" }}
+            staff4: { label: { fr: "100 - 250", en: "100 - 250" }}
+            staff5: { label: { fr: "500 - 5000", en: "500 - 5000" }}
+            staff6: { label: { fr: "> 5000", en: "> 5000" }}
+    nomenclature_company_turnover_rdvcarnot2016:
+        __construct: false
+        event: '@event_rdv_carnot_2016'
+        original: '@nomenclature_company_turnover'
+        title: "Chiffre d'affaire"
+        depth: 1
+        value:
+            turnover1: { label: { fr: "NC.", en: "NC." }}
+            turnover2: { label: { fr: "< 2 M€", en: "< 2 M€" }}
+            turnover3: { label: { fr: "2 - 10 M€", en: "2 - 10 M€" }}
+            turnover4: { label: { fr: "10 - 50 M€", en: "10 - 50 M€" }}
+            turnover5: { label: { fr: "50 - 1500 M€", en: "50 - 1500 M€" }}
+            turnover6: { label: { fr: "> 1500 M€", en: "> 1500 M€" }}

@@ -866,7 +866,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: ""
                                     en: ""
                                 mode: "singles"
-                                nomenclature: "@nomenclature_company_turnover->id"
+                                nomenclature: "@nomenclature_company_turnover_asddays2016->id"
                                 tags: ["sheet_organization_turnover", "sheet_data"]
                         efa6712a:
                             component: "object"
@@ -880,7 +880,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: ""
                                     en: ""
                                 mode: "singles"
-                                nomenclature: "@nomenclature_company_staff->id"
+                                nomenclature: "@nomenclature_company_staff_asddays2016->id"
                                 tags: ["sheet_organization_staff", "sheet_data"]
                         9ef18c06:
                             component: "object"
