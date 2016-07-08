@@ -28,13 +28,11 @@ class PromotionCodeQueryHandler
 
         // foreach promotion code used
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
-            $totalDiscount = $cart->getDiscount($promotionCodeRow->getPromotionCode());
-
             $promotionsCodeView[] = new PromotionCodeView(
                 $promotionCodeRow->getId(),
                 $promotionCodeRow->getPromotionCode()->getLabel($promotionCodeQuery->locale),
                 $promotionCodeRow->getPromotionCode()->getDescription($promotionCodeQuery->locale),
-                $totalDiscount,
+                $cart->getDiscount($promotionCodeRow->getPromotionCode()),
                 $promotionCodeQuery->sheet->getEvent()->getCurrency(),
                 $promotionCodeQuery->sheet->getEvent()->getMode()
             );

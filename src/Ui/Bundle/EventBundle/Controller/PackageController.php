@@ -274,7 +274,7 @@ class PackageController extends Controller
         $formTermsOfSale = $this->createForm(TermsOfSaleType::class, $termsOfSale);
 
         $promotionCode     = new PromotionCode();
-        $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode, ['submit' => true]);
+        $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode);
 
         if ($formTermsOfSale->handleRequest($request)->isSubmitted() && $formTermsOfSale->isValid()) {
             return $this->redirectToRoute('event_sheet');
@@ -283,7 +283,7 @@ class PackageController extends Controller
         if ($formPromotionCode->handleRequest($request)->isSubmitted() && $formPromotionCode->isValid()) {
             $this->validatePromotionCode($sheet, $promotionCode);
 
-            return $this->redirectToRoute('event_package_summary', ['sheet' => $sheet->getId()]);
+            return $this->redirect($this->generateUrl('event_package_summary', ['sheet' => $sheet->getId()]) . '#summary-promo-code-row');
         }
 
         $view = $this->get('tactician.commandbus.query')->handle(

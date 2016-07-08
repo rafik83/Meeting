@@ -1,7 +1,5 @@
 {% for promotion_code_error in app.session.flashbag.get('package_promotion_code_error') %}
-    <section class="important fail">
-        <p>
-            {{ promotion_code_error|trans({}, 'flashes') }}
-        </p>
+    <section class="important fail text-danger">
+        <p>{{ promotion_code_error|trans({}, 'flashes') }}</p>
     </section>
 {% endfor %}

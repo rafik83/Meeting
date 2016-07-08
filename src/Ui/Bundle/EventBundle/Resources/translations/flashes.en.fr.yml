@@ -1,0 +1,10 @@
+flash:
+    package:
+        promotionCode:
+            error:
+                notFound: 'Code inexistant, veuillez renouveler votre saisie'
+                codeConflict: 'Code inexistant, veuillez renouveler votre saisie'
+                notUsed: 'Code non compatible avec la formule choisie'
+                outDated: 'Code périmé'
+                soldOut: 'Code épuisé'
+                alreadyExist: 'Code déjà utilisé'
