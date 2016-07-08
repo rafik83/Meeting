@@ -1222,7 +1222,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         owner: "@user_asddays_2"
         registrationData:
-            3ad4b72f: { text: "Elao" }
+            3ad4b72f: { text: "Hello World Company" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_asddays_empty_with_tag:
@@ -1233,7 +1233,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         owner: "@user_asddays_3"
         registrationData:
-            3ad4b72f: { text: "Elao" }
+            3ad4b72f: { text: "Acme inc." }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
