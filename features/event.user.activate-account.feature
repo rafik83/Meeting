@@ -6,11 +6,13 @@ Feature: Activate Account
   Scenario: I can activate my account
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml   |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml |
-      | UserWithActivateAccountTokenAndSheet.yml                         |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml         |
+      | UserWithActivateAccountTokenAndSheet.yml                              |
     When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/activate/azertyuiopqsdfghjklmwxcvbn"
     And the response status code should be 200
     Then I fill in the following:

@@ -620,3 +620,30 @@ admin:
             unlock: Débloquer
             locked: Bloqué
             unlocked: Débloqué
+    nomenclature:
+        title: Nomenclatures
+        table:
+            title: Titre
+            depth: %depth% niveau|%depth% niveaux
+            read: Voir
+        link: Nomenclatures
+        create:
+            modal:
+                title: Créer une nomenclature
+                close: Fermer
+            button: Nouvelle nomenclature
+        read:
+            configuration:
+                title: Configuration
+            import:
+                title: Import
+                button: Importer
+            export:
+                title: Export
+                button: Exporter
+                help: Le fichier exporter contient une clé pour chaque ligne, la modification d'une de ces lignes modifiera l'élément correspondant. L'ajout d'une ligne sans clé créera un nouvel élément. La suppression n'est plus possible une fois que l'événement a des participants.
+            assign:
+                button: Assigner à un événement
+        assign:
+            modal:
+                title: Assigner à un événement

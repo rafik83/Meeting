@@ -1,0 +1,557 @@
+Proximum\Vimeet\Domain\Model\Event:
+    event_asddays_2016:
+        __construct: false
+        title: "ASD Days"
+        domain: asddays-2016.<domain()>
+        timeZone: 'Europe/Paris'
+        locales: [fr, en]
+        logo: 'assets/images/asddays-logo.png'
+        fallback: fr
+        assetPath: ''
+        country: 'FR'
+        organiserName: "PROXIMUM"
+        paymentAddress: '@payment_address_event_asddays_2016'
+        configuration: '@configuration_asddays_2016'
+        organiserEmail: "accounts@proximumgroup.com"
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
+        legalInformation: |+
+            TVA acquittée sur les encaissements
+            Pas d'escompte pour paiement anticipé
+        # vat mode :
+        # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
+        # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
+        mode: 'et'
+        vat: 20
+        currency: 'EUR'
+        elementToJoinWithInvoice: |+
+            - Numéro de la Facture
+            - Nom de l'événement
+            - Montant net à payer
+
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_asddays_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#00398C'
+
+Proximum\Vimeet\Domain\Model\EventTranslation:
+    event_asddays_2016_fr:
+        __construct: false
+        description: "ASD Days, le Rdv international dédié à l'Aéronautique, le Spatial, la Défense, la Sécurité et les Drones."
+        locale: fr
+        event: '@event_asddays_2016'
+    event_asddays_2016_en:
+        __construct: false
+        description: "ASD Days, the international meeting dedicated to: Aerospace, Defence, Security & UAVs."
+        locale: en
+        event: '@event_asddays_2016'
+
+Proximum\Vimeet\Domain\Model\Address (local):
+    payment_address_event_asddays_2016:
+        __construct:
+            - 855 Avenue Roger Salengro
+            - 92370
+            - CHAVILLE
+            - fr
+
+Proximum\Vimeet\Domain\Model\Product:
+    # plans
+    product_plan_1_asddays:
+        __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', '', 1690, '', ''] }
+        quantityMax: 1
+        updatable: false
+        updatableUntil: ~
+    product_plan_2_asddays:
+        __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', '', 2880, '', '' ] }
+        quantityMax: 1
+        updatable: false
+        updatableUntil: ~
+    # participants
+    product_participant_1_asddays:
+        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 1O ] }
+        image: ~
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: false
+        updatableUntil: ~
+    # plannings
+    product_planning_1_asddays:
+        __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 1O ] }
+        availabilityCurrent: ~
+        availabilityMax: ~
+        updatable: false
+        updatableUntil: ~
+    # options
+    product_option_1_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
+    product_option_2_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', '', 9, 5, '', '', true, null] }
+    product_option_3_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option A', '', 29, 2, '', '', true, null] }
+    product_option_4_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option B', '', 44, 10, '', '', true, null] }
+    product_option_5_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 49, 10, 0, 50, true, null] }
+    product_option_6_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option D', '', 19, 3, 2, 100, true, null] }
+    product_option_7_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option E', '', 199, 4, 5, 10, true, null] }
+
+Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
+    product_included_plan_1_asddays_fr:
+        __construct: false
+        quantity: 2
+        product: '@product_plan_1_asddays'
+        included: '@product_participant_1_asddays'
+
+Proximum\Vimeet\Domain\Model\ProductTranslation:
+    product_plan_1_asddays_fr:
+        __construct: false
+        product: '@product_plan_1_asddays'
+        title: 'Formule B2B Meeting'
+        heading: 'Pas de stand'
+        description: 'Vous changez de lieu à chaque rendez-vous.'
+        addon: ''
+        locale: 'fr'
+    product_plan_1_asddays_en:
+        __construct: false
+        product: '@product_plan_1_asddays'
+        title: 'B2B Meeting Formula'
+        heading: 'No booth'
+        description: 'You have to move at each appointment.'
+        addon: ''
+        locale: 'en'
+    product_plan_2_asddays_fr:
+        __construct: false
+        product: '@product_plan_2_asddays'
+        title: 'Formule Exposant'
+        heading: 'Stand équipé 4m² (2x2m)'
+        description: 'Avec enseigne, drapeau, lampe, 1 table et 4 chaises.'
+        addon: ''
+        locale: 'fr'
+    product_plan_2_asddays_en:
+        __construct: false
+        product: '@product_plan_2_asddays'
+        title: 'Exhibitor Formula'
+        heading: 'An equipped 4 sqm booth (2X2 m)'
+        description: 'With a banner, lighting, 1 table and 4 chairs.'
+        addon: ''
+        locale: 'en'
+    product_participant_1_asddays_fr:
+        __construct: false
+        product: '@product_participant_1_asddays'
+        title: 'Participant supplémentaire'
+        heading: ''
+        description: 'Accompagnant le premier sur un même agenda incluant une entrée à la convention d’affaire, accès illimité à la pause café et aux conférences.'
+        addon: ''
+        locale: 'fr'
+    product_participant_1_asddays_en:
+        __construct: false
+        product: '@product_participant_1_asddays'
+        title: 'Extra participant'
+        heading: ''
+        description: 'Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.'
+        addon: ''
+        locale: 'en'
+    product_planning_1_asddays_fr:
+        __construct: false
+        product: '@product_planning_1_asddays'
+        title: 'Packs de rendez-vous'
+        heading: ''
+        description: 'Description du pack de rendez-vous'
+        addon: ''
+        locale: 'fr'
+    product_planning_1_asddays_en:
+        __construct: false
+        product: '@product_planning_1_asddays'
+        title: 'Extra planning'
+        heading: ''
+        description: 'Description extra planning'
+        addon: ''
+        locale: 'en'
+    product_option_1_asddays_fr:
+        __construct: false
+        product: '@product_option_1_asddays'
+        title: 'Option 4m² supplémentaires'
+        heading: ''
+        description: 'Option valable uniquement en complément des formules Exposant et Parrain.'
+        addon: ''
+        locale: 'fr'
+    product_option_1_asddays_en:
+        __construct: false
+        product: '@product_option_1_asddays'
+        title: 'Add booth option (4 sqm)'
+        heading: ''
+        description: 'Option available in addition with exhibitor and sponsor formula only.'
+        addon: ''
+        locale: 'en'
+    product_option_2_asddays_fr:
+        __construct: false
+        product: '@product_option_2_asddays'
+        title: 'Chaise'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_2_asddays_en:
+        __construct: false
+        product: '@product_option_2_asddays'
+        title: 'Chair'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_3_asddays_fr:
+        __construct: false
+        product: '@product_option_3_asddays'
+        title: 'Option A'
+        heading: ''
+        description: 'Description option A'
+        addon: 'Au lieu de 999€'
+        locale: 'fr'
+    product_option_3_asddays_en:
+        __construct: false
+        product: '@product_option_3_asddays'
+        title: 'Option A'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_4_asddays_fr:
+        __construct: false
+        product: '@product_option_4_asddays'
+        title: 'Option B'
+        heading: ''
+        description: 'Description option B'
+        addon: ''
+        locale: 'fr'
+    product_option_4_asddays_en:
+        __construct: false
+        product: '@product_option_4_asddays'
+        title: 'Option B'
+        heading: ''
+        description: 'Description Option B'
+        addon: ''
+        locale: 'en'
+    product_option_5_asddays_fr:
+        __construct: false
+        product: '@product_option_5_asddays'
+        title: 'Option C'
+        heading: ''
+        description: 'Description option C'
+        addon: ''
+        locale: 'fr'
+    product_option_5_asddays_en:
+        __construct: false
+        product: '@product_option_5_asddays'
+        title: 'Option C'
+        heading: ''
+        description: 'Description Option C'
+        addon: ''
+        locale: 'en'
+    product_option_6_asddays_fr:
+        __construct: false
+        product: '@product_option_6_asddays'
+        title: 'Option D'
+        heading: ''
+        description: 'Description option D'
+        addon: ''
+        locale: 'fr'
+    product_option_6_asddays_en:
+        __construct: false
+        product: '@product_option_6_asddays'
+        title: 'Option D'
+        heading: ''
+        description: 'Description Option D'
+        addon: ''
+        locale: 'en'
+    product_option_7_asddays_fr:
+        __construct: false
+        product: '@product_option_7_asddays'
+        title: 'Option E'
+        heading: ''
+        description: 'Description option E'
+        addon: ''
+        locale: 'fr'
+    product_option_7_asddays_en:
+        __construct: false
+        product: '@product_option_7_asddays'
+        title: 'Option E'
+        heading: ''
+        description: 'Description Option E'
+        addon: ''
+        locale: 'en'
+
+Proximum\Vimeet\Domain\Model\Product\Feature:
+    feature_1:
+        __construct: false
+        product: '@product_plan_1_asddays'
+    feature_2:
+        __construct: false
+        product: '@product_plan_1_asddays'
+    feature_3:
+        __construct: false
+        product: '@product_plan_1_asddays'
+    feature_4:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_5:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_6:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_7:
+        __construct: false
+        product: '@product_plan_2_asddays'
+    feature_8:
+        __construct: false
+        product: '@product_plan_2_asddays'
+
+Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
+    feature_translation_1_fr:
+        __construct: false
+        feature: '@feature_1'
+        locale: 'fr'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_1_en:
+        __construct: false
+        feature: '@feature_1'
+        locale: 'en'
+        title: 'Presta 1'
+        description: 'Description Presta 1'
+    feature_translation_2_fr:
+        __construct: false
+        feature: '@feature_2'
+        locale: 'fr'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_2_en:
+        __construct: false
+        feature: '@feature_2'
+        locale: 'en'
+        title: 'Presta 2'
+        description: 'Description Presta 2'
+    feature_translation_3_fr:
+        __construct: false
+        feature: '@feature_3'
+        locale: 'fr'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_3_en:
+        __construct: false
+        feature: '@feature_3'
+        locale: 'en'
+        title: 'Presta 3'
+        description: 'Description Presta 3'
+    feature_translation_4_fr:
+        __construct: false
+        feature: '@feature_4'
+        locale: 'fr'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_4_en:
+        __construct: false
+        feature: '@feature_4'
+        locale: 'en'
+        title: 'Presta 4'
+        description: 'Description Presta 4'
+    feature_translation_5_fr:
+        __construct: false
+        feature: '@feature_5'
+        locale: 'fr'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_5_en:
+        __construct: false
+        feature: '@feature_5'
+        locale: 'en'
+        title: 'Presta 5'
+        description: 'Description Presta 5'
+    feature_translation_6_fr:
+        __construct: false
+        feature: '@feature_6'
+        locale: 'fr'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_6_en:
+        __construct: false
+        feature: '@feature_6'
+        locale: 'en'
+        title: 'Presta 6'
+        description: 'Description Presta 6'
+    feature_translation_7_fr:
+        __construct: false
+        feature: '@feature_7'
+        locale: 'fr'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_7_en:
+        __construct: false
+        feature: '@feature_7'
+        locale: 'en'
+        title: 'Presta 7'
+        description: 'Description Presta 7'
+    feature_translation_8_fr:
+        __construct: false
+        feature: '@feature_8'
+        locale: 'fr'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
+    feature_translation_8_en:
+        __construct: false
+        feature: '@feature_8'
+        locale: 'en'
+        title: 'Presta 8'
+        description: 'Description Presta 8'
+
+Proximum\Vimeet\Domain\Model\Package:
+    package_asd_days:
+        __construct: false
+        event: '@event_asddays_2016'
+        title: "Package ASD Days"
+        createdAt: "<dateTimeBetween('-10days', 'now')>"
+        participant: '@product_participant_1_asddays'
+        planning: '@product_planning_1_asddays'
+        plansEnabled: true
+        participantAndPlanningEnabled: true
+        optionsEnabled: true
+
+Proximum\Vimeet\Domain\Model\PackageTranslation:
+    package_asd_days_fr:
+        __construct: false
+        package: '@package_asd_days'
+        locale: 'fr'
+        plansLabel: 'Formules'
+        participantAndPlanningLabel: 'Participants & plannings'
+        optionsLabel: 'Options'
+    package_asd_days_en:
+        __construct: false
+        package: '@package_asd_days'
+        locale: 'en'
+        plansLabel: 'Plan'
+        participantAndPlanningLabel: 'Participants & plannings'
+        optionsLabel: 'Options'
+
+Proximum\Vimeet\Domain\Model\PackagePlanRank:
+    package_plan_1_rank_asd_days:
+        __construct: false
+        rank: 1
+        package: '@package_asd_days'
+        plan: '@product_plan_1_asddays'
+    package_plan_2_rank_asd_days:
+        __construct: false
+        rank: 2
+        package: '@package_asd_days'
+        plan: '@product_plan_2_asddays'
+
+Proximum\Vimeet\Domain\Model\PackageGroup:
+    package_group_1_asd_days:
+        __construct: false
+        rank: 1
+        package: '@package_asd_days'
+    package_group_2_asd_days:
+        __construct: false
+        rank: 2
+        package: '@package_asd_days'
+    package_group_3_asd_days:
+        __construct: false
+        rank: 3
+        package: '@package_asd_days'
+
+Proximum\Vimeet\Domain\Model\PackageGroupTranslation:
+    package_group_1_asd_days_fr:
+        __construct: false
+        locale: 'fr'
+        label: 'Options d’exposition'
+        group: '@package_group_1_asd_days'
+    package_group_1_asd_days_en:
+        __construct: false
+        locale: 'en'
+        label: 'Exhibiting options'
+        group: '@package_group_1_asd_days'
+    package_group_2_asd_days_fr:
+        __construct: false
+        locale: 'fr'
+        label: "Options d'exposition et de communication"
+        group: '@package_group_2_asd_days'
+    package_group_2_asd_days_en:
+        __construct: false
+        locale: 'en'
+        label: 'Exhibiting and communication options'
+        group: '@package_group_2_asd_days'
+    package_group_3_asd_days_fr:
+        __construct: false
+        locale: 'fr'
+        label: 'Options de communication'
+        group: '@package_group_3_asd_days'
+    package_group_3_asd_days_en:
+        __construct: false
+        locale: 'en'
+        label: 'Communication options'
+        group: '@package_group_3_asd_days'
+
+Proximum\Vimeet\Domain\Model\PackageOptionRank:
+    package_group_1_option_1_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_1_asd_days'
+        option: '@product_option_1_asddays'
+    package_group_1_option_2_asd_days:
+        __construct: false
+        rank: 2
+        group: '@package_group_1_asd_days'
+        option: '@product_option_2_asddays'
+    package_group_2_option_3_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_2_asd_days'
+        option: '@product_option_3_asddays'
+    package_group_3_option_4_asd_days:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_asd_days'
+        option: '@product_option_4_asddays'
+    package_group_3_option_5_asd_days:
+        __construct: false
+        rank: 2
+        group: '@package_group_3_asd_days'
+        option: '@product_option_5_asddays'
+    package_group_3_option_6_asd_days:
+        __construct: false
+        rank: 3
+        group: '@package_group_3_asd_days'
+        option: '@product_option_6_asddays'
+    package_group_3_option_7_asd_days:
+        __construct: false
+        rank: 4
+        group: '@package_group_3_asd_days'
+        option: '@product_option_7_asddays'
+
+Proximum\Vimeet\Domain\Model\Event\Content:
+    content_terms_of_sale_asddays_2016:
+        __construct: false
+        type: 'terms-of-sale'
+        event: '@event_asddays_2016'
+
+Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
+    content_terms_of_sale_asddays_2016_fr:
+        __construct: false
+        content: '@content_terms_of_sale_asddays_2016'
+        locale: 'fr'
+        value: |+
+            Conditions générales de vente pour ASD DAYS 2016
+    content_terms_of_sale_asddays_2016_en:
+        __construct: false
+        content: '@content_terms_of_sale_asddays_2016'
+        locale: 'en'
+        value: |+
+            Our General Terms and Conditions of Sale shall exclusively apply to all
+            contracts between us and our clients. Any differing conditions or terms of
+            buyer are herewith objected to and shall not apply. Any agreement affecting
+            the execution of this contract must be in writing.

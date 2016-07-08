@@ -33,17 +33,24 @@ class NomenclatureItem
     private $parent;
 
     /**
+     * @var boolean
+     */
+    private $sort = true;
+
+    /**
      * NomenclatureItem constructor.
      *
      * @param string             $key
      * @param string             $label
      * @param NomenclatureItem[] $children
+     * @param bool               $sort
      */
-    public function __construct($key, $label, array $children = [])
+    public function __construct($key, $label, array $children = [], $sort = true)
     {
         $this->key      = $key;
         $this->label    = $label;
         $this->children = $children;
+        $this->sort     = $sort;
 
         foreach ($children as $child) {
             $child->setParent($this);
@@ -103,7 +110,9 @@ class NomenclatureItem
     {
         $children = $this->getChildren();
 
-        Nomenclature::sort($children, $locale);
+        if ($this->sort) {
+            Nomenclature::sort($children, $locale);
+        }
 
         return $children;
     }
@@ -140,5 +149,18 @@ class NomenclatureItem
         return !empty (array_filter($this->children, function (NomenclatureItem $child) use ($keys) {
             return in_array($child->getKey(), $keys) || $child->any($keys);
         }));
+    }
+
+    /**
+     * @return array
+     */
+    public function getLocales()
+    {
+        return array_unique(array_merge(
+            array_keys($this->label),
+            array_reduce($this->getChildren(), function (array $carry, NomenclatureItem $item) {
+                return array_merge($carry, $item->getLocales());
+            }, []))
+        );
     }
 }

@@ -10,6 +10,8 @@ Feature: Handle Product
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admins.yml                                                               |
     And I am logged with "test2@test.com" on admin
     Given I go to this page "/admin/fr/event"

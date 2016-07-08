@@ -1152,6 +1152,41 @@ form:
                 label: Echelle (en minutes)
             submit:
                 label: Enregistrer
+    nomenclature_create_type:
+        children:
+            title:
+                label: Titre
+            submit:
+                label: Enregistrer
+    nomenclature_update_type:
+        children:
+            title:
+                label: Titre
+            sort:
+                label: Tri
+                choice:
+                    sort_alpha: Trier la nomenclature par ordre alphabétique
+                    sort_file: Conserver l'ordre du fichier
+            submit:
+                label: Enregistrer
+    nomenclature_import_type:
+        children:
+            file:
+                label: Fichier
+                help: Un import réinitialisera la nomenclature sauf si le fichier importé provient d'un export.
+            charset:
+                label: Encodage
+    nomenclature_export_type:
+        children:
+            charset:
+                label: Encodage
+    nomenclature_assign_type:
+        children:
+            event:
+                label: Événement
+                help: La nomenclature sera dupliqué pour être assigné à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
+            submit:
+                label: Assigner
     event_practical_info_update:
         children:
             organiserName:

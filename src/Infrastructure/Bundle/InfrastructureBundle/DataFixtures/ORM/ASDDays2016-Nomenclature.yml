@@ -1,0 +1,177 @@
+Proximum\Vimeet\Domain\Model\Nomenclature:
+    nomenclature_competences_asddays2016:
+        __construct: false
+        event: '@event_asddays_2016'
+        original: '@nomenclature_competences'
+        title: "Compétences"
+        depth: 3
+        value:
+            ad987cae:
+                label: { fr: "Aéronautiques", en: "Aeronautical" }
+                children:
+                    ecc44d0d:
+                        label: { fr: "Ingénierie & Bureau d'études", en: "Engineering and Engineering consulting firm" }
+                        children:
+                            c93def9a: { label: { fr: "Modélisation et calculs", en: "Modelling and calculations" } }
+                            34eab90c: { label: { fr: "Expérimentation & réalisation de prototypes", en: "Experiment and realization of prototypes" } }
+                    32ef03cc:
+                        label: { fr: "Informatique", en: "Computing" }
+                        children:
+                            cab0332d: { label: { fr: "Modélisation & simulation", en: "Modelling and simulation" } }
+                    2ec033da:
+                        label: { fr: "Instrumentation Appareils de mesures scientifiques in-situ", en: "Instrumentation in situ scientific Measuring devices" }
+                        children:
+                            aaa34eb9: { label: { fr: "Appareils de mesures scientifiques in-situ", en: "In situ scientific measuring devices" } }
+                            bdec99a0: { label: { fr: "Prototypage", en: "Prototypage" } }
+                            b35ae9c7: { label: { fr: "Technologie laser", en: "Laser technology" } }
+            dea09e034:
+                label: { fr: "Défenses", en: "Defence" }
+                children:
+                    acc44d0d:
+                        label: { fr: "Ingénierie & Bureau d'études", en: "Engineering and Engineering consulting firm" }
+                        children:
+                            993def9a: { label: { fr: "Modélisation et calculs", en: "Modelling and calculations" } }
+                            e4eab90c: { label: { fr: "Expérimentation & réalisation de prototypes", en: "Experiment and realization of prototypes" } }
+                    42ef03cc:
+                        label: { fr: "Informatique", en: "Computing" }
+                        children:
+                            dab0332d: { label: { fr: "Modélisation & simulation", en: "Modelling and simulation" } }
+                    5ec033da:
+                        label: { fr: "Instrumentation Appareils de mesures scientifiques in-situ", en: "Instrumentation in situ scientific Measuring devices" }
+                        children:
+                            faa34eb9: { label: { fr: "Appareils de mesures scientifiques in-situ", en: "In situ scientific measuring devices" } }
+                            adec99a0: { label: { fr: "Prototypage", en: "Prototypage" } }
+                            a35ae9c7: { label: { fr: "Technologie laser", en: "Laser technology" } }
+    nomenclature_offre_besoins_asddays2016:
+        __construct: false
+        event: '@event_asddays_2016'
+        original: '@nomenclature_offre_besoins'
+        title: "Offre et besoins"
+        depth: 1
+        value:
+            ab93de01:
+                label: { fr: "Ingénierie & Bureau d'études", en: "Engineering and Engineering consulting firm" }
+            ab93de02:
+                label: { fr: "Modélisation et calculs", en: "Modelling and calculations" }
+            ab93de03:
+                label: { fr: "Expérimentation & réalisation de prototypes", en: "Experiment and realization of prototypes" }
+            ab93de04:
+                label: { fr: "Informatique", en: "Computing" }
+            ab93de05:
+                label: { fr: "Modélisation & simulation", en: "Modelling and simulation" }
+            ab93de06:
+                label: { fr: "Instrumentation Appareils de mesures scientifiques in-situ", en: "Instrumentation in situ scientific Measuring devices" }
+            ab93de07:
+                label: { fr: "Prototypage", en: "Prototypage" }
+    nomenclature_position_asddays2016:
+        __construct: false
+        event: '@event_asddays_2016'
+        original: '@nomenclature_position'
+        title: "Fonction"
+        depth: 2
+        value:
+            domainPositionCommerciale:
+                label: { fr: "Commerciale/Vente", en: "Commerciale/Vente", es: "Comercial / Retail" }
+                children:
+                    position4: { label: { fr: "Assistant commercial", en: "Assistant commercial", es: "Asistente Comercial" } }
+                    position5: { label: { fr: "Assistant export", en: "Assistant export", es: "Asistente para la exportación" } }
+                    position6: { label: { fr: "Télévendeur / Téléprospecteur", en: "Télévendeur / Téléprospecteur", es: "Televentas / teleoperador" } }
+                    position7: { label: { fr: "Commercial sédentaire", en: "Commercial sédentaire", es: "Commercial sédentaire" } }
+                    position8: { label: { fr: "Vendeur non-cadre / Conseiller de vente", en: "Vendeur non-cadre / Conseiller de vente", es: "Vendeur non-cadre / Conseiller de vente" } }
+                    position9: { label: { fr: "Technico-commercial non-cadre", en: "Technico-commercial non-cadre", es: "Technico-commercial non-cadre" } }
+                    position10: { label: { fr: "Ingénieur technico-commercial", en: "Ingénieur technico-commercial", es: "Ingénieur technico-commercial" } }
+                    position11: { label: { fr: "Ingénieur commercial ou d'affaires", en: "Ingénieur commercial ou d'affaires", es: "Ingénieur commercial ou d'affaires" } }
+                    position12: { label: { fr: "Responsable d'une agence commerciale", en: "Responsable d'une agence commerciale", es: "Responsable d'une agence commerciale" } }
+                    position13: { label: { fr: "Responsable d'une équipe de vente", en: "Responsable d'une équipe de vente", es: "Responsable d'une équipe de vente" } }
+                    position14: { label: { fr: "Responsable régional des ventes", en: "Responsable régional des ventes", es: "Responsable régional des ventes" } }
+                    position15: { label: { fr: "Responsable export", en: "Responsable export", es: "Responsable export" } }
+                    position16: { label: { fr: "Directeur des ventes export", en: "Directeur des ventes export", es: "Directeur des ventes export" } }
+                    position17: { label: { fr: "Directeur des ventes", en: "Directeur des ventes", es: "Directeur des ventes" } }
+                    position18: { label: { fr: "Directeur commercial", en: "Directeur commercial", es: "Directeur commercial" } }
+            domainPositionCommunication:
+                label: { fr: "Communication", en: "Communication", es: "Communication" }
+                children:
+                    position19: { label: { fr: "Chargé de communication", en: "Chargé de communication", es: "Chargé de communication" } }
+                    position20: { label: { fr: "Directeur de la communication", en: "Directeur de la communication", es: "Directeur de la communication" } }
+            domainPositionDirection:
+                label: { fr: "Direction", en: "Direction", es: "Direction" }
+                children:
+                    position21: { label: { fr: "Directeur général adjoint", en: "Directeur général adjoint", es: "Directeur général adjoint" } }
+                    position22: { label: { fr: "Directeur d'une division", en: "Directeur d'une division", es: "Directeur d'une division" } }
+                    position23: { label: { fr: "Directeur général", en: "Directeur général", es: "Directeur général" } }
+                    position24: { label: { fr: "Président-directeur général / Chef d'entreprise", en: "Président-directeur général / Chef d'entreprise", es: "Président-directeur général / Chef d'entreprise" } }
+            domainPositionInformatique:
+                label: { fr: "Informatique", en: "Informatique", es: "Informatique" }
+                children:
+                    position25: { label: { fr: "Technicien support clients", en: "Technicien support clients", es: "Technicien support clients" } }
+                    position26: { label: { fr: "Technicien micro-informatique", en: "Technicien micro-informatique", es: "Technicien micro-informatique" } }
+                    position27: { label: { fr: "Administrateur de base de données", en: "Administrateur de base de données", es: "Administrateur de base de données" } }
+                    position28: { label: { fr: "Ingénieur réseau", en: "Ingénieur réseau", es: "Ingénieur réseau" } }
+                    position29: { label: { fr: "Ingénieur système", en: "Ingénieur système", es: "Ingénieur système" } }
+                    position30: { label: { fr: "Gestionnaire de parc informatique", en: "Gestionnaire de parc informatique", es: "Gestionnaire de parc informatique" } }
+                    position31: { label: { fr: "Responsable d'application", en: "Responsable d'application", es: "Responsable d'application" } }
+                    position32: { label: { fr: "Responsable d'exploitation / Responsable de production", en: "Responsable d'exploitation / Responsable de production", es: "Responsable d'exploitation / Responsable de production" } }
+                    position33: { label: { fr: "Analyste programmeur / Développeur", en: "Analyste programmeur / Développeur", es: "Analyste programmeur / Développeur" } }
+                    position34: { label: { fr: "Analyste fonctionnel", en: "Analyste fonctionnel", es: "Analyste fonctionnel" } }
+                    position35: { label: { fr: "Ingénieur d'études / Ingénieur de développement informatique", en: "Ingénieur d'études / Ingénieur de développement informatique", es: "Ingénieur d'études / Ingénieur de développement informatique" } }
+                    position36: { label: { fr: "Chef de projet informatique", en: "Chef de projet informatique", es: "Chef de projet informatique" } }
+                    position37: { label: { fr: "Responsable des systèmes d'information", en: "Responsable des systèmes d'information", es: "Responsable des systèmes d'information" } }
+                    position38: { label: { fr: "Directeur des systèmes d'information / directeur informatique", en: "Directeur des systèmes d'information / directeur informatique", es: "Directeur des systèmes d'information / directeur informatique" } }
+            domainPositionMarketing:
+                label: { fr: "Marketing", en: "Marketing", es: "Marketing" }
+                children:
+                    position39: { label: { fr: "Assistant marketing / Assistant chef de produits", en: "Assistant marketing / Assistant chef de produits", es: "Assistant marketing / Assistant chef de produits" } }
+                    position40: { label: { fr: "Chef de produits", en: "Chef de produits", es: "Chef de produits" } }
+                    position41: { label: { fr: "Directeur marketing / Responsable marketing", en: "Directeur marketing / Responsable marketing", es: "Directeur marketing / Responsable marketing" } }
+            domainPositionRecherche:
+                label: { fr: "Recherche/Etudes et Laboratoire", en: "Recherche/Etudes et Laboratoire", es: "Recherche/Etudes et Laboratoire" }
+                children:
+                    position66: { label: { fr: "Agent de laboratoire", en: "Agent de laboratoire", es: "Agent de laboratoire" } }
+                    position67: { label: { fr: "Technicien de laboratoire", en: "Technicien de laboratoire", es: "Technicien de laboratoire" } }
+                    position68: { label: { fr: "Responsable de laboratoire", en: "Responsable de laboratoire", es: "Responsable de laboratoire" } }
+                    position69: { label: { fr: "Dessinateur", en: "Dessinateur", es: "Dessinateur" } }
+                    position70: { label: { fr: "Dessinateur d'études", en: "Dessinateur d'études", es: "Dessinateur d'études" } }
+                    position71: { label: { fr: "Dessinateur-projeteur", en: "Dessinateur-projeteur", es: "Dessinateur-projeteur" } }
+                    position72: { label: { fr: "Ingénieur chef de projet", en: "Ingénieur chef de projet", es: "Ingénieur chef de projet" } }
+                    position73: { label: { fr: "Responsable bureau d'études", en: "Responsable bureau d'études", es: "Responsable bureau d'études" } }
+                    position74: { label: { fr: "Responsable recherche / Responsable développement", en: "Responsable recherche / Responsable développement", es: "Responsable recherche / Responsable développement" } }
+                    position75: { label: { fr: "Directeur recherche et développement", en: "Directeur recherche et développement", es: "Directeur recherche et développement" } }
+    nomenclature_service_asddays2016:
+        __construct: false
+        event: '@event_asddays_2016'
+        original: '@nomenclature_service'
+        title: "Service"
+        depth: 1
+        value:
+            serviceCommerciale: { label: { fr: "Commerciale/Vente", en: "Commerciale/Vente" }}
+            serviceCommunication: { label: { fr: "Communication", en: "Communication" }}
+            serviceDirection: { label: { fr: "Direction", en: "Direction" }}
+            serviceInformatique: { label: { fr: "Informatique", en: "Informatique" }}
+            serviceMarketing: { label: { fr: "Marketing", en: "Marketing" }}
+            serviceRecherche: { label: { fr: "Recherche/Etudes et Laboratoire", en: "Recherche/Etudes et Laboratoire" }}
+    nomenclature_activite_asddays2016:
+        __construct: false
+        event: '@event_asddays_2016'
+        original: '@nomenclature_activite'
+        title: "Activité"
+        depth: 1
+        value:
+            activite1: { label: { fr: "AGRICULTURE, SYLVICULTURE ET PÊCHE", en: "AGRICULTURE, SYLVICULTURE ET PÊCHE" }}
+            activite2: { label: { fr: "COMMERCE", en: "COMMERCE" }}
+            activite3: { label: { fr: "INFORMATION ET COMMUNICATION", en: "INFORMATION ET COMMUNICATION" }}
+    nomenclature_company_category_asddays2016:
+        __construct: false
+        event: '@event_asddays_2016'
+        original: '@nomenclature_company_category'
+        title: "Catégorie"
+        depth: 1
+        value:
+            category1: { label: { fr: "PME", en: "PME" }}
+            category2: { label: { fr: "Start-up", en: "Start-up" }}
+            category3: { label: { fr: "Grand groupe", en: "Large group" }}
+            category4: { label: { fr: "Organisme public", en: "Publique organization" }}
+            category5: { label: { fr: "ETI", en: "ETI" }}
+            category6: { label: { fr: "Institutionnelle", en: "Institutional" }}
+            category6: { label: { fr: "Structure de recherche", en: "Research structure" }}
+            category6: { label: { fr: "Association", en: "Association" }}
+            category6: { label: { fr: "Pôle de compétitivité", en: "Cluster" }}
