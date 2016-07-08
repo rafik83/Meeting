@@ -17,6 +17,6 @@ class PromotionCodeAlreadyExistException extends PromotionCodeException
      */
     public function getFlash()
     {
-        return parent::getFlash() . 'alreadyExist';
+        return parent::getFlash() . '.alreadyExist';
     }
 }

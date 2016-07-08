@@ -17,6 +17,6 @@ class PromotionCodeConflictException extends PromotionCodeException
      */
     public function getFlash()
     {
-        return parent::getFlash() . 'codeConflict';
+        return parent::getFlash() . '.codeConflict';
     }
 }

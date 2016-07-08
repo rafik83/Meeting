@@ -18,6 +18,6 @@ class PromotionCodeSoldOutException extends PromotionCodeException
      */
     public function getFlash()
     {
-        return parent::getFlash() . 'soldOut';
+        return parent::getFlash() . '.soldOut';
     }
 }

@@ -17,6 +17,6 @@ class PromotionCodeNotUsedException extends PromotionCodeException
      */
     public function getFlash()
     {
-        return parent::getFlash() . 'notUsed';
+        return parent::getFlash() . '.notUsed';
     }
 }

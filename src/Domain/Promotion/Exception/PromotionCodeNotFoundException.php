@@ -18,6 +18,6 @@ class PromotionCodeNotFoundException extends PromotionCodeException
      */
     public function getFlash()
     {
-        return parent::getFlash() . 'notFound';
+        return parent::getFlash() . '.notFound';
     }
 }

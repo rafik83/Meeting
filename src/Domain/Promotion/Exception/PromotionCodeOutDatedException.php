@@ -18,6 +18,6 @@ class PromotionCodeOutDatedException extends PromotionCodeException
      */
     public function getFlash()
     {
-        return parent::getFlash() . 'outDated';
+        return parent::getFlash() . '.outDated';
     }
 }
