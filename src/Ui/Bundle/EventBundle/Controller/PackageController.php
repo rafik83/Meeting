@@ -17,19 +17,13 @@ use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\PromotionCode as PromotionCodeModel;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
@@ -343,18 +337,8 @@ class PackageController extends Controller
 
         try {
             $this->get('tactician.commandbus')->handle($command);
-        } catch (PromotionCodeNotFoundException $e) {
-            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.notFound');
-        } catch (PromotionCodeOutDatedException $e) {
-            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.outDated');
-        } catch (PromotionCodeSoldOutException $e) {
-            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.soldOut');
-        } catch (PromotionCodeAlreadyExistException $e) {
-            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.alreadyExist');
-        } catch (PromotionCodeNotUsedException $e) {
-            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.notUsed');
-        } catch(PromotionCodeConflictException $e) {
-            $this->addFlash('package_promotion_code_error', 'flash.package.promotionCode.error.codeConflict');
+        } catch (PromotionCodeException $e) {
+            $this->addFlash('package_promotion_code_error', $e->getFlash());
         }
     }
 
