@@ -18,8 +18,8 @@ class PlanningViewQueryHandler
     public function handle(PlanningViewQuery $planningQuery)
     {
         return new CategoryView(
-            Category::BILLING,
-            '',
+            Category::PLANNING,
+            Category::PLANNING_ICON,
             []
         );
     }

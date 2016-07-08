@@ -1401,6 +1401,7 @@ services:
     query.navigation.category_member_space_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQueryHandler
         arguments:
+            - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQuery }
     query.navigation.category_package_view_query_handler:

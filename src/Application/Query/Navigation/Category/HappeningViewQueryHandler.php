@@ -18,8 +18,8 @@ class HappeningViewQueryHandler
     public function handle(HappeningViewQuery $happeningQuery)
     {
         return new CategoryView(
-            Category::BILLING,
-            '',
+            Category::HAPPENING,
+            Category::HAPPENING_ICON,
             []
         );
     }

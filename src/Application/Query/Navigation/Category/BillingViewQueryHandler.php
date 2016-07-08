@@ -19,7 +19,7 @@ class BillingViewQueryHandler
     {
         return new CategoryView(
             Category::BILLING,
-            '',
+            Category::BILLING_ICON,
             []
         );
     }

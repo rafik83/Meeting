@@ -15,22 +15,22 @@ class LinkView
     /**
      * @var string
      */
-    private $title;
+    public $label;
 
     /**
      * @var string
      */
-    private $link;
+    public $link;
 
     /**
      * LinkView constructor.
      *
-     * @param string $title
+     * @param string $label
      * @param string $link
      */
-    public function __construct($title, $link)
+    public function __construct($label, $link)
     {
-        $this->title = $title;
+        $this->label = $label;
         $this->link  = $link;
     }
 }

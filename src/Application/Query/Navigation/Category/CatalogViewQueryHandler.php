@@ -18,8 +18,8 @@ class CatalogViewQueryHandler
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
         return new CategoryView(
-            Category::BILLING,
-            '',
+            Category::CATALOG,
+            Category::CATALOG_ICON,
             []
         );
     }

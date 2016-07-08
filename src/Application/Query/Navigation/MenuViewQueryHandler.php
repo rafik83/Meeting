@@ -55,7 +55,7 @@ class MenuViewQueryHandler
 
         foreach (Category::$categories as $category) {
             $categoryView[] = $this->categoryViewQueryHandler->handle(new CategoryViewQuery(
-                $sheet, $category
+                $sheet, $menuViewQuery->user, $category, $menuViewQuery->locale
             ));
         }
 

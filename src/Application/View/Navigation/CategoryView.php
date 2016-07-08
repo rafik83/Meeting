@@ -15,17 +15,17 @@ class CategoryView
     /**
      * @var string
      */
-    private $title;
+    public $title;
 
     /**
      * @var string
      */
-    private $icon;
+    public $icon;
 
     /**
      * @var LinkView[]
      */
-    private $linksView;
+    public $linksView;
 
     /**
      * CategoryView constructor.

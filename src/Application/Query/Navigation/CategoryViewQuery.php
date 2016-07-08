@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class CategoryViewQuery
 {
@@ -20,19 +21,33 @@ class CategoryViewQuery
     public $sheet;
 
     /**
+     * @var User
+     */
+    public $user;
+
+    /**
      * @var string
      */
     public $categoryType;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * CategoryViewQuery constructor.
      *
      * @param Sheet  $sheet
+     * @param User   $user
      * @param string $categoryType
+     * @param        $locale
      */
-    public function __construct(Sheet $sheet, $categoryType)
+    public function __construct(Sheet $sheet, User $user, $categoryType, $locale)
     {
         $this->sheet        = $sheet;
         $this->categoryType = $categoryType;
+        $this->user         = $user;
+        $this->locale       = $locale;
     }
 }

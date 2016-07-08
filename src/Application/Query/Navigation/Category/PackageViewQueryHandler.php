@@ -18,8 +18,8 @@ class PackageViewQueryHandler
     public function handle(PackageViewQuery $packageQuery)
     {
         return new CategoryView(
-            Category::BILLING,
-            '',
+            Category::PACKAGE,
+            Category::PACKAGE_ICON,
             []
         );
     }

@@ -18,8 +18,8 @@ class SheetViewQueryHandler
     public function handle(SheetViewQuery $sheetQuery)
     {
         return new CategoryView(
-            Category::BILLING,
-            '',
+            Category::SHEET,
+            Category::SHEET_ICON,
             []
         );
     }

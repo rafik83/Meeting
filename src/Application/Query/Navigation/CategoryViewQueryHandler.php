@@ -92,11 +92,20 @@ class CategoryViewQueryHandler
         $this->packageViewQueryHandler     = $packageViewQueryHandler;
     }
 
+    /**
+     * @param CategoryViewQuery $categoryViewQuery
+     *
+     * @return \Proximum\Vimeet\Application\View\Navigation\CategoryView
+     */
     public function handle(CategoryViewQuery $categoryViewQuery)
     {
         switch ($categoryViewQuery->categoryType) {
             case Category::MEMBER_SPACE:
-                return $this->memberSpaceViewQueryHandler->handle(new MemberSpaceViewQuery());
+                return $this->memberSpaceViewQueryHandler->handle(new MemberSpaceViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
                 break;
             case Category::BILLING:
                 return $this->billingViewQueryHandler->handle(new BillingViewQuery());
@@ -110,7 +119,7 @@ class CategoryViewQueryHandler
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery());
                 break;
-            case Category::HAPPENNING:
+            case Category::HAPPENING:
                 return $this->happeningViewQueryHandler->handle(new HappeningViewQuery());
                 break;
             case Category::PACKAGE:
