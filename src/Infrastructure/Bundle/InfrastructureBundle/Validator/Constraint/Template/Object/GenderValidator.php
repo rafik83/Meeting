@@ -10,10 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\Object;
 
-
-use Symfony\Component\Validator\Constraint;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\ObjectValidator;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class GenderValidator extends ObjectValidator
@@ -24,7 +23,10 @@ class GenderValidator extends ObjectValidator
     protected function checkRequired(Object $object, Constraint $constraint)
     {
         if ($object instanceof Object\Gender && true === $object->getOption('required')) {
-            $this->context->getValidator()->inContext($this->context)->atPath($constraint->key . '.gender')->validate($object->getContentValue(), new NotBlank());
+            $this->context->getValidator()
+                          ->inContext($this->context)
+                          ->atPath($constraint->key . '.gender')
+                          ->validate($object->getContentValue(), new NotBlank());
         }
     }
 }

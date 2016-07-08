@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\Object;
 
-
 use Symfony\Component\Validator\Constraint;
 
 class GenderConstraint extends Constraint

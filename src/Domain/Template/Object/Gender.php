@@ -20,7 +20,7 @@ class Gender extends EditableObject implements ContentObjectInterface
     /**
      * @param string $gender
      *
-     * @return gender
+     * @return Gender
      */
     public function setGender($gender)
     {
