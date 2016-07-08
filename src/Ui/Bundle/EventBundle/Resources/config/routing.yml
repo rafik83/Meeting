@@ -434,6 +434,7 @@ event_package:
     path: /package
     defaults: { _controller: EventBundle:Package:redirect }
     methods: [GET]
+
 event_package_step:
     path: /sheet/{sheet}/package/step/{step}
     defaults: { _controller: EventBundle:Package:step }
@@ -441,6 +442,23 @@ event_package_step:
         sheet: \d+
         step: \d+
     methods:  [GET, POST]
+
+event_package_add_participant:
+    path: /sheet/{sheet}/package/step/{step}/participant/add
+    defaults: { _controller: EventBundle:Package:addParticipant }
+    requirements:
+        sheet: \d+
+        step: \d+
+    methods:  [GET]
+
+event_package_remove_participant:
+    path: /sheet/{sheet}/package/step/{step}/participant/remove
+    defaults: { _controller: EventBundle:Package:removeParticipant }
+    requirements:
+        sheet: \d+
+        step: \d+
+    methods:  [GET]
+
 event_package_summary:
     path: /sheet/{sheet}/package/summary
     defaults: { _controller: EventBundle:Package:summary }

@@ -37,7 +37,7 @@ common:
     next: Suivant
     validate: Valider
     backToSheet: Retour à la fiche
-
+    backToPackage: Retour au forfait
 register:
     register_as: S'inscrire en tant que :
     already_registered: Déjà inscrit ?
@@ -68,6 +68,7 @@ sheet:
     edit:
         object: Editer "%label%"
 
+    maxParticipantReached: Nombre maximum de participants atteint
 nomenclature:
     select_all: Tous sélectionner
     select_none: Aucun

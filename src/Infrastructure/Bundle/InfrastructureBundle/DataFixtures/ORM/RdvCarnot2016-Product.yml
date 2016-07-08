@@ -14,8 +14,9 @@ Proximum\Vimeet\Domain\Model\Product:
     product_participant_1_rdv_carnot:
         __construct: { createParticipant: [ '@event_rdv_carnot_2016', 'Participant supplémentaire Fournisseur', 195, 1O ] }
         image: ~
-        availabilityCurrent: 0
-        availabilityMax: 0
+        availabilityCurrent: ~
+        availabilityMax: ~
+        quantityMax: 4
         updatable: false
         updatableUntil: ~
     # plannings

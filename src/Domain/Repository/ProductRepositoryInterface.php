@@ -28,6 +28,13 @@ interface ProductRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function countByEvent(Event $event);
+
+    /**
      * @param Event  $event
      * @param array  $types
      *
