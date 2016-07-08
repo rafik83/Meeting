@@ -52,7 +52,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->createQueryBuilder()
             ->select('product, productIncluded, SUM(row.quantity) AS bought')
             ->from(Product::class, 'product')
-            ->leftJoin(Row::class, 'row', 'WITH', 'row.linkedProduct = product')
+            ->leftJoin(Row::class, 'row', 'WITH', 'row.product = product')
             ->leftJoin('product.productIncluded', 'productIncluded')
             ->where('product.event = :event')
             ->setParameter('event', $event)
