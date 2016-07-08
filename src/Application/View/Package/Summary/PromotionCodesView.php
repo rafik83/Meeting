@@ -33,7 +33,6 @@ class PromotionCodesView
     public function getTotal()
     {
         $total = 0;
-
         foreach ($this->promotionCodes as $promotionCodeView) {
             $total += $promotionCodeView->total;
         }

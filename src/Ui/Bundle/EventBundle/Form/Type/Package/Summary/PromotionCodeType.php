@@ -39,7 +39,6 @@ class PromotionCodeType extends AbstractType
     {
         $optionsResolver->setDefaults([
             'data_class' => PromotionCode::class,
-            'submit' => true,
         ]);
     }
 

@@ -27,9 +27,8 @@ class PromotionCodeQueryHandler
         $promotionsCodeView = [];
 
         // foreach promotion code used
-        $totalDiscount = 0;
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
-            $totalDiscount += $cart->getDiscount($promotionCodeRow->getPromotionCode());
+            $totalDiscount = $cart->getDiscount($promotionCodeRow->getPromotionCode());
 
             $promotionsCodeView[] = new PromotionCodeView(
                 $promotionCodeRow->getId(),

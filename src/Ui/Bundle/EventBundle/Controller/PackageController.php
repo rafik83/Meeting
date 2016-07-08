@@ -280,7 +280,7 @@ class PackageController extends Controller
         $formTermsOfSale = $this->createForm(TermsOfSaleType::class, $termsOfSale);
 
         $promotionCode     = new PromotionCode();
-        $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode);
+        $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode, ['submit' => true]);
 
         if ($formTermsOfSale->handleRequest($request)->isSubmitted() && $formTermsOfSale->isValid()) {
             return $this->redirectToRoute('event_sheet');
@@ -391,12 +391,15 @@ class PackageController extends Controller
         }
 
         if (!$sheet->getPackage()->isPassable()) {
-            throw $this->createNotFoundException(sprintf('Package for sheet %s is not passable', $sheet->getId()));
+            throw $this->createNotFoundException(
+                sprintf('Package for sheet %s is not passable', $sheet->getId())
+            );
         }
 
         if (!$sheet->hasUser($user)) {
-            throw $this->createNotFoundException(sprintf('The user %s is not participant on the sheet %s',
-                $user->getId(), $sheet->getId()));
+            throw $this->createNotFoundException(
+                sprintf('The user %s is not participant on the sheet %s', $user->getId(), $sheet->getId())
+            );
         }
     }
 }
