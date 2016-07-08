@@ -44,7 +44,7 @@ class ProductController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $products = $this->get('vimeet_infrastructure.repository.product_repository')->findByEvent($event);
+        $products = $this->get('vimeet_infrastructure.repository.product_repository')->countByEvent($event);
 
         return $this->render('AdminBundle:Product:list.html.twig', [
             'event'    => $event,
