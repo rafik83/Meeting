@@ -12,6 +12,7 @@ Feature: Manage products selection templates
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml       |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
       | Admin.yml                                                             |
      And I am logged with "test@test.com" on admin
@@ -33,6 +34,7 @@ Feature: Manage products selection templates
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml       |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
       | Admin.yml                                                             |
       And I am logged with "test@test.com" on admin
