@@ -1291,12 +1291,12 @@ form:
     event_payment_conditions_update:
         children:
             allowDeposit:
-                label: Accompte autorisé
+                label: Activer le paiement en acompte
             minimumForDeposit:
-                label: Accompte minimum
+                label: Somme total à partir duquel l'acompte est applicable
             depositUntil:
-                label: Date de fin d'autorisation des accomptes
+                label: Date limite d'acceptation des acomptes
             deposit:
-                label: Pourcentage de l'accompte
+                label: Pourcentage de l'acompte
             submit:
                 label: Enregistrer
