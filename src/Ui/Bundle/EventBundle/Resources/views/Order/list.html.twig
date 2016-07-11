@@ -57,13 +57,15 @@
             <thead>
             <th>{{ 'order.transaction.list.column.date'|trans }}</th>
             <th>{{ 'order.transaction.list.column.state'|trans }}</th>
+            <th>{{ 'order.transaction.list.column.mode'|trans }}</th>
             <th>{{ 'order.transaction.list.column.total'|trans }}</th>
             </thead>
             <tbody>
             {% for transaction in transactions %}
                 <tr>
                     <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
-                    <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</a></td>
+                    <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</td>
+                    <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
                 </tr>
             {% endfor %}

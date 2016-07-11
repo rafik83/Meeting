@@ -191,6 +191,12 @@ order:
                 date: Date
                 state: État
                 total: Somme
+                mode: Mode
         state:
             pending: En attente
             paid: Réglé
+        mode:
+            bank_card: Carte bleu
+            bank_transfer: Transfert
+            bank_check: Chèque
+

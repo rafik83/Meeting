@@ -551,8 +551,8 @@ class PackageController extends Controller
 
         try {
             $this->get('tactician.commandbus')->handle($command);
-        } catch (PromotionCodeException $e) {
-            $this->addFlash('package_promotion_code_error', $e->getFlash());
+        } catch (PromotionCodeException $exception) {
+            $this->addFlash('package_promotion_code_error', $exception->getFlash());
         }
     }
 

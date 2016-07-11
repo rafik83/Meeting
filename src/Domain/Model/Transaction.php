@@ -67,7 +67,7 @@ class Transaction
      * @param string             $mode
      * @param string             $reference
      * @param string             $state
-     * @param                    $currency
+     * @param string             $currency
      */
     public function __construct(
         Sheet $sheet,
