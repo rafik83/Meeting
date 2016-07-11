@@ -34,6 +34,13 @@ class FilterType extends AbstractType
                 'group_by'    => function ($product) {
                     return sprintf('form.product_choice.group_by.type.%s', $product->getType());
                 },
+                'choice_value' => function ($choice) {
+                    if ($choice instanceof Product) {
+                        return $choice->getId();
+                    }
+
+                    return $choice;
+                }
             ])
         ;
     }
