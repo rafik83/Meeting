@@ -1,5 +1,5 @@
 @event
-
+@account
 Feature: Change password
 When I am logged, I need to be able to change my password
 
