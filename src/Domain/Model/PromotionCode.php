@@ -204,6 +204,18 @@ class PromotionCode
     {
         return $this->stock;
     }
+
+    /**
+     * @param int $stock
+     *
+     * @return PromotionCode
+     */
+    public function setStock($stock)
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
     
     /**
      * @param Product $product

@@ -1500,6 +1500,7 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.billing_info_repository'
             - '@repository.promotion_code_row_repository'
+            - '@repository.promotion_code_repository'
             - '@package.specification.vat_applicable'
             - '@datetime'
 

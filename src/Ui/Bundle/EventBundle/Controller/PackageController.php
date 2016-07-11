@@ -55,6 +55,12 @@ class PackageController extends Controller
             throw $this->createNotFoundException($exception->getMessage());
         }
 
+        if (!empty($sheet->getOrders())) {
+            return $this->redirectToRoute('event_order_list', [
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         return $this->redirectToRoute('event_package_step', [
             'sheet' => $sheet->getId(),
             'step'  => 1,
@@ -72,6 +78,10 @@ class PackageController extends Controller
     public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+
+        if (!empty($sheet->getOrders())) {
+            throw $this->createNotFoundException('This sheet has already an order');
+        }
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
@@ -249,6 +259,10 @@ class PackageController extends Controller
     public function summaryAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+
+        if (!empty($sheet->getOrders())) {
+            throw $this->createNotFoundException('This sheet has already an order');
+        }
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 

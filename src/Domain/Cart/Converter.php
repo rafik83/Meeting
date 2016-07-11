@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Address;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 /**
@@ -64,11 +66,17 @@ class Converter
     private $promotionCodeRowRepository;
 
     /**
+     * @var PromotionCodeRepositoryInterface
+     */
+    private $promotionCodeRepository;
+
+    /**
      * @param OrderRepositoryInterface            $orderRepository
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param BillingInfoRepositoryInterface      $billingInfoRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
+     * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
      * @param VatApplicable                       $vatApplicable
      * @param \DateTimeInterface                  $datetime
      */
@@ -78,6 +86,7 @@ class Converter
         CartStepRepositoryInterface $cartStepRepository,
         BillingInfoRepositoryInterface $billingInfoRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
+        PromotionCodeRepositoryInterface $promotionCodeRepository,
         VatApplicable $vatApplicable,
         \DateTimeInterface $datetime
     ) {
@@ -86,6 +95,7 @@ class Converter
         $this->cartStepRepository         = $cartStepRepository;
         $this->billingInfoRepository      = $billingInfoRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
+        $this->promotionCodeRepository    = $promotionCodeRepository;
         $this->vatApplicable              = $vatApplicable;
         $this->datetime                   = $datetime;
     }
@@ -142,6 +152,7 @@ class Converter
             $order->addPromotionCode(
                 $this->convertToPromotionCode($order, $cart, $promotionCodeRow)
             );
+            $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
         }
 
         $this->orderRepository->add($order);
@@ -200,5 +211,18 @@ class Converter
         $this->cartRowRepository->deleteForSheet($cart->getSheet());
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
         $this->promotionCodeRowRepository->deleteForSheet($cart->getSheet());
+    }
+
+    /**
+     * @param PromotionCode $promotionCode
+     */
+    private function decrementStockPromotionCode(PromotionCode $promotionCode)
+    {
+        $stock = $promotionCode->getStock();
+
+        if (null !== $stock && $stock > 0) {
+            $promotionCode->setStock($stock - 1);
+            $this->promotionCodeRepository->set($promotionCode);
+        }
     }
 }
