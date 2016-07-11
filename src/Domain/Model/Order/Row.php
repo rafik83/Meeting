@@ -139,9 +139,11 @@ class Row
      */
     public function getProductId()
     {
-        $data = json_decode($this->data, true);
+        if (null === $this->getProduct()) {
+            return null;
+        }
 
-        return isset($data['id']) ? $data['id'] : null;
+        return $this->getProduct()->getId();
     }
 
     /**
