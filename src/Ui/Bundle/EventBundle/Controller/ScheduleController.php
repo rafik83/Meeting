@@ -178,6 +178,12 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        if (!$this->get('domain.key_dates.checker.happenings_access_checker')->isRouteOpened(
+            $eventDomain->getEvent())
+        ) {
+            throw $this->createNotFoundException();
+        }
+
         if ($happening->getEvent()->getId() !== $eventDomain->getId()
             || $sheet->getEvent()->getId() !== $eventDomain->getId()
             || null === $sheet->getUserParticipant($this->getUser())
