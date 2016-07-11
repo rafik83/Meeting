@@ -29,7 +29,10 @@ class GenderDataType extends AbstractType
 
         $builder
             ->add('gender', ChoiceType::class, [
-                'choices'  => $gender->getGendersTranslation(),
+                'choices'  => $gender->getGenders(),
+                'choice_label' => function ($value) {
+                    return sprintf('gender.%s', $value);
+                },
                 'expanded' => true,
                 'multiple' => false,
                 'label'    => $label ? $gender->getOption('label')[$locale] : false,
