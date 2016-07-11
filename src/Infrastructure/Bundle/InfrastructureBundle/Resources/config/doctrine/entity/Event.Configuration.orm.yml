@@ -31,4 +31,12 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             nullable: true
         deposit:
             type: integer
+        catalogOnlineDate:
+            type: datetime
+            nullable: true
+        happeningsOpenDate:
+            type: datetime
+            nullable: true
+        schedulePublishDate:
+            type: datetime
             nullable: true

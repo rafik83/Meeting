@@ -10,17 +10,19 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\Create;
-use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
-use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
+use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
+use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -203,6 +205,32 @@ class EventController extends Controller
         return $this->render('AdminBundle:Event/PaymentConditions:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    public function datesAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $command = new ConfigureDates($event);
+        $form    = $this->createForm(ConfigureDatesType::class, $command, ['event' => $event, 'submit' => true]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.admin.event.configure_dates.success');
+
+            return $this->redirectToRoute('admin_event_configure_dates', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Event:dates.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
         ]);
     }
 }

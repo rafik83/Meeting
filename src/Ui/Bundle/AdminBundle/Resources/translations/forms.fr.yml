@@ -1298,5 +1298,13 @@ form:
                 label: Date de fin d'autorisation des accomptes
             deposit:
                 label: Pourcentage de l'accompte
+    event_configure_date:
+        children:
+            catalogOnlineDate:
+                label: Mise en ligne du catalogue
+            happeningsOpenDate:
+                label: Ouverture des inscriptions aux sous-événements
+            schedulePublishDate:
+                label: Publication des agendas définitifs (RDV)
             submit:
                 label: Enregistrer
