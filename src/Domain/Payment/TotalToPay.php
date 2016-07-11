@@ -50,6 +50,10 @@ class TotalToPay
         $total         = $cart->getTotal() + $cart->getTotalDiscount();
         $vatToPay      = 0;
 
+        if ($total < 0) {
+            return 0;
+        }
+
         if ($vatApplicable) {
             $vatToPay = ($total * $cart->getSheet()->getEvent()->getVat()) / 100;
         }
