@@ -61,6 +61,4 @@ class PromotionCodeView
         $this->vatMode     = $vatMode;
         $this->currency    = $currency;
     }
-
-
 }
