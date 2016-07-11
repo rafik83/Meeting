@@ -32,13 +32,13 @@
             </a>
         </li>
         <li>
-            <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
-                {{ 'admin.event.see_on_front.link'|trans }}
+            <a href="{{ path('admin_event_configure_dates', { 'event': event.id }) }}">
+                {{ 'admin.spot.configure_dates'|trans }}
             </a>
         </li>
         <li>
-            <a href="{{ path('admin_event_configure_dates', { 'event': event.id }) }}">
-                {{ 'admin.spot.configure_dates'|trans }}
+            <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
+                {{ 'admin.event.see_on_front.link'|trans }}
             </a>
         </li>
     </ul>
