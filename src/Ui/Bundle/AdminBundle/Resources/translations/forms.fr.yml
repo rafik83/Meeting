@@ -1318,3 +1318,5 @@ form:
                 label: Pourcentage de l'accompte
             submit:
                 label: Enregistrer
+    order:
+        filter_by_bought_product: Filtrer par produit acheté

@@ -15,10 +15,12 @@ use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,18 +36,33 @@ class OrderController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $filters = [];
+        $filterForm = $this->createFilterForm(
+            FilterType::class,
+            $filters,
+            ['event' => $event, 'locale' => $locale]
+        );
+        $filtered = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
+
+        if ($filtered) {
+            $filters = $filterForm->getData();
+        }
+
         $query = new PaginatedOrderListViewQuery(
             $event,
-            [],
+            $filters,
             $request->query->getInt('page', 1),
             20,
-            $request->getLocale()
+            $locale
         );
         $orders = $this->get('tactician.commandbus.query')->handle($query);
 
         return $this->render('AdminBundle:Order:list.html.twig', [
-            'event' =>  $event,
-            'orders' => $orders,
+            'event'      => $event,
+            'orders'     => $orders,
+            'filterForm' => $filterForm->createView(),
         ]);
     }
 
@@ -192,5 +209,22 @@ class OrderController extends Controller
         if ($order->getSheet()->getEvent() !== $event) {
             throw $this->createAccessDeniedException();
         }
+    }
+
+    /**
+     * @param string $type
+     * @param array  $data
+     * @param array  $options
+     *
+     * @return FormInterface
+     */
+    private function createFilterForm($type, $data, array $options = [])
+    {
+        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'required'           => false,
+            'allow_extra_fields' => true,
+        ]));
     }
 }
