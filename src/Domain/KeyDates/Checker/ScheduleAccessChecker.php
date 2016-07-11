@@ -19,7 +19,7 @@ class ScheduleAccessChecker extends AccessChecker
      *
      * @return bool
      */
-    public function isRouteOpened(Event $event)
+    public function allowedToAccess(Event $event)
     {
         return $this->datetime >= $event->getConfiguration()->getSchedulePublishDate();
     }

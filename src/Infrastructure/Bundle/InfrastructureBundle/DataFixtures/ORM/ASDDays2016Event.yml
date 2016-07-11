@@ -37,6 +37,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#59a4eb'
             - '#00398c'
             - '#00398C'
+        catalogOnlineDate: "<dateTimeBetween('now', '2032-07-08')>"
+        happeningsOpenDate: "<dateTimeBetween('now', '2032-07-08')>"
+        schedulePublishDate: "<dateTimeBetween('now', '2032-07-08')>"
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:

@@ -33,7 +33,7 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->isRouteOpened($eventDomain->getEvent())) {
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
             throw $this->createNotFoundException();
         }
 
@@ -59,7 +59,7 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->isRouteOpened($eventDomain->getEvent())) {
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
             throw $this->createNotFoundException();
         }
 
@@ -97,7 +97,7 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->isRouteOpened($eventDomain->getEvent())) {
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
             throw $this->createNotFoundException();
         }
 

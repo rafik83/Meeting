@@ -26,6 +26,6 @@ class AccessChecker
      */
     public function __construct(\DateTimeInterface $datetime)
     {
-        $this->datetime       = $datetime;
+        $this->datetime = $datetime;
     }
 }
