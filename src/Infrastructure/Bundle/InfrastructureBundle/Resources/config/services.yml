@@ -1409,3 +1409,18 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # KeyDates
+    #
+    domain.key_dates.checker.happenings_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker
+        arguments: ['@datetime']
+
+    domain.key_dates.checker.schedule_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\ScheduleAccessChecker
+        arguments: ['@datetime']
+
+    domain.key_dates.checker.catalog_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
+        arguments: ['@datetime']
