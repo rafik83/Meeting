@@ -48,16 +48,15 @@ class PromotionCodeView
      * @param string $label
      * @param string $description
      * @param float  $total
-     * @param int    $quantity
      * @param string $vatMode
      * @param string $currency
      */
-    public function __construct($label, $description, $total, $quantity, $vatMode, $currency)
+    public function __construct($label, $description, $total, $vatMode, $currency)
     {
         $this->label       = $label;
         $this->description = $description;
         $this->total       = $total;
-        $this->quantity    = $quantity;
+        $this->quantity    = 1;
         $this->vatMode     = $vatMode;
         $this->currency    = $currency;
     }

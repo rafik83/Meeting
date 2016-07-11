@@ -198,7 +198,6 @@ class Converter
         return new Order\PromotionCode(
             $order,
             $promotionCodeRow->getPromotionCode(),
-            1,
             $discount
         );
     }

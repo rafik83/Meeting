@@ -27,7 +27,6 @@ class PromotionCodeViewQueryHandler
             $promotionCodeViewQuery->promotionCode->getLabel($locale),
             $promotionCodeViewQuery->promotionCode->getDescription($locale),
             $promotionCodeViewQuery->promotionCode->getPrice(),
-            $promotionCodeViewQuery->promotionCode->getQuantity(),
             $promotionCodeViewQuery->promotionCode->getOrder()->getVatMode(),
             $promotionCodeViewQuery->promotionCode->getOrder()->getCurrency()
         );

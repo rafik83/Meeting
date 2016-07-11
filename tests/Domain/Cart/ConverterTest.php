@@ -94,7 +94,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $order         = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime);
         $planOrderRow  = new Order\Row($order, $plan, 1, null);
         $chairOrderRow = new Order\Row($order, $chair, 2, null);
-        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, 1, -50);
+        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -50);
         $order->addRow($planOrderRow);
         $order->addRow($chairOrderRow);
         $order->addPromotionCode($promotionCodeOrderRow);

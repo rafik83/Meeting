@@ -7,8 +7,6 @@ Proximum\Vimeet\Domain\Model\Order\PromotionCode:
             generator:
                 strategy: AUTO
     fields:
-        quantity:
-            type: integer
         data:
             type: json_array
         price:

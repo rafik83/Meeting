@@ -36,11 +36,6 @@ class PromotionCode
     private $data;
 
     /**
-     * @var int
-     */
-    private $quantity;
-
-    /**
      * @var float
      */
     private $price;
@@ -50,13 +45,11 @@ class PromotionCode
      *
      * @param Order               $order
      * @param Model\PromotionCode $promotionCode
-     * @param int                 $quantity
      * @param float               $price
      */
-    public function __construct(Order $order, Model\PromotionCode $promotionCode, $quantity, $price)
+    public function __construct(Order $order, Model\PromotionCode $promotionCode, $price)
     {
         $this->order         = $order;
-        $this->quantity      = $quantity;
         $this->promotionCode = $promotionCode;
         $this->data          = $promotionCode->getSerializedData();
         $this->price         = $price;
@@ -84,14 +77,6 @@ class PromotionCode
     public function getData()
     {
         return $this->data;
-    }
-
-    /**
-     * @return int
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
     }
 
     /**

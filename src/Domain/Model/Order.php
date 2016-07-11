@@ -231,7 +231,7 @@ class Order
         }
 
         foreach ($this->promotionCodes->toArray() as $promotionCode) {
-            $total += $promotionCode->getPrice() * $promotionCode->getQuantity();
+            $total += $promotionCode->getPrice();
         }
 
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
