@@ -24,6 +24,9 @@
                                     {% endif %}
                                 {% else %}
                                     <span class="inactive">{{ link.label|trans }}</span>
+                                    {% if link.button is not empty %}
+                                        <span class="state">{{ link.button.label|trans }}</span>
+                                    {% endif %}
                                 {% endif %}
                             </li>
                         {% endfor %}

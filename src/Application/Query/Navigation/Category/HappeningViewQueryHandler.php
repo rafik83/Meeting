@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class HappeningViewQueryHandler
@@ -51,30 +52,16 @@ class HappeningViewQueryHandler
                                                        ->getConfiguration()
                                                        ->getHappeningsOpenDate();
 
-        if ($this->dateTime < $happeningOpenDate) {
+        if ($happeningOpenDate === null) {
             return null;
         }
 
-        $linksView = [];
-
+        $linksView   = [];
         $linksView[] = new LinkView(
-            'navigation.links.happening.proposal',
-            null
-        );
-
-        $linksView[] = new LinkView(
-            'navigation.links.happening.waiting',
-            null
-        );
-
-        $linksView[] = new LinkView(
-            'navigation.links.happening.accept',
-            null
-        );
-
-        $linksView[] = new LinkView(
-            'navigation.links.happening.decline',
-            null
+            'navigation.links.happening.open_date',
+            null,
+            null,
+            new StateButtonView(false, $happeningOpenDate->format('d m Y'))
         );
 
         return new CategoryView(

@@ -166,8 +166,10 @@ navigation:
             waiting: Demandes en attente
             accept: Acceptées
             decline: Refusées
+            open_date: Disponible le
         planning:
             available_date: Disponible le
+            final_date: Publication le
             unavailability: Ajouter une indisponibilité
             conference: Conférences
             flash_presentation: Présentations flash

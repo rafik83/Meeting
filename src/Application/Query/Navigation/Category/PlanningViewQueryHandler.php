@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class PlanningViewQueryHandler
@@ -49,40 +50,29 @@ class PlanningViewQueryHandler
         $schedulePublishDate = $planningQuery->sheet->getEvent()
                                                     ->getConfiguration()
                                                     ->getSchedulePublishDate();
+        $happeningOpenDate   = $planningQuery->sheet->getEvent()
+                                                    ->getConfiguration()
+                                                    ->getHappeningsOpenDate();
 
         if ($schedulePublishDate === null) {
             return null;
         }
 
-        $linksView = [];
+        $linksView   = [];
 
-        if ($this->dateTime < $schedulePublishDate) {
-            $linksView[] = new LinkView(
-                'navigation.links.planning.available_date',
-                null
-            );
-        } else {
-            $linksView[] = new LinkView(
-                'navigation.links.planning.unavailability',
-                $this->navigationBuilder->getRoute('event_sheet_schedule_add_unavailability', [
-                    'sheet' => $planningQuery->sheet->getId(),
-                ])
-            );
-            $linksView[] = new LinkView(
-                'navigation.links.planning.conference',
-                null
-            );
-            $linksView[] = new LinkView(
-                'navigation.links.planning.flash_presentation',
-                null
-            );
-            $linksView[] = new LinkView(
-                'navigation.links.planning.my_schedule',
-                $this->navigationBuilder->getRoute('event_sheet_schedule', [
-                    'sheet' => $planningQuery->sheet->getId(),
-                ])
-            );
-        }
+        $linksView[] = new LinkView(
+            'navigation.links.planning.available_date',
+            null,
+            null,
+            new StateButtonView(false, $happeningOpenDate->format('d Y m'))
+        );
+
+        $linksView[] = new LinkView(
+            'navigation.links.planning.final_date',
+            null,
+            null,
+            new StateButtonView(false, $schedulePublishDate->format('d Y m'))
+        );
 
         return new CategoryView(
             Category::PLANNING,
