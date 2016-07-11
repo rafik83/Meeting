@@ -385,6 +385,10 @@ admin:
         title: Titre
         languages: Langues
         fallback: Par défaut
+        billing:
+          configuration:
+            link: Information facturation
+            title: Configuration des informations de facturation
         practicalInfo:
           link: Informations Pratiques
           update:

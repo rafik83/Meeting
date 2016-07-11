@@ -197,11 +197,29 @@ form:
                     children:
                         description:
                             label: Description
-            submit:
-                label: Enregistrer
             organiserName:
                 label: Organisateur
-
+            submit:
+                label: Enregistrer
+    event_billing_configuration:
+        children:
+            legalInfo:
+                label: Informations légales
+            translations:
+                prototype:
+                    children:
+                        bankInfo:
+                            label: Informations banque
+                            placeholder: Iban...
+                        billingAddress:
+                            label: Adresse de paiement
+                        paymentCondition:
+                            label: Conditions de paiement
+                        paymentFooter:
+                            label: Pied de page
+                            placeholder: Exemple adresse, siret, capital ...
+            submit:
+                label: Enregistrer
     who_see_who:
         children:
             seer:
