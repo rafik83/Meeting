@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 
 use DateTimeInterface;
+use IntlDateFormatter;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
@@ -56,6 +57,9 @@ class CatalogViewQueryHandler
         if (empty($catalogOnlineDate)) {
             return null;
         }
+        
+        $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+        $formatter->setPattern('d MMMM Y');
 
         $linksView = [];
 
@@ -64,14 +68,14 @@ class CatalogViewQueryHandler
                 'navigation.links.catalog.available_date',
                 null,
                 null,
-                new StateButtonView(true, $catalogOnlineDate->format('d m Y'))
+                new StateButtonView(true, $formatter->format($catalogOnlineDate))
             );
         } else {
             $linksView[] = new LinkView(
                 'navigation.links.catalog.available_date',
                 $this->navigationBuilder->getRoute('event_catalog'),
                 null,
-                new StateButtonView(true, $catalogOnlineDate->format('d m Y'))
+                new StateButtonView(true, $formatter->format($catalogOnlineDate))
             );
         }
 

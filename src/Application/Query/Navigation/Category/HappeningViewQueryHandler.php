@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 
+use IntlDateFormatter;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
@@ -56,12 +57,15 @@ class HappeningViewQueryHandler
             return null;
         }
 
+        $formatter = new IntlDateFormatter($happeningViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+        $formatter->setPattern('d MMMM Y');
+
         $linksView   = [];
         $linksView[] = new LinkView(
             'navigation.links.happening.open_date',
             null,
             null,
-            new StateButtonView(false, $happeningOpenDate->format('d m Y'))
+            new StateButtonView(false, $formatter->format($happeningOpenDate))
         );
 
         return new CategoryView(
