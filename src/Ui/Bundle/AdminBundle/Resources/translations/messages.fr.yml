@@ -256,6 +256,7 @@ message:
                 confirm: Confirmer la suppression
 
 admin:
+    filter: Filtrer
     filter_by: Filtrer par
     filters:
         all: Tous
