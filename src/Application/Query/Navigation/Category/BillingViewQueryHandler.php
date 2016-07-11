@@ -13,9 +13,25 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class BillingViewQueryHandler
 {
+    /**
+     * @var NavigationBuilder
+     */
+    private $navigationBuilder;
+
+    /**
+     * BillingViewQueryHandler constructor.
+     *
+     * @param NavigationBuilder $navigationBuilder
+     */
+    public function __construct(NavigationBuilder $navigationBuilder)
+    {
+        $this->navigationBuilder = $navigationBuilder;
+    }
+
     /**
      * @param BillingViewQuery $billingQuery
      *
@@ -32,12 +48,12 @@ class BillingViewQueryHandler
         if (empty($billingQuery->sheet->getOrders())) {
             $linksView[] = new LinkView(
                 'navigation.links.billing.billing_info',
-                ''
+                $this->navigationBuilder->getRoute('event_billing_info', ['sheet' => $billingQuery->sheet->getId()])
             );
         } else {
             $linksView[] = new LinkView(
                 'navigation.links.billing.billing_info',
-                ''
+                $this->navigationBuilder->getRoute('event_billing_info', ['sheet' => $billingQuery->sheet->getId()])
             );
             $linksView[] = new LinkView(
                 'navigation.links.billing.order_history',

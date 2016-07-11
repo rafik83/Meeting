@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class PackageViewQueryHandler
 {
@@ -23,19 +24,26 @@ class PackageViewQueryHandler
     private $funnelFactory;
 
     /**
+     * @var NavigationBuilder
+     */
+    private $navigationBuilder;
+
+    /**
      * PackageViewQueryHandler constructor.
      *
-     * @param FunnelFactory $funnelFactory
+     * @param FunnelFactory     $funnelFactory
+     * @param NavigationBuilder $navigationBuilder
      */
-    public function __construct(FunnelFactory $funnelFactory)
+    public function __construct(FunnelFactory $funnelFactory, NavigationBuilder $navigationBuilder)
     {
-        $this->funnelFactory = $funnelFactory;
+        $this->funnelFactory     = $funnelFactory;
+        $this->navigationBuilder = $navigationBuilder;
     }
 
     /**
      * @param PackageViewQuery $packageQuery
      *
-     * @return null|CategoryView
+     * @return CategoryView|null
      */
     public function handle(PackageViewQuery $packageQuery)
     {
@@ -49,21 +57,22 @@ class PackageViewQueryHandler
         foreach ($funnel->getSteps() as $step) {
             $linksView[] = new LinkView(
                 $step->title,
-                ''
+                $this->navigationBuilder->getRoute('event_package_step', [
+                    'sheet' => $packageQuery->sheet->getId(),
+                    'step'  => $step->index,
+                ])
             );
         }
 
         if ($funnel->isCompleted()) {
             $linksView[] = new LinkView(
                 'navigation.links.package.summary',
-                ''
+                $this->navigationBuilder->getRoute('event_package_summary', [
+                    'sheet' => $packageQuery->sheet->getId()
+                ])
             );
         }
 
-        return new CategoryView(
-            Category::PACKAGE,
-            Category::PACKAGE_ICON,
-            $linksView
-        );
+        return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView);
     }
 }

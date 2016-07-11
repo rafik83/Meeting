@@ -13,9 +13,25 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class SheetViewQueryHandler
 {
+    /**
+     * @var NavigationBuilder
+     */
+    private $navigationBuilder;
+
+    /**
+     * SheetViewQueryHandler constructor.
+     *
+     * @param NavigationBuilder $navigationBuilder
+     */
+    public function __construct(NavigationBuilder $navigationBuilder)
+    {
+        $this->navigationBuilder = $navigationBuilder;
+    }
+
     /**
      * @param SheetViewQuery $sheetQuery
      *
@@ -28,7 +44,7 @@ class SheetViewQueryHandler
         foreach($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
             $linksView[] = new LinkView(
                 'navigation.links.sheet.locale',
-                '',
+                $this->navigationBuilder->getRoute('event_sheet_locale', ['locale' => $locale]),
                 $locale
             );
         }
