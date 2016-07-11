@@ -28,7 +28,8 @@ class SheetViewQueryHandler
         foreach($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
             $linksView[] = new LinkView(
                 'navigation.links.sheet.locale',
-                ''
+                '',
+                $locale
             );
         }
 

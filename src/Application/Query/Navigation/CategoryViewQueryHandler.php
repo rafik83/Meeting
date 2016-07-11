@@ -122,7 +122,9 @@ class CategoryViewQueryHandler
                 ));
                 break;
             case Category::CATALOG:
-                return $this->catalogViewQueryHandler->handle(new CatalogViewQuery());
+                return $this->catalogViewQueryHandler->handle(new CatalogViewQuery(
+                    
+                ));
                 break;
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery());

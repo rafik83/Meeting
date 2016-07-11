@@ -15,6 +15,11 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 
 class HappeningViewQueryHandler
 {
+    /**
+     * @param HappeningViewQuery $happeningQuery
+     *
+     * @return CategoryView
+     */
     public function handle(HappeningViewQuery $happeningQuery)
     {
         return new CategoryView(

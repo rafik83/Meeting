@@ -23,14 +23,21 @@ class LinkView
     public $link;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * LinkView constructor.
      *
      * @param string $label
      * @param string $link
+     * @param null   $locale
      */
-    public function __construct($label, $link)
+    public function __construct($label, $link, $locale = null)
     {
-        $this->label = $label;
-        $this->link  = $link;
+        $this->label  = $label;
+        $this->link   = $link;
+        $this->locale = $locale;
     }
 }
