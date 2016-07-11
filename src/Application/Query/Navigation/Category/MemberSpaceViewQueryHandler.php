@@ -41,7 +41,7 @@ class MemberSpaceViewQueryHandler
     {
         $participant = $memberSpaceQuery->sheet->getUserParticipant($memberSpaceQuery->user);
         
-        if ($participant == null) {
+        if ($participant === null) {
             return null;
         }
 

@@ -129,7 +129,11 @@ class CategoryViewQueryHandler
                 ));
                 break;
             case Category::PLANNING:
-                return $this->planningViewQueryHandler->handle(new PlanningViewQuery());
+                return $this->planningViewQueryHandler->handle(new PlanningViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
                 break;
             case Category::HAPPENING:
                 return $this->happeningViewQueryHandler->handle(new HappeningViewQuery(

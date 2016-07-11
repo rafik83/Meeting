@@ -14,7 +14,13 @@
                     <ul>
                         {% for link in category.linksView %}
                             <li>
-                                <a href="#">{{ link.label|trans }} {% if link.locale is not empty %}{{ link.locale|upper }}{% endif %}</a>
+                                <a href="#">
+                                    {{ link.label|trans }}
+                                    {% if link.locale is not empty %}"{{ link.locale|upper }}"{% endif %}
+                                </a>
+                                {% if link.button is not empty %}
+                                    <span class="state">{{ link.button.label }}</span>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

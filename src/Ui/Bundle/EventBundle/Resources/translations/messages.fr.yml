@@ -161,3 +161,15 @@ navigation:
             payment: Paiement
         catalog:
             available_date: Disponible le
+        happening:
+            proposal: Propositions de RDV
+            waiting: Demandes en attente
+            accept: Acceptées
+            decline: Refusées
+        planning:
+            available_date: Disponible le
+            unavailability: Ajouter une indisponibilité
+            conference: Conférences
+            flash_presentation: Présentations flash
+            my_schedule: Mon agenda
+            all_schedule: Tous les agendas

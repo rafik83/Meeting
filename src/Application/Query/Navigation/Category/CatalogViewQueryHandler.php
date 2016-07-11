@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 
 class CatalogViewQueryHandler
 {
@@ -51,7 +52,9 @@ class CatalogViewQueryHandler
         $linksView   = [];
         $linksView[] = new LinkView(
             'navigation.links.catalog.available_date',
-            ''
+            '',
+            $catalogViewQuery->user->getLocale(),
+            new StateButtonView(true, $catalogOnlineDate->format('c'))
         );
 
         return new CategoryView(
