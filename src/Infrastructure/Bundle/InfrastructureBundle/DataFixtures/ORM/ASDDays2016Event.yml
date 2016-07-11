@@ -1280,18 +1280,20 @@ Proximum\Vimeet\Domain\Model\Product:
         image: ~
         availabilityCurrent: ~
         availabilityMax: ~
+        quantityMax: 4
         updatable: false
         updatableUntil: ~
     # plannings
     product_planning_1_asddays:
         __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 1O ] }
-        availabilityCurrent: ~
-        availabilityMax: ~
+        availabilityCurrent: 0
+        availabilityMax: 0
         updatable: false
         updatableUntil: ~
     # options
     product_option_1_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
+        subjectedToValidation: true
     product_option_2_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option chaise', '', 9, 5, '', '', true, null] }
     product_option_3_asddays:
@@ -1304,6 +1306,8 @@ Proximum\Vimeet\Domain\Model\Product:
         __construct: { createOption: ['@event_asddays_2016', 'Option D', '', 19, 3, 2, 100, true, null] }
     product_option_7_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option E', '', 199, 4, 5, 10, true, null] }
+    product_option_8_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option F', '', 59, 4, 3, 4, true, null, false, "<dateTimeBetween('-10days', '-2days')>"] }
 
 Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     product_included_plan_1_asddays_fr:
@@ -1487,6 +1491,22 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         title: 'Option E'
         heading: ''
         description: 'Description Option E'
+        addon: ''
+        locale: 'en'
+    product_option_8_asddays_fr:
+        __construct: false
+        product: '@product_option_8_asddays'
+        title: 'Option F'
+        heading: ''
+        description: 'Description option F'
+        addon: ''
+        locale: 'fr'
+    product_option_8_asddays_en:
+        __construct: false
+        product: '@product_option_8_asddays'
+        title: 'Option F'
+        heading: ''
+        description: 'Description Option F'
         addon: ''
         locale: 'en'
 
@@ -1736,6 +1756,11 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         rank: 4
         group: '@package_group_3_asd_days'
         option: '@product_option_7_asddays'
+    package_group_3_option_8_asd_days:
+        __construct: false
+        rank: 5
+        group: '@package_group_3_asd_days'
+        option: '@product_option_8_asddays'
 
 Proximum\Vimeet\Domain\Model\Event\Content:
     content_terms_of_sale_asddays_2016:

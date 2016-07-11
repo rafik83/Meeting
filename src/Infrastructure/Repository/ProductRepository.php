@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
@@ -49,10 +50,14 @@ class ProductRepository implements ProductRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('product')
+            ->select('product, productIncluded, SUM(row.quantity) AS bought')
             ->from(Product::class, 'product')
+            ->leftJoin(Row::class, 'row', 'WITH', 'row.linkedProduct = product')
+            ->leftJoin('product.productIncluded', 'productIncluded')
             ->where('product.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->groupBy('product')
+            ->orderBy('product.name');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -73,5 +78,13 @@ class ProductRepository implements ProductRepositoryInterface
             ->setParameter('types', $types);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function update(Product $product)
+    {
+        $this->entityManager->flush($product);
     }
 }

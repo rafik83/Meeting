@@ -1,5 +1,5 @@
 @event
-
+@participant
 Feature: Manage participant
   I need to be able to add and remove a participant
 

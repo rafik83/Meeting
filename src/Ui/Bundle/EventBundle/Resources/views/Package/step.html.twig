@@ -11,7 +11,15 @@
         <div class="product">
             <div class="step-number-title"> {{ view.currentStep.index }} </div>
 
-            {{ include('EventBundle:Package/Step:' ~ view.currentStep.type ~ '.html.twig', {view: view, form: form}) }}
+            {{ include('EventBundle:Package/Step:' ~ view.currentStep.type ~ '.html.twig', {
+                view: view,
+                form: form,
+                form_add: form_add,
+                form_remove: form_remove,
+                displayAddParticipantForm: displayAddParticipantForm,
+                displayRemoveParticipantForm: displayRemoveParticipantForm,
+                participants: participants
+            }) }}
         </div>
     </div>
 </section>

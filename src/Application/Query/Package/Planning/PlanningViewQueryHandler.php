@@ -64,7 +64,8 @@ class PlanningViewQueryHandler
             $planningProduct->getEvent()->getCurrency(),
             $planningProduct->getSubjectedToValidationHelp($planningViewQuery->locale),
             $planningProduct->isSubjectedToValidation(),
-            $included
+            $included,
+            $planningProduct->isBuyable(new \DateTime())
         );
     }
 }

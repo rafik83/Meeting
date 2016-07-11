@@ -1,0 +1,44 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Repository;
+
+use Proximum\Vimeet\Domain\Model\CartStep;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
+interface CartStepRepositoryInterface
+{
+    /**
+     * @param CartStep $cartStep
+     */
+    public function add(CartStep $cartStep);
+
+    /**
+     * @param CartStep $cartStep
+     */
+    public function set(CartStep $cartStep);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return CartStep
+     */
+    public function findBySheet(Sheet $sheet);
+
+    /**
+     * @param CartStep $cartStep
+     */
+    public function delete(CartStep $cartStep);
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function deleteForSheet(Sheet $sheet);
+}

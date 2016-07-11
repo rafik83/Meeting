@@ -1,0 +1,11 @@
+Proximum\Vimeet\Application\Command\Event\BillingConfiguration:
+    properties:
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        bankInfo: ~
+                        billingAddress:
+                            - NotBlank: ~
+                        paymentCondition: ~
+                        paymentFooter: ~

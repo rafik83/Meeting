@@ -1,5 +1,6 @@
 @event
-
+@participant
+@registration
 Feature: Register with participant step
   I need to be able to register and fill information during the registration
 

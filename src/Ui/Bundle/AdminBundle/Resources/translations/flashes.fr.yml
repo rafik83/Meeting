@@ -82,6 +82,9 @@ flash:
                     failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
+            billing:
+                configuration:
+                    success: La configuration de facturation a bien été mis à jour
             paymentConditions:
                 update:
                     success: Les conditions de paiement ont été modifiées avec succès
@@ -176,9 +179,13 @@ flash:
             package:
                 update:
                     success: Template de forfait modifié avec succès
+                duplicate:
+                    success: Template de forfait dupliqué avec succès
         product:
             create:
                 success: Le produit a bien été créé
+            update:
+                success: Le produit a été modifié avec succès
         package:
             create:
                 success: La formule a bien été créée
@@ -205,7 +212,7 @@ flash:
     schedule:
         slot:
             generate:
-                success: %count% créneau a été ajouté|%count% créneaux ont été ajoutés
+                success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
         configure:
             success: Votre configuration a bien été enregistrer
     admin.event.practicalInfo:
