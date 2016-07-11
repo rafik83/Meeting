@@ -80,3 +80,10 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         price: 59
         data: '{"name":"Option F", "translations":{"fr":"{\"title\":\"Option F\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Option F\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
         product: '@product_option_8_asddays'
+    order_2_row_4:
+        __construct: false
+        order: '@order_2'
+        quantity: 1
+        price: 195
+        data: '{"name":"Participant supplémentaire Fournisseur", "translations":{"fr":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
+        product: '@product_participant_1_asddays'
