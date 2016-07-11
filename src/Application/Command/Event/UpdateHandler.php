@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Event;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
+use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -52,11 +53,18 @@ class UpdateHandler
     /**
      * @param Update $update
      *
+     * @throws DomainAlreadyUsedException
      * @throws GuidelineAssetBuildFailedException
      */
     public function handle(Update $update)
     {
         $colorUpdated = $update->isColorsUpdated();
+
+        if ($update->domain !== $update->event->getDomain()
+            && null !== $this->eventRepository->getEventByDomain($update->domain)
+        ) {
+            throw new DomainAlreadyUsedException(sprintf('Given domain %s', $update->domain));
+        }
 
         $event = $update->event;
         $event->update(
@@ -66,7 +74,10 @@ class UpdateHandler
             $update->mode,
             $update->vat,
             $update->country,
-            $update->currency
+            $update->currency,
+            $update->timeZone,
+            $update->domain,
+            $update->organiserName
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 

@@ -1,0 +1,5 @@
+Proximum\Vimeet\Domain\Package\Summary\TermsOfSale:
+    properties:
+        termsOfSale:
+            - NotBlank:
+                message: package.terms-of-sale

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\EventListView;
-use Proximum\Vimeet\Domain\View\EventView;
 
 interface EventRepositoryInterface
 {
@@ -46,6 +45,11 @@ interface EventRepositoryInterface
      *
      * @param Event $event
      */
+    public function add(Event $event);
+
+    /**
+     * @param Event $event
+     */
     public function set(Event $event);
 
     /**
@@ -54,14 +58,6 @@ interface EventRepositoryInterface
      * @return Event
      */
     public function getEventByDomain($domain);
-
-    /**
-     * @param string $domain
-     * @param string $locale
-     *
-     * @return EventView
-     */
-    public function getEventViewByDomain($domain, $locale);
 
     /**
      * @param int $id

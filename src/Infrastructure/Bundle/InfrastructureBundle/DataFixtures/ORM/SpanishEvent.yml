@@ -1,14 +1,19 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
-        title: Evento en español
-        domain: spanish-event.<domain()>
-        timeZone: 'Europe/Paris'
+        __construct:
+            - "Evento en español"      #title
+            -  es                      #fallback
+            - [es]                     #locales
+            - 'et'                     #mode
+            - 20                       #vat
+            - 'ES'                     #country
+            -  'EUR'                   #currency
+            - 'Europe/Paris'           #timeZone
+            - spanish-event.<domain()> #domain
+            - "PROXIMUM"               #organiserName
         locales: [es]
-        logo: 'assets/images/asddays-logo.png'
-        fallback: es
         assetPath: ''
-        country: 'ES'
-        organiserName: PROXIMUM
+        logo: 'assets/images/asddays-logo.png'
         paymentAddress: '@payment_address_event_spanish'
         configuration: '@configuration_event_spanish'
         organiserEmail: accounts@proximumgroup.com
@@ -22,9 +27,6 @@ Proximum\Vimeet\Domain\Model\Event:
         # vat mode :
         # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
         # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-        mode: 'et'
-        vat: 20
-        currency: 'EUR'
         elementToJoinWithInvoice: |+
             - Número de la factura
             - Nombre del evento

@@ -16,13 +16,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         // Context
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
         // Current

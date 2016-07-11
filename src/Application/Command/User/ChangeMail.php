@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\EventView;
 
 class ChangeMail
 {
@@ -26,17 +26,17 @@ class ChangeMail
     public $mail;
 
     /**
-     * @var EventView
+     * @var Event
      */
-    public $eventView;
+    public $event;
 
     /**
-     * @param User      $user
-     * @param EventView $eventView
+     * @param User  $user
+     * @param Event $event
      */
-    public function __construct(User $user, EventView $eventView)
+    public function __construct(User $user, Event $event)
     {
-        $this->user      = $user;
-        $this->eventView = $eventView;
+        $this->user  = $user;
+        $this->event = $event;
     }
 }

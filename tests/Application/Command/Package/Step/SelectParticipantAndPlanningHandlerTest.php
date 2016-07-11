@@ -22,12 +22,13 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $datetime    = new \DateTime();
         $user        = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
@@ -48,18 +49,22 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
 
         $planRow = new CartRow($sheet, $planProduct, 1);
 
-        $actualCart = new Cart($sheet, [$planRow]);
-        $expectedCart = new Cart($sheet, [
-            $planRow,
-            new CartRow($sheet, $participantProduct, 1),
-            new CartRow($sheet, $planningProduct, 1),
-        ]);
+        $actualCart   = new Cart($sheet, [$planRow], 1);
+        $expectedCart = new Cart(
+            $sheet,
+            [
+                $planRow,
+                new CartRow($sheet, $participantProduct, 1),
+                new CartRow($sheet, $planningProduct, 1),
+            ],
+            1
+            );
 
         $cartManager = $this->prophesize(CartManager::class);
-        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($actualCart);
+        $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldBeCalled();
 
-        $command                   = new SelectParticipantAndPlanning($sheet);
+        $command                   = new SelectParticipantAndPlanning($sheet, 1);
         $command->planningQuantity = 1;
 
         $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal());
@@ -68,7 +73,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testWithSeveralParticipantsAndNoPlanningHandle()
     {
-        $event       = new Event();
+        $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $datetime    = new \DateTime();
 
@@ -95,21 +100,28 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
 
         $planRow = new CartRow($sheet, $planProduct, 1);
 
-        $actualCart = new Cart($sheet, [
-            $planRow,
-            new CartRow($sheet, $participantProduct, 1)
-        ]);
+        $actualCart = new Cart(
+            $sheet,
+            [
+                $planRow,
+                new CartRow($sheet, $participantProduct, 1),
+            ],
+            1
+        );
 
-        $expectedCart = new Cart($sheet, [
-            $planRow,
-            new CartRow($sheet, $participantProduct, 2),
-        ]);
+        $expectedCart = new Cart(
+            $sheet,
+            [
+                $planRow,
+                new CartRow($sheet, $participantProduct, 2),
+            ],
+            1);
 
         $cartManager = $this->prophesize(CartManager::class);
-        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($actualCart);
+        $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldBeCalled();
 
-        $command                   = new SelectParticipantAndPlanning($sheet);
+        $command                   = new SelectParticipantAndPlanning($sheet, 1);
         $command->planningQuantity = 0;
 
         $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal());

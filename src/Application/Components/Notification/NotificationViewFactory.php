@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Notification;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Model\User;
@@ -72,12 +73,12 @@ class NotificationViewFactory
     /**
      * Count unread notification for this event and user
      *
-     * @param int  $event
-     * @param User $user
+     * @param Event $event
+     * @param User  $user
      *
      * @return int
      */
-    public function countUnreadNotificationByEventAndUser($event, User $user)
+    public function countUnreadNotificationByEventAndUser(Event $event, User $user)
     {
         $notifications = $this->getNotificationsByEventAndUser($event, $user, $user->getLocale());
 
@@ -89,13 +90,13 @@ class NotificationViewFactory
     /**
      * Get unread notification for this event and user
      *
-     * @param int    $event
+     * @param Event  $event
      * @param User   $user
      * @param string $locale
      *
      * @return NotificationView[]
      */
-    public function getNotificationsByEventAndUser($event, User $user, $locale)
+    public function getNotificationsByEventAndUser(Event $event, User $user, $locale)
     {
         $notifications   = $this->notificationRepository->getNotificationsByEventAndUser($event, $user);
         $receivedRequest = $this->requestRepository->getRequestsByEventAndUser($event, $user);

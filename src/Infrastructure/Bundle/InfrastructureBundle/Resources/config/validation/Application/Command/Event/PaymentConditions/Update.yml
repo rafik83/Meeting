@@ -1,0 +1,15 @@
+Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update:
+    constraints:
+        - Expression:
+            expression: "!this.allowDeposit or (null !== this.minimumForDeposit and null !== this.deposit and null !== this.depositUntil)"
+            message: "validators.allowDepositMissingData"
+    properties:
+        minimumForDeposit:
+            - Range:
+                min: 0
+        deposit:
+            - Range:
+                min: 0
+                max: 100
+        depositUntil:
+            - DateTime: ~

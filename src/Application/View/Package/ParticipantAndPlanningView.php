@@ -18,15 +18,15 @@ class ParticipantAndPlanningView extends AbstractProductsView
     public $participantsView;
 
     /**
-     * @var PlanningView
+     * @var ProductView
      */
     public $planningView;
 
     /**
      * @param ParticipantsView $participantsView
-     * @param PlanningView     $planningView
+     * @param ProductView      $planningView
      */
-    public function __construct(ParticipantsView $participantsView, PlanningView $planningView)
+    public function __construct(ParticipantsView $participantsView, ProductView $planningView)
     {
         $this->participantsView = $participantsView;
         $this->planningView     = $planningView;

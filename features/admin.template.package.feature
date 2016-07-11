@@ -1,3 +1,5 @@
+@admin
+
 Feature: Manage products selection templates
   As an Admin, I need to be able to add, update and list products selection templates
 

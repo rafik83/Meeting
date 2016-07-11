@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\Event\User;
 
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\EventView;
 use Symfony\Component\EventDispatcher\Event;
+use Proximum\Vimeet\Domain\Model\Event as EventModel;
 
 class CompleteProfileEvent extends Event
 {
@@ -23,9 +23,9 @@ class CompleteProfileEvent extends Event
     private $user;
 
     /**
-     * @var EventView
+     * @var Event
      */
-    private $eventView;
+    private $event;
 
     /**
      * @var string
@@ -39,14 +39,14 @@ class CompleteProfileEvent extends Event
 
     /**
      * @param User        $user
-     * @param EventView   $eventView
+     * @param EventModel  $event
      * @param Participant $participant
      * @param string      $locale
      */
-    public function __construct(User $user, EventView $eventView, Participant $participant, $locale)
+    public function __construct(User $user, EventModel $event, Participant $participant, $locale)
     {
         $this->user        = $user;
-        $this->eventView   = $eventView;
+        $this->event       = $event;
         $this->participant = $participant;
         $this->locale      = $locale;
     }
@@ -60,11 +60,11 @@ class CompleteProfileEvent extends Event
     }
 
     /**
-     * @return EventView
+     * @return EventModel
      */
-    public function getEventView()
+    public function getEvent()
     {
-        return $this->eventView;
+        return $this->event;
     }
 
     /**

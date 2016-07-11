@@ -16,13 +16,14 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $event    = new Event();
+        $event    = EventFactory::createEvent();
         $event->setLocales(['fr'], 'fr');
         $create   = new CreateForEvent();
         $create->title = 'Toto';

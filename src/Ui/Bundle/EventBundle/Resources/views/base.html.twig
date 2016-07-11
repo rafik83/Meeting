@@ -6,8 +6,8 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-            {% if eventView is defined %}
-                <link rel="stylesheet" href="{{ asset(eventView.asset) }}">
+            {% if event is defined %}
+                <link rel="stylesheet" href="{{ asset(event.assetPath) }}">
             {% endif %}
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -16,47 +16,49 @@
         {% block body %}
             <div class="wrapper">
                 <div class="header">
-                    {% if eventView is defined %}
-                        {% if eventView.logo != null %}
+                    {% if event is defined %}
+                        {% if event.logo != null %}
                         <a href="{{ path('event') }}">
-                            <img src="{{ eventView.logo|imagine_filter('event_header_logo') }}" class="logo">
+                            <img src="{{ event.logo|imagine_filter('event_header_logo') }}" class="logo">
                         </a>
                         {% endif %}
                         <div class="header__info">
-                                <p>{{ eventView.title }}</p>
-                                <p>{{ eventView.description }}</p>
+                            <p>{{ event.title }}</p>
+                            <p>{{ event.description(app.request.locale) }}</p>
                         </div>
                     {% endif %}
 
                     <ul class="header__navigation">
-                        {% if eventView is defined %}
-                            {% for locale in eventView.locales if locale != app.request.locale %}
+                        {% if event is defined %}
+                            {% for locale in event.locales if locale != app.request.locale %}
                                 <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
                             {% endfor %}
                         {% endif %}
 
                         {% if is_granted('ROLE_USER') %}
-                            <li>
+                            <li class="notifs">
                                 <a href="">
                                     <i class="icon-Retard"></i>
                                     <span class="name">Notifications</span> <span class="notif">1</span>
                                 </a>
                             </li>
                             <li>
-                                <a href=""><img src="{{ asset('assets/images/icons/icon-settings.png') }}"></a>
+                                <a href="">
+                                    <i class="icon-Preferences_1"></i>
+                                </a>
                             </li>
                         {% endif %}
 
                         {% if is_granted('ROLE_USER') %}
                             <li>
                                 <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
-                                    <img src="{{ asset('assets/images/icons/icon-login.png') }}">
+                                    <i class="icon-Disconnect"></i>
                                 </a>
                             </li>
                         {% else %}
                             <li>
                                 <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
-                                    <img src="{{ asset('assets/images/icons/icon-login.png') }}">
+                                    <i class="icon-Disconnect"></i>
                                 </a>
                             </li>
                         {% endif %}
@@ -90,8 +92,8 @@
                 {% endif %}
             </div>
 
-            {% if is_granted('ROLE_PREVIOUS_ADMIN') and eventView is defined %}
-                {{ render(controller('EventBundle:Security:impersonatingUser', {'eventView': eventView})) }}
+            {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
+                {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
             {% endif %}
 
             {{ include('EventBundle::flashes.html.twig') }}

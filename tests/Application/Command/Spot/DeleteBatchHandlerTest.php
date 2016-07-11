@@ -14,13 +14,14 @@ use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatchHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DeleteBatchHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         //Context
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $ids = [1, 2, 3, 4, 5];
 
         //Command

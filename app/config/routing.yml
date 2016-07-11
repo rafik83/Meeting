@@ -3,7 +3,7 @@ default:
     host: '%domain%'
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /%locale%/
+        path: '/%locale%/'
         permanent: true
     methods: [GET]
 
@@ -16,7 +16,7 @@ default_admin:
     host: '%domain%'
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /admin/%locale%/
+        path: '/admin/%locale%/'
         permanent: true
     methods: [GET]
 

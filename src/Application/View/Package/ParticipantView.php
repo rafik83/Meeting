@@ -40,18 +40,25 @@ class ParticipantView
     public $included;
 
     /**
+     * @var string
+     */
+    public $currency;
+
+    /**
      * @param int                  $id
      * @param Participant\CardView $card
      * @param float                $price
      * @param string               $vatMode
+     * @param string               $currency
      * @param bool                 $included
      */
-    public function __construct($id, Participant\CardView $card, $price, $vatMode, $included)
+    public function __construct($id, Participant\CardView $card, $price, $vatMode, $currency, $included)
     {
         $this->id       = $id;
         $this->card     = $card;
         $this->price    = $price;
         $this->vatMode  = $vatMode;
+        $this->currency = $currency;
         $this->included = $included;
     }
 }

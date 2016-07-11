@@ -134,11 +134,43 @@ class Event implements EventInterface
 
     /**
      * Constructor.
+     *
+     * @param string $title
+     * @param string $fallback
+     * @param array  $locales
+     * @param string $mode
+     * @param float  $vat
+     * @param string $country
+     * @param string $currency
+     * @param string $timeZone
+     * @param string $domain
+     * @param string $organiserName
      */
-    public function __construct()
-    {
-        $this->translations  = new ArrayCollection();
-        $this->configuration = new Configuration('', '', '');
+    public function __construct(
+        $title,
+        $fallback,
+        array $locales,
+        $mode,
+        $vat,
+        $country,
+        $currency,
+        $timeZone,
+        $domain,
+        $organiserName
+    ) {
+        $this->translations   = new ArrayCollection();
+        $this->configuration  = new Configuration('', '', '');
+        $this->paymentAddress = new Address('', '', '', '');
+        $this->title          = $title;
+        $this->fallback       = $fallback;
+        $this->locales        = $locales;
+        $this->mode           = $mode;
+        $this->vat            = $vat;
+        $this->country        = $country;
+        $this->currency       = $currency;
+        $this->timeZone       = $timeZone;
+        $this->domain         = $domain;
+        $this->organiserName  = $organiserName;
     }
 
     /**
@@ -177,6 +209,16 @@ class Event implements EventInterface
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -301,16 +343,32 @@ class Event implements EventInterface
      * @param float  $vat
      * @param string $country
      * @param string $currency
+     * @param string $timeZone
+     * @param string $domain
+     * @param string $organiserName
      */
-    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency)
+    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency, $timeZone, $domain, $organiserName)
     {
-        $this->title    = $title;
-        $this->locales  = $locales;
-        $this->fallback = $fallback;
-        $this->mode     = $mode;
-        $this->vat      = $vat;
-        $this->country  = $country;
-        $this->currency = $currency;
+        $this->title         = $title;
+        $this->locales       = $locales;
+        $this->fallback      = $fallback;
+        $this->mode          = $mode;
+        $this->vat           = $vat;
+        $this->country       = $country;
+        $this->currency      = $currency;
+        $this->timeZone      = $timeZone;
+        $this->domain        = $domain;
+        $this->organiserName = $organiserName;
+    }
+
+    /**
+     * @param string $organiserName
+     * @param string $organiserEmail
+     */
+    public function updateOrganiserInfo($organiserName, $organiserEmail)
+    {
+        $this->organiserName  = $organiserName;
+        $this->organiserEmail = $organiserEmail;
     }
 
     /**
@@ -319,6 +377,18 @@ class Event implements EventInterface
     public function getOrganiserName()
     {
         return $this->organiserName;
+    }
+
+    /**
+     * @param string $organiserName
+     *
+     * @return Event
+     */
+    public function setOrganiserName($organiserName)
+    {
+        $this->organiserName = $organiserName;
+
+        return $this;
     }
 
     /**
@@ -335,6 +405,18 @@ class Event implements EventInterface
     public function getOrganiserEmail()
     {
         return $this->organiserEmail;
+    }
+
+    /**
+     * @param string $organiserEmail
+     * 
+     * @return $this
+     */
+    public function setOrganiserEmail($organiserEmail)
+    {
+        $this->organiserEmail = $organiserEmail;
+
+        return $this;
     }
 
     /**

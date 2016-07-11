@@ -33,6 +33,20 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Event $event)
+    {
+        $this->entityManager->persist($event);
+        $this->entityManager->flush($event);
+
+        foreach ($event->getTranslations() as $translation) {
+            $this->entityManager->persist($translation);
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(Event $event)
     {
         $this->entityManager->flush($event);
@@ -122,36 +136,6 @@ class EventRepository implements EventRepositoryInterface
             ->from(Event::class, 'event')
             ->where('event.domain = :domain')
             ->setParameter('domain', $domain);
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEventViewByDomain($domain, $locale)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\EventView(
-                event.id,
-                event.title,
-                event.logo,
-                translations.description,
-                translations.locale,
-                event.fallback,
-                event.locales,
-                event.timeZone,
-                event.assetPath,
-                event.country
-            )')
-            ->from(Event::class, 'event')
-            ->join('event.translations', 'translations', 'WITH', 'translations.locale = :locale')
-            ->setParameter('locale', $locale)
-            ->where('event.domain = :domain')
-            ->setParameter('domain', $domain)
-            ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

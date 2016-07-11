@@ -1,3 +1,5 @@
+@admin
+
 Feature: Forgot Password Admin
   I need to be able to change my password if I forgot it as an Admin
 

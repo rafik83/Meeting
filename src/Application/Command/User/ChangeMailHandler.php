@@ -89,7 +89,7 @@ class ChangeMailHandler
 
         $changeMailEvent = new ChangeMailAddressEvent(
             $user,
-            $changeMail->eventView,
+            $changeMail->event,
             $changeMailToken
         );
 

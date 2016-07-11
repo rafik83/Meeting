@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
@@ -47,20 +48,17 @@ class TypeChoiceType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
-                'label'        => false,
-                'choices'      => $this->typeRepository->getTypeViewsByEvent(
-                    $options['eventId'],
-                    $options['locale']
-                ),
-                'expanded'     => true,
-                'required'     => true,
-                'choice_label' => 'title',
-                'choice_value' => 'id',
-                'attr'         => ['data-choice-description' => '#type-description'],
-                'choice_attr'  => function (TypeView $typeView) {
+                'label'              => false,
+                'choices'            => $this->typeRepository->getTypeViewsByEvent($options['event'], $options['locale']),
+                'expanded'           => true,
+                'required'           => true,
+                'choice_label'       => 'title',
+                'choice_value'       => 'id',
+                'attr'               => ['data-choice-description' => '#type-description'],
+                'translation_domain' => false,
+                'choice_attr'        => function (TypeView $typeView) {
                     return ['data-description' => $this->markdown->toHtml($typeView->description)];
                 },
-                'translation_domain' => false,
             ]);
     }
 
@@ -69,7 +67,8 @@ class TypeChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['eventId', 'locale']);
+        $resolver->setRequired(['event', 'locale']);
+        $resolver->setAllowedTypes('event', Event::class);
     }
 
     /**

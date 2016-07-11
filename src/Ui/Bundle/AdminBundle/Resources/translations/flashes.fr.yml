@@ -74,12 +74,17 @@ flash:
             success: Vous allez recevoir un email vous permettant de créer un nouveau mot de passe
             expired: Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.
         event:
+            create:
+                success: Votre événement a bien été ajouté
             update:
                 success: L'événement a bien été mis à jour
                 asset:
                     failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
             who_see_what:
                 success: La règle a bien été mis à jour
+            paymentConditions:
+                update:
+                    success: Les conditions de paiement ont été modifiées avec succès
             configure_dates:
                 success: Les dates ont bien été enregistrées
         type:
@@ -200,6 +205,9 @@ flash:
     schedule:
         slot:
             generate:
-                success: %count% créneau a été ajouté|%count% créneaux ont été ajoutés
+                success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
         configure:
             success: Votre configuration a bien été enregistrer
+    admin.event.practicalInfo:
+        update:
+            success: Les informations pratiques ont bien été mises à jour

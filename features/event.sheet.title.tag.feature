@@ -1,3 +1,5 @@
+@event
+
 Feature: Sheet with a tag in editable text title
     I see the organization name in the sheet title
 

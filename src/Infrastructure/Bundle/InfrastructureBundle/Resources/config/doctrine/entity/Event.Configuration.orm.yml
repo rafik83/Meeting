@@ -18,3 +18,26 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         schedulePublishDate:
             type: datetime
             nullable: true
+        contactFirstName:
+            type: string
+            nullable: true
+        contactLastName:
+            type: string
+            nullable: true
+        organiserPhone:
+            type: string
+            nullable: true
+        organiserWebsite:
+            type: string
+            nullable: true
+        allowDeposit:
+            type: boolean
+        depositUntil:
+            type: datetime
+            nullable: true
+        minimumForDeposit:
+            type: float
+            nullable: true
+        deposit:
+            type: integer
+            nullable: true

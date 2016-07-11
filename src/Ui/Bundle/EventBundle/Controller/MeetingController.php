@@ -17,7 +17,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\UpdateType;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,14 +26,14 @@ use Symfony\Component\HttpFoundation\Response;
 class MeetingController extends Controller
 {
     /**
-     * @param Request    $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     * @param Meeting   $meeting
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param Meeting     $meeting
      *
      * @return Response
      */
-    public function displayAction(Request $request, EventView $eventView, Sheet $sheet, Meeting $meeting)
+    public function displayAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -43,7 +43,7 @@ class MeetingController extends Controller
         $sheetInfoGuesser       = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:Meeting:display.html.twig', [
-            'eventView'        => $eventView,
+            'event'            => $eventDomain->getEvent(),
             'sheet'            => $sheet,
             'meeting'          => $meeting,
             'from'             => $sheetInfoGuesser->guessSheetName($meeting->getFromSheet(), $locale),
@@ -64,14 +64,14 @@ class MeetingController extends Controller
     }
 
     /**
-     * @param Request   $request
-     * @param EventView $eventView
-     * @param Sheet     $sheet
-     * @param Meeting   $meeting
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param Meeting     $meeting
      *
      * @return RedirectResponse|Response
      */
-    public function cancelAction(Request $request, EventView $eventView, Sheet $sheet, Meeting $meeting)
+    public function cancelAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -86,22 +86,22 @@ class MeetingController extends Controller
         }
 
         return $this->render('EventBundle:Meeting:cancel.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'meeting'   => $meeting,
-            'form'      => $form->createView(),
+            'event'   => $eventDomain->getEvent(),
+            'sheet'   => $sheet,
+            'meeting' => $meeting,
+            'form'    => $form->createView(),
         ]);
     }
 
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      * @param Sheet     $sheet
      * @param Meeting   $meeting
      *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request, EventView $eventView, Sheet $sheet, Meeting $meeting)
+    public function updateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -116,10 +116,10 @@ class MeetingController extends Controller
         }
 
         return $this->render('EventBundle:Meeting:update.html.twig', [
-            'eventView' => $eventView,
-            'sheet'     => $sheet,
-            'meeting'   => $meeting,
-            'form'      => $form->createView(),
+            'event'   => $eventDomain->getEvent(),
+            'sheet'   => $sheet,
+            'meeting' => $meeting,
+            'form'    => $form->createView(),
         ]);
     }
 }

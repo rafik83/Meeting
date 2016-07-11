@@ -23,20 +23,27 @@ class Cart
     private $sheet;
 
     /**
-     * @var CartRow[]
+     * @var ArrayCollection of CartRow
      */
     private $rows;
+
+    /**
+     * @var int
+     */
+    private $currentStep;
 
     /**
      * Cart constructor.
      *
      * @param Sheet     $sheet
      * @param CartRow[] $rows
+     * @param int       $currentStep
      */
-    public function __construct(Sheet $sheet, array $rows)
+    public function __construct(Sheet $sheet, array $rows, $currentStep = null)
     {
-        $this->sheet = $sheet;
-        $this->rows  = new ArrayCollection($rows);
+        $this->sheet       = $sheet;
+        $this->rows        = new ArrayCollection($rows);
+        $this->currentStep = $currentStep;
     }
 
     /**
@@ -102,33 +109,55 @@ class Cart
     }
 
     /**
-     * @return false|CartRow
+     * @return null|CartRow
      */
     public function getPlanRow()
     {
-        return $this->rows->filter(function (CartRow $cartRow) {
-            return $cartRow->getProduct()->isPlan();
-        })->first();
+        foreach ($this->rows as $cartRow) {
+            if ($cartRow->getProduct()->isPlan()) {
+                return $cartRow;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * @return false|CartRow
+     * @return null|CartRow
      */
     public function getParticipantRow()
     {
-        return $this->rows->filter(function (CartRow $cartRow) {
-            return $cartRow->getProduct()->isParticipant();
-        })->first();
+        foreach ($this->rows as $cartRow) {
+            if ($cartRow->getProduct()->isParticipant()) {
+                return $cartRow;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * @return false|CartRow
+     * @return null|CartRow
      */
     public function getPlanningRow()
     {
+        foreach ($this->rows as $cartRow) {
+            if ($cartRow->getProduct()->isPlanning()) {
+                return $cartRow;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return ArrayCollection CartRow[]
+     */
+    public function getOptionsRow()
+    {
         return $this->rows->filter(function (CartRow $cartRow) {
-            return $cartRow->getProduct()->isPlanning();
-        })->first();
+            return $cartRow->getProduct()->isOption();
+        });
     }
 
     /**
@@ -147,6 +176,22 @@ class Cart
         return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         });
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return CartRow
+     */
+    public function getCartRowForProduct(Product $product)
+    {
+        foreach ($this->rows as $cartRow) {
+            if ($cartRow->getProduct() === $product) {
+                return $cartRow;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -181,5 +226,35 @@ class Cart
     public function clear()
     {
         $this->rows->clear();
+    }
+
+    /**
+     * Clear the cart
+     */
+    public function clearOptions()
+    {
+        foreach ($this->getOptionsRow() as $row) {
+            $this->rows->removeElement($row);
+        }
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCurrentStep()
+    {
+        return $this->currentStep;
+    }
+
+    /**
+     * @param int $currentStep
+     *
+     * @return Cart
+     */
+    public function setCurrentStep($currentStep)
+    {
+        $this->currentStep = $currentStep;
+
+        return $this;
     }
 }

@@ -240,6 +240,20 @@ class Product
     }
 
     /**
+     * @return array
+     */
+    public function getTranslationsSerializedData()
+    {
+        $data = [];
+
+        foreach ($this->translations->toArray() as $locale => $translation) {
+            $data[$locale] = $translation->getTranslationSerializedData();
+        }
+
+        return $data;
+    }
+
+    /**
      * @param string $locale
      * @param string $title
      * @param string $heading
@@ -291,6 +305,16 @@ class Product
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getAddon($locale)
+    {
+        return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getAddon() : '';
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -319,7 +343,7 @@ class Product
      */
     public function getQuantityMax()
     {
-        return $this->quantityMax;
+        return null === $this->quantityMax ? INF : $this->quantityMax;
     }
 
     /**
@@ -336,6 +360,14 @@ class Product
     public function getAvailabilityMax()
     {
         return $this->availabilityMax;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAvailability()
+    {
+        return $this->getAvailabilityMax() ? $this->getAvailabilityCurrent() : INF;
     }
 
     /**
@@ -448,6 +480,18 @@ class Product
     }
 
     /**
+     * @param Product $product
+     *
+     * @return false|ProductIncluded
+     */
+    public function getIncludedProduct(Product $product)
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) use ($product) {
+            return $productIncluded->getIncluded() == $product;
+        })->first();
+    }
+
+    /**
      * @return ProductIncluded[]
      */
     public function getIncludedProducts()
@@ -493,6 +537,14 @@ class Product
     public function getVatMode()
     {
         return $this->getEvent()->getMode();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOutOfStock()
+    {
+        return $this->getAvailabilityMax() && !$this->getAvailabilityCurrent();
     }
 
     /**
@@ -609,6 +661,23 @@ class Product
     }
 
     /**
+     * @return array
+     */
+    private function getIncludedProductSerializedData()
+    {
+        $data = [];
+
+        foreach ($this->productIncluded->toArray() as $productIncluded) {
+            $data[] = [
+                'quantity' => $productIncluded->getQuantity(),
+                'included' => $productIncluded->getIncluded()->getSerializedData(),
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
      * @return string
      */
     public function getSerializedData()
@@ -617,11 +686,13 @@ class Product
             [
                 'name'                => $this->name,
                 'unitPrice'           => $this->unitPrice,
+                'translations'        => $this->getTranslationsSerializedData(),
                 'quantityMax'         => $this->quantityMax,
                 'availabilityCurrent' => $this->availabilityCurrent,
                 'availabilityMax'     => $this->availabilityMax,
                 'updatable'           => $this->updatable,
                 'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
+                'productsIncluded'    => $this->getIncludedProductSerializedData(),
             ]
         );
     }

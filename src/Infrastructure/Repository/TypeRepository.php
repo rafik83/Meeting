@@ -105,7 +105,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypeViewByIdAndEvent($typeId, $eventId, $locale)
+    public function getTypeViewByIdAndEvent($typeId, Event $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -116,8 +116,8 @@ class TypeRepository implements TypeRepositoryInterface
             ->setParameter('locale', $locale)
             ->where('type.id = :typeId')
             ->setParameter('typeId', $typeId)
-            ->andWhere('type.event = :eventId')
-            ->setParameter('eventId', $eventId)
+            ->andWhere('type.event = :event')
+            ->setParameter('event', $event)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
@@ -126,7 +126,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypeViewsByEvent($eventId, $locale)
+    public function getTypeViewsByEvent(Event $event, $locale)
     {
         $queryBuilder = $this
             ->entityManager
@@ -135,8 +135,8 @@ class TypeRepository implements TypeRepositoryInterface
             ->from('Entity:Type', 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
-            ->where('type.event = :eventId')
-            ->setParameter('eventId', $eventId)
+            ->where('type.event = :event')
+            ->setParameter('event', $event)
             ->orderBy('type.position');
 
         return $queryBuilder->getQuery()->getResult();
@@ -255,7 +255,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSeeableTypeIdsByUser($user)
+    public function getSeeableTypeIdsByUser(User $user)
     {
         return $this->seeableTypeByRules($this->rulesBySheets($this->sheetByUser($user)));
     }
@@ -269,11 +269,11 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * @param User|int $user
+     * @param User $user
      *
      * @return array
      */
-    private function sheetByUser($user)
+    private function sheetByUser(User $user)
     {
         $queryBuilder = $this
             ->entityManager

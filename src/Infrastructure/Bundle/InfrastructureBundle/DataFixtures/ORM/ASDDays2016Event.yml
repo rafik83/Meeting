@@ -1,14 +1,18 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_asddays_2016:
-        title: "ASD Days"
-        domain: asddays-2016.<domain()>
-        timeZone: 'Europe/Paris'
-        locales: [fr, en]
+        __construct:
+            - "ASD Days"               #title
+            -  fr                      #fallback
+            - [fr, en]                 #locales
+            - 'et'                     #mode
+            - 20                       #vat
+            - 'FR'                     #country
+            -  'EUR'                   #currency
+            - 'Europe/Paris'           #timeZone
+            - asddays-2016.<domain()> #domain
+            - "PROXIMUM"               #organiserName
         logo: 'assets/images/asddays-logo.png'
-        fallback: fr
         assetPath: ''
-        country: 'FR'
-        organiserName: "PROXIMUM"
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
@@ -22,9 +26,6 @@ Proximum\Vimeet\Domain\Model\Event:
         # vat mode :
         # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
         # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-        mode: 'et'
-        vat: 20
-        currency: 'EUR'
         elementToJoinWithInvoice: |+
             - Numéro de la Facture
             - Nom de l'événement
@@ -1193,6 +1194,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct: false
         type: '@event_asddays_2016_type_fournisseur'
         event: '@event_asddays_2016'
+        owner: '@user_asddays_2'
         data: []
         owner: "@user_asddays_2"
         registrationData:
@@ -1203,6 +1205,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct: false
         type: '@event_asddays_2016_type_investisseur'
         event: '@event_asddays_2016'
+        owner: '@user_asddays_3'
         data: []
         owner: "@user_asddays_3"
         registrationData:
@@ -1290,13 +1293,17 @@ Proximum\Vimeet\Domain\Model\Product:
     product_option_1_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }
     product_option_2_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', '', 9, 5, '', '', true, null] }
     product_option_3_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option A', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option A', '', 29, 2, '', '', true, null] }
     product_option_4_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option B', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option B', '', 44, 10, '', '', true, null] }
     product_option_5_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 9, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 49, 10, 0, 50, true, null] }
+    product_option_6_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option D', '', 19, 3, 2, 100, true, null] }
+    product_option_7_asddays:
+        __construct: { createOption: ['@event_asddays_2016', 'Option E', '', 199, 4, 5, 10, true, null] }
 
 Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     product_included_plan_1_asddays_fr:
@@ -1400,6 +1407,86 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         title: 'Chair'
         heading: ''
         description: ''
+        addon: ''
+        locale: 'en'
+    product_option_3_asddays_fr:
+        __construct: false
+        product: '@product_option_3_asddays'
+        title: 'Option A'
+        heading: ''
+        description: 'Description option A'
+        addon: 'Au lieu de 999€'
+        locale: 'fr'
+    product_option_3_asddays_en:
+        __construct: false
+        product: '@product_option_3_asddays'
+        title: 'Option A'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_4_asddays_fr:
+        __construct: false
+        product: '@product_option_4_asddays'
+        title: 'Option B'
+        heading: ''
+        description: 'Description option B'
+        addon: ''
+        locale: 'fr'
+    product_option_4_asddays_en:
+        __construct: false
+        product: '@product_option_4_asddays'
+        title: 'Option B'
+        heading: ''
+        description: 'Description Option B'
+        addon: ''
+        locale: 'en'
+    product_option_5_asddays_fr:
+        __construct: false
+        product: '@product_option_5_asddays'
+        title: 'Option C'
+        heading: ''
+        description: 'Description option C'
+        addon: ''
+        locale: 'fr'
+    product_option_5_asddays_en:
+        __construct: false
+        product: '@product_option_5_asddays'
+        title: 'Option C'
+        heading: ''
+        description: 'Description Option C'
+        addon: ''
+        locale: 'en'
+    product_option_6_asddays_fr:
+        __construct: false
+        product: '@product_option_6_asddays'
+        title: 'Option D'
+        heading: ''
+        description: 'Description option D'
+        addon: ''
+        locale: 'fr'
+    product_option_6_asddays_en:
+        __construct: false
+        product: '@product_option_6_asddays'
+        title: 'Option D'
+        heading: ''
+        description: 'Description Option D'
+        addon: ''
+        locale: 'en'
+    product_option_7_asddays_fr:
+        __construct: false
+        product: '@product_option_7_asddays'
+        title: 'Option E'
+        heading: ''
+        description: 'Description option E'
+        addon: ''
+        locale: 'fr'
+    product_option_7_asddays_en:
+        __construct: false
+        product: '@product_option_7_asddays'
+        title: 'Option E'
+        heading: ''
+        description: 'Description Option E'
         addon: ''
         locale: 'en'
 
@@ -1621,7 +1708,7 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         option: '@product_option_1_asddays'
     package_group_1_option_2_asd_days:
         __construct: false
-        rank: 1
+        rank: 2
         group: '@package_group_1_asd_days'
         option: '@product_option_2_asddays'
     package_group_2_option_3_asd_days:
@@ -1636,9 +1723,19 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         option: '@product_option_4_asddays'
     package_group_3_option_5_asd_days:
         __construct: false
-        rank: 1
+        rank: 2
         group: '@package_group_3_asd_days'
         option: '@product_option_5_asddays'
+    package_group_3_option_6_asd_days:
+        __construct: false
+        rank: 3
+        group: '@package_group_3_asd_days'
+        option: '@product_option_6_asddays'
+    package_group_3_option_7_asd_days:
+        __construct: false
+        rank: 4
+        group: '@package_group_3_asd_days'
+        option: '@product_option_7_asddays'
 
 Proximum\Vimeet\Domain\Model\Event\Content:
     content_terms_of_sale_asddays_2016:

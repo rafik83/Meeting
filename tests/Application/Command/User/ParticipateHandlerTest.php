@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $now   = new \DateTime();
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
-        $event = new Event();
+        $event = EventFactory::createEvent();
         $type  = new Type($event);
 
         $template = [

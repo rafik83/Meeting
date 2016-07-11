@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ForgottenPasswordType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\NewPasswordType;
 use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,17 +26,17 @@ class ForgottenPasswordController extends Controller
 {
     /**
      * @param Request   $request
-     * @param EventView $eventView
+     * @param EventDomain $eventDomain
      *
      * @return RedirectResponse|Response
      */
-    public function forgottenPasswordAction(Request $request, EventView $eventView)
+    public function forgottenPasswordAction(Request $request, EventDomain $eventDomain)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('event');
         }
 
-        $forgottenPassword = new ForgottenPassword($eventView, $request->getLocale());
+        $forgottenPassword = new ForgottenPassword($eventDomain->getEvent(), $request->getLocale());
         $form              = $this->createForm(ForgottenPasswordType::class, $forgottenPassword, [
             'action' => $this->generateUrl('event_forgotten_password'),
             'method' => 'POST',
@@ -55,19 +55,19 @@ class ForgottenPasswordController extends Controller
         }
 
         return $this->render('EventBundle:ResetPassword:request_token.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 
     /**
      * @param Request                $request
-     * @param EventView              $eventView
+     * @param EventDomain              $eventDomain
      * @param ForgottenPasswordToken $forgottenPasswordToken
      *
      * @return RedirectResponse|Response
      */
-    public function createNewPasswordAction(Request $request, EventView $eventView, ForgottenPasswordToken $forgottenPasswordToken)
+    public function createNewPasswordAction(Request $request, EventDomain $eventDomain, ForgottenPasswordToken $forgottenPasswordToken)
     {
         if ($forgottenPasswordToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
@@ -91,8 +91,8 @@ class ForgottenPasswordController extends Controller
         }
 
         return $this->render('EventBundle:ResetPassword:new_password.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 }

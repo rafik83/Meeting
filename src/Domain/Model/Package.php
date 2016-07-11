@@ -179,6 +179,34 @@ class Package
     }
 
     /**
+     * Get options
+     *
+     * @return Product[]
+     */
+    public function getOptions()
+    {
+        return array_reduce($this->groups->toArray(), function ($carry, $item) {
+            if ($item instanceof PackageGroup) {
+                $carry = array_merge($carry, $item->getOptions());
+            }
+
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * Get options not out of stock
+     *
+     * @return Product[]
+     */
+    public function getAvailablesOptions()
+    {
+        return array_filter($this->getOptions(), function (Product $product) {
+            return !$product->isOutOfStock();
+        });
+    }
+
+    /**
      * Get participant
      *
      * @return Product

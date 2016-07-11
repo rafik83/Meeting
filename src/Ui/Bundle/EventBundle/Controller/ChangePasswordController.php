@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ChangePassword;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\ChangePasswordType;
-use Proximum\Vimeet\Domain\View\EventView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
 class ChangePasswordController extends Controller
 {
     /**
-     * @param Request   $request
-     * @param EventView $eventView
+     * @param Request     $request
+     * @param EventDomain $eventDomain
      *
      * @return Response|RedirectResponse
      */
-    public function changePasswordAction(Request $request, EventView $eventView)
+    public function changePasswordAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -45,8 +45,8 @@ class ChangePasswordController extends Controller
         }
 
         return $this->render('EventBundle:ChangePassword:change_password.html.twig', [
-            'eventView' => $eventView,
-            'form'      => $form->createView(),
+            'event' => $eventDomain->getEvent(),
+            'form'  => $form->createView(),
         ]);
     }
 }
