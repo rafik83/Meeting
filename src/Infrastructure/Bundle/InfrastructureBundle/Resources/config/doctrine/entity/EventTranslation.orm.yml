@@ -11,6 +11,18 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
             type: text
         locale:
             type: string
+        bankInfo:
+            type: string
+            nullable: true
+        billingAddress:
+            type: string
+            nullable: true
+        paymentCondition:
+            type: string
+            nullable: true
+        paymentFooter:
+            type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

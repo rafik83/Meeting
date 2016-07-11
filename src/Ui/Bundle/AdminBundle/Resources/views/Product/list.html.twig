@@ -1,43 +1,62 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.product.title'|trans }}
+{% endblock %}
+
 {% block list_title 'admin.product.title'|trans %}
 
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
-    <a href="{{ path('admin_product_create_option', {'event': event.id}) }}" class="btn btn-primary">
-        <i class="glyphicon glyphicon-product-option"></i>
-        {{ 'admin.product_create.option.title'|trans }}
-    </a>
-    <a href="{{ path('admin_product_create_plan', {'event': event.id}) }}" class="btn btn-primary">
-        <i class="glyphicon glyphicon-product-plan"></i>
-        {{ 'admin.product_create.plan.title'|trans }}
-    </a>
-    <a href="{{ path('admin_product_create_participant', {'event': event.id}) }}" class="btn btn-primary">
-        <i class="glyphicon glyphicon-product-participant"></i>
-        {{ 'admin.product_create.participant.title'|trans }}
-    </a>
-    <a href="{{ path('admin_product_create_planning', {'event': event.id}) }}" class="btn btn-primary">
-        <i class="glyphicon glyphicon-product-planning"></i>
-        {{ 'admin.product_create.planning.title'|trans }}
-    </a>
+
+    <p>
+        <a href="{{ path('admin_product_create_option', {'event': event.id}) }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-product-option"></i>
+            {{ 'admin.product_create.option.title'|trans }}
+        </a>
+        <a href="{{ path('admin_product_create_plan', {'event': event.id}) }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-product-plan"></i>
+            {{ 'admin.product_create.plan.title'|trans }}
+        </a>
+        <a href="{{ path('admin_product_create_participant', {'event': event.id}) }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-product-participant"></i>
+            {{ 'admin.product_create.participant.title'|trans }}
+        </a>
+        <a href="{{ path('admin_product_create_planning', {'event': event.id}) }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-product-planning"></i>
+            {{ 'admin.product_create.planning.title'|trans }}
+        </a>
+    </p>
+
     <table class="table table-hover">
         <thead>
         <tr>
             <th>{{ 'admin.product.name'|trans }}</th>
-            <th class="text-right">{{ 'admin.product.unitPrice'|trans }}</th>
-            <th class="text-right">{{ 'admin.product.quantityMax'|trans }}</th>
-            <th class="text-right">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
-            <th class="text-center">{{ 'admin.product.subjectedToValidation'|trans }}</th>
+            <th class="text-center col-md-1">{{ 'admin.product.bought'|trans }}</th>
+            <th class="text-center col-md-1">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.unitPrice'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.quantityMax'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.buyableUntil'|trans }}</th>
             <th class="text-center">{{ 'admin.product.updatable'|trans }}</th>
-            <th class="text-right">{{ 'admin.product.updatableUntil'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.updatableUntil'|trans }}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        {% for product in products %}
+        {% for row in products %}
+            {% set bought = row.bought %}
+            {% set product = row[0] %}
             <tr>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                     {{ product.name }}
+
+                    {% if product.subjectedToValidation %}
+                        <span class="label label-warning">
+                            {{ 'admin.product.subjectedToValidation'|trans }}
+                        </span>
+                    {% endif %}
+
                     {% if product.hasIncludedProducts %}
                         <ul>
                             {% for includedProduct in product.includedProducts %}
@@ -46,12 +65,36 @@
                         </ul>
                     {% endif %}
                 </td>
+                <td class="text-center">
+                    {% if bought > 0 %}
+                        {% set availabilityStatus = product.getAvailabilityStatus(bought) %}
+                        {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+                        <span class="label label-{{ availabilityCssClass[availabilityStatus] }}">
+                            {{ bought }}
+                        </span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if product.availabilityManaged %}
+                        <div class="progress" data-toggle="tooltip" data-placement="top" title="{{ product.availabilityCurrent }} / {{ product.availabilityMax }}" style="margin-bottom: 0">
+                            {% if product.availabilityCurrent > 0 %}
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ product.availabilityCurrent }}" aria-valuemin="0" aria-valuemax="{{ product.availabilityMax }}" style="width: {{ (100 * product.availabilityCurrent / product.availabilityMax)|round }}%;"></div>
+                            {% else %}
+                                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ product.availabilityCurrent }}" aria-valuemin="0" aria-valuemax="{{ product.availabilityMax }}" style="width: 100%;"></div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </td>
                 <td class="text-right">{{ product.unitPrice|localizedcurrency(event.currency) }}</td>
                 <td class="text-right">{{ product.quantityMax }}</td>
-                <td class="text-right">{{ product.availabilityCurrent }} / {{ product.availabilityMax }}</td>
-                <td class="text-center">{{ product.subjectedToValidation ? '✓' : '' }}</td>
+                <td class="text-center">{{ product.buyableUntil ? product.buyableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
                 <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
-                <td class="text-right">{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
+                <td class="text-center">{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.product.update.action'|trans }}
+                    </a>
+                </td>
             </tr>
         {% else %}
             <tr>

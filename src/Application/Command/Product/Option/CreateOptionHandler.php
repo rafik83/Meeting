@@ -1,0 +1,43 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Product\Option;
+
+use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
+use Proximum\Vimeet\Domain\Model\Product;
+
+class CreateOptionHandler extends AbstractHandler
+{
+    /**
+     * @param CreateOption $createOption
+     */
+    public function handle(CreateOption $createOption)
+    {
+        $product = Product::createOption(
+            $createOption->event,
+            $createOption->name,
+            $this->fileStorageInterface->upload($createOption->file),
+            $createOption->unitPrice,
+            $createOption->quantityMax,
+            $createOption->availabilityCurrent,
+            $createOption->availabilityMax,
+            $createOption->updatable,
+            $createOption->updatableUntil,
+            $createOption->subjectedToValidation
+        );
+
+        foreach ($createOption->translations as $locale => $translation) {
+            $product->translate($locale, $translation['title'], null, $translation['description'],
+                $translation['addon'], $translation['subjectedToValidationHelp']);
+        }
+
+        $this->productRepository->add($product);
+    }
+}

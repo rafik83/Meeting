@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
@@ -17,15 +18,14 @@ use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalI
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,8 +41,7 @@ class EventController extends Controller
         $events = $this
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($this->getUser());
-
-
+        
         return $this->render('AdminBundle:Event:list.html.twig', [
             'events' => $events,
         ]);
@@ -143,6 +142,34 @@ class EventController extends Controller
      * @param Request $request
      * @param Event   $event
      *
+     * @return Response
+     */
+    public function billingConfigurationAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $billingConfiguration = new BillingConfiguration($event);
+        $form = $this->createForm(BillingConfigurationType::class, $billingConfiguration, [
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($billingConfiguration);
+            $this->addFlash('success', 'flash.admin.event.billing.configuration.success');
+
+            return $this->redirectToRoute('admin_event_list');
+        }
+
+        return $this->render('AdminBundle:Event:billingConfiguration.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
      * @return RedirectResponse|Response
      */
     public function practicalInfoAction(Request $request, Event $event)
@@ -151,16 +178,12 @@ class EventController extends Controller
 
         $update = new PracticalInfoUpdate($event);
 
-        $form = $this->createForm(
-            PracticalInfo\UpdateType::class,
-            $update,
-            [
-                'method' => 'POST',
-                'event'  => $event,
-                'action' => $this->generateUrl('admin_event_practical_info_update', ['event' => $event->getId()])
-            ]
-        );
-        $form->add('submit', SubmitType::class);
+        $form = $this->createForm(PracticalInfo\UpdateType::class, $update, [
+            'method' => 'POST',
+            'event'  => $event,
+            'action' => $this->generateUrl('admin_event_practical_info_update', ['event' => $event->getId()]),
+            'submit' => true,
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
@@ -169,13 +192,10 @@ class EventController extends Controller
             return $this->redirectToRoute('admin_event_practical_info_update', ['event' => $event->getId()]);
         }
 
-        return $this->render(
-            'AdminBundle:Event/PracticalInfo:update.html.twig',
-            [
-                'event' => $event,
-                'form'  => $form->createView(),
-            ]
-        );
+        return $this->render('AdminBundle:Event/PracticalInfo:update.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
     }
 
     /**
@@ -197,6 +217,7 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.event.paymentConditions.update.success');
 

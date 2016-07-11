@@ -18,6 +18,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         schedulePublishDate:
             type: datetime
             nullable: true
+        legalInfo:
+            type: string
+            nullable: true
         contactFirstName:
             type: string
             nullable: true
