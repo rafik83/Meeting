@@ -13,8 +13,23 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class BillingViewQuery extends AbstractCategoryViewQuery
+abstract class AbstractCategoryViewQuery
 {
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var User
+     */
+    public $user;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
     /**
      * MemberSpaceViewQuery constructor.
      *
@@ -24,6 +39,8 @@ class BillingViewQuery extends AbstractCategoryViewQuery
      */
     public function __construct(Sheet $sheet, User $user, $locale)
     {
-        parent::__construct($sheet, $user, $locale);
+        $this->sheet  = $sheet;
+        $this->user   = $user;
+        $this->locale = $locale;
     }
 }

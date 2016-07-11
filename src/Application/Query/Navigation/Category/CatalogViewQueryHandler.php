@@ -53,8 +53,8 @@ class CatalogViewQueryHandler
         $linksView[] = new LinkView(
             'navigation.links.catalog.available_date',
             '',
-            $catalogViewQuery->user->getLocale(),
-            new StateButtonView(true, $catalogOnlineDate->format('c'))
+            null,
+            new StateButtonView(true, $catalogOnlineDate->format('d m Y'))
         );
 
         return new CategoryView(

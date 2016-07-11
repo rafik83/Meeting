@@ -19,7 +19,7 @@
                                     {% if link.locale is not empty %}"{{ link.locale|upper }}"{% endif %}
                                 </a>
                                 {% if link.button is not empty %}
-                                    <span class="state">{{ link.button.label }}</span>
+                                    <span class="state">{{ link.button.label|trans }}</span>
                                 {% endif %}
                             </li>
                         {% endfor %}
@@ -99,5 +99,5 @@
     {#</ul>#}
     {#</div>#}
     {#</div>#}
-</div>
+    </div>
 </div>
