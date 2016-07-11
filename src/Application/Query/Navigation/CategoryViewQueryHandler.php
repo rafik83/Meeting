@@ -123,14 +123,20 @@ class CategoryViewQueryHandler
                 break;
             case Category::CATALOG:
                 return $this->catalogViewQueryHandler->handle(new CatalogViewQuery(
-                    
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
                 ));
                 break;
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery());
                 break;
             case Category::HAPPENING:
-                return $this->happeningViewQueryHandler->handle(new HappeningViewQuery());
+                return $this->happeningViewQueryHandler->handle(new HappeningViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale
+                ));
                 break;
             case Category::PACKAGE:
                 return $this->packageViewQueryHandler->handle(new PackageViewQuery(

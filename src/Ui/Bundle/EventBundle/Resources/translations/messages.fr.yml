@@ -159,3 +159,5 @@ navigation:
         package:
             summary: Récapitulatif
             payment: Paiement
+        catalog:
+            available_date: Disponible le
