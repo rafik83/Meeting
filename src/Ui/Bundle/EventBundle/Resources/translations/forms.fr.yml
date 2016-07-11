@@ -1,6 +1,6 @@
 gender:
-    man: Homme
-    woman: Femme
+    man: Monsieur
+    woman: Madame
 
 form:
     change_password_user:
