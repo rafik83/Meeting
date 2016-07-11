@@ -41,6 +41,7 @@ Feature: Complete my package
     Then I should see "Options d’exposition"
     And I should see "Options d'exposition et de communication"
     And I should see "Options de communication"
+    And I should see "package.product.subjectedToValidationHelp"
     When I fill in the following:
       | options_10 | 1  |
       | options_11 | 10 |
