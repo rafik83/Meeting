@@ -108,7 +108,7 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to edit this unavailibity');
@@ -149,7 +149,7 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to remove this unavailibity');
@@ -174,8 +174,8 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($happening->getEvent()->getId() !== $eventDomain->getId()
-            || $sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
+            || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('Event not linked to this happening');
@@ -224,8 +224,8 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($happening->getEvent()->getId() !== $eventDomain->getId()
-            || $sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
+            || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('Event not linked to this happening');
