@@ -1413,8 +1413,6 @@ services:
     query.navigation.category_happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler
         arguments:
-            - '@datetime'
-            - '@navigation.navigation_builder'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQuery }
     query.navigation.category_member_space_view_query_handler:
@@ -1434,8 +1432,6 @@ services:
     query.navigation.category_planning_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler
         arguments:
-            - '@datetime'
-            - '@navigation.navigation_builder'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQuery }
     query.navigation.category_sheet_view_query_handler:

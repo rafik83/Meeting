@@ -15,32 +15,9 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class PlanningViewQueryHandler
 {
-    /**
-     * @var \DateTimeInterface
-     */
-    private $dateTime;
-
-    /**
-     * @var NavigationBuilder
-     */
-    private $navigationBuilder;
-
-    /**
-     * PlanningViewQueryHandler constructor.
-     *
-     * @param \DateTimeInterface $dateTime
-     * @param NavigationBuilder  $navigationBuilder
-     */
-    public function __construct(\DateTimeInterface $dateTime, NavigationBuilder $navigationBuilder)
-    {
-        $this->dateTime          = $dateTime;
-        $this->navigationBuilder = $navigationBuilder;
-    }
-
     /**
      * @param PlanningViewQuery $planningQuery
      *
