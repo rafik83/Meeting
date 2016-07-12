@@ -493,7 +493,7 @@ admin:
         disable: Désactiver
         list:
             checkbox: Case à cocher
-        configure_dates: Dates clées
+        configure_dates: Dates clés
     admin_list:
         filter:
             empty_filter: Vider les filtres
