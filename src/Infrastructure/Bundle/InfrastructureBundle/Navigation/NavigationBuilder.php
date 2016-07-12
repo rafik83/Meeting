@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation;
 
-use Proximum\Vimeet\Domain\Navigation\NavigationInterface;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Symfony\Component\Routing\Router;
 
 class NavigationBuilder implements NavigationBuilderInterface
