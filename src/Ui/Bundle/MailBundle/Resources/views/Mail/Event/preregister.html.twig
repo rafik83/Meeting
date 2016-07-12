@@ -7,8 +7,8 @@
 {% block body %}
     {{ 'mail.event.preregister.body'|trans({
         '%event%': mail.event.title,
-        '%firstname%': mail.receiverUser.account.firstname|upper,
-        '%lastname%': mail.receiverUser.account.lastname|humanize
+        '%firstname%': mail.receiverUser.account.firstname|humanize,
+        '%lastname%': mail.receiverUser.account.lastname|upper
     }, 'mail', mail.locale|html|nl2br) }}
     <ul>
         <li>{{ mail.participantData['sheet_organization'] }}</li>

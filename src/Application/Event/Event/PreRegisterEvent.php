@@ -59,11 +59,11 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
      * PreRegisterEvent constructor.
      *
      * @param ParticipantInfoGuesser $participantInfoGuesser
-     * @param                   $event
-     * @param                   $user
-     * @param                   $locale
-     * @param Participant       $participant
-     * @param Sheet             $sheet
+     * @param Event                  $event
+     * @param User                   $user
+     * @param string                 $locale
+     * @param Participant            $participant
+     * @param Sheet                  $sheet
      */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
@@ -73,14 +73,13 @@ class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
         Participant $participant,
         Sheet $sheet
     ) {
-        $this->event             = $event;
-        $this->user              = $user;
-        $this->locale            = $locale;
-        $this->participant       = $participant;
-        $this->sheet             = $sheet;
+        $this->event                  = $event;
+        $this->user                   = $user;
+        $this->locale                 = $locale;
+        $this->participant            = $participant;
+        $this->sheet                  = $sheet;
         $this->participantInfoGuesser = $participantInfoGuesser;
-
-        $this->participantData = $this->participantInfoGuesser->guessParticipantInfoForMail($participant, $locale);
+        $this->participantData        = $this->participantInfoGuesser->guessParticipantInfoForMail($participant, $locale);
     }
 
     /**

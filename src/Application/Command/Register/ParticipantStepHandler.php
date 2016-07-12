@@ -77,13 +77,17 @@ class ParticipantStepHandler
         $templateData    = $participantStep->templateData;
 
         foreach ($participantStep->data as $key => $value) {
-            if ($templateData->getBlock(intval($participantStep->step))->getObject($key)
+            if ($templateData->getBlock(intval($participantStep->step))
+                             ->getObject($key)
                              ->hasTag(Tag::PARTICIPANT_DATA)
             ) {
                 $participantData = array_merge($participantData, [$key => $value]);
             }
 
-            if ($templateData->getBlock(intval($participantStep->step))->getObject($key)->hasTag(Tag::SHEET_DATA)) {
+            if ($templateData->getBlock(intval($participantStep->step))
+                             ->getObject($key)
+                             ->hasTag(Tag::SHEET_DATA)
+            ) {
                 $sheetData = array_merge($sheetData, [$key => $value]);
             }
 
@@ -106,7 +110,7 @@ class ParticipantStepHandler
      */
     private function triggerEvent(ParticipantStep $participantStep)
     {
-        if ($participantStep->step == 3) {
+        if ($participantStep->templateData->getNextBlockPosition($participantStep->step) === null) {
             $preRegisteredEvent = new PreRegisterEvent(
                 $this->participantInfoGuesser,
                 $participantStep->sheet->getEvent(),
