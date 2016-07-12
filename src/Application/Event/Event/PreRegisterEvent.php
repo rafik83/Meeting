@@ -15,8 +15,9 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Symfony\Component\EventDispatcher;
 
-class PreRegisterEvent extends \Symfony\Component\EventDispatcher\Event
+class PreRegisterEvent extends EventDispatcher\Event
 {
     /**
      * @var Event
