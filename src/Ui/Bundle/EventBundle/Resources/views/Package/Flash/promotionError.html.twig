@@ -1,6 +1,7 @@
-{% if app.session.flashbag.get('package_promotion_code_error')|length %}
+{% set promotionCodeErrorFlashes = app.session.flashbag.get('package_promotion_code_error') %}
+{% if promotionCodeErrorFlashes|length %}
     <section class="important fail text-danger">
-        {% for promotion_code_error in app.session.flashbag.get('package_promotion_code_error') %}
+        {% for promotion_code_error in promotionCodeErrorFlashes %}
             <p>{{ promotion_code_error|trans({}, 'flashes') }}</p>
         {% endfor %}
     </section>
