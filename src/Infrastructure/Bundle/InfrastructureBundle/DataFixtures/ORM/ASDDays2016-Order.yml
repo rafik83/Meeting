@@ -1,0 +1,51 @@
+Proximum\Vimeet\Domain\Model\Address (local):
+    order_address_1:
+        __construct: false
+        street: 10 rue Saint Marc
+        zipcode: 75002
+        city: Paris
+        country: FR
+
+Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
+    order_billing_info_1:
+        __construct:
+            - Jean
+            - Test
+            - DG
+            - 0101010101
+            - 0101010101
+            - test@elao.com
+            - ELAO
+            - '@order_address_1'
+            - 123456789
+
+Proximum\Vimeet\Domain\Model\Order:
+    order_1:
+        __construct:
+            - '@sheet_asddays_empty'
+            - true
+            - '@order_billing_info_1'
+            - <dateTimeBetween('-10days', 'now')>
+
+Proximum\Vimeet\Domain\Model\Order\Row:
+    order_row_1:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 1690
+        product: '{"name":"Formule B2B Meeting","unitPrice":1690,"translations":{"fr":"{\"title\":\"Formule B2B Meeting\",\"heading\":\"Pas de stand\",\"description\":\"Vous changez de lieu \\u00e0 chaque rendez-vous.\",\"addon\":\"\"}","en":"{\"title\":\"B2B Meeting Formula\",\"heading\":\"No booth\",\"description\":\"You have to move at each appointment.\",\"addon\":\"\"}"},"quantityMax":1,"availabilityCurrent":0,"availabilityMax":0,"updatable":false,"updatableUntil":null,"productsIncluded":[{"quantity":2,"included":"{\"name\":\"Participant suppl\\u00e9mentaire Fournisseur\",\"unitPrice\":195,\"translations\":{\"fr\":\"{\\\"title\\\":\\\"Participant suppl\\\\u00e9mentaire\\\",\\\"heading\\\":\\\"\\\",\\\"description\\\":\\\"Accompagnant le premier sur un m\\\\u00eame agenda incluant une entr\\\\u00e9e \\\\u00e0 la convention d\\\\u2019affaire, acc\\\\u00e8s illimit\\\\u00e9 \\\\u00e0 la pause caf\\\\u00e9 et aux conf\\\\u00e9rences.\\\",\\\"addon\\\":\\\"\\\"}\",\"en\":\"{\\\"title\\\":\\\"Extra participant\\\",\\\"heading\\\":\\\"\\\",\\\"description\\\":\\\"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.\\\",\\\"addon\\\":\\\"\\\"}\"},\"quantityMax\":1,\"availabilityCurrent\":null,\"availabilityMax\":null,\"updatable\":false,\"updatableUntil\":null,\"productsIncluded\":[]}"}]}'
+        linkedProduct: '@product_plan_1_asddays'
+    order_row_2:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 199
+        product: '{"name":"Option E", "translations":{"fr":"{\"title\":\"Option E\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Option E\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
+        linkedProduct: '@product_option_7_asddays'
+    order_row_3:
+        __construct: false
+        order: '@order_1'
+        quantity: 3
+        price: 59
+        product: '{"name":"Option F", "translations":{"fr":"{\"title\":\"Option F\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Option F\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
+        linkedProduct: '@product_option_8_asddays'

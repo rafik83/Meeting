@@ -1,4 +1,5 @@
 @admin
+@admin-event
 Feature: See, create and update event
   I need to be able to see, create and update an event
 

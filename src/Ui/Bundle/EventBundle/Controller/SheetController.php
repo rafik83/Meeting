@@ -50,7 +50,11 @@ class SheetController extends Controller
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
@@ -234,7 +238,11 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $twig = $object->getType() === 'nomenclature'
@@ -269,9 +277,27 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        if (!$sheet->canBuyParticipant()) {
+            throw $this->createNotFoundException(
+                sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
+            );
+        }
+
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        try {
+            $object = $templateData->getObject($key);
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
+        }
+
+        if ($object->getType() !== 'participant') {
+            throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
+        }
+
+        $label = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
@@ -301,6 +327,11 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        if (!$sheet->canBuyParticipant()) {
+            throw $this->createNotFoundException(
+                sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
+            );
+        }
 
         $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
         $form           = $this->createForm(AddType::class, $addParticipant, [
@@ -321,9 +352,14 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $object       = $this->getParticipantObject($templateData, $key);
+        $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'            => $eventDomain->getEvent(),
@@ -384,8 +420,19 @@ class SheetController extends Controller
     {
         list ($form, $sheet) = $this->removeParticipantData($eventDomain, $locale, $key);
 
-        $templateData      = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $label             = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        try {
+            $object = $templateData->getObject($key);
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
+        }
+
+        if ($object->getType() !== 'participant') {
+            throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
+        }
+
+        $label             = $object->getLabel($locale, $sheet->getEvent()->getFallback());
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
         $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
 
@@ -424,9 +471,15 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the remove participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+        $object       = $this->getParticipantObject($templateData, $key);
+        $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
+
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'        => $eventDomain->getEvent(),
@@ -440,5 +493,26 @@ class SheetController extends Controller
             'uid'              => $key,
             'participants'     => $participants,
         ]);
+    }
+
+    /**
+     * @param Template\TemplateData $templateData
+     * @param string                $key
+     *
+     * @return Template\Object
+     */
+    private function getParticipantObject(Template\TemplateData $templateData, $key)
+    {
+        try {
+            $object = $templateData->getObject($key);
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
+        }
+
+        if ($object->getType() !== 'participant') {
+            throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
+        }
+
+        return $object;
     }
 }

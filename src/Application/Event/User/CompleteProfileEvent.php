@@ -23,7 +23,7 @@ class CompleteProfileEvent extends Event
     private $user;
 
     /**
-     * @var Event
+     * @var EventModel
      */
     private $event;
 

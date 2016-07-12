@@ -1,3 +1,5 @@
+@admin
+@admin-event
 Feature: See and update practical information
   I need to be able to see and init practical information for an event
 

@@ -120,6 +120,13 @@ admin_event_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:update }
 
+admin_event_billing_configuration:
+    path: /event/{event}/billing/configuration
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Event:billingConfiguration }
+
 admin_event_practical_info_update:
     path: /event/{event}/practical-info
     requirements:
@@ -528,7 +535,12 @@ admin_package_update:
     methods: [GET, POST]
     requirements:
         package: \d+
-
+admin_package_duplicate:
+    path: /template/package/{package}/duplicate
+    defaults: { _controller: AdminBundle:Package:duplicate }
+    methods: [GET, POST]
+    requirements:
+        package: \d+
 #
 # SheetTemplate
 #
@@ -585,25 +597,52 @@ admin_product_create_option:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:createOption }
+admin_product_update_option:
+    path: /event/{event}/product/{product}/update/option
+    requirements:
+        event: \d+
+        product: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:updateOption }
 admin_product_create_plan:
     path: /event/{event}/product/create/plan
     requirements:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:createPlan }
+admin_product_update_plan:
+    path: /event/{event}/product/{product}/update/plan
+    requirements:
+        event: \d+
+        product: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:updatePlan }
 admin_product_create_participant:
     path: /event/{event}/product/create/participant
     requirements:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:createParticipant }
+admin_product_update_participant:
+    path: /event/{event}/product/{product}/update/participant
+    requirements:
+        event: \d+
+        product: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:updateParticipant }
 admin_product_create_planning:
     path: /event/{event}/product/create/planning
     requirements:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:createPlanning }
-
+admin_product_update_planning:
+    path: /event/{event}/product/{product}/update/planning
+    requirements:
+        event: \d+
+        product: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:updatePlanning }
 #
 # Organizer
 #

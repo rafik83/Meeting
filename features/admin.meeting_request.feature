@@ -1,5 +1,5 @@
 @admin
-
+@meeting
 Feature: See meeting request
   I can see meeting requests
 

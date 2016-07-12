@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Package\Funnel;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 
 class FunnelFactory
 {
@@ -21,11 +22,18 @@ class FunnelFactory
     private $cartManager;
 
     /**
-     * @param CartManager $cartManager
+     * @var CartStepRepositoryInterface
      */
-    public function __construct(CartManager $cartManager)
+    private $cartStepRepository;
+
+    /**
+     * @param CartManager                 $cartManager
+     * @param CartStepRepositoryInterface $cartStepRepository
+     */
+    public function __construct(CartManager $cartManager, CartStepRepositoryInterface $cartStepRepository)
     {
-        $this->cartManager = $cartManager;
+        $this->cartManager        = $cartManager;
+        $this->cartStepRepository = $cartStepRepository;
     }
 
     /**
@@ -40,24 +48,43 @@ class FunnelFactory
         $package = $sheet->getPackage();
         $funnel  = new Funnel();
 
-        $cart = $this->cartManager->getCart($sheet);
+        $cartStep = $this->cartStepRepository->findBySheet($sheet);
+        $cart    = $this->cartManager->getCart($sheet);
+
+        if (null !== $cartStep) {
+            $cart->setCurrentStep($cartStep->getCurrentStep());
+        }
+
+        $funnel->setCart($cart);
+        $funnel->setCartStep($cartStep);
 
         if ($package->isPlansEnabled()) {
             $step = new Step($this->getNextIndex($funnel), $package->getPlansLabel($locale), Step::TYPE_PLAN);
-            $funnel->addStep($step);
 
-            if ($cart->getPlanRow()) {
+            if (null !== $cart->getCurrentStep() && $cart->getCurrentStep() > $this->getNextIndex($funnel)) {
                 $step->completed = true;
             }
+
+            $funnel->addStep($step);
         }
 
         if ($package->isParticipantAndPlanningEnabled()) {
             $step = new Step($this->getNextIndex($funnel), $package->getParticipantAndPlanningLabel($locale), Step::TYPE_PARTICIPANT_PLANNING);
+
+            if (null !== $cart->getCurrentStep() && $cart->getCurrentStep() > $this->getNextIndex($funnel)) {
+                $step->completed = true;
+            }
+
             $funnel->addStep($step);
         }
 
         if ($package->isOptionsEnabled()) {
             $step = new Step($this->getNextIndex($funnel), $package->getOptionsLabel($locale), Step::TYPE_OPTIONS);
+
+            if (null !== $cart->getCurrentStep() && $cart->getCurrentStep() > $this->getNextIndex($funnel)) {
+                $step->completed = true;
+            }
+
             $funnel->addStep($step);
         }
 

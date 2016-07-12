@@ -87,3 +87,8 @@ form:
                 placeholder: NOM
             email:
                 placeholder: E-mail
+    package_summary_terms_of_sale:
+        children:
+            termsOfSale:
+                label: >
+                    Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.

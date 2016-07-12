@@ -127,6 +127,22 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return int|double
+     */
+    public function getMaxParticipant()
+    {
+        return $this->type->getMaxParticipant();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBuyParticipant()
+    {
+        return $this->getMaxParticipant() > $this->countParticipant();
+    }
+
+    /**
      * Get id.
      *
      * @return int

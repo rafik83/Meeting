@@ -269,7 +269,7 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * @param User $user
+     * @param User|int $user
      *
      * @return array
      */
