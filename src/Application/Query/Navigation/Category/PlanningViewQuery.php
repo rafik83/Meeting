@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class PlanningViewQuery extends AbstractCategoryViewQuery
 {
     /**
-     * HappeningViewQuery constructor.
+     * PlanningViewQuery constructor.
      *
      * @param Sheet  $sheet
      * @param User   $user
