@@ -15,20 +15,8 @@
                 ) }}
             </div>
         </td>
-        <td class="col-md-2">
-            <div class="product">
-                <span class="product-price text-center">
-                    {{ 'package.product.unitPrice'|trans({
-                        '%price%': promotionCodeView.total|localizednumber,
-                        '%currency%': promotionCodeView.currency|currency_symbol,
-                        '%vatMode%': ('package.vatMode.' ~ promotionCodeView.vatMode)|trans
-                    })|html }}
-                </span>
-            </div>
-        </td>
-        <td class="col-md-2">
-            <p class="text-center">{{ promotionCodeView.quantity }}</p>
-        </td>
+        <td class="col-md-2"></td>
+        <td class="col-md-2"></td>
         <td class="col-md-2">
             <div class="product">
                 <span class="product-price text-center">
