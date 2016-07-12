@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature;
 
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
+use Symfony\Component\Debug\Exception\ContextErrorException;
+
 final class Charset
 {
     const UTF_8        = 'UTF-8';
@@ -22,16 +25,21 @@ final class Charset
      * @param string      $outCharset
      * @param string|null $outFilename
      *
-     * @return string
+     * @return null|string
+     * @throws BadCharsetException
      */
     public static function convert($inFilename, $inCharset, $outCharset, $outFilename = null)
     {
         if ($inCharset !== $outCharset) {
-            $input       = file_get_contents($inFilename);
-            $outFilename = $outFilename ? : sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
-            $output      = iconv($inCharset, $outCharset, $input);
+            try {
+                $input       = file_get_contents($inFilename);
+                $outFilename = $outFilename ? : sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
+                $output      = iconv($inCharset, $outCharset, $input);
 
-            file_put_contents($outFilename, $output);
+                file_put_contents($outFilename, $output);
+            } catch (ContextErrorException $exception) {
+                throw new BadCharsetException($exception->getMessage());
+            }
 
             return $outFilename;
         }

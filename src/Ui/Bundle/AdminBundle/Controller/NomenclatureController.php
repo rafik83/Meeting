@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Command\Nomenclature\CreateResult;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
