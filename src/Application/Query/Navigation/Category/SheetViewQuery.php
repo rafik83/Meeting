@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class SheetViewQuery extends AbstractCategoryViewQuery
 {
     /**
-     * MemberSpaceViewQuery constructor.
+     * SheetViewQuery constructor.
      *
      * @param Sheet  $sheet
      * @param User   $user

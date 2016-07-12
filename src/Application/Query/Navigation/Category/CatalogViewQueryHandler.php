@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class CatalogViewQueryHandler
 {
@@ -26,17 +26,17 @@ class CatalogViewQueryHandler
     private $dateTime;
 
     /**
-     * @var NavigationBuilder
+     * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
 
     /**
-     * HappeningViewQueryHandler constructor.
+     * CatalogViewQueryHandler constructor.
      *
-     * @param DateTimeInterface $dateTime
-     * @param NavigationBuilder $navigationBuilder
+     * @param DateTimeInterface   $dateTime
+     * @param NavigationBuilderInterface $navigationBuilder
      */
-    public function __construct(DateTimeInterface $dateTime, NavigationBuilder $navigationBuilder)
+    public function __construct(DateTimeInterface $dateTime, NavigationBuilderInterface $navigationBuilder)
     {
         $this->dateTime          = $dateTime;
         $this->navigationBuilder = $navigationBuilder;
@@ -50,17 +50,18 @@ class CatalogViewQueryHandler
      */
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
-        $catalogOnlineDate = $catalogViewQuery->sheet->getEvent()
-                                                     ->getConfiguration()
-                                                     ->getCatalogOnlineDate();
+        $catalogOnlineDate = $catalogViewQuery
+                            ->sheet
+                            ->getEvent()
+                            ->getConfiguration()
+                            ->getCatalogOnlineDate();
 
         $linksView = [];
 
         if (empty($catalogOnlineDate)) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-            $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG,
-                IntlDateFormatter::LONG);
+            $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
             $formatter->setPattern('d MMMM Y');
 
             if ($this->dateTime < $catalogOnlineDate) {

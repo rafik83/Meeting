@@ -26,17 +26,18 @@ class HappeningViewQueryHandler
      */
     public function handle(HappeningViewQuery $happeningViewQuery)
     {
-        $happeningOpenDate = $happeningViewQuery->sheet->getEvent()
-                                                       ->getConfiguration()
-                                                       ->getHappeningsOpenDate();
+        $happeningOpenDate = $happeningViewQuery
+                            ->sheet
+                            ->getEvent()
+                            ->getConfiguration()
+                            ->getHappeningsOpenDate();
 
         $linksView = [];
 
         if ($happeningOpenDate === null) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-            $formatter = new IntlDateFormatter($happeningViewQuery->locale, IntlDateFormatter::LONG,
-                IntlDateFormatter::LONG);
+            $formatter = new IntlDateFormatter($happeningViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
             $formatter->setPattern('d MMMM Y');
 
             $linksView[] = new LinkView(

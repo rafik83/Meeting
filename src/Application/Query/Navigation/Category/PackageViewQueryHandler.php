@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class PackageViewQueryHandler
 {
@@ -24,17 +24,17 @@ class PackageViewQueryHandler
     private $funnelFactory;
 
     /**
-     * @var NavigationBuilder
+     * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
 
     /**
      * PackageViewQueryHandler constructor.
      *
-     * @param FunnelFactory     $funnelFactory
-     * @param NavigationBuilder $navigationBuilder
+     * @param FunnelFactory              $funnelFactory
+     * @param NavigationBuilderInterface $navigationBuilder
      */
-    public function __construct(FunnelFactory $funnelFactory, NavigationBuilder $navigationBuilder)
+    public function __construct(FunnelFactory $funnelFactory, NavigationBuilderInterface $navigationBuilder)
     {
         $this->funnelFactory     = $funnelFactory;
         $this->navigationBuilder = $navigationBuilder;

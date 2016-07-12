@@ -21,24 +21,28 @@ class PlanningViewQueryHandler
     /**
      * @param PlanningViewQuery $planningQuery
      *
-     * @return CategoryView|null
+     * @return CategoryView
      */
     public function handle(PlanningViewQuery $planningQuery)
     {
-        $schedulePublishDate = $planningQuery->sheet->getEvent()
-                                                    ->getConfiguration()
-                                                    ->getSchedulePublishDate();
-        $happeningOpenDate   = $planningQuery->sheet->getEvent()
-                                                    ->getConfiguration()
-                                                    ->getHappeningsOpenDate();
+        $schedulePublishDate = $planningQuery
+                              ->sheet
+                              ->getEvent()
+                              ->getConfiguration()
+                              ->getSchedulePublishDate();
+
+        $happeningOpenDate = $planningQuery
+                            ->sheet
+                            ->getEvent()
+                            ->getConfiguration()
+                            ->getHappeningsOpenDate();
 
         $linksView = [];
 
         if ($schedulePublishDate === null) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-            $formatter = new IntlDateFormatter($planningQuery->locale, IntlDateFormatter::LONG,
-                IntlDateFormatter::LONG);
+            $formatter = new IntlDateFormatter($planningQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
             $formatter->setPattern('d MMMM Y');
 
             $linksView[] = new LinkView(

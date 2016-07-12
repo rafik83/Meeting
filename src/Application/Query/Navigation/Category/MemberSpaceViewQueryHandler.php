@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class MemberSpaceViewQueryHandler
 {
@@ -24,17 +24,17 @@ class MemberSpaceViewQueryHandler
     private $templateDataFactory;
 
     /**
-     * @var NavigationBuilder
+     * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
 
     /**
      * MemberSpaceViewQueryHandler constructor.
      *
-     * @param TemplateDataFactory $templateDataFactory
-     * @param NavigationBuilder   $navigationBuilder
+     * @param TemplateDataFactory        $templateDataFactory
+     * @param NavigationBuilderInterface $navigationBuilder
      */
-    public function __construct(TemplateDataFactory $templateDataFactory, NavigationBuilder $navigationBuilder)
+    public function __construct(TemplateDataFactory $templateDataFactory, NavigationBuilderInterface $navigationBuilder)
     {
         $this->templateDataFactory = $templateDataFactory;
         $this->navigationBuilder   = $navigationBuilder;

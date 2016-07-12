@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Navigation;
 
-interface NavigationInterface
+interface NavigationBuilderInterface
 {
     /**
      * @param string $path
