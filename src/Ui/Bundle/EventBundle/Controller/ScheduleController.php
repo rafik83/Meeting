@@ -42,7 +42,9 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('domain.key_dates.checker.schedule_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+        if (!$this->get('domain.key_dates.checker.schedule_access_checker')
+            ->allowedToAccess($eventDomain->getEvent())
+        ){
             throw $this->createNotFoundException();
         }
 
@@ -178,9 +180,9 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('domain.key_dates.checker.happenings_access_checker')->allowedToAccess(
-            $eventDomain->getEvent())
-        ) {
+        if (!$this->get('domain.key_dates.checker.happenings_access_checker')
+            ->allowedToAccess($eventDomain->getEvent())
+        ){
             throw $this->createNotFoundException();
         }
 
