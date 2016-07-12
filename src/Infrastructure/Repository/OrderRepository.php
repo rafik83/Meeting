@@ -68,7 +68,8 @@ class OrderRepository implements OrderRepositoryInterface
             ->select('_order')
             ->from(Order::class, '_order', '_order.id')
             ->where('_order.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->setParameter('sheet', $sheet)
+            ->orderBy('_order.createdAt', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }

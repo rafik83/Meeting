@@ -295,6 +295,14 @@ admin:
         follower: Suivi commercial
         createdAt: Créée le
         total: Total
+    transaction:
+        column:
+            date: Date
+            state: Statut
+            total: Total
+        state:
+            pending: En attente
+            paid: Réglé
     product:
         link: Catalogue de produits
         title: Catalogue de produits
@@ -344,6 +352,9 @@ admin:
             auto: 'automatiquement'
             validate: 'Validée le %at%'
         details:
+            orders: Commandes
+            transactions: Transactions
+            remainingToPay: Solde restant dû
             participants: Participants
             owner:
                 email: Email du propriétaire

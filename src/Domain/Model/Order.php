@@ -180,6 +180,18 @@ class Order
     }
 
     /**
+     * @return string
+     */
+    public function getTotalVatMode()
+    {
+        if ($this->vatApplicable) {
+            return Event::VAT_MODE_ATI;
+        }
+
+        return $this->getVatMode();
+    }
+
+    /**
      * @return array
      */
     public function getGroupsData()

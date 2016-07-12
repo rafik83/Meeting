@@ -43,7 +43,8 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->select('transaction')
             ->from(Transaction::class, 'transaction')
             ->where('transaction.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->setParameter('sheet', $sheet)
+            ->orderBy('transaction.date', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }
