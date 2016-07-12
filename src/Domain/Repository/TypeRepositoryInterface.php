@@ -110,7 +110,7 @@ interface TypeRepositoryInterface
     public function getTypesTitleByEventAndLocale(Event $event, $locale);
 
     /**
-     * @param User $user
+     * @param User|int $user
      *
      * @return array
      */
