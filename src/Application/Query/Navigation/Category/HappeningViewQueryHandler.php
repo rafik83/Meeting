@@ -56,10 +56,7 @@ class HappeningViewQueryHandler
         $linksView = [];
 
         if ($happeningOpenDate === null) {
-            $linksView[] = new LinkView(
-                'navigation.links.incoming',
-                null
-            );
+            $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
             $formatter = new IntlDateFormatter($happeningViewQuery->locale, IntlDateFormatter::LONG,
                 IntlDateFormatter::LONG);
@@ -73,10 +70,6 @@ class HappeningViewQueryHandler
             );
         }
 
-        return new CategoryView(
-            Category::HAPPENING,
-            Category::HAPPENING_ICON,
-            $linksView
-        );
+        return new CategoryView(Category::HAPPENING, Category::HAPPENING_ICON, $linksView);
     }
 }

@@ -57,10 +57,7 @@ class CatalogViewQueryHandler
         $linksView = [];
 
         if (empty($catalogOnlineDate)) {
-            $linksView[] = new LinkView(
-                'navigation.links.incoming',
-                null
-            );
+            $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
             $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG,
                 IntlDateFormatter::LONG);

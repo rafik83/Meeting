@@ -31,6 +31,7 @@ class CategoryView
      * CategoryView constructor.
      *
      * @param string     $title
+     * @param string     $icon
      * @param LinkView[] $linksView
      */
     public function __construct($title, $icon, array $linksView)

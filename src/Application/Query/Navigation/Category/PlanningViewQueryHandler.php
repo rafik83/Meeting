@@ -58,12 +58,8 @@ class PlanningViewQueryHandler
         $linksView = [];
 
         if ($schedulePublishDate === null) {
-            $linksView[] = new LinkView(
-                'navigation.links.incoming',
-                null
-            );
+            $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-
             $formatter = new IntlDateFormatter($planningQuery->locale, IntlDateFormatter::LONG,
                 IntlDateFormatter::LONG);
             $formatter->setPattern('d MMMM Y');

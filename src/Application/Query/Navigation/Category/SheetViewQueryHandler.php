@@ -49,10 +49,6 @@ class SheetViewQueryHandler
             );
         }
 
-        return new CategoryView(
-            Category::SHEET,
-            Category::SHEET_ICON,
-            $linksView
-        );
+        return new CategoryView(Category::SHEET, Category::SHEET_ICON, $linksView);
     }
 }
