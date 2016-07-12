@@ -87,6 +87,7 @@
                 <thead>
                 <th>{{ 'admin.transaction.column.date'|trans }}</th>
                 <th>{{ 'admin.transaction.column.state'|trans }}</th>
+                <th>{{ 'admin.transaction.column.mode'|trans }}</th>
                 <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
                 </thead>
                 <tbody>
@@ -94,6 +95,7 @@
                     <tr>
                         <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
                         <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
+                        <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
                         <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
                     </tr>
                 {% else %}

@@ -299,10 +299,15 @@ admin:
         column:
             date: Date
             state: Statut
+            mode: Mode de paiement
             total: Total
         state:
             pending: En attente
             paid: Réglé
+        mode:
+            bank_card: Carte bleu
+            bank_transfer: Transfert
+            bank_check: Chèque
     product:
         link: Catalogue de produits
         title: Catalogue de produits
