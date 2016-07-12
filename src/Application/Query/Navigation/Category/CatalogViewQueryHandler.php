@@ -54,29 +54,33 @@ class CatalogViewQueryHandler
                                                      ->getConfiguration()
                                                      ->getCatalogOnlineDate();
 
-        if (empty($catalogOnlineDate)) {
-            return null;
-        }
-        
-        $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
-        $formatter->setPattern('d MMMM Y');
-
         $linksView = [];
 
-        if ($this->dateTime < $catalogOnlineDate) {
+        if (empty($catalogOnlineDate)) {
             $linksView[] = new LinkView(
-                'navigation.links.catalog.available_date',
-                null,
-                null,
-                new StateButtonView(true, $formatter->format($catalogOnlineDate))
+                'navigation.links.incoming',
+                null
             );
         } else {
-            $linksView[] = new LinkView(
-                'navigation.links.catalog.available_date',
-                $this->navigationBuilder->getRoute('event_catalog'),
-                null,
-                new StateButtonView(true, $formatter->format($catalogOnlineDate))
-            );
+            $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG,
+                IntlDateFormatter::LONG);
+            $formatter->setPattern('d MMMM Y');
+
+            if ($this->dateTime < $catalogOnlineDate) {
+                $linksView[] = new LinkView(
+                    'navigation.links.catalog.available_date',
+                    null,
+                    null,
+                    new StateButtonView(true, $formatter->format($catalogOnlineDate))
+                );
+            } else {
+                $linksView[] = new LinkView(
+                    'navigation.links.catalog.available_date',
+                    $this->navigationBuilder->getRoute('event_catalog'),
+                    null,
+                    new StateButtonView(true, $formatter->format($catalogOnlineDate))
+                );
+            }
         }
 
         return new CategoryView(Category::CATALOG, Category::CATALOG_ICON, $linksView);

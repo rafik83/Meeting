@@ -55,15 +55,16 @@ class PackageViewQueryHandler
         $funnel    = $this->funnelFactory->create($packageQuery->sheet, $packageQuery->locale);
 
         foreach ($funnel->getSteps() as $step) {
-            if ($step->completed === true || $step->index === 1) {
-                $linksView[] = new LinkView(
-                    $step->title,
-                    $this->navigationBuilder->getRoute('event_package_step', [
-                        'sheet' => $packageQuery->sheet->getId(),
-                        'step'  => $step->index,
-                    ])
-                );
-            }
+            $linksView[] = new LinkView(
+                $step->title,
+                $this->navigationBuilder->getRoute('event_package_step', [
+                    'sheet' => $packageQuery->sheet->getId(),
+                    'step'  => $step->index,
+                ]),
+                null,
+                null,
+                ($step->completed || $step->index === 1) ? true : false
+            );
         }
 
         if ($funnel->isCompleted()) {

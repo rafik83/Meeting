@@ -55,33 +55,34 @@ class PlanningViewQueryHandler
                                                     ->getConfiguration()
                                                     ->getHappeningsOpenDate();
 
-        if ($schedulePublishDate === null) {
-            return null;
-        }
-
-        $formatter = new IntlDateFormatter($planningQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
-        $formatter->setPattern('d MMMM Y');
-
         $linksView = [];
 
-        $linksView[] = new LinkView(
-            'navigation.links.planning.available_date',
-            null,
-            null,
-            new StateButtonView(false, $formatter->format($happeningOpenDate))
-        );
+        if ($schedulePublishDate === null) {
+            $linksView[] = new LinkView(
+                'navigation.links.incoming',
+                null
+            );
+        } else {
 
-        $linksView[] = new LinkView(
-            'navigation.links.planning.final_date',
-            null,
-            null,
-            new StateButtonView(false, $formatter->format($schedulePublishDate))
-        );
+            $formatter = new IntlDateFormatter($planningQuery->locale, IntlDateFormatter::LONG,
+                IntlDateFormatter::LONG);
+            $formatter->setPattern('d MMMM Y');
 
-        return new CategoryView(
-            Category::PLANNING,
-            Category::PLANNING_ICON,
-            $linksView
-        );
+            $linksView[] = new LinkView(
+                'navigation.links.planning.available_date',
+                null,
+                null,
+                new StateButtonView(false, $formatter->format($happeningOpenDate))
+            );
+
+            $linksView[] = new LinkView(
+                'navigation.links.planning.final_date',
+                null,
+                null,
+                new StateButtonView(false, $formatter->format($schedulePublishDate))
+            );
+        }
+
+        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linksView);
     }
 }

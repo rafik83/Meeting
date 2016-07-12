@@ -14,7 +14,7 @@
                     <ul>
                         {% for link in category.linksView %}
                             <li>
-                                {% if link.link %}
+                                {% if link.link and link.state == true %}
                                     <a href="{{ link.link }}">
                                         {{ link.label|trans }}
                                         {% if link.locale is not empty %}"{{ link.locale|upper }}"{% endif %}

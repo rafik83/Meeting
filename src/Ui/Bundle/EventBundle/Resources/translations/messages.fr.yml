@@ -147,6 +147,7 @@ navigation:
         happening: Gestion de rdv
         planning: Agenda provisoire
     links:
+        incoming: A venir
         member_space:
             profile: Profil
             avatar: Photo

@@ -72,7 +72,7 @@ class MemberSpaceViewQueryHandler
                 $this->navigationBuilder->getRoute('event_account_participant_avatar', [
                     'sheet'       => $memberSpaceQuery->sheet->getId(),
                     'participant' => $participant->getId(),
-                    'key'         => array_keys($objects)[0],
+                    'key'         => array_keys($objects)[0], // get avatar key
                 ])
             );
         }
@@ -87,10 +87,6 @@ class MemberSpaceViewQueryHandler
             );
         }
 
-        return new CategoryView(
-            Category::MEMBER_SPACE,
-            Category::MEMBER_SPACE_ICON,
-            $linksView
-        );
+        return new CategoryView(Category::MEMBER_SPACE, Category::MEMBER_SPACE_ICON, $linksView);
     }
 }
