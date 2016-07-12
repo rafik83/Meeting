@@ -1,3 +1,5 @@
+@admin
+@admin-event
 Feature: See and update payment conditions
   I need to be able to see and init payment conditions for an event
 

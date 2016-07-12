@@ -1,5 +1,5 @@
 @event
-
+@registration
 Feature: Register and login user
   I need to be able to register to an event and login to my account
 

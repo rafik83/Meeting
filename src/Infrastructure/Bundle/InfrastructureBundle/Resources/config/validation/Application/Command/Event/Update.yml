@@ -41,3 +41,5 @@ Proximum\Vimeet\Application\Command\Event\Update:
             - Regex:
                 pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
                 message: validators.hexadecimal
+        organiserName:
+            - NotBlank: ~

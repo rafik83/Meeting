@@ -29,20 +29,21 @@ class Update extends AbstractEvent
      */
     public function __construct(Model\Event $event)
     {
-        $this->event        = $event;
-        $this->title        = $event->getTitle();
-        $this->locales      = $event->getLocales();
-        $this->fallback     = $event->getFallback();
-        $this->translations = [];
-        $this->mode         = $event->getMode();
-        $this->domain       = $event->getDomain();
-        $this->timeZone     = $event->getTimeZone();
-        $this->country      = $event->getCountry();
-        $this->vat          = $event->getVat();
-        $this->currency     = $event->getCurrency();
-        $this->leftColor    = $event->getConfiguration()->getLeftColor();
-        $this->rightColor   = $event->getConfiguration()->getRightColor();
-        $this->textColor    = $event->getConfiguration()->getTextColor();
+        $this->event         = $event;
+        $this->title         = $event->getTitle();
+        $this->locales       = $event->getLocales();
+        $this->fallback      = $event->getFallback();
+        $this->translations  = [];
+        $this->mode          = $event->getMode();
+        $this->domain        = $event->getDomain();
+        $this->timeZone      = $event->getTimeZone();
+        $this->country       = $event->getCountry();
+        $this->vat           = $event->getVat();
+        $this->currency      = $event->getCurrency();
+        $this->leftColor     = $event->getConfiguration()->getLeftColor();
+        $this->rightColor    = $event->getConfiguration()->getRightColor();
+        $this->textColor     = $event->getConfiguration()->getTextColor();
+        $this->organiserName = $event->getOrganiserName();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
@@ -57,7 +58,7 @@ class Update extends AbstractEvent
     public function isColorsUpdated()
     {
         return
-            $this->leftColor  !== $this->event->getConfiguration()->getLeftColor() ||
+            $this->leftColor  !== $this->event->getConfiguration()->getLeftColor()  ||
             $this->rightColor !== $this->event->getConfiguration()->getRightColor() ||
             $this->textColor  !== $this->event->getConfiguration()->getTextColor();
     }

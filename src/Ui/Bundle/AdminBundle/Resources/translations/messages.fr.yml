@@ -292,11 +292,13 @@ admin:
         title: Catalogue de produits
         name: Nom
         unitPrice: Prix unitaire
-        quantityMax: Quantité max
+        quantityMax: Qté max
         availabilityCurrentMax: Disponibilité courante / max
         subjectedToValidation: Soumis à validation
+        buyableUntil: Achetable jusqu'au
         updatable: Supprimable
-        updatableUntil: Supprimable jusqu'à
+        updatableUntil: Supprimable jusqu'au
+        bought: Nombre achetés
         actions: Actions
         update:
           action: Modifier
@@ -383,6 +385,10 @@ admin:
         title: Titre
         languages: Langues
         fallback: Par défaut
+        billing:
+          configuration:
+            link: Information facturation
+            title: Configuration des informations de facturation
         practicalInfo:
           link: Informations Pratiques
           update:
