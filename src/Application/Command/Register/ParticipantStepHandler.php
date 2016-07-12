@@ -77,16 +77,18 @@ class ParticipantStepHandler
         $templateData    = $participantStep->templateData;
 
         foreach ($participantStep->data as $key => $value) {
-            if ($templateData->getBlock(intval($participantStep->step))
-                             ->getObject($key)
-                             ->hasTag(Tag::PARTICIPANT_DATA)
+            if ($templateData
+                ->getBlock(intval($participantStep->step))
+                ->getObject($key)
+                ->hasTag(Tag::PARTICIPANT_DATA)
             ) {
                 $participantData = array_merge($participantData, [$key => $value]);
             }
 
-            if ($templateData->getBlock(intval($participantStep->step))
-                             ->getObject($key)
-                             ->hasTag(Tag::SHEET_DATA)
+            if ($templateData
+                ->getBlock(intval($participantStep->step))
+                ->getObject($key)
+                ->hasTag(Tag::SHEET_DATA)
             ) {
                 $sheetData = array_merge($sheetData, [$key => $value]);
             }
