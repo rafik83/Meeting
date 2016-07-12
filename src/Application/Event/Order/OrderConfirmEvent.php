@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Event\Order;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\User;
-use \Symfony\Component\EventDispatcher;
+use Symfony\Component\EventDispatcher;
 
 class OrderConfirmEvent extends EventDispatcher\Event
 {

@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Application\Event\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Symfony\Component\EventDispatcher;
 
-class SheetAddParticipantEvent extends \Symfony\Component\EventDispatcher\Event
+class SheetAddParticipantEvent extends EventDispatcher\Event
 {
     /**
      * @var Sheet
