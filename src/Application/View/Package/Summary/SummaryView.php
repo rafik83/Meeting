@@ -56,6 +56,11 @@ class SummaryView
     public $funnel;
 
     /**
+     * @var bool
+     */
+    public $mustPayVat;
+
+    /**
      * @param Funnel     $funnel
      * @param GroupsView $groupsView
      * @param string     $vatMode
