@@ -43,7 +43,6 @@ class CatalogViewQueryHandler
     }
 
     /**
-     *
      * @param CatalogViewQuery $catalogViewQuery
      *
      * @return CategoryView

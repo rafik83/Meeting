@@ -13,21 +13,21 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class SheetViewQueryHandler
 {
     /**
-     * @var NavigationBuilder
+     * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
 
     /**
      * SheetViewQueryHandler constructor.
      *
-     * @param NavigationBuilder $navigationBuilder
+     * @param NavigationBuilderInterface $navigationBuilder
      */
-    public function __construct(NavigationBuilder $navigationBuilder)
+    public function __construct(NavigationBuilderInterface $navigationBuilder)
     {
         $this->navigationBuilder = $navigationBuilder;
     }

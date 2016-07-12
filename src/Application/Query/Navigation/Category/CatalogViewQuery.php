@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class CatalogViewQuery extends AbstractCategoryViewQuery
 {
     /**
-     * HappeningViewQuery constructor.
+     * CatalogViewQuery constructor.
      *
      * @param Sheet  $sheet
      * @param User   $user
