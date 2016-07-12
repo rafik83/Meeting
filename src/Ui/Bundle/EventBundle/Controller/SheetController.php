@@ -171,6 +171,7 @@ class SheetController extends Controller
             'collection'    => Data\ItemCollectionDataType::class,
             'nomenclature'  => Data\NomenclatureDataType::class,
             'image'         => Data\ImageDataType::class,
+            'tags'          => Data\ItemCollectionDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {

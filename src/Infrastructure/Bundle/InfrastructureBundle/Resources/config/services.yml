@@ -279,7 +279,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@datetime'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Create }
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
@@ -919,6 +920,32 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
+    command.nomenclature.create_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\CreateHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Create }
+    command.nomenclature.update_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\UpdateHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Update }
+    command.nomenclature.import_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@application.nomenclature.import.csv_importer'
+            - '@domain.event.has_sheet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Import }
+    command.nomenclature.assign_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\AssignHandler
+        arguments:
+            - '@application.nomenclature.nomenclature_cloner'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
     command.event.payment_conditions.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler
         arguments:
@@ -1188,6 +1215,20 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+    template.sheet.sheet_template_cloner:
+        class: Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner
+        arguments:
+            - '@repository.template.sheet_template_repository'
+            - '@template.template_data_factory'
+            - '@application.nomenclature.nomenclature_cloner'
+            - '@datetime'
+    template.registration.registration_template_cloner:
+        class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@template.template_data_factory'
+            - '@application.nomenclature.nomenclature_cloner'
+            - '@datetime'
 
     #
     # Guesser
@@ -1444,3 +1485,27 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # Nomenclature
+    #
+    application.nomenclature.id.uniqu_id_generator:
+        class: Proximum\Vimeet\Application\Nomenclature\Id\UniquIdGenerator
+    application.nomenclature.import.csv_importer:
+        class: Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter
+        arguments:
+            - '@application.nomenclature.id.uniqu_id_generator'
+    application.nomenclature.export.csv_exporter:
+        class: Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter
+    application.nomenclature.nomenclature_cloner:
+        class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
+        arguments:
+            - '@repository.nomenclature_repository'
+
+    #
+    # Event
+    #
+    domain.event.has_sheet:
+        class: Proximum\Vimeet\Domain\Event\HasSheet
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'

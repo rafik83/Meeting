@@ -712,3 +712,23 @@ admin_schedule_slot_unlock:
     requirements:
         event: \d+
         meetingSlot: \d+
+
+#
+# Nomenclature
+#
+admin_nomenclature_globals:
+    path: /template/nomenclature
+    defaults: { _controller: AdminBundle:Nomenclature:globals }
+    methods: [GET, POST]
+admin_nomenclature_event:
+    path: /template/nomenclature/event/{event}
+    defaults: { _controller: AdminBundle:Nomenclature:event }
+    methods: [GET, POST]
+admin_nomenclature_read:
+    path: /template/nomenclature/{nomenclature}
+    defaults: { _controller: AdminBundle:Nomenclature:read }
+    methods: [GET, POST]
+admin_nomenclature_export:
+    path: /template/nomenclature/{nomenclature}/export
+    defaults: { _controller: AdminBundle:Nomenclature:export }
+    methods: [GET]

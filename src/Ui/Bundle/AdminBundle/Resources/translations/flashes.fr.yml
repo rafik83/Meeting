@@ -187,6 +187,13 @@ flash:
         package:
             create:
                 success: La formule a bien été créée
+        nomenclature:
+            update:
+                success: La nomenclature a bien été mise à jour
+            import:
+                success: La nomenclature a bien été importée
+            assign:
+                success: La nomenclature a bien été assignée
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:

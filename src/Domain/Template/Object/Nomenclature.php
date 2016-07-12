@@ -21,11 +21,6 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     private $nomenclature;
 
     /**
-     * @var null|array
-     */
-    private $nomenclatureLabels;
-
-    /**
      * @param string $nomenclature
      *
      * @return Nomenclature
@@ -144,8 +139,8 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function setNomenclature(NomenclatureModel $nomenclature)
     {
-        $this->nomenclature       = $nomenclature;
-        $this->nomenclatureLabels = $nomenclature->getLabels($this->locale) ? : [];
+        $this->nomenclature = $nomenclature;
+        $this->setOption('nomenclature', $nomenclature->getId());
     }
 
     /**
@@ -167,11 +162,13 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     }
 
     /**
+     * @param null $locale
+     *
      * @return array|null
      */
-    public function getNomenclatureLabels()
+    public function getNomenclatureLabels($locale = null)
     {
-        return $this->nomenclatureLabels;
+        return $this->nomenclature->getLabels($locale ? : $this->locale);
     }
 
     /**
@@ -179,11 +176,13 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
      */
     public function getNomenclatureLabel()
     {
-        if (isset($this->nomenclatureLabels[$this->getItem()])) {
-            return $this->nomenclatureLabels[$this->getItem()];
+        $labels = $this->getNomenclatureLabels();
+
+        if (isset($labels[$this->getItem()])) {
+            return $labels[$this->getItem()];
         }
 
-        foreach ($this->nomenclatureLabels as $values) {
+        foreach ($labels as $values) {
             if (null !== $this->getItem() && isset($values[$this->getItem()])) {
                 return $values[$this->getItem()];
             }

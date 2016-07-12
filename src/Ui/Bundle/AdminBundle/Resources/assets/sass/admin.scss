@@ -14,6 +14,14 @@ body {
     }
 }
 
+.mg-bt {
+    margin-bottom: 20px;
+}
+
+.mg-tp {
+    margin-top: 20px;
+}
+
 .required:after {
   content: '*';
 }
@@ -89,6 +97,12 @@ body {
 
 .with-submit-section {
     margin-bottom: 100px;
+}
+
+.well {
+    h3 {
+        margin-top: 0;
+    }
 }
 
 .submit-section {

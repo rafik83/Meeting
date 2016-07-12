@@ -34,5 +34,10 @@ interface RegistrationTemplateRepositoryInterface
     /**
      * @param RegistrationTemplate $registrationTemplate
      */
+    public function add(RegistrationTemplate $registrationTemplate);
+
+    /**
+     * @param RegistrationTemplate $registrationTemplate
+     */
     public function set(RegistrationTemplate $registrationTemplate);
 }

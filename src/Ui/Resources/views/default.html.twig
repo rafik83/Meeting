@@ -1,20 +1,5 @@
 {% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_default_layout.html.twig' %}
 
-{%- block form_row -%}
-    <div class="form-row">
-        {{- form_label(form) -}}
-        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ (errors|length ? 'error' : '')|trim)}) %}
-
-        {% if 'select2' in attr.class %}
-            {% set attr = attr|merge({'data-no-results-label': 'select2.no_results'|trans}) %}
-        {% endif %}
-
-        {{- form_widget(form, {attr: attr}) -}}
-
-        {{ form_errors(form) }}
-    </div>
-{%- endblock form_row -%}
-
 {%- block telephone_widget -%}
     {%- set type = type|default('tel') -%}
     {{ block('form_widget_simple') }}
@@ -22,8 +7,8 @@
 
 {%- block quantity_widget -%}
     {% set attr = attr|merge({
-    'data-min-message': attr['data-min-message']|trans,
-    'data-max-message': attr['data-max-message']|trans
+        'data-min-message': attr['data-min-message']|trans,
+        'data-max-message': attr['data-max-message']|trans
     }) %}
 
     <div class="select-quantity">
@@ -43,14 +28,6 @@
         </ul>
     {% endif %}
 {%- endblock form_errors -%}
-
-{%- block form_rows -%}
-    <div class="inputs">
-        {% for child in form %}
-            {{- form_row(child) -}}
-        {% endfor %}
-    </div>
-{%- endblock form_rows -%}
 
 {%- block submit_row -%}
     <div class="validation">
@@ -269,3 +246,13 @@
     {%- set type = type|default('text') -%}
     {{ block('form_widget_simple') }}
 {%- endblock url_widget -%}
+
+{% block items_item_row %}
+    {% set group_attr = group_attr|default({})|merge({ 'class': group_attr.class|default('') ~ ' row' }) %}
+    <div {{ block('row_container_attributes') }}>
+        {{ form_row(form.title, { 'group_attr': { 'class': 'col-md-10' } }) }}
+        <div class="col-md-1 text-right">
+            {{ block('collection_delete_button') }}
+        </div>
+    </div>
+{% endblock %}

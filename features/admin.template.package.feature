@@ -6,10 +6,15 @@ Feature: Manage products selection templates
   Scenario: Create a package template
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml |
-      | Admin.yml                                                      |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml   |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml       |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
+      | Admin.yml                                                             |
      And I am logged with "test@test.com" on admin
      And I am on this page "/admin/fr/event"
      And I follow "admin.package.link"
@@ -23,10 +28,15 @@ Feature: Manage products selection templates
   Scenario: Update a package template
     Given the database is empty
       And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml |
-      | Admin.yml                                                      |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml   |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml       |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
+      | Admin.yml                                                             |
       And I am logged with "test@test.com" on admin
       And I am on this page "/admin/fr/event"
       And I follow "admin.package.link"
