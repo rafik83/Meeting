@@ -52,22 +52,22 @@ class Add
     public $event;
 
     /**
-     * @var User|null
+     * @var User
      */
-    public $sender;
+    public $adder;
 
     /**
-     * @param User   $sender
+     * @param User   $adder
      * @param Sheet  $sheet
      * @param Event  $event
      * @param string $locale
      */
-    public function __construct(Sheet $sheet, Event $event, $locale, User $sender)
+    public function __construct(Sheet $sheet, Event $event, $locale, User $adder)
     {
         $this->sheet  = $sheet;
         $this->event  = $event;
         $this->locale = $locale;
         $this->owner  = false;
-        $this->sender = $sender;
+        $this->adder = $adder;
     }
 }

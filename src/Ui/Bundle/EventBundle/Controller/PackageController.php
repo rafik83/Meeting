@@ -184,7 +184,7 @@ class PackageController extends Controller
         $displayRemoveParticipantForm = false;
         $redirect                     = false;
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
@@ -269,7 +269,7 @@ class PackageController extends Controller
 
         $locale         = $request->getLocale();
         $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),

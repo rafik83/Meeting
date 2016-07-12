@@ -150,7 +150,7 @@ class AddHandler
     private function sendActivationEvent(Add $add, User $user)
     {
         $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
-        $event = new ActivateAccountEvent($user, $add->sheet->getEvent(), $token, $add->locale, $add->sender);
+        $event = new ActivateAccountEvent($user, $add->sheet->getEvent(), $token, $add->locale, $add->adder);
         $this->eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $event);
     }
 
@@ -162,7 +162,7 @@ class AddHandler
      */
     private function sendActivationConfirmEvent(Add $add, User $guest)
     {
-        $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->sender);
+        $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->adder);
         $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $event);
     }
 

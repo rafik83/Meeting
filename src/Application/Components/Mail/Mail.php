@@ -25,12 +25,12 @@ class Mail
     private $receiver;
 
     /**
-     * @var User
+     * @var User|null
      */
     private $senderUser;
 
     /**
-     * @var User
+     * @var User|null
      */
     private $receiverUser;
 
@@ -50,13 +50,13 @@ class Mail
     private $locale;
 
     /**
-     * @param string $sender
-     * @param string $receiver
-     * @param string $template
-     * @param string $messageId
-     * @param string $locale
-     * @param User   $senderUser
-     * @param User   $receiverUser
+     * @param string    $sender
+     * @param string    $receiver
+     * @param string    $template
+     * @param string    $messageId
+     * @param string    $locale
+     * @param User|null $senderUser
+     * @param User|null $receiverUser
      */
     public function __construct($sender, $receiver, $template, $messageId, $locale, User $senderUser = null, User $receiverUser = null)
     {
@@ -110,7 +110,7 @@ class Mail
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getSenderUser()
     {
@@ -118,7 +118,7 @@ class Mail
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getReceiverUser()
     {

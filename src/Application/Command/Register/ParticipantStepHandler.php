@@ -104,6 +104,7 @@ class ParticipantStepHandler
 
         $this->accountSynchronizer->set($templateData, $participantStep->participant->getUser());
 
+        // send email notification when user arrive to the last step of register funnel
         $this->triggerEvent($participantStep);
     }
 
@@ -112,6 +113,7 @@ class ParticipantStepHandler
      */
     private function triggerEvent(ParticipantStep $participantStep)
     {
+        // check if user are in last register funnel step
         if ($participantStep->templateData->getNextBlockPosition($participantStep->step) === null) {
             $preRegisteredEvent = new PreRegisterEvent(
                 $this->participantInfoGuesser,
