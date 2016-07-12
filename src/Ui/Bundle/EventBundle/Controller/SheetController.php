@@ -50,7 +50,11 @@ class SheetController extends Controller
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
@@ -233,7 +237,11 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $twig = $object->getType() === 'nomenclature'
@@ -343,7 +351,11 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain->getEvent(), $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
@@ -458,7 +470,11 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the remove participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos($eventDomain, $sheet, $locale);
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
