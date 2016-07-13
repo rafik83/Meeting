@@ -46,7 +46,7 @@ class FunnelFactory
     public function create(Sheet $sheet, $locale)
     {
         $package = $sheet->getPackage();
-        $funnel  = new Funnel();
+        $funnel  = new Funnel($sheet);
 
         $cartStep = $this->cartStepRepository->findBySheet($sheet);
         $cart    = $this->cartManager->getCart($sheet);
