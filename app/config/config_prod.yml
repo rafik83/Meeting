@@ -28,7 +28,7 @@ monolog:
 
 elao_error_notifier:
     from: "%mailer_error_from%"
-    to: vimeet@elao.com
+    to: 'vimeet@elao.com'
     handle404: true
     handleHTTPcodes: ~
     mailer: swiftmailer.mailer.error
