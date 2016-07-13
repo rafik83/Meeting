@@ -318,8 +318,10 @@ admin:
         details:
             participants: Participants
             owner:
-                email: Email du propriétaire
-                phone: Téléphone du propriétaire
+                email: Email
+                phone: Téléphone
+                mobile: Mobile
+                title: Propriétaire
             meeting:
                 request:
                     title: Demandes de rendez-vous
@@ -336,6 +338,8 @@ admin:
             comments:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
+            participant:
+                    title: Participant
         state: Etat
         category: Catégorie
         type: Type
