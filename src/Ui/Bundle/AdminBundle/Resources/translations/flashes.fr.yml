@@ -88,6 +88,8 @@ flash:
             paymentConditions:
                 update:
                     success: Les conditions de paiement ont été modifiées avec succès
+            configure_dates:
+                success: Les dates ont bien été enregistrées
         type:
             create:
                 success: Le type a bien été créé

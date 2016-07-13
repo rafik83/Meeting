@@ -901,18 +901,24 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Schedule\Configure }
-    application.command.meeting_slot.lock_handler:
+    command.meeting_slot.lock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    application.command.meeting_slot.unlock_handler:
+    command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
+    command.event.configure_dates_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ConfigureDates }
     command.participant.update_company_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler
         arguments:
@@ -1485,6 +1491,21 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # KeyDates
+    #
+    domain.key_dates.checker.happenings_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker
+        arguments: ['@datetime']
+
+    domain.key_dates.checker.schedule_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\ScheduleAccessChecker
+        arguments: ['@datetime']
+
+    domain.key_dates.checker.catalog_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
+        arguments: ['@datetime']
 
     #
     # Nomenclature

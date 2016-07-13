@@ -373,6 +373,9 @@ admin:
           link: Informations Pratiques
           update:
             title: Modifier les informations pratiques
+        configuration:
+            key_dates:
+                title: Date clé de l'événement
     rule:
         link: Qui voit qui
     type:
@@ -479,6 +482,7 @@ admin:
         disable: Désactiver
         list:
             checkbox: Case à cocher
+        configure_dates: Dates clés
     admin_list:
         filter:
             empty_filter: Vider les filtres
