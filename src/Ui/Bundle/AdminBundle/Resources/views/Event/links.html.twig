@@ -63,6 +63,11 @@
         {{ 'admin.schedule.link'|trans }}
     </a>
 </li>
+<li>
+    <a href="{{ path('admin_nomenclature_event', { 'event': event.id }) }}">
+        {{ 'admin.nomenclature.link'|trans }}
+    </a>
+</li>
 <li class="dropdown-submenu">
     <a href="{{ path('admin_type_list', { 'event': event.id }) }}">{{ 'admin.type.link'|trans }}</a>
     <ul class="dropdown-menu">

@@ -24,7 +24,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,8 +85,8 @@ class ScheduleController extends Controller
             'method' => 'POST',
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
+            'submit' => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
@@ -114,7 +113,7 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to edit this unavailibity');
@@ -128,8 +127,8 @@ class ScheduleController extends Controller
             ]),
             'method' => 'POST',
             'sheet'  => $sheet,
+            'submit' => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
@@ -155,7 +154,7 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('The current User is not allowed to remove this unavailibity');
@@ -180,14 +179,15 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if (!$this->get('domain.key_dates.checker.happenings_access_checker')
+        if (!$this
+            ->get('domain.key_dates.checker.happenings_access_checker')
             ->allowedToAccess($eventDomain->getEvent())
-        ){
+        ) {
             throw $this->createNotFoundException();
         }
 
-        if ($happening->getEvent()->getId() !== $eventDomain->getId()
-            || $sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
+            || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('Event not linked to this happening');
@@ -204,8 +204,8 @@ class ScheduleController extends Controller
             'sheet'     => $sheet,
             'happening' => $happening,
             'locale'    => $request->getLocale(),
+            'submit'    => true,
         ]);
-        $form->add('submit', SubmitType::class);
 
         // Handle form
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -236,8 +236,8 @@ class ScheduleController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        if ($happening->getEvent()->getId() !== $eventDomain->getId()
-            || $sheet->getEvent()->getId() !== $eventDomain->getId()
+        if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
+            || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
         ) {
             throw $this->createNotFoundException('Event not linked to this happening');

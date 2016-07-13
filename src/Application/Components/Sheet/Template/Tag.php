@@ -37,6 +37,8 @@ final class Tag
     const SHEET_TITLE                 = 'sheet_title';
     const SHEET_ORGANIZATION          = 'sheet_organization';
     const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
+    const SHEET_ORGANIZATION_TURNOVER = 'sheet_organization_turnover';
+    const SHEET_ORGANIZATION_STAFF    = 'sheet_organization_staff';
 
     // Setter
     const PARTICIPANT_DATA = 'participant_data';
@@ -102,6 +104,8 @@ final class Tag
             self::SHEET_ORGANIZATION,
             self::SHEET_TITLE,
             self::SHEET_ORGANIZATION_CATEGORY,
+            self::SHEET_ORGANIZATION_TURNOVER,
+            self::SHEET_ORGANIZATION_STAFF,
         ];
     }
 }

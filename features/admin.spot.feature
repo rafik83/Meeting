@@ -10,6 +10,8 @@ Feature: Spot feature
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Spot.yml            |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin

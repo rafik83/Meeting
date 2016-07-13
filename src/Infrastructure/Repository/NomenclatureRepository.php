@@ -39,8 +39,9 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('nomenclature')
-            ->from('Entity:Nomenclature', 'nomenclature')
-            ->orderBy('nomenclature.title');
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->orderBy('nomenclature.title', 'ASC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -54,7 +55,28 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('nomenclature')
-            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id');
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->where('nomenclature.event = :event')
+            ->setParameter('event', $event)
+            ->orderBy('nomenclature.title', 'ASC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findGlobals()
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('nomenclature')
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->where('nomenclature.event IS NULL')
+            ->orderBy('nomenclature.title', 'ASC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -71,6 +93,46 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
             ->from(Nomenclature::class, 'nomenclature')
             ->where('nomenclature.id = :id')
             ->setParameter('id', $id);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function add(Nomenclature $nomenclature)
+    {
+        $this->entityManager->persist($nomenclature);
+        $this->entityManager->flush($nomenclature);
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function set(Nomenclature $nomenclature)
+    {
+        $this->entityManager->flush($nomenclature);
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     * @param Event        $event
+     *
+     * @return Nomenclature|null
+     */
+    public function findClone($nomenclature, $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('nomenclature')
+            ->from(Nomenclature::class, 'nomenclature', 'nomenclature.id')
+            ->andWhere('nomenclature.original = :nomenclature')
+            ->setParameter('nomenclature', $nomenclature)
+            ->andWhere('nomenclature.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

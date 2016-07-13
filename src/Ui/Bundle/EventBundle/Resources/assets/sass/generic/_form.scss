@@ -6,7 +6,7 @@
     background: $bg-container-color;
 
     .inputs {
-        .form-row {
+        .form-group {
             margin-bottom: 20px;
 
             &.split {
@@ -20,7 +20,7 @@
             }
         }
 
-        .form-row:last-child {
+        .form-group:last-child {
             margin-bottom: 0 !important;
         }
     }

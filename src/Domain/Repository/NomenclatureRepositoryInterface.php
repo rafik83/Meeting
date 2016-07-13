@@ -33,4 +33,27 @@ interface NomenclatureRepositoryInterface
      * @return Nomenclature
      */
     public function findById($id);
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function add(Nomenclature $nomenclature);
+
+    /**
+     * @param Nomenclature $nomenclature
+     */
+    public function set(Nomenclature $nomenclature);
+
+    /**
+     * @return Nomenclature[]
+     */
+    public function findGlobals();
+
+    /**
+     * @param Nomenclature $nomenclature
+     * @param Event        $event
+     *
+     * @return Nomenclature
+     */
+    public function findClone($nomenclature, $event);
 }
