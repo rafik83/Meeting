@@ -91,6 +91,14 @@ class Object extends AbstractChild
     }
 
     /**
+     * @return string|null
+     */
+    public function getDefaultLabel()
+    {
+        return $this->getOption('label', $this->locale);
+    }
+
+    /**
      * @return bool
      */
     public function isTranslatable()
