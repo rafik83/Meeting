@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,31 +12,32 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Template\Object;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EditableTextInputDataType extends AbstractType
+class GenderDataType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $text   = $options['object'];
+        $gender = $options['object'];
         $locale = $options['locale'];
         $label  = $options['label'];
-        $attr   = $text->getOption('maxLength') ? ['maxlength' => $text->getOption('maxLength')] : [];
 
         $builder
-            ->add('content', TextType::class, [
-                'label'              => $label ? $text->getOption('label')[$locale] : false,
-                'required'           => $text->getOption('required'),
-                'placeholder'        => $text->getOption('placeholder')[$locale],
-                'attr'               => $attr,
-                'translation_domain' => false,
-            ])
-        ;
+            ->add('gender', ChoiceType::class, [
+                'choices'  => $gender->getGenders(),
+                'choice_label' => function ($value) {
+                    return sprintf('gender.%s', $value);
+                },
+                'expanded' => true,
+                'multiple' => false,
+                'label'    => $label ? $gender->getOption('label')[$locale] : false,
+                'required' => true,
+            ]);
     }
 
     /**
@@ -45,10 +46,10 @@ class EditableTextInputDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', Object\EditableText::class);
+        $resolver->setAllowedTypes('object', Object\Gender::class);
         $resolver->setDefaults([
-            'label'      => false,
-            'data_class' => Object\EditableText::class
+            'label'      => true,
+            'data_class' => Object\Gender::class,
         ]);
     }
 
@@ -57,6 +58,6 @@ class EditableTextInputDataType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'text_data';
+        return 'gender_data';
     }
 }

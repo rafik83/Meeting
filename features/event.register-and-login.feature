@@ -88,6 +88,7 @@ Feature: Register and login user
       | Nom                | Dupont       |
       | Téléphone portable | +33698765432 |
       | Téléphone fixe     | +33198765432 |
+    Then I check the "gender.man" radio
     And I select "Informatique" from "block[6c4a3a4f][item][first]"
     And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
     And I press "common.next"

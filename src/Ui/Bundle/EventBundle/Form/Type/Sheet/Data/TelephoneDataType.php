@@ -29,10 +29,11 @@ class TelephoneDataType extends AbstractType
 
         $builder
             ->add('telephone', TelephoneType::class, [
-                'label'       => $label ? $telephone->getOption('label')[$locale] : false,
-                'required'    => $telephone->getOption('required'),
-                'placeholder' => $telephone->getOption('placeholder')[$locale],
-                'country'     => $options['country'],
+                'label'              => $label ? $telephone->getOption('label')[$locale] : false,
+                'required'           => $telephone->getOption('required'),
+                'placeholder'        => $telephone->getOption('placeholder')[$locale],
+                'country'            => $options['country'],
+                'translation_domain' => false,
             ])
         ;
     }

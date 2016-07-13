@@ -40,6 +40,7 @@ class TemplateDataFactory
         'participants_planings' => Object::class,
         'options'               => Object::class,
         'tags'                  => Object\TagsCollection::class,
+        'gender'                => Object\Gender::class,
     ];
 
     /**

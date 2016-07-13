@@ -31,6 +31,7 @@ Feature: Update participant profile
       | Nom                | Yupont      |
       | Téléphone portable | +0698765432 |
       | Téléphone fixe     | +0198765432 |
+    And I check the "gender.man" radio
     And I press "common.validate"
     Then I should be on this page "/fr/account/sheet/1/participant/1"
     And I should see "YY"

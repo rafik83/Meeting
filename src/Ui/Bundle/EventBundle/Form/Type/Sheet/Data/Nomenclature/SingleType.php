@@ -32,6 +32,7 @@ class SingleType extends AbstractType
                     return $item->getLabel($options['locale']);
                 }, array_slice($options['choices'], 0, 3)));
             },
+            'translation_domain'        => false,
             'choice_translation_domain' => false,
             'choice_name'               => function (NomenclatureItem $item = null) { return $item ? $item->getKey() : null; },
             'choice_value'              => function (NomenclatureItem $item = null) { return $item ? $item->getKey() : null; },

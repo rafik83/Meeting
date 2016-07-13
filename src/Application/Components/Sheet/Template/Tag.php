@@ -24,6 +24,7 @@ final class Tag
     const PARTICIPANT_CITY            = 'participant_city';
     const PARTICIPANT_COUNTRY         = 'participant_country';
     const PARTICIPANT_WEBSITE         = 'participant_website';
+    const PARTICIPANT_GENDER          = 'participant_gender';
     const BILLING_NAME                = 'billing_name';
     const BILLING_ADDRESS             = 'billing_address';
     const BILLING_CITY                = 'billing_city';
@@ -73,6 +74,7 @@ final class Tag
             self::PARTICIPANT_CITY,
             self::PARTICIPANT_COUNTRY,
             self::PARTICIPANT_WEBSITE,
+            self::PARTICIPANT_GENDER,
         ];
     }
 

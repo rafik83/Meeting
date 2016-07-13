@@ -37,3 +37,6 @@ Proximum\Vimeet\Domain\Model\User\Account:
         country:
             type: string
             nullable: true
+        gender:
+            type: string
+            nullable: true

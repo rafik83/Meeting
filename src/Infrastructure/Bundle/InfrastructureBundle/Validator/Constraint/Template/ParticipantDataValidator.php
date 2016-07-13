@@ -29,5 +29,6 @@ abstract class ParticipantDataValidator extends ConstraintValidator
         'telephone'     => Object\TelephoneConstraint::class,
         'text'          => ObjectConstraint::class,
         'url'           => Object\UrlConstraint::class,
+        'gender'        => Object\GenderConstraint::class,
     ];
 }
