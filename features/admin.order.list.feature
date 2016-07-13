@@ -6,10 +6,17 @@ Feature: List and filter orders
   Scenario: List event orders
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml  |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml |
-      | Admin.yml                                                    |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
+      | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event/1/order"
     Then I should see "admin.order.title"
