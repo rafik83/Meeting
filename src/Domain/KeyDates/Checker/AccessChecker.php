@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\KeyDates\Checker;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class AccessChecker
 {
     /**
