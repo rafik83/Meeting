@@ -1,5 +1,9 @@
 "Bad credentials.": Identifiants incorrects
 
+gender:
+    man: Monsieur
+    woman: Madame
+
 select2:
     no_results: Aucun résultat
 
@@ -124,6 +128,10 @@ package:
         totalVat: '+ TVA applicable de %vat%%'
         totalPlusVat: Total à régler
         option: Option
+        promotion:
+            label: Offres de réductions
+            button:
+                label: Valider
         billingInfo:
             update: Modifier vos informations de facturation
         columns:
@@ -160,6 +168,7 @@ summary:
     total: 'Total de la commande:'
     vatRate: 'TVA applicable %vatRate%%:'
     totalToPay: 'Total à régler:'
+    promotionCode: 'Offres de réductions'
     group:
         option:
             title: Options
@@ -184,8 +193,14 @@ order:
             title: Liste de vos transactions
             column:
                 date: Date
-                state: Êtat
+                state: État
                 total: Somme
+                mode: Mode
         state:
             pending: En attente
             paid: Réglé
+        mode:
+            bank_card: Carte bleu
+            bank_transfer: Transfert
+            bank_check: Chèque
+

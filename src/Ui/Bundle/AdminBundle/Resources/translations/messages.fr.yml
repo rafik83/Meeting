@@ -199,26 +199,6 @@ event:
     activateAccount:
         password: Définir votre mot de passe
 
-template:
-    name:
-        participant: Participant
-        sheet: Fiche de participation
-        package: Forfait
-    updateOrder: Enregistrer l'ordre
-    field:
-        add: Ajouter un champ
-        update: Modifier
-        type:
-            lib_country: Pays
-            lib_text: Texte
-            lib_choice: Choix
-            lib_textarea: Zone de texte
-            lib_participant: Ajout de participant
-            lib_planning: Ajout de planning
-            lib_option: Options
-            upload_with_choices: Upload avec options
-            choice_with_description: Choix avec description
-
 who:
     see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
     the:
@@ -404,6 +384,9 @@ admin:
         vatMode:
             et: HT
             ati: TTC
+        configuration:
+            key_dates:
+                title: Date clé de l'événement
     rule:
         link: Qui voit qui
     type:
@@ -510,6 +493,7 @@ admin:
         disable: Désactiver
         list:
             checkbox: Case à cocher
+        configure_dates: Dates clés
     admin_list:
         filter:
             empty_filter: Vider les filtres
@@ -669,3 +653,30 @@ admin:
             unlock: Débloquer
             locked: Bloqué
             unlocked: Débloqué
+    nomenclature:
+        title: Nomenclatures
+        table:
+            title: Titre
+            depth: %depth% niveau|%depth% niveaux
+            read: Voir
+        link: Nomenclatures
+        create:
+            modal:
+                title: Créer une nomenclature
+                close: Fermer
+            button: Nouvelle nomenclature
+        read:
+            configuration:
+                title: Configuration
+            import:
+                title: Import
+                button: Importer
+            export:
+                title: Export
+                button: Exporter
+                help: Le fichier exporter contient une clé pour chaque ligne, la modification d'une de ces lignes modifiera l'élément correspondant. L'ajout d'une ligne sans clé créera un nouvel élément. La suppression n'est plus possible une fois que l'événement a des participants.
+            assign:
+                button: Assigner à un événement
+        assign:
+            modal:
+                title: Assigner à un événement

@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\PromotionCode\Create;
 use Proximum\Vimeet\Application\Command\PromotionCode\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
-use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeExcetpion;
+use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -102,7 +102,7 @@ class PromotionCodeController extends Controller
                 return $this->redirectToRoute('admin_promotion_code_list', [
                     'event' => $event->getId(),
                 ]);
-            } catch (NonUniqueCodeExcetpion $exception) {
+            } catch (NonUniqueCodeException $exception) {
                 $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
             }
         }

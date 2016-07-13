@@ -1,0 +1,8 @@
+{% if promotionCode is defined %}
+    <tr>
+        <td>{{ promotionCode.label }}</td>
+        <td class="text-center"></td>
+        <td class="text-center"></td>
+        <td class="text-center">{{ promotionCode.total|localizedcurrency(promotionCode.currency) }} {{ ('package.vatMode.' ~ promotionCode.vatMode)|trans }}</td>
+    </tr>
+{% endif %}

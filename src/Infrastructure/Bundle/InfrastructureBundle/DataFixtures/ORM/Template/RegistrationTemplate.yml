@@ -22,6 +22,20 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                   fr: "Profil"
                                   en: "Profile"
                                 type: "title"
+                        4b674gba:
+                            component: "object"
+                            type: "gender"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Genre"
+                                    en: "Gender"
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: true
+                                translatable: false
+                                tags: ["participant_gender", "participant_data"]
                         541f84d4:
                             component: "object"
                             type: "editable-text"

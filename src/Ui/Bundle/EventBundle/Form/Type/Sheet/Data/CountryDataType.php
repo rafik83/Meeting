@@ -29,13 +29,14 @@ class CountryDataType extends AbstractType
 
         $builder
             ->add('country', CountryType::class, [
-                'label'       => $label ? $country->getOption('label')[$locale] : false,
-                'required'    => $country->getOption('required'),
-                'placeholder' => $country->getOption('placeholder')[$locale],
-                'attr'        => [
+                'label'              => $label ? $country->getOption('label')[$locale] : false,
+                'required'           => $country->getOption('required'),
+                'placeholder'        => $country->getOption('placeholder')[$locale],
+                'attr'               => [
                     'class'            => 'form-control select2',
                     'data-placeholder' => $country->getOption('label')[$locale],
                 ],
+                'translation_domain' => false,
             ]);
     }
 

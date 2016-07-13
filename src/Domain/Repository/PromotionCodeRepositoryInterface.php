@@ -43,7 +43,7 @@ interface PromotionCodeRepositoryInterface
      * @param Event  $event
      * @param string $code
      *
-     * @return PromotionCode[]
+     * @return PromotionCode
      */
     public function findByEventAndCode(Event $event, $code);
 }

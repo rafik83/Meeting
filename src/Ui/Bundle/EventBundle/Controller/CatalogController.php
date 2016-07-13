@@ -33,6 +33,10 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
+
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
             ->getCategoryViewsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
@@ -54,6 +58,10 @@ class CatalogController extends Controller
     public function categoryAction(EventDomain $eventDomain, CategoryView $categoryView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
@@ -88,6 +96,10 @@ class CatalogController extends Controller
     public function sheetAction(EventDomain $eventDomain, CategoryView $categoryView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         try {
             $sheetView = $this

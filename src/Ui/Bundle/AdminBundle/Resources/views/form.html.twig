@@ -1,0 +1,21 @@
+{{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
+    {{ form_errors(form) }}
+
+    {% for name, child in form.children if name != 'submit' %}
+        {{ form_row(child) }}
+    {% endfor %}
+
+    <div class="form-group submit-section">
+        <div class="col-sm-3">
+            {% if back_url is defined %}
+                <a href="{{ back_url }}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ 'admin.goback.link'|trans }}
+                </a>
+            {% endif %}
+        </div>
+        <div class="col-sm-9 text-right">
+            {{ form_row(form.submit) }}
+        </div>
+    </div>
+{{ form_end(form) }}

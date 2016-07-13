@@ -36,17 +36,40 @@ class Nomenclature
     private $value = [];
 
     /**
+     * @var bool
+     */
+    private $sort = true;
+
+    /**
+     * @var Event
+     */
+    private $event;
+
+    /**
+     * The nomenclature from this nomenclature has been clone
+     *
+     * @var Nomenclature
+     */
+    private $original;
+
+    /**
      * Nomenclature constructor.
      *
-     * @param string $title
-     * @param int    $depth
-     * @param array  $value
+     * @param string       $title
+     * @param int          $depth
+     * @param array        $value
+     * @param bool         $sort
+     * @param Event        $event
+     * @param Nomenclature $original
      */
-    public function __construct($title, $depth, array $value)
+    public function __construct($title, $depth = 1, array $value = [], $sort = true, Event $event = null, Nomenclature $original = null)
     {
-        $this->title = $title;
-        $this->depth = $depth;
-        $this->value = $value;
+        $this->title    = $title;
+        $this->depth    = $depth;
+        $this->value    = $value;
+        $this->sort     = $sort;
+        $this->event    = $event;
+        $this->original = $original;
     }
 
     /**
@@ -165,7 +188,9 @@ class Nomenclature
     {
         $children = $this->getChildren();
 
-        Nomenclature::sort($children, $locale);
+        if ($this->sort) {
+            Nomenclature::sort($children, $locale);
+        }
 
         return $children;
     }
@@ -298,5 +323,95 @@ class Nomenclature
         return !empty(array_filter($this->getChildren(), function (NomenclatureItem $item) use ($keys) {
             return in_array($item->getKey(), $keys) || $item->any($keys);
         }));
+    }
+
+    /**
+     * @return Nomenclature
+     */
+    public function enableSort()
+    {
+        $this->sort = true;
+
+        return $this;
+    }
+
+    /**
+     * @return Nomenclature
+     */
+    public function disableSort()
+    {
+        $this->sort = false;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSorted()
+    {
+        return $this->sort;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Nomenclature
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get locales available in the nomenclature
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return array_unique(array_reduce($this->getChildren(), function (array $carry, NomenclatureItem $item) {
+            return array_merge($carry, $item->getLocales());
+        }, []));
+    }
+
+    /**
+     * Set value
+     *
+     * @param int   $depth
+     * @param array $value
+     *
+     * @return Nomenclature
+     */
+    public function update($depth, $value)
+    {
+        $this->depth = $depth;
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get event
+     *
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * Get original
+     *
+     * @return Nomenclature
+     */
+    public function getOriginal()
+    {
+        return $this->original;
     }
 }

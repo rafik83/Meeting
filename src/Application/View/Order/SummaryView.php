@@ -20,6 +20,11 @@ class SummaryView
     public $groups;
 
     /**
+     * @var PromotionCodesView
+     */
+    public $promotionCodes;
+
+    /**
      * @var float
      */
     public $total;
@@ -60,26 +65,29 @@ class SummaryView
     public $currency;
 
     /**
-     * @param GroupsView $groups
-     * @param bool       $vatApplicable
-     * @param float      $vatRate
-     * @param string     $vatMode
-     * @param string     $currency
+     * @param GroupsView         $groups
+     * @param PromotionCodesView $promotionCodes
+     * @param bool               $vatApplicable
+     * @param float              $vatRate
+     * @param string             $vatMode
+     * @param string             $currency
      */
     public function __construct(
         GroupsView $groups,
+        PromotionCodesView $promotionCodes,
         $vatApplicable,
         $vatRate,
         $vatMode,
         $currency
     ) {
-        $this->groups        = $groups;
-        $this->total         = $groups->getTotal();
-        $this->vatApplicable = $vatApplicable;
-        $this->vatRate       = $vatRate;
-        $this->totalPlusVat  = $this->total;
-        $this->vatMode       = $vatMode;
-        $this->currency      = $currency;
+        $this->groups         = $groups;
+        $this->promotionCodes = $promotionCodes;
+        $this->total          = $groups->getTotal() + $promotionCodes->getTotal();
+        $this->vatApplicable  = $vatApplicable;
+        $this->vatRate        = $vatRate;
+        $this->totalPlusVat   = $this->total;
+        $this->vatMode        = $vatMode;
+        $this->currency       = $currency;
 
         if ($vatApplicable) {
             $this->vat          = ($this->total * $vatRate) / 100;

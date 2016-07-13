@@ -4,7 +4,8 @@
     <h1 class="page-header">{{ 'admin.promotion_code.title'|trans }}</h1>
 
     <p>
-        <a href="{{ path('admin_promotion_code_create', { 'event': event.id }) }}" class="btn btn-success">{{ 'admin.promotion_code.new'|trans }}</a>
+        <a href="{{ path('admin_promotion_code_create', { 'event': event.id }) }}"
+           class="btn btn-success">{{ 'admin.promotion_code.new'|trans }}</a>
     </p>
 
     <table class="table">
@@ -23,9 +24,14 @@
                 <td>{{ promotion_code.title }}</td>
                 <td>{{ promotion_code.code }}</td>
                 <td>{{ promotion_code.stock }}</td>
-                <td>{{ promotion_code.validUntil|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>
+                    {% if promotion_code.validUntil is not null %}
+                        {{ promotion_code.validUntil|localizeddate('medium', 'short', app.request.locale) }}
+                    {% endif %}
+                </td>
                 <td class="text-right">
-                    <a href="{{ path('admin_promotion_code_update', { 'event': event.id, 'promotionCode': promotion_code.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.promotion_code.table.action.edit'|trans }}</a>
+                    <a href="{{ path('admin_promotion_code_update', { 'event': event.id, 'promotionCode': promotion_code.id }) }}"
+                       class="btn btn-primary btn-sm">{{ 'admin.promotion_code.table.action.edit'|trans }}</a>
                 </td>
             </tr>
         {% else %}

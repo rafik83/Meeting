@@ -9,7 +9,12 @@ Feature: Complete my package
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr"
     And I go to this page "/fr/sheet"
@@ -108,6 +113,20 @@ Feature: Complete my package
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/package/payment"
+
+  Scenario: I can add multiple promotion code
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/summary"
+    Then I should see "package.summary.title"
+    And I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS10"
+    And I press "package.summary.promotion.button.label"
+    Then I should be on this page "/fr/sheet/1/package/summary#summary-promo-code-row"
+    And I should see "Assdays Promotion Code"
+    Then I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS20"
+    And I press "package.summary.promotion.button.label"
+    Then I should be on this page "/fr/sheet/1/package/summary#summary-promo-code-row"
+    And I should see "Assdays Promotion Code"
+    And I should see "Assdays Promotion Code 2"
 
   Scenario: I can my payment method
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"

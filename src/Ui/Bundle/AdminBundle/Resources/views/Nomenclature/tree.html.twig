@@ -1,0 +1,19 @@
+<ul class="mg-tp">
+    {% for child_one in nomenclature.childrenSorted(locale) %}
+        <li>
+            {{ child_one.label(locale) }}
+            <ul>
+                {% for child_two in child_one.childrenSorted(locale) %}
+                    <li>
+                        {{ child_two.label(locale) }}
+                        <ul>
+                            {% for child_three in child_two.childrenSorted(locale) %}
+                                <li>{{ child_three.label(locale) }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>

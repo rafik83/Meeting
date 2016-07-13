@@ -13,7 +13,7 @@
             <div class="product">
                 <span class="product-price text-center">
                     {{ 'package.product.unitPrice'|trans({
-                        '%price%': included.total,
+                        '%price%': included.total|localizednumber,
                         '%currency%': included.currency|currency_symbol,
                         '%vatMode%': ('package.vatMode.' ~ included.vatMode)|trans
                     })|html }}

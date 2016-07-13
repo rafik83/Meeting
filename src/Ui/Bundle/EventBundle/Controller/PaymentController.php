@@ -36,11 +36,13 @@ class PaymentController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
+        $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
             || !$sheet->getPackage()->isPassable()
             || false === $authorize
+            || false === $funnel->isCompleted()
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
@@ -64,6 +66,8 @@ class PaymentController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($paymentChoice);
+
+                $this->consumePackageCompletedPaymentFlash();
 
                 // This will have to redirect to payment when needed
                 return $this->redirectToRoute('event_order_list', [
@@ -92,12 +96,22 @@ class PaymentController extends Controller
      */
     private function hasPackageCompletedPaymentFlash()
     {
-        $sheet = $this->container->get('session')->getFlashBag()->get('package_completed_payment');
+        $sheet = $this->consumePackageCompletedPaymentFlash();
 
         if (!empty($sheet)) {
             $this->addFlash('package_completed_payment', $sheet);
         }
 
         return !empty($sheet);
+    }
+
+    /**
+     * @return null|int
+     */
+    private function consumePackageCompletedPaymentFlash()
+    {
+        $sheet = $this->container->get('session')->getFlashBag()->get('package_completed_payment');
+
+        return $sheet;
     }
 }

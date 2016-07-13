@@ -31,6 +31,7 @@ class BlockValidator extends ConstraintValidator
         'telephone'     => Object\TelephoneConstraint::class,
         'country'       => Object\CountryConstraint::class,
         'url'           => Object\UrlConstraint::class,
+        'gender'        => Object\GenderConstraint::class,
     ];
 
     /**
