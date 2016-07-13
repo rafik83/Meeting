@@ -1,5 +1,5 @@
 @event
-
+@account
 Feature: Change password
 When I am logged, I need to be able to change my password
 
@@ -10,6 +10,8 @@ When I am logged, I need to be able to change my password
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | User.yml                                                                 |
     And I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr/"

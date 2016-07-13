@@ -40,6 +40,8 @@ services:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
     form_extension.select2:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\Select2Extension
+        arguments:
+            - '@translator'
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType' }
     vimeet.form_extension.textarea_extension:
@@ -234,6 +236,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
         arguments:
             - '@translator'
+            - '@request_stack'
 
     filter_summary:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
@@ -257,5 +260,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
+            - '@datetime'
         tags:
             - { name: validator.constraint_validator, alias: alias_name }

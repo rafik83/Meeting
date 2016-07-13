@@ -11,10 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class CreateHandler
@@ -25,21 +26,32 @@ class CreateHandler
     private $typeRepository;
 
     /**
-     * @var \DateTimeInterface
+     * @var SheetTemplateCloner
      */
-    private $dateTime;
+    private $sheetTemplateCloner;
+
+    /**
+     * @var RegistrationTemplateCloner
+     */
+    private $registrationTemplateCloner;
 
     /**
      * CreateHandler constructor.
      *
-     * @param TypeRepositoryInterface $typeRepository
-     * @param \DateTimeInterface      $dateTime
+     * @param TypeRepositoryInterface    $typeRepository
+     * @param SheetTemplateCloner        $sheetTemplateCloner
+     * @param RegistrationTemplateCloner $registrationTemplateCloner
      */
-    public function __construct(TypeRepositoryInterface $typeRepository, \DateTimeInterface $dateTime)
-    {
-        $this->typeRepository = $typeRepository;
-        $this->dateTime       = $dateTime;
+    public function __construct(
+        TypeRepositoryInterface $typeRepository,
+        SheetTemplateCloner $sheetTemplateCloner,
+        RegistrationTemplateCloner $registrationTemplateCloner
+    ) {
+        $this->typeRepository             = $typeRepository;
+        $this->sheetTemplateCloner        = $sheetTemplateCloner;
+        $this->registrationTemplateCloner = $registrationTemplateCloner;
     }
+
 
     /**
      * @param Create $create
@@ -57,10 +69,7 @@ class CreateHandler
             if ($this->typeRepository->typeExists($create->event, $locale, $translation['title'])) {
                 $localesTitleAlreadyExists[] = $locale;
             } else {
-                $type->getTranslations()->set(
-                    $locale,
-                    new TypeTranslation($type, $locale, $translation['title'], $translation['description'])
-                );
+                $type->translate($locale, $translation['title'], $translation['description']);
             }
         }
 
@@ -72,38 +81,46 @@ class CreateHandler
             $type->getValidationCriteria()->setSheetAccepted($create->validationCriteria['sheetAccepted']);
         }
 
-        if ($create->sheetTemplate->getEvent() === $create->event) {
-            $sheetTemplate = $create->sheetTemplate;
-        } else {
-            $sheetTemplate = new SheetTemplate(
-                $type->getTitle($create->event->getAvailableLocale($create->locale)),
-                $create->sheetTemplate->getValue(),
-                $create->sheetTemplate->getLocales(),
-                $create->sheetTemplate->getFallback(),
-                $this->dateTime
-            );
-            $sheetTemplate->setEvent($create->event);
-        }
-
-        if ($create->registrationTemplate->getEvent() === $create->event) {
-            $registrationTemplate = $create->registrationTemplate;
-        } else {
-            $registrationTemplate = new RegistrationTemplate(
-                $type->getTitle($create->event->getAvailableLocale($create->locale)),
-                $create->sheetTemplate->getValue(),
-                $create->sheetTemplate->getLocales(),
-                $create->sheetTemplate->getFallback(),
-                $this->dateTime
-            );
-            $registrationTemplate->setEvent($create->event);
-        }
-
-        $type->setSheetTemplate($sheetTemplate);
-        $type->setRegistrationTemplate($registrationTemplate);
+        $type->setSheetTemplate($this->getSheetTemplate($create, $type));
+        $type->setRegistrationTemplate($this->getRegistrationTemplate($create, $type));
         $type->setPackage($create->package);
 
         $this->typeRepository->add($type);
 
         $create->type = $type;
+    }
+
+    /**
+     * @param Create $create
+     * @param Type   $type
+     *
+     * @return SheetTemplate
+     */
+    private function getSheetTemplate(Create $create, Type $type)
+    {
+        return $create->sheetTemplate->getEvent() === $create->event
+            ? $create->sheetTemplate
+            : $this->sheetTemplateCloner->duplicate(
+                $create->sheetTemplate,
+                $create->event,
+                $type->getTitle($create->event->getAvailableLocale($create->locale))
+            );
+    }
+
+    /**
+     * @param Create $create
+     * @param Type   $type
+     *
+     * @return RegistrationTemplate
+     */
+    private function getRegistrationTemplate(Create $create, Type $type)
+    {
+        return $create->registrationTemplate->getEvent() === $create->event
+            ? $create->registrationTemplate
+            : $this->registrationTemplateCloner->duplicate(
+                $create->registrationTemplate,
+                $create->event,
+                $type->getTitle($create->event->getAvailableLocale($create->locale))
+            );
     }
 }

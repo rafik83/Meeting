@@ -1,5 +1,5 @@
 @event
-
+@meeting
 Feature: Meeting Request Update
   I need to be able update my meeting request and proposition when they are sent or approved
 
@@ -10,6 +10,8 @@ Feature: Meeting Request Update
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |

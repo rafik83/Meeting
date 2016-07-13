@@ -255,4 +255,19 @@ class BillingInfo
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted()
+    {
+        return null !== $this->lastname
+            && null !== $this->firstname
+            && null !== $this->email
+            && null !== $this->company
+            && null !== $this->address->getStreet()
+            && null !== $this->address->getZipcode()
+            && null !== $this->address->getCity()
+            && null !== $this->address->getCountry();
+    }
 }

@@ -58,8 +58,8 @@ class TaggedInfoGuesser
      */
     public function guessFirst(AbstractTemplate $template, $data, $tag, $locale, $default = null)
     {
-        $templateData = $this->templateDataFactory->create(
-            $template->getValue(),
+        $templateData = $this->templateDataFactory->createFromTemplate(
+            $template,
             $data,
             $locale,
             $template->getFallback()

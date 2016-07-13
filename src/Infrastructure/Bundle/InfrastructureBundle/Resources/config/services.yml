@@ -207,6 +207,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.cart_step_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\CartStepRepository
+        arguments:
+            - '@doctrine'
 
     #
     # Fixture providers
@@ -275,7 +279,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@datetime'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Create }
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
@@ -744,6 +749,13 @@ services:
             - '@repository.package_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Update }
+    command.package.duplicate_handler:
+        class: Proximum\Vimeet\Application\Command\Package\DuplicateHandler
+        arguments:
+            - '@repository.package_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Duplicate }
     command.sheet.update_data_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
@@ -751,31 +763,57 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
     command.product.create_option_handler:
-        class: Proximum\Vimeet\Application\Command\Product\CreateOptionHandler
+        class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateOption }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Option\CreateOption }
+    command.product.update_option_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Option\UpdateOptionHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Option\UpdateOption }
     command.product.create_plan_handler:
-        class: Proximum\Vimeet\Application\Command\Product\CreatePlanHandler
+        class: Proximum\Vimeet\Application\Command\Product\Plan\CreatePlanHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePlan }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan }
+    command.product.update_plan_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlanHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan }
     command.product.create_participant_handler:
-        class: Proximum\Vimeet\Application\Command\Product\CreateParticipantHandler
+        class: Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipantHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreateParticipant }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant }
+    command.product.update_participant_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant }
     command.product.create_planning_handler:
-        class: Proximum\Vimeet\Application\Command\Product\CreatePlanningHandler
+        class: Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanningHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\CreatePlanning }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning }
+    command.product.update_planning_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanningHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning }
     command.participant.update_profile_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler
         arguments:
@@ -814,6 +852,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectOptionsHandler
         arguments:
             - '@cart_manager'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
@@ -862,18 +901,24 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Schedule\Configure }
-    application.command.meeting_slot.lock_handler:
+    command.meeting_slot.lock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    application.command.meeting_slot.unlock_handler:
+    command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
+    command.event.configure_dates_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ConfigureDates }
     command.participant.update_company_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler
         arguments:
@@ -881,6 +926,32 @@ services:
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
+    command.nomenclature.create_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\CreateHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Create }
+    command.nomenclature.update_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\UpdateHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Update }
+    command.nomenclature.import_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@application.nomenclature.import.csv_importer'
+            - '@domain.event.has_sheet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Import }
+    command.nomenclature.assign_handler:
+        class: Proximum\Vimeet\Application\Command\Nomenclature\AssignHandler
+        arguments:
+            - '@application.nomenclature.nomenclature_cloner'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Nomenclature\Assign }
     command.event.payment_conditions.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler
         arguments:
@@ -897,6 +968,12 @@ services:
             - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
+    command.event.billing_configuration_handler:
+        class: Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\BillingConfiguration }
     command.event.practical_info.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\PracticalInfo\UpdateHandler
         arguments:
@@ -1099,14 +1176,6 @@ services:
             - '@mailer'
             - '@twig'
 
-    #
-    # Order component
-    #
-    components.sheet.specification.vat_applicable:
-        class: Proximum\Vimeet\Application\Components\Sheet\Order\Specification\VatApplicable
-        arguments:
-            - '@components.sheet.billing_info_guesser'
-            - '%infrastructure.eu_countries%'
 
     #
     # Proforma component
@@ -1152,6 +1221,20 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+    template.sheet.sheet_template_cloner:
+        class: Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner
+        arguments:
+            - '@repository.template.sheet_template_repository'
+            - '@template.template_data_factory'
+            - '@application.nomenclature.nomenclature_cloner'
+            - '@datetime'
+    template.registration.registration_template_cloner:
+        class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@template.template_data_factory'
+            - '@application.nomenclature.nomenclature_cloner'
+            - '@datetime'
 
     #
     # Guesser
@@ -1294,8 +1377,42 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
         arguments:
             - '@cart_manager'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
+
+    query.package.summary.product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler
+    query.package.summary.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.planning_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.plan_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.participant_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler
+        arguments:
+            - '@query.package.summary.product_view_query_handler'
+    query.package.summary.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler
+        arguments:
+            - '@query.package.summary.plan_group_view_query_handler'
+            - '@query.package.summary.participant_group_view_query_handler'
+            - '@query.package.summary.planning_group_view_query_handler'
+            - '@query.package.summary.group_view_query_handler'
+    query.package.summary.summary_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQueryHandler
+        arguments:
+            - '@query.package.summary.groups_view_query_handler'
+            - '@package.specification.vat_applicable'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
 
     #
     # Elastic Transformer
@@ -1330,6 +1447,7 @@ services:
         class: Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory
         arguments:
             - '@cart_manager'
+            - '@repository.cart_step_repository'
 
     #
     # Package
@@ -1338,6 +1456,11 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+    package.specification.vat_applicable:
+        class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
+        arguments:
+            - '@repository.billing_info_repository'
+            - '%infrastructure.eu_countries%'
 
     #
     # Cart
@@ -1346,6 +1469,7 @@ services:
         class: Proximum\Vimeet\Domain\Cart\CartManager
         arguments:
             - '@repository.cart_row_repository'
+            - '@repository.cart_step_repository'
 
     #
     # Promotion
@@ -1367,3 +1491,42 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # KeyDates
+    #
+    domain.key_dates.checker.happenings_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker
+        arguments: ['@datetime']
+
+    domain.key_dates.checker.schedule_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\ScheduleAccessChecker
+        arguments: ['@datetime']
+
+    domain.key_dates.checker.catalog_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
+        arguments: ['@datetime']
+
+    #
+    # Nomenclature
+    #
+    application.nomenclature.id.uniqu_id_generator:
+        class: Proximum\Vimeet\Application\Nomenclature\Id\UniquIdGenerator
+    application.nomenclature.import.csv_importer:
+        class: Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter
+        arguments:
+            - '@application.nomenclature.id.uniqu_id_generator'
+    application.nomenclature.export.csv_exporter:
+        class: Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter
+    application.nomenclature.nomenclature_cloner:
+        class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
+        arguments:
+            - '@repository.nomenclature_repository'
+
+    #
+    # Event
+    #
+    domain.event.has_sheet:
+        class: Proximum\Vimeet\Domain\Event\HasSheet
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'

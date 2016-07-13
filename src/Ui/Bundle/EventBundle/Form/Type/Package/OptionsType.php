@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
+use DateTime;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
@@ -40,8 +41,8 @@ class OptionsType extends AbstractType
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
 
-        $products = $sheet->getPackage()->getAvailablesOptions();
-        
+        $products = $sheet->getPackage()->getAvailablesOptions($options['now']);
+
         foreach ($products as $product) {
             $builder->add(
                 $product->getId(),
@@ -66,6 +67,7 @@ class OptionsType extends AbstractType
         $optionsResolver->setDefaults(
             [
                 'data_class' => SelectOptions::class,
+                'now'        => new DateTime(),
             ]
         );
     }

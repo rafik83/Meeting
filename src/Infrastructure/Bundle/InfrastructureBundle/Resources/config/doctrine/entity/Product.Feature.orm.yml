@@ -12,6 +12,7 @@ Proximum\Vimeet\Domain\Model\Product\Feature:
             mappedBy: feature
             indexBy: locale
             cascade: ["persist"]
+            orphanRemoval: true
     manyToOne:
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

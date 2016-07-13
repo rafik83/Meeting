@@ -1,0 +1,109 @@
+Proximum\Vimeet\Domain\Model\Event:
+    event_asddays_2016:
+        __construct:
+            - "ASD Days"               #title
+            -  fr                      #fallback
+            - [fr, en]                 #locales
+            - 'et'                     #mode
+            - 20                       #vat
+            - 'FR'                     #country
+            -  'EUR'                   #currency
+            - 'Europe/Paris'           #timeZone
+            - asddays-2016.<domain()> #domain
+            - "PROXIMUM"               #organiserName
+        logo: 'assets/images/asddays-logo.png'
+        assetPath: ''
+        paymentAddress: '@payment_address_event_asddays_2016'
+        configuration: '@configuration_asddays_2016'
+        organiserEmail: "accounts@proximumgroup.com"
+        legalInformation: |+
+            TVA acquittée sur les encaissements
+            Pas d'escompte pour paiement anticipé
+        # vat mode :
+        # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
+        # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
+        elementToJoinWithInvoice: |+
+            - Numéro de la Facture
+            - Nom de l'événement
+            - Montant net à payer
+
+Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+    configuration_asddays_2016:
+        __construct:
+            - '#59a4eb'
+            - '#00398c'
+            - '#00398C'
+        catalogOnlineDate: "<dateTimeBetween('now', '2032-07-08')>"
+        happeningsOpenDate: "<dateTimeBetween('now', '2032-07-08')>"
+        schedulePublishDate: "<dateTimeBetween('now', '2032-07-08')>"
+
+Proximum\Vimeet\Domain\Model\EventTranslation:
+    event_asddays_2016_fr:
+        __construct: false
+        description: "ASD Days, le Rdv international dédié à l'Aéronautique, le Spatial, la Défense, la Sécurité et les Drones."
+        locale: fr
+        event: '@event_asddays_2016'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
+        billingAddress: |+
+            PROXIMUM
+            855 avenue Roger Salengro
+            92370 CHAVILLE
+            mail: acounts@proximumgroup.com
+        paymentFooter: 'Proximum: 855 avenue Roger Salengro 92370 CHAVILLE - France - Tél: +33 (0) 1 46 90 00 00 - www.proximumgroup.com - S.a.r.l au capital de 60000 Euros - RCS Nanterres B 424 540 441 - N° TVA Intracommunautaire: FR83424540441 00047'
+        paymentCondition: |+
+            A joindre à votre règlement:
+            Numéro de facture
+            Net à payer
+    event_asddays_2016_en:
+        __construct: false
+        description: "ASD Days, the international meeting dedicated to: Aerospace, Defence, Security & UAVs."
+        locale: en
+        event: '@event_asddays_2016'
+        bankInfo: |+
+            HSBC Issy les Moulineaux
+            IBAN: FR76 3005 6006 4306 4332 4153 439
+            SWIFT (BIC): CCFRFRPP
+        billingAddress: |+
+            PROXIMUM
+            855 avenue Roger Salengro
+            92370 CHAVILLE
+            mail: acounts@proximumgroup.com
+        paymentFooter: 'Proximum: 855 avenue Roger Salengro 92370 CHAVILLE - France - Tél: +33 (0) 1 46 90 00 00 - www.proximumgroup.com - S.a.r.l au capital de 60000 Euros - RCS Nanterres B 424 540 441 - N° TVA Intracommunautaire: FR83424540441 00047'
+        paymentCondition: |+
+            A joindre à votre règlement:
+            Numéro de facture
+            Net à payer
+
+Proximum\Vimeet\Domain\Model\Address (local):
+    payment_address_event_asddays_2016:
+        __construct:
+            - 855 Avenue Roger Salengro
+            - 92370
+            - CHAVILLE
+            - fr
+
+Proximum\Vimeet\Domain\Model\Event\Content:
+    content_terms_of_sale_asddays_2016:
+        __construct: false
+        type: 'terms-of-sale'
+        event: '@event_asddays_2016'
+
+Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
+    content_terms_of_sale_asddays_2016_fr:
+        __construct: false
+        content: '@content_terms_of_sale_asddays_2016'
+        locale: 'fr'
+        value: |+
+            Conditions générales de vente pour ASD DAYS 2016
+    content_terms_of_sale_asddays_2016_en:
+        __construct: false
+        content: '@content_terms_of_sale_asddays_2016'
+        locale: 'en'
+        value: |+
+            Our General Terms and Conditions of Sale shall exclusively apply to all
+            contracts between us and our clients. Any differing conditions or terms of
+            buyer are herewith objected to and shall not apply. Any agreement affecting
+            the execution of this contract must be in writing.

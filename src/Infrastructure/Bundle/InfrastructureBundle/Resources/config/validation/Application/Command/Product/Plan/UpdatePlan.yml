@@ -1,0 +1,44 @@
+Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan:
+    properties:
+        name:
+            - NotBlank: ~
+        file:
+            - Image: ~
+        availabilityCurrent:
+            - Range:
+                min: 0
+        availabilityMax:
+            - Range:
+                min: 0
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        heading:
+                            - NotBlank: ~
+                        description: ~
+                        addon: ~
+                        subjectedToValidationHelp: ~
+        features:
+            - All:
+                - Collection:
+                    fields:
+                        translations:
+                            - All:
+                                - Collection:
+                                    fields:
+                                        title:
+                                            - NotBlank: ~
+                                        description: ~
+        productIncluded:
+            - All:
+                - Collection:
+                    fields:
+                        quantity:
+                            - NotBlank: ~
+                            - Range:
+                                min: 0
+                        product:
+                            - NotBlank: ~

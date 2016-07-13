@@ -31,6 +31,11 @@ class CardListViewQuery
     public $user;
 
     /**
+     * @var bool
+     */
+    public $editable;
+
+    /**
      * @param Sheet  $sheet
      * @param User   $user
      * @param string $locale

@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -33,6 +32,10 @@ class CatalogController extends Controller
     public function categoriesAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         $categories = $this
             ->get('vimeet_infrastructure.repository.category_repository')
@@ -55,6 +58,10 @@ class CatalogController extends Controller
     public function categoryAction(EventDomain $eventDomain, CategoryView $categoryView)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
@@ -89,6 +96,10 @@ class CatalogController extends Controller
     public function sheetAction(EventDomain $eventDomain, CategoryView $categoryView, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         try {
             $sheetView = $this

@@ -1,16 +1,18 @@
 @event
-
+@account
 Feature: Forgot Password
   I need to be able to change my password if I forgot it
 
   Scenario: I can not request a token for a non-existent account
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml   |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml |
-      | UserWithActivateAccountTokenAndSheet.yml                         |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml         |
+      | UserWithActivateAccountTokenAndSheet.yml                              |
     When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
     And I fill in "form.forgotten_password.children.email.label" with "not-known-user@example.net"
     And I press "form.forgotten_password.children.submit.label"

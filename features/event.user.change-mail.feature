@@ -1,16 +1,18 @@
 @event
-
+@account
 Feature: Change my mail
   I need to be able to change my account
 
   Background:
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml   |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml |
-      | UserWithActivateAccountTokenAndSheet.yml                         |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml     |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml         |
+      | UserWithActivateAccountTokenAndSheet.yml                              |
     And I am logged with "test@test.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can change my email

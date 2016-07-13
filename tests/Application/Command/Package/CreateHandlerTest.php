@@ -52,7 +52,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->title = 'Lorem ipsum';
 
         $packageRepository = $this->prophesize(PackageRepositoryInterface::class);
-        $dateTime          = new \DateTimeImmutable();
 
         $packageRepository->add(Argument::that(function (Package $package) use ($expected) {
             $this->assertEquals($expected, $package);

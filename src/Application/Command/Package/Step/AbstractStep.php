@@ -20,10 +20,17 @@ class AbstractStep
     public $sheet;
 
     /**
-     * @param Sheet $sheet
+     * @var int
      */
-    public function __construct(Sheet $sheet)
+    public $currentStep;
+
+    /**
+     * @param Sheet $sheet
+     * @param int   $currentStep
+     */
+    public function __construct(Sheet $sheet, $currentStep)
     {
-        $this->sheet = $sheet;
+        $this->sheet       = $sheet;
+        $this->currentStep = $currentStep;
     }
 }

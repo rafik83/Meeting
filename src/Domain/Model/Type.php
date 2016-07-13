@@ -308,4 +308,22 @@ class Type implements WhoInterface
             return $category->getTitle($locale);
         })->toArray();
     }
+
+    /**
+     * @param string $locale
+     * @param string $title
+     * @param string $description
+     *
+     * @return Type
+     */
+    public function translate($locale, $title, $description)
+    {
+        if ($this->translations->containsKey($locale)) {
+            $this->translations->get($locale)->update($title, $description);
+        } else {
+            $this->translations->set($locale, new TypeTranslation($this, $locale, $title, $description));
+        }
+
+        return $this;
+    }
 }
