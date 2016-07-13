@@ -247,7 +247,7 @@
     {{ block('form_widget_simple') }}
 {%- endblock url_widget -%}
 
-{% block items_item_row %}
+{% block sheet_item_data_row %}
     {% set group_attr = group_attr|default({})|merge({ 'class': group_attr.class|default('') ~ ' row' }) %}
     <div {{ block('row_container_attributes') }}>
         {{ form_row(form.title, { 'group_attr': { 'class': 'col-md-10' } }) }}
