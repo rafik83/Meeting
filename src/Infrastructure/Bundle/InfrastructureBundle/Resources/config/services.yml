@@ -1077,7 +1077,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'

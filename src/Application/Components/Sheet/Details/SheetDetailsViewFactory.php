@@ -18,8 +18,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\Object;
-use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SheetDetailsViewFactory
@@ -28,11 +26,6 @@ class SheetDetailsViewFactory
      * @var SheetInfoGuesser
      */
     private $sheetInfoGuesser;
-
-    /**
-     * @var ParticipantInfoGuesser
-     */
-    private $participantInfoGuesser;
 
     /**
      * @var RequestRepositoryInterface
@@ -58,7 +51,6 @@ class SheetDetailsViewFactory
      * SheetDetailsViewFactory constructor.
      *
      * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param ParticipantInfoGuesser     $participantInfoGuesser
      * @param RequestRepositoryInterface $requestRepository
      * @param TemplateDataFactory        $templateDataFactory
      * @param CommentRepositoryInterface $commentRepository
@@ -66,18 +58,16 @@ class SheetDetailsViewFactory
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
-        ParticipantInfoGuesser $participantInfoGuesser,
         RequestRepositoryInterface $requestRepository,
         TemplateDataFactory $templateDataFactory,
         CommentRepositoryInterface $commentRepository,
         TraceRepositoryInterface $traceRepository
     ) {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->requestRepository      = $requestRepository;
-        $this->templateDataFactory    = $templateDataFactory;
-        $this->commentRepository      = $commentRepository;
-        $this->traceRepository        = $traceRepository;
+        $this->sheetInfoGuesser    = $sheetInfoGuesser;
+        $this->requestRepository   = $requestRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->commentRepository   = $commentRepository;
+        $this->traceRepository     = $traceRepository;
     }
 
     /**
