@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
+use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
+use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 
@@ -26,19 +28,14 @@ class SheetDetailsView
     public $state;
 
     /**
-     * @var array
+     * @var OwnerView
+     */
+    public $owner;
+
+    /**
+     * @var ParticipantView[]
      */
     public $participants;
-
-    /**
-     * @var string
-     */
-    public $ownerEmail;
-
-    /**
-     * @var string
-     */
-    public $ownerPhone;
 
     /**
      * "Forfait"
@@ -102,26 +99,24 @@ class SheetDetailsView
     /**
      * SheetDetailsView constructor.
      *
-     * @param string          $title
-     * @param string          $state
-     * @param array           $participants
-     * @param string          $ownerEmail
-     * @param string          $ownerPhone
-     * @param int             $approvedRequests
-     * @param int             $pendingRequests
-     * @param int             $refusedRequests
-     * @param int             $approvedPropositions
-     * @param int             $pendingPropositions
-     * @param int             $refusedPropositions
-     * @param Comment[]       $comments
-     * @param Trace[]         $traces
+     * @param string            $title
+     * @param string            $state
+     * @param OwnerView         $owner
+     * @param ParticipantView[] $participants
+     * @param int               $approvedRequests
+     * @param int               $pendingRequests
+     * @param int               $refusedRequests
+     * @param int               $approvedPropositions
+     * @param int               $pendingPropositions
+     * @param int               $refusedPropositions
+     * @param Comment[]         $comments
+     * @param Trace[]           $traces
      */
     public function __construct(
         $title,
         $state,
+        OwnerView $owner,
         array $participants,
-        $ownerEmail,
-        $ownerPhone,
         $approvedRequests,
         $pendingRequests,
         $refusedRequests,
@@ -133,9 +128,8 @@ class SheetDetailsView
     ) {
         $this->title                = $title;
         $this->state                = $state;
+        $this->owner                = $owner;
         $this->participants         = $participants;
-        $this->ownerEmail           = $ownerEmail;
-        $this->ownerPhone           = $ownerPhone;
         $this->approvedRequests     = $approvedRequests;
         $this->pendingRequests      = $pendingRequests;
         $this->refusedRequests      = $refusedRequests;

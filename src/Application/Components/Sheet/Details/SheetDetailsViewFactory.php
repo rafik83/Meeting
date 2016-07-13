@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
+use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -93,30 +95,23 @@ class SheetDetailsViewFactory
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             // State
             $sheet->getState(),
+            new OwnerView(
+                $sheet->getOwner(),
+                $sheet->getOwner()->getAccount()->getFirstName(),
+                $sheet->getOwner()->getAccount()->getLastName(),
+                $sheet->getOwner()->getEmail(),
+                $sheet->getOwner()->getAccount()->getMobile(),
+                $sheet->getOwner()->getAccount()->getPhone(),
+                null === $sheet->getParticipantOwner()
+            ),
             // Participant names
             array_map(function (Participant $participant) use ($templateDataFactory, $locale) {
-                $objects = $templateDataFactory->createRegistrationFromParticipant($participant, $locale)->getProfileObjects();
-
-                $infos = [];
-
-                /** @var Object $object */
-                foreach ($objects as $object) {
-                    if ($object instanceof Object\ContentObjectInterface) {
-                        $label = $object->getLabel($locale, $participant->getSheet()->getEvent()->getFallback());
-                        if ($object instanceof Object\Nomenclature) {
-                            $infos[$label] = $object->getContentLabel();
-                        } else {
-                            $infos[$label] = $object->getContentValue();
-                        }
-                    }
-                }
-
-                return $infos;
+                return new ParticipantView(
+                    $participant->getId(),
+                    $templateDataFactory->createRegistrationFromParticipant($participant, $locale),
+                    $participant->isOwnerParticipant()
+                );
             }, $sheet->getParticipants()->toArray()),
-            // Owner email
-            $sheet->getOwner()->getEmail(),
-            // Owner phone
-            null !== $sheet->getParticipantOwner() ? $this->participantInfoGuesser->guessParticipantPhone($sheet->getParticipantOwner(), $locale) : $sheet->getOwner()->getAccount()->getPhone(),
             // Approved requests
             $this->requestRepository->countApprovedRequestSentBySheet($sheet),
             // Pending requests
