@@ -128,6 +128,10 @@ package:
         totalVat: '+ TVA applicable de %vat%%'
         totalPlusVat: Total à régler
         option: Option
+        promotion:
+            label: Offres de réductions
+            button:
+                label: Valider
         billingInfo:
             update: Modifier vos informations de facturation
         columns:
@@ -139,5 +143,64 @@ package:
     funnel:
         summary: 'Récapitulatif & Facturation'
         payment: Paiement
+    payment:
+        pay:
+            label: Payer
+        title: Paiement
+        total:
+            title: Total:
+            toPay: 'Le total à régler est de: %total%'
+        deposit:
+            title: Accompte:
+            toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
 billing_info:
     title: Info de facturation
+
+pro_forma:
+    title: 'Pro Forma - %date%'
+    bankInfo:
+        title: Coordonnées bancaires:
+    vatNumber:
+        title: 'TVA Intracommunautaire:'
+    date:
+        title: 'Date:'
+summary:
+    total: 'Total de la commande:'
+    vatRate: 'TVA applicable %vatRate%%:'
+    totalToPay: 'Total à régler:'
+    promotionCode: 'Offres de réductions'
+    group:
+        option:
+            title: Options
+    product:
+        included: 'Inclus:'
+    column:
+        title: Intitulé
+        unitPrice: Prix unitaire
+        quantity: Quantité
+        total: Total
+
+order:
+    list:
+        title: Liste de vos commandes
+        column:
+            date: Date
+            pro_forma: Pro Forma
+            total: Total
+        remainingToPay: Reste à payer
+    transaction:
+        list:
+            title: Liste de vos transactions
+            column:
+                date: Date
+                state: État
+                total: Somme
+                mode: Mode
+        state:
+            pending: En attente
+            paid: Réglé
+        mode:
+            bank_card: Carte bleu
+            bank_transfer: Transfert
+            bank_check: Chèque
+

@@ -212,4 +212,45 @@ class PackageGroup
     {
         return $this->translations->get($locale);
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'translations' => $this->getTranslationData(),
+            'rank'         => $this->rank,
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function serializeData()
+    {
+        return json_encode($this->getData());
+    }
+
+    /**
+     * @return array
+     */
+    public function getTranslationData()
+    {
+        $data = [];
+
+        foreach ($this->translations as $translation) {
+            $data[$translation->getLocale()] = $translation->getData();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function serializeTranslation()
+    {
+        return json_encode($this->getTranslationData());
+    }
 }

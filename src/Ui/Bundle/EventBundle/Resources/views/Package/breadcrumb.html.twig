@@ -20,7 +20,10 @@
             {% set remainingStep = step.index %}
         {% endfor %}
 
-        <li class="li {% if app.request.attributes.get('_route') ==  'event_package_summary' %}current{% endif %}" >
+        <li class="li
+        {% if app.request.attributes.get('_route') == 'event_package_summary' %}current{% endif %}
+        {% if app.request.attributes.get('_route') == 'event_package_payment' %}complete{% endif %}
+        " >
             {% if view.funnel.isCompleted %}
                 <a href="{{ path('event_package_summary', {'sheet': view.funnel.sheet.id}) }}">
             {% endif %}
@@ -28,10 +31,12 @@
             <div class="name-step">
                 <p>{{ 'package.funnel.summary'|trans }}</p>
             </div>
-            {% if view.funnel.isCompleted %}</a>{% endif %}
+            {% if view.funnel.isCompleted %}
+                </a>
+            {% endif %}
         </li>
 
-        <li class="li">
+        <li class="li {% if app.request.attributes.get('_route') == 'event_package_payment' %}current{% endif %}">
             <div class="number-step">{{ remainingStep + 2 }}</div>
             <div class="name-step">
                 <p>{{ 'package.funnel.payment'|trans }}</p>

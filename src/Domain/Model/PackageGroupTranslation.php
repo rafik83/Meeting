@@ -99,4 +99,22 @@ class PackageGroupTranslation
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'label' => $this->label,
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function serializeData()
+    {
+        return json_encode($this->getData());
+    }
 }

@@ -73,7 +73,6 @@ class BillingController extends Controller
         ]);
     }
 
-
     /**
      * @return string|null
      */

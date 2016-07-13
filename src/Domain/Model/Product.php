@@ -266,12 +266,12 @@ class Product
     /**
      * @return array
      */
-    public function getTranslationsSerializedData()
+    public function getTranslationsData()
     {
         $data = [];
 
         foreach ($this->translations->toArray() as $locale => $translation) {
-            $data[$locale] = $translation->getTranslationSerializedData();
+            $data[$locale] = $translation->getData();
         }
 
         return $data;
@@ -831,7 +831,7 @@ class Product
         foreach ($this->productIncluded->toArray() as $productIncluded) {
             $data[] = [
                 'quantity' => $productIncluded->getQuantity(),
-                'included' => $productIncluded->getIncluded()->getSerializedData(),
+                'included' => $productIncluded->getIncluded()->getData(),
             ];
         }
 
@@ -839,23 +839,24 @@ class Product
     }
 
     /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'id'               => $this->getId(),
+            'type'             => $this->getType(),
+            'translations'     => $this->getTranslationsData(),
+            'productsIncluded' => $this->getIncludedProductSerializedData(),
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getSerializedData()
     {
-        return json_encode(
-            [
-                'name'                => $this->name,
-                'unitPrice'           => $this->unitPrice,
-                'translations'        => $this->getTranslationsSerializedData(),
-                'quantityMax'         => $this->quantityMax,
-                'availabilityCurrent' => $this->availabilityCurrent,
-                'availabilityMax'     => $this->availabilityMax,
-                'updatable'           => $this->updatable,
-                'updatableUntil'      => $this->updatableUntil ? $this->updatableUntil->format('c') : null,
-                'productsIncluded'    => $this->getIncludedProductSerializedData(),
-            ]
-        );
+        return json_encode($this->getData());
     }
 
     /**

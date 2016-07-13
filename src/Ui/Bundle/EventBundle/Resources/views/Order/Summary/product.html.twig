@@ -1,0 +1,11 @@
+{% if product is defined %}
+    <tr>
+        <td>{{ product.label }}</td>
+        <td class="text-center">{{ product.price|localizedcurrency(product.currency) }} {{ ('package.vatMode.' ~ product.vatMode)|trans }}</td>
+        <td class="text-center">{{ product.quantity }}</td>
+        <td class="text-center">{{ product.total|localizedcurrency(product.currency) }} {{ ('package.vatMode.' ~ product.vatMode)|trans }}</td>
+        {% for included in product.includedProducts %}
+            {{ include('EventBundle:Order/Summary:included.html.twig', {included: included}) }}
+        {% endfor %}
+    </tr>
+{% endif %}

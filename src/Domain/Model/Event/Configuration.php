@@ -135,6 +135,14 @@ class Configuration
     }
 
     /**
+     * @return bool
+     */
+    public function isDepositAllowed()
+    {
+        return $this->allowDeposit;
+    }
+
+    /**
      * @return \DateTimeInterface
      */
     public function getDepositUntil()

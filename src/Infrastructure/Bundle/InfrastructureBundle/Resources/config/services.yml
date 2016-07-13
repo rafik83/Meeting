@@ -129,10 +129,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    vimeet_infrastructure.repository.cart_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\CartRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -194,7 +190,11 @@ services:
     repository.cart_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
         arguments:
-        - '@doctrine.orm.entity_manager'
+            - '@doctrine.orm.entity_manager'
+    repository.promotion_code_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRowRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.billing_info_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\BillingInfoRepository
         arguments:
@@ -980,6 +980,41 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
+    command.payment.choice_handler:
+        class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
+        arguments:
+            - '@repository.transaction'
+            - '@cart.convertor'
+            - '@cart_manager'
+            - '@payment.total_to_pay'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\Choice }
+    command.payment.choice_with_deposit_handler:
+        class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
+        arguments:
+            - '@repository.transaction'
+            - '@cart.convertor'
+            - '@cart_manager'
+            - '@payment.total_to_pay'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
+    command.event.promotion_code.add_handler:
+        class: Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler
+        arguments:
+           - '@cart_manager'
+           - '@repository.promotion_code_repository'
+           - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Add }
+    command.event.promotion_code.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Package\PromotionCode\RemoveHandler
+        arguments:
+           - '@repository.promotion_code_row_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
+
 
     #
     # Security
@@ -1380,7 +1415,10 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
-
+    query.package.summary.promotion_code_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQuery }
     query.package.summary.product_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler
     query.package.summary.group_view_query_handler:
@@ -1411,8 +1449,38 @@ services:
         arguments:
             - '@query.package.summary.groups_view_query_handler'
             - '@package.specification.vat_applicable'
+            - '@query.package.summary.promotion_code_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
+    query.order.summary.product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\ProductViewQueryHandler
+        arguments:
+            - '@order.row.product_included_info_guesser'
+    query.order.summary.group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler
+        arguments:
+            - '@query.order.summary.product_view_query_handler'
+    query.order.summary.groups_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
+        arguments:
+            - '@query.order.summary.group_view_query_handler'
+    query.order.summary.promotion_code_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodeViewQueryHandler
+    query.order.summary.promotion_codes_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler
+        arguments:
+            - '@query.order.summary.promotion_code_view_query_handler'
+    query.order.summary_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
+        arguments:
+            - '@query.order.summary.groups_view_query_handler'
+            - '@query.order.summary.promotion_codes_view_query_handler'
+    query.order.pro_forma_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
+        arguments:
+            - '@query.order.summary_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\ProFormaQuery }
 
     #
     # Elastic Transformer
@@ -1470,6 +1538,18 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
+            - '@repository.promotion_code_row_repository'
+    cart.convertor:
+        class: Proximum\Vimeet\Domain\Cart\Converter
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@repository.cart_row_repository'
+            - '@repository.cart_step_repository'
+            - '@repository.billing_info_repository'
+            - '@repository.promotion_code_row_repository'
+            - '@repository.promotion_code_repository'
+            - '@package.specification.vat_applicable'
+            - '@datetime'
 
     #
     # Promotion
@@ -1491,6 +1571,21 @@ services:
     #
     domain.meeting.slot.slot_generator:
         class: Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator
+
+    #
+    # Payment
+    #
+    payment.total_to_pay:
+        class: Proximum\Vimeet\Domain\Payment\TotalToPay
+        arguments:
+            - '@cart_manager'
+            - '@package.specification.vat_applicable'
+
+    #
+    # Order
+    #
+    order.row.product_included_info_guesser:
+        class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
 
     #
     # KeyDates

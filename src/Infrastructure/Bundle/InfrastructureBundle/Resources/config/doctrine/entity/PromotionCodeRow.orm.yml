@@ -1,20 +1,17 @@
-Proximum\Vimeet\Domain\Model\Cart:
+Proximum\Vimeet\Domain\Model\PromotionCodeRow:
     type:  entity
-    table: cart
+    table: promotion_code_row
     id:
         id:
             type: integer
             generator:
                 strategy: AUTO
-    fields:
-        data:
-            type: json_array
-        template:
-            type: json_array
-        createdAt:
-            type: datetime
-    oneToOne:
+    manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: "cascade"
+        promotionCode:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
             joinColumn:
                 onDelete: "cascade"

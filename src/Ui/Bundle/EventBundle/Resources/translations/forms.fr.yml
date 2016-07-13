@@ -91,8 +91,31 @@ form:
                 placeholder: NOM
             email:
                 placeholder: E-mail
+    payment_choice:
+        children:
+            mode:
+                label: 'Choisissez votre mode de paiement:'
+            paymentMode:
+                bank_card: Carte bleu
+                bank_transfer: Transfert
+                bank_check: Chèque
+    payment_choice_with_deposit:
+        children:
+            mode:
+                label: 'Choisissez votre mode de paiement:'
+            deposit:
+                label: "Choisissez si vous souhaitez payer le total ou l'accompte"
+            depositMode:
+                deposit: Accompte
+                total: Total
     package_summary_terms_of_sale:
         children:
             termsOfSale:
                 label: >
                     Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.
+    package_summary_promotion_code:
+        placeholder: Saisir votre code promotionnel
+        children:
+            submit:
+                label: Valider
+

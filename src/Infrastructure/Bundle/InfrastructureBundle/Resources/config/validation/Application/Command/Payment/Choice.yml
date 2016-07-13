@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Payment\Choice:
+    properties:
+        mode:
+            - NotBlank: ~

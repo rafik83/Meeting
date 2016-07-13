@@ -1,0 +1,16 @@
+{% if group is defined and group.products is not empty %}
+    <tr>
+        <td colspan="4" class="active">
+            {% if group.type == 'option' %}
+                <b>{{ 'summary.group.option.title'|trans }}</b> {{ group.label }}
+            {% else %}
+                <b>{{ group.label }}</b>
+            {% endif %}
+        </td>
+    </tr>
+    {% if group.products is not empty %}
+        {% for product in group.products %}
+            {{ include('EventBundle:Order/Summary:product.html.twig', {product: product}) }}
+        {% endfor %}
+    {% endif %}
+{% endif %}

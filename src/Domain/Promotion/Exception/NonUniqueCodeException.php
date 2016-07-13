@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Promotion\Exception;
 
-class NonUniqueCodeExcetpion extends PromotionCodeExcetpion
+class NonUniqueCodeException extends PromotionCodeException
 {
 }

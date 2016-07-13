@@ -484,4 +484,42 @@ class Package
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        $data = [];
+
+        foreach ($this->groups as $group) {
+            $data[$group->getId()] = $group->getData();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function serializeData()
+    {
+        return json_encode($this->getData());
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return PackageGroup
+     */
+    public function getGroupOfProduct(Product $product)
+    {
+        foreach ($this->groups as $group) {
+            if ($group->hasOption($product)) {
+                return $group;
+            }
+        }
+
+        return null;
+    }
 }
