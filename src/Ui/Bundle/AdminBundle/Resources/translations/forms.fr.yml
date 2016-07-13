@@ -1290,6 +1290,41 @@ form:
                 label: Echelle (en minutes)
             submit:
                 label: Enregistrer
+    nomenclature_create_type:
+        children:
+            title:
+                label: Titre
+            submit:
+                label: Enregistrer
+    nomenclature_update_type:
+        children:
+            title:
+                label: Titre
+            sort:
+                label: Tri
+                choice:
+                    sort_alpha: Trier la nomenclature par ordre alphabétique
+                    sort_file: Conserver l'ordre du fichier
+            submit:
+                label: Enregistrer
+    nomenclature_import_type:
+        children:
+            file:
+                label: Fichier
+                help: Un import réinitialisera la nomenclature sauf si le fichier importé provient d'un export.
+            charset:
+                label: Encodage
+    nomenclature_export_type:
+        children:
+            charset:
+                label: Encodage
+    nomenclature_assign_type:
+        children:
+            event:
+                label: Événement
+                help: La nomenclature sera dupliqué pour être assigné à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
+            submit:
+                label: Assigner
     event_practical_info_update:
         children:
             organiserName:
@@ -1309,12 +1344,22 @@ form:
     event_payment_conditions_update:
         children:
             allowDeposit:
-                label: Accompte autorisé
+                label: Activer le paiement en acompte
             minimumForDeposit:
-                label: Accompte minimum
+                label: Somme total à partir duquel l'acompte est applicable
             depositUntil:
-                label: Date de fin d'autorisation des accomptes
+                label: Date limite d'acceptation des acomptes
             deposit:
-                label: Pourcentage de l'accompte
+                label: Pourcentage de l'acompte
+            submit:
+                label: Enregistrer
+    event_configure_date:
+        children:
+            catalogOnlineDate:
+                label: Mise en ligne du catalogue
+            happeningsOpenDate:
+                label: Ouverture des inscriptions aux sous-événements
+            schedulePublishDate:
+                label: Publication des agendas définitifs (RDV)
             submit:
                 label: Enregistrer

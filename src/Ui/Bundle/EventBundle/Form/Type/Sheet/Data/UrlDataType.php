@@ -29,9 +29,10 @@ class UrlDataType extends AbstractType
 
         $builder
             ->add('url', UrlType::class, [
-                'label'       => $label ? $url->getOption('label')[$locale] : false,
-                'required'    => $url->getOption('required'),
-                'placeholder' => $url->getOption('placeholder')[$locale],
+                'label'              => $label ? $url->getOption('label')[$locale] : false,
+                'required'           => $url->getOption('required'),
+                'placeholder'        => $url->getOption('placeholder')[$locale],
+                'translation_domain' => false,
             ])
         ;
     }

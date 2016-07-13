@@ -1,0 +1,98 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{{ nomenclature.title }} <small>{{ nomenclature.event ? nomenclature.event.title : '' }}</small></h1>
+
+    {% set locales = nomenclature.locales %}
+
+    <div class="row with-submit-section">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+            <ul class="nav nav-tabs" role="tablist">
+                {% for locale in locales %}
+                    <li role="presentation"{% if loop.first %} class="active"{% endif %}><a href="#nomenclature-{{ locale }}" aria-controls="home" role="tab" data-toggle="tab">{{ locale }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <div class="tab-content">
+                {% for locale in locales %}
+                    <div role="tabpanel" class="tab-pane{% if loop.first %} active{% endif %}" id="nomenclature-{{ locale }}">
+                        {{ include('AdminBundle:Nomenclature:tree.html.twig', { 'nomenclature': nomenclature, 'locale': locale }, false) }}
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            {% if not nomenclature.event and is_granted('ROLE_SUPER_ADMIN') or is_granted('PERMISSION_EVENT_ACCESS', nomenclature.event) %}
+                <div class="well">
+                    <h3>{{ 'admin.nomenclature.read.configuration.title'|trans }}</h3>
+                    {{ form(update_form) }}
+                </div>
+                <div class="well">
+                    <h3>{{ 'admin.nomenclature.read.import.title'|trans }}</h3>
+                    {{ form_start(import_form) }}
+                        {{ form_errors(import_form) }}
+                        {{ form_row(import_form.file) }}
+                        {{ form_row(import_form.charset) }}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            {{ 'admin.nomenclature.read.import.button'|trans }}
+                        </button>
+                    {{ form_end(import_form) }}
+                </div>
+            {% endif %}
+            <div class="well">
+                <h3>{{ 'admin.nomenclature.read.export.title'|trans }}</h3>
+                <p class="help-block">{{ 'admin.nomenclature.read.export.help'|trans }}</p>
+                {{ form_start(export_form) }}
+                    {{ form_errors(export_form) }}
+                    {{ form_row(export_form.charset) }}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-download"></i>
+                        {{ 'admin.nomenclature.read.export.button'|trans }}
+                    </button>
+                {{ form_end(export_form) }}
+            </div>
+        </div>
+    </div>
+
+    {% if not nomenclature.event %}
+        <div class="modal fade" id="assignModal">
+            {{ form_start(assign_form) }}
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="configure-modal-label">{{ 'admin.nomenclature.assign.modal.title'|trans }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_row(assign_form.event) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.nomenclature.create.modal.close'|trans }}</button>
+                            {{ form_row(assign_form.submit) }}
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(assign_form) }}
+        </div>
+    {% endif %}
+
+    <div class="form">
+        <div class="form-group submit-section">
+            <div class="col-sm-3">
+                <a href="{{ nomenclature.event ? path('admin_nomenclature_event', { 'event': nomenclature.event.id }) : path('admin_nomenclature_globals') }}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ 'admin.goback.link'|trans }}
+                </a>
+            </div>
+            <div class="col-sm-9 text-right">
+                {% if not nomenclature.event %}
+                    <a href="#assignModal" data-toggle="modal" class="btn btn-primary">{{ 'admin.nomenclature.read.assign.button'|trans }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

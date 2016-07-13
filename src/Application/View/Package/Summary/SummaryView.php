@@ -61,24 +61,37 @@ class SummaryView
     public $funnel;
 
     /**
+     * @var bool
+     */
+    public $mustPayVat;
+
+    /**
      * @param Funnel             $funnel
      * @param GroupsView         $groupsView
+     * @param PromotionCodesView $promotionCodesView
      * @param string             $vatMode
      * @param float              $vat
      * @param float              $total
      * @param string             $currency
      * @param bool               $mustPayVat
-     * @param PromotionCodesView $promotionCodesView
      */
-    public function __construct(Funnel $funnel, GroupsView $groupsView, PromotionCodesView $promotionCodesView, $vatMode, $vat, $total, $currency, $mustPayVat)
-    {
-        $this->funnel       = $funnel;
-        $this->groups       = $groupsView;
-        $this->vatMode      = $vatMode;
-        $this->vat          = $vat;
-        $this->total        = $total;
-        $this->mustPayVat   = $mustPayVat;
-        $this->currency     = $currency;
+    public function __construct(
+        Funnel $funnel,
+        GroupsView $groupsView,
+        PromotionCodesView $promotionCodesView,
+        $vatMode,
+        $vat,
+        $total,
+        $currency,
+        $mustPayVat
+    ) {
+        $this->funnel     = $funnel;
+        $this->groups     = $groupsView;
+        $this->vatMode    = $vatMode;
+        $this->vat        = $vat;
+        $this->total      = $total;
+        $this->mustPayVat = $mustPayVat;
+        $this->currency   = $currency;
 
         if ($mustPayVat) {
             $this->totalVat     = ($total * $vat) / 100;

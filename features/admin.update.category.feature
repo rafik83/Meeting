@@ -10,6 +10,8 @@ Feature: Update a participation category
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Category.yml        |

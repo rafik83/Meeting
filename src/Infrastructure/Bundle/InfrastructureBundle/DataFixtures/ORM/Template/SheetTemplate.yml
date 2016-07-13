@@ -175,22 +175,35 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 required: false
                                 default: "3"
                     -
-                        696dc236:
+                        d6fa1ac7:
                             component: "object"
-                            type: "collection"
+                            type: "tags"
                             config:
                                 style: "style-1"
                                 label:
                                     fr: "Repères"
                                     en: "Landmarks"
                                 placeholder:
-                                    fr: ""
+                                    fr: "Saisissez un repère"
                                     en: ""
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
-                                default: "3"
+                                tags:
+                                    -
+                                        tag: "sheet_organization_turnover"
+                                        label:
+                                            fr: "Chiffre d'affaires"
+                                            en: "Turnover"
+                                    -
+                                        tag: "sheet_organization_staff"
+                                        label:
+                                            fr: "Effectifs"
+                                            en: "Staff"
+                                required: false
+                                collection: true
+                                default: 3
+                                translatable: true
                         a9271999:
                             component: "object"
                             type: "collection"

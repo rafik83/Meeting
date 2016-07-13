@@ -9,7 +9,12 @@ Feature: Register and login user
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     When I go to this page "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
@@ -83,6 +88,7 @@ Feature: Register and login user
       | Nom                | Dupont       |
       | Téléphone portable | +33698765432 |
       | Téléphone fixe     | +33198765432 |
+    Then I check the "gender.man" radio
     And I select "Informatique" from "block[6c4a3a4f][item][first]"
     And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
     And I press "common.next"

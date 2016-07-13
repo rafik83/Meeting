@@ -9,7 +9,12 @@ Feature: Update participant profile
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016Event.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
     And I follow "event.link.see_my_sheet"
@@ -26,6 +31,7 @@ Feature: Update participant profile
       | Nom                | Yupont      |
       | Téléphone portable | +0698765432 |
       | Téléphone fixe     | +0198765432 |
+    And I check the "gender.man" radio
     And I press "common.validate"
     Then I should be on this page "/fr/account/sheet/1/participant/1"
     And I should see "YY"
