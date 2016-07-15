@@ -115,6 +115,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\OrderRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
     vimeet_infrastructure.repository.product_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
         arguments:
@@ -1481,6 +1482,13 @@ services:
             - '@query.order.summary_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\ProFormaQuery }
+    query.order.order_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
 
     #
     # Elastic Transformer
