@@ -41,15 +41,10 @@ class UpdateHandler
         $localesTitleAlreadyExists = [];
 
         foreach ($update->translations as $locale => $translation) {
-            if ($this->typeRepository->typeExists(
-                $update->type->getEvent(),
-                $locale,
-                $translation['title'],
-                $update->type
-            )) {
+            if ($this->typeRepository->typeExists($update->type->getEvent(), $locale, $translation['title'], $update->type)) {
                 $localesTitleAlreadyExists[] = $locale;
             } else {
-                $type->getTranslations()->get($locale)->update($translation['title'], $translation['description']);
+                $type->translate($locale, $translation['title'], $translation['description']);
             }
         }
 

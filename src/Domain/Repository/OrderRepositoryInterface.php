@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface OrderRepositoryInterface
@@ -31,4 +33,15 @@ interface OrderRepositoryInterface
      * @return Order[]
      */
     public function findBySheet(Sheet $sheet);
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param int    $page
+     * @param int    $limit
+     * @param string $locale
+     *
+     * @return PaginatedResult
+     */
+    public function findByEvent(Event $event, array $filters, $page, $limit, $locale);
 }

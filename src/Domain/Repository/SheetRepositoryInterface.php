@@ -112,4 +112,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function findFullSheets(array $sheets);
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEvent(Event $event);
 }

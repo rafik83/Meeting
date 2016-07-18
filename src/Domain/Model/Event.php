@@ -86,11 +86,6 @@ class Event implements EventInterface
     /**
      * @var string
      */
-    private $bankInfo;
-
-    /**
-     * @var string
-     */
     private $legalInformation;
 
     /**
@@ -226,7 +221,7 @@ class Event implements EventInterface
      *
      * @return string
      */
-    public function getIban($locale)
+    public function getBankInfo($locale)
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBankInfo() : '';
     }
@@ -457,14 +452,6 @@ class Event implements EventInterface
         $this->organiserEmail = $organiserEmail;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBankInfo()
-    {
-        return $this->bankInfo;
     }
 
     /**

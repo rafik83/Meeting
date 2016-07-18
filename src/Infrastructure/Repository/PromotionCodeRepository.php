@@ -102,8 +102,9 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
             ->where('promotion_code.event = :event')
             ->setParameter('event', $event)
             ->andWhere('promotion_code.code = :code')
-            ->setParameter('code', $code);
+            ->setParameter('code', $code)
+            ->setMaxResults(1);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

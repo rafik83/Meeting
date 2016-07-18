@@ -28,12 +28,12 @@ class Row
     /**
      * @var string
      */
-    private $product;
+    private $data;
 
     /**
      * @var Product
      */
-    private $linkedProduct;
+    private $product;
 
     /**
      * @var int
@@ -46,19 +46,26 @@ class Row
     private $price;
 
     /**
+     * @var null|int
+     */
+    private $groupId;
+
+    /**
      * Row constructor.
      *
-     * @param Order   $order
-     * @param Product $linkedProduct
-     * @param int     $quantity
+     * @param Order    $order
+     * @param Product  $product
+     * @param int      $quantity
+     * @param int|null $groupId
      */
-    public function __construct(Order $order, Product $linkedProduct, $quantity)
+    public function __construct(Order $order, Product $product, $quantity, $groupId = null)
     {
-        $this->order         = $order;
-        $this->quantity      = $quantity;
-        $this->linkedProduct = $linkedProduct;
-        $this->price         = $linkedProduct->getUnitPrice();
-        $this->product       = $linkedProduct->getSerializedData();
+        $this->order    = $order;
+        $this->quantity = $quantity;
+        $this->data     = $product->getSerializedData();
+        $this->product  = $product;
+        $this->price    = $product->getUnitPrice();
+        $this->groupId  = $groupId;
     }
 
     /**
@@ -78,7 +85,7 @@ class Row
     }
 
     /**
-     * @return string
+     * @return Product
      */
     public function getProduct()
     {
@@ -102,10 +109,76 @@ class Row
     }
 
     /**
-     * @return Product
+     * @return string
      */
-    public function getLinkedProduct()
+    public function getData()
     {
-        return $this->linkedProduct;
+        return $this->data;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType()
+    {
+        $data = json_decode($this->data, true);
+
+        return isset($data['type']) ? $data['type'] : null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getProductId()
+    {
+        $data = json_decode($this->data, true);
+
+        return isset($data['id']) ? $data['id'] : null;
+    }
+
+    /**
+     * @param string      $locale
+     * @param string|null $fallback
+     *
+     * @return string
+     */
+    public function getLabel($locale, $fallback = null)
+    {
+        $data = json_decode($this->data, true);
+
+        if (!isset($data['translations'])) {
+            return '';
+        }
+
+        if (isset($data['translations'][$locale]) && isset($data['translations'][$locale]['title'])) {
+            return $data['translations'][$locale]['title'];
+        }
+
+        if (null !== $fallback
+            && isset($data['translations'][$fallback])
+            && isset($data['translations'][$fallback]['title'])
+        ) {
+            return $data['translations'][$fallback]['title'];
+        }
+
+        return '';
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasIncludedProduct()
+    {
+        $data = json_decode($this->data, true);
+
+        return isset($data['productsIncluded']) && !empty($data['productsIncluded']) ? true : false;
     }
 }

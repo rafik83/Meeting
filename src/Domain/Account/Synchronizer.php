@@ -35,6 +35,7 @@ class Synchronizer
         Tag::PARTICIPANT_COUNTRY   => 'Country',
         Tag::PARTICIPANT_WEBSITE   => 'Website',
         Tag::SHEET_ORGANIZATION    => 'Company',
+        Tag::PARTICIPANT_GENDER    => 'Gender',
     ];
 
     /**

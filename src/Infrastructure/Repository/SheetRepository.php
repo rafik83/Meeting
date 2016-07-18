@@ -265,4 +265,20 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $sheets;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(sheet.id)')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

@@ -1,11 +1,17 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1>{{ event.title }}</h1>
+    <div class="panel panel-default pull-right">
+        <div class="panel-heading">
+            {{ 'admin.sheet.details.remainingToPay'|trans }}
+        </div>
+        <div class="panel-body text-center h1">
+            {{ details.remainingToPay|localizedcurrency(event.currency) }}
+        </div>
+    </div>
 
-    <h2>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h2>
+    <h1>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h1>
 
-    <h3>{{ 'admin.sheet.details.participants'|trans }}</h3>
     <table class="table table-bordered">
         <tr>
             <th>{{ 'admin.sheet.details.participants'|trans }}</th>
@@ -39,6 +45,68 @@
             <td>{{ details.ownerPhone }}</td>
         </tr>
     </table>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>{{ 'admin.sheet.details.orders'|trans }}</h3>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{{ 'admin.order.id'|trans }}</th>
+                    <th>{{ 'admin.order.createdAt'|trans }}</th>
+                    <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in details.orders %}
+                    <tr>
+                        <td>
+                            {{ order.id }}
+                        </td>
+                        <td>
+                            {{ order.createdAt|localizeddate('medium', 'short') }}
+                        </td>
+                        <td class="text-right">
+                            {{ order.total|localizedcurrency(order.currency) }}
+                            {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h3>{{ 'admin.sheet.details.transactions'|trans }}</h3>
+
+            <table class="table table-hover">
+                <thead>
+                <th>{{ 'admin.transaction.column.date'|trans }}</th>
+                <th>{{ 'admin.transaction.column.state'|trans }}</th>
+                <th>{{ 'admin.transaction.column.mode'|trans }}</th>
+                <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
+                </thead>
+                <tbody>
+                {% for transaction in details.transactions %}
+                    <tr>
+                        <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
+                        <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
+                        <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <h3>{{ 'admin.sheet.details.meeting.request.title'|trans }}</h3>
 

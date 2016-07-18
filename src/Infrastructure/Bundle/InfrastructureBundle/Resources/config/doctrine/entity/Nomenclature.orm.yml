@@ -13,3 +13,14 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
             type: integer
         value:
             type: json_array
+        sort:
+            type: boolean
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+        original:
+            targetEntity: Proximum\Vimeet\Domain\Model\Nomenclature
+            joinColumn:
+                onDelete: SET NULL

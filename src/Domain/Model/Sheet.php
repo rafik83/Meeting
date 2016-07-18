@@ -359,7 +359,7 @@ class Sheet implements TraceableInterface
      */
     public function getOrders()
     {
-        return $this->orders;
+        return $this->orders->toArray();
     }
 
     /**

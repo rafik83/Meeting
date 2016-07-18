@@ -24,6 +24,7 @@ final class Tag
     const PARTICIPANT_CITY            = 'participant_city';
     const PARTICIPANT_COUNTRY         = 'participant_country';
     const PARTICIPANT_WEBSITE         = 'participant_website';
+    const PARTICIPANT_GENDER          = 'participant_gender';
     const BILLING_NAME                = 'billing_name';
     const BILLING_ADDRESS             = 'billing_address';
     const BILLING_CITY                = 'billing_city';
@@ -37,6 +38,8 @@ final class Tag
     const SHEET_TITLE                 = 'sheet_title';
     const SHEET_ORGANIZATION          = 'sheet_organization';
     const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
+    const SHEET_ORGANIZATION_TURNOVER = 'sheet_organization_turnover';
+    const SHEET_ORGANIZATION_STAFF    = 'sheet_organization_staff';
 
     // Setter
     const PARTICIPANT_DATA = 'participant_data';
@@ -71,6 +74,7 @@ final class Tag
             self::PARTICIPANT_CITY,
             self::PARTICIPANT_COUNTRY,
             self::PARTICIPANT_WEBSITE,
+            self::PARTICIPANT_GENDER,
         ];
     }
 
@@ -102,6 +106,8 @@ final class Tag
             self::SHEET_ORGANIZATION,
             self::SHEET_TITLE,
             self::SHEET_ORGANIZATION_CATEGORY,
+            self::SHEET_ORGANIZATION_TURNOVER,
+            self::SHEET_ORGANIZATION_STAFF,
         ];
     }
 }

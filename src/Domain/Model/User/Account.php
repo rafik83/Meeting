@@ -52,25 +52,30 @@ class Account
      */
     private $website;
 
-        /**
+    /**
      * @var string
      */
     private $address;
 
-        /**
+    /**
      * @var string
      */
     private $zipCode;
 
-        /**
+    /**
      * @var string
      */
     private $city;
 
-        /**
+    /**
      * @var string
      */
     private $country;
+
+    /**
+     * @var string
+     */
+    private $gender;
 
     /**
      * @return string
@@ -262,5 +267,21 @@ class Account
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
     }
 }

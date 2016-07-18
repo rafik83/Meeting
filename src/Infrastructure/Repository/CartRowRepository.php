@@ -90,4 +90,20 @@ class CartRowRepository implements CartRowRepositoryInterface
         $this->entityManager->remove($cartRow);
         $this->entityManager->flush($cartRow);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteForSheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(CartRow::class, 'cartRow')
+            ->where('cartRow.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        $queryBuilder->getQuery()->execute();
+    }
 }

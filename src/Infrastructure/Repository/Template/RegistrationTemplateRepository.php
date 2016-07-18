@@ -81,9 +81,17 @@ class RegistrationTemplateRepository implements RegistrationTemplateRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function set(RegistrationTemplate $registrationTemplate)
+    public function add(RegistrationTemplate $registrationTemplate)
     {
         $this->entityManager->persist($registrationTemplate);
+        $this->entityManager->flush($registrationTemplate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(RegistrationTemplate $registrationTemplate)
+    {
         $this->entityManager->flush($registrationTemplate);
     }
 }

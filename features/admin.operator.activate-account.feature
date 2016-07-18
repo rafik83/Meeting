@@ -10,6 +10,8 @@ Feature: Operator Activate Account
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | AdminWithActivateAccountToken.yml                                        |
     When I go to this page "/admin/fr/activate-account/azertyuiopqsdfghjklmwxcvbn"
     Then I fill in the following:

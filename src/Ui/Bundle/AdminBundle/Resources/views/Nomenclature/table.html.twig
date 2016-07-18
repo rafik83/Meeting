@@ -1,0 +1,34 @@
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>{{ 'admin.nomenclature.table.title'|trans }}</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for nomenclature in nomenclatures %}
+        <tr>
+            <td>
+                <a href="{{ path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}">
+                    {{ nomenclature.title }}
+                </a>
+            </td>
+            <td>
+                {{ 'admin.nomenclature.table.depth'|transchoice(nomenclature.depth, { '%depth%': nomenclature.depth }) }}
+            </td>
+            <td class="text-right">
+                <a href="{{ path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}" class="btn btn-primary btn-sm">
+                    {{ 'admin.nomenclature.table.read'|trans }}
+                </a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">
+                {{ 'admin.zero-result'|trans }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

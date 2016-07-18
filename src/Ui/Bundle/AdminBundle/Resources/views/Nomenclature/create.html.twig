@@ -1,0 +1,23 @@
+<div>
+    <a href="#createModal" data-toggle="modal" class="btn btn-success">{{ 'admin.nomenclature.create.button'|trans }}</a>
+</div>
+
+<div class="modal fade" id="createModal">
+    {{ form_start(form) }}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="configure-modal-label">{{ 'admin.nomenclature.create.modal.title'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.nomenclature.create.modal.close'|trans }}</button>
+                    {{ form_row(form.submit) }}
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>

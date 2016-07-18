@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Package\Funnel;
 
 use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Funnel
 {
@@ -29,6 +30,19 @@ class Funnel
      * @var CartStep
      */
     private $cartStep;
+
+    /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function __construct(Sheet $sheet)
+    {
+        $this->sheet = $sheet;
+    }
 
     /**
      * @param int $currentIndex
@@ -161,5 +175,13 @@ class Funnel
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
     }
 }

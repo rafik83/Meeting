@@ -20,13 +20,35 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = EventFactory::createEvent();
+        $event = new Event(
+            'barfoo',
+            'en',
+            ['fr', 'en'],
+            Event::VAT_MODE_ATI,
+            20,
+            'FR',
+            'USD',
+            'Europe/Paris',
+            'hello.vimeet.proximum.dev',
+            'proximum'
+        );
 
         $catalogOnlineDate   = new \DateTime('2016-06-23 12:00:00');
         $happeningsOpenDate  = new \DateTime('2016-06-21 12:00:00');
         $schedulePublishDate = new \DateTime('2016-06-30 12:00:00');
 
-        $expectedEvent = EventFactory::createEvent();
+        $expectedEvent = new Event(
+            'barfoo',
+            'en',
+            ['fr', 'en'],
+            Event::VAT_MODE_ATI,
+            20,
+            'FR',
+            'USD',
+            'Europe/Paris',
+            'hello.vimeet.proximum.dev',
+            'proximum'
+        );
         $expectedEvent->getConfiguration()->setDates($catalogOnlineDate, $happeningsOpenDate, $schedulePublishDate);
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);

@@ -50,9 +50,25 @@ class ProductRepository implements ProductRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
             ->select('product, productIncluded, SUM(row.quantity) AS bought')
             ->from(Product::class, 'product')
-            ->leftJoin(Row::class, 'row', 'WITH', 'row.linkedProduct = product')
+            ->leftJoin(Row::class, 'row', 'WITH', 'row.product = product')
             ->leftJoin('product.productIncluded', 'productIncluded')
             ->where('product.event = :event')
             ->setParameter('event', $event)

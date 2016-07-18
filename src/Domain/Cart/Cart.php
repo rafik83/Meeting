@@ -11,9 +11,16 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 
 class Cart
 {
@@ -28,6 +35,11 @@ class Cart
     private $rows;
 
     /**
+     * @var ArrayCollection of PromotionCodeRow
+     */
+    private $promotionCodeRows;
+
+    /**
      * @var int
      */
     private $currentStep;
@@ -37,13 +49,15 @@ class Cart
      *
      * @param Sheet     $sheet
      * @param CartRow[] $rows
+     * @param array     $promotionRows
      * @param int       $currentStep
      */
-    public function __construct(Sheet $sheet, array $rows, $currentStep = null)
+    public function __construct(Sheet $sheet, array $rows, array $promotionRows, $currentStep = null)
     {
-        $this->sheet       = $sheet;
-        $this->rows        = new ArrayCollection($rows);
-        $this->currentStep = $currentStep;
+        $this->sheet             = $sheet;
+        $this->rows              = new ArrayCollection($rows);
+        $this->promotionCodeRows = new ArrayCollection($promotionRows);
+        $this->currentStep       = $currentStep;
     }
 
     /**
@@ -179,6 +193,19 @@ class Cart
     }
 
     /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function hasPromotionCode(PromotionCode $promotionCode)
+    {
+        return $this->promotionCodeRows->exists(
+            function ($key, PromotionCodeRow $promotionCodeRow) use ($promotionCode) {
+                return $promotionCodeRow->getPromotionCode() === $promotionCode;
+            });
+    }
+
+    /**
      * @param Product $product
      *
      * @return CartRow
@@ -221,6 +248,14 @@ class Cart
     }
 
     /**
+     * @return PromotionCodeRow[]
+     */
+    public function getPromotionCodeRows()
+    {
+        return $this->promotionCodeRows->toArray();
+    }
+
+    /**
      * Clear the cart
      */
     public function clear()
@@ -256,5 +291,134 @@ class Cart
         $this->currentStep = $currentStep;
 
         return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        $rows = $this->rows->toArray();
+
+        return empty($rows) ? 0 : array_reduce(
+            $rows,
+            function ($carry, CartRow $row) {
+                return $carry + ($row->getQuantity() * $row->getProduct()->getUnitPrice());
+            },
+            0
+        );
+    }
+
+    /**
+     * @param PromotionCode      $promotionCode
+     * @param \DateTimeInterface $dateTime
+     *
+     * @throws PromotionCodeOutDatedException
+     * @throws PromotionCodeSoldOutException
+     * @throws PromotionCodeAlreadyExistException
+     * @throws PromotionCodeNotUsedException
+     * @throws PromotionCodeConflictException
+     *
+     * @return Cart
+     */
+    public function apply(PromotionCode $promotionCode, \DateTimeInterface $dateTime)
+    {
+        if ($promotionCode->isOutDated($dateTime)) {
+            throw new PromotionCodeOutDatedException();
+        }
+
+        if ($promotionCode->isSoldOut()) {
+            throw new PromotionCodeSoldOutException();
+        }
+
+        if ($this->hasPromotionCode($promotionCode)) {
+            throw new PromotionCodeAlreadyExistException();
+        }
+
+        if (!$this->cartRowProductInPromotionCode($promotionCode)) {
+            throw new PromotionCodeNotUsedException();
+        }
+
+        if ($this->isPromotionHaveConflict($promotionCode)) {
+            throw new PromotionCodeConflictException();
+        }
+
+        $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
+
+        return $this;
+    }
+
+    /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function cartRowProductInPromotionCode(PromotionCode $promotionCode)
+    {
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            if (null !== $this->getCartRowForProduct($promotion->getProduct())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Conflict when two promotion code offer promotion on the same product
+     *
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function isPromotionHaveConflict(PromotionCode $promotionCode)
+    {
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            foreach ($this->getPromotionCodeRows() as $promotionCodeRow) {
+                if ($promotionCodeRow->getPromotionCode()->hasPromotion($promotion->getProduct())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get total discount for a specific promotion code
+     *
+     * @param PromotionCode $promotionCode
+     *
+     * @return float|int
+     */
+    public function getDiscount(PromotionCode $promotionCode)
+    {
+        $total = 0;
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
+                if ($cartRow->getQuantity() < $promotion->getQuantity()) {
+                    $total -= $cartRow->getQuantity() * $promotion->getDiscount();
+                } else {
+                    $total -= $promotion->getQuantity() * $promotion->getDiscount();
+                }
+            }
+        }
+
+        return $total;
+    }
+
+    /**
+     * Get total discount of all promotion code on the cart
+     *
+     * @return float|int
+     */
+    public function getTotalDiscount()
+    {
+        $total = 0;
+        foreach ($this->getPromotionCodeRows() as $promotionCodeRow) {
+            $total += $this->getDiscount($promotionCodeRow->getPromotionCode());
+        }
+
+        return $total;
     }
 }
