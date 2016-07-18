@@ -36,10 +36,12 @@
                     {{ order.id }}
                 </td>
                 <td>
-                    {{ order.title }}
+                    <a href="{{ path('admin_sheet_details', { event: event.id, sheet: order.sheetId }) }}">
+                        {{ order.sheetTitle }}
+                    </a>
                 </td>
                 <td>
-                    {{ order.type }}
+                    {{ order.sheetType }}
                 </td>
                 <td>
                     {{ order.follower }}
@@ -48,7 +50,7 @@
                     {{ order.createdAt|localizeddate('medium', 'short') }}
                 </td>
                 <td class="text-right">
-                    {{ order.total|localizedcurrency(order.currency) }} {{ ('admin.event.vatMode.' ~ order.vatMode)|trans }}
+                    {{ order.total|localizedcurrency(order.currency) }}
                 </td>
             </tr>
         {% else %}

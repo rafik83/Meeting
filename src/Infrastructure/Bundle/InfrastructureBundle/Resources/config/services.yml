@@ -1083,6 +1083,7 @@ services:
             - '@template.template_data_factory'
             - '@repository.sheet.comment_repository'
             - '@repository.trace_repository'
+            - '@order.balance'
     sheet.sheet_meetings_list_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
         arguments:
@@ -1592,6 +1593,11 @@ services:
     #
     # Order
     #
+    order.balance:
+        class: Proximum\Vimeet\Domain\Order\Balance
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@repository.transaction'
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
 

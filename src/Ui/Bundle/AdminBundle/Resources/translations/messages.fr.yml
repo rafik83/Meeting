@@ -275,6 +275,19 @@ admin:
         follower: Suivi commercial
         createdAt: Créée le
         total: Total
+    transaction:
+        column:
+            date: Date
+            state: Statut
+            mode: Mode de paiement
+            total: Total
+        state:
+            pending: En attente
+            paid: Réglé
+        mode:
+            bank_card: Carte bleu
+            bank_transfer: Transfert
+            bank_check: Chèque
     product:
         link: Catalogue de produits
         title: Catalogue de produits
@@ -324,6 +337,9 @@ admin:
             auto: 'automatiquement'
             validate: 'Validée le %at%'
         details:
+            orders: Commandes
+            transactions: Transactions
+            remainingToPay: Solde restant dû
             participants: Participants
             owner:
                 email: Email du propriétaire
@@ -384,9 +400,6 @@ admin:
         vatMode:
             et: HT
             ati: TTC
-        configuration:
-            key_dates:
-                title: Date clé de l'événement
     rule:
         link: Qui voit qui
     type:

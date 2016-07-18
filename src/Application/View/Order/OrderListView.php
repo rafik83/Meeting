@@ -18,14 +18,19 @@ class OrderListView
     public $id;
 
     /**
-     * @var string
+     * @var int
      */
-    public $title;
+    public $sheetId;
 
     /**
      * @var string
      */
-    public $type;
+    public $sheetTitle;
+
+    /**
+     * @var string
+     */
+    public $sheetType;
 
     /**
      * @var string
@@ -54,8 +59,9 @@ class OrderListView
 
     /**
      * @param int                $id
-     * @param string             $title
-     * @param string             $type
+     * @param int                $sheetId
+     * @param string             $sheetTitle
+     * @param string             $sheetType
      * @param string             $follower
      * @param \DateTimeInterface $createdAt
      * @param float              $total
@@ -64,21 +70,23 @@ class OrderListView
      */
     public function __construct(
         $id,
-        $title,
-        $type,
+        $sheetId,
+        $sheetTitle,
+        $sheetType,
         $follower,
         \DateTimeInterface $createdAt,
         $total,
         $vatMode,
         $currency
     ) {
-        $this->id        = $id;
-        $this->title     = $title;
-        $this->type      = $type;
-        $this->follower  = $follower;
-        $this->createdAt = $createdAt;
-        $this->total     = $total;
-        $this->vatMode   = $vatMode;
-        $this->currency  = $currency;
+        $this->id         = $id;
+        $this->sheetId    = $sheetId;
+        $this->sheetTitle = $sheetTitle;
+        $this->sheetType  = $sheetType;
+        $this->follower   = $follower;
+        $this->createdAt  = $createdAt;
+        $this->total      = $total;
+        $this->vatMode    = $vatMode;
+        $this->currency   = $currency;
     }
 }
