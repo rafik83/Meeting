@@ -47,7 +47,7 @@ class OwnerView
     /**
      * @var bool
      */
-    public $shouldBeDisplay;
+    public $shouldBeDisplayed;
 
     /**
      * @param User   $user
@@ -56,16 +56,16 @@ class OwnerView
      * @param string $email
      * @param string $mobile
      * @param string $phone
-     * @param bool   $shouldBeDisplay
+     * @param bool   $shouldBeDisplayed
      */
-    public function __construct(User $user, $firstName, $lastName, $email, $mobile, $phone, $shouldBeDisplay = true)
+    public function __construct(User $user, $firstName, $lastName, $email, $mobile, $phone, $shouldBeDisplayed = true)
     {
-        $this->user            = $user;
-        $this->firstName       = $firstName;
-        $this->lastName        = $lastName;
-        $this->email           = $email;
-        $this->mobile          = $mobile;
-        $this->phone           = $phone;
-        $this->shouldBeDisplay = $shouldBeDisplay;
+        $this->user              = $user;
+        $this->firstName         = $firstName;
+        $this->lastName          = $lastName;
+        $this->email             = $email;
+        $this->mobile            = $mobile;
+        $this->phone             = $phone;
+        $this->shouldBeDisplayed = $shouldBeDisplayed;
     }
 }
