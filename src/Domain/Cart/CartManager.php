@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManager
 {
@@ -28,15 +29,23 @@ class CartManager
     private $cartStepRepository;
 
     /**
-     * @param CartRowRepositoryInterface  $cartRowRepository
-     * @param CartStepRepositoryInterface $cartStepRepository
+     * @var PromotionCodeRowRepositoryInterface
+     */
+    private $promotionCodeRowRepository;
+
+    /**
+     * @param CartRowRepositoryInterface          $cartRowRepository
+     * @param CartStepRepositoryInterface         $cartStepRepository
+     * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
-        CartStepRepositoryInterface $cartStepRepository
+        CartStepRepositoryInterface $cartStepRepository,
+        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
     ) {
-        $this->cartRowRepository  = $cartRowRepository;
-        $this->cartStepRepository = $cartStepRepository;
+        $this->cartRowRepository          = $cartRowRepository;
+        $this->cartStepRepository         = $cartStepRepository;
+        $this->promotionCodeRowRepository = $promotionCodeRowRepository;
     }
 
     /**
@@ -50,6 +59,7 @@ class CartManager
         return new Cart(
             $sheet,
             $this->cartRowRepository->findBySheet($sheet),
+            $this->promotionCodeRowRepository->findBySheet($sheet),
             $currentStep
         );
     }
@@ -78,6 +88,20 @@ class CartManager
                 $this->cartRowRepository->set($row);
             } else {
                 $this->cartRowRepository->add($row);
+            }
+        }
+
+        // Save / add promotion code rows
+        foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
+            if ($promotionCodeRow->getId()) {
+                // Remove promotionCodeRow if the discount is not usable anymore
+                if (0 > $cart->getDiscount($promotionCodeRow->getPromotionCode())) {
+                    $this->promotionCodeRowRepository->set($promotionCodeRow);
+                } else {
+                    $this->promotionCodeRowRepository->delete($promotionCodeRow);
+                }
+            } else {
+                $this->promotionCodeRowRepository->add($promotionCodeRow);
             }
         }
 

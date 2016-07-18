@@ -69,6 +69,9 @@ flash:
             success: Les informations de votre forfait ont bien été enregistrées
         payment_mode:
             success: Votre mode de paiement a bien été pris en compte
+        promotion:
+            delete:
+                success: Votre code promotionnel a bien été supprimé
     admin:
         reset_password_token:
             success: Vous allez recevoir un email vous permettant de créer un nouveau mot de passe
@@ -189,6 +192,13 @@ flash:
         package:
             create:
                 success: La formule a bien été créée
+        nomenclature:
+            update:
+                success: La nomenclature a bien été mise à jour
+            import:
+                success: La nomenclature a bien été importée
+            assign:
+                success: La nomenclature a bien été assignée
     activate_account:
         success: Votre compte a été activé avec succès
     change_mail:
@@ -218,3 +228,6 @@ flash:
     admin.event.practicalInfo:
         update:
             success: Les informations pratiques ont bien été mises à jour
+    payment:
+        deposit:
+            notAvailable: "Nous sommes désolé, l'accompte n'est plus disponible"

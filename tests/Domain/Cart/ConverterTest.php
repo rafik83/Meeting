@@ -1,0 +1,134 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Cart;
+
+use Prophecy\Argument;
+use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\Converter;
+use Proximum\Vimeet\Domain\Model\Address;
+use Proximum\Vimeet\Domain\Model\BillingInfo;
+use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Promotion;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
+use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class ConverterTest extends \PHPUnit_Framework_TestCase
+{
+    public function testToOrder()
+    {
+        $datetime = new \DateTime();
+        $event    = EventFactory::createEvent();
+        $type     = new Type($event);
+        $owner    = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
+        $package  = new Package($event, 'title', $datetime);
+        $sheet    = new Sheet($event, $type, [], $owner, $datetime);
+        $type->setPackage($package);
+        $billingInfo = new BillingInfo($sheet);
+        $billingInfo->update(
+            'lastname',
+            'firstname',
+            'function',
+            'phone',
+            'mobile',
+            'company',
+            'email@email.com',
+            new Address('street', 'zipcode', 'city', 'FR'),
+            'vatNumber'
+        );
+
+        $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
+        $plan->translate('fr', 'plan', '', '', '', '');
+        $plan->translate('en', 'plan', '', '', '', '');
+        $chair = Product::createOption($event, 'chair', '', 100, 2, 20,100, true, null, null, null);
+        $chair->translate('fr', 'chair', '', '', '', '');
+        $chair->translate('en', 'chair', '', '', '', '');
+
+        $promotionCode    = new PromotionCode($event, 'title', 'code', 20, null);
+        $promotionCode->setPromotion($chair, Promotion::TYPE_PERCENT_OFF, 50);
+        $promotionCodeRow = new PromotionCodeRow($sheet, $promotionCode);
+
+        $planRow     = new CartRow($sheet, $plan, 1);
+        $chairRow    = new CartRow($sheet, $chair, 2);
+        $currentStep = 4;
+        $cart  = new Cart($sheet, [$planRow, $chairRow], [$promotionCodeRow], $currentStep);
+
+        // Expected
+        $orderBillingInfo = new Order\BillingInfo(
+            'lastname',
+            'firstname',
+            'function',
+            'phone',
+            'mobile',
+            'company',
+            'email@email.com',
+            new Address('street', 'zipcode', 'city', 'FR'),
+            'vatNumber'
+        );
+
+        $expectedPromotionCode = new PromotionCode($event, 'title', 'code', 19, null);
+        $expectedPromotionCode->setPromotion($chair, Promotion::TYPE_PERCENT_OFF, 50);
+
+        $groupsData    = '';
+        $order         = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime);
+        $planOrderRow  = new Order\Row($order, $plan, 1, null);
+        $chairOrderRow = new Order\Row($order, $chair, 2, null);
+        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -50);
+        $order->addRow($planOrderRow);
+        $order->addRow($chairOrderRow);
+        $order->addPromotionCode($promotionCodeOrderRow);
+
+        // Mock
+        $orderRepository            = $this->prophesize(OrderRepositoryInterface::class);
+        $cartRowRepository          = $this->prophesize(CartRowRepositoryInterface::class);
+        $vatApplicable              = $this->prophesize(VatApplicable::class);
+        $billingInfoRepository      = $this->prophesize(BillingInfoRepositoryInterface::class);
+        $cartStepRepository         = $this->prophesize(CartStepRepositoryInterface::class);
+        $promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
+        $promotionCodeRepository    = $this->prophesize(PromotionCodeRepositoryInterface::class);
+
+        $orderRepository->add(Argument::that(function (Order $givenOrder) use ($order) {
+            return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotal() == $order->getTotal() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
+        }))->shouldBeCalled();
+        $billingInfoRepository->getBySheet($sheet)->shouldBeCalled()->willReturn($billingInfo);
+        $vatApplicable->onCart($cart)->shouldBeCalled()->willReturn(true);
+        $cartRowRepository->deleteForSheet($sheet)->shouldBeCalled();
+        $cartStepRepository->deleteForSheet($sheet)->shouldBeCalled();
+        $promotionCodeRowRepository->deleteForSheet($sheet)->shouldBeCalled();
+        $promotionCodeRepository->set($expectedPromotionCode)->shouldBeCalled();
+
+        $converter = new Converter(
+            $orderRepository->reveal(),
+            $cartRowRepository->reveal(),
+            $cartStepRepository->reveal(),
+            $billingInfoRepository->reveal(),
+            $promotionCodeRowRepository->reveal(),
+            $promotionCodeRepository->reveal(),
+            $vatApplicable->reveal(),
+            $datetime
+        );
+
+        $converter->toOrder($cart);
+    }
+}

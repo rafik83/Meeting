@@ -10,6 +10,8 @@ Feature: Login admin
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admins.yml                                                               |
     When I go to this page "/admin/fr/login"
     And I fill in "form.login.children.username.label" with "test@test.com"

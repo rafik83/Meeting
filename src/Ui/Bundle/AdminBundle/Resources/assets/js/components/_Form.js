@@ -10,6 +10,13 @@ Form.prototype.get = function (name)
 
     if (inputs.length === 1) {
 
+        if (this.isMultipleSelect(inputs[0])) {
+            return [].map.call(
+                [].filter.call(inputs[0].querySelectorAll('option'), function (option) { return option.selected; }),
+                function (option) { return option.value }
+            );
+        }
+
         if (this.hasValue(inputs[0])) {
             return inputs[0].value;
         }
@@ -36,9 +43,24 @@ Form.prototype.get = function (name)
 
 Form.prototype.set = function (name, value)
 {
+    if (value === undefined) {
+        return;
+    }
+
     var inputs = this.getByName(name);
 
     if (inputs.length === 1) {
+
+        if (this.isMultipleSelect(inputs[0])) {
+
+            [].forEach.call(inputs[0].querySelectorAll('option'), function (option) {
+                if (-1 !== value.indexOf(option.value)) {
+                    option.selected = true;
+                }
+            });
+
+            return;
+        }
 
         if (this.hasValue(inputs[0])) {
             inputs[0].value = value;
@@ -169,6 +191,11 @@ Form.prototype.checkRadio = function (inputs, value)
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].checked = (value === inputs[i].value);
     }
+};
+
+Form.prototype.isMultipleSelect = function (input)
+{
+    return input.tagName === 'SELECT' && input.multiple === true;
 };
 
 Form.prototype.bind = function (name, value)

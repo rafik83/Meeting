@@ -167,13 +167,21 @@ class ProductTranslation
     /**
      * @return array
      */
-    public function getTranslationSerializedData()
+    public function getData()
     {
-        return json_encode([
+        return [
             'title'       => $this->title,
             'heading'     => $this->heading,
             'description' => $this->description,
             'addon'       => $this->addon,
-        ]);
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslationSerializedData()
+    {
+        return json_encode($this->getData());
     }
 }

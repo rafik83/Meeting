@@ -1,0 +1,5 @@
+{% if null != promoRows and promoRows is not empty %}
+    {% for promoRow in promoRows %}
+        {{ include('EventBundle:Package/Summary:promo-code-row.html.twig', { promotionCodeView: promoRow }) }}
+    {% endfor %}
+{% endif %}

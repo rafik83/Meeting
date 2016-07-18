@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class PromotionCode
@@ -35,7 +36,7 @@ class PromotionCode
     private $code;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection of Promotion
      */
     private $promotions;
 
@@ -205,6 +206,18 @@ class PromotionCode
     }
 
     /**
+     * @param int $stock
+     *
+     * @return PromotionCode
+     */
+    public function setStock($stock)
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+    
+    /**
      * @param Product $product
      *
      * @return bool
@@ -256,5 +269,60 @@ class PromotionCode
         $this->promotions->removeElement($promotion);
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSoldOut()
+    {
+        return $this->stock === 0;
+    }
+
+    /**
+     * @param DateTimeInterface $datetime
+     *
+     * @return bool
+     */
+    public function isOutDated(DateTimeInterface $datetime)
+    {
+        if (empty($this->validUntil)) {
+            return false;
+        }
+
+        return $datetime >= $this->validUntil;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return [
+            'id'           => $this->getId(),
+            'translations' => $this->getTranslationsData(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getTranslationsData()
+    {
+        $data = [];
+
+        foreach ($this->translations->toArray() as $locale => $translation) {
+            $data[$locale] = $translation->getData();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerializedData()
+    {
+        return json_encode($this->getData());
     }
 }

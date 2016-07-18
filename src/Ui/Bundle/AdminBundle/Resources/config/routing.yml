@@ -140,6 +140,7 @@ admin_event_payment_conditions:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:paymentConditions }
+
 admin_event_configure_dates:
     path: /event/{event}/dates
     requirements:
@@ -362,6 +363,12 @@ admin_sheet_batch:
 #
 # Order
 #
+admin_sheet_order_list:
+    path: /event/{event}/order
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Order:list }
 admin_sheet_order_edit:
     path: /event/{event}/order/{order}/edit
     requirements:
@@ -718,3 +725,23 @@ admin_schedule_slot_unlock:
     requirements:
         event: \d+
         meetingSlot: \d+
+
+#
+# Nomenclature
+#
+admin_nomenclature_globals:
+    path: /template/nomenclature
+    defaults: { _controller: AdminBundle:Nomenclature:globals }
+    methods: [GET, POST]
+admin_nomenclature_event:
+    path: /template/nomenclature/event/{event}
+    defaults: { _controller: AdminBundle:Nomenclature:event }
+    methods: [GET, POST]
+admin_nomenclature_read:
+    path: /template/nomenclature/{nomenclature}
+    defaults: { _controller: AdminBundle:Nomenclature:read }
+    methods: [GET, POST]
+admin_nomenclature_export:
+    path: /template/nomenclature/{nomenclature}/export
+    defaults: { _controller: AdminBundle:Nomenclature:export }
+    methods: [GET]

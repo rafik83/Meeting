@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>{{ 'pro_forma.title'|trans({ '%date%': pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }) }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-8 col-md-4">
+                <b>{{ pro_forma.billingInfo.company }}</b><br>
+                {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>
+                {{ pro_forma.billingInfo.address.street }}<br>
+                {{ pro_forma.billingInfo.address.zipCode }} {{ pro_forma.billingInfo.address.city }}<br>
+                {{ pro_forma.billingInfo.address.country|country }}<br>
+                {% if pro_forma.billingInfo.vatNumber %}
+                    <b>{{ 'pro_forma.vatNumber.title'|trans }}</b> {{ pro_forma.billingInfo.vatNumber }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <b>{{ 'pro_forma.date.title'|trans }}</b> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+            </div>
+        </div>
+        {{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary}) }}
+        <div class="row">
+            <div class="col-md-4">
+                {{ pro_forma.billingAddress|nl2br }}<br>
+                <b>{{ 'pro_forma.bankInfo.title'|trans }}</b><br>
+                {{ pro_forma.bankInfo|nl2br }}<br>
+            </div>
+            <div class="col-md-offset-4 col-md-4">
+                {{ pro_forma.paymentCondition|nl2br }}<br>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-12">
+                {{ pro_forma.footer|nl2br }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

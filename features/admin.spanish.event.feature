@@ -6,9 +6,12 @@ Feature: Update spanish event
   Scenario: I can see the event
     Given the database is empty
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/SpanishEvent.yml |
-      | Admin.yml                                               |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml         |
+      | @InfrastructureBundle/DataFixtures/ORM/Spanish-Event.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/Spanish-Nomenclature.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/Spanish-Template.yml     |
+      | @InfrastructureBundle/DataFixtures/ORM/Spanish-Type.yml         |
+      | Admin.yml                                                       |
     And elastica is populate
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"

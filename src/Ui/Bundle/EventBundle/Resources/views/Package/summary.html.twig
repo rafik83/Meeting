@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'package.summary.pageTitle'|trans }}{% endblock %}
 
-{% form_theme form '@Ui/default.html.twig' %}
+{% form_theme formTermsOfSale '@Ui/default.html.twig' %}
 
 {% block content %}
     <section class="main">
@@ -10,15 +10,17 @@
 
         <div class="main__container">
             <div class="product product--recap">
-                <div class="step-number-title"> 4 </div>
+                <div class="step-number-title"> 4</div>
 
                 <div class="content-header clearfix">
                     <h2 class="pull-left">{{ 'package.summary.title'|trans }}</h2>
-                    <a class="btn btn-primary pull-right" href="{{ path('event_package_summary_fill_billing_info', {'sheet': sheet.id}) }}"><i class="icon-Paiement_1"></i> {{ 'package.summary.billingInfo.update'|trans }}</a>
+                    <a class="btn btn-primary pull-right"
+                       href="{{ path('event_package_summary_fill_billing_info', {'sheet': sheet.id}) }}"><i
+                                class="icon-Paiement_1"></i> {{ 'package.summary.billingInfo.update'|trans }}</a>
                 </div>
 
                 <section class="object object--collection style--style-1 section">
-                    {{ form_start(form, {'attr': {'class': 'form--table--head'}}) }}
+                    <div class="form--table--head">
                         <table class="table table--recap">
                             <thead>
                             <tr>
@@ -33,12 +35,18 @@
                             {{ include('EventBundle:Package/Summary:participant.html.twig', {participantGroup: view.groups.participantGroup}) }}
                             {{ include('EventBundle:Package/Summary:planning.html.twig', {planningGroup: view.groups.planningGroup}) }}
                             {{ include('EventBundle:Package/Summary:groups.html.twig', {groups: view.groups.groups}) }}
+                            {{ include('EventBundle:Package/Summary:promo-code.html.twig', {form: formPromotionCode}) }}
+                            {{ include('EventBundle:Package/Summary:promo-code-rows.html.twig', { promoRows: view.promotionCodes.promotionCodes }) }}
                             </tbody>
                         </table>
+                        {{ form_start(formTermsOfSale) }}
                         <div class="row end-table">
+                            {# promotion code errors #}
+                            {% include('EventBundle:Package/Flash:promotionError.html.twig') %}
                             <div class="col-md-8 cgv">
-                                {{ form_row(form.termsOfSale) }}
-                                <a href="{{ path('event_content_terms_of_sale') }}" target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
+                                {{ form_row(formTermsOfSale.termsOfSale) }}
+                                <a href="{{ path('event_content_terms_of_sale') }}"
+                                   target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
                             </div>
                             <div class="col-md-4 sum">
                                 <ul>
@@ -47,7 +55,7 @@
                                             {{ 'package.summary.totalOfSummary'|trans }}
                                             <span>
                                                 {{ 'package.product.unitPrice'|trans({
-                                                    '%price%': view.total,
+                                                    '%price%': view.total|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                     '%vatMode%': ('package.vatMode.' ~ view.vatMode)|trans
                                                 })|html }}
@@ -56,7 +64,7 @@
                                         <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vat }) }}
                                             <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
-                                                    '%price%': view.totalVat,
+                                                    '%price%': view.totalVat|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
@@ -66,7 +74,7 @@
                                         {% set totalVatMode = (view.mustPayVat ? 'ati' :  view.vatMode) %}
                                         <span>
                                             {{ 'package.product.unitPrice'|trans({
-                                                '%price%': view.totalPlusVat,
+                                                '%price%': view.totalPlusVat|localizednumber,
                                                 '%currency%': view.currency|currency_symbol,
                                                 '%vatMode%': ('package.vatMode.' ~ totalVatMode)|trans
                                             })|html }}
@@ -83,7 +91,8 @@
                                 </button>
                             </div>
                         </div>
-                    {{ form_end(form) }}
+                        {{ form_end(formTermsOfSale) }}
+                    </div>
                 </section>
             </div>
         </div>

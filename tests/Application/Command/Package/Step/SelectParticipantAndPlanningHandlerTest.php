@@ -13,15 +13,17 @@ namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler;
 use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
@@ -47,9 +49,11 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $package->setParticipant($participantProduct);
         $type->setPackage($package);
 
-        $planRow = new CartRow($sheet, $planProduct, 1);
+        $promotionCode    = new PromotionCode($event, 'My promotion code', 'AXYZ', 1, $datetime->modify('+1 month'));
+        $planRow          = new CartRow($sheet, $planProduct, 1);
+        $promotionCodeRow = new PromotionCodeRow($sheet, $promotionCode);
 
-        $actualCart   = new Cart($sheet, [$planRow], 1);
+        $actualCart   = new Cart($sheet, [$planRow], [$promotionCodeRow], 1);
         $expectedCart = new Cart(
             $sheet,
             [
@@ -57,6 +61,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
                 new CartRow($sheet, $participantProduct, 1),
                 new CartRow($sheet, $planningProduct, 1),
             ],
+            [$promotionCodeRow],
             1
             );
 
@@ -98,7 +103,9 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $package->setParticipant($participantProduct);
         $type->setPackage($package);
 
+        $promotionCode    = new PromotionCode($event, 'My promotion code', 'AXYZ', 1, $datetime->modify('+1 month'));
         $planRow = new CartRow($sheet, $planProduct, 1);
+        $promotionCodeRow = new PromotionCodeRow($sheet, $promotionCode);
 
         $actualCart = new Cart(
             $sheet,
@@ -106,6 +113,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
                 $planRow,
                 new CartRow($sheet, $participantProduct, 1),
             ],
+            [$promotionCodeRow],
             1
         );
 
@@ -115,6 +123,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
                 $planRow,
                 new CartRow($sheet, $participantProduct, 2),
             ],
+            [$promotionCodeRow],
             1);
 
         $cartManager = $this->prophesize(CartManager::class);

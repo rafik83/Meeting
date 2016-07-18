@@ -1,0 +1,76 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'order.list.title'|trans }}
+{% endblock %}
+
+{% block content %}
+<section class="main">
+    <header>
+        <h1>
+            <i class="icon-Panier_2"></i>
+            {{ 'order.list.title'|trans }}
+        </h1>
+    </header>
+    <div class="main__container">
+        <div class="row">
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <th>{{ 'order.list.column.date'|trans }}</th>
+                        <th>{{ 'order.list.column.pro_forma'|trans }}</th>
+                        <th>{{ 'order.list.column.total'|trans }}</th>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}">{{ 'order.list.column.pro_forma'|trans }}</a></td>
+                                <td>{{ order.total|localizedcurrency(order.currency) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ 'order.list.remainingToPay'|trans }}
+                    </div>
+                    <div class="panel-body text-center h1">
+                        {{ remainingToPay|localizedcurrency(event.currency) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="main">
+    <header>
+        <h1>
+            <i class="icon-Paiement_1"></i>
+            {{ 'order.transaction.list.title'|trans }}
+        </h1>
+    </header>
+    <div class="main__container">
+        <table class="table">
+            <thead>
+            <th>{{ 'order.transaction.list.column.date'|trans }}</th>
+            <th>{{ 'order.transaction.list.column.state'|trans }}</th>
+            <th>{{ 'order.transaction.list.column.mode'|trans }}</th>
+            <th>{{ 'order.transaction.list.column.total'|trans }}</th>
+            </thead>
+            <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                    <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</td>
+                    <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
+                    <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

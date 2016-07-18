@@ -34,8 +34,8 @@ class NomenclatureValidator extends ObjectValidator
     {
         if ($object instanceof Object\Nomenclature && true === $object->getOption('required')) {
             if ($object->isSingles()) {
-                if ($object->getNomenclature() !== null) {
-                    $depth = $object->getNomenclature()->getDepth();
+                if ($object->getNomenclatureModel() !== null) {
+                    $depth = $object->getNomenclatureModel()->getDepth();
                     $reference = [
                         1 => 'first',
                         2 => 'second',

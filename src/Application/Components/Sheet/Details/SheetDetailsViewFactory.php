@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
@@ -53,6 +54,11 @@ class SheetDetailsViewFactory
     private $templateDataFactory;
 
     /**
+     * @var Balance
+     */
+    private $balance;
+
+    /**
      * SheetDetailsViewFactory constructor.
      *
      * @param SheetInfoGuesser           $sheetInfoGuesser
@@ -61,6 +67,7 @@ class SheetDetailsViewFactory
      * @param TemplateDataFactory        $templateDataFactory
      * @param CommentRepositoryInterface $commentRepository
      * @param TraceRepositoryInterface   $traceRepository
+     * @param Balance                    $balance
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -68,7 +75,8 @@ class SheetDetailsViewFactory
         RequestRepositoryInterface $requestRepository,
         TemplateDataFactory $templateDataFactory,
         CommentRepositoryInterface $commentRepository,
-        TraceRepositoryInterface $traceRepository
+        TraceRepositoryInterface $traceRepository,
+        Balance $balance
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -76,6 +84,7 @@ class SheetDetailsViewFactory
         $this->templateDataFactory    = $templateDataFactory;
         $this->commentRepository      = $commentRepository;
         $this->traceRepository        = $traceRepository;
+        $this->balance                = $balance;
     }
 
     /**
@@ -132,7 +141,15 @@ class SheetDetailsViewFactory
             // Comments
             $this->commentRepository->getCommentsBySheet($sheet),
             // Trace for accepted
-            $this->traceRepository->getAllTracesByObject($sheet)
+            $this->traceRepository->getAllTracesByObject($sheet),
+            // Orders
+            $this->balance->getOrders($sheet),
+            // Transactions
+            $this->balance->getTransactions($sheet),
+            // Total of orders
+            $this->balance->getTotal($sheet),
+            // Remaining to pay
+            $this->balance->getRemainingToPay($sheet)
         );
     }
 }
