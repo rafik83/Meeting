@@ -167,8 +167,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->select('participant')
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
-            ->setParameterx('userId', $userId)
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
+            ->setParameter('userId', $userId)
             ->setParameter('eventId', $event->getId());
 
         return $queryBuilder->getQuery()->getResult();
