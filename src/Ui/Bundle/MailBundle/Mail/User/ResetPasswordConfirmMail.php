@@ -29,24 +29,24 @@ class ResetPasswordConfirmMail extends Mail
     private $user;
 
     /**
-     * @var Sheet
+     * @var null|Sheet
      */
     private $sheet;
 
     /**
-     * @var Participant|null
+     * @var null|Participant
      */
     private $participant;
 
     /**
-     * @param string $sender
-     * @param string $receiver
-     * @param string $template
-     * @param string $messageId
-     * @param string $locale
-     * @param Event  $event
-     * @param User   $user
-     * @param Sheet  $sheet
+     * @param string     $sender
+     * @param string     $receiver
+     * @param string     $template
+     * @param string     $messageId
+     * @param string     $locale
+     * @param Event      $event
+     * @param User       $user
+     * @param null|Sheet $sheet
      */
     public function __construct(
         $sender,
@@ -56,7 +56,7 @@ class ResetPasswordConfirmMail extends Mail
         $locale,
         Event $event,
         User $user,
-        Sheet $sheet
+        Sheet $sheet = null
     ) {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
 
@@ -64,11 +64,12 @@ class ResetPasswordConfirmMail extends Mail
         $this->sheet = $sheet;
         $this->user  = $user;
 
+        if ($sheet !== null) {
+            $participant = $sheet->getUserParticipant($user);
 
-        $participant = $sheet->getUserParticipant($user);
-
-        if ($participant instanceof Participant) {
-            $this->participant = $participant;
+            if ($participant instanceof Participant) {
+                $this->participant = $participant;
+            }
         }
     }
 
