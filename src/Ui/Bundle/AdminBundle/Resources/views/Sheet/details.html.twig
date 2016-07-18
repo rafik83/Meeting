@@ -30,6 +30,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {{ 'admin.sheet.details.participant.title'|trans }} {{ loop.index }}
+
+                        {% if participant.isOwner %}
+                            ({{ 'admin.sheet.details.owner.title'|trans }})
+                        {% endif %}
                     </div>
                     <div class="panel-body">
                         {% for object in participant.templateData.getProfileObjects %}
