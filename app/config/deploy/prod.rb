@@ -30,4 +30,4 @@ end
 set :branch, "prod"
 
 # Tasks
-after :deploy, 'app_tasks:initdb'
+before "symfony:cache:warmup", "symfony:doctrine:migrations:migrate"
