@@ -167,7 +167,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->select('participant')
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
-            ->setParameter('userId', $userId)
+            ->setParameterx('userId', $userId)
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
             ->setParameter('eventId', $event->getId());
 
@@ -231,12 +231,12 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('participant')
+            ->select('participant.id')
             ->from(Participant::class, 'participant')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event != :eventId')
-            ->where('participant.user = :user')
-            ->setParameter('eventId', $currentEvent->getId())
-            ->setParameter('user', $user);
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event != :event AND participant.user = :user')
+            ->setParameter('event', $currentEvent)
+            ->setParameter('user', $user)
+            ->setMaxResults(1);
 
         return !empty($queryBuilder->getQuery()->getOneOrNullResult());
     }

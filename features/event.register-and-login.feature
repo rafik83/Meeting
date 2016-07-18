@@ -26,7 +26,6 @@ Feature: Register and login user
     And I fill in "register_new_user_password_second" with "p@ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
-    And the "user.registered" mail should be sent to "test@test.com"
     Then I should see "Profil"
     And I should see "register.step"
     And I should see "1/3"
@@ -43,7 +42,6 @@ Feature: Register and login user
     And I fill in "register_new_user_password_second" with "mypassword"
     And I press "common.next"
     Then the response status code should be 200
-    And the "user.registered" mail should be sent to "user@example.net"
     And I should see "Mon profil"
     And I should not see "register.step"
 
