@@ -179,6 +179,7 @@ navigation:
         package:
             summary: Récapitulatif
             payment: Paiement
+            order_list: Liste des commandes
         catalog:
             available_date: Disponible le
         happening:

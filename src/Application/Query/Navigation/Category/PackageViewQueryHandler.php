@@ -52,28 +52,39 @@ class PackageViewQueryHandler
         }
 
         $linksView = [];
-        $funnel    = $this->funnelFactory->create($packageQuery->sheet, $packageQuery->locale);
+        $orders    = $packageQuery->sheet->getOrders();
 
-        foreach ($funnel->getSteps() as $step) {
+        if (sizeof($orders) > 0) {
             $linksView[] = new LinkView(
-                $step->title,
-                $this->navigationBuilder->getRoute('event_package_step', [
-                    'sheet' => $packageQuery->sheet->getId(),
-                    'step'  => $step->index,
-                ]),
-                null,
-                null,
-                ($step->completed || $step->index === 1) ? true : false
-            );
-        }
-
-        if ($funnel->isCompleted()) {
-            $linksView[] = new LinkView(
-                'navigation.links.package.summary',
-                $this->navigationBuilder->getRoute('event_package_summary', [
+                'navigation.links.package.order_list',
+                $this->navigationBuilder->getRoute('event_order_list', [
                     'sheet' => $packageQuery->sheet->getId(),
                 ])
             );
+        } else {
+            $funnel = $this->funnelFactory->create($packageQuery->sheet, $packageQuery->locale);
+
+            foreach ($funnel->getSteps() as $step) {
+                $linksView[] = new LinkView(
+                    $step->title,
+                    $this->navigationBuilder->getRoute('event_package_step', [
+                        'sheet' => $packageQuery->sheet->getId(),
+                        'step'  => $step->index,
+                    ]),
+                    null,
+                    null,
+                    ($step->completed || $step->index === 1) ? true : false
+                );
+            }
+
+            if ($funnel->isCompleted()) {
+                $linksView[] = new LinkView(
+                    'navigation.links.package.summary',
+                    $this->navigationBuilder->getRoute('event_package_summary', [
+                        'sheet' => $packageQuery->sheet->getId(),
+                    ])
+                );
+            }
         }
 
         return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView);
