@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Register;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -115,6 +116,23 @@ class ParticipantStepHandler
     {
         // check if user are in last register funnel step
         if ($participantStep->templateData->getNextBlockPosition($participantStep->step) === null) {
+
+            $alreadyRegister = $this->participantRepository->isParticipantForAnotherEvent(
+                $participantStep->sheet->getEvent(),
+                $participantStep->participant->getUser()
+            );
+
+            if ($alreadyRegister === false) {
+                // trigger registered event
+                $registeredEvent = new RegisteredEvent(
+                    $participantStep->sheet->getEvent(),
+                    $participantStep->participant->getUser(),
+                    $participantStep->locale
+                );
+                
+                $this->eventDispatcher->dispatch(Events::USER_REGISTERED, $registeredEvent);
+            }
+            
             $preRegisteredEvent = new PreRegisterEvent(
                 $this->participantInfoGuesser,
                 $participantStep->sheet->getEvent(),
