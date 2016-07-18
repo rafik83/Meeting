@@ -7,7 +7,7 @@ set :user,      "www-data"
 set :composer_options, "--verbose --prefer-dist --optimize-autoloader --no-progress"
 
 # Clear *_dev controllers
-set :clear_controllers, false
+set :clear_controllers, true
 
 role :app, front1, :primary => true
 #role :app, front2, :primary => false
