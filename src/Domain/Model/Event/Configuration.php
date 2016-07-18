@@ -133,7 +133,7 @@ class Configuration
     {
         return $this->allowDeposit;
     }
-
+    
     /**
      * @return \DateTimeInterface
      */
