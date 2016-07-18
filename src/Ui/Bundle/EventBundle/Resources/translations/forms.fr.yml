@@ -1,3 +1,7 @@
+gender:
+    man: Monsieur
+    woman: Madame
+
 form:
     change_password_user:
         children:
@@ -51,7 +55,7 @@ form:
         children:
             medias:
                 label_add: Ajouter
-                label_delete: Supprimer
+                label_delete: "&times;"
                 prototype:
                     children:
                         title:
@@ -66,7 +70,7 @@ form:
         children:
             items:
                 label_add: Ajouter
-                label_delete: Supprimer
+                label_delete: "&times;"
                 prototype:
                     children:
                         title:

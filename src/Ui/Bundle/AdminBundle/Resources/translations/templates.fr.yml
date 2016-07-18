@@ -9,10 +9,13 @@ template:
         nomenclature: Nomenclature
         tag: Contenu affiché par défaut
         participant: Participant
+        tags: Multi tag
     tag:
         sheet_title: Titre de fiche
         sheet_organization: Nom de l'organisation
         sheet_organization_category: Catégorie d'organisation
+        sheet_organization_turnover: Chiffre d'affaires
+        sheet_organization_staff: Effectifs
     media:
         placeholder:
             title: Placeholder du titre
@@ -43,6 +46,8 @@ template:
         title: Aide
     required:
         title: Requis
+    collection:
+        title: Champs collection activés
     translatable:
         title: Traduisible
     maxLength:
@@ -53,3 +58,5 @@ template:
         title: Type
     defaultElement:
         title: Élément par défaut
+    tags:
+        title: Tags

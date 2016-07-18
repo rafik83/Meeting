@@ -594,6 +594,10 @@ class PackageController extends Controller
             );
         }
 
+        if (null === $user) {
+            throw $this->createNotFoundException('Unknown user');
+        }
+
         if (!$sheet->hasUser($user)) {
             throw $this->createNotFoundException(
                 sprintf('The user %s is not participant on the sheet %s', $user->getId(), $sheet->getId())

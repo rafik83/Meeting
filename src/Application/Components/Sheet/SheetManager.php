@@ -88,7 +88,7 @@ class SheetManager
             $sheet->getParticipants()->toArray(),
             $sheet->getData(),
             $sheet->getPackageData(),
-            $sheet->getBillingData(),
+            [],
             $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
             $this->participantRepository->getParticipantForUserAndSheet($user, $sheet),
             $sheet->getOrders()->toArray()
@@ -112,7 +112,7 @@ class SheetManager
         return new SheetCatalogView(
             $sheet->getId(),
             $sheet->getData(),
-            $sheet->getType()->getSheetTemplate(),
+            [],
             $sheet->getType()->getParticipantTemplate(),
             $sheet->getParticipants()->toArray()
         );

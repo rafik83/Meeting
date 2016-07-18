@@ -31,7 +31,7 @@ class FilterType extends AbstractType
                 'select2'     => true,
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
-                'group_by'    => function ($product) {
+                'group_by'    => function (Product $product) {
                     return sprintf('form.product_choice.group_by.type.%s', $product->getType());
                 },
                 'choice_value' => function ($choice) {

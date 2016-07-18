@@ -231,9 +231,10 @@ class SheetTemplateController extends Controller
         }
 
         // Queries
-        $nomenclatures = $this->get('repository.nomenclature_repository')->getAll();
+        $respository   = $this->get('repository.nomenclature_repository');
         $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
+        $nomenclatures = $template->getEvent() ? $respository->findByEvent($template->getEvent()) : $respository->findGlobals();
 
         // Add warning if some locales translations are incompletes
         if (!empty($incompletes)) {
@@ -309,7 +310,7 @@ class SheetTemplateController extends Controller
         $config = json_decode($request->getContent(), true);
         $this->get('tactician.commandbus')->handle(new Save($template, $config));
 
-        return new JsonResponse();
+        return new JsonResponse($config);
     }
 
     /**

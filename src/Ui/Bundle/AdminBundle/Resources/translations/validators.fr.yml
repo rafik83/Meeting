@@ -61,6 +61,10 @@ validators:
         slot:
             recipe:
                 date_range: La date de début doit être antérieure à la date de fin
+    nomenclature:
+        import:
+            error: Votre fichier comporte des erreurs
+            missing_keys: Vous ne pouvez plus supprimer d'élément de cette nomenclature car il y a déjà des inscriptions
     event:
         domain:
             unique: Ce nom de domaine est déjà utilisé sur un autre événement

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Order;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Admin;
 
 class PaginatedOrderListViewQuery
 {

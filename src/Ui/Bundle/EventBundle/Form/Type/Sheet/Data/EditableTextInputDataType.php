@@ -30,10 +30,11 @@ class EditableTextInputDataType extends AbstractType
 
         $builder
             ->add('content', TextType::class, [
-                'label'       => $label ? $text->getOption('label')[$locale] : false,
-                'required'    => $text->getOption('required'),
-                'placeholder' => $text->getOption('placeholder')[$locale],
-                'attr'        => $attr,
+                'label'              => $label ? $text->getOption('label')[$locale] : false,
+                'required'           => $text->getOption('required'),
+                'placeholder'        => $text->getOption('placeholder')[$locale],
+                'attr'               => $attr,
+                'translation_domain' => false,
             ])
         ;
     }

@@ -1,0 +1,14 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.nomenclature.title'|trans }}</h1>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        {{ include('AdminBundle:Nomenclature:create.html.twig', { 'form': form }, false) }}
+    {% endif %}
+
+    {{ include('AdminBundle:Nomenclature:table.html.twig', { 'nomenclatures': nomenclatures }, false) }}
+
+{% endblock %}

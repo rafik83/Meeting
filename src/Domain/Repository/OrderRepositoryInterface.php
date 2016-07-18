@@ -41,7 +41,7 @@ interface OrderRepositoryInterface
      * @param int    $limit
      * @param string $locale
      *
-     * @return PaginatedResult[]
+     * @return PaginatedResult
      */
     public function findByEvent(Event $event, array $filters, $page, $limit, $locale);
 }

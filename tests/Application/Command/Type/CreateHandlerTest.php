@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\CreateHandler;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Template;
@@ -61,8 +63,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $typeRepository->add($expectedType)->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'toto')->willReturn(false);
 
+        $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
+        $sheetTemplateCloner->duplicate($sheetTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedSheetTemplate);
+
+        $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
+        $registrationTemplateCloner->duplicate($registrationTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedRegistrationTemplate);
+
         //Handler
-        $handler = new CreateHandler($typeRepository->reveal(), $dateTime);
+        $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateCloner->reveal(), $registrationTemplateCloner->reveal());
         $handler->handle($create);
     }
 }
