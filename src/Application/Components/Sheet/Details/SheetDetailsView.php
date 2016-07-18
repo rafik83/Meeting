@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
+use Proximum\Vimeet\Domain\Model\Transaction;
 
 class SheetDetailsView
 {
@@ -97,6 +99,26 @@ class SheetDetailsView
     public $traces;
 
     /**
+     * @var Order[]
+     */
+    public $orders;
+
+    /**
+     * @var Transaction[]
+     */
+    public $transactions;
+
+    /**
+     * @var float
+     */
+    public $total;
+
+    /**
+     * @var float
+     */
+    public $remainingToPay;
+
+    /**
      * SheetDetailsView constructor.
      *
      * @param string            $title
@@ -111,6 +133,10 @@ class SheetDetailsView
      * @param int               $refusedPropositions
      * @param Comment[]         $comments
      * @param Trace[]           $traces
+     * @param Order[]           $orders
+     * @param Transaction[]     $transactions
+     * @param float             $total
+     * @param float             $remainingToPay
      */
     public function __construct(
         $title,
@@ -124,7 +150,11 @@ class SheetDetailsView
         $pendingPropositions,
         $refusedPropositions,
         array $comments,
-        array $traces
+        array $traces,
+        array $orders,
+        array $transactions,
+        $total,
+        $remainingToPay
     ) {
         $this->title                = $title;
         $this->state                = $state;
@@ -138,5 +168,9 @@ class SheetDetailsView
         $this->refusedPropositions  = $refusedPropositions;
         $this->comments             = $comments;
         $this->traces               = $traces;
+        $this->orders               = $orders;
+        $this->transactions         = $transactions;
+        $this->total                = $total;
+        $this->remainingToPay       = $remainingToPay;
     }
 }

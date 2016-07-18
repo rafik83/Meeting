@@ -363,6 +363,12 @@ admin_sheet_batch:
 #
 # Order
 #
+admin_sheet_order_list:
+    path: /event/{event}/order
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Order:list }
 admin_sheet_order_edit:
     path: /event/{event}/order/{order}/edit
     requirements:

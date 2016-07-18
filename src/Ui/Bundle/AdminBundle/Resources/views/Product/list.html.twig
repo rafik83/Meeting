@@ -69,9 +69,11 @@
                     {% if bought > 0 %}
                         {% set availabilityStatus = product.getAvailabilityStatus(bought) %}
                         {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
-                        <span class="label label-{{ availabilityCssClass[availabilityStatus] }}">
-                            {{ bought }}
-                        </span>
+                        <a href="{{ path('admin_sheet_order_list', {'event': event.id, 'product': product.id}) }}">
+                            <span class="label label-{{ availabilityCssClass[availabilityStatus] }}">
+                                {{ bought }}
+                            </span>
+                        </a>
                     {% endif %}
                 </td>
                 <td>

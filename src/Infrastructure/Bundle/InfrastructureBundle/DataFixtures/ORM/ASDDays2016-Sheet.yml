@@ -16,8 +16,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
             # Compétence
             e438c993: { items: ["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"] }
-            # Carousel
-            848e283e: []
             # Client de référence
             1adc1873: { items: [{ title: { fr: "CNES" } }, { title: { fr: "CNRS" } }, { title: { fr: "Daher" } }, { title: { fr: "Dassault" } }, { title: { fr: "Dewe France" } }, { title: { fr: "DGAC" } }, { title: { fr: "DLR" } }, { title: { fr: "Durr" } }, { title: { fr: "Embraer" } }, { title: { fr: "Esa" } }, { title: { fr: "Honeywell" } }, { title: { fr: "Aircelle" } }, { title: { fr: "Messier Bugatti Dowty" } }, { title: { fr: "Snecma" } }, { title: { fr: "Turbomeca" } }, { title: { fr: "Zodiac Aerospace" } }]}
             # Projets innovant
@@ -50,7 +48,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         owner: "@user_asddays_2"
         registrationData:
-            3ad4b72f: { text: "Elao" }
+            3ad4b72f: { text: "Hello World Company" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_asddays_empty_with_tag:
@@ -61,7 +59,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         data: []
         owner: "@user_asddays_3"
         registrationData:
-            3ad4b72f: { text: "Elao" }
+            3ad4b72f: { text: "World Company Inc" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
