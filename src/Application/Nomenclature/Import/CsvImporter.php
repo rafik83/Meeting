@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
-use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
