@@ -706,7 +706,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Sexe"
+                                    fr: "Genre"
                                     en: "Gender"
                                 help:
                                     fr: ""
