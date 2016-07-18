@@ -156,7 +156,6 @@ package:
 billing_info:
     title: Info de facturation
 
-<<<<<<< HEAD
 navigation:
     category:
         member_space: Espace membre
@@ -196,7 +195,6 @@ navigation:
             flash_presentation: Présentations flash
             my_schedule: Mon agenda
             all_schedule: Tous les agendas
-=======
 pro_forma:
     title: 'Pro Forma - %date%'
     bankInfo:
@@ -244,5 +242,3 @@ order:
             bank_card: Carte bleu
             bank_transfer: Transfert
             bank_check: Chèque
-
->>>>>>> master
