@@ -322,6 +322,8 @@ admin:
                 phone: Téléphone
                 mobile: Mobile
                 title: Propriétaire
+            owner_not_participant:
+                title: Propriétaire mais non participant
             meeting:
                 request:
                     title: Demandes de rendez-vous
@@ -339,7 +341,7 @@ admin:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
             participant:
-                    title: Participant
+                title: Participant
         state: Etat
         category: Catégorie
         type: Type
