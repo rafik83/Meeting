@@ -1497,7 +1497,7 @@ services:
     navigation.navigation_builder:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
         arguments:
-            - '@router.default'
+            - '@adapter.router'
 
     ##
     # Navigation query handler

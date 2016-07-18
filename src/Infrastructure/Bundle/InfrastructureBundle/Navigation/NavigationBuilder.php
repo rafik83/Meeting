@@ -10,34 +10,34 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Symfony\Component\Routing\Router;
 
 class NavigationBuilder implements NavigationBuilderInterface
 {
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
     /**
      * NavigationBuilder constructor.
      *
-     * @param Router $router
+     * @param RouterInterface $router
      */
-    public function __construct(Router $router)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
     }
 
     /**
      * @param string $path
-     * @param array  $parameter
+     * @param array  $parameters
      *
      * @return string
      */
-    public function getRoute($path, $parameter = [])
+    public function getRoute($path, $parameters = [])
     {
-        return $this->router->generate($path, $parameter);
+        return $this->router->generate($path, $parameters);
     }
 }

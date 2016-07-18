@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 class HappeningViewQueryHandler
 {
     /**
-     *
      * @param HappeningViewQuery $happeningViewQuery
      *
      * @return CategoryView
@@ -27,10 +26,10 @@ class HappeningViewQueryHandler
     public function handle(HappeningViewQuery $happeningViewQuery)
     {
         $happeningOpenDate = $happeningViewQuery
-                            ->sheet
-                            ->getEvent()
-                            ->getConfiguration()
-                            ->getHappeningsOpenDate();
+            ->sheet
+            ->getEvent()
+            ->getConfiguration()
+            ->getHappeningsOpenDate();
 
         $linksView = [];
 

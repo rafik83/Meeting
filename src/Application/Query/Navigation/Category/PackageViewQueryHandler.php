@@ -71,7 +71,7 @@ class PackageViewQueryHandler
                     ]),
                     null,
                     null,
-                    ($step->completed || $step->index === 1) ? true : false
+                    ($step->completed || $step->index === 1)
                 );
             }
 

@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class BillingViewQuery extends AbstractCategoryViewQuery
 {
     /**
-     * MemberSpaceViewQuery constructor.
+     * BillingViewQuery constructor.
      *
      * @param Sheet  $sheet
      * @param User   $user

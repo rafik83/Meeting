@@ -50,10 +50,10 @@ class CatalogViewQueryHandler
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
         $catalogOnlineDate = $catalogViewQuery
-                            ->sheet
-                            ->getEvent()
-                            ->getConfiguration()
-                            ->getCatalogOnlineDate();
+            ->sheet
+            ->getEvent()
+            ->getConfiguration()
+            ->getCatalogOnlineDate();
 
         $linksView = [];
 
