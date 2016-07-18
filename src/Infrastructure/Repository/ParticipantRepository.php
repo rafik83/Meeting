@@ -206,7 +206,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-                // Participant have not already a meeting at this slot (except this one)
+            // Participant have not already a meeting at this slot (except this one)
                 'NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id = participant OR tp.id = participant) AND m.slot = :slot AND m != :meeting)',
                 // Participant have not unavailability during this slot
                 'NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant = participant AND (u.begin BETWEEN :slot_begin AND :slot_end OR u.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN u.begin AND u.end OR :slot_end BETWEEN u.begin AND u.end))',
@@ -238,6 +238,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('eventId', $currentEvent->getId())
             ->setParameter('user', $user);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return !empty($queryBuilder->getQuery()->getOneOrNullResult());
     }
 }

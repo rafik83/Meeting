@@ -5,10 +5,13 @@
 {% endblock %}
 
 {% block body %}
+    {% set memberSpace = path('event_account_participant_profile', {'sheet': mail.sheet.id, 'participant': mail.participant.id}) %}
+
     {{ 'mail.event.preregister.body'|trans({
         '%event%': mail.event.title,
         '%firstname%': mail.receiverUser.account.firstname|humanize,
-        '%lastname%': mail.receiverUser.account.lastname|upper
+        '%lastname%': mail.receiverUser.account.lastname|upper,
+        '%memberSpace%': memberSpace
     }, 'mail', mail.locale|html|nl2br) }}
     <ul>
         <li>{{ mail.participantData['sheet_organization'] }}</li>
@@ -18,9 +21,7 @@
         <li>{{ mail.participantData['participant_mobile'] }}</li>
         <li>{{ mail.receiverUser.email }}</li>
     </ul>
-{% endblock %}
 
-{% block end %}
     {{ 'mail.event.preregister.end'|trans({
         '%event%': mail.event.title,
         '%eventPhone%': mail.event.configuration.organiserPhone,

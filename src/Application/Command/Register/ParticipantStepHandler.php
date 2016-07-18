@@ -121,7 +121,7 @@ class ParticipantStepHandler
                 $participantStep->sheet->getEvent(),
                 $participantStep->participant->getUser()
             );
-
+            
             if ($alreadyRegister === false) {
                 // trigger registered event
                 $registeredEvent = new RegisteredEvent(
@@ -129,7 +129,7 @@ class ParticipantStepHandler
                     $participantStep->participant->getUser(),
                     $participantStep->locale
                 );
-                
+
                 $this->eventDispatcher->dispatch(Events::USER_REGISTERED, $registeredEvent);
             }
             
