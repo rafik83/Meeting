@@ -44,18 +44,20 @@ class QuantityMaxGuesser
 
         $cart              = $this->cartManager->getCart($sheet);
         $selectedPlan      = $cart->getPlanRow();
+        $countParticipants = $sheet->getParticipants()->count();
         $remainingQuantity = INF;
 
         if ($selectedPlan) {
             $includedPlanningProduct = $selectedPlan->getProduct()->getIncludedPlanningProduct();
 
             if ($includedPlanningProduct) {
-                $remainingQuantity = $sheet->getParticipants()->count() - $includedPlanningProduct->getQuantity();
+                $remainingQuantity = $countParticipants - $includedPlanningProduct->getQuantity();
             }
         }
 
         $max = min(
             $remainingQuantity,
+            $countParticipants,
             $planning->getQuantityMax(),
             $planning->getAvailability()
         );
