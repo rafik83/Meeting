@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class NavigationController extends Controller
 {
@@ -21,7 +22,7 @@ class NavigationController extends Controller
      * @param Request     $request
      * @param EventDomain $eventDomain
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function menuAction(Request $request, EventDomain $eventDomain)
     {
