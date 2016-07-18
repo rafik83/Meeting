@@ -54,12 +54,10 @@ class PackageViewQueryHandler
         $linksView = [];
         $orders    = $packageQuery->sheet->getOrders();
 
-        if (sizeof($orders) > 0) {
+        if (count($orders) > 0) {
             $linksView[] = new LinkView(
                 'navigation.links.package.order_list',
-                $this->navigationBuilder->getRoute('event_order_list', [
-                    'sheet' => $packageQuery->sheet->getId(),
-                ])
+                ''
             );
         } else {
             $funnel = $this->funnelFactory->create($packageQuery->sheet, $packageQuery->locale);

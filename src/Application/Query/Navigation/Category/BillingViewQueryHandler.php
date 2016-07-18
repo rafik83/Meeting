@@ -35,7 +35,7 @@ class BillingViewQueryHandler
     /**
      * @param BillingViewQuery $billingQuery
      *
-     * @return CategoryView
+     * @return null|CategoryView
      */
     public function handle(BillingViewQuery $billingQuery)
     {
@@ -43,21 +43,20 @@ class BillingViewQueryHandler
             return null;
         }
 
-        $linksView = [];
+        $linksView   = [];
+        $linksView[] = new LinkView(
+            'navigation.links.billing.billing_info',
+            $this->navigationBuilder->getRoute('event_billing_info', [
+                'sheet' => $billingQuery->sheet->getId()
+            ])
+        );
 
-        if (empty($billingQuery->sheet->getOrders())) {
-            $linksView[] = new LinkView(
-                'navigation.links.billing.billing_info',
-                $this->navigationBuilder->getRoute('event_billing_info', ['sheet' => $billingQuery->sheet->getId()])
-            );
-        } else {
-            $linksView[] = new LinkView(
-                'navigation.links.billing.billing_info',
-                $this->navigationBuilder->getRoute('event_billing_info', ['sheet' => $billingQuery->sheet->getId()])
-            );
+        if (count($billingQuery->sheet->getOrders()) > 0) {
             $linksView[] = new LinkView(
                 'navigation.links.billing.order_history',
-                ''
+                $this->navigationBuilder->getRoute('event_order_list', [
+                    'sheet' => $billingQuery->sheet->getId(),
+                ])
             );
         }
 

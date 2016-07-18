@@ -26,16 +26,16 @@ class PlanningViewQueryHandler
     public function handle(PlanningViewQuery $planningQuery)
     {
         $schedulePublishDate = $planningQuery
-                              ->sheet
-                              ->getEvent()
-                              ->getConfiguration()
-                              ->getSchedulePublishDate();
+            ->sheet
+            ->getEvent()
+            ->getConfiguration()
+            ->getSchedulePublishDate();
 
         $happeningOpenDate = $planningQuery
-                            ->sheet
-                            ->getEvent()
-                            ->getConfiguration()
-                            ->getHappeningsOpenDate();
+            ->sheet
+            ->getEvent()
+            ->getConfiguration()
+            ->getHappeningsOpenDate();
 
         $linksView = [];
 
