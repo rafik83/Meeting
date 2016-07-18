@@ -121,7 +121,9 @@ class Promotion
     }
 
     /**
-     * @return int
+     * Get quantity max
+     *
+     * @return null|int
      */
     public function getQuantityMax()
     {
@@ -162,6 +164,7 @@ class Promotion
                 $discount = $this->product->getUnitPrice();
                 break;
         }
+
 
         return $discount;
     }
