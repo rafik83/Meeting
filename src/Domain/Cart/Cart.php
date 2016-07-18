@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -396,10 +397,13 @@ class Cart
         $total = 0;
         foreach ($promotionCode->getPromotions() as $promotion) {
             if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
-                if ($cartRow->getQuantity() < $promotion->getQuantity()) {
+                /** "si promotion en valeur absolue la quantité n'est pas prise en compte" */
+                if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
+                    $total -= $promotion->getDiscount();
+                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()) {
                     $total -= $cartRow->getQuantity() * $promotion->getDiscount();
                 } else {
-                    $total -= $promotion->getQuantity() * $promotion->getDiscount();
+                    $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
                 }
             }
         }
