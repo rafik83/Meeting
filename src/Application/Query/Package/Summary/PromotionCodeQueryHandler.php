@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Package\Summary;
 
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionCodesView;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionCodeView;
+use Proximum\Vimeet\Application\View\Package\Summary\PromotionProductListView;
+use Proximum\Vimeet\Domain\Model\CartRow;
 
 class PromotionCodeQueryHandler
 {
@@ -28,6 +30,21 @@ class PromotionCodeQueryHandler
 
         // foreach promotion code used
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
+
+            $promotionProductList = [];
+            foreach($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
+                $cartRow = $cart->getCartRowForProduct($promotion->getProduct());
+
+                if($cartRow instanceof CartRow) {
+                    $promotionProductList[] = new PromotionProductListView(
+                        $promotion->getProduct()->getName(),
+                        $promotion->getType(),
+                        $promotion->getValue(),
+                        $promotion->getQuantityForCartRow($cartRow)
+                    );
+                }
+            }
+
             $promotionsCodeView[] = new PromotionCodeView(
                 $promotionCodeRow->getId(),
                 $promotionCodeRow->getPromotionCode()->getLabel($promotionCodeQuery->locale),

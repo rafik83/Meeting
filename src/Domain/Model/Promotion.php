@@ -155,4 +155,12 @@ class Promotion
 
         return $discount;
     }
+
+    /**
+     * @param CartRow $cartRow
+     */
+    public function getQuantityForCartRow(CartRow $cartRow)
+    {
+        
+    }
 }
