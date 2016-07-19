@@ -35,3 +35,6 @@ vimeet_event:
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
+payum_capture:
+    resource: "@PayumBundle/Resources/config/routing/capture.xml"

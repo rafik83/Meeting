@@ -1,0 +1,26 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form '@Ui/default.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'package.payment.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <div class="profile__content">
+            <header>
+                <h1><i class="icon-Paiement_1"></i> {{ 'package.payment.title'|trans }}</h1>
+            </header>
+            <div class="main__content styled-form form-with-label">
+                Status : {{ status }}
+                <ul>
+                    <li>{{ payment.total_amount }}</li>
+                    <li>{{ payment.currency_code }}</li>
+                    <li>{{ payment.details }}</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
