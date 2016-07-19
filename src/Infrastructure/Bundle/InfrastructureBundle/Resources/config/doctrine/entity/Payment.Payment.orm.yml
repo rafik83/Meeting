@@ -1,0 +1,8 @@
+Proximum\Vimeet\Domain\Model\Payment\Payment:
+    type:  entity
+    table: payment
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
