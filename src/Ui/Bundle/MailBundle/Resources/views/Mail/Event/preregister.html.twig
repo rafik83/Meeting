@@ -5,14 +5,15 @@
 {% endblock %}
 
 {% block body %}
-    {% set memberSpace = path('event_account_participant_profile', {'sheet': mail.sheet.id, 'participant': mail.participant.id}) %}
+    {% set memberSpace = url('event_account_participant_profile', {'sheet': mail.sheet.id, 'participant': mail.participant.id}) %}
 
     {{ 'mail.event.preregister.body'|trans({
         '%event%': mail.event.title,
         '%firstname%': mail.receiverUser.account.firstname|humanize,
         '%lastname%': mail.receiverUser.account.lastname|upper,
         '%memberSpace%': memberSpace
-    }, 'mail', mail.locale|html|nl2br) }}
+    }, 'mail', mail.locale)|html|nl2br }}
+
     <ul>
         <li>{{ mail.participantData['sheet_organization'] }}</li>
         <li>{{ mail.receiverUser.account.firstname|humanize ~ ' ' ~ mail.receiverUser.account.lastname|upper }}</li>
@@ -26,5 +27,5 @@
         '%event%': mail.event.title,
         '%eventPhone%': mail.event.configuration.organiserPhone,
         '%eventMail%': mail.event.organiserEmail
-    }, 'mail', mail.locale|html|nl2br) }}
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

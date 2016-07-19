@@ -15,5 +15,5 @@
         '%event%': mail.event.title,
         '%eventPhone%': mail.event.configuration.organiserPhone,
         '%eventMail%': mail.event.organiserEmail
-    }, 'mail', mail.locale) }}
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

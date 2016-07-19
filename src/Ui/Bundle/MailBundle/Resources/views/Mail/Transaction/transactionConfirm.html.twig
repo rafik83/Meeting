@@ -10,5 +10,5 @@
         '%firstname%': mail.user.account.firstname|humanize,
         '%lastname%': mail.user.lastname|upper,
         '%transactionTotal%': mail.transaction.amount
-    }, 'mail', mail.locale)|html }}
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
