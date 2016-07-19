@@ -666,6 +666,8 @@ admin:
             unlock: Débloquer
             locked: Bloqué
             unlocked: Débloqué
+    global_nomenclature:
+        title: Nomenclatures globales
     nomenclature:
         title: Nomenclatures
         table:

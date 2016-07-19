@@ -91,7 +91,7 @@ class NomenclatureController extends Controller
             /** @var CreateResult $result */
             $result = $this->get('tactician.commandbus')->handle($command);
 
-            return $this->redirectToRoute('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
+            return $this->redirect($this->getReadNomenclatureUrl($result->nomenclature));
         }
 
         $repository    = $this->get('repository.nomenclature_repository');
@@ -105,14 +105,38 @@ class NomenclatureController extends Controller
     }
 
     /**
-     * Display the Nomenclature, update form and import/export feature
-     *
      * @param Request      $request
      * @param Nomenclature $nomenclature
      *
      * @return RedirectResponse|Response
      */
     public function readAction(Request $request, Nomenclature $nomenclature)
+    {
+        return $this->read($request, $nomenclature);
+    }
+
+    /**
+     * @param Request      $request
+     * @param Event        $event
+     * @param Nomenclature $nomenclature
+     *
+     * @return RedirectResponse|Response
+     */
+    public function eventReadAction(Request $request, Event $event, Nomenclature $nomenclature)
+    {
+        return $this->read($request, $nomenclature, $event);
+    }
+
+    /**
+     * Display the Nomenclature, update form and import/export feature
+     *
+     * @param Request      $request
+     * @param Nomenclature $nomenclature
+     * @param null|Event   $event
+     *
+     * @return RedirectResponse|Response
+     */
+    private function read(Request $request, Nomenclature $nomenclature, $event = null)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
@@ -148,13 +172,19 @@ class NomenclatureController extends Controller
         $export     = new ExportData($nomenclature);
         $exportForm = $this->createExportForm($export);
 
-        return $this->render('AdminBundle:Nomenclature:read.html.twig', [
+        $eventParam = [];
+
+        if (null !== $event) {
+            $eventParam = ['event' => $event];
+        }
+
+        return $this->render('AdminBundle:Nomenclature:read.html.twig', array_merge([
             'update_form'  => $updateForm->createView(),
             'import_form'  => $importForm->createView(),
             'assign_form'  => $assignForm->createView(),
             'export_form'  => $exportForm->createView(),
             'nomenclature' => $nomenclature,
-        ]);
+        ], $eventParam));
     }
 
     /**
@@ -169,12 +199,15 @@ class NomenclatureController extends Controller
     private function handleUpdate(Request $request, FormInterface $form, Update $data)
     {
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->denyAccessUnlessNomenclatureAccess($data->nomenclature);
+            /** @var Nomenclature $nomenclature */
+            $nomenclature = $data->nomenclature;
+
+            $this->denyAccessUnlessNomenclatureAccess($nomenclature);
 
             $this->get('tactician.commandbus')->handle($data);
             $this->addFlash('success', 'flash.admin.nomenclature.update.success');
 
-            return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $data->nomenclature->getId()]);
+            return $this->getReadNomenclatureUrl($nomenclature);
         }
 
         return null;
@@ -200,7 +233,7 @@ class NomenclatureController extends Controller
                 $this->get('tactician.commandbus')->handle($import);
                 $this->addFlash('success', 'flash.admin.nomenclature.import.success');
 
-                return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $data->nomenclature->getId()]);
+                return $this->getReadNomenclatureUrl($data->nomenclature);
             } catch (ImportException $exception) {
                 $form->addError($this->get('error_factory')->create('validators.nomenclature.import.error'));
             } catch (MissingKeysException $exception) {
@@ -229,7 +262,7 @@ class NomenclatureController extends Controller
             $result = $this->get('tactician.commandbus')->handle($data);
             $this->addFlash('success', 'flash.admin.nomenclature.assign.success');
 
-            return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $result->nomenclature->getId()]);
+            return $this->getReadNomenclatureUrl($result->nomenclature);
         }
 
         return null;
@@ -285,5 +318,22 @@ class NomenclatureController extends Controller
         return $this->get('form.factory')->createNamed('', ExportType::class, $export, [
             'action' => $this->generateUrl('admin_nomenclature_export', ['nomenclature' => $export->nomenclature->getId()])
         ]);
+    }
+
+    /**
+     * @param Nomenclature $nomenclature
+     *
+     * @return string
+     */
+    private function getReadNomenclatureUrl(Nomenclature $nomenclature)
+    {
+        if ($nomenclature->getEvent()) {
+            return $this->generateUrl('admin_nomenclature_event_read', [
+                'event'        => $nomenclature->getEvent()->getId(),
+                'nomenclature' => $nomenclature->getId(),
+            ]);
+        }
+
+        return $this->generateUrl('admin_nomenclature_read', ['nomenclature' => $nomenclature->getId()]);
     }
 }
