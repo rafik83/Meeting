@@ -288,6 +288,7 @@ class NomenclatureController extends Controller
             $file     = $this->get('application.nomenclature.export.csv_exporter')->export($nomenclature, $filepath, $export->charset);
             $filename = sprintf('nomenclature-%s.csv', Transliterator::urlize($nomenclature->getTitle()));
             $response = new BinaryFileResponse($file);
+            $response->setCharset($export->charset);
             $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
 
             return $response;
