@@ -69,7 +69,12 @@ abstract class AbstractCommandHandler
     protected function setPromotions(PromotionCode $promotionCode, AbstractCommand $command)
     {
         foreach ($command->promotions as $promotion) {
-            $promotionCode->setPromotion($promotion['product'], $promotion['type'], $promotion['value']);
+            $promotionCode->setPromotion(
+                $promotion['product'],
+                $promotion['type'],
+                $promotion['value'],
+                $promotion['quantityMax']
+            );
         }
 
         foreach ($promotionCode->getPromotions() as $promotion) {

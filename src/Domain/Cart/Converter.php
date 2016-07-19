@@ -154,7 +154,7 @@ class Converter
             );
             $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
         }
-
+        
         $this->orderRepository->add($order);
         $this->emptyCart($cart);
 

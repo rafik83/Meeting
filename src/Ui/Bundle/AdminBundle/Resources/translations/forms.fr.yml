@@ -1230,6 +1230,8 @@ form:
                             label: Type
                         value:
                             label: Valeur
+                        quantityMax:
+                            label: Quantité max
     promotion_code_update:
         children:
             title:
@@ -1254,6 +1256,8 @@ form:
                             label: Type
                         value:
                             label: Valeur
+                        quantityMax:
+                            label: Quantité max
     promotion_code_translation:
         children:
             label:
