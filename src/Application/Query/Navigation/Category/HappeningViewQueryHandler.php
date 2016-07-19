@@ -36,14 +36,19 @@ class HappeningViewQueryHandler
         if ($happeningOpenDate === null) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-            $formatter = new IntlDateFormatter($happeningViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+            $formatter = new IntlDateFormatter(
+                $happeningViewQuery->locale,
+                IntlDateFormatter::LONG,
+                IntlDateFormatter::LONG
+            );
             $formatter->setPattern('d MMMM Y');
+            $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
 
             $linksView[] = new LinkView(
                 'navigation.links.happening.open_date',
                 null,
                 null,
-                new StateButtonView(false, $formatter->format($happeningOpenDate))
+                new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
             );
         }
 
