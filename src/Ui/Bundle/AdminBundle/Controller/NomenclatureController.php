@@ -136,7 +136,7 @@ class NomenclatureController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    private function read(Request $request, Nomenclature $nomenclature, $event = null)
+    private function read(Request $request, Nomenclature $nomenclature, Event $event = null)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
