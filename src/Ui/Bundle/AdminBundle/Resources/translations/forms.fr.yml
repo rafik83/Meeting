@@ -1351,6 +1351,14 @@ form:
                 label: Date limite d'acceptation des acomptes
             deposit:
                 label: Pourcentage de l'acompte
+    event_configure_date:
+        children:
+            catalogOnlineDate:
+                label: Mise en ligne du catalogue
+            happeningsOpenDate:
+                label: Ouverture des inscriptions aux sous-événements
+            schedulePublishDate:
+                label: Publication des agendas définitifs (RDV)
             submit:
                 label: Enregistrer
     event_configure_date:

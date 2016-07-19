@@ -40,6 +40,14 @@ function init (target) {
         });
     });
 
+    $('.dropdown-menu').on('click', function (e) {
+        e.stopPropagation();
+    });
+
+    $('.navigation__close').on('click', function (e) {
+        $('.navigation').toggleClass('open');
+    });
+
     $('.clear-on-hidden-modal', target)
         .on('show.bs.modal', function (event) {
             if (event.relatedTarget !== undefined && (event.relatedTarget.href !== '' || event.relatedTarget.href !== '#')) {

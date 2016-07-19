@@ -1491,6 +1491,80 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
 
+    ##
+    # Navigation builder
+    ##
+    navigation.navigation_builder:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
+        arguments:
+            - '@adapter.router'
+
+    ##
+    # Navigation query handler
+    ##
+    query.navigation.menu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\MenuViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@query.navigation.category_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
+    query.navigation.category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\CategoryViewQueryHandler
+        arguments:
+            - '@query.navigation.category_member_space_view_query_handler'
+            - '@query.navigation.category_billing_view_query_handler'
+            - '@query.navigation.category_catalog_view_query_handler'
+            - '@query.navigation.category_happening_view_query_handler'
+            - '@query.navigation.category_planning_view_query_handler'
+            - '@query.navigation.category_sheet_view_query_handler'
+            - '@query.navigation.category_package_view_query_handler'
+        tagsx:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\CategoryViewQuery }
+    query.navigation.category_billing_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQuery }
+    query.navigation.category_catalog_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\CatalogViewQueryHandler
+        arguments:
+            - '@datetime'
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\CatalogViewQuery }
+    query.navigation.category_happening_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler
+        arguments:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQuery }
+    query.navigation.category_member_space_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQueryHandler
+        arguments:
+            - '@template.template_data_factory'
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQuery }
+    query.navigation.category_package_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQueryHandler
+        arguments:
+            - '@package.funnel.funnel_factory'
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQuery }
+    query.navigation.category_planning_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler
+        arguments:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQuery }
+    query.navigation.category_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQuery }
+
     #
     # Elastic Transformer
     #

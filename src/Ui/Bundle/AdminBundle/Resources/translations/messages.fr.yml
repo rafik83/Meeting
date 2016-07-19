@@ -394,9 +394,12 @@ admin:
                 link: Information facturation
                 title: Configuration des informations de facturation
         practicalInfo:
-            link: Informations Pratiques
-            update:
-                title: Modifier les informations pratiques
+          link: Informations Pratiques
+          update:
+            title: Modifier les informations pratiques
+        configuration:
+            key_dates:
+                title: Date clé de l'événement
         vatMode:
             et: HT
             ati: TTC
