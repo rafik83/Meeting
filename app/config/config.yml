@@ -209,3 +209,10 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail: { size: [250, 100], mode: inset }
+
+# Doctrine migrations configuration
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
+    namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
+    table_name: migration_versions
+    name: Application Migrations
