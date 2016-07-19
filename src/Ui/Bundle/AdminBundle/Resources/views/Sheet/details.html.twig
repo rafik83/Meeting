@@ -12,7 +12,8 @@
         </div>
     </div>
 
-    <h1>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h1>
+    <h1>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span>
+    </h1>
 
     <h3>{{ 'admin.sheet.details.participants'|trans }}</h3>
 
@@ -87,7 +88,12 @@
             </table>
         </div>
         <div class="col-md-6">
-            <h3>{{ 'admin.sheet.details.transactions'|trans }}</h3>
+            <div class="col-md-10">
+                <h3>{{ 'admin.sheet.details.transactions'|trans }}</h3>
+            </div>
+            <div class="col-md-2">
+                <a href="{{ path('admin_sheet_transaction_create', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary pull-right">{{ 'admin.transaction.add'|trans }}</a>
+            </div>
 
             <table class="table table-hover">
                 <thead>
@@ -95,6 +101,7 @@
                 <th>{{ 'admin.transaction.column.state'|trans }}</th>
                 <th>{{ 'admin.transaction.column.mode'|trans }}</th>
                 <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
+                <th></th>
                 </thead>
                 <tbody>
                 {% for transaction in details.transactions %}
@@ -103,6 +110,23 @@
                         <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
                         <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
                         <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <a href="{{ path('admin_sheet_transaction_update', {
+                                    'event': event.id,
+                                    'sheet': sheet.id,
+                                    'transaction': transaction.id
+                                }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.edit'|trans }}</a>
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="#">{{ 'admin.transaction.remove'|trans }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
@@ -183,17 +207,17 @@
     </div>
 
     {% if details.traces %}
-    <h3>{{ 'admin.sheet.details.historic.title'|trans }}</h3>
-    <div class="row">
-        <ul>
-            {% for trace in details.traces %}
-                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
-                    {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
-                    {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+        <h3>{{ 'admin.sheet.details.historic.title'|trans }}</h3>
+        <div class="row">
+            <ul>
+                {% for trace in details.traces %}
+                    <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
+                        {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
+                        {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 
     <h3>{{ 'admin.sheet.details.comments.title'|trans }}</h3>

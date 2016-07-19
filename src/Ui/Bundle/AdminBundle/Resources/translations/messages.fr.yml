@@ -288,6 +288,9 @@ admin:
             bank_card: Carte bleu
             bank_transfer: Transfert
             bank_check: Chèque
+        add: Ajouter
+        edit: Modifier
+        remove: Supprimer
     product:
         link: Catalogue de produits
         title: Catalogue de produits

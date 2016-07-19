@@ -103,8 +103,6 @@ class TransactionController extends Controller
     }
 
     /**
-     * @Method("DELETE")
-     *
      * @param Event       $event
      * @param Sheet       $sheet
      * @param Transaction $transaction
