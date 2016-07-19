@@ -397,10 +397,12 @@ class Cart
         $total = 0;
         foreach ($promotionCode->getPromotions() as $promotion) {
             if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
-                /** "si promotion en valeur absolue la quantité n'est pas prise en compte" */
+                // don't use promotion quantity max if promotion type value off
                 if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
                     $total -= $promotion->getDiscount();
-                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()) {
+                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()
+                    || null === $promotion->getQuantityMax()
+                ) {
                     $total -= $cartRow->getQuantity() * $promotion->getDiscount();
                 } else {
                     $total -= $promotion->getQuantityMax() * $promotion->getDiscount();

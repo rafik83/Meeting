@@ -61,8 +61,7 @@ class Promotion
         $type,
         $value,
         $quantityMax = null
-    )
-    {
+    ) {
         $this->promotionCode = $promotionCode;
         $this->product       = $product;
         $this->type          = $type;
