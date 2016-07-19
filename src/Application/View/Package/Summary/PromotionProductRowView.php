@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Package\Summary;
 
-class PromotionProductListView
+class PromotionProductRowView
 {
     /**
      * @var string

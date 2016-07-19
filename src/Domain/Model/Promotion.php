@@ -170,9 +170,15 @@ class Promotion
 
     /**
      * @param CartRow $cartRow
+     *
+     * @return int
      */
     public function getQuantityForCartRow(CartRow $cartRow)
     {
-        
+        if ($cartRow->getQuantity() <= $this->getQuantityMax() || null === $this->getQuantityMax()) {
+            return $cartRow->getQuantity();
+        }
+
+        return $this->getQuantityMax();
     }
 }

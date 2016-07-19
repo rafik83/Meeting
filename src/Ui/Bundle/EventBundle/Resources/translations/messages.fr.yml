@@ -209,6 +209,7 @@ summary:
     vatRate: 'TVA applicable %vatRate%%:'
     totalToPay: 'Total à régler:'
     promotionCode: 'Offres de réductions'
+    promotionCode.free: 'Offert'
     group:
         option:
             title: Options

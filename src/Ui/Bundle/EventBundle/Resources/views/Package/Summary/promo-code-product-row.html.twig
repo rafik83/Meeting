@@ -1,0 +1,21 @@
+{% if promotionProduct.promotionType == 'percent_off' %}
+    {% set promotionTag = '%' %}
+{% elseif promotionProduct.promotionType == 'value_off' %}
+    {% set promotionTag = promotionCodeView.currency|currency_symbol %}
+{% else %}
+    {% set promotionTag = 'summary.promotionCode.free' %}
+{% endif %}
+
+<span>
+    {{ promotionProduct.product }}
+
+    {% if promotionProduct.promotionType == 'free' %}
+        {{ '(' ~ promotionTag|trans ~ ')' }}
+    {% elseif promotionProduct.quantity > 1 %}
+        {{ '(' ~ promotionProduct.quantity ~ ' x ' ~ ' -' ~ promotionProduct.discountValue ~ promotionTag ~ ')' }}
+    {% else %}
+        {{ '(-' ~ promotionProduct.discountValue ~ promotionTag ~ ')' }}
+    {% endif %}
+
+    {{ (key + 1 < promotionCodeView.promotionProductListView|length) ? ' - ' : '' }}
+</span>
