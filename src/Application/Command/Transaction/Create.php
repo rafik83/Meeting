@@ -40,20 +40,33 @@ class Create
     public $reference;
 
     /**
+     * @var string
+     */
+    public $state;
+
+    /**
      * Create constructor.
      *
      * @param Sheet              $sheet
-     * @param float              $amount
+     * @param null|string        $state
+     * @param null|float         $amount
      * @param \DateTimeInterface $date
-     * @param string             $mode
-     * @param string             $reference
+     * @param null|string        $mode
+     * @param null|string        $reference
      */
-    public function __construct(Sheet $sheet, $amount = null, \DateTimeInterface $date = null, $mode = null, $reference = null)
-    {
+    public function __construct(
+        Sheet $sheet,
+        $amount = null,
+        \DateTimeInterface $date = null,
+        $mode = null,
+        $reference = null,
+        $state = null
+    ) {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
         $this->date      = $date;
         $this->mode      = $mode;
         $this->reference = $reference;
+        $this->state     = $state;
     }
 }
