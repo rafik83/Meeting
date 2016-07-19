@@ -12,8 +12,9 @@ Proximum\Vimeet\Domain\Model\Promotion:
         value:
             type: float
             nullable: true
-        quantity:
+        quantityMax:
             type: integer
+            nullable: true
     manyToOne:
         promotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
