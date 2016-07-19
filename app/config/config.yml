@@ -216,3 +216,6 @@ doctrine_migrations:
     namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
     table_name: migration_versions
     name: Application Migrations
+
+payum_capture:
+    resource: "@PayumBundle/Resources/config/routing/capture.xml"
