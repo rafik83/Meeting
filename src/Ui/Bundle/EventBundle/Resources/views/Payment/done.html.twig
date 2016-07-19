@@ -1,7 +1,5 @@
 {% extends 'EventBundle::base.html.twig' %}
 
-{% form_theme form '@Ui/default.html.twig' %}
-
 {% block title %}
     {{ event.title }}: {{ 'package.payment.title'|trans }}
 {% endblock %}
@@ -17,7 +15,7 @@
                 <ul>
                     <li>{{ payment.total_amount }}</li>
                     <li>{{ payment.currency_code }}</li>
-                    <li>{{ payment.details }}</li>
+                    <li>{{ dump(payment.details) }}</li>
                 </ul>
             </div>
         </div>

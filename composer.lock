@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0652bb8d7bfc12bc6fb375689babe104",
+    "hash": "691d6228b7054bc4f24487e21733c4e6",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2702,6 +2702,67 @@
                 "library"
             ],
             "time": "2015-04-14 17:23:40"
+        },
+        {
+            "name": "payum/offline",
+            "version": "1.3.0",
+            "target-dir": "Payum/Offline",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Payum/Offline.git",
+                "reference": "6ebd3dd741ef0d0d3271265f795c90b4a34d1487"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Payum/Offline/zipball/6ebd3dd741ef0d0d3271265f795c90b4a34d1487",
+                "reference": "6ebd3dd741ef0d0d3271265f795c90b4a34d1487",
+                "shasum": ""
+            },
+            "require": {
+                "payum/core": "~1.0"
+            },
+            "require-dev": {
+                "payum/core": "~1.0@dev",
+                "phpunit/phpunit": "~4.0",
+                "symfony/phpunit-bridge": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Payum\\Offline": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/Payum/Offline/contributors"
+                },
+                {
+                    "name": "Kotlyar Maksim",
+                    "email": "kotlyar.maksim@gmail.com"
+                },
+                {
+                    "name": "Payum project",
+                    "homepage": "http://payum.org/"
+                }
+            ],
+            "description": "The Payum extension. It provides Offline payment integration.",
+            "homepage": "http://payum.org",
+            "keywords": [
+                "invoice",
+                "offlile",
+                "payment"
+            ],
+            "time": "2016-03-25 14:09:06"
         },
         {
             "name": "payum/payum-bundle",

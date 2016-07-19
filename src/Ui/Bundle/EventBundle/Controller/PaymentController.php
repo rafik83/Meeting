@@ -120,11 +120,8 @@ class PaymentController extends Controller
         $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
             $gatewayName,
             $payment,
-            'done', // the route to redirect after capture
-            [
-                'event' => $eventDomain->getEvent()->getId(),
-                'sheet' => $sheet->getId(),
-            ]
+            'event_package_payment_done', // the route to redirect after capture
+            ['sheet' => $sheet->getId()]
         );
 
         return $this->redirect($captureToken->getTargetUrl());
