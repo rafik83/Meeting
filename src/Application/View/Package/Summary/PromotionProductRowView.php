@@ -35,10 +35,10 @@ class PromotionProductRowView
     /**
      * PromotionProductListView constructor.
      *
-     * @param string $product
-     * @param string $promotionType
-     * @param        $discountValue
-     * @param int    $quantity
+     * @param string    $product
+     * @param string    $promotionType
+     * @param int|float $discountValue
+     * @param int       $quantity
      */
     public function __construct($product, $promotionType, $discountValue, $quantity)
     {
