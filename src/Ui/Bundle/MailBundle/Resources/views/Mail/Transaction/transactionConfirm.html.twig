@@ -1,7 +1,7 @@
 {% block subject %}
     {{ 'mail.transaction.confirm.subject'|trans({
         '%transactionNumber%': mail.transaction.id
-    }, 'mail', mail.locale)|html }}
+    }, 'mail', mail.locale) }}
 {% endblock %}
 
 {% block body %}

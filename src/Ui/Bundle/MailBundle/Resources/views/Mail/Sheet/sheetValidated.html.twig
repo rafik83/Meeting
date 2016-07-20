@@ -1,5 +1,5 @@
 {% block subject %}
-    {{ 'mail.sheet.validated.subject'|trans({'%event%': mail.sheet.event.title}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.sheet.validated.subject'|trans({'%event%': mail.sheet.event.title}, 'mail', mail.locale) }}
 {% endblock %}
 
 {% block body %}
