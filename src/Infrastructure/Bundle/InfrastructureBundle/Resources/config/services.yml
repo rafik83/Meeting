@@ -1017,6 +1017,13 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
 
 
+    command.order.add_row_handler:
+        class: Proximum\Vimeet\Application\Command\Order\AddRowHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRow }
+
     #
     # Security
     #
@@ -1427,6 +1434,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler
         arguments:
             - '@query.package.summary.product_view_query_handler'
+            - '@query.order.summary.custom_row_view_query_handler'
     query.package.summary.planning_group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
         arguments:
@@ -1462,6 +1470,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler
         arguments:
             - '@query.order.summary.product_view_query_handler'
+            - '@query.order.summary.custom_row_view_query_handler'
     query.order.summary.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
         arguments:
@@ -1472,11 +1481,20 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler
         arguments:
             - '@query.order.summary.promotion_code_view_query_handler'
+    query.order.summary.custom_row_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowViewQueryHandler
+    query.order.summary.custom_rows_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowsViewQueryHandler
+        arguments:
+            - '@query.order.summary.custom_row_view_query_handler'
     query.order.summary_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
         arguments:
             - '@query.order.summary.groups_view_query_handler'
             - '@query.order.summary.promotion_codes_view_query_handler'
+            - '@query.order.summary.custom_rows_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
     query.order.pro_forma_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
         arguments:
