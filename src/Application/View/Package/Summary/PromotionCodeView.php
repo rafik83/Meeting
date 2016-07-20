@@ -47,7 +47,7 @@ class PromotionCodeView
     /**
      * @var PromotionProductRowView[]
      */
-    public $promotionProductRowView;
+    public $promotionProductRowViews;
 
     /**
      * PromotionCodeView constructor.
@@ -58,9 +58,9 @@ class PromotionCodeView
      * @param float                     $total
      * @param string                    $currency
      * @param string                    $vatMode
-     * @param PromotionProductRowView[] $promotionProductRowView
+     * @param PromotionProductRowView[] $promotionProductRowViews
      */
-    public function __construct($id, $title, $description, $total, $currency, $vatMode, $promotionProductRowView)
+    public function __construct($id, $title, $description, $total, $currency, $vatMode, $promotionProductRowViews)
     {
         $this->id                       = $id;
         $this->title                    = $title;
@@ -68,6 +68,6 @@ class PromotionCodeView
         $this->total                    = $total;
         $this->currency                 = $currency;
         $this->vatMode                  = $vatMode;
-        $this->promotionProductListView = $promotionProductRowView;
+        $this->promotionProductRowViews = $promotionProductRowViews;
     }
 }

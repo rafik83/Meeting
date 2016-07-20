@@ -181,4 +181,28 @@ class Promotion
 
         return $this->getQuantityMax();
     }
+
+    /**
+     * @return bool
+     */
+    public function isPercentOff()
+    {
+        return $this->type == self::TYPE_PERCENT_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValueOff()
+    {
+        return $this->type == self::TYPE_VALUE_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFree()
+    {
+        return $this->type == self::TYPE_FREE;
+    }
 }

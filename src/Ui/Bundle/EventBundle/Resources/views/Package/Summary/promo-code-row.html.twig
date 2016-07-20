@@ -5,8 +5,11 @@
         <td class="col-md-6">
             <div class="col-md-10">
                 <strong>{{ promotionCodeView.title }}</strong>
-                {% for key, promotionProduct in promotionCodeView.promotionProductListView %}
-                    {% include 'EventBundle:Package/Summary:promo-code-product-row.html.twig' %}
+                {% for key, promotionProduct in promotionCodeView.promotionProductRowViews %}
+                    {{ include('EventBundle:Package/Summary:promo-code-product-row.html.twig', {
+                        'promotionProduct': promotionProduct
+                    }, false) }}
+                    {{ (key + 1 < promotionCodeView.promotionProductRowViews|length) ? ' - ' : '' }}
                 {% endfor %}
                 <br>{{ promotionCodeView.description|nl2br }}
             </div>

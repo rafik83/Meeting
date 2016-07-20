@@ -1,6 +1,6 @@
 {% if promotionCodes.promotionCodes is defined and promotionCodes.promotionCodes is not empty %}
     <tr>
-        <td colspan="4" class="active"><b>{{ 'summary.promotionCode'|trans }}</b></td>
+        <td colspan="4" class="active"><b>{{ 'summary.promotionCode.title'|trans }}</b></td>
     </tr>
     {% for promotionCode in promotionCodes.promotionCodes %}
         {{ include('EventBundle:Order/Summary:promotion_code.html.twig', {promotionCode: promotionCode}) }}

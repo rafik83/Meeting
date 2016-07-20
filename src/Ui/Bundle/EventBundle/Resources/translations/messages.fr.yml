@@ -208,8 +208,9 @@ summary:
     total: 'Total de la commande:'
     vatRate: 'TVA applicable %vatRate%%:'
     totalToPay: 'Total à régler:'
-    promotionCode: 'Offres de réductions'
-    promotionCode.free: 'Offert'
+    promotionCode:
+        title: 'Offres de réductions'
+        free: 'Offert'
     group:
         option:
             title: Options

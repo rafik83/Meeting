@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Package\Summary;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionCodesView;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionCodeView;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionProductRowView;
-use Proximum\Vimeet\Domain\Model\CartRow;
 
 class PromotionCodeQueryHandler
 {
@@ -31,12 +30,13 @@ class PromotionCodeQueryHandler
         // foreach promotion code used
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
 
-            $promotionProductRowView = [];
+            $promotionProductRowViews = [];
             foreach($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
                 $cartRow = $cart->getCartRowForProduct($promotion->getProduct());
 
-                if($cartRow instanceof CartRow) {
-                    $promotionProductRowView[] = new PromotionProductRowView(
+                if (null !== $cartRow) {
+                    $promotionProductRowViews[] = new PromotionProductRowView(
+                        $promotion,
                         $promotion->getProduct()->getName(),
                         $promotion->getType(),
                         $promotion->getValue(),
@@ -52,7 +52,7 @@ class PromotionCodeQueryHandler
                 $cart->getDiscount($promotionCodeRow->getPromotionCode()),
                 $promotionCodeQuery->sheet->getEvent()->getCurrency(),
                 $promotionCodeQuery->sheet->getEvent()->getMode(),
-                $promotionProductRowView
+                $promotionProductRowViews
             );
         }
 

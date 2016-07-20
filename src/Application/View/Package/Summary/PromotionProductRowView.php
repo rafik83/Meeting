@@ -10,8 +10,15 @@
 
 namespace Proximum\Vimeet\Application\View\Package\Summary;
 
+use Proximum\Vimeet\Domain\Model\Promotion;
+
 class PromotionProductRowView
 {
+    /**
+     * @var Promotion
+     */
+    public $promotion;
+
     /**
      * @var string
      */
@@ -35,16 +42,18 @@ class PromotionProductRowView
     /**
      * PromotionProductListView constructor.
      *
+     * @param Promotion $promotion
      * @param string    $product
      * @param string    $promotionType
      * @param int|float $discountValue
      * @param int       $quantity
      */
-    public function __construct($product, $promotionType, $discountValue, $quantity)
+    public function __construct(Promotion $promotion, $product, $promotionType, $discountValue, $quantity)
     {
+        $this->promotion     = $promotion;
         $this->product       = $product;
         $this->promotionType = $promotionType;
         $this->quantity      = $quantity;
-        $this->discountValue = $discountValue;
+        $this->discountValue = -1 * $discountValue;
     }
 }
