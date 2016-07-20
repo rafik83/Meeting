@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 
 /**
  * "Commande"
@@ -74,6 +75,11 @@ class Order
     private $groupsData;
 
     /**
+     * @var Row[]
+     */
+    private $customRows = [];
+
+    /**
      * @param Sheet             $sheet
      * @param bool              $vatApplicable
      * @param Order\BillingInfo $billingInfo
@@ -97,6 +103,7 @@ class Order
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
         $this->promotionCodes = new ArrayCollection();
+        $this->customRows     = new ArrayCollection();
     }
 
     /**
@@ -232,6 +239,18 @@ class Order
     }
 
     /**
+     * @param Row $customRow
+     *
+     * @return Order
+     */
+    public function addCustomRow(Order\Row $customRow)
+    {
+        $this->customRows->add($customRow);
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getTotal()
@@ -244,6 +263,10 @@ class Order
 
         foreach ($this->promotionCodes->toArray() as $promotionCode) {
             $total += $promotionCode->getPrice();
+        }
+
+        foreach ($this->customRows as $customRow) {
+            $total += $customRow->getQuantity() * $customRow->getPrice();
         }
 
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
@@ -309,10 +332,22 @@ class Order
      *
      * @return array
      */
-    public function getRowForGroupId($groupId)
+    public function getProductRowForGroupId($groupId)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
-            return $row->getGroupId() === $groupId;
+            return $row->isProduct() && $row->getGroupId() === $groupId;
+        });
+    }
+
+    /**
+     * @param $groupId
+     *
+     * @return array
+     */
+    public function getCustomRowForGroupId($groupId)
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+            return !$row->isProduct() && $row->getGroupId() === $groupId;
         });
     }
 
@@ -349,4 +384,13 @@ class Order
     {
         return $this->promotionCodes->toArray();
     }
+
+    /**
+     * @return Order\Row[]
+     */
+    public function getCustomRows()
+    {
+        return $this->customRows->toArray();
+    }
+
 }

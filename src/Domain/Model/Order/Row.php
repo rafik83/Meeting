@@ -23,49 +23,81 @@ class Row
     /**
      * @var Order
      */
-    private $order;
+    protected $order;
 
     /**
      * @var string
      */
-    private $data;
+    protected $data = '';
 
     /**
-     * @var Product
+     * @var null|Product
      */
-    private $product;
+    protected $product;
 
     /**
      * @var int
      */
-    private $quantity;
+    protected $quantity;
 
     /**
      * @var float
      */
-    private $price;
+    protected $price;
 
     /**
      * @var null|int
      */
-    private $groupId;
+    protected $groupId;
+
+    /**
+     * @var null|Row
+     */
+    private $parentRow;
+
+    /**
+     * @var string
+     */
+    protected $label;
+
+    /**
+     * @var null|string
+     */
+    protected $description;
 
     /**
      * Row constructor.
      *
-     * @param Order    $order
-     * @param Product  $product
-     * @param int      $quantity
-     * @param int|null $groupId
+     * @param Order        $order
+     * @param null|Product $product
+     * @param int          $quantity
+     * @param null|int     $groupId
+     * @param string       $label
+     * @param string       $description
+     * @param float        $price
      */
-    public function __construct(Order $order, Product $product, $quantity, $groupId = null)
+    public function __construct(
+        Order $order,
+        $product,
+        $quantity,
+        $groupId = null,
+        $label = null,
+        $description = null,
+        $price = null
+    )
     {
-        $this->order    = $order;
-        $this->quantity = $quantity;
-        $this->data     = $product->getSerializedData();
-        $this->product  = $product;
-        $this->price    = $product->getUnitPrice();
-        $this->groupId  = $groupId;
+        $this->order       = $order;
+        $this->quantity    = $quantity;
+        $this->groupId     = $groupId;
+        $this->label       = $label;
+        $this->description = $description;
+        $this->price       = $price;
+
+        if ($product != null) {
+            $this->product = $product;
+            $this->data    = $product->getSerializedData();
+            $this->price   = $product->getUnitPrice();
+        }
     }
 
     /**
@@ -150,7 +182,7 @@ class Row
      *
      * @return string
      */
-    public function getLabel($locale, $fallback = null)
+    public function getLabelFromData($locale, $fallback = null)
     {
         $data = json_decode($this->data, true);
 
@@ -173,6 +205,58 @@ class Row
     }
 
     /**
+     * @param string $locale
+     * @param null   $fallback
+     *
+     * @return string
+     */
+    public function getLabel($locale, $fallback = null)
+    {
+        if (!empty($this->data)) {
+            return $this->getLabelFromData($locale, $fallback);
+        }
+
+        return $this->label;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param Order        $order
+     * @param int          $quantity
+     * @param null|int     $groupId
+     * @param string       $label
+     * @param string       $description
+     * @param float        $price
+     *
+     * @return Row
+     */
+    public static function createCustomRow(
+        Order $order,
+        $quantity,
+        $groupId,
+        $label,
+        $description,
+        $price
+    ) {
+        return new self (
+            $order,
+            null,
+            $quantity,
+            $groupId,
+            $label,
+            $description,
+            $price
+        );
+    }
+
+    /**
      * @return bool
      */
     public function hasIncludedProduct()
@@ -180,5 +264,13 @@ class Row
         $data = json_decode($this->data, true);
 
         return isset($data['productsIncluded']) && !empty($data['productsIncluded']) ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProduct()
+    {
+        return null !== $this->getProduct();
     }
 }
