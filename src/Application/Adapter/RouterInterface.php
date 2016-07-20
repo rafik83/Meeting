@@ -47,4 +47,12 @@ interface RouterInterface
      * @return string
      */
     public function generateSheet(Sheet $sheet);
+
+    /**
+     * @param $path
+     * @param $parameters
+     *
+     * @return string
+     */
+    public function generate($path, $parameters);
 }

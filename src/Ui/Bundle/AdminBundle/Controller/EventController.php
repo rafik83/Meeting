@@ -234,7 +234,7 @@ class EventController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return Response
+     * @return RedirectResponse|Response
      */
     public function datesAction(Request $request, Event $event)
     {

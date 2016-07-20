@@ -18,7 +18,7 @@
                 {{ 'admin.nomenclature.table.depth'|transchoice(nomenclature.depth, { '%depth%': nomenclature.depth }) }}
             </td>
             <td class="text-right">
-                <a href="{{ path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}" class="btn btn-primary btn-sm">
+                <a href="{{ nomenclature.event ? path('admin_nomenclature_event_read', { 'event': nomenclature.event.id, 'nomenclature': nomenclature.id }) : path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}" class="btn btn-primary btn-sm">
                     {{ 'admin.nomenclature.table.read'|trans }}
                 </a>
             </td>

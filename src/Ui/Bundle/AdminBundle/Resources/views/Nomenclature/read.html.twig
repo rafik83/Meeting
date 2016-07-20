@@ -1,7 +1,10 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1 class="page-header">{{ nomenclature.title }} <small>{{ nomenclature.event ? nomenclature.event.title : '' }}</small></h1>
+    <h1 class="page-header">
+        <a href="{{ nomenclature.event ? path('admin_nomenclature_event', { 'event': nomenclature.event.id }) : path('admin_nomenclature_globals') }}">{{ nomenclature.event ? 'admin.nomenclature.title'|trans : 'admin.global_nomenclature.title'|trans }}</a>
+        / {{ nomenclature.title }}
+    </h1>
 
     {% set locales = nomenclature.locales %}
 

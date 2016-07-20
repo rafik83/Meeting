@@ -156,6 +156,46 @@ package:
 billing_info:
     title: Info de facturation
 
+navigation:
+    category:
+        member_space: Espace membre
+        billing: Facturation
+        sheet: Fiche de présentation
+        package: Forfait de participation
+        catalog: Catalogue des participants
+        happening: Gestion de rdv
+        planning: Agenda provisoire
+    links:
+        incoming: A venir
+        member_space:
+            profile: Profil
+            avatar: Photo
+            company: Société / Organisme
+        billing:
+            billing_info: Informations de facturation
+            order_history: Historique des commandes
+        sheet:
+            locale: Version
+        package:
+            summary: Récapitulatif
+            payment: Paiement
+            order_list: Liste des commandes
+        catalog:
+            available_date: Disponible le
+        happening:
+            proposal: Propositions de RDV
+            waiting: Demandes en attente
+            accept: Acceptées
+            decline: Refusées
+            open_date: Disponible le
+        planning:
+            available_date: Disponible le
+            final_date: Publication le
+            unavailability: Ajouter une indisponibilité
+            conference: Conférences
+            flash_presentation: Présentations flash
+            my_schedule: Mon agenda
+            all_schedule: Tous les agendas
 pro_forma:
     title: 'Pro Forma - %date%'
     bankInfo:
@@ -203,4 +243,3 @@ order:
             bank_card: Carte bleu
             bank_transfer: Transfert
             bank_check: Chèque
-

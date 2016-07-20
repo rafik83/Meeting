@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title %}{{ event.title }}: {{ details.title }}{% endblock %}
+
 {% block content %}
     <div class="panel panel-default pull-right">
         <div class="panel-heading">
@@ -12,39 +14,43 @@
 
     <h1>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span></h1>
 
-    <table class="table table-bordered">
-        <tr>
-            <th>{{ 'admin.sheet.details.participants'|trans }}</th>
-            <td>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        {% for label, value in details.participants|first %}
-                            <th>{{ label }}</th>
+    <h3>{{ 'admin.sheet.details.participants'|trans }}</h3>
+
+    <div class="row">
+        {% if details.owner.shouldBeDisplayed %}
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ 'admin.sheet.details.owner_not_participant.title'|trans }}
+                    </div>
+                    <div class="panel-body">
+                        {{ details.owner.firstName }}  {{ details.owner.lastName }}<br>
+                        {{ details.owner.email }}<br>
+                        {{ 'admin.sheet.details.owner.mobile'|trans }}: {{ details.owner.mobile }}<br>
+                        {{ 'admin.sheet.details.owner.phone'|trans }}: {{ details.owner.phone }}<br>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% for participant in details.participants %}
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ 'admin.sheet.details.participant.title'|trans }} {{ loop.index }}
+
+                        {% if participant.isOwner %}
+                            ({{ 'admin.sheet.details.owner.title'|trans }})
+                        {% endif %}
+                    </div>
+                    <div class="panel-body">
+                        {% for object in participant.templateData.getProfileObjects %}
+                            {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
                         {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for participant in details.participants %}
-                        <tr>
-                            {% for label, value in participant %}
-                                <td>{{ value }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <th>{{ 'admin.sheet.details.owner.email'|trans }}</th>
-            <td>{{ details.ownerEmail }}</td>
-        </tr>
-        <tr>
-            <th>{{ 'admin.sheet.details.owner.phone'|trans }}</th>
-            <td>{{ details.ownerPhone }}</td>
-        </tr>
-    </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
     <div class="row">
         <div class="col-md-6">
