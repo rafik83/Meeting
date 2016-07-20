@@ -187,7 +187,7 @@ class Promotion
      */
     public function isPercentOff()
     {
-        return $this->type == self::TYPE_PERCENT_OFF;
+        return $this->type === self::TYPE_PERCENT_OFF;
     }
 
     /**
@@ -195,7 +195,7 @@ class Promotion
      */
     public function isValueOff()
     {
-        return $this->type == self::TYPE_VALUE_OFF;
+        return $this->type === self::TYPE_VALUE_OFF;
     }
 
     /**
@@ -203,6 +203,6 @@ class Promotion
      */
     public function isFree()
     {
-        return $this->type == self::TYPE_FREE;
+        return $this->type === self::TYPE_FREE;
     }
 }

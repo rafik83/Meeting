@@ -9,7 +9,7 @@
                     {{ include('EventBundle:Package/Summary:promo-code-product-row.html.twig', {
                         'promotionProduct': promotionProduct
                     }, false) }}
-                    {{ (key + 1 < promotionCodeView.promotionProductRowViews|length) ? ' - ' : '' }}
+                    {{ not loop.last ? ' - ' : '' }}
                 {% endfor %}
                 <br>{{ promotionCodeView.description|nl2br }}
             </div>
