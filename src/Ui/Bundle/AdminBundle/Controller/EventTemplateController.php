@@ -30,6 +30,7 @@ class EventTemplateController extends Controller
 
         return $this->render('AdminBundle:EventTemplate:registrationTemplate.html.twig', [
             'templates' => $templates,
+            'event'     => $event,
         ]);
     }
 
@@ -50,6 +51,7 @@ class EventTemplateController extends Controller
         return $this->render('AdminBundle:EventTemplate:sheetTemplate.html.twig', [
             'baseTemplates' => $baseTemplates,
             'templates'     => $templates,
+            'event'         => $event,
         ]);
     }
 
@@ -66,6 +68,7 @@ class EventTemplateController extends Controller
 
         return $this->render('AdminBundle:EventTemplate:packageTemplate.html.twig', [
             'templates' => $templates,
+            'event'     => $event,
         ]);
     }
 }
