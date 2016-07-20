@@ -42,21 +42,29 @@ class PlanningViewQueryHandler
         if ($schedulePublishDate === null) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-            $formatter = new IntlDateFormatter($planningQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+            $formatter = new IntlDateFormatter(
+                $planningQuery->locale,
+                IntlDateFormatter::LONG,
+                IntlDateFormatter::LONG
+            );
             $formatter->setPattern('d MMMM Y');
+
+            $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
 
             $linksView[] = new LinkView(
                 'navigation.links.planning.available_date',
                 null,
                 null,
-                new StateButtonView(false, $formatter->format($happeningOpenDate))
+                new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
             );
+
+            $schedulePublishDateFormatted = $formatter->format($schedulePublishDate);
 
             $linksView[] = new LinkView(
                 'navigation.links.planning.final_date',
                 null,
                 null,
-                new StateButtonView(false, $formatter->format($schedulePublishDate))
+                new StateButtonView(false, $schedulePublishDateFormatted ? $schedulePublishDateFormatted : '')
             );
         }
 
