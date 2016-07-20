@@ -34,9 +34,9 @@ abstract class AbstractTransactionType extends AbstractType
                 'required' => true,
                 'expanded' => true,
                 'multiple' => false,
-                'choices'  => [
+                'choices' => [
                     Transaction::STATE_PENDING => Transaction::STATE_PENDING,
-                    Transaction::STATE_PAID => Transaction::STATE_PAID,
+                    Transaction::STATE_PAID    => Transaction::STATE_PAID,
                 ],
                 'choice_label' => function ($value) {
                     return sprintf('form.transaction.children.state.%s', $value);
