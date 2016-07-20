@@ -21,11 +21,20 @@ class GroupViewQueryHandler
     private $productViewQueryHandler;
 
     /**
-     * @param ProductViewQueryHandler $productViewQueryHandler
+     * @var CustomRowsViewQueryHandler
      */
-    public function __construct(ProductViewQueryHandler $productViewQueryHandler)
-    {
-        $this->productViewQueryHandler = $productViewQueryHandler;
+    private $customRowViewQueryHandler;
+
+    /**
+     * @param ProductViewQueryHandler    $productViewQueryHandler
+     * @param CustomRowViewQueryHandler $customRowsViewQueryHandler
+     */
+    public function __construct(
+        ProductViewQueryHandler $productViewQueryHandler,
+        CustomRowViewQueryHandler $customRowsViewQueryHandler
+    ) {
+        $this->productViewQueryHandler   = $productViewQueryHandler;
+        $this->customRowViewQueryHandler = $customRowsViewQueryHandler;
     }
 
     /**
@@ -39,17 +48,27 @@ class GroupViewQueryHandler
         $locale   = $groupViewQuery->locale;
         $order    = $groupViewQuery->order;
         $products = [];
+        $customRows = [];
 
         if ($groupViewQuery->type === Product::TYPE_OPTION) {
             $label = $order->getGroupLabel($groupViewQuery->groupId, $locale);
 
-            foreach ($order->getRowForGroupId($groupViewQuery->groupId) as $row) {
+            foreach ($order->getProductRowForGroupId($groupViewQuery->groupId) as $row) {
                 $products[] = $this->productViewQueryHandler->handle(
                     new ProductViewQuery(
                         $order,
                         $row,
                         $locale,
                         $groupViewQuery->planView
+                    )
+                );
+            }
+
+            foreach ($order->getCustomRowForGroupId($groupViewQuery->groupId) as $row) {
+                $customRows[] = $this->customRowViewQueryHandler->handle(
+                    new CustomRowViewQuery(
+                        $row,
+                        $locale
                     )
                 );
             }
@@ -72,7 +91,9 @@ class GroupViewQueryHandler
         return new GroupView(
             $label,
             $groupViewQuery->type,
-            $products
+            $groupViewQuery->groupId,
+            $products,
+            $customRows
         );
     }
 }

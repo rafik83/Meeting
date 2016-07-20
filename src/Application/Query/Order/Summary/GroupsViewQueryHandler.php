@@ -97,7 +97,7 @@ class GroupsViewQueryHandler
                     )
                 )
             );
-        }
+        };
 
         return $groupsView;
     }
