@@ -60,24 +60,20 @@ class CatalogViewQueryHandler
         if (empty($catalogOnlineDate)) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } else {
-            $formatter = new IntlDateFormatter($catalogViewQuery->locale, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+            $formatter = new IntlDateFormatter(
+                $catalogViewQuery->locale,
+                IntlDateFormatter::LONG,
+                IntlDateFormatter::LONG
+            );
             $formatter->setPattern('d MMMM Y');
+            $catalogOnlineDateFormatted = $formatter->format($catalogOnlineDate);
 
-            if ($this->dateTime < $catalogOnlineDate) {
-                $linksView[] = new LinkView(
-                    'navigation.links.catalog.available_date',
-                    null,
-                    null,
-                    new StateButtonView(true, $formatter->format($catalogOnlineDate))
-                );
-            } else {
-                $linksView[] = new LinkView(
-                    'navigation.links.catalog.available_date',
-                    $this->navigationBuilder->getRoute('event_catalog'),
-                    null,
-                    new StateButtonView(true, $formatter->format($catalogOnlineDate))
-                );
-            }
+            $linksView[] = new LinkView(
+                'navigation.links.catalog.available_date',
+                $this->dateTime < $catalogOnlineDate ? null : $this->navigationBuilder->getRoute('event_catalog'),
+                null,
+                new StateButtonView(true, $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '')
+            );
         }
 
         return new CategoryView(Category::CATALOG, Category::CATALOG_ICON, $linksView);

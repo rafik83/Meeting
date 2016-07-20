@@ -1326,7 +1326,7 @@ form:
         children:
             event:
                 label: Événement
-                help: La nomenclature sera dupliqué pour être assigné à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
+                help: La nomenclature sera dupliquée pour être assignée à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
             submit:
                 label: Assigner
     event_practical_info_update:
