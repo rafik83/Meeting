@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Create
@@ -25,7 +26,7 @@ class Create
     public $amount;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     public $date;
 
@@ -47,17 +48,17 @@ class Create
     /**
      * Create constructor.
      *
-     * @param Sheet              $sheet
-     * @param null|string        $state
-     * @param null|float         $amount
-     * @param \DateTimeInterface $date
-     * @param null|string        $mode
-     * @param null|string        $reference
+     * @param Sheet             $sheet
+     * @param null|string       $state
+     * @param null|float        $amount
+     * @param DateTimeInterface $date
+     * @param null|string       $mode
+     * @param null|string       $reference
      */
     public function __construct(
         Sheet $sheet,
         $amount = null,
-        \DateTimeInterface $date = null,
+        DateTimeInterface $date = null,
         $mode = null,
         $reference = null,
         $state = null
