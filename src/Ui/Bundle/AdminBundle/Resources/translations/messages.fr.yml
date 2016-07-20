@@ -292,6 +292,7 @@ admin:
         edit: Modifier
         remove: Supprimer
         create: Ajouter une transaction
+        update: Modifier une transaction
 
     product:
         link: Catalogue de produits
