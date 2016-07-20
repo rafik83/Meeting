@@ -20,50 +20,69 @@
             </tr>
         </thead>
         <tbody>
-            {% for groupName, group in order_view.groups %}
+
+            {% for group in order_view.groups.groups %}
                 <tr class="active">
                     <th colspan="5">{{ group.label }}</th>
                     <td class="text-right">
-                        <a href="{{ path('admin_sheet_order_add_row', { 'event': event.id, 'order': order.id, 'group': groupName }) }}"><i class="glyphicon glyphicon-plus"></i></a>
+                        {% if group.groupId %}
+                            <a href="{{ path('admin_sheet_order_add_row_to_group', { 'event': event.id, 'order': order.id, 'group': group.groupId }) }}"><i class="glyphicon glyphicon-plus"></i></a>
+                        {% endif %}
                     </td>
                 </tr>
-                {% for rowName, row in group.rows %}
+
+                {% for product in group.products %}
                     <tr>
                         <td>&nbsp;</td>
-                        <td>{{ row.label }}</td>
-                        <td class="text-right">{{ row.unitPrice|number_format(2, ',', ' ') }} €</td>
-                        <td class="text-right">{{ row.quantity }}</td>
-                        <td class="text-right">{{ row.total|number_format(2, ',', ' ') }} €</td>
+                        <td>{{ product.label }}</td>
+                        <td class="text-right">{{ product.price|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">{{ product.quantity }}</td>
+                        <td class="text-right">{{ product.total|number_format(2, ',', ' ') }} €</td>
                         <td class="text-right">
-                            {% if row.editable %}
-                                <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'group': groupName, 'row': rowName }) }}"><i class="glyphicon glyphicon-pencil"></i></a>
-                                {{ macro.button(path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'group': groupName, 'row': rowName }), 'DELETE', '<i class="glyphicon glyphicon-trash"></i>', { 'class': 'btn btn-link btn-np', 'data-confirm': 'message.admin.order.remove_row.confirm'|trans }) }}
+
+                            {% if product.id is null %}
+                                {#<a href="{{ path('admin_sheet_order_edit_row', { 'event': event.id, 'order': order.id, 'group': group.type, 'row': product.id, 'groupId': group.groupId }) }}"><i class="glyphicon glyphicon-edit"></i></a>#}
+                                {#<a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'group': group.type, 'row': product.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>#}
                             {% endif %}
                         </td>
                     </tr>
-                    {% if row.included is not empty %}
+                    {% if product.includedProducts is not empty %}
                         <tr>
                             <td>&nbsp;</td>
                             <th colspan="5">Inclus :</th>
                         </tr>
                     {% endif %}
-                    {% for included in row.included %}
+                    {% for included in product.includedProducts %}
                         <tr>
                             <td>&nbsp;</td>
                             <td>&gt; {{ included.label }}</td>
-                            <td class="text-right">{{ included.unitPrice|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-right">{{ included.price|number_format(2, ',', ' ') }} €</td>
                             <td class="text-right">{{ included.quantity }}</td>
                             <td class="text-right">{{ included.total|number_format(2, ',', ' ') }} €</td>
                             <td></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
+                {% for customRow in group.customRows %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>{{ customRow.label }}</td>
+                        <td class="text-right">{{ customRow.price|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">{{ customRow.quantity }}</td>
+                        <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
+                        <td class="text-right">
+
+                        <a href="{{ path('admin_sheet_order_edit_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-edit"></i></a>
+                        <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'group': group.groupId, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
 
             <tr class="info">
                 <th colspan="2"></th>
                 <th colspan="2">Total HT</th>
-                <th class="text-right">{{ order_view.totalWithoutTaxes|number_format(2, ',', ' ') }} €</th>
+                <th class="text-right">{{ order_view.total|number_format(2, ',', ' ') }} €</th>
                 <th></th>
             </tr>
             {% if order_view.vatApplicable %}
@@ -76,7 +95,7 @@
                 <tr>
                     <th colspan="2"></th>
                     <th colspan="2">Total TTC</th>
-                    <th class="text-right">{{ order_view.totalWithTaxes|number_format(2, ',', ' ') }} €</th>
+                    <th class="text-right">{{ order_view.totalPlusVat|number_format(2, ',', ' ') }} €</th>
                     <th></th>
                 </tr>
             {% endif %}
