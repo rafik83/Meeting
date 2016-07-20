@@ -42,11 +42,14 @@ class EventTemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $templates = $this->get('repository.template.sheet_template_repository')
-                          ->getTemplateForGivenEvent($event);
+        $baseTemplates = $this->get('repository.template.sheet_template_repository')
+                              ->getBaseTemplates();
+        $templates     = $this->get('repository.template.sheet_template_repository')
+                              ->getTemplateForGivenEvent($event);
 
         return $this->render('AdminBundle:EventTemplate:sheetTemplate.html.twig', [
-            'templates' => $templates,
+            'baseTemplates' => $baseTemplates,
+            'templates'     => $templates,
         ]);
     }
 
