@@ -15,14 +15,14 @@ use Proximum\Vimeet\Domain\Model\Order;
 class AddRow
 {
     /**
+     * @var int
+     */
+    public $id;
+    
+    /**
      * @var Order
      */
     public $order;
-
-    /**
-     * @var string
-     */
-    public $group;
 
     /**
      * @var string
@@ -45,14 +45,19 @@ class AddRow
     public $quantity = 1;
 
     /**
+     * @var int
+     */
+    public $groupId;
+
+    /**
      * AddRow constructor.
      *
      * @param Order  $order
-     * @param string $group
+     * @param string $groupId
      */
-    public function __construct(Order $order, $group)
+    public function __construct(Order $order, $groupId)
     {
-        $this->order = $order;
-        $this->group = $group;
+        $this->order   = $order;
+        $this->groupId = $groupId;
     }
 }

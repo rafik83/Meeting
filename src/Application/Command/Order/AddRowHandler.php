@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Domain\Model\Order\CustomRow;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class AddRowHandler
@@ -36,6 +38,16 @@ class AddRowHandler
      */
     public function handle(AddRow $addRow)
     {
+        $customRow = Row::createCustomRow(
+            $addRow->order,
+            $addRow->quantity,
+            $addRow->groupId,
+            $addRow->label,
+            $addRow->description,
+            $addRow->price
+        );
+
+        $addRow->order->addCustomRow($customRow);
         $this->orderRepository->set($addRow->order);
     }
 }
