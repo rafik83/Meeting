@@ -28,7 +28,7 @@ class EventTemplateController extends Controller
         $templates = $this->get('repository.template.registration_template_repository')
                           ->getTemplateForGivenEvent($event);
 
-        return $this->render('AdminBundle:RegistrationTemplate:list.html.twig', [
+        return $this->render('AdminBundle:EventTemplate:registrationTemplate.html.twig', [
             'templates' => $templates,
         ]);
     }
@@ -45,7 +45,7 @@ class EventTemplateController extends Controller
         $templates = $this->get('repository.template.sheet_template_repository')
                           ->getTemplateForGivenEvent($event);
 
-        return $this->render('AdminBundle:SheetTemplate:list.html.twig', [
+        return $this->render('AdminBundle:EventTemplate:sheetTemplate.html.twig', [
             'templates' => $templates,
         ]);
     }
@@ -61,7 +61,7 @@ class EventTemplateController extends Controller
 
         $templates = $this->get('repository.package_repository')->findByEvent($event);
 
-        return $this->render('', [
+        return $this->render('AdminBundle:EventTemplate:packageTemplate.html.twig', [
             'templates' => $templates,
         ]);
     }

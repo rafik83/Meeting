@@ -409,6 +409,11 @@ admin:
         vatMode:
             et: HT
             ati: TTC
+        template:
+          link: Templates
+          registration: Inscription
+          sheet: Présentation
+          package: Forfait de participation
     rule:
         link: Qui voit qui
     type:

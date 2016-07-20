@@ -1,0 +1,40 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.package.title'|trans }}</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.package.table.column.title'|trans }}</th>
+            <th>{{ 'admin.package.table.column.event'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for package in templates %}
+            <tr>
+                <td>{{ package.title }}</td>
+                <td>{{ package.event.title }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_package_duplicate', { 'package': package.id }) }}"
+                       class="btn btn-primary btn-sm" data-target="#duplicate-modal" data-toggle="modal">
+                        {{ 'admin.package.duplicate'|trans }}
+                    </a>
+                    <a href="{{ path('admin_package_update', { 'package': package.id }) }}"
+                       class="btn btn-primary btn-sm">
+                        {{ 'admin.package.update'|trans }}
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">
+                    {{ 'admin.zero-result'|trans }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
