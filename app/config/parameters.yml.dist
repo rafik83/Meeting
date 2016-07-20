@@ -33,3 +33,8 @@ parameters:
     trusted_proxies: []
     elastic_host: localhost
     elastic_port: 9200
+
+    paypal_username:  richard.hanna_api1.elao.com
+    paypal_password:  GA3RZSHAWSS2VUMK
+    paypal_signature: AFcWxV21C7fd0v3bYYYRCpSSRl31AgedbMbpUFqtxj-P6PyE.L8Qtv8K
+    paypal_sandbox:   true

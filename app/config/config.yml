@@ -224,5 +224,11 @@ payum:
     storages:
         Proximum\Vimeet\Domain\Model\Payment\Payment: { doctrine: orm }
     gateways:
+        paypal_express_checkout:
+            factory:
+                username:  "%paypal_username%"
+                password:  "%paypal_password%"
+                signature: "%paypal_signature%"
+                sandbox:   "%paypal_sandbox%"
         offline:
             factory: offline

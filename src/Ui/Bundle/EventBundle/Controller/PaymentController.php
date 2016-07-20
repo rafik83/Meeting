@@ -103,7 +103,7 @@ class PaymentController extends Controller
      */
     public function prepareAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $gatewayName = 'offline';
+        $gatewayName = 'paypal_express_checkout';
 
         $storage = $this->get('payum')->getStorage(Payment::class);
 
