@@ -1,7 +1,7 @@
 {% if promotionProduct.promotion.isPercentOff %}
     {% set promotionTag = '%' %}
 {% elseif promotionProduct.promotion.isValueOff %}
-    {% set promotionTag = promotionCodeView.currency|currency_symbol %}
+    {% set promotionTag = currency|currency_symbol %}
 {% endif %}
 
 {{ promotionProduct.product }}

@@ -7,7 +7,8 @@
                 <strong>{{ promotionCodeView.title }}</strong>
                 {% for key, promotionProduct in promotionCodeView.promotionProductRowViews %}
                     {{ include('EventBundle:Package/Summary:promo-code-product-row.html.twig', {
-                        'promotionProduct': promotionProduct
+                        'promotionProduct': promotionProduct,
+                        'currency': promotionCodeView.currency
                     }, false) }}
                     {{ not loop.last ? ' - ' : '' }}
                 {% endfor %}
