@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Template;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
@@ -74,6 +75,22 @@ class RegistrationTemplateRepository implements RegistrationTemplateRepositoryIn
             ->from(RegistrationTemplate::class, 'template')
             ->join('template.event', 'event', 'WITH', 'event.id IN (:events)')
             ->setParameter('events', array_map(function (EventInterface $event) { return $event->getId(); }, $events));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateForGivenEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(RegistrationTemplate::class, 'template')
+            ->join('template.event', 'event', 'WITH', 'event = :event')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
