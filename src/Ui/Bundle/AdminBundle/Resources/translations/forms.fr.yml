@@ -461,7 +461,7 @@ form:
             reference:
                 label: Référence
             state:
-                label: Status
+                label: Statut
             submit:
                 label: Enregistrer
     update_transaction:
@@ -475,7 +475,7 @@ form:
             reference:
                 label: Référence
             state:
-                label: Status
+                label: Statut
             submit:
                 label: Enregistrer
     transaction:
@@ -487,7 +487,7 @@ form:
                 bank_cash: Liquide
             state:
                 pending: En attente
-                paid: Reglé
+                paid: Réglé
     happening_create:
         children:
             category:
