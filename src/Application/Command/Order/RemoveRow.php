@@ -20,26 +20,19 @@ class RemoveRow
     public $order;
 
     /**
-     * @var string
-     */
-    public $group;
-
-    /**
-     * @var string
+     * @var Order\Row
      */
     public $row;
 
     /**
      * RemoveRow constructor.
      *
-     * @param Order  $order
-     * @param string $group
-     * @param string $row
+     * @param Order     $order
+     * @param Order\Row $row
      */
-    public function __construct(Order $order, $group, $row)
+    public function __construct(Order $order, Order\Row $row, $locale)
     {
         $this->order = $order;
-        $this->group = $group;
-        $this->row   = $row;
+        $this->row = $row;
     }
 }

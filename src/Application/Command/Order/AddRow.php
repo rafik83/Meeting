@@ -15,11 +15,6 @@ use Proximum\Vimeet\Domain\Model\Order;
 class AddRow
 {
     /**
-     * @var int
-     */
-    public $id;
-    
-    /**
      * @var Order
      */
     public $order;

@@ -52,20 +52,17 @@ class UpdateRow
     /**
      * UpdateRow constructor.
      *
-     * @param Order  $order
-     * @param string $group
-     * @param string $row
+     * @param Order     $order
+     * @param Order\Row $row
+     * @param string    $locale
      */
-    public function __construct(Order $order, $group, $row)
+    public function __construct(Order $order, Order\Row $row, $locale)
     {
-        $packageTemplate   = $order->getPackageTemplate();
-        $packageData       = $order->getPackageData();
         $this->order       = $order;
-        $this->group       = $group;
         $this->row         = $row;
-        $this->label       = $packageTemplate[$group]['template'][$row]['label'];
-        $this->description = $packageTemplate[$group]['template'][$row]['description'];
-        $this->price       = $packageTemplate[$group]['template'][$row]['unitPrice'];
-        $this->quantity    = $packageData[$group][$row]['quantity'];
+        $this->label       = $row->getLabel($locale);
+        $this->description = $row->getDescription();
+        $this->price       = $row->getPrice();
+        $this->quantity    = $row->getQuantity();
     }
 }

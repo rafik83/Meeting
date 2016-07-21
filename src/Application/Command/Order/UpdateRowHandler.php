@@ -36,6 +36,7 @@ class UpdateRowHandler
      */
     public function handle(UpdateRow $updateRow)
     {
+        $updateRow->order->updateCustomRow($updateRow->row);
         $this->orderRepository->set($updateRow->order);
     }
 }
