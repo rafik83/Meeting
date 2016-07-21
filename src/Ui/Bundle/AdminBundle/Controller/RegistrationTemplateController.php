@@ -48,7 +48,7 @@ class RegistrationTemplateController extends Controller
      */
     public function builderAction(Request $request, RegistrationTemplate $template, $locale)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $update     = new Update($template);
         $updateForm = $this->createForm(UpdateType::class, $update, [

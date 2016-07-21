@@ -89,7 +89,7 @@ class RegistrationTemplateRepository implements RegistrationTemplateRepositoryIn
             ->createQueryBuilder()
             ->select('template')
             ->from(RegistrationTemplate::class, 'template')
-            ->join('template.event', 'event', 'WITH', 'event = :event')
+            ->where('template.event = :event')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

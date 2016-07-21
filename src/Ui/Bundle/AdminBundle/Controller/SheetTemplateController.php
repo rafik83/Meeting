@@ -89,7 +89,7 @@ class SheetTemplateController extends Controller
      */
     public function listOrganizerTemplateAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $filters    = [];
         $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $this->getUser()]);
@@ -169,7 +169,7 @@ class SheetTemplateController extends Controller
      */
     public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $duplicate = new Duplicate($template, new \DateTime());
 
