@@ -10,7 +10,7 @@ set :composer_options, "--verbose --prefer-dist --optimize-autoloader --no-progr
 set :clear_controllers, true
 
 role :app, front1, :primary => true
-#role :app, front2, :primary => false
+role :app, front2, :primary => false
 
 namespace :app_tasks do
   task :php do
