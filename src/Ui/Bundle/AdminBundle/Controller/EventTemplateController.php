@@ -26,7 +26,7 @@ class EventTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $templates = $this->get('repository.template.registration_template_repository')
-            ->getTemplateForGivenEvent($event);
+                          ->getTemplateForGivenEvent($event);
 
         return $this->render('AdminBundle:EventTemplate:registrationTemplate.html.twig', [
             'templates' => $templates,
@@ -43,13 +43,10 @@ class EventTemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $baseTemplates = $this->get('repository.template.sheet_template_repository')
-            ->getBaseTemplates();
-        $templates     = $this->get('repository.template.sheet_template_repository')
+        $templates = $this->get('repository.template.sheet_template_repository')
             ->getTemplateForGivenEvent($event);
 
         return $this->render('AdminBundle:EventTemplate:sheetTemplate.html.twig', [
-            'baseTemplates' => $baseTemplates,
             'templates'     => $templates,
             'event'         => $event,
         ]);

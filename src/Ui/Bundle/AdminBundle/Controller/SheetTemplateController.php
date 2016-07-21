@@ -138,7 +138,7 @@ class SheetTemplateController extends Controller
      */
     public function duplicateAction(Request $request, SheetTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateType::class, $duplicate, [

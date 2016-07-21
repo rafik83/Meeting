@@ -55,11 +55,16 @@ class RegistrationTemplateController extends Controller
             'submit' => true,
         ]);
 
-        $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($template), [
-            'action'   => $this->generateUrl('admin_template_registration_add_locale', ['template' => $template->getId()]),
-            'submit'   => true,
-            'template' => $template,
-        ]);
+        $addLocaleForm = null;
+
+        if (!$template->getEvent()) {
+            $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($template), [
+                'action'   => $this->generateUrl('admin_template_registration_add_locale',
+                    ['template' => $template->getId()]),
+                'submit'   => true,
+                'template' => $template,
+            ]);
+        }
 
         $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
@@ -68,7 +73,10 @@ class RegistrationTemplateController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.template.registration.update.success');
 
-            return $this->redirectToRoute('admin_template_registration_list');
+            return $this->redirectToRoute('admin_template_registration_builder', [
+                'template' => $template->getId(),
+                'locale'   => $locale,
+            ]);
         }
 
         // Add warning if some locales translations are incompletes
@@ -80,8 +88,9 @@ class RegistrationTemplateController extends Controller
             'template'        => $template,
             'locale'          => $locale,
             'form'            => $updateForm->createView(),
-            'add_locale_form' => $addLocaleForm->createView(),
+            'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
+            'event'           => $template->getEvent(),
         ]);
     }
 
@@ -94,7 +103,7 @@ class RegistrationTemplateController extends Controller
      */
     public function addLocaleAction(Request $request, RegistrationTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $addLocale     = new AddLocale($template);
         $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [

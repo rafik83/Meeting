@@ -4,29 +4,6 @@
 
     <h1 class="page-header">{{ 'admin.template.sheet.link'|trans }}</h1>
 
-    <h3 class="page-header">{{ 'admin.template.sheet.titleBase'|trans }}</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>{{ 'admin.template.sheet.table.column.title'|trans }}</th>
-            <th class="text-right">{{ 'admin.template.sheet.table.column.action'|trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for baseTemplate in baseTemplates %}
-            <tr>
-                <td>{{ baseTemplate.title }}</td>
-                <td class="text-right">
-                    <a href="{{ path('admin_template_sheet_duplicate', { 'template': baseTemplate.id }) }}"
-                       class="btn btn-primary btn-sm" data-toggle="modal"
-                       data-target="#duplicate-modal">{{ 'admin.template.action.duplicate'|trans }}</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <h3 class="page-header">{{ 'admin.template.sheet.titleEvent'|trans }}</h3>
     <table class="table">
         <thead>
         <tr>
@@ -50,7 +27,7 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    <a href="{{ path('admin_template_sheet_duplicate', { 'template': template.id }) }}"
+                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}"
                        class="btn btn-primary btn-sm" data-toggle="modal"
                        data-target="#duplicate-modal">{{ 'admin.template.action.duplicate'|trans }}</a>
                 </td>
