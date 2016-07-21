@@ -1035,7 +1035,6 @@ services:
     command.order.remove_row_handler:
         class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
         arguments:
-            - '@vimeet_infrastructure.repository.order_row_repository'
             - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
