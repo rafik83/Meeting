@@ -3,6 +3,8 @@ set :front2,    "proximum-web-apache-02"
 set :deploy_to, "/var/www/proximum-vimeet.project.local/htdocs"
 set :user,      "www-data"
 
+set :deploy_via, :copy
+
 # Options to pass to composer when installing/updating
 set :composer_options, "--verbose --prefer-dist --optimize-autoloader --no-progress"
 

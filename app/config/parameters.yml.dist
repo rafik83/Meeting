@@ -33,3 +33,5 @@ parameters:
     trusted_proxies: []
     elastic_host: localhost
     elastic_port: 9200
+
+    session_save_path: '%kernel.cache_dir%/sessions'
