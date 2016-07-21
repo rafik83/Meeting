@@ -273,4 +273,18 @@ class Row
     {
         return null !== $this->getProduct();
     }
+
+    /**
+     * @param Row $customRow
+     *
+     * @return Row
+     */
+    public function update(Row $customRow)
+    {
+        $this->label    = $customRow->getLabel("fr");
+        $this->price    = $customRow->getPrice();
+        $this->quantity = $customRow->getQuantity();
+
+        return $this;
+    }
 }

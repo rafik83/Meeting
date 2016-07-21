@@ -207,7 +207,7 @@ class Order
     }
 
     /**
-     * @return Order\Row[]
+     * @return Row[]
      */
     public function getRows()
     {
@@ -215,11 +215,11 @@ class Order
     }
 
     /**
-     * @param Order\Row $row
+     * @param Row $row
      *
      * @return Order
      */
-    public function addRow(Order\Row $row)
+    public function addRow(Row $row)
     {
         $this->rows->add($row);
 
@@ -227,11 +227,11 @@ class Order
     }
 
     /**
-     * @param Order\PromotionCode $promotionCode
+     * @param PromotionCode $promotionCode
      *
      * @return Order
      */
-    public function addPromotionCode(Order\PromotionCode $promotionCode)
+    public function addPromotionCode(PromotionCode $promotionCode)
     {
         $this->promotionCodes->add($promotionCode);
 
@@ -243,10 +243,40 @@ class Order
      *
      * @return Order
      */
-    public function addCustomRow(Order\Row $customRow)
+    public function addCustomRow(Row $customRow)
     {
-        $this->customRows->add($customRow);
+        $this->rows->add($customRow);
 
+        return $this;
+    }
+
+    /**
+     * @param Row $customRow
+     *
+     * @return $this
+     */
+    public function removeCustomRow(Row $customRow)
+    {
+        foreach ($this->rows as $key => $row) {
+            if ($row->getId() == $customRow->getId()) {
+                $this->rows->remove($key);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param Row $customRow
+     *
+     * @return $this
+     */
+    public function updateCustomRow(Row $customRow)
+    {
+        foreach ($this->rows as $key => $row) {
+            if ($row->getId() == $customRow->getId()) {
+                $row->update($customRow);
+            }
+        }
         return $this;
     }
 
@@ -384,13 +414,4 @@ class Order
     {
         return $this->promotionCodes->toArray();
     }
-
-    /**
-     * @return Order\Row[]
-     */
-    public function getCustomRows()
-    {
-        return $this->customRows->toArray();
-    }
-
 }
