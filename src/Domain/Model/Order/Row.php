@@ -228,12 +228,13 @@ class Row
     }
 
     /**
-     * @param Order        $order
-     * @param int          $quantity
-     * @param null|int     $groupId
-     * @param string       $label
-     * @param string       $description
-     * @param float        $price
+     * @param Order    $order
+     * @param int      $quantity
+     * @param null|int $groupId
+     * @param string   $label
+     * @param string   $description
+     * @param float    $price
+     * @param null|int $productId
      *
      * @return Row
      */
@@ -243,7 +244,8 @@ class Row
         $groupId,
         $label,
         $description,
-        $price
+        $price,
+        $productId = null
     ) {
         return new self (
             $order,
@@ -252,7 +254,8 @@ class Row
             $groupId,
             $label,
             $description,
-            $price
+            $price,
+            $productId
         );
     }
 
