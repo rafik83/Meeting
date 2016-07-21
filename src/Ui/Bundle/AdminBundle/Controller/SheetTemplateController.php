@@ -249,6 +249,7 @@ class SheetTemplateController extends Controller
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures,
             'sheet_tags'      => Tag::getSheetTags(),
+            'event'           => $template->getEvent(),
         ]);
     }
 
