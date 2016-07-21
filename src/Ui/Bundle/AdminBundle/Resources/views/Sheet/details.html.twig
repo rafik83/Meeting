@@ -98,11 +98,14 @@
 
             <table class="table table-hover">
                 <thead>
-                <th>{{ 'admin.transaction.column.date'|trans }}</th>
-                <th>{{ 'admin.transaction.column.state'|trans }}</th>
-                <th>{{ 'admin.transaction.column.mode'|trans }}</th>
-                <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
-                <th></th>
+                <tr>
+                    <th>{{ 'admin.transaction.column.date'|trans }}</th>
+                    <th>{{ 'admin.transaction.column.state'|trans }}</th>
+                    <th>{{ 'admin.transaction.column.mode'|trans }}</th>
+                    <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
+                    <th>{{ 'admin.transaction.column.reference'|trans }}</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for transaction in details.transactions %}
@@ -111,6 +114,7 @@
                         <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
                         <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
                         <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                        <td>{{ transaction.reference }}</td>
                         <td class="text-right">
                             <div class="btn-group">
                                 <a href="{{ path('admin_sheet_transaction_update', {
@@ -118,7 +122,8 @@
                                     'sheet': sheet.id,
                                     'transaction': transaction.id
                                 }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.edit'|trans }}</a>
-                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right">

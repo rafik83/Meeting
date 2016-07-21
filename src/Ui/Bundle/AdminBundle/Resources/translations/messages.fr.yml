@@ -281,6 +281,7 @@ admin:
             state: Statut
             mode: Mode de paiement
             total: Total
+            reference: Commentaire
         state:
             pending: En attente
             paid: Réglé
