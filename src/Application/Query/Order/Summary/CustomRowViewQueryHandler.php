@@ -23,12 +23,13 @@ class CustomRowViewQueryHandler
     public function handle(CustomRowViewQuery $customRowViewQuery)
     {
         $locale = $customRowViewQuery->locale;
-        
+
         return new CustomRowView(
             $customRowViewQuery->row->getId(),
             $customRowViewQuery->row->getLabel($locale),
             $customRowViewQuery->row->getPrice($locale),
-            $customRowViewQuery->row->getQuantity($locale)
+            $customRowViewQuery->row->getQuantity($locale),
+            $customRowViewQuery->row->getProductId()
         );
     }
 }
