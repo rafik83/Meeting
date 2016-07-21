@@ -45,14 +45,21 @@ class AddRow
     public $groupId;
 
     /**
+     * @var int
+     */
+    public $productId;
+
+    /**
      * AddRow constructor.
      *
-     * @param Order  $order
-     * @param string $groupId
+     * @param Order    $order
+     * @param string   $groupId
+     * @param null|int $productId
      */
-    public function __construct(Order $order, $groupId)
+    public function __construct(Order $order, $groupId, $productId = null)
     {
-        $this->order   = $order;
-        $this->groupId = $groupId;
+        $this->order     = $order;
+        $this->groupId   = $groupId;
+        $this->productId = $productId;
     }
 }

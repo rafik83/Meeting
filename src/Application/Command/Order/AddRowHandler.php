@@ -44,7 +44,8 @@ class AddRowHandler
             $addRow->groupId,
             $addRow->label,
             $addRow->description,
-            $addRow->price
+            $addRow->price,
+            $addRow->productId
         );
 
         $addRow->order->addCustomRow($customRow);

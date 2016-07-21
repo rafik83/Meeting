@@ -18,21 +18,15 @@ class RemoveRowHandler
     /**
      * @var OrderRowRepositoryInterface
      */
-    private $orderRowRepository;
-
-    /**
-     * @var OrderRowRepositoryInterface
-     */
     private $orderRepository;
 
     /**
      * AddRowHandler constructor.
      *
-     * @param OrderRowRepositoryInterface $orderRowRepository
+     * @param OrderRepositoryInterface $orderRepositoryInterface
      */
-    public function __construct(OrderRowRepositoryInterface $orderRowRepository, OrderRepositoryInterface $orderRepositoryInterface)
+    public function __construct(OrderRepositoryInterface $orderRepositoryInterface)
     {
-        $this->orderRowRepository = $orderRowRepository;
         $this->orderRepository = $orderRepositoryInterface;
     }
 
