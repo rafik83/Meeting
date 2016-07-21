@@ -168,7 +168,7 @@ class Nomenclature
      */
     public function getItems()
     {
-        return self::items($this->value);
+        return self::items($this->value, $this->sort);
     }
 
     /**
@@ -197,13 +197,19 @@ class Nomenclature
 
     /**
      * @param array $items
+     * @param bool  $sort
      *
      * @return NomenclatureItem[]
      */
-    private static function items(array $items)
+    private static function items(array $items, $sort)
     {
-        return array_map(function ($key, $item) {
-            return new NomenclatureItem($key, $item['label'], isset($item['children']) ? self::items($item['children']) : []);
+        return array_map(function ($key, $item) use ($sort) {
+            return new NomenclatureItem(
+                $key,
+                $item['label'],
+                isset($item['children']) ? self::items($item['children'], $sort) : [],
+                $sort
+            );
         }, array_keys($items), $items);
     }
 

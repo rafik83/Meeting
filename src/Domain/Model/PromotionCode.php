@@ -242,18 +242,19 @@ class PromotionCode
     }
 
     /**
-     * @param Product $product
-     * @param string  $type
-     * @param int     $value
+     * @param Product  $product
+     * @param string   $type
+     * @param int      $value
+     * @param null|int $quantityMax
      *
      * @return PromotionCode
      */
-    public function setPromotion(Product $product, $type, $value)
+    public function setPromotion(Product $product, $type, $value, $quantityMax = null)
     {
         if ($this->hasPromotion($product)) {
-            $this->getPromotion($product)->update($type, $value);
+            $this->getPromotion($product)->update($type, $value, $quantityMax);
         } else {
-            $this->promotions->add(new Promotion($this, $product, $type, $value));
+            $this->promotions->add(new Promotion($this, $product, $type, $value, $quantityMax));
         }
 
         return $this;

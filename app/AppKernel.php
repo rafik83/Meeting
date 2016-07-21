@@ -17,6 +17,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
             new Elao\Bundle\FormBundle\ElaoFormBundle(),
@@ -24,7 +26,6 @@ class AppKernel extends Kernel
             new Elao\Bundle\Theme\TwitterBootstrap3Bundle\ElaoThemeTwitterBootstrap3Bundle(),
             new Elao\ErrorNotifierBundle\ElaoErrorNotifierBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
-            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new League\Tactician\Bundle\TacticianBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
 

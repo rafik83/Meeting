@@ -355,7 +355,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Order[]
      */
     public function getOrders()
     {

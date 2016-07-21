@@ -342,8 +342,12 @@ admin:
             remainingToPay: Solde restant dû
             participants: Participants
             owner:
-                email: Email du propriétaire
-                phone: Téléphone du propriétaire
+                email: Email
+                phone: Téléphone
+                mobile: Mobile
+                title: Propriétaire
+            owner_not_participant:
+                title: Propriétaire mais non participant
             meeting:
                 request:
                     title: Demandes de rendez-vous
@@ -360,6 +364,8 @@ admin:
             comments:
                 title: Commentaires
                 author: 'Par %firstname% %lastname%, le %date%'
+            participant:
+                title: Participant
         state: Etat
         category: Catégorie
         type: Type
@@ -394,9 +400,12 @@ admin:
                 link: Information facturation
                 title: Configuration des informations de facturation
         practicalInfo:
-            link: Informations Pratiques
-            update:
-                title: Modifier les informations pratiques
+          link: Informations Pratiques
+          update:
+            title: Modifier les informations pratiques
+        configuration:
+            key_dates:
+                title: Date clé de l'événement
         vatMode:
             et: HT
             ati: TTC
@@ -666,6 +675,8 @@ admin:
             unlock: Débloquer
             locked: Bloqué
             unlocked: Débloqué
+    global_nomenclature:
+        title: Nomenclatures globales
     nomenclature:
         title: Nomenclatures
         table:

@@ -30,6 +30,8 @@ Proximum\Vimeet\Application\Command\PromotionCode\Update:
                         - Type: { type: string }
                     value:
                         - Type: { type: float }
+                    quantityMax:
+                        - Type: { type: int }
                 - Expression:
                     expression: "value['type'] === 'free' || value['value'] !== null"
                     message: "validators.promotion_code.promotion.value.free"

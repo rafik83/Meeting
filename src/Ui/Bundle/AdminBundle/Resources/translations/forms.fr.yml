@@ -1230,6 +1230,8 @@ form:
                             label: Type
                         value:
                             label: Valeur
+                        quantityMax:
+                            label: Quantité max
     promotion_code_update:
         children:
             title:
@@ -1254,6 +1256,8 @@ form:
                             label: Type
                         value:
                             label: Valeur
+                        quantityMax:
+                            label: Quantité max
     promotion_code_translation:
         children:
             label:
@@ -1322,7 +1326,7 @@ form:
         children:
             event:
                 label: Événement
-                help: La nomenclature sera dupliqué pour être assigné à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
+                help: La nomenclature sera dupliquée pour être assignée à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
             submit:
                 label: Assigner
     event_practical_info_update:
@@ -1351,6 +1355,14 @@ form:
                 label: Date limite d'acceptation des acomptes
             deposit:
                 label: Pourcentage de l'acompte
+    event_configure_date:
+        children:
+            catalogOnlineDate:
+                label: Mise en ligne du catalogue
+            happeningsOpenDate:
+                label: Ouverture des inscriptions aux sous-événements
+            schedulePublishDate:
+                label: Publication des agendas définitifs (RDV)
             submit:
                 label: Enregistrer
     event_configure_date:

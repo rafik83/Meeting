@@ -74,6 +74,7 @@
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     {% set funnel = view is defined and view.funnel is defined %}
                     <div class="sub-header">
+                        {{ render(controller('EventBundle:Navigation:menu')) }}
                         <ul>
                             <li>
                                 <a href="{{ path('event_sheet') }}" class="btn btn-primary btn-lg {{ funnel ? 'btn-inactive' : '' }}">

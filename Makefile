@@ -172,11 +172,17 @@ test-behat@test:
 ## Deploy application (demo)
 deploy@demo: deploy-capifony@demo
 
+## Deploy application (preprod)
+deploy@preprod: deploy-capifony@preprod
+
 ## Deploy application (prod)
 deploy@prod: deploy-capifony@prod
 
 deploy-capifony@demo:
 	cap demo deploy
+
+deploy-capifony@preprod:
+	cap preprod deploy
 
 deploy-capifony@prod:
 	cap prod deploy
