@@ -152,7 +152,7 @@ class OrderController extends Controller
             ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
-        $updateRow = new UpdateRow($order, $row, $request->query->get('groupId'));
+        $updateRow = new UpdateRow($order, $row, $event->getLocales());
         $form   = $this->createForm(UpdateRowType::class, $updateRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -177,15 +177,15 @@ class OrderController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Order   $order
-     * @param string  $group
-     * @param string  $row
+     * @param Request   $request
+     * @param Event     $event
+     * @param Order     $order
+     * @param string    $group
+     * @param Order\Row $row
      *
      * @return RedirectResponse|Response
      */
-    public function updateRowAction(Request $request, Event $event, Order $order, $group, $row)
+    public function updateRowAction(Request $request, Event $event, Order $order, $group, Order\Row $row)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
 
@@ -218,18 +218,17 @@ class OrderController extends Controller
     }
 
     /**
-     * @param Event  $event
-     * @param Order  $order
-     * @param string $group
-     * @param string $row
+     * @param Event     $event
+     * @param Order     $order
+     * @param Order\Row $row
      *
      * @return RedirectResponse
      */
-    public function removeRowAction(Event $event, Order $order, $group, $row)
+    public function removeRowAction(Event $event, Order $order, Order\Row $row)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
 
-        $this->get('tactician.commandbus')->handle(new RemoveRow($order, $group, $row));
+        $this->get('tactician.commandbus')->handle(new RemoveRow($order, $row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
         return $this->redirectToRoute('admin_sheet_order_edit', [

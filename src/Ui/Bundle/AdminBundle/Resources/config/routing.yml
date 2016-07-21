@@ -389,6 +389,7 @@ admin_sheet_order_edit_row:
     requirements:
         event: \d+
         order: \d+
+        row: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Order:editRow }
 admin_sheet_order_remove_row:
