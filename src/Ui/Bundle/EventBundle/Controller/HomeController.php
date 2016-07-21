@@ -35,7 +35,7 @@ class HomeController extends Controller
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventDomain->getEvent(), $locale);
+                ->getSheetsByUserAndEvent($this->getUser()->getId(), $eventDomain->getEvent());
         } else {
             $sheets = [];
         }
