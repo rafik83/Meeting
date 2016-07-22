@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Template;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 interface SheetTemplateRepositoryInterface
@@ -25,6 +26,13 @@ interface SheetTemplateRepositoryInterface
      * @return SheetTemplate[]
      */
     public function getTemplateForGivenEvents(array $events);
+
+    /**
+     * @param Event $event
+     *
+     * @return SheetTemplate[]
+     */
+    public function getTemplateForGivenEvent(Event $event);
 
     /**
      * @return SheetTemplate[]

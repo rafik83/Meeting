@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
     registration_template:
         __construct: false
-        title: "Inscription Template de base"
+        title: "Template d'inscription de base"
         locales: ['fr', 'en']
         fallback: 'fr'
         createdAt: <dateTimeBetween('-10days', 'now')>
