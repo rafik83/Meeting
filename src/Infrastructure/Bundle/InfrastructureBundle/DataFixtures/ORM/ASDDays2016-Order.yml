@@ -34,6 +34,13 @@ Proximum\Vimeet\Domain\Model\Order:
             - '@order_billing_info_1'
             - '{"4":{"translations":{"fr":{"label":"Options d\u2019exposition"},"en":{"label":"Exhibiting options"}},"rank":1},"5":{"translations":{"fr":{"label":"Options d\u2019exposition et de communication"},"en":{"label":"Exhibiting and communication options"}},"rank":2},"6":{"translations":{"fr":{"label":"Options de communication"},"en":{"label":"Communication options"}},"rank":3}}'
             - <dateTimeBetween('-10days', 'now')>
+    order_3:
+        __construct:
+            - '@sheet_asddays_1'
+            - true
+            - '@order_billing_info_1'
+            - '{"4":{"translations":{"fr":{"label":"Options d\u2019exposition"},"en":{"label":"Exhibiting options"}},"rank":1},"5":{"translations":{"fr":{"label":"Options d\u2019exposition et de communication"},"en":{"label":"Exhibiting and communication options"}},"rank":2},"6":{"translations":{"fr":{"label":"Options de communication"},"en":{"label":"Communication options"}},"rank":3}}'
+            - <dateTimeBetween('-5days', 'now')>
 
 Proximum\Vimeet\Domain\Model\Order\Row:
     order_1_row_1:
@@ -84,6 +91,28 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         __construct: false
         order: '@order_2'
         quantity: 1
+        price: 195
+        data: '{"name":"Participant supplémentaire Fournisseur", "translations":{"fr":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
+        product: '@product_participant_1_asddays'
+    order_3_row_1:
+        __construct: false
+        order: '@order_3'
+        quantity: 3
+        groupId: 4
+        price: 199
+        data: '{"name":"Option E", "translations":{"fr":"{\"title\":\"Option E\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Option E\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
+        product: '@product_option_7_asddays'
+    order_3_row_2:
+        __construct: false
+        order: '@order_3'
+        quantity: 9
+        price: 59
+        data: '{"name":"Option F", "translations":{"fr":"{\"title\":\"Option F\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Option F\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
+        product: '@product_option_8_asddays'
+    order_3_row_3:
+        __construct: false
+        order: '@order_3'
+        quantity: 3
         price: 195
         data: '{"name":"Participant supplémentaire Fournisseur", "translations":{"fr":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
         product: '@product_participant_1_asddays'

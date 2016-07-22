@@ -178,6 +178,7 @@ navigation:
             locale: Version
         package:
             summary: Récapitulatif
+            order_summary_total: Récapitulatif forfait participation
             payment: Paiement
             order_list: Liste des commandes
         catalog:

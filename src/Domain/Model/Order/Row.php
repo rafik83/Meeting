@@ -101,6 +101,18 @@ class Row
     }
 
     /**
+     * @param $quantity
+     *
+     * @return Row
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getPrice()
