@@ -192,7 +192,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Catégorie (Pme / Eti / Startup / ... )"
                                 help:
                                     fr: ""
-                                nomenclature: "4"
+                                nomenclature: "@nomenclature_company_category->id"
                                 tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"
