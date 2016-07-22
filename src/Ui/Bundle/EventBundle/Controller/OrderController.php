@@ -107,15 +107,11 @@ class OrderController extends Controller
         $orderMerger = new Merger($sheet->getOrders());
         $order       = $orderMerger->merge();
 
-        dump($order);
-
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
             $sheet,
             $order,
             $request->getLocale()
         ));
-
-        dump($view);
 
         return $this->render('EventBundle:Order/SummaryTotal:summaryTotal.html.twig', [
             'event' => $eventDomain->getEvent(),
