@@ -125,6 +125,8 @@ package:
         title: Récapitulatif
         pay: Régler le forfait de participation
         totalOfSummary: Total de la commande
+        total:
+            title: Forfait de participation
         totalVat: '+ TVA applicable de %vat%%'
         totalPlusVat: Total à régler
         option: Option
@@ -178,7 +180,7 @@ navigation:
             locale: Version
         package:
             summary: Récapitulatif
-            order_summary_total: Récapitulatif forfait participation
+            order_summary_total: Forfait de participation
             payment: Paiement
             order_list: Liste des commandes
         catalog:
