@@ -9,9 +9,8 @@ Proximum\Vimeet\Application\Command\Package\Model\Plans:
         enabled:
             - Type: { type: boolean }
         plans:
-            - NotBlank: ~
             - Valid: ~
             - Type: { type: array }
-            - Count: { min: 1 }
+            - Count: { min: 0 }
             - All:
                 - NotBlank: ~
