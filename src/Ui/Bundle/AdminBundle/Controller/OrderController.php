@@ -93,7 +93,7 @@ class OrderController extends Controller
                 $request->getLocale()
             )
         );
-        
+
         return $this->render('AdminBundle:Order:edit.html.twig', [
             'event'      => $event,
             'sheet_info' => $sheetInfo,
