@@ -227,11 +227,11 @@ class Order
     }
 
     /**
-     * @param PromotionCode $promotionCode
+     * @param Order\PromotionCode $promotionCode
      *
      * @return Order
      */
-    public function addPromotionCode(PromotionCode $promotionCode)
+    public function addPromotionCode(Order\PromotionCode $promotionCode)
     {
         $this->promotionCodes->add($promotionCode);
 

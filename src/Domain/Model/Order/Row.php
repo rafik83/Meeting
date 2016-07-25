@@ -51,19 +51,14 @@ class Row
     protected $groupId;
 
     /**
-     * @var null|Row
+     * @var null|int
      */
-    private $parentRow;
+    protected $parentRow;
 
     /**
      * @var string
      */
     protected $label;
-
-    /**
-     * @var null|string
-     */
-    protected $description;
 
     /**
      * Row constructor.
@@ -73,8 +68,8 @@ class Row
      * @param int          $quantity
      * @param null|int     $groupId
      * @param string       $label
-     * @param string       $description
      * @param float        $price
+     * @param null|int     $parentRow
      */
     public function __construct(
         Order $order,
@@ -82,16 +77,16 @@ class Row
         $quantity,
         $groupId = null,
         $label = null,
-        $description = null,
-        $price = null
+        $price = null,
+        $parentRow = null
     )
     {
         $this->order       = $order;
         $this->quantity    = $quantity;
         $this->groupId     = $groupId;
         $this->label       = $label;
-        $this->description = $description;
         $this->price       = $price;
+        $this->parentRow   = $parentRow;
 
         if ($product != null) {
             $this->product = $product;
@@ -220,11 +215,11 @@ class Row
     }
 
     /**
-     * @return null|string
+     * @return int|null int
      */
-    public function getDescription()
+    public function getParentRow()
     {
-        return $this->description;
+        return $this->parentRow;
     }
 
     /**
@@ -232,9 +227,8 @@ class Row
      * @param int      $quantity
      * @param null|int $groupId
      * @param string   $label
-     * @param string   $description
      * @param float    $price
-     * @param null|int $productId
+     * @param null|int $parentRow
      *
      * @return Row
      */
@@ -243,9 +237,8 @@ class Row
         $quantity,
         $groupId,
         $label,
-        $description,
         $price,
-        $productId = null
+        $parentRow = null
     ) {
         return new self (
             $order,
@@ -253,9 +246,8 @@ class Row
             $quantity,
             $groupId,
             $label,
-            $description,
             $price,
-            $productId
+            $parentRow
         );
     }
 
