@@ -1245,7 +1245,7 @@ form:
                         value:
                             label: Valeur
                         quantityMax:
-                            label: Quantité max
+                            label: Quantité limitée à
     promotion_code_update:
         children:
             title:
@@ -1271,7 +1271,7 @@ form:
                         value:
                             label: Valeur
                         quantityMax:
-                            label: Quantité max
+                            label: Quantité limitée à
     promotion_code_translation:
         children:
             label:

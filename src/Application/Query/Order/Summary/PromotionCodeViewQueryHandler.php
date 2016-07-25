@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
 use Proximum\Vimeet\Application\View\Order\PromotionCodeView;
+use Proximum\Vimeet\Application\View\Package\Summary\PromotionProductRowView;
 
 class PromotionCodeViewQueryHandler
 {
@@ -21,14 +22,31 @@ class PromotionCodeViewQueryHandler
      */
     public function handle(PromotionCodeViewQuery $promotionCodeViewQuery)
     {
-        $locale = $promotionCodeViewQuery->locale;
+        $locale                   = $promotionCodeViewQuery->locale;
+        $promotionProductRowViews = [];
+        $promotions               = $promotionCodeViewQuery->promotionCode->getPromotionCode()->getPromotions();
+
+        foreach ($promotions as $promotion) {
+            $orderRow = $promotionCodeViewQuery->order->getOrderRowForProduct($promotion->getProduct());
+
+            if (null !== $orderRow) {
+                $promotionProductRowViews[] = new PromotionProductRowView(
+                    $promotion,
+                    $promotion->getProduct()->getName(),
+                    $promotion->getType(),
+                    $promotion->getValue(),
+                    $orderRow->getQuantity()
+                );
+            }
+        }
 
         return new PromotionCodeView(
             $promotionCodeViewQuery->promotionCode->getLabel($locale),
             $promotionCodeViewQuery->promotionCode->getDescription($locale),
             $promotionCodeViewQuery->promotionCode->getPrice(),
             $promotionCodeViewQuery->promotionCode->getOrder()->getVatMode(),
-            $promotionCodeViewQuery->promotionCode->getOrder()->getCurrency()
+            $promotionCodeViewQuery->promotionCode->getOrder()->getCurrency(),
+            $promotionProductRowViews
         );
     }
 }
