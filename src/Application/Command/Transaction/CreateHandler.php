@@ -40,7 +40,9 @@ class CreateHandler
             $create->amount,
             $create->date,
             $create->mode,
-            $create->reference
+            $create->reference,
+            $create->state,
+            $create->sheet->getEvent()->getCurrency()
         );
 
         $this->transactionRepository->add($transaction);
