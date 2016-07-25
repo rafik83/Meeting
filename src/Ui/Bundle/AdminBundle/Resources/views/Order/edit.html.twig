@@ -67,7 +67,7 @@
                             <td class="text-right">{{ customRow.quantity }}</td>
                             <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
                             <td class="text-right">
-                                <a href="{{ path('admin_sheet_order_edit_row', { 'event': event.id, 'order': order.id, 'row': customRow.id, 'locale': event.locales }) }}"><i class="glyphicon glyphicon-edit"></i></a>
+                                <a href="{{ path('admin_sheet_order_edit_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-edit"></i></a>
                                 <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>
                             </td>
                         </tr>
@@ -75,17 +75,19 @@
                     {% endfor %}
                 {% endfor %}
                 {% for customRow in group.customRows %}
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>{{ customRow.label }}</td>
-                        <td class="text-right">{{ customRow.price|number_format(2, ',', ' ') }} €</td>
-                        <td class="text-right">{{ customRow.quantity }}</td>
-                        <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
-                        <td class="text-right">
-                        <a href="{{ path('admin_sheet_order_edit_row', { 'event': event.id, 'order': order.id, 'row': customRow.id, 'locale': event.locales }) }}"><i class="glyphicon glyphicon-edit"></i></a>
-                        <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                    </tr>
+                    {% if customRow.productId is null %}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>{{ customRow.label }}</td>
+                            <td class="text-right">{{ customRow.price|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-right">{{ customRow.quantity }}</td>
+                            <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-right">
+                            <a href="{{ path('admin_sheet_order_edit_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>
+                            </td>
+                        </tr>
+                   {% endif %}
                 {% endfor %}
             {% endfor %}
 

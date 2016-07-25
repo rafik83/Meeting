@@ -27,7 +27,6 @@ abstract class AbstractRowType extends AbstractType
     {
         $builder
             ->add('label', TextType::class, ['required' => true])
-            ->add('description', TextareaType::class, ['required' => false])
             ->add('price', NumberType::class, ['required' => true])
             ->add('quantity', IntegerType::class, ['required' => true])
         ;
