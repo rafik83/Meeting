@@ -956,7 +956,7 @@ form:
                 label: Stock max
             updatable:
                 label: Produit supprimable
-            updatableUntil:
+            deletableUntil:
                 label: Supprimable jusqu'aù
             buyableUntil:
                 label: Achetable jusqu'aù
@@ -993,7 +993,7 @@ form:
                 label: Stock max
             updatable:
                 label: Produit supprimable
-            updatableUntil:
+            deletableUntil:
                 label: Supprimable jusqu'aù
             buyableUntil:
                 label: Achetable jusqu'aù

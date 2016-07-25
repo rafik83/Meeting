@@ -4,12 +4,12 @@ Proximum\Vimeet\Domain\Model\Product:
         __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', '', 1690, '', ''] }
         quantityMax: 1
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     product_plan_2_asddays:
         __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', '', 2880, '', '' ] }
         quantityMax: 1
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     # participants
     product_participant_1_asddays:
         __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 1O ] }
@@ -18,14 +18,14 @@ Proximum\Vimeet\Domain\Model\Product:
         availabilityMax: ~
         quantityMax: 4
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     # plannings
     product_planning_1_asddays:
         __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 1O ] }
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     # options
     product_option_1_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }

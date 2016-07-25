@@ -120,6 +120,9 @@ package:
         subjectedToValidationHelp: Sous réserve de validation
         unavailable: Non disponible
         includedProduct: 'Inclus:'
+        buyableUntil: Achetable jusqu'au %date%
+        deletableUntil: Supprimable jusqu'au %date%
+        notDeletableSince: Non supprimable depuis le %date%
     summary:
         pageTitle: Récapitulatif de votre forfait de participation
         title: Récapitulatif

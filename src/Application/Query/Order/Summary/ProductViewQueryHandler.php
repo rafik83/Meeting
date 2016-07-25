@@ -19,13 +19,21 @@ class ProductViewQueryHandler
      * @var ProductIncludedInfoGuesser
      */
     private $productIncludedInfoGuesser;
+    /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
 
     /**
      * @param ProductIncludedInfoGuesser $productIncludedInfoGuesser
+     * @param \DateTimeInterface         $dateTime
      */
-    public function __construct(ProductIncludedInfoGuesser $productIncludedInfoGuesser)
-    {
+    public function __construct(
+        ProductIncludedInfoGuesser $productIncludedInfoGuesser,
+        \DateTimeInterface $dateTime
+    ) {
         $this->productIncludedInfoGuesser = $productIncludedInfoGuesser;
+        $this->dateTime                   = $dateTime;
     }
 
     /**
@@ -41,11 +49,16 @@ class ProductViewQueryHandler
             $productViewQuery->row->getPrice(),
             $productViewQuery->row->getQuantity(),
             $productViewQuery->order->getVatMode(),
-            $productViewQuery->order->getCurrency()
+            $productViewQuery->order->getCurrency(),
+            $productViewQuery->row->getProduct()->getBuyableUntil(),
+            $productViewQuery->row->getProduct()->getDeletableUntil(),
+            $productViewQuery->row->getProduct()->isBuyable($this->dateTime),
+            $productViewQuery->row->getProduct()->isDeletable($this->dateTime)
         );
 
         if ($productViewQuery->row->hasIncludedProduct()) {
-            $infos = $this->productIncludedInfoGuesser->getProductIncludedInfo($productViewQuery->row, $productViewQuery->locale);
+            $infos = $this->productIncludedInfoGuesser->getProductIncludedInfo($productViewQuery->row,
+                $productViewQuery->locale);
 
             foreach ($infos as $info) {
                 $productView->addIncludedProduct(
@@ -55,7 +68,11 @@ class ProductViewQueryHandler
                         $info['price'],
                         $info['quantity'],
                         $productViewQuery->order->getVatMode(),
-                        $productViewQuery->order->getCurrency()
+                        $productViewQuery->order->getCurrency(),
+                        $productViewQuery->row->getProduct()->getBuyableUntil(),
+                        $productViewQuery->row->getProduct()->getDeletableUntil(),
+                        $productViewQuery->row->getProduct()->isBuyable($this->dateTime),
+                        $productViewQuery->row->getProduct()->isDeletable($this->dateTime)
                     )
                 );
             }
