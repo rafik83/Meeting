@@ -1001,6 +1001,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
+    command.order.create_handler:
+        class: Proximum\Vimeet\Application\Command\Order\CreateHandler
+        arguments:
+            - '@cart.converter'
+            - '@cart_manager'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Create }
     command.event.promotion_code.add_handler:
         class: Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler
         arguments:
