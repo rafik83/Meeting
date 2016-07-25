@@ -1,0 +1,25 @@
+{% if null != promotionCodeView %}
+    {% import 'EventBundle::macro.html.twig' as macros %}
+
+    <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
+        <td class="col-md-6">
+            <div class="col-md-10">
+                <strong>{{ promotionCodeView.label }}</strong><br>
+                {{ promotionCodeView.description|nl2br }}
+            </div>
+        </td>
+        <td class="col-md-2"></td>
+        <td class="col-md-2"></td>
+        <td class="col-md-2">
+            <div class="product">
+                <span class="product-price text-center">
+                    {{ 'package.product.unitPrice'|trans({
+                        '%price%': promotionCodeView.total|localizednumber,
+                        '%currency%': promotionCodeView.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ promotionCodeView.vatMode)|trans
+                    })|html }}
+                </span>
+            </div>
+        </td>
+    </tr>
+{% endif %}

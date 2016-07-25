@@ -26,7 +26,7 @@
                             </thead>
                             <tbody>
                             {{ include('EventBundle:Order/SummaryTotal:groups.html.twig', { groups: view.groups.groups }) }}
-                            {{ include('EventBundle:Order/Summary:promotion_codes.html.twig', {promotionCodes: view.promotionCodes}) }}
+                            {{ include('EventBundle:Order/SummaryTotal:promo-code-rows.html.twig', { promotionCodes: view.promotionCodes.promotionCodes }) }}
                             </tbody>
                         </table>
                         <div class="row end-table">
