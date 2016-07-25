@@ -65,7 +65,7 @@ class PackageController extends Controller
         }
 
         if (!empty($sheet->getOrders())) {
-            return $this->redirectToRoute('event_order_list', [
+            return $this->redirectToRoute('event_order_summary_total', [
                 'sheet' => $sheet->getId(),
             ]);
         }

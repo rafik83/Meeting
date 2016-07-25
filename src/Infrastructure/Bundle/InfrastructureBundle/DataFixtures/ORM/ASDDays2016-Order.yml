@@ -118,3 +118,11 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         price: 195
         data: '{"name":"Participant supplémentaire Fournisseur", "translations":{"fr":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}","en":"{\"title\":\"Participant supplémentaire Fournisseur\",\"heading\":\"\",\"description\":\"\",\"addon\":\"\"}"}}'
         product: '@product_participant_1_asddays'
+
+Proximum\Vimeet\Domain\Model\Order\PromotionCode:
+    order_promotion_code_row_1:
+        __construct: false
+        order: '@order_2'
+        promotionCode: '@promotion_code_asddays_2016'
+        data: '{}'
+        price: -250
