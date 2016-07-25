@@ -27,9 +27,9 @@ class CustomRowViewQueryHandler
         return new CustomRowView(
             $customRowViewQuery->row->getId(),
             $customRowViewQuery->row->getLabel($locale),
-            $customRowViewQuery->row->getPrice($locale),
-            $customRowViewQuery->row->getQuantity($locale),
-            $customRowViewQuery->row->getProductId()
+            $customRowViewQuery->row->getPrice(),
+            $customRowViewQuery->row->getQuantity(),
+            $customRowViewQuery->row->getParentRow()
         );
     }
 }
