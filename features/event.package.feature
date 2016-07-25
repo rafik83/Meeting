@@ -139,3 +139,14 @@ Feature: Complete my package
     Then I press "package.payment.pay.label"
     Then I should be on this page "/fr/sheet/1/orders"
     And I should see "order.transaction.state.pending"
+
+  Scenario: I can see my package total summary:
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet"
+    And I follow "navigation.links.package.order_summary_total"
+    Then I should be on this page "/fr/sheet/1/order/summary"
+    And I should see "package.summary.total.title"
+    And I should see "summary.promotionCode"
+    And I should see "summary.total"
+    And I should see "package.summary.totalVat"
+    And I should see "summary.totalToPay"
