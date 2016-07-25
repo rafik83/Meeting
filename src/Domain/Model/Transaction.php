@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Payment\Mode;
+
 /**
  * "Transaction".
  */
@@ -189,5 +191,13 @@ class Transaction
     public function isPending()
     {
         return $this->state === self::STATE_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaypal()
+    {
+        return Mode::PAYMENT_PAYPAL === $this->getMode();
     }
 }
