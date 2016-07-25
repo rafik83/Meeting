@@ -360,7 +360,7 @@ class Order
     /**
      * @param $groupId
      *
-     * @return array
+     * @return false|Order\Row[]
      */
     public function getProductRowForGroupId($groupId)
     {
@@ -370,14 +370,26 @@ class Order
     }
 
     /**
-     * @param $groupId
+     * @param int $groupId
      *
-     * @return array
+     * @return false|Order\Row[]
      */
     public function getCustomRowForGroupId($groupId)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
-            return !$row->isProduct() && $row->getGroupId() === $groupId;
+            return !$row->isProduct() && $row->getGroupId() === $groupId && !$row->hasParentRow();
+        });
+    }
+
+    /**
+     * @param Row $parentRow
+     *
+     * @return false|Order\Row[]
+     */
+    public function getCustomRowForProduct(Row $parentRow)
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
+            return !$row->isProduct() && $parentRow === $row->getParentRow();
         });
     }
 

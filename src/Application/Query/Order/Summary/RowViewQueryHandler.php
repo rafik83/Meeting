@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
-use Proximum\Vimeet\Application\View\Order\ProductView;
+use Proximum\Vimeet\Application\View\Order\CustomRowView;
+use Proximum\Vimeet\Application\View\Order\IncludedProductView;
+use Proximum\Vimeet\Application\View\Order\RowView;
 use Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser;
 
 class ProductViewQueryHandler
@@ -31,11 +33,12 @@ class ProductViewQueryHandler
     /**
      * @param ProductViewQuery $productViewQuery
      *
-     * @return ProductView
+     * @return RowView
      */
     public function handle(ProductViewQuery $productViewQuery)
     {
-        $productView = new ProductView(
+        $rowView = new RowView(
+            $productViewQuery->row->getId(),
             $productViewQuery->row->getProductId(),
             $productViewQuery->row->getLabel($productViewQuery->locale),
             $productViewQuery->row->getPrice(),
@@ -44,16 +47,28 @@ class ProductViewQueryHandler
             $productViewQuery->order->getCurrency()
         );
 
-        if ($productViewQuery->row->hasIncludedProduct()) {
-            $infos = $this->productIncludedInfoGuesser->getProductIncludedInfo($productViewQuery->row, $productViewQuery->locale);
+        foreach ($productViewQuery->order->getCustomRowForProduct($productViewQuery->row) as $customRow) {
+            $rowView->addCustomRow(new CustomRowView(
+                $customRow->getId(),
+                $customRow->getLabel(),
+                $customRow->getPrice(),
+                $customRow->getQuantity()
+            ));
+        }
 
-            foreach ($infos as $info) {
-                $productView->addIncludedProduct(
-                    new ProductView(
-                        $info['id'],
-                        $info['label'],
-                        $info['price'],
-                        $info['quantity'],
+        if ($productViewQuery->row->hasIncludedProduct()) {
+            $includedProducts = $this->productIncludedInfoGuesser->getProductIncludedInfo(
+                $productViewQuery->row,
+                $productViewQuery->locale
+            );
+
+            foreach ($includedProducts as $includedProduct) {
+                $rowView->addIncludedProduct(
+                    new IncludedProductView(
+                        $includedProduct['id'],
+                        $includedProduct['label'],
+                        $includedProduct['price'],
+                        $includedProduct['quantity'],
                         $productViewQuery->order->getVatMode(),
                         $productViewQuery->order->getCurrency()
                     )
@@ -63,13 +78,13 @@ class ProductViewQueryHandler
 
         if (null !== $productViewQuery->planView) {
             foreach ($productViewQuery->planView->includedProducts as $key => $includedView) {
-                if (null !== $includedView && $includedView->id === $productView->id) {
-                    $productView->addIncludedProduct($includedView);
+                if (null !== $includedView && $includedView->id === $rowView->productId) {
+                    $rowView->addIncludedProduct($includedView);
                     unset($productViewQuery->planView->includedProducts[$key]);
                 }
             }
         }
 
-        return $productView;
+        return $rowView;
     }
 }

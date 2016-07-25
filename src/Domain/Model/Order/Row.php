@@ -51,7 +51,7 @@ class Row
     protected $groupId;
 
     /**
-     * @var null|int
+     * @var null|Row
      */
     protected $parentRow;
 
@@ -69,7 +69,7 @@ class Row
      * @param null|int     $groupId
      * @param string       $label
      * @param float        $price
-     * @param null|int     $parentRow
+     * @param null|Row     $parentRow
      */
     public function __construct(
         Order $order,
@@ -205,9 +205,9 @@ class Row
      *
      * @return string
      */
-    public function getLabel($locale, $fallback = null)
+    public function getLabel($locale = null, $fallback = null)
     {
-        if (!empty($this->data)) {
+        if (!empty($this->data) && null !== $locale) {
             return $this->getLabelFromData($locale, $fallback);
         }
 
@@ -215,11 +215,19 @@ class Row
     }
 
     /**
-     * @return int|null int
+     * @return null|Row
      */
     public function getParentRow()
     {
         return $this->parentRow;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParentRow()
+    {
+        return null !== $this->parentRow;
     }
 
     /**
@@ -228,23 +236,38 @@ class Row
      * @param null|int $groupId
      * @param string   $label
      * @param float    $price
-     * @param null|int $parentRow
      *
      * @return Row
      */
-    public static function createCustomRow(
+    public static function createCustomRowToGroup(
         Order $order,
         $quantity,
         $groupId,
         $label,
-        $price,
-        $parentRow = null
+        $price
     ) {
-        return new self (
+        return new self(
             $order,
             null,
             $quantity,
             $groupId,
+            $label,
+            $price
+        );
+    }
+
+    public static function createCustomRowToProduct(
+        Order $order,
+        Row $parentRow,
+        $label,
+        $quantity,
+        $price
+    ) {
+        return new self(
+            $order,
+            null,
+            $quantity,
+            $parentRow->getGroupId(),
             $label,
             $price,
             $parentRow
@@ -270,16 +293,14 @@ class Row
     }
 
     /**
-     * @param Row $customRow
-     *
-     * @return Row
+     * @param string $label
+     * @param float  $price
+     * @param int    $quantity
      */
-    public function update(Row $customRow)
+    public function update($label, $price, $quantity)
     {
-        $this->label    = $customRow->getLabel("fr");
-        $this->price    = $customRow->getPrice();
-        $this->quantity = $customRow->getQuantity();
-
-        return $this;
+        $this->label    = $label;
+        $this->price    = $price;
+        $this->quantity = $quantity;
     }
 }

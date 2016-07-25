@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
 use Proximum\Vimeet\Application\View\Order\ProductView;
+use Proximum\Vimeet\Application\View\Order\RowView;
 use Proximum\Vimeet\Domain\Model\Order;
 
 class ProductViewQuery
@@ -31,17 +32,17 @@ class ProductViewQuery
     public $order;
 
     /**
-     * @var ProductView
+     * @var RowView
      */
     public $planView;
 
     /**
-     * @param Order            $order
-     * @param Order\Row        $row
-     * @param string           $locale
-     * @param ProductView|null $planView
+     * @param Order        $order
+     * @param Order\Row    $row
+     * @param string       $locale
+     * @param null|RowView $planView
      */
-    public function __construct(Order $order, Order\Row $row, $locale, ProductView $planView = null)
+    public function __construct(Order $order, Order\Row $row, $locale, RowView $planView = null)
     {
         $this->order    = $order;
         $this->row      = $row;

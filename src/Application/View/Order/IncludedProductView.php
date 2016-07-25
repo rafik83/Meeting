@@ -48,11 +48,6 @@ class ProductView
     public $currency;
 
     /**
-     * @var ProductView[]
-     */
-    public $includedProducts = [];
-
-    /**
      * @param int    $id
      * @param string $label
      * @param float  $price
@@ -68,13 +63,13 @@ class ProductView
         $vatMode,
         $currency
     ) {
-        $this->id       = $id;
-        $this->label    = $label;
-        $this->price    = $price;
-        $this->quantity = $quantity;
-        $this->total    = $price * $quantity;
-        $this->vatMode  = $vatMode;
-        $this->currency = $currency;
+        $this->id        = $id;
+        $this->label     = $label;
+        $this->price     = $price;
+        $this->quantity  = $quantity;
+        $this->total     = $price * $quantity;
+        $this->vatMode   = $vatMode;
+        $this->currency  = $currency;
     }
 
     /**
@@ -83,5 +78,13 @@ class ProductView
     public function addIncludedProduct(ProductView $productView)
     {
         $this->includedProducts[] = $productView;
+    }
+
+    /**
+     * @param CustomRowView $customRowView
+     */
+    public function addCustomRow(CustomRowView $customRowView)
+    {
+        $this->customRows[] = $customRowView;
     }
 }
