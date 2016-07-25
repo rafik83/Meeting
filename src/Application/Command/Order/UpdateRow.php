@@ -61,7 +61,6 @@ class UpdateRow
         $this->order       = $order;
         $this->row         = $row;
         $this->label       = $row->getLabel($locale);
-        $this->description = $row->getDescription();
         $this->price       = $row->getPrice();
         $this->quantity    = $row->getQuantity();
     }

@@ -25,11 +25,6 @@ class AddRow
     public $label;
 
     /**
-     * @var string
-     */
-    public $description;
-
-    /**
      * @var float
      */
     public $price;

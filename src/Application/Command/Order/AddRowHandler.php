@@ -43,7 +43,6 @@ class AddRowHandler
             $addRow->quantity,
             $addRow->groupId,
             $addRow->label,
-            $addRow->description,
             $addRow->price,
             $addRow->productId
         );

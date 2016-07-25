@@ -30,7 +30,7 @@ class RemoveRow
      * @param Order     $order
      * @param Order\Row $row
      */
-    public function __construct(Order $order, Order\Row $row, $locale)
+    public function __construct(Order $order, Order\Row $row)
     {
         $this->order = $order;
         $this->row = $row;
