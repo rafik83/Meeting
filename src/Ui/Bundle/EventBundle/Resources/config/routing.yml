@@ -489,19 +489,20 @@ event_package_payment:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Payment:paymentChoice }
 
-event_package_payment_prepare:
-    path: /sheet/{sheet}/package/payment/prepare
+event_package_payment_prepare_paypal:
+    path: /sheet/{sheet}/package/payment/paypal/{transaction}
     requirements:
         sheet: \d+
+        transaction: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:prepare }
+    defaults: { _controller: EventBundle:Payment:preparePaypal }
 
 event_package_payment_done:
     path: /sheet/{sheet}/package/payment/done
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:done }
+    defaults: { _controller: EventBundle:Payment:donePayment }
 
 #
 # Order

@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Payum\Core\Request\GetHumanStatus;
+use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
@@ -39,6 +41,7 @@ class PaymentController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
+        $funnel = null;
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
@@ -50,29 +53,43 @@ class PaymentController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $now            = new \DateTime();
-        $funnel         = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
-        $total          = $this->get('payment.total_to_pay')->getTotal($sheet);
+        $now   = new \DateTime();
+        $total = $this->get('payment.total_to_pay')->getTotal($sheet);
+
+        // If nothing to pay, create the order
+        if ($total <= 0) {
+            $create = new Create($sheet);
+            $this->get('tactician.commandbus')->handle($create);
+
+            return $this->redirectToRoute('event_order_list', [
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
         $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
 
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet);
-            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
-            ]);
+            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
         } else {
             $paymentChoice = new Choice($sheet);
-            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
-            ]);
+            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($paymentChoice);
-
+                /** @var Transaction $transaction */
+                $transaction = $this->get('tactician.commandbus')->handle($paymentChoice);
                 $this->consumePackageCompletedPaymentFlash();
 
-                // This will have to redirect to payment when needed
+                if ($transaction->isPaypal()) {
+                    return $this->redirectToRoute('event_package_payment_prepare_paypal', [
+                        'sheet'       => $sheet->getId(),
+                        'transaction' => $transaction->getId(),
+                    ]);
+                }
+
                 return $this->redirectToRoute('event_order_list', [
                     'sheet' => $sheet->getId(),
                 ]);
@@ -98,22 +115,42 @@ class PaymentController extends Controller
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
+     * @param Transaction $transaction
      *
      * @return RedirectResponse
      */
-    public function prepareAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
+    public function preparePaypalAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Transaction $transaction
+    ) {
+        $billingInfo = $this->get('repository.billing_info_repository')->getBySheet($sheet);
+
         $gatewayName = 'paypal_express_checkout';
 
         $storage = $this->get('payum')->getStorage(Payment::class);
 
+        /** @var Payment $payment */
         $payment = $storage->create();
-        $payment->setNumber(uniqid());
-        $payment->setCurrencyCode('EUR');
-        $payment->setTotalAmount(123); // 1.23 EUR
-        $payment->setDescription('A description');
-        $payment->setClientId('anId');
-        $payment->setClientEmail('foo@example.com');
+        $payment->setNumber($transaction->getId());
+        $payment->setCurrencyCode($transaction->getCurrency());
+        $payment->setTotalAmount($transaction->getAmount() * 100);
+        // $payment->setDescription('A description');
+        $payment->setClientId($transaction->getSheet()->getId());
+        $payment->setClientEmail($billingInfo->getEmail());
+
+        $payment->setDetails([
+            'FIRSTNAME'         => $billingInfo->getFirstname(),
+            'LASTNAME'          => $billingInfo->getLastname(),
+            'COUNTRYCODE'       => $billingInfo->getAddress()->getCountry(),
+            'SHIPTONAME'        => $billingInfo->getCompleteName(),
+            'SHIPTOSTREET'      => $billingInfo->getAddress()->getStreet(),
+            'SHIPTOCITY'        => $billingInfo->getAddress()->getCity(),
+            'SHIPTOSTATE'       => '',
+            'SHIPTOZIP'         => $billingInfo->getAddress()->getZipcode(),
+            'SHIPTOCOUNTRYCODE' => $billingInfo->getAddress()->getCountry(),
+        ]);
 
         $storage->update($payment);
 
@@ -134,21 +171,15 @@ class PaymentController extends Controller
      *
      * @return Response
      */
-    public function doneAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function donePaymentAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $token = $this->get('payum')->getHttpRequestVerifier()->verify($request);
-
-        $gateway = $this->get('payum')->getGateway($token->getGatewayName());
-
-        // you can invalidate the token. The url could not be requested any more.
-        // $this->get('payum')->getHttpRequestVerifier()->invalidate($token);
-
-        // Once you have token you can get the model from the storage directly.
-        //$identity = $token->getDetails();
-        //$payment = $payum->getStorage($identity->getClass())->find($identity);
-
-        // or Payum can fetch the model for you while executing a request (Preferred).
+        $payum   = $this->get('payum');
+        $token   = $payum->getHttpRequestVerifier()->verify($request);
+        $gateway = $payum->getGateway($token->getGatewayName());
+        $payum->getHttpRequestVerifier()->invalidate($token);
         $gateway->execute($status = new GetHumanStatus($token));
+
+        /** @var Payment $payment */
         $payment = $status->getFirstModel();
 
         return $this->render('EventBundle:Payment:done.html.twig', [
