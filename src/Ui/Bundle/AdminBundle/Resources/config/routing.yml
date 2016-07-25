@@ -385,21 +385,13 @@ admin_sheet_order_add_row_to_group:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Order:addRowToGroup }
 admin_sheet_order_add_row_to_product:
-    path: /event/{event}/order/{order}/row/add/to-product/{product}
-    requirements:
-        event: \d+
-        order: \d+
-        product: \d+
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Order:addRowToProduct }
-admin_sheet_order_edit_row:
-    path: /event/{event}/order/{order}/row/{row}/edit
+    path: /event/{event}/order/{order}/row/add/to-product/{row}
     requirements:
         event: \d+
         order: \d+
         row: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Order:editRow }
+    defaults: { _controller: AdminBundle:Order:addRowToProduct }
 admin_sheet_order_remove_row:
     path: /event/{event}/order/{order}/row/{row}/remove
     requirements:

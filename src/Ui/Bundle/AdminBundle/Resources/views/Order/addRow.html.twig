@@ -1,13 +1,18 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+{% block form_content %}
+    <h1 class="page-header">Commande {{ order.id }} de {{ sheet_info }}</h1>
 
-    <h2>{{ sheet_info }}</h2>
+    <h4>
+        Ajouter une ligne
+        {% if row_label is defined %}
+            après "{{ row_label }}"
+        {% endif %}
+    </h4>
 
-    <h3>Commande {{ order.id }}</h3>
+    {{ form_row(form.label) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.quantity) }}
+{% endblock form_content %}
 
-    <h4>Ajouter une ligne</h4>
-
-    {{ form(form) }}
-{% endblock %}
+{% block goback_link path('admin_event_list') %}

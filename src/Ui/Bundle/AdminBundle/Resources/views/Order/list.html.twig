@@ -52,8 +52,8 @@
                 <td class="text-right">
                     {{ order.total|localizedcurrency(order.currency) }}
                 </td>
-                <td>
-                    <a class="btn btn-primary" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">Modifier</a>
+                <td class="text-right">
+                    <a class="btn btn-default bt-sm" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}

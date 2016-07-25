@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Order\AddRow;
+use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
+use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
@@ -119,8 +121,7 @@ class OrderController extends Controller
             ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
-
-        $addRow = new AddRow($order, $group);
+        $addRow = new AddRowToGroup($order, $group);
         $form   = $this->createForm(AddRowType::class, $addRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -161,7 +162,7 @@ class OrderController extends Controller
             ->guessSheetName($order->getSheet(), $request->getLocale())
         ;
 
-        $addRow = new AddRow($order, $row->getGroupId(), $row->getProductId());
+        $addRow = new AddRowToProduct($order, $row);
         $form   = $this->createForm(AddRowType::class, $addRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -180,39 +181,8 @@ class OrderController extends Controller
                 'event'      => $event,
                 'sheet_info' => $sheetInfo,
                 'order'      => $order,
-                'form'       => $form->createView(),
-            ]
-        );
-    }
-
-    public function editRowAction(Request $request, Event $event, Order $order, Order\Row $row)
-    {
-        $this->denyAccessIfOrderNotInEvent($event, $order);
-
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($order->getSheet(), $request->getLocale())
-        ;
-
-        $updateRow = new UpdateRow($order, $row, $event->getLocales());
-        $form   = $this->createForm(UpdateRowType::class, $updateRow);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($updateRow);
-            $this->addFlash('success', 'flash.admin.order.add_row.success');
-
-            return $this->redirectToRoute('admin_sheet_order_edit', [
-                'event' => $event->getId(),
-                'order' => $order->getId(),
-            ]);
-        }
-
-        return $this->render(
-            'AdminBundle:Order:addRow.html.twig',
-            [
-                'event'      => $event,
-                'sheet_info' => $sheetInfo,
-                'order'      => $order,
+                'row_label'  => $row->getLabel($event->getAvailableLocale($request->getLocale())),
+                'row'        => $row,
                 'form'       => $form->createView(),
             ]
         );
@@ -222,12 +192,11 @@ class OrderController extends Controller
      * @param Request   $request
      * @param Event     $event
      * @param Order     $order
-     * @param string    $group
      * @param Order\Row $row
      *
      * @return RedirectResponse|Response
      */
-    public function updateRowAction(Request $request, Event $event, Order $order, $group, Order\Row $row)
+    public function updateRowAction(Request $request, Event $event, Order $order, Order\Row $row)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
 
@@ -235,7 +204,7 @@ class OrderController extends Controller
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
             ->guessSheetName($order->getSheet(), $request->getLocale());
 
-        $updateRow = new UpdateRow($order, $group, $row);
+        $updateRow = new UpdateRow($row);
         $form      = $this->createForm(UpdateRowType::class, $updateRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -270,7 +239,7 @@ class OrderController extends Controller
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
 
-        $this->get('tactician.commandbus')->handle(new RemoveRow($order, $row));
+        $this->get('tactician.commandbus')->handle(new RemoveRow($row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
         return $this->redirectToRoute('admin_sheet_order_edit', [
