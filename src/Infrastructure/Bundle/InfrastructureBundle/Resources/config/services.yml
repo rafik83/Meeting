@@ -985,7 +985,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
         arguments:
             - '@repository.transaction'
-            - '@cart.convertor'
+            - '@cart.converter'
             - '@cart_manager'
             - '@payment.total_to_pay'
             - '@datetime'
@@ -995,7 +995,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
         arguments:
             - '@repository.transaction'
-            - '@cart.convertor'
+            - '@cart.converter'
             - '@cart_manager'
             - '@payment.total_to_pay'
             - '@datetime'
@@ -1621,7 +1621,7 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
-    cart.convertor:
+    cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
