@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Order;
 
+use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -33,6 +34,10 @@ class Merger
      */
     public function __construct(Sheet $sheet, array $orders)
     {
+        if (count($orders) === 0) {
+            throw new OrderMergerException();
+        }
+
         $this->orders = $orders;
 
         /** @var Order $orderPattern */
