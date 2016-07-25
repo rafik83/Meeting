@@ -20,14 +20,16 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             nullable: true
         price:
             type: float
-        parentRow:
-            type: integer
-            nullable: true
     manyToOne:
         order:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             inversedBy: rows
             joinColumn:
+                onDelete: "cascade"
+        parentRow:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
+            joinColumn:
+                nullable: true
                 onDelete: "cascade"
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product

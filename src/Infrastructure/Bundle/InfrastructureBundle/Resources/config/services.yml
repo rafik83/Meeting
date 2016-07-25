@@ -116,6 +116,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+    vimeet_infrastructure.repository.order_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Order\RowRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.product_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
         arguments:
@@ -1017,25 +1021,31 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
 
 
-    command.order.add_row_handler:
-        class: Proximum\Vimeet\Application\Command\Order\AddRowHandler
+    command.order.add_row_to_product_handler:
+        class: Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRow }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToProduct }
 
+    command.order.add_row_to_group_handler:
+        class: Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToGroup }
 
     command.order.update_row_handler:
         class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
         arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.order_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\UpdateRow }
 
     command.order.remove_row_handler:
         class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
         arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.order_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
     #
@@ -1475,14 +1485,14 @@ services:
             - '@query.package.summary.promotion_code_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
-    query.order.summary.product_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Order\Summary\ProductViewQueryHandler
+    query.order.summary.row_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\RowViewQueryHandler
         arguments:
             - '@order.row.product_included_info_guesser'
     query.order.summary.group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler
         arguments:
-            - '@query.order.summary.product_view_query_handler'
+            - '@query.order.summary.row_view_query_handler'
             - '@query.order.summary.custom_row_view_query_handler'
     query.order.summary.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
