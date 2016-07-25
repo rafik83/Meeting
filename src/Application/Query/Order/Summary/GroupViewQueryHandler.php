@@ -16,9 +16,9 @@ use Proximum\Vimeet\Domain\Model\Product;
 class GroupViewQueryHandler
 {
     /**
-     * @var ProductViewQueryHandler
+     * @var RowViewQueryHandler
      */
-    private $productViewQueryHandler;
+    private $rowViewQueryHandler;
 
     /**
      * @var CustomRowsViewQueryHandler
@@ -26,14 +26,16 @@ class GroupViewQueryHandler
     private $customRowViewQueryHandler;
 
     /**
-     * @param ProductViewQueryHandler    $productViewQueryHandler
+     * GroupViewQueryHandler constructor.
+     *
+     * @param RowViewQueryHandler       $rowViewQueryHandler
      * @param CustomRowViewQueryHandler $customRowsViewQueryHandler
      */
     public function __construct(
-        ProductViewQueryHandler $productViewQueryHandler,
+        RowViewQueryHandler $rowViewQueryHandler,
         CustomRowViewQueryHandler $customRowsViewQueryHandler
     ) {
-        $this->productViewQueryHandler   = $productViewQueryHandler;
+        $this->rowViewQueryHandler   = $rowViewQueryHandler;
         $this->customRowViewQueryHandler = $customRowsViewQueryHandler;
     }
 
@@ -54,8 +56,8 @@ class GroupViewQueryHandler
             $label = $order->getGroupLabel($groupViewQuery->groupId, $locale);
 
             foreach ($order->getProductRowForGroupId($groupViewQuery->groupId) as $row) {
-                $products[] = $this->productViewQueryHandler->handle(
-                    new ProductViewQuery(
+                $products[] = $this->rowViewQueryHandler->handle(
+                    new RowViewQuery(
                         $order,
                         $row,
                         $locale,
@@ -77,8 +79,8 @@ class GroupViewQueryHandler
 
             if (null !== $product) {
                 $label = $product->getLabel($locale);
-                $products[] = $this->productViewQueryHandler->handle(
-                    new ProductViewQuery(
+                $products[] = $this->rowViewQueryHandler->handle(
+                    new RowViewQuery(
                         $order,
                         $product,
                         $locale,

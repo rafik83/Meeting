@@ -28,8 +28,7 @@ class CustomRowViewQueryHandler
             $customRowViewQuery->row->getId(),
             $customRowViewQuery->row->getLabel($locale),
             $customRowViewQuery->row->getPrice(),
-            $customRowViewQuery->row->getQuantity(),
-            $customRowViewQuery->row->getParentRow()
+            $customRowViewQuery->row->getQuantity()
         );
     }
 }

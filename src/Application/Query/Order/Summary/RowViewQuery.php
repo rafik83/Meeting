@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
-use Proximum\Vimeet\Application\View\Order\ProductView;
 use Proximum\Vimeet\Application\View\Order\RowView;
 use Proximum\Vimeet\Domain\Model\Order;
 
-class ProductViewQuery
+class RowViewQuery
 {
     /**
      * @var string
