@@ -100,11 +100,12 @@ class OrderController extends Controller
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
             || !$sheet->getPackage()->isPassable()
+            || count($sheet->getOrders()) === 0
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $orderMerger = new Merger($sheet->getOrders());
+        $orderMerger = new Merger($sheet, $sheet->getOrders());
         $order       = $orderMerger->merge();
 
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(

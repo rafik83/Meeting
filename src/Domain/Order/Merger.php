@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Merger
 {
@@ -27,9 +28,10 @@ class Merger
     /**
      * Merger constructor.
      *
+     * @param Sheet   $sheet
      * @param Order[] $orders
      */
-    public function __construct(array $orders)
+    public function __construct(Sheet $sheet, array $orders)
     {
         $this->orders = $orders;
 
@@ -40,8 +42,8 @@ class Merger
             $orderPattern->getSheet(),
             $orderPattern->isVatApplicable(),
             $orderPattern->getBillingInfo(),
-            $orderPattern->getGroupsData(),
-            new \DateTime()
+            $sheet->getPackage()->serializeData(),
+            $orderPattern->getCreatedAt()
         );
     }
 
