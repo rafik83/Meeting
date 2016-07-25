@@ -1,7 +1,7 @@
 {% if null != product %}
     <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
         <td class="col-md-6">
-            <strong>{{ product.label }}</strong>
+            <p>{{ product.label }}</p>
             {% if product.buyableUntil is not empty %}
                 <p>{{ 'package.product.buyableUntil'|trans({'%date%': product.buyableUntil|date('d/m/Y')}) }}</p>
             {% endif %}
