@@ -10,9 +10,6 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         label:
             type: text
             nullable: true
-        description:
-            type: text
-            nullable: true
         quantity:
             type: integer
         data:
@@ -23,6 +20,9 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             nullable: true
         price:
             type: float
+        parentRow:
+            type: integer
+            nullable: true
     manyToOne:
         order:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
