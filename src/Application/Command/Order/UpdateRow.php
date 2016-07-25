@@ -10,22 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
-use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 
 class UpdateRow
 {
     /**
-     * @var Order
-     */
-    public $order;
-
-    /**
-     * @var string
-     */
-    public $group;
-
-    /**
-     * @var string
+     * @var Row
      */
     public $row;
 
@@ -33,11 +23,6 @@ class UpdateRow
      * @var string
      */
     public $label;
-
-    /**
-     * @var string
-     */
-    public $description;
 
     /**
      * @var float
@@ -50,18 +35,13 @@ class UpdateRow
     public $quantity;
 
     /**
-     * UpdateRow constructor.
-     *
-     * @param Order     $order
-     * @param Order\Row $row
-     * @param string    $locale
+     * @param Row $row
      */
-    public function __construct(Order $order, Order\Row $row, $locale)
+    public function __construct(Row $row)
     {
-        $this->order       = $order;
-        $this->row         = $row;
-        $this->label       = $row->getLabel($locale);
-        $this->price       = $row->getPrice();
-        $this->quantity    = $row->getQuantity();
+        $this->row      = $row;
+        $this->label    = $row->getLabel();
+        $this->price    = $row->getPrice();
+        $this->quantity = $row->getQuantity();
     }
 }

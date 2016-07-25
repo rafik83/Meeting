@@ -12,49 +12,20 @@ namespace Proximum\Vimeet\Application\Command\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
 
-class AddRow
+class AddRowToGroup extends AbstractAddRow
 {
-    /**
-     * @var Order
-     */
-    public $order;
-
-    /**
-     * @var string
-     */
-    public $label;
-
-    /**
-     * @var float
-     */
-    public $price;
-
-    /**
-     * @var int
-     */
-    public $quantity = 1;
-
     /**
      * @var int
      */
     public $groupId;
 
     /**
-     * @var int
+     * @param Order  $order
+     * @param string $groupId
      */
-    public $productId;
-
-    /**
-     * AddRow constructor.
-     *
-     * @param Order    $order
-     * @param string   $groupId
-     * @param null|int $productId
-     */
-    public function __construct(Order $order, $groupId, $productId = null)
+    public function __construct(Order $order, $groupId)
     {
-        $this->order     = $order;
-        $this->groupId   = $groupId;
-        $this->productId = $productId;
+        $this->order   = $order;
+        $this->groupId = $groupId;
     }
 }
