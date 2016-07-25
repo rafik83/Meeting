@@ -32,7 +32,7 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $updatable           = true;
-        $updatableUntil      = new \DateTime();
+        $deletableUntil      = new \DateTime();
         $translations = [
             'fr' => [
                 'title'                     => 'foo',
@@ -55,7 +55,7 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax     = $availabilityMax;
         $create->updatable           = $updatable;
-        $create->updatableUntil      = $updatableUntil;
+        $create->deletableUntil      = $deletableUntil;
         $create->translations        = $translations;
         $create->file                = null;
 
@@ -70,7 +70,7 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
             $availabilityCurrent,
             $availabilityMax,
             $updatable,
-            $updatableUntil
+            $deletableUntil
         );
         $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional', '');
         $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional', '');
