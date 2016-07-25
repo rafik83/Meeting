@@ -96,9 +96,10 @@ form:
             mode:
                 label: 'Choisissez votre mode de paiement:'
             paymentMode:
-                bank_card: Carte bleu
+                bank_card: Carte bleue
                 bank_transfer: Transfert
                 bank_check: Chèque
+                paypal: Paypal ou Carte bleue
     payment_choice_with_deposit:
         children:
             mode:
