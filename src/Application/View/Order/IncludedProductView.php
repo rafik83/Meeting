@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
-class ProductView
+class IncludedProductView
 {
     /**
      * @var int
@@ -70,21 +70,5 @@ class ProductView
         $this->total     = $price * $quantity;
         $this->vatMode   = $vatMode;
         $this->currency  = $currency;
-    }
-
-    /**
-     * @param ProductView $productView
-     */
-    public function addIncludedProduct(ProductView $productView)
-    {
-        $this->includedProducts[] = $productView;
-    }
-
-    /**
-     * @param CustomRowView $customRowView
-     */
-    public function addCustomRow(CustomRowView $customRowView)
-    {
-        $this->customRows[] = $customRowView;
     }
 }

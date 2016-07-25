@@ -58,15 +58,21 @@ class GroupView
      */
     public function getTotal()
     {
-        return array_reduce($this->products, function ($carry, ProductView $product) {
+        $total = array_reduce($this->products, function ($carry, RowView $product) {
             return $carry + $product->total;
         }, 0);
+
+        $total += array_reduce($this->customRows, function ($carry, CustomRowView $product) {
+            return $carry + $product->total;
+        }, 0);
+
+        return $total;
     }
 
     /**
-     * @param ProductView $product
+     * @param RowView $product
      */
-    public function addProduct(ProductView $product)
+    public function addProduct(RowView $product)
     {
         $this->products[] = $product;
     }
