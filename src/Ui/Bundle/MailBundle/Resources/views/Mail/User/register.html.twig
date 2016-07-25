@@ -1,5 +1,5 @@
 {% block subject %}
-    {{ 'mail.register.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale) }}
+    {{ 'mail.register.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html }}
 {% endblock %}
 
 {% block body %}
