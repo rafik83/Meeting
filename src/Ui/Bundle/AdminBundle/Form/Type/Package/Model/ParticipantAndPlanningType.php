@@ -44,7 +44,7 @@ class ParticipantAndPlanningType extends AbstractType
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PARTICIPANT]);
                 },
-                'required'         => false,
+                'required'         => true,
             ])
             ->add('planning', ProductChoiceType::class, [
                 'event'            => $options['event'],

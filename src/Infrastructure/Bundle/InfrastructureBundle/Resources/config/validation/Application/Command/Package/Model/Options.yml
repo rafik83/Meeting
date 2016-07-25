@@ -10,4 +10,3 @@ Proximum\Vimeet\Application\Command\Package\Model\Options:
             - Type: { type: boolean }
         groups:
             - Valid: ~
-            - NotBlank: ~
