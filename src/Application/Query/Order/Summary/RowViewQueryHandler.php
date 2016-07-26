@@ -47,7 +47,7 @@ class RowViewQueryHandler
             $rowViewQuery->order->getCurrency()
         );
 
-        foreach ($rowViewQuery->order->getCustomRowForProduct($rowViewQuery->row) as $customRow) {
+        foreach ($rowViewQuery->order->getCustomRowsForProduct($rowViewQuery->row) as $customRow) {
             $rowView->addCustomRow(new CustomRowView(
                 $customRow->getId(),
                 $customRow->getLabel(),

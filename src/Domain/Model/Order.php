@@ -386,7 +386,7 @@ class Order
      *
      * @return false|Order\Row[]
      */
-    public function getCustomRowForProduct(Row $parentRow)
+    public function getCustomRowsForProduct(Row $parentRow)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
             return !$row->isProduct() && $parentRow === $row->getParentRow();
