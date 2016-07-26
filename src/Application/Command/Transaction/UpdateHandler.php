@@ -38,7 +38,8 @@ class UpdateHandler
             $update->amount,
             $update->date,
             $update->mode,
-            $update->reference
+            $update->reference,
+            $update->state
         ));
     }
 }

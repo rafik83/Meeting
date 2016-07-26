@@ -281,13 +281,21 @@ admin:
             state: Statut
             mode: Mode de paiement
             total: Total
+            reference: Commentaire
         state:
             pending: En attente
             paid: Réglé
         mode:
-            bank_card: Carte bleu
-            bank_transfer: Transfert
+            bank_card: Carte bleue
+            bank_transfer: Virement
             bank_check: Chèque
+            bank_cash: Liquide
+        add: Ajouter
+        edit: Modifier
+        remove: Supprimer
+        create: Ajouter une transaction
+        update: Modifier une transaction
+
     product:
         link: Catalogue de produits
         title: Catalogue de produits
@@ -400,15 +408,20 @@ admin:
                 link: Information facturation
                 title: Configuration des informations de facturation
         practicalInfo:
-          link: Informations Pratiques
-          update:
-            title: Modifier les informations pratiques
+            link: Informations Pratiques
+            update:
+                title: Modifier les informations pratiques
         configuration:
             key_dates:
                 title: Date clé de l'événement
         vatMode:
             et: HT
             ati: TTC
+        template:
+            link: Templates
+            registration: Inscription
+            sheet: Présentation
+            package: Forfait de participation
     rule:
         link: Qui voit qui
     type:

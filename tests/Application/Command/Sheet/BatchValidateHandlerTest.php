@@ -33,9 +33,9 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $date    = new \DateTime();
         $comment = 'truc muche';
 
-        $user1 = new User('test@test.com', 'salt', 'password', 'fr');
-        $user2 = new User('test@test.com', 'salt', 'password', 'fr');
-        $user3 = new User('test@test.com', 'salt', 'password', 'fr');
+        $user1  = new User('test@test.com', 'salt', 'password', 'fr');
+        $user2  = new User('test@test.com', 'salt', 'password', 'fr');
+        $user3  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
         $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());

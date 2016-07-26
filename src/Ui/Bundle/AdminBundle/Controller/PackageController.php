@@ -84,7 +84,8 @@ class PackageController extends Controller
         }
 
         return $this->render('AdminBundle:Package:update.html.twig', [
-            'form' => $form->createView(),
+            'form'  => $form->createView(),
+            'event' => $package->getEvent(),
         ]);
     }
 

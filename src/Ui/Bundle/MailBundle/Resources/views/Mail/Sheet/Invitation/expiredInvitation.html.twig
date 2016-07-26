@@ -1,0 +1,19 @@
+{% block subject %}
+    {{ 'mail.sheet.invitation_expired.subject'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ 'mail.sheet.invitation_expired.body'|trans({
+        '%firstname%': mail.user.firstname|humanize,
+        '%lastname%': mail.user.lastname|upper,
+        '%event%': mail.event.title
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}
+
+{% block end %}
+    {{ 'mail.sheet.invitation_expired.end'|trans({
+        '%event%': mail.event.title,
+        '%eventPhone%': mail.event.configuration.organiserPhone,
+        '%eventMail%': mail.event.organiserMail
+    }, 'mail', mail.locale) }}
+{% endblock %}

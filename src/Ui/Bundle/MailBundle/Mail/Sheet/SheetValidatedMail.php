@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -32,9 +32,9 @@ class SheetValidatedMail extends Mail
      */
     public function __construct(Sheet $sheet, $sender, $receiver, $template, $messageId, $locale)
     {
-        $this->sheet = $sheet;
-
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
+
+        $this->sheet = $sheet;
     }
 
     /**

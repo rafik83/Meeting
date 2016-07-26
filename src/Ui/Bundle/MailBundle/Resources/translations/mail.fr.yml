@@ -1,0 +1,183 @@
+mail:
+    resetPassword:
+        subject: '[%event%] Mot de passe oublié'
+        body: |
+            Bonjour,
+            Vous avez fait une demande de réinitialisation de mot de passe.
+            Rendez vous sur ce lien pour pouvoir créer un nouveau mot de passe:
+        end: |
+            Cordialement,
+            L'équipe Vimeet
+    confirmResetPassword:
+        subject: Votre mot de pase a bien été changé
+        body: |
+            Bonjour %firstname% %lastname%,
+
+            Votre mot de passe à bien été changé. Pour accéder à votre espace membre cliquez sur le lien ci-dessous
+
+        end: |
+            Bien cordialement,
+            L’équipe %event%
+            %eventPhone%
+            %eventMail%
+        link: Mon espace membre
+    activateAccount:
+        subject: '[%event%] Activer votre compte'
+        body: |
+            Bonjour,
+
+            Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event%.
+
+            Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous %linkInvitation%. Ce lien expirera dans 48h.
+        end: |
+            Bien cordialement
+            L’équipe %event%
+            %eventPhone%
+            %eventMail%
+    sheet:
+        add_participant_confirmation:
+            subject: Invitation envoyée
+            body: |
+                Bonjour %firstname% %lastname%,
+
+                Votre invitation à %guestMail% pour l’événement %event% a bien été envoyée.
+
+                L’invitation expirera dans 48H.
+
+                Bien cordialement,
+                L’équipe %event%
+                %eventPhone%
+                %eventMail%
+        invitation_close_to_expiration:
+            subject: Votre invitation arrive à expiration
+            body: |
+                Bonjour,
+                Vous avez reçu une invitation de %firstname% %lastname% pour l’événement %event% et nous vous informons que votre invitation expire dans 12h.
+                Pour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous
+            end: |
+                Bien cordialement
+                L’équipe %event%
+                %eventPhone%
+                %eventMail%
+        invitation_expired:
+            subject: Votre invitation est expirée
+            body: |
+                Votre invitation à %guestMail% pour l’événement %event% est expirée.
+
+                Vous avez la possibilité de renvoyer une nouvelle invitation depuis votre espace membre %linkProfile%
+            end: |
+                Bien cordialement
+                L’équipe %event%
+                %eventPhone%
+                %eventMail%
+    changeMailOld:
+        subject: Demande de changement d'email
+        body: |
+            Vous venez d'effectuer une demande de changement d'email pour l'email %email%
+            Consultez la boite email de cette nouvelle adresse pour valider le changement
+            Si vous n'avez pas demandé ce changement, veuillez contacter un administrateur
+        end: |
+            Cordialement,
+            L'équipe Vimeet
+    changeMailNew:
+        subject: Votre nouvel identifiant Vimeet
+        body: |
+            Cher(e) M/Mme %firstname% %lastname%,
+
+            Vous avez récemment choisit l'adresse suivante comme nouvel identifiant ViMeet : %newMail%.
+
+            Pour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace membre.
+        end: |
+            Cordialement,
+            L'équipe Vimeet
+    completeProfile:
+        subject: '[%event%] Invitation en tant que participant'
+        body: |
+            Vous avez été invité en tant que participant pour l'événement %event%.
+            Pour y accéder, cliquer sur le lien suivant et entrer votre mot de passe Vimeet pour confirmer votre participation
+        end: |
+            Cordialement,
+            L'équipe Vimeet
+    register:
+        subject: Votre compte d'accès à l'espace membre de %event% est créé
+        body: |
+            Cher(e) M/Mme %firstname% %lastname%,
+
+            Félicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté Vimeet.
+
+            Vous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.
+
+        end: |
+            Bien cordialement,
+            L’équipe %event%
+            %eventPhone%
+            %eventMail%
+    event.preregister:
+        subject: Vous êtes pré-enregistré à %event%
+        body: |
+            Cher(e) M/Mme %firstname% %lastname%,
+
+            Votre demande d'inscription à %event% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.
+
+            Vous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur.
+
+            Pour vous identifier sur notre site lors de vos prochaines visites, cliquez sur <a href="%memberSpace%">%memberSpace%"</a> en haut de toutes les pages de notre site.
+
+            Vous trouverez ci-dessous le récapitulatif des informations saisies:
+
+        end: |
+            Bien cordialement,
+            L’équipe %event%
+            %eventPhone%
+            %eventMail%
+    sheet.validated:
+        subject: Votre inscription en tant que %participationType% à l'événement %event% est validée
+        body: |
+            Cher(e) M/Mme %firstname% %lastname%,
+
+            Nous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.
+
+            Nous vous rappelons ci-dessous les prochaines étapes de votre participation :
+
+            <ul>
+            <li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>
+            <li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %meetingLimitDate%. Ensuite l’ensemble des participants auront jusqu’au [date premier calcul] pour valider les différentes propositions reçues.</li>
+            <li>Le %scheduleDate% votre planning provisoire sera disponible en ligne. Vous aurez ensuite jusqu’au [date fin optimisation] pour compléter votre sélection et optimiser votre participation.</li>
+            <li>Le %eventOpenDate% à %eventCloseDate%, nous aurons le plaisir de vous accueillir à %eventPlace% pour l’ouverture de [nom event]. Toute notre équipe sera à votre disposition pour faire de votre participation un succès.</li>
+            </ul>
+
+            Pour toute question sur l'événement, vous pouvez contacter l'équipe %event% à %eventMail%
+
+        end: |
+          PROXIMUM Group
+          %event% Team
+          %eventSite%
+          %eventMail%
+          %eventPhone%
+    transaction:
+        confirm:
+            subject: Votre paiement %transactionNumber% est validé
+            body: |
+                Bonjour %firstname% %lastname%,
+
+                - Votre paiement %transactionNumber% d’un montant de %transactionTotal% à bien été reçu. Veuillez trouver ci-dessous le récapitulatif de votre commande
+admin:
+    mail:
+        resetPassword:
+            subject: Mot de passe oublié ViMeet
+            body: |
+                Bonjour,
+
+                Pour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:
+            end: |
+                Bien cordialement,
+                L'équipe Vimeet
+        activateAccount:
+            subject: 'Activer votre compte'
+            body: |
+                Bonjour,
+                Vous avez été invité en tant que collaborateur sur Vimeet
+                Pour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:
+            end: |
+                Cordialement,
+                L'équipe Vimeet
