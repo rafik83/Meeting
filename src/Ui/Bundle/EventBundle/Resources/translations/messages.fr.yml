@@ -239,6 +239,7 @@ order:
         state:
             pending: En attente
             paid: Réglé
+            cancelled: Annulé
         mode:
             paypal: Paypal ou Carte bleue
             bank_card: Carte bleue

@@ -8,3 +8,8 @@ flash:
                 outDated: 'Code périmé'
                 soldOut: 'Code épuisé'
                 alreadyExist: 'Code déjà utilisé'
+    payment:
+        success: Paiement effectué avec succès.
+        cancelled: Paiement annulé
+        pending: Paiement en attente de validation
+        error: Le paiement n'a pas été effectué.

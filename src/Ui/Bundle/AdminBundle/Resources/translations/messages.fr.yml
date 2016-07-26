@@ -284,6 +284,7 @@ admin:
         state:
             pending: En attente
             paid: Réglé
+            cancelled: Annulé
         mode:
             bank_card: Carte bleu
             bank_transfer: Transfert
