@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Merger
 {
@@ -27,36 +26,33 @@ class Merger
     private $orderMerged;
 
     /**
-     * Merger constructor.
+     * @param array $orders
      *
-     * @param Sheet   $sheet
-     * @param Order[] $orders
+     * @return Order
      */
-    public function __construct(Sheet $sheet, array $orders)
+    public function merge(array $orders)
     {
-        if (count($orders) === 0) {
+        $this->orders = $orders;
+
+        if (count($this->orders) === 0) {
             throw new OrderMergerException();
         }
 
-        $this->orders = $orders;
+        if (count($this->orders) === 1) {
+            return $this->orders[0];
+        }
 
         /** @var Order $orderPattern */
-        $orderPattern = reset($orders);
+        $orderPattern = reset($this->orders);
 
         $this->orderMerged = new Order(
             $orderPattern->getSheet(),
             $orderPattern->isVatApplicable(),
             $orderPattern->getBillingInfo(),
-            $sheet->getPackage()->serializeData(),
+            $orderPattern->getGroupsData(),
             $orderPattern->getCreatedAt()
         );
-    }
 
-    /**
-     * @return Order
-     */
-    public function merge()
-    {
         foreach ($this->orders as $order) {
             $this->mergeProduct($order);
             $this->mergePromotionCode($order);

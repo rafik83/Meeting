@@ -105,8 +105,11 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $orderMerger = new Merger($sheet, $sheet->getOrders());
-        $order       = $orderMerger->merge();
+        $orders = $this->get('vimeet_infrastructure.repository.order_repository')
+            ->findBySheet($sheet);
+
+        $orderMerger = new Merger();
+        $order       = $orderMerger->merge($orders);
 
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
             $sheet,
