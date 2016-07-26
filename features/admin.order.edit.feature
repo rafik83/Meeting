@@ -32,7 +32,8 @@ Feature: Edit an order
     And I should see "1 389"
 
   Scenario: Update custom row
-    And I am on this page "/admin/fr/event/1/order/1/row/2/update"
+    When I am logged with "test@test.com" on admin
+    When I follow "admin.edit_custom_row"
     Then the response status code should be 200
     When I fill in the following:
       | order_row_label    | Another awesome reduction |
@@ -44,6 +45,7 @@ Feature: Edit an order
     And I should see "1 489"
 
   Scenario: Remove custom row
-    When I am on this page "/admin/fr/event/1/order/1/row/1/update"
+    When I am logged with "test@test.com" on admin
+    And I follow "admin.remove_custom_row"
     Then the response status code should be 200
     And I should not see "Another awesome reduction"
