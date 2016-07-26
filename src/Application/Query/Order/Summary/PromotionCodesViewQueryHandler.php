@@ -36,14 +36,17 @@ class PromotionCodesViewQueryHandler
     {
         $locale             = $promotionCodesViewQuery->locale;
         $order              = $promotionCodesViewQuery->order;
+
         $promotionCodesView = new PromotionCodesView();
 
         foreach ($order->getPromotionCodes() as $promotionCode) {
+            
             $promotionCodesView->addPromotionCode(
                 $this->promotionCodeViewQueryHandler->handle(
                     new PromotionCodeViewQuery(
                         $promotionCode,
-                        $locale
+                        $locale,
+                        $order
                     )
                 )
             );

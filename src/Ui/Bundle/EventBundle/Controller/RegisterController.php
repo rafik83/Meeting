@@ -92,7 +92,7 @@ class RegisterController extends Controller
      */
     public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
-        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale());
+        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale(), $eventDomain->getEvent());
 
         if ($command->email === null || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
@@ -363,7 +363,7 @@ class RegisterController extends Controller
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($user, $event);
+            ->getSheetsByUserAndEvent($user, $event);
 
         return !empty($sheets);
     }

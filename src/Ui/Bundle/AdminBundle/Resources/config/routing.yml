@@ -528,7 +528,7 @@ admin_template_registration_builder:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_registration_add_locale:
-    path: /template/regitration/{template}/locale
+    path: /template/registration/{template}/locale
     defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
     methods: [POST]
     requirements:
@@ -759,3 +759,22 @@ admin_nomenclature_event_read:
         event: \d+
         nomenclature: \d+
 
+# Event Template
+admin_event_template_registration:
+    path: /event/{event}/template/registration
+    defaults: { _controller: AdminBundle:EventTemplate:registrationTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+
+admin_event_template_sheet:
+    path: /event/{event}/template/sheet
+    defaults: { _controller: AdminBundle:EventTemplate:sheetTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+
+admin_event_template_package:
+    path: /event/{event}/template/package
+    defaults: { _controller: AdminBundle:EventTemplate:packageTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+

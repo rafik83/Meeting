@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -208,7 +209,7 @@ class Cart
     /**
      * @param Product $product
      *
-     * @return CartRow
+     * @return null|CartRow
      */
     public function getCartRowForProduct(Product $product)
     {
@@ -274,7 +275,7 @@ class Cart
     }
 
     /**
-     * @return int|null
+     * @return null|int
      */
     public function getCurrentStep()
     {
@@ -396,10 +397,15 @@ class Cart
         $total = 0;
         foreach ($promotionCode->getPromotions() as $promotion) {
             if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
-                if ($cartRow->getQuantity() < $promotion->getQuantity()) {
+                // don't use promotion quantity max if promotion type value off
+                if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
+                    $total -= $promotion->getDiscount();
+                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()
+                    || null === $promotion->getQuantityMax()
+                ) {
                     $total -= $cartRow->getQuantity() * $promotion->getDiscount();
                 } else {
-                    $total -= $promotion->getQuantity() * $promotion->getDiscount();
+                    $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
                 }
             }
         }

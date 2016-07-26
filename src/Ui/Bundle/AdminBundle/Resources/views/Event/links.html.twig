@@ -133,3 +133,23 @@
         </li>
     </ul>
 </li>
+<li class="dropdown-submenu">
+    <a href="#">{{ 'admin.event.template.link'|trans }}</a>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="{{ path('admin_event_template_registration', { 'event': event.id }) }}">
+                {{ 'admin.event.template.registration'|trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('admin_event_template_sheet', { 'event': event.id }) }}">
+                {{ 'admin.event.template.sheet'|trans }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('admin_event_template_package', { 'event': event.id }) }}">
+                {{ 'admin.event.template.package'|trans }}
+            </a>
+        </li>
+    </ul>
+</li>

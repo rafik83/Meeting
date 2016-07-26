@@ -35,9 +35,11 @@ class HomeController extends Controller
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
-                ->getSheetViewsByUserAndEvent($this->getUser()->getId(), $eventDomain->getEvent(), $locale);
-        } else {
-            $sheets = [];
+                ->getSheetsByUserAndEvent($this->getUser(), $eventDomain->getEvent());
+
+            if (count($sheets)) {
+                return $this->redirectToRoute('event_sheet');
+            }
         }
 
         $form = $this->createForm(TypeChoiceType::class, null, [
@@ -63,8 +65,7 @@ class HomeController extends Controller
 
         return $this->render('EventBundle:Home:index.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'sheets'    => $sheets,
-            'form'      => $form->createView(),
+            'form'  => $form->createView(),
         ]);
     }
 }

@@ -4,8 +4,15 @@
     <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
         <td class="col-md-6">
             <div class="col-md-10">
-                <strong>{{ promotionCodeView.title }}</strong><br>
-                {{ promotionCodeView.description|nl2br }}
+                <strong>{{ promotionCodeView.title }}</strong>
+                {% for key, promotionProduct in promotionCodeView.promotionProductRowViews %}
+                    {{ include('EventBundle:Package/Summary:promo-code-product-row.html.twig', {
+                        'promotionProduct': promotionProduct,
+                        'currency': promotionCodeView.currency
+                    }, false) }}
+                    {{ not loop.last ? ' - ' : '' }}
+                {% endfor %}
+                <br>{{ promotionCodeView.description|nl2br }}
             </div>
             <div class="col-md-2 text-right">
                 {{ macros.delete_button(

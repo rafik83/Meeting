@@ -460,6 +460,8 @@ form:
                 label: Mode de paiement
             reference:
                 label: Référence
+            state:
+                label: Statut
             submit:
                 label: Enregistrer
     update_transaction:
@@ -472,8 +474,20 @@ form:
                 label: Mode de paiement
             reference:
                 label: Référence
+            state:
+                label: Statut
             submit:
                 label: Enregistrer
+    transaction:
+        children:
+            transaction_mode:
+                bank_card: Carte bancaire
+                bank_transfer: Virement
+                bank_check: Chèque
+                bank_cash: Liquide
+            state:
+                pending: En attente
+                paid: Réglé
     happening_create:
         children:
             category:
@@ -1230,6 +1244,8 @@ form:
                             label: Type
                         value:
                             label: Valeur
+                        quantityMax:
+                            label: Quantité limitée à
     promotion_code_update:
         children:
             title:
@@ -1254,6 +1270,8 @@ form:
                             label: Type
                         value:
                             label: Valeur
+                        quantityMax:
+                            label: Quantité limitée à
     promotion_code_translation:
         children:
             label:

@@ -382,6 +382,7 @@ services:
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
             - '@repository.user.forgotten_password_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\NewPassword }
     command.admin.new_password_handler:
@@ -726,6 +727,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
@@ -839,6 +841,8 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
     command.package.step.select_plans_handler:

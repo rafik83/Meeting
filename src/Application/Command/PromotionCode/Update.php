@@ -41,9 +41,10 @@ class Update extends AbstractCommand
 
         foreach ($promotionCode->getPromotions() as $promotion) {
             $this->promotions[] = [
-                'product' => $promotion->getProduct(),
-                'type'    => $promotion->getType(),
-                'value'   => $promotion->getValue(),
+                'product'     => $promotion->getProduct(),
+                'type'        => $promotion->getType(),
+                'value'       => $promotion->getValue(),
+                'quantityMax' => $promotion->getQuantityMax(),
             ];
         }
     }

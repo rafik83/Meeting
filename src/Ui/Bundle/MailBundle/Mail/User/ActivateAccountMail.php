@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ActivateAccountMail extends Mail
 {
@@ -33,10 +34,21 @@ class ActivateAccountMail extends Mail
      * @param string $locale
      * @param Event  $event
      * @param string $token
+     * @param User   $senderUser
+     * @param User   $receiverUser
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, $token)
-    {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
+    public function __construct(
+        $sender,
+        $receiver,
+        $template,
+        $messageId,
+        $locale,
+        Event $event,
+        $token,
+        $senderUser,
+        $receiverUser
+    ) {
+        parent::__construct($sender, $receiver, $template, $messageId, $locale, $senderUser, $receiverUser);
 
         $this->event = $event;
         $this->token = $token;

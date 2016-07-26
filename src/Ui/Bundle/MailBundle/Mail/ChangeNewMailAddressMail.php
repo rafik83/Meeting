@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ChangeNewMailAddressMail extends Mail
 {
@@ -20,17 +21,25 @@ class ChangeNewMailAddressMail extends Mail
     private $token;
 
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
      * @param string $sender
      * @param string $receiver
      * @param string $template
      * @param string $messageId
      * @param string $locale
      * @param string $token
+     * @param User   $user
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $token)
+    public function __construct($sender, $receiver, $template, $messageId, $locale, $token, User $user)
     {
         parent::__construct($sender, $receiver, $template, $messageId, $locale);
+
         $this->token = $token;
+        $this->user  = $user;
     }
 
     /**
@@ -39,5 +48,13 @@ class ChangeNewMailAddressMail extends Mail
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

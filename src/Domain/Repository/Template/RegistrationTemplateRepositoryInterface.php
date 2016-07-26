@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Template;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 
 interface RegistrationTemplateRepositoryInterface
@@ -30,6 +31,13 @@ interface RegistrationTemplateRepositoryInterface
      * @return RegistrationTemplate[]
      */
     public function getTemplateForGivenEvents(array $events);
+
+    /**
+     * @param Event $event
+     *
+     * @return RegistrationTemplate[]
+     */
+    public function getTemplateForGivenEvent(Event $event);
 
     /**
      * @param RegistrationTemplate $registrationTemplate

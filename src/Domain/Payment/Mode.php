@@ -16,6 +16,7 @@ class Mode
     const PAYMENT_BANK_CARD     = 'bank_card';
     const PAYMENT_BANK_TRANSFER = 'bank_transfer';
     const PAYMENT_BANK_CHECK    = 'bank_check';
+    const PAYMENT_BANK_CASH     = 'bank_cash';
 
     /**
      * Return all the payment modes allowed on front
@@ -28,6 +29,19 @@ class Mode
             self::PAYMENT_BANK_CARD     => self::PAYMENT_PAYPAL,
             self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
             self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTransactionModes()
+    {
+        return [
+            self::PAYMENT_BANK_CARD     => self::PAYMENT_BANK_CARD,
+            self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
+            self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,
+            self::PAYMENT_BANK_CASH     => self::PAYMENT_BANK_CASH,
         ];
     }
 }

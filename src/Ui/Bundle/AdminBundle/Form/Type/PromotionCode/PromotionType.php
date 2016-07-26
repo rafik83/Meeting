@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -46,7 +47,10 @@ class PromotionType extends AbstractType
                 ],
             ])
             ->add('value', NumberType::class, [
-                'required' => false
+                'required' => false,
+            ])
+            ->add('quantityMax', IntegerType::class, [
+                'required' => false,
             ])
         ;
     }

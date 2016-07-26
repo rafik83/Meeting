@@ -44,7 +44,7 @@ class Promotion
     /**
      * @var int
      */
-    private $quantity = 1;
+    private $quantityMax;
 
     /**
      * Promotion constructor.
@@ -53,13 +53,20 @@ class Promotion
      * @param Product       $product
      * @param string        $type
      * @param float         $value
+     * @param null|int      $quantityMax
      */
-    public function __construct(PromotionCode $promotionCode, Product $product, $type, $value)
-    {
+    public function __construct(
+        PromotionCode $promotionCode,
+        Product $product,
+        $type,
+        $value,
+        $quantityMax = null
+    ) {
         $this->promotionCode = $promotionCode;
         $this->product       = $product;
         $this->type          = $type;
         $this->value         = $type === self::TYPE_FREE ? null : $value;
+        $this->quantityMax   = $quantityMax;
     }
 
     /**
@@ -113,23 +120,27 @@ class Promotion
     }
 
     /**
-     * @return int
+     * Get quantity max
+     *
+     * @return null|int
      */
-    public function getQuantity()
+    public function getQuantityMax()
     {
-        return $this->quantity;
+        return $this->quantityMax;
     }
 
     /**
-     * @param $type
-     * @param $value
+     * @param string   $type
+     * @param int      $value
+     * @param null|int $quantityMax
      *
      * @return Promotion
      */
-    public function update($type, $value)
+    public function update($type, $value, $quantityMax = null)
     {
-        $this->type  = $type;
-        $this->value = $type === self::TYPE_FREE ? null : $value;
+        $this->type        = $type;
+        $this->value       = $type === self::TYPE_FREE ? null : $value;
+        $this->quantityMax = $quantityMax;
 
         return $this;
     }
@@ -153,6 +164,45 @@ class Promotion
                 break;
         }
 
+
         return $discount;
+    }
+
+    /**
+     * @param CartRow $cartRow
+     *
+     * @return int
+     */
+    public function getQuantityForCartRow(CartRow $cartRow)
+    {
+        if ($cartRow->getQuantity() <= $this->getQuantityMax() || null === $this->getQuantityMax()) {
+            return $cartRow->getQuantity();
+        }
+
+        return $this->getQuantityMax();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentOff()
+    {
+        return $this->type === self::TYPE_PERCENT_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValueOff()
+    {
+        return $this->type === self::TYPE_VALUE_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFree()
+    {
+        return $this->type === self::TYPE_FREE;
     }
 }

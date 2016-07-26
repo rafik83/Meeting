@@ -123,7 +123,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetByUserAndEvent(User $user, Event $event)
+    public function getSheetsByUserAndEvent(User $user, Event $event)
     {
         $queryBuilder = $this
             ->entityManager
@@ -142,7 +142,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
+    public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event)
     {
         $queryBuilder = $this
             ->entityManager
