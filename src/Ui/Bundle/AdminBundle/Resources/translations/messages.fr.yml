@@ -709,3 +709,21 @@ admin:
         assign:
             modal:
                 title: Assigner à un événement
+    order_edit:
+        edit_custom_row: ''
+        remove_custom_row: ''
+        link: Modifier
+        columns:
+            product: Produit
+            unitPrice: Prix unitaire
+            quantity: Quantité
+            total: Total
+        includedProduct: Inclus
+        total:
+            withVAT: Total TTC
+            withoutVAT: Total HT
+        VAT: TVA
+        add_line: Ajouter une ligne
+        after: après
+
+

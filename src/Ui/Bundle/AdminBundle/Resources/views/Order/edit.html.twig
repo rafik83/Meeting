@@ -8,10 +8,10 @@
     <table class="table table-condensed">
         <thead>
             <tr>
-                <th colspan="2">Produit</th>
-                <th class="text-right">Prix unitaire</th>
-                <th class="text-right">Quantité</th>
-                <th class="text-right">Total</th>
+                <th colspan="2">{{ 'admin.order_edit.columns.product'|trans }}</th>
+                <th class="text-right">{{ 'admin.order_edit.columns.unitPrice'|trans }}</th>
+                <th class="text-right">{{ 'admin.order_edit.columns.quantity'|trans }}</th>
+                <th class="text-right">{{ 'admin.order_edit.columns.total'|trans }}</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -41,7 +41,7 @@
                     {% if product.includedProducts is not empty %}
                         <tr>
                             <td>&nbsp;</td>
-                            <th colspan="5">Inclus :</th>
+                            <th colspan="5">{{ 'admin.order_edit.includedProduct'|trans }} :</th>
                         </tr>
                     {% endif %}
 
@@ -64,8 +64,8 @@
                             <td class="text-right">{{ customRow.quantity }}</td>
                             <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
                             <td class="text-right">
-                                <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-edit"></i></a>
-                                <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>
+                                <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-edit"></i> {{ 'admin.order_edit.edit_custom_row'|trans }}</a>
+                                <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i> {{ 'admin.order_edit.remove_custom_row'|trans }}</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -79,8 +79,8 @@
                             <td class="text-right">{{ customRow.quantity }}</td>
                             <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
                             <td class="text-right">
-                            <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"><i class="glyphicon glyphicon-remove"></i></a>
+                            <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"> {{ "admin.order_edit.edit_custom_row"|trans }} <i class="glyphicon glyphicon-edit"></i></a>
+                            <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"> {{ "admin.order_edit.remove_custom_row"|trans }} <i class="glyphicon glyphicon-remove"></i></a>
                             </td>
                         </tr>
                 {% endfor %}
@@ -88,20 +88,20 @@
 
             <tr class="info">
                 <th colspan="2"></th>
-                <th colspan="2">Total HT</th>
+                <th colspan="2">{{ 'admin.order_edit.total.withoutVAT'|trans }}</th>
                 <th class="text-right">{{ order_view.total|number_format(2, ',', ' ') }} €</th>
                 <th></th>
             </tr>
             {% if order_view.vatApplicable %}
                 <tr>
                     <th colspan="2"></th>
-                    <th colspan="2">TVA</th>
+                    <th colspan="2">{{ 'admin.order_edit.VAT'|trans }}</th>
                     <th class="text-right">{{ order_view.vat }}%</th>
                     <th></th>
                 </tr>
                 <tr>
                     <th colspan="2"></th>
-                    <th colspan="2">Total TTC</th>
+                    <th colspan="2">{{ 'admin.order_edit.total.withVAT'|trans }}</th>
                     <th class="text-right">{{ order_view.totalPlusVat|number_format(2, ',', ' ') }} €</th>
                     <th></th>
                 </tr>

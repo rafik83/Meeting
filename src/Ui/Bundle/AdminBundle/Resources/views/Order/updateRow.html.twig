@@ -1,6 +1,6 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block content %}
+{% block form_content %}
     <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <h2>{{ sheet_info }}</h2>
@@ -9,5 +9,9 @@
 
     <h4>Modifier une ligne</h4>
 
-    {{ form(form) }}
-{% endblock %}
+    {{ form_row(form.label, {widget_columns: 6}) }}
+    {{ form_row(form.price, {widget_columns: 6}) }}
+    {{ form_row(form.quantity, {widget_columns: 6}) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

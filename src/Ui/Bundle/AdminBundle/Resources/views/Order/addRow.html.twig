@@ -4,15 +4,16 @@
     <h1 class="page-header">Commande {{ order.id }} de {{ sheet_info }}</h1>
 
     <h4>
-        Ajouter une ligne
+        {{ 'admin.order_edit.add_line'|trans }}
         {% if row_label is defined %}
-            après "{{ row_label }}"
+            {{ 'admin.order_edit.after'|trans }}
+            "{{ row_label }}"
         {% endif %}
     </h4>
 
-    {{ form_row(form.label) }}
-    {{ form_row(form.price) }}
-    {{ form_row(form.quantity) }}
+    {{ form_row(form.label, {widget_columns: 6}) }}
+    {{ form_row(form.price, {widget_columns: 6}) }}
+    {{ form_row(form.quantity, {widget_columns: 6}) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}
