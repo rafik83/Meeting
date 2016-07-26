@@ -256,6 +256,15 @@ class Row
         );
     }
 
+    /**
+     * @param Order  $order
+     * @param Row    $parentRow
+     * @param string $label
+     * @param int    $quantity
+     * @param float  $price
+     *
+     * @return Row
+     */
     public static function createCustomRowToProduct(
         Order $order,
         Row $parentRow,
