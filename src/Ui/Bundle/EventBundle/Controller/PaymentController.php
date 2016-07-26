@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -112,6 +113,32 @@ class PaymentController extends Controller
     }
 
     /**
+     * Only for debug
+     */
+    public function createTempTransactionAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet
+    ) {
+        $transaction = new Transaction(
+            $sheet,
+            200,
+            new \DateTime(),
+            Mode::PAYMENT_PAYPAL,
+            uniqid(),
+            Transaction::STATE_PENDING,
+            $sheet->getEvent()->getCurrency()
+        );
+
+        $this->get('repository.transaction')->add($transaction);
+
+        return $this->redirectToRoute(
+            'event_package_payment_prepare_paypal',
+            ['sheet' => $sheet->getId(), 'transaction' => $transaction->getId()]
+        );
+    }
+
+    /**
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
@@ -176,7 +203,7 @@ class PaymentController extends Controller
         $payum   = $this->get('payum');
         $token   = $payum->getHttpRequestVerifier()->verify($request);
         $gateway = $payum->getGateway($token->getGatewayName());
-        $payum->getHttpRequestVerifier()->invalidate($token);
+        //$payum->getHttpRequestVerifier()->invalidate($token);
         $gateway->execute($status = new GetHumanStatus($token));
 
         /** @var Payment $payment */

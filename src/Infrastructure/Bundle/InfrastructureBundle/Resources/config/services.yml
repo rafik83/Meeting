@@ -1720,3 +1720,9 @@ services:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
+    # Payum
+    #
+    vimeet.payum.action.store_paypal_notification:
+        class: Proximum\Vimeet\Infrastructure\Payum\Action\StorePaypalNotificationAction

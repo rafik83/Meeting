@@ -504,6 +504,13 @@ event_package_payment_done:
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:donePayment }
 
+create_transaction:
+    path: /sheet/{sheet}/create-transaction
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:createTempTransaction }
+
 #
 # Order
 #
