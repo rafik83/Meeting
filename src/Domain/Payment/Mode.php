@@ -26,7 +26,7 @@ class Mode
     public static function getPaymentModes()
     {
         return [
-            self::PAYMENT_BANK_CARD     => self::PAYMENT_PAYPAL,
+            self::PAYMENT_PAYPAL        => self::PAYMENT_PAYPAL,
             self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
             self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,
         ];
@@ -38,6 +38,7 @@ class Mode
     public static function getTransactionModes()
     {
         return [
+            self::PAYMENT_PAYPAL        => self::PAYMENT_PAYPAL,
             self::PAYMENT_BANK_CARD     => self::PAYMENT_BANK_CARD,
             self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
             self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,

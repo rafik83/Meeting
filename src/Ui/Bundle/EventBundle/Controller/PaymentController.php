@@ -130,7 +130,7 @@ class PaymentController extends Controller
             200,
             new \DateTime(),
             Mode::PAYMENT_PAYPAL,
-            uniqid(),
+            '',
             Transaction::STATE_PENDING,
             $sheet->getEvent()->getCurrency()
         );

@@ -481,6 +481,7 @@ form:
     transaction:
         children:
             transaction_mode:
+                paypal: Paypal
                 bank_card: Carte bancaire
                 bank_transfer: Virement
                 bank_check: Chèque
@@ -488,6 +489,7 @@ form:
             state:
                 pending: En attente
                 paid: Réglé
+                cancelled: Annulé
     happening_create:
         children:
             category:
