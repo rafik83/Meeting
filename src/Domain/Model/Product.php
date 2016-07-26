@@ -162,9 +162,9 @@ class Product
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
      * @param bool                    $updatable
-     * @param \DateTimeInterface|null $deletableUntil
+     * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
-     * @param \DateTimeInterface      $buyableUntil
+     * @param null|\DateTimeInterface $buyableUntil
      */
     private function __construct(
         Event $event,
@@ -422,7 +422,7 @@ class Product
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeInterface
      */
     public function getDeletableUntil()
     {
@@ -430,7 +430,7 @@ class Product
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeInterface
      */
     public function getBuyableUntil()
     {
