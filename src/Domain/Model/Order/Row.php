@@ -85,6 +85,18 @@ class Row
     }
 
     /**
+     * @param Order $order
+     *
+     * @return Order\Row
+     */
+    public function setOrder(Order $order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
      * @return Product
      */
     public function getProduct()

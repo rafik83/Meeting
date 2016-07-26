@@ -61,7 +61,7 @@ class MergerTest extends \PHPUnit_Framework_TestCase
         $orderTwo->addRow(new Order\Row($orderTwo, $option, 3));
         $sheet->addOrder($orderTwo);
 
-        $orderMerger = new Merger($orderRepository->reveal());
+        $orderMerger = new Merger();
         $order       = $orderMerger->merge([$orderOne, $orderTwo]);
 
         $this->assertEquals(1, $order->getRowForProduct($plan)->getQuantity());

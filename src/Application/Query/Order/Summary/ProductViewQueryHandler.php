@@ -57,8 +57,12 @@ class ProductViewQueryHandler
         );
 
         if ($productViewQuery->row->hasIncludedProduct()) {
-            $infos = $this->productIncludedInfoGuesser->getProductIncludedInfo($productViewQuery->row,
-                $productViewQuery->locale);
+            $infos = $this
+                ->productIncludedInfoGuesser
+                ->getProductIncludedInfo(
+                    $productViewQuery->row,
+                    $productViewQuery->locale
+                );
 
             foreach ($infos as $info) {
                 $productView->addIncludedProduct(

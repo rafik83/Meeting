@@ -39,7 +39,7 @@ class Merger
         }
 
         if (count($this->orders) === 1) {
-            return $this->orders[0];
+            return reset($this->orders);
         }
 
         /** @var Order $orderPattern */
@@ -70,12 +70,8 @@ class Merger
             if ($orderMergedRow = $this->orderMerged->getRowForProduct($row->getProduct())) {
                 $orderMergedRow->setQuantity($orderMergedRow->getQuantity() + $row->getQuantity());
             } else {
-                $this->orderMerged->addRow(new Order\Row(
-                    $order,
-                    $row->getProduct(),
-                    $row->getQuantity(),
-                    $row->getGroupId()
-                ));
+                $cloneRow = clone $row;
+                $this->orderMerged->addRow($cloneRow->setOrder($this->orderMerged));
             }
         }
     }
@@ -87,11 +83,8 @@ class Merger
     {
         foreach ($order->getPromotionCodes() as $promotionCode) {
             if (!$this->orderMerged->hasPromotionCode($promotionCode)) {
-                $this->orderMerged->addPromotionCode(new Order\PromotionCode(
-                    $order,
-                    $promotionCode->getPromotionCode(),
-                    $promotionCode->getPrice()
-                ));
+                $promotionCodeClone = clone $promotionCode;
+                $this->orderMerged->addPromotionCode($promotionCodeClone->setOrder($this->orderMerged));
             }
         }
     }

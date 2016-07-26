@@ -70,7 +70,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_2'
         quantity: 1
         price: 1690
-        data: '{"name":"Formule B2B Meeting","unitPrice":1690,"translations":{"fr":"{"title":"Formule B2B Meeting","heading":"Pas de stand","description":"Vous changez de lieu u00e0 chaque rendez-vous.","addon":""}","en":"{"title":"B2B Meeting Formula","heading":"No booth","description":"You have to move at each appointment.","addon":""}"},"quantityMax":1,"availabilityCurrent":0,"availabilityMax":0,"updatable":false,"deletableUntil":null,"productsIncluded":[{"quantity":2,"included":"{"name":"Participant supplu00e9mentaire Fournisseur","unitPrice":195,"translations":{"fr":"{"title":"Participant supplu00e9mentaire","heading":"","description":"Accompagnant le premier sur un mu00eame agenda incluant une entru00e9e u00e0 la convention du2019affaire, accu00e8s illimitu00e9 u00e0 la pause cafu00e9 et aux confu00e9rences.","addon":""}","en":"{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}"},"quantityMax":1,"availabilityCurrent":null,"availabilityMax":null,"updatable":false,"deletableUntil":null,"productsIncluded":[]}"}]}'
+        data: '{"id":10,"type":"plan","translations":{"fr":{"title":"Formule B2B Meeting","heading":"Pas de stand","description":"Vous changez de lieu \u00e0 chaque rendez-vous.","addon":""},"en":{"title":"B2B Meeting Formula","heading":"No booth","description":"You have to move at each appointment.","addon":""}},"productsIncluded":[{"quantity":2,"included":{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\u00eame agenda incluant une entr\u00e9e \u00e0 la convention d\u2019affaire, acc\u00e8s illimit\u00e9 \u00e0 la pause caf\u00e9 et aux conf\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}}]}'
         product: '@product_plan_1_asddays'
     order_2_row_2:
         __construct: false
@@ -78,7 +78,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         quantity: 1
         groupId: 4
         price: 199
-        data: '{"name":"Option E", "translations":{"fr":"{"title":"Option E","heading":"","description":"","addon":""}","en":"{"title":"Option E","heading":"","description":"","addon":""}"}}'
+        data: '{"id":20,"type":"option","translations":{"fr":{"title":"Option E","heading":"","description":"Description option E","addon":""},"en":{"title":"Option E","heading":"","description":"Description Option E","addon":""}},"productsIncluded":[]}'
         product: '@product_option_7_asddays'
     order_2_row_3:
         __construct: false
@@ -86,14 +86,14 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         quantity: 1
         price: 59
         groupId: 5
-        data: '{"name":"Option F", "translations":{"fr":"{"title":"Option F","heading":"","description":"","addon":""}","en":"{"title":"Option F","heading":"","description":"","addon":""}"}}'
+        data: '{"id":21,"type":"option","translations":{"fr":{"title":"Option F","heading":"","description":"Description option F","addon":""},"en":{"title":"Option F","heading":"","description":"Description Option F","addon":""}},"productsIncluded":[]}'
         product: '@product_option_8_asddays'
     order_2_row_4:
         __construct: false
         order: '@order_2'
         quantity: 1
         price: 195
-        data: '{"name":"Participant supplémentaire Fournisseur", "translations":{"fr":"{"title":"Participant supplémentaire Fournisseur","heading":"","description":"","addon":""}","en":"{"title":"Participant supplémentaire Fournisseur","heading":"","description":"","addon":""}"}}'
+        data: '{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\u00eame agenda incluant une entr\u00e9e \u00e0 la convention d\u2019affaire, acc\u00e8s illimit\u00e9 \u00e0 la pause caf\u00e9 et aux conf\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}'
         product: '@product_participant_1_asddays'
     order_3_row_1:
         __construct: false
@@ -101,7 +101,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         quantity: 3
         groupId: 4
         price: 199
-        data: '{"name":"Option E", "translations":{"fr":"{"title":"Option E","heading":"","description":"","addon":""}","en":"{"title":"Option E","heading":"","description":"","addon":""}"}}'
+        data: '{"id":20,"type":"option","translations":{"fr":{"title":"Option E","heading":"","description":"Description option E","addon":""},"en":{"title":"Option E","heading":"","description":"Description Option E","addon":""}},"productsIncluded":[]}'
         product: '@product_option_7_asddays'
     order_3_row_2:
         __construct: false
@@ -109,14 +109,14 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         quantity: 9
         groupId: 5
         price: 59
-        data: '{"name":"Option F", "translations":{"fr":"{"title":"Option F","heading":"","description":"","addon":""}","en":"{"title":"Option F","heading":"","description":"","addon":""}"}}'
+        data: '{"id":21,"type":"option","translations":{"fr":{"title":"Option F","heading":"","description":"Description option F","addon":""},"en":{"title":"Option F","heading":"","description":"Description Option F","addon":""}},"productsIncluded":[]}'
         product: '@product_option_8_asddays'
     order_3_row_3:
         __construct: false
         order: '@order_3'
         quantity: 3
         price: 195
-        data: '{"name":"Participant supplémentaire Fournisseur", "translations":{"fr":"{"title":"Participant supplémentaire Fournisseur","heading":"","description":"","addon":""}","en":"{"title":"Participant supplémentaire Fournisseur","heading":"","description":"","addon":""}"}}'
+        data: '{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\u00eame agenda incluant une entr\u00e9e \u00e0 la convention d\u2019affaire, acc\u00e8s illimit\u00e9 \u00e0 la pause caf\u00e9 et aux conf\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}'
         product: '@product_participant_1_asddays'
 
 Proximum\Vimeet\Domain\Model\Order\PromotionCode:
