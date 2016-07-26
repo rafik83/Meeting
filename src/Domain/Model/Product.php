@@ -649,8 +649,8 @@ class Product
     /**
      * @param string $name
      * @param string $image
-     * @param int $availabilityCurrent
-     * @param int $availabilityMax
+     * @param int    $availabilityCurrent
+     * @param int    $availabilityMax
      *
      * @return Product
      */
@@ -741,17 +741,17 @@ class Product
     }
 
     /**
-     * @param Event              $event
-     * @param string             $name
-     * @param string             $image
-     * @param int                $unitPrice
-     * @param int                $quantityMax
-     * @param int                $availabilityCurrent
-     * @param int                $availabilityMax
-     * @param bool               $updatable
-     * @param \DateTimeInterface $deletableUntil
-     * @param bool               $subjectedToValidation
-     * @param \DateTimeInterface $buyableUntil
+     * @param Event                   $event
+     * @param string                  $name
+     * @param string                  $image
+     * @param int                     $unitPrice
+     * @param int                     $quantityMax
+     * @param int                     $availabilityCurrent
+     * @param int                     $availabilityMax
+     * @param bool                    $updatable
+     * @param null|\DateTimeInterface $deletableUntil
+     * @param bool                    $subjectedToValidation
+     * @param null|\DateTimeInterface $buyableUntil
      *
      * @return Product
      */
@@ -791,7 +791,7 @@ class Product
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
      * @param bool                    $updatable
-     * @param \DateTimeInterface|null $deletableUntil
+     * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
      *

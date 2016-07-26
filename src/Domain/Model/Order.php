@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 
 /**
  * "Commande"
@@ -367,11 +368,11 @@ class Order
     }
 
     /**
-     * @param $promotionCode
+     * @param PromotionCode $promotionCode
      *
      * @return bool
      */
-    public function hasPromotionCode($promotionCode)
+    public function hasPromotionCode(PromotionCode $promotionCode)
     {
         foreach ($this->promotionCodes as $promoCode) {
             if ($promoCode === $promotionCode) {

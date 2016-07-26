@@ -113,7 +113,7 @@ class Row
     }
 
     /**
-     * @param $quantity
+     * @param int $quantity
      *
      * @return Row
      */
