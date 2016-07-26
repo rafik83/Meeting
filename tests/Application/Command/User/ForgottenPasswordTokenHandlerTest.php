@@ -14,6 +14,7 @@ use DateTime;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler;
 use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -52,7 +53,7 @@ class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $forgottenPasswordTokenRepository->create($forgottenPasswordToken)->shouldBeCalled();
 
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch('user_reset_password', $event)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::USER_PASSWORD_RESET, $event)->shouldBeCalled();
 
         $handler = new ForgottenPasswordHandler(
             $forgottenPasswordTokenGenerator->reveal(),

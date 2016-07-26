@@ -381,4 +381,20 @@ class Order
 
         return false;
     }
+
+    /**
+     * @param Product $product
+     *
+     * @return null|Order\Row
+     */
+    public function getOrderRowForProduct(Product $product)
+    {
+        foreach($this->rows as $orderRow) {
+            if ($orderRow->getProduct() === $product) {
+                return $orderRow;
+            }
+        }
+
+        return null;
+    }
 }

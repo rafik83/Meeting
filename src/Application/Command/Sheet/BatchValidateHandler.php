@@ -53,6 +53,7 @@ class BatchValidateHandler
         });
 
         // Validate sheets
+        /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
             $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $batchValidate->date, $batchValidate->comment));
         }

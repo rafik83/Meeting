@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Operator\Update;
 use Proximum\Vimeet\Application\Command\Operator\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -116,7 +117,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $activateAccountTokenGenerator->generate($expectedOperator)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
-        $eventDispatcher->dispatch('admin_activate_account', $activateAccountEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::ADMIN_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
 
         $handler = new UpdateHandler(
             $adminRepository->reveal(),

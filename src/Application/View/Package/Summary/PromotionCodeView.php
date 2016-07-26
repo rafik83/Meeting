@@ -30,11 +30,6 @@ class PromotionCodeView
     public $description;
 
     /**
-     * @var int
-     */
-    public $quantity;
-
-    /**
      * @var float
      */
     public $total;
@@ -50,24 +45,29 @@ class PromotionCodeView
     public $vatMode;
 
     /**
+     * @var PromotionProductRowView[]
+     */
+    public $promotionProductRowViews;
+
+    /**
      * PromotionCodeView constructor.
      *
-     * @param int    $id
-     * @param string $title
-     * @param string $description
-     * @param float  $total
-     * @param string $currency
-     * @param string $vatMode
-     * @param int    $quantity
+     * @param int                       $id
+     * @param string                    $title
+     * @param string                    $description
+     * @param float                     $total
+     * @param string                    $currency
+     * @param string                    $vatMode
+     * @param PromotionProductRowView[] $promotionProductRowViews
      */
-    public function __construct($id, $title, $description, $total, $currency, $vatMode, $quantity = 1)
+    public function __construct($id, $title, $description, $total, $currency, $vatMode, $promotionProductRowViews)
     {
-        $this->id          = $id;
-        $this->title       = $title;
-        $this->description = $description;
-        $this->total       = $total;
-        $this->quantity    = $quantity;
-        $this->currency    = $currency;
-        $this->vatMode     = $vatMode;
+        $this->id                       = $id;
+        $this->title                    = $title;
+        $this->description              = $description;
+        $this->total                    = $total;
+        $this->currency                 = $currency;
+        $this->vatMode                  = $vatMode;
+        $this->promotionProductRowViews = $promotionProductRowViews;
     }
 }

@@ -39,7 +39,7 @@ class SheetGuesser
      */
     public function getUserSheet(User $user, Event $event, $locale)
     {
-        $sheets = $this->sheetRepository->getSheetByUserAndEvent($user, $event);
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
         if (empty($sheets)) {
             throw new \Exception('Sheet not found.');

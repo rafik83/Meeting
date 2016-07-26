@@ -23,7 +23,7 @@ class DepositApplicable
      */
     public static function isApplicable(Event $event, \DateTimeInterface $now, $total)
     {
-        return $event->getConfiguration()->isDepositAllowed()
+        return $event->getConfiguration()->isAllowDeposit()
         && $now < $event->getConfiguration()->getDepositUntil()
         && $total > $event->getConfiguration()->getMinimumForDeposit();
     }

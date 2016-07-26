@@ -11,9 +11,14 @@
 namespace Proximum\Vimeet\Application\Command\Register;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipantStepHandler
 {
@@ -33,18 +38,34 @@ class ParticipantStepHandler
     private $accountSynchronizer;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
+     * @param EventDispatcherInterface       $eventDispatcher
+     * @param ParticipantInfoGuesser         $participantInfoGuesser
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
-        Synchronizer $accountSynchronizer
+        Synchronizer $accountSynchronizer,
+        EventDispatcherInterface $eventDispatcher,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
-        $this->sheetRepository       = $sheetRepository;
-        $this->participantRepository = $participantRepository;
-        $this->accountSynchronizer   = $accountSynchronizer;
+        $this->sheetRepository        = $sheetRepository;
+        $this->participantRepository  = $participantRepository;
+        $this->accountSynchronizer    = $accountSynchronizer;
+        $this->eventDispatcher        = $eventDispatcher;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
@@ -57,11 +78,19 @@ class ParticipantStepHandler
         $templateData    = $participantStep->templateData;
 
         foreach ($participantStep->data as $key => $value) {
-            if ($templateData->getBlock(intval($participantStep->step))->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
+            if ($templateData
+                ->getBlock(intval($participantStep->step))
+                ->getObject($key)
+                ->hasTag(Tag::PARTICIPANT_DATA)
+            ) {
                 $participantData = array_merge($participantData, [$key => $value]);
             }
 
-            if ($templateData->getBlock(intval($participantStep->step))->getObject($key)->hasTag(Tag::SHEET_DATA)) {
+            if ($templateData
+                ->getBlock(intval($participantStep->step))
+                ->getObject($key)
+                ->hasTag(Tag::SHEET_DATA)
+            ) {
                 $sheetData = array_merge($sheetData, [$key => $value]);
             }
 
@@ -75,5 +104,45 @@ class ParticipantStepHandler
         $this->sheetRepository->set($participantStep->sheet);
 
         $this->accountSynchronizer->set($templateData, $participantStep->participant->getUser());
+
+        // send email notification when user arrive to the last step of register funnel
+        $this->triggerEvent($participantStep);
+    }
+
+    /**
+     * @param ParticipantStep $participantStep
+     */
+    private function triggerEvent(ParticipantStep $participantStep)
+    {
+        // check if user are in last register funnel step
+        if ($participantStep->templateData->getNextBlockPosition($participantStep->step) === null) {
+
+            $alreadyRegister = $this->participantRepository->isParticipantForAnotherEvent(
+                $participantStep->sheet->getEvent(),
+                $participantStep->participant->getUser()
+            );
+            
+            if ($alreadyRegister === false) {
+                // trigger registered event
+                $registeredEvent = new RegisteredEvent(
+                    $participantStep->sheet->getEvent(),
+                    $participantStep->participant->getUser(),
+                    $participantStep->locale
+                );
+
+                $this->eventDispatcher->dispatch(Events::USER_REGISTERED, $registeredEvent);
+            }
+            
+            $preRegisteredEvent = new PreRegisterEvent(
+                $this->participantInfoGuesser,
+                $participantStep->sheet->getEvent(),
+                $participantStep->participant->getUser(),
+                $participantStep->locale,
+                $participantStep->participant,
+                $participantStep->sheet
+            );
+
+            $this->eventDispatcher->dispatch(Events::EVENT_PRE_REGISTERED, $preRegisteredEvent);
+        }
     }
 }

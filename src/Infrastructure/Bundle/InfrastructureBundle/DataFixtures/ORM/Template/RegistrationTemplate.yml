@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
     registration_template:
         __construct: false
-        title: "Inscription Template de base"
+        title: "Template d'inscription de base"
         locales: ['fr', 'en']
         fallback: 'fr'
         createdAt: <dateTimeBetween('-10days', 'now')>
@@ -192,7 +192,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Catégorie (Pme / Eti / Startup / ... )"
                                 help:
                                     fr: ""
-                                nomenclature: "4"
+                                nomenclature: "@nomenclature_company_category->id"
                                 tags: ["sheet_data"]
                         9ef18c06:
                             component: "object"

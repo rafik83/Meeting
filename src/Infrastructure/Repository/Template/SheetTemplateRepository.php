@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Template;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
@@ -58,6 +59,22 @@ class SheetTemplateRepository implements SheetTemplateRepositoryInterface
             ->from(SheetTemplate::class, 'template')
             ->join('template.event', 'event', 'WITH', 'event.id IN (:events)')
             ->setParameter('events', array_map(function (EventInterface $event) { return $event->getId(); }, $events));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateForGivenEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(SheetTemplate::class, 'template')
+            ->where('template.event = :event')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

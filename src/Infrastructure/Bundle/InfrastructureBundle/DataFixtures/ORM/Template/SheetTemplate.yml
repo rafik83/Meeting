@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
     template_asd_days:
         __construct: false
-        title: "Template ASD Days"
+        title: "Template de présentation de base"
         locales: ['fr']
         fallback: 'fr'
         createdAt: "<dateTimeBetween('-10days', 'now')>"
