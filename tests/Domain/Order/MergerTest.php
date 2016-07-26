@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Infrastructure\Repository\OrderRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class MergerTest extends \PHPUnit_Framework_TestCase
