@@ -100,7 +100,7 @@ class SheetController extends Controller
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($this->getUser(), $event);
+            ->getSheetsByUserAndEvent($this->getUser(), $event);
 
         if (empty($sheets)) {
             throw $this->createNotFoundException('Sheet not found.');
@@ -299,7 +299,7 @@ class SheetController extends Controller
 
         $label = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
@@ -333,7 +333,7 @@ class SheetController extends Controller
             );
         }
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);

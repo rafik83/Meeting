@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
@@ -82,6 +83,6 @@ class ForgottenPasswordHandler
             $forgottenPassword->locale
         );
 
-        $this->eventDispatcher->dispatch('user_reset_password', $event);
+        $this->eventDispatcher->dispatch(Events::USER_PASSWORD_RESET, $event);
     }
 }

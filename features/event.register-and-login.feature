@@ -26,7 +26,7 @@ Feature: Register and login user
     And I fill in "register_new_user_password_second" with "p@ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
-    And I should see "Profil"
+    Then I should see "Profil"
     And I should see "register.step"
     And I should see "1/3"
 

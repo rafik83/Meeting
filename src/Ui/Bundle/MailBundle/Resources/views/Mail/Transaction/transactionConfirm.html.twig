@@ -1,0 +1,14 @@
+{% block subject %}
+    {{ 'mail.transaction.confirm.subject'|trans({
+        '%transactionNumber%': mail.transaction.id
+    }, 'mail', mail.locale) }}
+{% endblock %}
+
+{% block body %}
+    {{ 'mail.transaction.confirm.body'|trans({
+        '%transactionNumber%': mail.transaction.id,
+        '%firstname%': mail.user.account.firstname|humanize,
+        '%lastname%': mail.user.lastname|upper,
+        '%transactionTotal%': mail.transaction.amount
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

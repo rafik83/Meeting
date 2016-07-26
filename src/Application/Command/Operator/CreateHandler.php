@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Operator;
 use Proximum\Vimeet\Application\Command\Admin\AbstractCreateHandler;
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
@@ -95,6 +96,6 @@ class CreateHandler extends AbstractCreateHandler
     {
         $token = $this->activateAccountTokenGenerator->generate($admin);
         $event = new ActivateAccountEvent($admin, $token, $create->organizer->getLocale());
-        $this->eventDispatcher->dispatch('admin_activate_account', $event);
+        $this->eventDispatcher->dispatch(Events::ADMIN_ACCOUNT_ACTIVATED, $event);
     }
 }
