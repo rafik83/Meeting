@@ -11,15 +11,18 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Payum\Core\Request\GetHumanStatus;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -120,6 +123,8 @@ class PaymentController extends Controller
         EventDomain $eventDomain,
         Sheet $sheet
     ) {
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+
         $transaction = new Transaction(
             $sheet,
             200,
@@ -152,41 +157,9 @@ class PaymentController extends Controller
         Sheet $sheet,
         Transaction $transaction
     ) {
-        $billingInfo = $this->get('repository.billing_info_repository')->getBySheet($sheet);
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $gatewayName = 'paypal_express_checkout';
-
-        $storage = $this->get('payum')->getStorage(Payment::class);
-
-        /** @var Payment $payment */
-        $payment = $storage->create();
-        $payment->setNumber($transaction->getId());
-        $payment->setCurrencyCode($transaction->getCurrency());
-        $payment->setTotalAmount($transaction->getAmount() * 100);
-        // $payment->setDescription('A description');
-        $payment->setClientId($transaction->getSheet()->getId());
-        $payment->setClientEmail($billingInfo->getEmail());
-
-        $payment->setDetails([
-            'FIRSTNAME'         => $billingInfo->getFirstname(),
-            'LASTNAME'          => $billingInfo->getLastname(),
-            'COUNTRYCODE'       => $billingInfo->getAddress()->getCountry(),
-            'SHIPTONAME'        => $billingInfo->getCompleteName(),
-            'SHIPTOSTREET'      => $billingInfo->getAddress()->getStreet(),
-            'SHIPTOCITY'        => $billingInfo->getAddress()->getCity(),
-            'SHIPTOSTATE'       => '',
-            'SHIPTOZIP'         => $billingInfo->getAddress()->getZipcode(),
-            'SHIPTOCOUNTRYCODE' => $billingInfo->getAddress()->getCountry(),
-        ]);
-
-        $storage->update($payment);
-
-        $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
-            $gatewayName,
-            $payment,
-            'event_package_payment_done', // the route to redirect after capture
-            ['sheet' => $sheet->getId()]
-        );
+        $captureToken = $status = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction);
 
         return $this->redirect($captureToken->getTargetUrl());
     }
@@ -200,24 +173,16 @@ class PaymentController extends Controller
      */
     public function donePaymentAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $payum   = $this->get('payum');
-        $token   = $payum->getHttpRequestVerifier()->verify($request);
-        $gateway = $payum->getGateway($token->getGatewayName());
-        //$payum->getHttpRequestVerifier()->invalidate($token);
-        $gateway->execute($status = new GetHumanStatus($token));
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        /** @var Payment $payment */
-        $payment = $status->getFirstModel();
+        $status = $this->get('vimeet.payum.paypal.capture_payment')->process($request);
 
-        return $this->render('EventBundle:Payment:done.html.twig', [
-            'event'   => $eventDomain->getEvent(),
-            'status'  => $status->getValue(),
-            'payment' => [
-                'total_amount'  => $payment->getTotalAmount(),
-                'currency_code' => $payment->getCurrencyCode(),
-                'details'       => $payment->getDetails(),
-            ],
-        ]);
+        $this->addFlash(
+            CapturePayment::STATUS_SUCCESS === $status ? 'success' : 'error',
+            sprintf('flash.payment.%s', $status)
+        );
+
+        return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
     }
 
     /**
@@ -242,5 +207,16 @@ class PaymentController extends Controller
         $sheet = $this->container->get('session')->getFlashBag()->get('package_completed_payment');
 
         return $sheet;
+    }
+
+    /**
+     * @param Event $event
+     * @param Sheet $sheet
+     */
+    private function denyAccessIfUserNotAllowed(Event $event, Sheet $sheet)
+    {
+        if ($event !== $sheet->getEvent() || !$sheet->hasUser($this->getUser())) {
+            throw $this->createNotFoundException('This page is not accessible by this user');
+        }
     }
 }

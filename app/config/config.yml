@@ -230,6 +230,6 @@ payum:
             password:  "%paypal_password%"
             signature: "%paypal_signature%"
             sandbox:   "%paypal_sandbox%"
-            payum.action.process_payment: '@vimeet.payum.action.store_paypal_notification'
+            payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
         offline:
             factory: offline

@@ -14,21 +14,20 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class CartStepRepository implements CartStepRepositoryInterface
 {
     /**
      * @var EntityManager
      */
-    private $manager;
+    private $entityManager;
 
     /**
-     * @param ManagerRegistry $registry
+     * @param EntityManager $entityManager
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->manager = $registry->getManager();
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -36,8 +35,8 @@ class CartStepRepository implements CartStepRepositoryInterface
      */
     public function add(CartStep $cartStep)
     {
-        $this->manager->persist($cartStep);
-        $this->manager->flush($cartStep);
+        $this->entityManager->persist($cartStep);
+        $this->entityManager->flush($cartStep);
     }
 
     /**
@@ -45,7 +44,7 @@ class CartStepRepository implements CartStepRepositoryInterface
      */
     public function set(CartStep $cartStep)
     {
-        $this->manager->flush($cartStep);
+        $this->entityManager->flush($cartStep);
     }
 
     /**
@@ -54,7 +53,7 @@ class CartStepRepository implements CartStepRepositoryInterface
     public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this
-            ->manager
+            ->entityManager
             ->createQueryBuilder()
             ->select('cartStep')
             ->from(CartStep::class, 'cartStep')
@@ -70,14 +69,17 @@ class CartStepRepository implements CartStepRepositoryInterface
      */
     public function delete(CartStep $cartStep)
     {
-        $this->manager->remove($cartStep);
-        $this->manager->flush($cartStep);
+        $this->entityManager->remove($cartStep);
+        $this->entityManager->flush($cartStep);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteForSheet(Sheet $sheet)
     {
         $this
-            ->manager
+            ->entityManager
             ->createQueryBuilder()
             ->delete(CartStep::class, 'cartStep')
             ->where('cartStep.sheet = :sheetId')
@@ -86,6 +88,6 @@ class CartStepRepository implements CartStepRepositoryInterface
             ->execute()
         ;
 
-        $this->manager->flush();
+        $this->entityManager->flush();
     }
 }
