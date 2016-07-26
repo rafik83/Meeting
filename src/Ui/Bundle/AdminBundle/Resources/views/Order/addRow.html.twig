@@ -1,8 +1,10 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block form_content %}
-    <h1 class="page-header">Commande {{ order.id }} de {{ sheet_info }}</h1>
+{% block form_title %}
+    Commande {{ order.id }} de {{ sheet_info }}
+{% endblock form_title %}
 
+{% block form_content %}
     <h4>
         {{ 'admin.order_edit.add_line'|trans }}
         {% if row_label is defined %}

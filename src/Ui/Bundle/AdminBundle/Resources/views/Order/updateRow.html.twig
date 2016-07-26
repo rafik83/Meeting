@@ -1,10 +1,10 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
+{% block form_title %}
+    Commande {{ order.id }} de {{ sheet_info }}
+{% endblock form_title %}
+
 {% block form_content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>{{ sheet_info }}</h2>
-
     <h3>Commande {{ order.id }}</h3>
 
     <h4>Modifier une ligne</h4>
