@@ -97,9 +97,9 @@
                 {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
             {% endif %}
 
-            {{ include('EventBundle::flashes.html.twig') }}
-
             <div class="container-fluid">
+                {{ include('EventBundle::flashes.html.twig') }}
+
                 {% block content %}{% endblock %}
             </div>
         {% endblock body %}
