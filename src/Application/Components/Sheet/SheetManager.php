@@ -91,7 +91,7 @@ class SheetManager
             [],
             $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
             $this->participantRepository->getParticipantForUserAndSheet($user, $sheet),
-            $sheet->getOrders()->toArray()
+            $sheet->getOrders()
         );
     }
 

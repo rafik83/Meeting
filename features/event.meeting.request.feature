@@ -18,17 +18,12 @@ Feature: Meeting Request / Proposition
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
     And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
-    And I go to this page "/fr/"
-    When I follow "event.link.see_meeting_request"
-    Then the response status code should be 200
-    And I should be on "/fr/sheet/1/meeting/request"
+    And I go to this page "/fr"
+    And I go to this page "/fr/sheet/1/meeting/request"
 
   Scenario: I can see my meeting proposition
     Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
-    And I go to this page "/fr/"
-    When I follow "event.link.see_meeting_proposition"
-    Then the response status code should be 200
-    And I should be on "/fr/sheet/1/meeting/proposition"
+    And I go to this page "/fr/sheet/1/meeting/proposition"
 
   #
   # Rewrite the catalog in order to request meetings

@@ -1,6 +1,15 @@
 {% if promotionCode is defined %}
     <tr>
-        <td>{{ promotionCode.label }}</td>
+        <td>
+            <strong>{{ promotionCode.label }}</strong>
+            {% for key, promotionProduct in promotionCode.promotionProductRowViews %}
+                {{ include('EventBundle:Order/Summary:promo-code-product-row.html.twig', {
+                    'promotionProduct': promotionProduct,
+                    'currency': promotionCode.currency
+                }, false) }}
+                {{ not loop.last ? ' - ' : '' }}
+            {% endfor %}
+        </td>
         <td class="text-center"></td>
         <td class="text-center"></td>
         <td class="text-center">{{ promotionCode.total|localizedcurrency(promotionCode.currency) }} {{ ('package.vatMode.' ~ promotionCode.vatMode)|trans }}</td>

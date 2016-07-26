@@ -3,7 +3,7 @@
 Feature: Manage participant
   I need to be able to add and remove a participant
 
-  Scenario: I can a participant to my sheet
+  Scenario: I can add participant to my sheet
     Given the database is empty
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
@@ -17,7 +17,6 @@ Feature: Manage participant
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
     And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    And I follow "event.link.see_my_sheet"
     Then I should be on this page "/fr/sheet"
     And I should see "sheet.object.action.add"
     Then I follow "sheet.object.action.add"
@@ -36,7 +35,6 @@ Feature: Manage participant
   Scenario: I can remove a participant of my sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
-    And I follow "event.link.see_my_sheet"
     Then I should be on this page "/fr/sheet"
     And I should see "sheet.object.action.remove"
     Then I follow "sheet.object.action.remove"

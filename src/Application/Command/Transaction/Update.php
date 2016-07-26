@@ -40,6 +40,11 @@ class Update
     public $reference;
 
     /**
+     * @var string
+     */
+    public $state;
+
+    /**
      * Create constructor.
      *
      * @param Transaction $transaction
@@ -51,5 +56,6 @@ class Update
         $this->date        = $transaction->getDate();
         $this->mode        = $transaction->getMode();
         $this->reference   = $transaction->getReference();
+        $this->state       = $transaction->getState();
     }
 }

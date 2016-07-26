@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+use Proximum\Vimeet\Application\View\Package\Summary\PromotionProductRowView;
+
 class PromotionCodeView
 {
     /**
@@ -43,21 +45,28 @@ class PromotionCodeView
     public $currency;
 
     /**
+     * @var PromotionProductRowView[]
+     */
+    public $promotionProductRowViews;
+
+    /**
      * PromotionCodeView constructor.
      *
-     * @param string $label
-     * @param string $description
-     * @param float  $total
-     * @param string $vatMode
-     * @param string $currency
+     * @param string                    $label
+     * @param string                    $description
+     * @param float                     $total
+     * @param string                    $vatMode
+     * @param string                    $currency
+     * @param PromotionProductRowView[] $promotionProductRowViews
      */
-    public function __construct($label, $description, $total, $vatMode, $currency)
+    public function __construct($label, $description, $total, $vatMode, $currency, $promotionProductRowViews)
     {
-        $this->label       = $label;
-        $this->description = $description;
-        $this->total       = $total;
-        $this->quantity    = 1;
-        $this->vatMode     = $vatMode;
-        $this->currency    = $currency;
+        $this->label                    = $label;
+        $this->description              = $description;
+        $this->total                    = $total;
+        $this->quantity                 = 1;
+        $this->vatMode                  = $vatMode;
+        $this->currency                 = $currency;
+        $this->promotionProductRowViews = $promotionProductRowViews;
     }
 }

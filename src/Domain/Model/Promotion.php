@@ -167,4 +167,42 @@ class Promotion
 
         return $discount;
     }
+
+    /**
+     * @param CartRow $cartRow
+     *
+     * @return int
+     */
+    public function getQuantityForCartRow(CartRow $cartRow)
+    {
+        if ($cartRow->getQuantity() <= $this->getQuantityMax() || null === $this->getQuantityMax()) {
+            return $cartRow->getQuantity();
+        }
+
+        return $this->getQuantityMax();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentOff()
+    {
+        return $this->type === self::TYPE_PERCENT_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValueOff()
+    {
+        return $this->type === self::TYPE_VALUE_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFree()
+    {
+        return $this->type === self::TYPE_FREE;
+    }
 }
