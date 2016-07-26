@@ -29,8 +29,6 @@ class SummaryViewQueryHandler
      * @var PromotionCodeQueryHandler
      */
     public $promotionCodeQueryHandler;
-    
-    public $customRowQueryHandler;
 
     /**
      * @param GroupsViewQueryHandler    $groupsViewQueryHandler

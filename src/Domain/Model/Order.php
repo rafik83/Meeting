@@ -253,7 +253,7 @@ class Order
     /**
      * @param Row $customRow
      *
-     * @return $this
+     * @return Order
      */
     public function removeCustomRow(Row $customRow)
     {
@@ -268,7 +268,7 @@ class Order
     /**
      * @param Row $customRow
      *
-     * @return $this
+     * @return Order
      */
     public function updateCustomRow(Row $customRow)
     {
@@ -362,7 +362,7 @@ class Order
      *
      * @return false|Order\Row[]
      */
-    public function getProductRowForGroupId($groupId)
+    public function getProductRowsForGroupId($groupId)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
             return $row->isProduct() && $row->getGroupId() === $groupId;
@@ -374,7 +374,7 @@ class Order
      *
      * @return false|Order\Row[]
      */
-    public function getCustomRowForGroupId($groupId)
+    public function getCustomRowsForGroupId($groupId)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
             return !$row->isProduct() && $row->getGroupId() === $groupId && !$row->hasParentRow();

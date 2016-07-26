@@ -44,7 +44,7 @@ class GroupViewQuery
      * @param Order        $order
      * @param string       $locale
      * @param string       $type
-     * @param int|null     $groupId
+     * @param null|int     $groupId
      * @param null|RowView $planView
      */
     public function __construct(Order $order, $locale, $type, $groupId = null, RowView $planView = null)

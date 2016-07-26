@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
-
 use Proximum\Vimeet\Application\View\Order\CustomRowView;
 
 class CustomRowViewQueryHandler

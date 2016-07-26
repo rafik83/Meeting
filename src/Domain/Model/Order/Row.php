@@ -200,8 +200,8 @@ class Row
     }
 
     /**
-     * @param string $locale
-     * @param null   $fallback
+     * @param string      $locale
+     * @param null|string $fallback
      *
      * @return string
      */

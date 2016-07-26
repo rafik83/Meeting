@@ -26,8 +26,6 @@ class GroupViewQueryHandler
     private $customRowViewQueryHandler;
 
     /**
-     * GroupViewQueryHandler constructor.
-     *
      * @param RowViewQueryHandler       $rowViewQueryHandler
      * @param CustomRowViewQueryHandler $customRowsViewQueryHandler
      */
@@ -35,7 +33,7 @@ class GroupViewQueryHandler
         RowViewQueryHandler $rowViewQueryHandler,
         CustomRowViewQueryHandler $customRowsViewQueryHandler
     ) {
-        $this->rowViewQueryHandler   = $rowViewQueryHandler;
+        $this->rowViewQueryHandler       = $rowViewQueryHandler;
         $this->customRowViewQueryHandler = $customRowsViewQueryHandler;
     }
 
@@ -46,16 +44,16 @@ class GroupViewQueryHandler
      */
     public function handle(GroupViewQuery $groupViewQuery)
     {
-        $label    = '';
-        $locale   = $groupViewQuery->locale;
-        $order    = $groupViewQuery->order;
-        $products = [];
+        $label      = '';
+        $locale     = $groupViewQuery->locale;
+        $order      = $groupViewQuery->order;
+        $products   = [];
         $customRows = [];
 
         if ($groupViewQuery->type === Product::TYPE_OPTION) {
             $label = $order->getGroupLabel($groupViewQuery->groupId, $locale);
 
-            foreach ($order->getProductRowForGroupId($groupViewQuery->groupId) as $row) {
+            foreach ($order->getProductRowsForGroupId($groupViewQuery->groupId) as $row) {
                 $products[] = $this->rowViewQueryHandler->handle(
                     new RowViewQuery(
                         $order,
@@ -66,7 +64,7 @@ class GroupViewQueryHandler
                 );
             }
 
-            foreach ($order->getCustomRowForGroupId($groupViewQuery->groupId) as $row) {
+            foreach ($order->getCustomRowsForGroupId($groupViewQuery->groupId) as $row) {
                 $customRows[] = $this->customRowViewQueryHandler->handle(
                     new CustomRowViewQuery(
                         $row,

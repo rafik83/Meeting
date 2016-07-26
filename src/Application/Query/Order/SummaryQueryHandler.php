@@ -47,7 +47,7 @@ class SummaryQueryHandler
     ) {
         $this->groupsViewQueryHandler         = $groupsViewQueryHandler;
         $this->promotionCodesViewQueryHandler = $promotionCodesViewQueryHandler;
-        $this->customRowsViewQueryHandler = $customRowsViewQueryHandler;
+        $this->customRowsViewQueryHandler     = $customRowsViewQueryHandler;
     }
     /**
      * @param SummaryQuery $summaryQuery
