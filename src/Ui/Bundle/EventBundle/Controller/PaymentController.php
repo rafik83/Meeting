@@ -10,14 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Payum\Core\Request\GetHumanStatus;
-use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
@@ -45,8 +42,7 @@ class PaymentController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
-        $funnel = null;
-        $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+        $funnel    = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())

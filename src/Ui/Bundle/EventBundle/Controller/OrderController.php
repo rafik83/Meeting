@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Query\Order\ProFormaQuery;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
