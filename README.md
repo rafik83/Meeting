@@ -57,3 +57,18 @@ Mot de passe: `vimeet360`
 ### Fixtures
 
 User exhibitor: test@elao.com / p@ssw0rd
+
+## Deployment
+
+### Prepare migrations for preprod/prod
+
+1- Go to preprod branch `$ git checkout preprod`
+2- Drop db schema `$ bin/console doctrine:schema:drop --force`
+3- Empty the `migration_versions` table
+4- Run all migrations `$ bin/console doctrine:migrations:migrate`
+5- Merge the master branch into preprod `$ git merge origin/master`
+6- Generate the new migration : `$ bin/console doctrine:migrations:diff`
+7- Edit docblocks in generated file `/src/Infrastructure/Bundle/InfrastructureBundle/Migrations/VersionYYYYMMDDHHMMSS.php`
+8- Add a new branch, commit, push and request merge the new migrations `git checkout -b migrations/VersionYYYYMMDDHHMMSS && git add && git commit -m "Add migrations" && git push origin migrations/VersionYYYYMMDDHHMMSS`
+9- Merge migration branch into preprod : `git checkout preprod && git merge origin/migrations/VersionYYYYMMDDHHMMSS`
+10- Finally, push the preprod branch and deploy it!
