@@ -27,7 +27,7 @@ Proximum\Vimeet\Domain\Model\Product:
             nullable: true
         updatable:
             type: boolean
-        updatableUntil:
+        deletableUntil:
             type: datetime
             nullable: true
         buyableUntil:

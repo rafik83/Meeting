@@ -120,11 +120,16 @@ package:
         subjectedToValidationHelp: Sous réserve de validation
         unavailable: Non disponible
         includedProduct: 'Inclus:'
+        buyableUntil: Achetable jusqu'au %date%
+        deletableUntil: Supprimable jusqu'au %date%
+        notDeletableSince: Non supprimable depuis le %date%
     summary:
         pageTitle: Récapitulatif de votre forfait de participation
         title: Récapitulatif
         pay: Régler le forfait de participation
         totalOfSummary: Total de la commande
+        total:
+            title: Forfait de participation
         totalVat: '+ TVA applicable de %vat%%'
         totalPlusVat: Total à régler
         option: Option
@@ -178,6 +183,7 @@ navigation:
             locale: Version
         package:
             summary: Récapitulatif
+            order_summary_total: Récapitulatif
             payment: Paiement
             order_list: Liste des commandes
         catalog:

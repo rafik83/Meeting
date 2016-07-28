@@ -72,6 +72,18 @@ class PromotionCode
     }
 
     /**
+     * @param Order $order
+     *
+     * @return PromotionCode
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getData()

@@ -27,7 +27,7 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->availabilityCurrent,
             $updateOption->availabilityMax,
             $updateOption->updatable,
-            $updateOption->updatableUntil,
+            $updateOption->deletableUntil,
             $updateOption->subjectedToValidation,
             $updateOption->buyableUntil
         );
