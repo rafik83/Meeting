@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler;
 use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\ImporterInterface;
 use Proximum\Vimeet\Domain\Event\HasSheet;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

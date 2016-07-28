@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Operator;
 
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Operator\Update;
 use Proximum\Vimeet\Application\Command\Operator\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
@@ -18,7 +17,6 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

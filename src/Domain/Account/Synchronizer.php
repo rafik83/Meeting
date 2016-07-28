@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Domain\Account;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\Object;
-use Proximum\Vimeet\Domain\Template\Object\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class Synchronizer
@@ -75,7 +75,7 @@ class Synchronizer
                 foreach ($tags as $tag) {
                     if (isset($this->tagMapping[$tag])) {
                         $method = 'get' . $this->tagMapping[$tag];
-                        if ($object instanceof Object\Nomenclature) {
+                        if ($object instanceof TemplateObject\Nomenclature) {
                             $object->setContentValue($object->getKeyForLabel($account->$method(), $templateData->getLocale()));
                         } else {
                             $object->setContentValue($account->$method());
@@ -107,7 +107,7 @@ class Synchronizer
                     if (isset($this->tagMapping[$tag])) {
                         $method = 'set' . $this->tagMapping[$tag];
 
-                        if ($object instanceof Object\Nomenclature) {
+                        if ($object instanceof TemplateObject\Nomenclature) {
                             $account->$method($object->getLabelForKey($object->getContentValue(), $templateData->getLocale()));
                         } else {
                             $account->$method($object->getContentValue());

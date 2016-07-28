@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -22,7 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -219,17 +218,17 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $text  = new Object\Text('text', [], 'fr', 'fr');
-        $editableText1 = new Object\EditableText('editable-text', [
+        $text  = new TemplateObject\Text('text', [], 'fr', 'fr');
+        $editableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
-        $editableText2 = new Object\EditableText('editable-text', [
+        $editableText2 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
-        $telephone1    = new Object\Telephone('telephone', [
+        $telephone1    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
-        $telephone2    = new Object\Telephone('telephone', [
+        $telephone2    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
 
@@ -243,20 +242,20 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $expectedBlock = new Block('12', [], 'fr', 'fr');
-        $expectedText  = new Object\Text('text', [], 'fr', 'fr');
-        $exEditableText1 = new Object\EditableText('editable-text', [
+        $expectedText  = new TemplateObject\Text('text', [], 'fr', 'fr');
+        $exEditableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText1->setContentValue('foo');
-        $exEditableText2 = new Object\EditableText('editable-text', [
+        $exEditableText2 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText2->setContentValue('bar');
-        $exTelephone1    = new Object\Telephone('telephone', [
+        $exTelephone1    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone1->setContentValue('phone');
-        $exTelephone2    = new Object\Telephone('telephone', [
+        $exTelephone2    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone2->setContentValue('mobile');
