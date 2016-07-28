@@ -17,6 +17,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoice
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -57,7 +58,7 @@ class TypeCreateType extends AbstractType
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
-            ->add('rank', NumberType::class, [
+            ->add('rank', IntegerType::class, [
                 'required' => false,
             ])
             ->add('validationCriteria', TypeValidationCriteriaType::class, [

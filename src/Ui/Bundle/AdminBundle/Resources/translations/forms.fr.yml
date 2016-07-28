@@ -239,6 +239,12 @@ form:
                 children:
                     sheetAccepted:
                         label: Fiche acceptée
+            sheetTemplate:
+                label: Template de présentation
+            registrationTemplate:
+                label: Template d'Inscription
+            package:
+                label: Template
             translations:
                 prototype:
                     children:

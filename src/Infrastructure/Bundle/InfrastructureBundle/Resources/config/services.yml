@@ -274,6 +274,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Update }
     vimeet_infrastructure.vimeet.application.command.type.create_handler:

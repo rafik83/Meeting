@@ -3,6 +3,9 @@
 {% block form_title 'admin.type.update.title'|trans %}
 
 {% block form_content %}
+    {{ form_row(form.sheetTemplate) }}
+    {{ form_row(form.registrationTemplate) }}
+    {{ form_row(form.package) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.rank, {widget_columns: 1}) }}
     {{ form_row(form.validationCriteria) }}
