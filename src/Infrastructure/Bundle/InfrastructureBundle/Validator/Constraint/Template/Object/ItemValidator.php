@@ -22,14 +22,12 @@ class ItemValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        foreach ($value->getCollection()->getItems() as $item) {
-            /** @var Item $item */
-            if (null !== $item->getterTitle()) {
-                if (is_array($item->getterTitle())) {
-                    $this->validateArray($item->getterTitle(), $constraint);
-                } else {
-                    $this->validateString($item->getterTitle(), $constraint);
-                }
+        /** @var Item $value */
+        if (null !== $value->getRawTitle()) {
+            if (is_array($value->getRawTitle())) {
+                $this->validateArray($value->getRawTitle(), $constraint);
+            } else {
+                $this->validateString($value->getRawTitle(), $constraint);
             }
         }
     }

@@ -74,7 +74,7 @@ class Item
     /**
      * @return array|string
      */
-    public function getterTitle()
+    public function getRawTitle()
     {
         return $this->title;
     }

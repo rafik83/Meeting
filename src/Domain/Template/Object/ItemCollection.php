@@ -55,7 +55,7 @@ class ItemCollection extends Object
     }
 
     /**
-     * @return array
+     * @return Item[]
      */
     public function getItems()
     {
