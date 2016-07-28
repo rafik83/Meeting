@@ -14,8 +14,7 @@
                 </a>
                 {% endif %}
                 <div class="header__info">
-                    <p>{{ event.title }}</p>
-                    <p>{{ event.description(app.request.locale) }}</p>
+                    <p>{{ event.description(app.request.locale)|nl2br }}</p>
                 </div>
             {% endif %}
             <ul class="header__navigation">
