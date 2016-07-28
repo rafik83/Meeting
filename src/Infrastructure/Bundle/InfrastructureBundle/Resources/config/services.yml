@@ -1713,7 +1713,6 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
         arguments:
             - '@repository.nomenclature_repository'
-
     #
     # Event
     #

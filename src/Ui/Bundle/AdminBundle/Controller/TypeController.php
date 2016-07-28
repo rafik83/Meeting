@@ -38,7 +38,8 @@ class TypeController extends Controller
 
         $types = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
+            ->paginate($request->query->get('page', 1), 20, $event->getId(),
+                $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('AdminBundle:Type:list.html.twig', [
             'event' => $event,
@@ -60,7 +61,8 @@ class TypeController extends Controller
         $form   = $this->createForm(TypeCreateType::class, $create, [
             'action'       => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
             'method'       => 'POST',
-            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser()),
+            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')
+                                   ->getListByAdmin($this->getUser()),
             'currentEvent' => $event,
         ]);
         $form->add('submit', SubmitType::class);
@@ -102,13 +104,14 @@ class TypeController extends Controller
         }
 
         $update = new Update($type, $request->getLocale());
-        $form = $this->createForm(TypeUpdateType::class, $update, [
+        $form   = $this->createForm(TypeUpdateType::class, $update, [
             'action'       => $this->generateUrl('admin_type_update',
                 ['event' => $event->getId(), 'type' => $type->getId()]),
             'method'       => 'POST',
             'events'       => $this->get('vimeet_infrastructure.repository.event_repository')
-                                   ->getListByAdmin($this->getUser()),
+                ->getListByAdmin($this->getUser()),
             'currentEvent' => $event,
+            'type'         => $type,
         ]);
         $form->add('submit', SubmitType::class);
 

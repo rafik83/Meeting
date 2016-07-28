@@ -3,10 +3,20 @@
 {% block form_title 'admin.type.update.title'|trans %}
 
 {% block form_content %}
-    {{ form_row(form.sheetTemplate) }}
-    {{ form_row(form.registrationTemplate) }}
-    {{ form_row(form.package) }}
     {{ form_row(form.translations) }}
+
+    {% if form.sheetTemplate is defined %}
+        {{ form_row(form.sheetTemplate) }}
+    {% endif %}
+
+    {% if form.registrationTemplate is defined %}
+        {{ form_row(form.registrationTemplate) }}
+    {% endif %}
+
+    {% if form.package is defined %}
+        {{ form_row(form.package) }}
+    {% endif %}
+
     {{ form_row(form.rank, {widget_columns: 1}) }}
     {{ form_row(form.validationCriteria) }}
 {% endblock form_content %}
