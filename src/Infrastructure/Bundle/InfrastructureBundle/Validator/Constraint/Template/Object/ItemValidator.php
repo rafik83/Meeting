@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\Object;
 
+use Proximum\Vimeet\Domain\Template\Object\Item;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -22,6 +23,7 @@ class ItemValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         foreach ($value->getCollection()->getItems() as $item) {
+            /** @var Item $item */
             if (null !== $item->getterTitle()) {
                 if (is_array($item->getterTitle())) {
                     $this->validateArray($item->getterTitle(), $constraint);
