@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Object;
 
-use Proximum\Vimeet\Domain\Template\Object;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface

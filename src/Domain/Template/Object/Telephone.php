@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Object;
 
-use Proximum\Vimeet\Domain\Template\Object;
-
 class Telephone extends EditableObject implements ContentObjectInterface
 {
     /**
