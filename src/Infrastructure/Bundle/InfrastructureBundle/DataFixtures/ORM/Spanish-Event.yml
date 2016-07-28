@@ -60,12 +60,12 @@ Proximum\Vimeet\Domain\Model\Product:
         __construct: { createPlan: ['@event_spanish', 'Formule B2B Meeting', '', 1690, '', ''] }
         quantityMax: 1
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     product_plan_2_spanish_event:
         __construct: { createPlan: [ '@event_spanish', 'Formule Exposant', '', 2880, '', '' ] }
         quantityMax: 1
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     # participants
     product_participant_1_spanish_event:
         __construct: { createParticipant: [ '@event_spanish', 'Participant supplémentaire Fournisseur', 195, 1O ] }
@@ -73,14 +73,14 @@ Proximum\Vimeet\Domain\Model\Product:
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     # plannings
     product_planning_1_spanish_event:
         __construct: { createPlanning: [ '@event_spanish', 'Planning supplémentaire Fournisseur', 495, 1O ] }
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false
-        updatableUntil: ~
+        deletableUntil: ~
     # options
     product_option_1_spanish_event:
         __construct: { createOption: ['@event_spanish', 'Option 4m² supplémentaires Fournisseur', '', 990, 1, '', '', true, null] }

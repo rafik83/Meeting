@@ -38,7 +38,7 @@
             <th class="text-center">{{ 'admin.product.quantityMax'|trans }}</th>
             <th class="text-center">{{ 'admin.product.buyableUntil'|trans }}</th>
             <th class="text-center">{{ 'admin.product.updatable'|trans }}</th>
-            <th class="text-center">{{ 'admin.product.updatableUntil'|trans }}</th>
+            <th class="text-center">{{ 'admin.product.deletableUntil'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -91,7 +91,7 @@
                 <td class="text-right">{{ product.quantityMax }}</td>
                 <td class="text-center">{{ product.buyableUntil ? product.buyableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
                 <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
-                <td class="text-center">{{ product.updatableUntil ? product.updatableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
+                <td class="text-center">{{ product.deletableUntil ? product.deletableUntil|localizeddate('medium', 'short', app.request.locale) : '-' }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}" class="btn btn-default btn-sm">
                         {{ 'admin.product.update.action'|trans }}

@@ -506,3 +506,10 @@ event_pro_forma:
         order: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Order:proForma }
+
+event_order_summary_total:
+    path: /sheet/{sheet}/order/summary
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Order:summaryTotal }

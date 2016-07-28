@@ -47,7 +47,7 @@ abstract class AbstractProduct
     /**
      * @var \DateTimeInterface
      */
-    public $updatableUntil;
+    public $deletableUntil;
 
     /**
      * @var \DateTimeInterface

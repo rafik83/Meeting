@@ -306,7 +306,7 @@ admin:
         subjectedToValidation: Soumis à validation
         buyableUntil: Achetable jusqu'au
         updatable: Supprimable
-        updatableUntil: Supprimable jusqu'au
+        deletableUntil: Supprimable jusqu'au
         bought: Nombre achetés
         actions: Actions
         update:

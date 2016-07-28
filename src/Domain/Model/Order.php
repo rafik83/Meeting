@@ -317,6 +317,22 @@ class Order
     }
 
     /**
+     * @param Product $product
+     *
+     * @return null|Order\Row
+     */
+    public function getRowForProduct(Product $product)
+    {
+        foreach($this->rows as $row) {
+            if($row->getProduct() === $product) {
+                return $row;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string $type
      *
      * @return bool
@@ -348,6 +364,22 @@ class Order
     public function getPromotionCodes()
     {
         return $this->promotionCodes->toArray();
+    }
+
+    /**
+     * @param Order\PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function hasPromotionCode(Order\PromotionCode $promotionCode)
+    {
+        foreach ($this->promotionCodes as $promoCode) {
+            if ($promoCode === $promotionCode) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
