@@ -67,7 +67,6 @@ class Synchronizer
             return $templateData;
         }
 
-        /** @var Object $object */
         foreach ($templateData->getEditableObjects() as $object) {
             if ($object instanceof ContentObjectInterface && '' === $object->getContentValue()) {
                 $tags = $object->getTags();
@@ -98,7 +97,6 @@ class Synchronizer
     {
         $account = $user->getAccount();
 
-        /** @var Object $object */
         foreach ($templateData->getEditableObjects() as $object) {
             if ($object instanceof ContentObjectInterface && '' !== $object->getContentValue()) {
                 $tags = $object->getTags();
