@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;

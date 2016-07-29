@@ -151,7 +151,7 @@ class ParticipantController extends Controller
         try {
             $image = $profileTemplate->getObject($key);
 
-            if (!$image instanceof Template\Object\Image || !$image->hasTag(Tag::PARTICIPANT_AVATAR)) {
+            if (!$image instanceof Template\TemplateObject\Image || !$image->hasTag(Tag::PARTICIPANT_AVATAR)) {
                 throw $this->createNotFoundException(sprintf('Key %s of object given is not an image', $key));
             }
         } catch (\Exception $exception) {
@@ -172,7 +172,7 @@ class ParticipantController extends Controller
         );
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($image instanceof Template\Object\Image) {
+            if ($image instanceof Template\TemplateObject\Image) {
                 $file = $form->get($key)->get('file')->getData();
 
                 if ($file instanceof UploadedFile) {

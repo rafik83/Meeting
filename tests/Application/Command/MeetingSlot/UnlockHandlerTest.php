@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\MeetingSlot;
 
 use Proximum\Vimeet\Application\Command\MeetingSlot\Unlock;
 use Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

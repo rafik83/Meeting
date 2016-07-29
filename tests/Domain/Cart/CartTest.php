@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Cart\Cart;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;

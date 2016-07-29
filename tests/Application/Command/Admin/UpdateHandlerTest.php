@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Command\Admin\Update;
 use Proximum\Vimeet\Application\Command\Admin\UpdateHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 

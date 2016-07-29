@@ -14,15 +14,14 @@ namespace Proximum\Vimeet\Tests\Application\Template\Registration;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\Object\Nomenclature as NomenclatureObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RegistrationTemplateClonerTest extends \PHPUnit_Framework_TestCase

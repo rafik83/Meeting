@@ -14,7 +14,6 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Model\Group;
 use Proximum\Vimeet\Application\Command\Package\Update;
 use Proximum\Vimeet\Application\Command\Package\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
