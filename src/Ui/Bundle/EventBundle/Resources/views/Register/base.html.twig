@@ -6,47 +6,7 @@
     {% endif %}
 
     <div class="wrapper profile">
-        <div class="header">
-            {% if event is defined %}
-                {% if event.logo != null %}
-                <a href="{{ path('event') }}">
-                    <img src="{{ event.logo|imagine_filter('event_header_logo') }}" class="logo">
-                </a>
-                {% endif %}
-                <div class="header__info">
-                    <p>{{ event.description(app.request.locale)|nl2br }}</p>
-                </div>
-            {% endif %}
-            <ul class="header__navigation">
-                <li>
-                    {% if event is defined %}
-                        {% for locale in event.locales if locale != app.request.locale %}
-                            <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
-                        {% endfor %}
-                    {% endif %}
-                </li>
-
-                {% if is_granted('ROLE_USER') %}
-                    <li>
-                        <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
-                            <i class="icon-Disconnect"></i>
-                        </a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
-                            <i class="icon-Disconnect"></i>
-                        </a>
-                    </li>
-                {% endif %}
-
-                <li>
-                    <a href="">
-                        <i class="icon-Appeler"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        {{ include('EventBundle:Common:header.html.twig') }}
 
         <div class="profile__content">
             {% block content %}{% endblock %}
