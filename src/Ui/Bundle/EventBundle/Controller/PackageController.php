@@ -410,16 +410,20 @@ class PackageController extends Controller
         }
 
         if ($command instanceof Step\SelectParticipantAndPlanning) {
-            $planningRow = $cart->getPlanningRow();
+            $planningRow   = $cart->getPlanningRow();
+            $orderQuantity = 0;
+            $cartQuantity  = 0;
 
             if (isset($orderMerged)) {
-                $planning                  = $command->sheet->getPackage()->getPlanning();
-                $command->planningQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
+                $planning      = $command->sheet->getPackage()->getPlanning();
+                $orderQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
             }
 
             if (null !== $planningRow) {
-                $command->planningQuantity = $planningRow->getQuantity();
+                $cartQuantity = $planningRow->getQuantity();
             }
+
+            $command->planningQuantity = $orderQuantity + $cartQuantity;
 
             return;
         }
@@ -464,9 +468,9 @@ class PackageController extends Controller
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
 
-        if (!empty($sheet->getOrders())) {
-            throw $this->createNotFoundException('This sheet has already an order');
-        }
+//        if (!empty($sheet->getOrders())) {
+//            throw $this->createNotFoundException('This sheet has already an order');
+//        }
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 

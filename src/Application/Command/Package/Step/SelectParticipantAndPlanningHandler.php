@@ -37,30 +37,40 @@ class SelectParticipantAndPlanningHandler
 
     /**
      * @param SelectParticipantAndPlanning $selectParticipantAndPlanning
+     *
+     * @throws \Exception
      */
     public function handle(SelectParticipantAndPlanning $selectParticipantAndPlanning)
     {
         $sheet   = $selectParticipantAndPlanning->sheet;
         $package = $sheet->getPackage();
 
+        if (!$package) {
+            throw new \Exception('Package not found');
+        }
+
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
+
+        // Update participant cart row
         $cart->resolveParticipantsQuantity();
 
-        if (count($sheet->getOrders()) > 0) {
+        if (!$package->getPlanning()) {
+            return;
+        }
+
+        // Update planning cart row
+        $orderPlanningQuantity = 0;
+
+        if ($sheet->hasOrders()) {
             $merged = $this->merger->merge($sheet->getOrders());
             if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
-                $orderQuantity = $orderRow->getQuantity();
+                $orderPlanningQuantity = $orderRow->getQuantity();
             }
         }
 
-        $quantity = (isset($orderQuantity)) ?
-            $selectParticipantAndPlanning->planningQuantity - $orderQuantity :
-            $selectParticipantAndPlanning->planningQuantity;
+        $quantity = (int) $selectParticipantAndPlanning->planningQuantity - $orderPlanningQuantity;
 
-        if ($package && $package->getPlanning()) {
-            $cart->setProduct($package->getPlanning(), $quantity);
-        }
-
+        $cart->setProduct($package->getPlanning(), $quantity);
         $this->cartManager->save($cart);
     }
 }

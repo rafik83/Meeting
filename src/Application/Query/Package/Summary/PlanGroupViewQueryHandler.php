@@ -40,9 +40,11 @@ class PlanGroupViewQueryHandler
 
         $plan = $cart->getPlanRow();
 
-        if ($package->isPlansEnabled() && null === $plan) {
-            throw new \Exception('Plan is enabled and no plan is selected');
-        }
+        return null;
+
+//        if ($package->isPlansEnabled() && null === $plan) {
+//            throw new \Exception('Plan is enabled and no plan is selected');
+//        }
 
         $planView = $this->productViewQueryHandler->handle(new ProductViewQuery(
             $planGroupViewQuery->sheet,

@@ -82,13 +82,13 @@ class Cart
         if ($this->hasProduct($product)) {
             $row = $this->getRow($product);
 
-            if ($quantity > 0) {
-                $row->setProduct($product)->setQuantity($quantity);
-            } else {
+            if (0 === $quantity) {
                 $this->rows->removeElement($row);
+            } else {
+                $row->setProduct($product)->setQuantity($quantity);
             }
 
-        } elseif ($quantity > 0) {
+        } else if (0 !== $quantity) {
             $this->rows[] = new CartRow($this->sheet, $product, $quantity);
         }
 
