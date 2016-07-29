@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Object;
 
-use Proximum\Vimeet\Domain\Template\Object;
 use Symfony\Component\Intl\Intl;
 
 class Country extends EditableObject implements ContentObjectInterface

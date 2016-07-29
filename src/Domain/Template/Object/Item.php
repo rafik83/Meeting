@@ -72,6 +72,14 @@ class Item
     }
 
     /**
+     * @return array|string
+     */
+    public function getRawTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Get fallback title if object is translatable.
      *
      * @return string|null

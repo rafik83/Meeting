@@ -30,7 +30,7 @@ class ItemDataType extends AbstractType
             ->add('title', TextType::class, [
                 'label'       => false,
                 'required'    => false,
-                'placeholder' => $options['placeholder']
+                'placeholder' => $options['placeholder'],
             ])
         ;
     }

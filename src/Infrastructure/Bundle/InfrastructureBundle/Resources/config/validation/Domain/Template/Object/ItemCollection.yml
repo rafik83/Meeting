@@ -1,0 +1,4 @@
+Proximum\Vimeet\Domain\Template\Object\ItemCollection:
+    properties:
+        items:
+            - Valid: ~
