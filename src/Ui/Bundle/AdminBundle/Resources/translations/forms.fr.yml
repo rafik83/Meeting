@@ -196,7 +196,7 @@ form:
                 prototype:
                     children:
                         description:
-                            label: Description
+                            label: Entête de page
             organiserName:
                 label: Organisateur
             submit:

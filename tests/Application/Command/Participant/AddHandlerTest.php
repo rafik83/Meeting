@@ -18,9 +18,8 @@ use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenera
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
-use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -48,7 +47,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $planProduct        = Product::createPlan($event, 'plan', '', 100, 10, 40);
         $participantProduct = Product::createParticipant($event, 'participant', 50, 10);
 
-        $package  = new Package($event, 'My package', $now);
+        $package = new Package($event, 'My package', $now);
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setParticipant($participantProduct);
@@ -61,7 +60,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $expectedUser,
             [
                 '541f84d4' => [
-                    'text' => 'jean'
+                    'text' => 'jean',
                 ],
                 '838197c7' => [
                     'text' => 'truc',
@@ -76,15 +75,19 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository->add($expectedUser)->shouldBeCalled();
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add(Argument::that(function (Participant $participant) use ($expectedParticipant) {
-            return true;
-        }))->shouldBeCalled();
+        $participantRepository->add(
+            Argument::that(
+                function (Participant $participant) use ($expectedParticipant) {
+                    return true;
+                }
+            )
+        )->shouldBeCalled();
 
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
-        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+        $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedUser,
@@ -107,23 +110,32 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $user
         );
 
-        $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn($expectedActivateAccountToken);
+        $activateAccountTokenGenerator->generate($expectedUser, $sheet)->shouldBeCalled()->willReturn(
+            $expectedActivateAccountToken
+        );
 
-        $eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $sheetAddConfirmationEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
+            $sheetAddConfirmationEvent
+        )->shouldBeCalled();
         $eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
 
         $cartManager = $this->prophesize(CartManager::class);
         $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
 
-        $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
-        $block = new Template\Block('12', [], 'fr', 'fr');
-        $editableText1 = new Template\Object\EditableText('editable-text', [
+        $templateData  = new Template\TemplateData('root', [], 'fr', 'fr');
+        $block         = new Template\Block('12', [], 'fr', 'fr');
+        $editableText1 = new Template\TemplateObject\EditableText(
+            'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
-        ], 'fr', 'fr');
+        ], 'fr', 'fr'
+        );
         $editableText1->setContentValue('truc');
-        $editableText2 = new Template\Object\EditableText('editable-text', [
+        $editableText2 = new Template\TemplateObject\EditableText(
+            'editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
-        ], 'fr', 'fr');
+        ], 'fr', 'fr'
+        );
         $editableText2->setContentValue('bidule');
 
         $block->addChild(1, '541f84d4', $editableText1);
@@ -131,8 +143,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
 
-        $add = new Add($sheet, $event, 'fr', $user);
-        $add->email = 'test@test.com';
+        $add            = new Add($sheet, $event, 'fr', $user);
+        $add->email     = 'test@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';
 
@@ -151,18 +163,18 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWhenUserExists()
     {
-        $now   = new \DateTime();
-        $event = EventFactory::createEvent();
-        $type  = new Type($event);
-        $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
-        $user2 = new User('test2@test.com', '__SALT__', 'password', 'fr');
-        $sheet = new Sheet($event, $type, [], $user, $now);
+        $now         = new \DateTime();
+        $event       = EventFactory::createEvent();
+        $type        = new Type($event);
+        $user        = new User('test@test.com', '__SALT__', 'password', 'fr');
+        $user2       = new User('test2@test.com', '__SALT__', 'password', 'fr');
+        $sheet       = new Sheet($event, $type, [], $user, $now);
         $participant = new Participant(
             $sheet,
             $user2,
             [
                 '541f84d4' => [
-                    'text' => 'jean'
+                    'text' => 'jean',
                 ],
                 '838197c7' => [
                     'text' => 'truc',
@@ -180,20 +192,24 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
-        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+        $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
 
         $cartManager = $this->prophesize(CartManager::class);
 
-        $templateData = new Template\TemplateData('root', [], 'fr', 'fr');
-        $block = new Template\Block('12', [], 'fr', 'fr');
-        $editableText1 = new Template\Object\EditableText('editable-text', [
+        $templateData  = new Template\TemplateData('root', [], 'fr', 'fr');
+        $block         = new Template\Block('12', [], 'fr', 'fr');
+        $editableText1 = new Template\TemplateObject\EditableText(
+            'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
-        ], 'fr', 'fr');
+        ], 'fr', 'fr'
+        );
         $editableText1->setContentValue('truc');
-        $editableText2 = new Template\Object\EditableText('editable-text', [
+        $editableText2 = new Template\TemplateObject\EditableText(
+            'editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
-        ], 'fr', 'fr');
+        ], 'fr', 'fr'
+        );
         $editableText2->setContentValue('bidule');
 
         $block->addChild(1, '541f84d4', $editableText1);
@@ -202,7 +218,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldNotBeCalled();
 
-        $add = new Add($sheet, $event, 'fr', $user);
+        $add            = new Add($sheet, $event, 'fr', $user);
         $add->email     = 'test2@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';

@@ -25,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

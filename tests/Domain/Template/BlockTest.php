@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
-use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,9 +71,48 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $blockA->addChild(0, 'object-2', new EditableText('editable-text', [], 'fr', 'fr'));
 
         $blockB = new Block('block-b', [], 'fr', 'fr');
-        $blockB->addChild(0, 'block-ba', (new Block('block-ba', [], 'fr', 'fr'))->addChild(0, 'object-3', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(0, 'block-bb', (new Block('block-bb', [], 'fr', 'fr'))->addChild(0, 'object-4', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(1, 'block-bc', (new Block('block-bc', [], 'fr', 'fr'))->addChild(0, 'object-5', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB->addChild(
+            0,
+            'block-ba',
+            (new Block('block-ba', [], 'fr', 'fr'))->addChild(
+                0,
+                'object-3',
+                new EditableText(
+                    'editable-text',
+                    [],
+                    'fr',
+                    'fr'
+                )
+            )
+        );
+        $blockB->addChild(
+            0,
+            'block-bb',
+            (new Block('block-bb', [], 'fr', 'fr'))->addChild(
+                0,
+                'object-4',
+                new EditableText(
+                    'editable-text',
+                    [],
+                    'fr',
+                    'fr'
+                )
+            )
+        );
+        $blockB->addChild(
+            1,
+            'block-bc',
+            (new Block('block-bc', [], 'fr', 'fr'))->addChild(
+                0,
+                'object-5',
+                new EditableText(
+                    'editable-text',
+                    [],
+                    'fr',
+                    'fr'
+                )
+            )
+        );
 
         $blockC = new Block('block-c', [], 'fr', 'fr');
 
@@ -96,9 +135,48 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $blockA->addChild(0, 'object-2', new EditableText('editable-text', [], 'fr', 'fr'));
 
         $blockB = new Block('block-b', [], 'fr', 'fr');
-        $blockB->addChild(0, 'block-ba', (new Block('block-ba', [], 'fr', 'fr'))->addChild(0, 'object-3', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(0, 'block-bb', (new Block('block-bb', [], 'fr', 'fr'))->addChild(0, 'object-4', new EditableText('editable-text', [], 'fr', 'fr')));
-        $blockB->addChild(1, 'block-bc', (new Block('block-bc', [], 'fr', 'fr'))->addChild(0, 'object-5', new EditableText('editable-text', [], 'fr', 'fr')));
+        $blockB->addChild(
+            0,
+            'block-ba',
+            (new Block('block-ba', [], 'fr', 'fr'))->addChild(
+                0,
+                'object-3',
+                new EditableText(
+                    'editable-text',
+                    [],
+                    'fr',
+                    'fr'
+                )
+            )
+        );
+        $blockB->addChild(
+            0,
+            'block-bb',
+            (new Block('block-bb', [], 'fr', 'fr'))->addChild(
+                0,
+                'object-4',
+                new EditableText(
+                    'editable-text',
+                    [],
+                    'fr',
+                    'fr'
+                )
+            )
+        );
+        $blockB->addChild(
+            1,
+            'block-bc',
+            (new Block('block-bc', [], 'fr', 'fr'))->addChild(
+                0,
+                'object-5',
+                new EditableText(
+                    'editable-text',
+                    [],
+                    'fr',
+                    'fr'
+                )
+            )
+        );
 
         $blockC = new Block('block-c', [], 'fr', 'fr');
 

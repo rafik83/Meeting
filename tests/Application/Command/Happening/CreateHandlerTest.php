@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;

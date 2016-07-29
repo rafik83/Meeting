@@ -131,7 +131,7 @@ class Promotion
 
     /**
      * @param string   $type
-     * @param int      $value
+     * @param float    $value
      * @param null|int $quantityMax
      *
      * @return Promotion
@@ -163,7 +163,6 @@ class Promotion
                 $discount = $this->product->getUnitPrice();
                 break;
         }
-
 
         return $discount;
     }

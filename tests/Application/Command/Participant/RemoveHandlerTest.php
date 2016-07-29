@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
