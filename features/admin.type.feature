@@ -18,6 +18,7 @@ Feature: add type
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
       | Admin.yml                                                                |
+      | TypeWithoutSheet.yml                                                     |
     And I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I follow "admin.type.link"
@@ -41,7 +42,7 @@ Feature: add type
     When I follow "admin.type.link"
     Then I should be on "/admin/fr/event/1/type"
     When I follow "admin.type.update.link"
-    Then I should be on "/admin/fr/event/1/type/1/update"
+    Then I should be on "/admin/fr/event/1/type/2/update"
     And I should see "admin.type.update.title"
     And I should not see "form.type_update.sheetTemplate.label"
     And I should not see "form.type_update.registrationTemplate.label"
@@ -67,7 +68,7 @@ Feature: add type
     And I fill in the following:
       | type_update_translations_fr_title | TestEditedTwo |
       | type_update_translations_en_title | TestEditedTwo |
-      | type_update_rank                  | 2          |
+      | type_update_rank                  | 2             |
     When I press "form.type_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.type.update.success"
