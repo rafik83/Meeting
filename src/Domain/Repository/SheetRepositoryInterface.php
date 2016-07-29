@@ -40,9 +40,9 @@ interface SheetRepositoryInterface
     /**
      * @param Type $type
      *
-     * @return Sheet[]
+     * @return bool
      */
-    public function getByType(Type $type);
+    public function isThereAtLeastOneByType(Type $type);
 
     /**
      * @param Event  $event

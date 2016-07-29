@@ -48,9 +48,7 @@ class TypeUpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $sheets = $this->sheetRepository->getByType($options['type']);
-
-        if (count($sheets) === 0) {
+        if (false === $this->sheetRepository->isThereAtLeastOneByType($options['type'])) {
             $builder
                 ->add('sheetTemplate', SheetTemplateChoiceType::class, [
                     'events'      => $options['events'],

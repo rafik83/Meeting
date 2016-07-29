@@ -283,16 +283,18 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByType(Type $type)
+    public function isThereAtLeastOneByType(Type $type)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet')
+            ->select('sheet.id')
             ->from(Sheet::class, 'sheet')
             ->where('sheet.type = :type')
-            ->setParameter('type', $type);
+            ->setParameter('type', $type)
+            ->setMaxResults(1)
+        ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

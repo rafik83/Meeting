@@ -119,7 +119,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
-            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType }
+            - { name: form.type }
 
     #
     # Helper
