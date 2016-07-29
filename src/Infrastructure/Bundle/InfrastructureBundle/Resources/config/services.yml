@@ -859,6 +859,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@datetime'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:

@@ -333,6 +333,21 @@ class Order
     }
 
     /**
+     * @param $id
+     *
+     * @return null|Order\Row
+     */
+    public function getRowByProductId($id) {
+        foreach($this->rows as $row) {
+            if($row->getProduct()->getId() === $id) {
+                return $row;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string $type
      *
      * @return bool

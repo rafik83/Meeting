@@ -22,7 +22,6 @@ use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -440,17 +439,19 @@ class PackageController extends Controller
                 $cart->getOptionsRow()->toArray()
             );
 
-            $availableOptionsId = array_map(
-                function (Product $product) {
-                    return $product->getId();
-                },
-                $command->sheet->getPackage()->getAvailablesOptions(new \DateTime())
-            );
-
             $options = [];
 
-            foreach ($availableOptionsId as $optionId) {
-                $options[$optionId] = isset($optionRows[$optionId]) ? $optionRows[$optionId]->getQuantity() : 0;
+            foreach ($command->sheet->getPackage()->getOptions() as $option) {
+                $orderQuantity = 0;
+                $cartQuantity  = 0;
+
+                if (isset($orderMerged) && $product = $orderMerged->getRowForProduct($option)) {
+                    $orderQuantity = $product->getQuantity();
+                } elseif (isset($optionRows[$option->getId()])) {
+                    $cartQuantity = $optionRows[$option->getId()]->getQuantity();
+                }
+
+                $options[$option->getId()] =  $orderQuantity + $cartQuantity;
             }
 
             $command->options = $options;

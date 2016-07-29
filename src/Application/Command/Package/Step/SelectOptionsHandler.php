@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Order\Merger;
 
 class SelectOptionsHandler
 {
@@ -25,13 +26,20 @@ class SelectOptionsHandler
     private $now;
 
     /**
+     * @var Merger
+     */
+    private $merger;
+
+    /**
      * @param CartManager        $cartManager
      * @param \DateTimeInterface $now
+     * @param Merger             $merger
      */
-    public function __construct(CartManager $cartManager, \DateTimeInterface $now)
+    public function __construct(CartManager $cartManager, \DateTimeInterface $now, Merger $merger)
     {
         $this->cartManager = $cartManager;
         $this->now         = $now;
+        $this->merger      = $merger;
     }
 
     /**
@@ -54,8 +62,17 @@ class SelectOptionsHandler
 
         $cart->clearOptions();
 
-        foreach ($selectOptions->options as $id => $quantity) {
-            $cart->setProduct($options[$id], $quantity);
+        if ($sheet->hasOrders()) {
+            $orderMerged = $this->merger->merge($sheet->getOrders());
+            foreach ($selectOptions->options as $id => $quantity) {
+                if ($product = $orderMerged->getRowByProductId($id)) {
+                    $cart->setProduct($options[$id], $quantity - $product->getQuantity());
+                }
+            }
+        } else {
+            foreach ($selectOptions->options as $id => $quantity) {
+                $cart->setProduct($options[$id], $quantity);
+            }
         }
 
         $this->cartManager->save($cart);
