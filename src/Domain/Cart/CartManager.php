@@ -71,10 +71,12 @@ class CartManager
     {
         $cart = $this->getCart($sheet, null);
 
-        if ($cart->getPlanRow()) {
-            $cart->resolveParticipantsQuantity();
-            $this->save($cart);
+        if ($sheet->getPackage()->isPlansEnabled() && !$cart->getPlanRow()) {
+            return;
         }
+
+        $cart->resolveParticipantsQuantity();
+        $this->save($cart);
     }
 
     /**

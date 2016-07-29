@@ -13,14 +13,14 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
 use Proximum\Vimeet\Application\Command\Package\Step;
-use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
 use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
@@ -34,14 +34,14 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\PromotionCodeType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -87,10 +87,6 @@ class PackageController extends Controller
     public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
-
-        if (!empty($sheet->getOrders())) {
-            throw $this->createNotFoundException('This sheet has already an order');
-        }
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
@@ -395,8 +391,13 @@ class PackageController extends Controller
      */
     private function assignProductsToCommand(Step\AbstractStep $command)
     {
-        $cartManager = $this->get('cart_manager');
-        $cart        = $cartManager->getCart($command->sheet, $command->currentStep);
+        $cartManager    = $this->get('cart_manager');
+        $cart           = $cartManager->getCart($command->sheet, $command->currentStep);
+        $orderMerger    = $this->get('order.merger');
+
+        if ($command->sheet->hasOrders()) {
+            $orderMerged = $orderMerger->merge($command->sheet->getOrders());
+        }
 
         if ($command instanceof Step\SelectPlan) {
             $selectedPlan = $cart->getPlanRow();
@@ -410,6 +411,11 @@ class PackageController extends Controller
 
         if ($command instanceof Step\SelectParticipantAndPlanning) {
             $planningRow = $cart->getPlanningRow();
+
+            if (isset($orderMerged)) {
+                $planning                  = $command->sheet->getPackage()->getPlanning();
+                $command->planningQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
+            }
 
             if (null !== $planningRow) {
                 $command->planningQuantity = $planningRow->getQuantity();

@@ -145,6 +145,7 @@ package:
             quantity: Quantité
             total: Total
         seeTermsOfSale: Voir les conditions générales de vente
+        edit: Editer
     funnel:
         summary: 'Récapitulatif & Facturation'
         payment: Paiement

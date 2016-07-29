@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Order;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SummaryView
 {
@@ -65,12 +66,18 @@ class SummaryView
     public $currency;
 
     /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
      * @param GroupsView         $groups
      * @param PromotionCodesView $promotionCodes
      * @param bool               $vatApplicable
      * @param float              $vatRate
      * @param string             $vatMode
      * @param string             $currency
+     * @param Sheet              $sheet
      */
     public function __construct(
         GroupsView $groups,
@@ -78,7 +85,8 @@ class SummaryView
         $vatApplicable,
         $vatRate,
         $vatMode,
-        $currency
+        $currency,
+        Sheet $sheet
     ) {
         $this->groups         = $groups;
         $this->promotionCodes = $promotionCodes;
@@ -88,6 +96,7 @@ class SummaryView
         $this->totalPlusVat   = $this->total;
         $this->vatMode        = $vatMode;
         $this->currency       = $currency;
+        $this->sheet          = $sheet;
 
         if ($vatApplicable) {
             $this->vat          = ($this->total * $vatRate) / 100;

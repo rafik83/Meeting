@@ -118,6 +118,13 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         price: 195
         data: '{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\u00eame agenda incluant une entr\u00e9e \u00e0 la convention d\u2019affaire, acc\u00e8s illimit\u00e9 \u00e0 la pause caf\u00e9 et aux conf\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}'
         product: '@product_participant_1_asddays'
+    order_3_row_4:
+        __construct: false
+        order: '@order_3'
+        quantity: 1
+        price: 495
+        data: '{"id":13,"type":"planning","translations":{"fr":{"title":"Planning supplémentaire","heading":"","description":"En fonction du nombre de rendez-vous bi validuées","addon":""},"en":{"title":"Extra planning","heading":"","description":"According to the number of bi-validated meetings","addon":""}},"productsIncluded":[]}'
+        product: '@product_planning_1_asddays'
 
 Proximum\Vimeet\Domain\Model\Order\PromotionCode:
     order_promotion_code_row_1:

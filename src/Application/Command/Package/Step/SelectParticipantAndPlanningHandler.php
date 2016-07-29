@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Order\Merger;
 
 class SelectParticipantAndPlanningHandler
 {
@@ -20,11 +21,18 @@ class SelectParticipantAndPlanningHandler
     private $cartManager;
 
     /**
-     * @param CartManager $cartManager
+     * @var Merger
      */
-    public function __construct(CartManager $cartManager)
+    private $merger;
+
+    /**
+     * @param CartManager $cartManager
+     * @param Merger      $merger
+     */
+    public function __construct(CartManager $cartManager, Merger $merger)
     {
         $this->cartManager = $cartManager;
+        $this->merger      = $merger;
     }
 
     /**
@@ -38,8 +46,19 @@ class SelectParticipantAndPlanningHandler
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
         $cart->resolveParticipantsQuantity();
 
+        if (count($sheet->getOrders()) > 0) {
+            $merged = $this->merger->merge($sheet->getOrders());
+            if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
+                $orderQuantity = $orderRow->getQuantity();
+            }
+        }
+
+        $quantity = (isset($orderQuantity)) ?
+            $selectParticipantAndPlanning->planningQuantity - $orderQuantity :
+            $selectParticipantAndPlanning->planningQuantity;
+
         if ($package && $package->getPlanning()) {
-            $cart->setProduct($package->getPlanning(), $selectParticipantAndPlanning->planningQuantity);
+            $cart->setProduct($package->getPlanning(), $quantity);
         }
 
         $this->cartManager->save($cart);

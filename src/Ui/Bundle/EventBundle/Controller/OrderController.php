@@ -108,7 +108,7 @@ class OrderController extends Controller
         $orders = $this->get('vimeet_infrastructure.repository.order_repository')
             ->findBySheet($sheet);
 
-        $orderMerger = new Merger();
+        $orderMerger = $this->get('order.merger');
         $order       = $orderMerger->merge($orders);
 
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(

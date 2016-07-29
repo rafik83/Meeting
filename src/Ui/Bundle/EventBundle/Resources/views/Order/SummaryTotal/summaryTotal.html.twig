@@ -46,10 +46,17 @@
                                     <li class="total">{{ 'summary.totalToPay'|trans }}
                                         <span>{{ view.totalPlusVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
+
+                        <div class="pull-right">
+                            <a class="btn btn-primary" href="{{ path('event_package_step', {
+                                'sheet': view.sheet.id,
+                                'step': 1
+                            }) }}">{{ 'package.summary.edit'|trans }}</a>
+                        </div>
+
                     </div>
                 </section>
             </div>
