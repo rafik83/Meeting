@@ -68,8 +68,6 @@ class StepOption
 
         $options = [];
 
-        dump($command->sheet->getPackage()->getAvailablesOptions(new \DateTime()));
-
         foreach ($command->sheet->getPackage()->getAvailablesOptions(new \DateTime()) as $option) {
             $orderQuantity = 0;
             $cartQuantity  = 0;

@@ -323,8 +323,8 @@ class Order
      */
     public function getRowForProduct(Product $product)
     {
-        foreach($this->rows as $row) {
-            if($row->getProduct() === $product) {
+        foreach ($this->rows as $row) {
+            if ($row->getProduct() === $product) {
                 return $row;
             }
         }
@@ -337,9 +337,10 @@ class Order
      *
      * @return null|Order\Row
      */
-    public function getRowByProductId($id) {
-        foreach($this->rows as $row) {
-            if($row->getProduct()->getId() === $id) {
+    public function getRowByProductId($id)
+    {
+        foreach ($this->rows as $row) {
+            if ($row->getProduct()->getId() === $id) {
                 return $row;
             }
         }
@@ -382,14 +383,20 @@ class Order
     }
 
     /**
-     * @param Order\PromotionCode $promotionCode
+     * @param Order\PromotionCode|PromotionCode $promotionCode
      *
      * @return bool
      */
-    public function hasPromotionCode(Order\PromotionCode $promotionCode)
+    public function hasPromotionCode($promotionCode)
     {
         foreach ($this->promotionCodes as $promoCode) {
-            if ($promoCode === $promotionCode) {
+            if ($promotionCode instanceof PromotionCode
+                && $promoCode->getPromotionCode() === $promotionCode
+            ) {
+                return true;
+            } elseif ($promotionCode instanceof Order\PromotionCode
+                && $promoCode === $promotionCode
+            ) {
                 return true;
             }
         }
@@ -404,7 +411,7 @@ class Order
      */
     public function getOrderRowForProduct(Product $product)
     {
-        foreach($this->rows as $orderRow) {
+        foreach ($this->rows as $orderRow) {
             if ($orderRow->getProduct() === $product) {
                 return $orderRow;
             }
