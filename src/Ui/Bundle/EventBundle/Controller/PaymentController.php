@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
@@ -53,6 +54,15 @@ class PaymentController extends Controller
         $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
         $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
 
+        //Create order from cart and redirect if total payment is negative or zero
+        if ($total <= 0) {
+            $this->get('tactician.commandbus')->handle(new Create($sheet));
+
+            return $this->redirectToRoute('event_order_list', [
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet);
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
@@ -66,7 +76,6 @@ class PaymentController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($paymentChoice);
-
                 $this->consumePackageCompletedPaymentFlash();
 
                 // This will have to redirect to payment when needed
@@ -110,7 +119,7 @@ class PaymentController extends Controller
      */
     private function consumePackageCompletedPaymentFlash()
     {
-        $sheet = $this->container->get('session')->getFlashBag()->get('package_completed_payment');
+        $sheet = $this->get('session')->getFlashBag()->get('package_completed_payment');
 
         return $sheet;
     }

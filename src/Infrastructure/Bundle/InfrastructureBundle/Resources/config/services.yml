@@ -1021,7 +1021,13 @@ services:
            - '@repository.promotion_code_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
-
+    command.order.create_handler:
+        class: Proximum\Vimeet\Application\Command\Order\CreateHandler
+        arguments:
+            - '@cart.convertor'
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Create }
 
     #
     # Security
