@@ -1228,7 +1228,7 @@ services:
         arguments:
             - '@cart_manager'
     components.step.step_command_factory:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\StepCommandFactory
+        class: Proximum\Vimeet\Application\Components\Step\StepCommandFactory
         arguments:
             - '@components.step.step_plan'
             - '@components.step.step_participant'
