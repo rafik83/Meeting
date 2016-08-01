@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Payment;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
@@ -76,8 +77,19 @@ abstract class AbstractChoiceHandler
         // Convert cart to order
         $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
 
-        // Create Transaction
-        $transaction = Transaction::createForPaypal($choice->sheet, $total, $this->datetime);
+        if (Mode::PAYMENT_PAYPAL === $choice->mode) {
+            $transaction = Transaction::createForPaypal($choice->sheet, $total, $this->datetime);
+        } else {
+            $transaction = new Transaction(
+                $choice->sheet,
+                $total,
+                $this->datetime,
+                $choice->mode,
+                null,
+                Transaction::STATE_PENDING,
+                $choice->sheet->getEvent()->getCurrency()
+            );
+        }
 
         $this->transactionRepository->add($transaction);
 

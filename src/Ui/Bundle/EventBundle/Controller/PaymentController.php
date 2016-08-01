@@ -175,7 +175,7 @@ class PaymentController extends Controller
     ) {
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $captureToken = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction);
+        $captureToken = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction, $request->getLocale());
 
         return $this->redirect($captureToken->getTargetUrl());
     }

@@ -78,6 +78,7 @@ order.transaction.no: 'Aucune'
 order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
+order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
 package.options.included: inclus
