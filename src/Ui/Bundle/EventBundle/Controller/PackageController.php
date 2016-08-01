@@ -451,7 +451,7 @@ class PackageController extends Controller
                     $cartQuantity = $optionRows[$option->getId()]->getQuantity();
                 }
 
-                $options[$option->getId()] =  $orderQuantity + $cartQuantity;
+                $options[$option->getId()] = $orderQuantity + $cartQuantity;
             }
 
             $command->options = $options;
