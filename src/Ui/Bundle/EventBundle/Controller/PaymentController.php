@@ -33,7 +33,7 @@ class PaymentController extends Controller
      */
     public function paymentChoiceAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());

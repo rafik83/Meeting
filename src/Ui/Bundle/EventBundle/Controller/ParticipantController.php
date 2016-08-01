@@ -40,7 +40,7 @@ class ParticipantController extends Controller
      */
     public function seeAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $locale             = $request->getLocale();
         $user               = $this->getUser();
@@ -83,7 +83,7 @@ class ParticipantController extends Controller
      */
     public function updateProfileAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $user               = $this->getUser();
         $locale             = $request->getLocale();
@@ -137,7 +137,7 @@ class ParticipantController extends Controller
     public function updateAvatarAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant, $key)
     {
         // to do: voter with sheet and user
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $user               = $this->getUser();
         $locale             = $request->getLocale();
@@ -215,7 +215,7 @@ class ParticipantController extends Controller
      */
     public function updateCompanyAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $user               = $this->getUser();
         $locale             = $request->getLocale();

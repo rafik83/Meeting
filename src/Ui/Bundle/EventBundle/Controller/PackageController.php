@@ -55,7 +55,7 @@ class PackageController extends Controller
      */
     public function redirectAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         try {
             $sheet = $this->get('sheet.sheet_guesser')
@@ -268,7 +268,7 @@ class PackageController extends Controller
      */
     public function addParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createNotFoundException(
                 sprintf(
@@ -311,7 +311,7 @@ class PackageController extends Controller
      */
     public function removeParticipantAction(Request $request, Sheet $sheet, $step)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createNotFoundException(
                 sprintf(
@@ -580,7 +580,7 @@ class PackageController extends Controller
      */
     private function authorizeAccess(EventDomain $eventDomain, Sheet $sheet, User $user = null)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($sheet->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createNotFoundException(

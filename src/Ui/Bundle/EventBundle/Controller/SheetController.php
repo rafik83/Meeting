@@ -45,7 +45,7 @@ class SheetController extends Controller
      */
     public function sheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
@@ -139,7 +139,7 @@ class SheetController extends Controller
      */
     public function formAction(EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -203,7 +203,7 @@ class SheetController extends Controller
      */
     public function updateAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -275,7 +275,7 @@ class SheetController extends Controller
      */
     public function addParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
@@ -324,7 +324,7 @@ class SheetController extends Controller
      */
     public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
         if (!$sheet->canBuyParticipant()) {
@@ -385,7 +385,7 @@ class SheetController extends Controller
      */
     private function removeParticipantData($eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
 

@@ -30,7 +30,7 @@ class OrderController extends Controller
      */
     public function listAction(EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $balance = $this->get('order.balance');
         $orders  = $balance->getOrders($sheet);
@@ -62,7 +62,7 @@ class OrderController extends Controller
      */
     public function proFormaAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Order $order)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
@@ -95,7 +95,7 @@ class OrderController extends Controller
      */
     public function summaryTotalAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())

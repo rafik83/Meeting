@@ -30,7 +30,7 @@ class BillingController extends Controller
      */
     public function infoAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         if (!$sheet->hasUser($this->getUser()) || $sheet->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createNotFoundException(
                 sprintf('The current user %s is not part of this sheet %s', $this->getUser()->getId(), $sheet->getId())

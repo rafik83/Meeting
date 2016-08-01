@@ -33,7 +33,7 @@ class AccountController extends Controller
      */
     public function updateEmailAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $changeMail = new ChangeMail($this->getUser(), $eventDomain->getEvent());
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [
@@ -71,7 +71,7 @@ class AccountController extends Controller
             throw $this->createNotFoundException('The token expired.');
         }
 
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
