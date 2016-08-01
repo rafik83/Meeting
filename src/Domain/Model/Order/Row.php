@@ -112,6 +112,18 @@ class Row
     }
 
     /**
+     * @param Order $order
+     *
+     * @return Order\Row
+     */
+    public function setOrder(Order $order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
      * @return Product
      */
     public function getProduct()
@@ -125,6 +137,18 @@ class Row
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     *
+     * @return Row
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
     }
 
     /**

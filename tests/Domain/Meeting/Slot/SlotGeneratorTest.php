@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Domain\Meeting\Slot;
 
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 

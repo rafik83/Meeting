@@ -28,7 +28,7 @@ class AvatarType extends AbstractType
         $template = $options['template'];
         $key      = $options['key'];
         $locale   = $options['locale'];
-        /** @var Template\Object\Image $avatar */
+        /** @var Template\TemplateObject\Image $avatar */
         $avatar   = $template->getObject($key);
 
         $builder->add($key, ImageDataType::class, [

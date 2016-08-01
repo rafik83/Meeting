@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,10 +32,10 @@ class ImageDataType extends AbstractType
             'required'    => $image->getOption('required'),
             'mapped'      => false,
             'attr'        => [
-                'accept' => implode(', ', Object\Image::supportedMimeType()),
+                'accept' => implode(', ', TemplateObject\Image::supportedMimeType()),
             ],
             'constraints' => [
-                new Image(['mimeTypes' => Object\Image::supportedMimeType()]),
+                new Image(['mimeTypes' => TemplateObject\Image::supportedMimeType()]),
             ]
         ]);
     }
@@ -46,10 +46,10 @@ class ImageDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', Object\Image::class);
+        $resolver->setAllowedTypes('object', TemplateObject\Image::class);
         $resolver->setDefaults([
             'label'       => false,
-            'data_class'  => Object\Image::class,
+            'data_class'  => TemplateObject\Image::class,
             'placeholder' => null,
             'help'        => null,
         ]);

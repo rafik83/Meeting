@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\Object\EditableText;
-use Proximum\Vimeet\Domain\Template\Object\Text;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
 
 class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
 {

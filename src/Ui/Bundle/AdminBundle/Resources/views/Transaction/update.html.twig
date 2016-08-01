@@ -3,12 +3,9 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+    <h1 class="page-header">{{ 'admin.transaction.update'|trans }}</h1>
 
-    <h2>{{ sheet_info }}</h2>
+    {{ include('AdminBundle::form.html.twig', { 'form': form }, false) }}
 
-    <h3>Modifier une transaction</h3>
-
-    {{ form(form) }}
 {% endblock %}
 

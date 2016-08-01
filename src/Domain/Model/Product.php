@@ -118,11 +118,11 @@ class Product
     private $updatable;
 
     /**
-     * The date the product quantity can be updated until.
+     * The date the product quantity can be deletable until.
      *
      * @var \DateTimeInterface
      */
-    private $updatableUntil;
+    private $deletableUntil;
 
     /**
      * Date how far the product can be sold
@@ -162,9 +162,9 @@ class Product
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
      * @param bool                    $updatable
-     * @param \DateTimeInterface|null $updatableUntil
+     * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
-     * @param \DateTimeInterface      $buyableUntil
+     * @param null|\DateTimeInterface $buyableUntil
      */
     private function __construct(
         Event $event,
@@ -176,7 +176,7 @@ class Product
         $availabilityCurrent,
         $availabilityMax,
         $updatable,
-        \DateTimeInterface $updatableUntil = null,
+        \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
     ) {
@@ -192,7 +192,7 @@ class Product
         $this->availabilityCurrent   = $availabilityCurrent;
         $this->availabilityMax       = $availabilityMax;
         $this->updatable             = $updatable;
-        $this->updatableUntil        = $updatableUntil;
+        $this->deletableUntil        = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
     }
@@ -422,15 +422,15 @@ class Product
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeInterface
      */
-    public function getUpdatableUntil()
+    public function getDeletableUntil()
     {
-        return $this->updatableUntil;
+        return $this->deletableUntil;
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return null|\DateTimeInterface
      */
     public function getBuyableUntil()
     {
@@ -649,8 +649,8 @@ class Product
     /**
      * @param string $name
      * @param string $image
-     * @param int $availabilityCurrent
-     * @param int $availabilityMax
+     * @param int    $availabilityCurrent
+     * @param int    $availabilityMax
      *
      * @return Product
      */
@@ -741,17 +741,17 @@ class Product
     }
 
     /**
-     * @param Event              $event
-     * @param string             $name
-     * @param string             $image
-     * @param int                $unitPrice
-     * @param int                $quantityMax
-     * @param int                $availabilityCurrent
-     * @param int                $availabilityMax
-     * @param bool               $updatable
-     * @param \DateTimeInterface $updatableUntil
-     * @param bool               $subjectedToValidation
-     * @param \DateTimeInterface $buyableUntil
+     * @param Event                   $event
+     * @param string                  $name
+     * @param string                  $image
+     * @param int                     $unitPrice
+     * @param int                     $quantityMax
+     * @param int                     $availabilityCurrent
+     * @param int                     $availabilityMax
+     * @param bool                    $updatable
+     * @param null|\DateTimeInterface $deletableUntil
+     * @param bool                    $subjectedToValidation
+     * @param null|\DateTimeInterface $buyableUntil
      *
      * @return Product
      */
@@ -764,7 +764,7 @@ class Product
         $availabilityCurrent,
         $availabilityMax,
         $updatable,
-        \DateTimeInterface $updatableUntil = null,
+        \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
     ) {
@@ -778,7 +778,7 @@ class Product
             $availabilityCurrent,
             $availabilityMax,
             $updatable,
-            $updatableUntil,
+            $deletableUntil,
             $subjectedToValidation,
             $buyableUntil
         );
@@ -791,7 +791,7 @@ class Product
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
      * @param bool                    $updatable
-     * @param \DateTimeInterface|null $updatableUntil
+     * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
      *
@@ -804,7 +804,7 @@ class Product
         $availabilityCurrent,
         $availabilityMax,
         $updatable,
-        \DateTimeInterface $updatableUntil = null,
+        \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
     ) {
@@ -814,7 +814,7 @@ class Product
         $this->availabilityCurrent   = $availabilityCurrent;
         $this->availabilityMax       = $availabilityMax;
         $this->updatable             = $updatable;
-        $this->updatableUntil        = $updatableUntil;
+        $this->deletableUntil        = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
 
@@ -913,6 +913,16 @@ class Product
     public function isBuyable(\DateTimeInterface $now)
     {
         return ($this->buyableUntil === null) || ($now < $this->buyableUntil);
+    }
+
+    /**
+     * @param \DateTimeInterface $now
+     *
+     * @return bool
+     */
+    public function isDeletable(\DateTimeInterface $now)
+    {
+        return ($this->deletableUntil === null) || ($now < $this->deletableUntil);
     }
 
     /**

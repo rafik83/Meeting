@@ -3,7 +3,7 @@
 Feature: Manage templates
   As an Admin, I need to be able to add, update, duplicate, see templates
 
-  Scenario: see list of templates
+  Scenario: See list of templates
     Given the database is empty
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
@@ -20,7 +20,7 @@ Feature: Manage templates
     Then I should be on this page "/admin/fr/template/registration"
     And I should see "Template d'inscription de base"
 
-  Scenario: edit Registration Template
+  Scenario: Edit Registration Template
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/template/registration"
     And I should see "Template d'inscription de base"
@@ -30,3 +30,19 @@ Feature: Manage templates
     And I press "template_registration_update_submit"
     Then I should be on this page "/admin/fr/template/registration/1/fr"
     And I should see "flash.admin.template.registration.update.success"
+
+  Scenario: Edit Sheet Template
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/template/sheet"
+    And I should see "Template de présentation de base"
+    When I follow "admin.template.action.edit"
+    Then I should be on this page "/admin/fr/template/sheet/1/fr"
+    And I should see "Template de présentation de base"
+    And I should see "template.object.editable-text"
+    And I should see "template.object.image"
+    And I should see "template.object.tags"
+    And I should see "template.object.collection"
+    And I should see "template.object.nomenclature"
+    And I should see "template.object.text"
+    And I should see "template.object.media"
+    And I should see "template.participant.title"

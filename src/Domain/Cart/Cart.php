@@ -209,7 +209,7 @@ class Cart
     /**
      * @param Product $product
      *
-     * @return CartRow
+     * @return null|CartRow
      */
     public function getCartRowForProduct(Product $product)
     {
@@ -275,7 +275,7 @@ class Cart
     }
 
     /**
-     * @return int|null
+     * @return null|int
      */
     public function getCurrentStep()
     {

@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class SynchronizerTest extends \PHPUnit_Framework_TestCase
@@ -32,17 +32,17 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $text  = new Object\Text('text', [], $locale, $locale);
-        $editableText1 = new Object\EditableText('editable-text', [
+        $text  = new TemplateObject\Text('text', [], $locale, $locale);
+        $editableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
-        $editableText2 = new Object\EditableText('editable-text', [
+        $editableText2 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
-        $telephone1    = new Object\Telephone('telephone', [
+        $telephone1    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);
-        $telephone2    = new Object\Telephone('telephone', [
+        $telephone2    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_mobile'],
         ], $locale, $locale);
 
@@ -59,20 +59,20 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $expectedBlock = new Block('12', [], 'fr', 'fr');
-        $expectedText  = new Object\Text('text', [], $locale, $locale);
-        $expectedEditableText1 = new Object\EditableText('editable-text', [
+        $expectedText  = new TemplateObject\Text('text', [], $locale, $locale);
+        $expectedEditableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
         $expectedEditableText1->setContentValue('Test');
-        $expectedEditableText2 = new Object\EditableText('editable-text', [
+        $expectedEditableText2 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
         $expectedEditableText2->setContentValue('Truc');
-        $expectedTelephone1    = new Object\Telephone('telephone', [
+        $expectedTelephone1    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);
         $expectedTelephone1->setContentValue('Foo');
-        $expectedTelephone2    = new Object\Telephone('telephone', [
+        $expectedTelephone2    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_mobile'],
         ], $locale, $locale);
         $expectedTelephone2->setContentValue('Bar');
@@ -101,20 +101,20 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $text  = new Object\Text('text', [], $locale, $locale);
-        $editableText1 = new Object\EditableText('editable-text', [
+        $text  = new TemplateObject\Text('text', [], $locale, $locale);
+        $editableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
         $editableText1->setContentValue('Test');
-        $editableText2 = new Object\EditableText('editable-text', [
+        $editableText2 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
         $editableText2->setContentValue('Truc');
-        $telephone1    = new Object\Telephone('telephone', [
+        $telephone1    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);
         $telephone1->setContentValue('Foo');
-        $telephone2    = new Object\Telephone('telephone', [
+        $telephone2    = new TemplateObject\Telephone('telephone', [
             'tags' => ['participant_mobile'],
         ], $locale, $locale);
         $telephone2->setContentValue('Bar');

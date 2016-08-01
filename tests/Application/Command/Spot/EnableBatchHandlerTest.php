@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Spot;
 
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatchHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 

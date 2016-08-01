@@ -98,7 +98,7 @@ class LoginEventListener
             return;
         }
 
-        $sheets = $this->sheetRepository->getSheetByUserAndEvent($user, $event);
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
         foreach ($sheets as $sheet) {
             $this->sheetRepository->set($sheet->setLastLoginAt(new \DateTime()));

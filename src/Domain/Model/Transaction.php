@@ -94,15 +94,17 @@ class Transaction
      * @param \DateTimeInterface $date
      * @param string             $mode
      * @param string             $reference
+     * @param string             $state
      *
      * @return Transaction
      */
-    public function update($amount, \DateTimeInterface $date, $mode, $reference)
+    public function update($amount, \DateTimeInterface $date, $mode, $reference, $state)
     {
         $this->amount    = $amount;
         $this->date      = $date;
         $this->mode      = $mode;
         $this->reference = $reference;
+        $this->state     = $state;
 
         return $this;
     }

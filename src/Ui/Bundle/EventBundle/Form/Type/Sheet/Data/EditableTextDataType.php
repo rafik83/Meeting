@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
