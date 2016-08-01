@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Payment;
 
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 
 class ChoiceWithDepositHandler extends AbstractChoiceHandler
@@ -18,6 +19,7 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
     /**
      * @param ChoiceWithDeposit $choice
      *
+     * @return Transaction
      * @throws DepositNotAvailableException
      */
     public function handle(ChoiceWithDeposit $choice)
@@ -34,6 +36,6 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
             $total = $totalDeposit;
         }
 
-        $this->handleChoice($choice, $total);
+        return $this->handleChoice($choice, $total);
     }
 }

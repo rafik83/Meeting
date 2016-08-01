@@ -285,7 +285,9 @@ admin:
         state:
             pending: En attente
             paid: Réglé
+            cancelled: Annulé
         mode:
+            paypal: Paypal
             bank_card: Carte bleue
             bank_transfer: Virement
             bank_check: Chèque

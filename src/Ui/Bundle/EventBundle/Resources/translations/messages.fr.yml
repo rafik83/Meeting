@@ -247,7 +247,9 @@ order:
         state:
             pending: En attente
             paid: Réglé
+            cancelled: Annulé
         mode:
-            bank_card: Carte bleu
+            paypal: Paypal ou Carte bleue
+            bank_card: Carte bleue
             bank_transfer: Transfert
             bank_check: Chèque
