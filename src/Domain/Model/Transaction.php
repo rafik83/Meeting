@@ -68,7 +68,7 @@ class Transaction
      * @param float              $amount
      * @param \DateTimeInterface $date
      * @param string             $mode
-     * @param string             $reference
+     * @param null|string        $reference
      * @param string             $state
      * @param string             $currency
      */
@@ -218,5 +218,25 @@ class Transaction
     public function setCancelled()
     {
         $this->state = self::STATE_CANCELLED;
+    }
+
+    /**
+     * @param Sheet              $sheet
+     * @param float              $amount
+     * @param \DateTimeInterface $date
+     *
+     * @return Transaction
+     */
+    public static function createForPaypal(Sheet $sheet, $amount, \DateTimeInterface $date)
+    {
+        return new self(
+            $sheet,
+            $amount,
+            $date,
+            Mode::PAYMENT_PAYPAL,
+            null,
+            self::STATE_PENDING,
+            $sheet->getEvent()->getCurrency()
+        );
     }
 }

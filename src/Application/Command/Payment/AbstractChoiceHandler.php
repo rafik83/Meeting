@@ -77,15 +77,7 @@ abstract class AbstractChoiceHandler
         $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
 
         // Create Transaction
-        $transaction = new Transaction(
-            $choice->sheet,
-            $total,
-            $this->datetime,
-            $choice->mode,
-            null,
-            Transaction::STATE_PENDING,
-            $choice->sheet->getEvent()->getCurrency()
-        );
+        $transaction = Transaction::createForPaypal($choice->sheet, $total, $this->datetime);
 
         $this->transactionRepository->add($transaction);
 

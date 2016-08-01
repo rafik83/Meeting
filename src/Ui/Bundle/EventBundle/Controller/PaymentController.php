@@ -131,16 +131,7 @@ class PaymentController extends Controller
             return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
         }
 
-        $transaction = new Transaction(
-            $sheet,
-            $remainingToPay,
-            new \DateTime(),
-            Mode::PAYMENT_PAYPAL,
-            '',
-            Transaction::STATE_PENDING,
-            $sheet->getEvent()->getCurrency()
-        );
-
+        $transaction = Transaction::createForPaypal($sheet, $remainingToPay, new \DateTime());
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute('event_package_payment_prepare_paypal', [
@@ -159,16 +150,7 @@ class PaymentController extends Controller
     ) {
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $transaction = new Transaction(
-            $sheet,
-            200,
-            new \DateTime(),
-            Mode::PAYMENT_PAYPAL,
-            '',
-            Transaction::STATE_PENDING,
-            $sheet->getEvent()->getCurrency()
-        );
-
+        $transaction = Transaction::createForPaypal($sheet, rand(1, 200), new \DateTime());
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute(
@@ -193,7 +175,7 @@ class PaymentController extends Controller
     ) {
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $captureToken = $status = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction);
+        $captureToken = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction);
 
         return $this->redirect($captureToken->getTargetUrl());
     }
