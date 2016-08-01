@@ -1,721 +1,471 @@
-greetings: 'Bonjour !'
-
+account.update_email.title: 'Changer mon email'
+account.update.title: 'Modifier mon compte'
+admin.account.content.password: 'Modifier mon mot de passe'
+admin.account.link: 'Mon compte'
+admin.account.title: 'Mon compte'
+admin.account.update_password.title: 'Modifier mon mot de passe'
+admin.activateAccount.password.title: 'Création du mot de passe pour votre compte collaborateur'
+admin.admin_list.action.create: 'Créer un nouvel utilisateur'
+admin.admin_list.filter.empty_filter: 'Vider les filtres'
+admin.admin_list.link: Utilisateurs
+admin.admin_list.table.content.admin.events.none: Aucun
+admin.admin_list.table.content.super_admin.events.all: Tous
+admin.admin_list.table.content.update: Éditer
+admin.admin_list.table.title.actions: Actions
+admin.admin_list.table.title.email: Email
+admin.admin_list.table.title.events: Événéments
+admin.admin_list.table.title.firstname: Prénom
+admin.admin_list.table.title.lastname: Nom
+admin.admin_list.table.title.role: Type
+admin.admin_list.title: 'Liste des utilisateurs du backoffice'
+admin.batch_actions.plural: 'Actions batch sur %count% éléments'
+admin.batch_actions.single: 'Actions batch sur un élément'
+admin.cancel: Annuler
+admin.category.add: Ajouter
+admin.category.link: 'Catégories de participation'
+admin.category.update: Modifier
+admin.check-all: 'Tout cocher'
+admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
+admin.event.billing.configuration.link: 'Information facturation'
+admin.event.billing.configuration.title: 'Configuration des informations de facturation'
+admin.event.configuration.key_dates.title: 'Date clé de l''événement'
+admin.event.create.title: 'Créer un événement'
+admin.event.fallback: 'Par défaut'
+admin.event.languages: Langues
+admin.event.paymentConditions.link: 'Conditions de paiement'
+admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
+admin.event.practicalInfo.link: 'Informations Pratiques'
+admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.see_on_front.link: 'Voir le site'
+admin.event.see.link: Voir
+admin.event.settings.link: 'Paramétrages de l''évènement'
+admin.event.template.link: Templates
+admin.event.template.package: 'Forfait de participation'
+admin.event.template.registration: Inscription
+admin.event.template.sheet: Présentation
+admin.event.title: Titre
+admin.event.update.link: Modifier
+admin.event.update.title: 'Modifier l''évènement'
+admin.event.vatMode.ati: TTC
+admin.event.vatMode.et: HT
+admin.events.link: 'Mes évènements'
+admin.filter: Filtrer
+admin.filter_by: 'Filtrer par'
+admin.filters.all: Tous
+admin.filters.reset: 'Réinitialiser les filtres'
+admin.global_nomenclature.title: 'Nomenclatures globales'
+admin.goback.link: Retour
+admin.happening_category.add: Ajouter
+admin.happening_category.addTitle: 'Ajouter une catégorie de conférences'
+admin.happening_category.link: 'Catégories de conférences'
+admin.happening_category.table.column.picto: Picto
+admin.happening_category.table.column.position: Position
+admin.happening_category.table.column.title: Titre
+admin.happening_category.title: 'Catégories de conférences'
+admin.happening_category.update: Modifier
+admin.happening_category.updateTitle: 'Modifier une catégorie de conférences'
+admin.happening_speaker.action.confirmDelete: 'Confirmer la suppression'
+admin.happening_speaker.action.delete: Supprimer
+admin.happening_speaker.action.edit: Modifier
+admin.happening_speaker.action.see: Voir
+admin.happening_speaker.add: Ajouter
+admin.happening_speaker.addTitle: 'Ajouter un intervenant'
+admin.happening_speaker.happenings: Conférences
+admin.happening_speaker.link: Intervenants
+admin.happening_speaker.no-result: 'Aucun intervenant.'
+admin.happening_speaker.speakerName: 'Intervenant %name%'
+admin.happening_speaker.table.column.company: Société
+admin.happening_speaker.table.column.function: Fonction
+admin.happening_speaker.table.column.logoCompany: 'Logo de la société'
+admin.happening_speaker.table.column.name: Nom
+admin.happening_speaker.table.column.photo: 'Photo de l''intervenant'
+admin.happening_speaker.table.column.subEvent: Sous-événements
+admin.happening_speaker.title: Intervenants
+admin.happening_speaker.update: Modifier
+admin.happening_speaker.updateTitle: 'Modifier un intervenant'
+admin.happening.add: Ajouter
+admin.happening.addTitle: 'Ajouter une conférence'
+admin.happening.link: Conférences
+admin.happening.list.begin: Début
+admin.happening.list.end: Fin
+admin.happening.list.speaker: Intervenants
+admin.happening.list.title: Titre
+admin.happening.title: Conférences
+admin.happening.update: Modifier
+admin.happening.updateTitle: 'Modifier une conférence'
+admin.login.logged_as: '%firstname% %lastname% (%role%)'
+admin.meeting_request_sheets_list.link: 'Par fiche de participation'
+admin.meeting_request.createdAt: 'Date de création'
+admin.meeting_request.details: Détail
+admin.meeting_request.from: De
+admin.meeting_request.link: 'Demandes de rendez-vous'
+admin.meeting_request.set_a_meeting: 'Placer un RDV'
+admin.meeting_request.state.approved: Accepté
+admin.meeting_request.state.cancelled: Annulé
+admin.meeting_request.state.refused: Refusé
+admin.meeting_request.state.sent: Envoyé
+admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
+admin.meeting_request.to: À
+admin.meeting.link: Rendez-vous
+admin.menu.link: Menu
+admin.new.link: Ajouter
+admin.nomenclature.assign.modal.title: 'Assigner à un événement'
+admin.nomenclature.create.button: 'Nouvelle nomenclature'
+admin.nomenclature.create.modal.close: Fermer
+admin.nomenclature.create.modal.title: 'Créer une nomenclature'
+admin.nomenclature.link: Nomenclatures
+admin.nomenclature.read.assign.button: 'Assigner à un événement'
+admin.nomenclature.read.configuration.title: Configuration
+admin.nomenclature.read.export.button: Exporter
+admin.nomenclature.read.export.help: 'Le fichier exporter contient une clé pour chaque ligne, la modification d''une de ces lignes modifiera l''élément correspondant. L''ajout d''une ligne sans clé créera un nouvel élément. La suppression n''est plus possible une fois que l''événement a des participants.'
+admin.nomenclature.read.export.title: Export
+admin.nomenclature.read.import.button: Importer
+admin.nomenclature.read.import.title: Import
+admin.nomenclature.table.depth: '%depth% niveau|%depth% niveaux'
+admin.nomenclature.table.read: Voir
+admin.nomenclature.table.title: Titre
+admin.nomenclature.title: Nomenclatures
+admin.operator_list.action.create: 'Créer un nouveau collaborateur'
+admin.operator_list.filter.empty_filter: 'Vider les filtres'
+admin.operator_list.link: 'Liste des collaborateurs'
+admin.operator_list.table.content.admin.events.none: Aucun
+admin.operator_list.table.content.update: Editer
+admin.operator_list.table.title.actions: Actions
+admin.operator_list.table.title.email: Email
+admin.operator_list.table.title.events: Événéments
+admin.operator_list.table.title.firstname: Prénom
+admin.operator_list.table.title.lastLoginAt: 'Date de dernière connexion'
+admin.operator_list.table.title.lastname: Nom
+admin.operator_list.title: 'Liste des collaborateurs'
+admin.operator.create.title: 'Créer un nouveau collaborateur'
+admin.operator.update.title: 'Editer un collaborateur'
+admin.order.createdAt: 'Créée le'
+admin.order.follower: 'Suivi commercial'
+admin.order.id: Id
+admin.order.link: Commandes
+admin.order.sheet: Fiche
+admin.order.title: 'Liste des commandes'
+admin.order.total: Total
+admin.order.type: 'Type de participation'
+admin.organizer_template_list.table.column.action: Action
+admin.organizer_template_list.table.column.date: 'Date de création'
+admin.organizer_template_list.table.column.locales: Langues
+admin.organizer_template_list.table.column.title: Titre
+admin.package.create: 'Créer un template'
+admin.package.duplicate: Dupliquer
+admin.package.link: 'Template de forfait de participation'
+admin.package.steps.step1.label: Formules
+admin.package.steps.step2.label: 'Participants & Plannings'
+admin.package.steps.step3.label: Options
+admin.package.table.column.event: Evènement
+admin.package.table.column.title: Titre
+admin.package.title: 'Template de forfait de participation'
+admin.package.update: Modifier
+admin.plan_create.title: 'Ajouter une formule au catalogue'
+admin.plan.link: 'Catalogue de formules'
+admin.plan.name: Nom
+admin.plan.productIncluded: 'Produits inclus'
+admin.plan.title: 'Catalogue de formules'
+admin.plan.unitPrice: 'Prix unitaire'
+admin.product_create.option.title: 'Ajouter un produit'
+admin.product_create.participant.title: 'Ajouter un produit participant'
+admin.product_create.plan.title: 'Ajouter une formule'
+admin.product_create.planning.title: 'Ajouter un produit planning'
+admin.product_update.option.title: 'Modifier un produit'
+admin.product_update.participant.title: 'Modifier un participant'
+admin.product_update.plan.title: 'Modifier une formule'
+admin.product_update.planning.title: 'Modifier un planning'
+admin.product.actions: Actions
+admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
+admin.product.bought: 'Nombre achetés'
+admin.product.buyableUntil: 'Achetable jusqu''au'
+admin.product.deletableUntil: 'Supprimable jusqu''au'
+admin.product.link: 'Catalogue de produits'
+admin.product.name: Nom
+admin.product.quantityMax: 'Qté max'
+admin.product.subjectedToValidation: 'Soumis à validation'
+admin.product.title: 'Catalogue de produits'
+admin.product.unitPrice: 'Prix unitaire'
+admin.product.updatable: Supprimable
+admin.product.update.action: Modifier
+admin.promotion_code.action.close: Fermer
+admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
+admin.promotion_code.link: 'Codes promos'
+admin.promotion_code.new: 'Nouveau code'
+admin.promotion_code.table.action.edit: Modifier
+admin.promotion_code.table.column.action: Action
+admin.promotion_code.table.column.code: Code
+admin.promotion_code.table.column.stock: Stock
+admin.promotion_code.table.column.title: Titre
+admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'
+admin.promotion_code.table.no_result: 'Aucun code promo'
+admin.promotion_code.title: 'Codes promos'
+admin.role.ROLE_OPERATOR: Collaborateur
+admin.role.ROLE_ORGANIZER: Organisateur
+admin.role.ROLE_SUPER_ADMIN: Admin
+admin.rule.link: 'Qui voit qui'
+admin.schedule.link: Agenda
+admin.schedule.slot.lock: Bloquer
+admin.schedule.slot.locked: Bloqué
+admin.schedule.slot.unlock: Débloquer
+admin.schedule.slot.unlocked: Débloqué
+admin.schedule.slots.generate.action: 'Générer des créneaux'
+admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
+admin.schedule.slots.table.begin: De
+admin.schedule.slots.table.duration: Durée
+admin.schedule.slots.table.end: à
+admin.schedule.slots.title: 'Créneaux de rendez-vous'
+admin.schedule.title: Agenda
+admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
+admin.sheet.category: Catégorie
+admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
+admin.sheet.created_this_week: 'Inscrits cette semaine'
+admin.sheet.created_today: 'Inscrits aujourd''hui'
+admin.sheet.createdAt: 'Date inscription'
+admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
+admin.sheet.details.comments.title: Commentaires
+admin.sheet.details.historic.title: Historique
+admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
+admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
+admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'
+admin.sheet.details.meeting.proposition.title: 'Propositions de rendez-vous'
+admin.sheet.details.meeting.request.approved: 'Demandes validées'
+admin.sheet.details.meeting.request.pending: 'Demandes en attente'
+admin.sheet.details.meeting.request.refused: 'Demandes refusées'
+admin.sheet.details.meeting.request.title: 'Demandes de rendez-vous'
+admin.sheet.details.orders: Commandes
+admin.sheet.details.owner_not_participant.title: 'Propriétaire mais non participant'
+admin.sheet.details.owner.email: Email
+admin.sheet.details.owner.mobile: Mobile
+admin.sheet.details.owner.phone: Téléphone
+admin.sheet.details.owner.title: Propriétaire
+admin.sheet.details.participant.title: Participant
+admin.sheet.details.participants: Participants
+admin.sheet.details.remainingToPay: 'Solde restant dû'
+admin.sheet.details.transactions: Transactions
+admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
+admin.sheet.follower: 'Suivi commercial'
+admin.sheet.impersonate: Impersonnation
+admin.sheet.lastLoginAt: 'Dernière connexion'
+admin.sheet.link: Participations
+admin.sheet.read: Voir
+admin.sheet.state: Etat
+admin.sheet.title: Participations
+admin.sheet.trace.accept: 'Acceptée le %at%'
+admin.sheet.trace.author: 'par %by%'
+admin.sheet.trace.auto: automatiquement
+admin.sheet.trace.comment: 'avec le commentaire: %comment%'
+admin.sheet.trace.validate: 'Validée le %at%'
+admin.sheet.type: Type
+admin.sheet.validate: Valider
+admin.spot.active.no: Non
+admin.spot.active.yes: Oui
+admin.spot.batch_create.title: 'Créer des lieux par lot'
+admin.spot.configure_dates: 'Dates clés'
+admin.spot.createSpot.title: 'Créer un lieu'
+admin.spot.delete: Supprimer
+admin.spot.disable: Désactiver
+admin.spot.enable: Activer
+admin.spot.link: Lieux
+admin.spot.list.checkbox: 'Case à cocher'
+admin.spot.listSpot.active: Actif
+admin.spot.listSpot.add: 'Créer un lieu'
+admin.spot.listSpot.meetingCapacity: 'Nombre de rendez-vous en simultané'
+admin.spot.listSpot.no: Non
+admin.spot.listSpot.reference: Identifiant
+admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
+admin.spot.listSpot.size: 'Taille (en m²)'
+admin.spot.listSpot.yes: Oui
+admin.spot.title: Lieux
+admin.template_list.link: Templates
+admin.template_list.organizer_link: 'Mes Templates'
+admin.template.action.addLanguage: 'Ajouter une langue'
+admin.template.action.close: Fermer
+admin.template.action.create: 'Créer un template'
+admin.template.action.duplicate: Dupliquer
+admin.template.action.edit: Modifier
+admin.template.action.save: Enregistrer
+admin.template.registration.link: 'Template d''Inscription'
+admin.template.registration.table.column.action: Action
+admin.template.registration.table.column.createdAt: 'Créé le'
+admin.template.registration.table.column.eventType: Événement/Type(s)
+admin.template.registration.table.column.title: Titre
+admin.template.registration.table.content.edit: Modifier
+admin.template.registration.title: 'Templates d''Inscription'
+admin.template.registration.titleOrganizer: 'Templates d''Inscription des organisateurs'
+admin.template.registration.update: 'Modifier le template d''Inscription'
+admin.template.sheet.link: 'Template de présentation'
+admin.template.sheet.table.column.action: Action
+admin.template.sheet.table.column.eventType: Événement/Type(s)
+admin.template.sheet.table.column.title: Titre
+admin.template.sheet.titleBase: 'Templates globaux'
+admin.template.sheet.titleEvent: 'Templates assignés'
+admin.transaction.add: Ajouter
+admin.transaction.column.date: Date
+admin.transaction.column.mode: 'Mode de paiement'
+admin.transaction.column.reference: Commentaire
+admin.transaction.column.state: Statut
+admin.transaction.column.total: Total
+admin.transaction.create: 'Ajouter une transaction'
+admin.transaction.edit: Modifier
+admin.transaction.mode.bank_card: 'Carte bleue'
+admin.transaction.mode.bank_cash: Liquide
+admin.transaction.mode.bank_check: Chèque
+admin.transaction.mode.bank_transfer: Virement
+admin.transaction.mode.paypal: Paypal
+admin.transaction.remove: Supprimer
+admin.transaction.state.cancelled: Annulé
+admin.transaction.state.paid: Réglé
+admin.transaction.state.pending: 'En attente'
+admin.transaction.update: 'Modifier une transaction'
+admin.type.already_exists: 'Un type de participation au titre identique existe déjà'
+admin.type.create.link: Ajouter
+admin.type.create.title: 'Ajouter un type de participation'
+admin.type.link: 'Types de participation'
+admin.type.position: Position
+admin.type.title: Titre
+admin.type.update.link: Modifier
+admin.type.update.title: 'Modifier le type de participation'
+admin.update_admin.title: 'Modifier un utilisateur du backoffice'
+admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
+admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
+admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'
-
-login:
-    title: Connexion
-    link: Connexion
-    forgotPassword: Mot de passe oublié ?
-
-logout:
-    title: Déconnecter
-    link: Déconnecter
-    confirmation: Êtes vous sûr de vouloir vous déconnecter de votre compte ?
-
-change_password:
-    title: Changer le mot de passe
-    link: Changer le mot de passe
-
-register:
-    email_already_exists: Un compte associé à cette adresse mail existe déjà
-
-reset_password:
-    title: Demande de nouveau mot de passe
-
-new_password:
-    title: Créer un nouveau mot de passe
-
-account:
-    update:
-        title: Modifier mon compte
-    update_email:
-        title: Changer mon email
-
-event:
-    link:
-        see_my_sheet: 'Voir ma fiche %type%'
-        see_catalog: Voir le catalogue
-        see_schedule: 'Voir mon agenda %type%'
-        see_meeting_request: Voir mes demandes de rendez-vous
-        see_meeting_proposition: Voir mes propositions de rendez-vous
-        go_back_to_sheet: Retourner à la fiche
-        product:
-            cancel: Annuler
-    sheet:
-        state:
-            pending: En attente
-            validated: Validée
-            accepted: Acceptée
-        completed:
-            complete: Complète
-            incomplete: Incomplète
-        participant:
-            already_exists: Ce participant est déjà ajouté
-            email: Adresse email
-            owner: Propriétaire
-            guest: Invité
-        block:
-            participants:
-                title: Participants
-            add_participant:
-                title: Remplir ce participant
-            buy_participant:
-                title: Ajouter un participant
-                option: Option
-            update_participant:
-                title: Modifier
-            edit: Modifier
-            delete_participant:
-                title: Supprimer ce participant
-        add_participant:
-            title: Ajouter un participant
-        package:
-            products:
-                title: Sélectionner des produits à ajouter à ma fiche
-            include: Inclus avec votre forfait
-            includeQuantity: '{0} Inclus avec votre forfait|{1} %count% est déjà inclus avec votre forfait|]1,Inf[ %count% sont déjà inclus avec votre forfait'
-            step:
-                next: Choisir votre forfait
-            column:
-                choices: Choix
-                label: Intitulé
-                description: Description
-                unitPrice: Prix unitaire
-                quantity: Quantité
-            participant:
-                boughtNumber: '{0}|{1} Vous avez déjà ajouté %count% participant sur votre fiche|]1,Inf[ Vous avez déjà ajouté %count% participants sur votre fiche'
-        billing:
-            title: Facturation
-        payment:
-            title: Mode de paiement
-            description: Choisissez votre mode de paiement
-        listOrders:
-            title: Liste de vos commandes
-            proForma: Visualiser la pro-forma
-        cart:
-            title: Récapitulatif de votre panier
-            column:
-                product: Produit
-                unitPrice: Prix unitaire
-                quantity: Quantité
-                total: Total
-            label:
-                totalPrice: Total
-                billingStep: Passer à l'étape de facturation
-            includeTitle: 'Inclus avec %product%'
-            include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
-            empty: Aucun produit dans le panier
-            totalWithoutTaxes: Total HT
-        summary:
-            title: Récapitulatif de participation
-            update_product: Modifier
-            product: Produit
-            unit_price: Prix unitaire
-            quantity: Quantité
-            total: Total
-            action: Action
-        update_product:
-            title: Modifier un produit commandé
-    meeting:
-        listRequest:
-            title: Liste de vos demandes de rendez-vous
-            state: Statut
-            to: A destination de
-            participants: Les participants
-            informations: Informations
-            createdAt: Envoyé le
-            actions: Actions
-            cancel: Annuler
-            show: Voir
-            edit: Modifier
-        listProposition:
-            title: Liste de vos propositions de rendez-vous
-            state: Statut
-            from: Venant de
-            participants: Les participants
-            yourParticipants: Vos participants
-            description: Description
-            createdAt: Reçu le
-            informations: Informations
-            accept: Accepter
-            refuse: Refuser
-            actions: Actions
-            show: Voir
-            edit: Modifier
-        showDetailsRequest:
-            title: Détails de la demande de rendez-vous
-            to: A destination de
-            from: Provenant de
-            participants: Les participants
-            message: Votre conversation
-            state: Statut
-        request:
-            state:
-                from:
-                    sent: Envoyé
-                    approved: Accepté
-                    refused: Refusé
-                    cancelled: Annulé
-                to:
-                    sent: Reçu
-                    approved: Accepté
-                    refused: Refusé
-                    cancelled: Annulé
-        createRequest:
-            title: Demande de rendez-vous
-            destination: 'Pour %toName% avec la fiche %fromName%'
-        editRequest:
-            title: Modifiez une demande de rendez-vous
-            destination: 'Pour %toName% avec la fiche %fromName%'
-        approvedRequest:
-            title: Accepter la proposition de rendez vous
-            label: 'De %fromName% pour %toName%'
-        refusedRequest:
-            title: Refuser la proposition de rendez vous
-            label: 'De %fromName% pour %toName%'
-        cancelRequest:
-            title: Annuler la demande de rendez-vous
-            label: 'De %fromName% pour %toName%'
-        refusedRequest:
-            title: Refuser la proposition de rendez vous
-            label: 'De %fromName% pour %toName%'
-        cancelRequest:
-            title: Annuler la demande de rendez-vous
-            label: 'De %fromName% pour %toName%'
-    schedule:
-        columns:
-            meeting:
-                title: Rendez-vous
-            happening:
-                title: Sous-événements
-            unavailability:
-                title: Indisponibilités
-    catalog:
-        sheet:
-            meetingRequest: Demander un rendez-vous
-        category:
-            seeSheet: Voir la fiche
-    activateAccount:
-        password: Définir votre mot de passe
-
-who:
-    see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
-    the:
-        category: la catégorie
-        type: le type
-
-notification:
-    participant:
-        added:
-            action: Participant ajouté
-        removed:
-            action: Participant retiré
-    meeting_request:
-        canceled:
-            withoutMessage: Demande annulée par %sheetName%
-            withMessage: 'Demande annulée par %sheetName% pour le motif suivant : "%message%"'
-            action: Demande de RDV annulée
-        refused:
-            withoutMessage: Demande refusée par %sheetName%
-            withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
-            action: Demande de RDV refusée
-        participant:
-            removed:
-                message: 'Participant retiré par %sheetName% pour le motif suivant : "%message%"'
-            added:
-                message: 'Participant ajouté par %sheetName% pour le motif suivant : "%message%"'
-
-message:
-    admin:
-        order:
-            remove_row:
-                confirm: Confirmer la suppression
-        transaction:
-            remove:
-                confirm: Confirmer la suppression
-
-admin:
-    filter: Filtrer
-    filter_by: Filtrer par
-    filters:
-        all: Tous
-        reset: Réinitialiser les filtres
-    new:
-        link: Ajouter
-    check-all: Tout cocher
-    batch_actions:
-        single: Actions batch sur un élément
-        plural: 'Actions batch sur %count% éléments'
-    goback:
-        link: Retour
-    zero-result: Aucun résultat
-    cancel: Annuler
-    menu:
-        link: Menu
-    events:
-        link: Mes évènements
-    role:
-        ROLE_OPERATOR: Collaborateur
-        ROLE_ORGANIZER: Organisateur
-        ROLE_SUPER_ADMIN: Admin
-    account:
-        link: Mon compte
-        title: Mon compte
-        content:
-            password: Modifier mon mot de passe
-        update_password:
-            title: Modifier mon mot de passe
-    order:
-        link: Commandes
-        title: Liste des commandes
-        id: Id
-        sheet: Fiche
-        type: Type de participation
-        follower: Suivi commercial
-        createdAt: Créée le
-        total: Total
-    transaction:
-        column:
-            date: Date
-            state: Statut
-            mode: Mode de paiement
-            total: Total
-            reference: Commentaire
-        state:
-            pending: En attente
-            paid: Réglé
-            cancelled: Annulé
-        mode:
-            paypal: Paypal
-            bank_card: Carte bleue
-            bank_transfer: Virement
-            bank_check: Chèque
-            bank_cash: Liquide
-        add: Ajouter
-        edit: Modifier
-        remove: Supprimer
-        create: Ajouter une transaction
-        update: Modifier une transaction
-
-    product:
-        link: Catalogue de produits
-        title: Catalogue de produits
-        name: Nom
-        unitPrice: Prix unitaire
-        quantityMax: Qté max
-        availabilityCurrentMax: Disponibilité courante / max
-        subjectedToValidation: Soumis à validation
-        buyableUntil: Achetable jusqu'au
-        updatable: Supprimable
-        deletableUntil: Supprimable jusqu'au
-        bought: Nombre achetés
-        actions: Actions
-        update:
-          action: Modifier
-    promotion_code:
-        link: Codes promos
-        title: Codes promos
-        new: Nouveau code
-        action:
-            close: Fermer
-        table:
-            column:
-                title: Titre
-                code: Code
-                stock: Stock
-                validUntil: Valide jusqu'au
-                action: Action
-            action:
-                edit: Modifier
-            no_result: Aucun code promo
-        error:
-            non_unique_code: Ce code est déjà utilisé
-    sheet:
-        title: Participations
-        link: Participations
-        read: Voir
-        validate: Valider
-        commercialFollowUp: Attribuer le suivi commercial
-        impersonate: Impersonnation
-        exit_impersonation: Quitter l'impersonnation
-        acceptedAt: 'Acceptée le %at% par %by%'
-        trace:
-            accept: 'Acceptée le %at%'
-            author: 'par %by%'
-            comment: 'avec le commentaire: %comment%'
-            auto: 'automatiquement'
-            validate: 'Validée le %at%'
-        details:
-            orders: Commandes
-            transactions: Transactions
-            remainingToPay: Solde restant dû
-            participants: Participants
-            owner:
-                email: Email
-                phone: Téléphone
-                mobile: Mobile
-                title: Propriétaire
-            owner_not_participant:
-                title: Propriétaire mais non participant
-            meeting:
-                request:
-                    title: Demandes de rendez-vous
-                    approved: Demandes validées
-                    pending: Demandes en attente
-                    refused: Demandes refusées
-                proposition:
-                    title: Propositions de rendez-vous
-                    approved: Propositions validées
-                    pending: Propositions en attente
-                    refused: Propositions refusées
-            historic:
-                title: Historique
-            comments:
-                title: Commentaires
-                author: 'Par %firstname% %lastname%, le %date%'
-            participant:
-                title: Participant
-        state: Etat
-        category: Catégorie
-        type: Type
-        follower: Suivi commercial
-        createdAt: Date inscription
-        lastLoginAt: Dernière connexion
-        created_today: Inscrits aujourd'hui
-        created_this_week: Inscrits cette semaine
-    login:
-        logged_as: '%firstname% %lastname% (%role%)'
-    event:
-        see:
-            link: Voir
-        see_on_front:
-            link: Voir le site
-        update:
-            link: Modifier
-            title: Modifier l'évènement
-        settings:
-            link: Paramétrages de l'évènement
-        paymentConditions:
-            link: Conditions de paiement
-            update:
-                title: Modifier les conditions de paiement
-        create:
-            title: Créer un événement
-        title: Titre
-        languages: Langues
-        fallback: Par défaut
-        billing:
-            configuration:
-                link: Information facturation
-                title: Configuration des informations de facturation
-        practicalInfo:
-            link: Informations Pratiques
-            update:
-                title: Modifier les informations pratiques
-        configuration:
-            key_dates:
-                title: Date clé de l'événement
-        vatMode:
-            et: HT
-            ati: TTC
-        template:
-            link: Templates
-            registration: Inscription
-            sheet: Présentation
-            package: Forfait de participation
-    rule:
-        link: Qui voit qui
-    type:
-        link: Types de participation
-        title: Titre
-        position: Position
-        create:
-            link: Ajouter
-            title: Ajouter un type de participation
-        update:
-            link: Modifier
-            title: Modifier le type de participation
-        already_exists: Un type de participation au titre identique existe déjà
-    category:
-        link: Catégories de participation
-        add: Ajouter
-        update: Modifier
-    meeting:
-        link: Rendez-vous
-    meeting_request:
-        link: Demandes de rendez-vous
-        title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
-        details: Détail
-        set_a_meeting: Placer un RDV
-        from: De
-        to: À
-        createdAt: Date de création
-        state:
-            sent: Envoyé
-            approved: Accepté
-            refused: Refusé
-            cancelled: Annulé
-    meeting_request_sheets_list:
-        link: Par fiche de participation
-    happening:
-        link: Conférences
-        title: Conférences
-        add: Ajouter
-        addTitle: Ajouter une conférence
-        update: Modifier
-        updateTitle: Modifier une conférence
-        list:
-            title: Titre
-            speaker: Intervenants
-            begin: Début
-            end: Fin
-    happening_category:
-        link: Catégories de conférences
-        title: Catégories de conférences
-        add: Ajouter
-        addTitle: Ajouter une catégorie de conférences
-        update: Modifier
-        updateTitle: Modifier une catégorie de conférences
-        table:
-            column:
-                position: Position
-                title: Titre
-                picto: Picto
-    happening_speaker:
-        speakerName: 'Intervenant %name%'
-        link: Intervenants
-        title: Intervenants
-        happenings: Conférences
-        add: Ajouter
-        addTitle: Ajouter un intervenant
-        update: Modifier
-        updateTitle: Modifier un intervenant
-        table:
-            column:
-                name: Nom
-                function: Fonction
-                company: Société
-                logoCompany: Logo de la société
-                photo: Photo de l'intervenant
-                subEvent: Sous-événements
-        no-result: Aucun intervenant.
-        action:
-            edit: Modifier
-            see: Voir
-            delete: Supprimer
-            confirmDelete: Confirmer la suppression
-
-    spot:
-        link: Lieux
-        title: Lieux
-        active:
-            yes: Oui
-            no: Non
-        listSpot:
-            reference: Identifiant
-            size: Taille (en m²)
-            meetingCapacity: Nombre de rendez-vous en simultané
-            seatCapacity: Nombre de places assises
-            active: Actif
-            add: Créer un lieu
-            yes: Oui
-            no: Non
-        createSpot:
-            title: Créer un lieu
-        batch_create:
-            title: Créer des lieux par lot
-        delete: Supprimer
-        enable: Activer
-        disable: Désactiver
-        list:
-            checkbox: Case à cocher
-        configure_dates: Dates clés
-    admin_list:
-        filter:
-            empty_filter: Vider les filtres
-        link: Utilisateurs
-        title: Liste des utilisateurs du backoffice
-        action:
-            create: Créer un nouvel utilisateur
-        table:
-            title:
-                lastname: Nom
-                firstname: Prénom
-                email: Email
-                role: Type
-                events: Événéments
-                actions: Actions
-            content:
-                update: Éditer
-                super_admin:
-                    events:
-                        all: Tous
-                admin:
-                    events:
-                        none: Aucun
-    create_admin:
-        title: Créer un nouvel utilisateur du backoffice
-    update_admin:
-        title: Modifier un utilisateur du backoffice
-    operator_list:
-        filter:
-            empty_filter: Vider les filtres
-        link: Liste des collaborateurs
-        title: Liste des collaborateurs
-        action:
-            create: Créer un nouveau collaborateur
-        table:
-            title:
-                lastname: Nom
-                firstname: Prénom
-                email: Email
-                lastLoginAt: Date de dernière connexion
-                events: Événéments
-                actions: Actions
-            content:
-                update: Editer
-                admin:
-                    events:
-                        none: Aucun
-    operator:
-        create:
-            title: Créer un nouveau collaborateur
-        update:
-            title: Editer un collaborateur
-    activateAccount:
-        password:
-            title: Création du mot de passe pour votre compte collaborateur
-    template_list:
-        link: Templates
-        organizer_link: Mes Templates
-    organizer_template_list:
-        table:
-            column:
-                title: Titre
-                locales: Langues
-                date: Date de création
-                action: Action
-    template:
-        action:
-            create: Créer un template
-            edit: Modifier
-            save: Enregistrer
-            duplicate: Dupliquer
-            addLanguage: Ajouter une langue
-            close: Fermer
-        sheet:
-            link: Template de présentation
-            titleBase: Templates globaux
-            titleEvent: Templates assignés
-            table:
-                column:
-                    title: Titre
-                    eventType: Événement/Type(s)
-                    action: Action
-        registration:
-            link: Template d'Inscription
-            title: Templates d'Inscription
-            titleOrganizer: Templates d'Inscription des organisateurs
-            update: Modifier le template d'Inscription
-            table:
-                column:
-                    title: Titre
-                    eventType: Événement/Type(s)
-                    createdAt: Créé le
-                    action: Action
-                content:
-                    edit: Modifier
-    package:
-        link: Template de forfait de participation
-        title: Template de forfait de participation
-        create: Créer un template
-        update: Modifier
-        steps:
-            step1:
-                label: Formules
-            step2:
-                label: Participants & Plannings
-            step3:
-                label: Options
-        table:
-            column:
-                title: Titre
-                event: Evènement
-        duplicate: Dupliquer
-    product_create:
-        option:
-            title: Ajouter un produit
-        plan:
-            title: Ajouter une formule
-        participant:
-            title: Ajouter un produit participant
-        planning:
-            title: Ajouter un produit planning
-    product_update:
-        option:
-            title: Modifier un produit
-        plan:
-          title: Modifier une formule
-        planning:
-          title: Modifier un planning
-        participant:
-          title: Modifier un participant
-    plan_create:
-        title: Ajouter une formule au catalogue
-    plan:
-        link: Catalogue de formules
-        title: Catalogue de formules
-        name: Nom
-        unitPrice: Prix unitaire
-        productIncluded: Produits inclus
-    update_content:
-        terms-of-sale:
-            title: Modifier les conditions générales de vente
-            link: Conditions générales de vente
-    schedule:
-        link: Agenda
-        title: Agenda
-        slots:
-            title: Créneaux de rendez-vous
-            generate:
-                action: Générer des créneaux
-                title: Générer des créneaux de rendez-vous
-            table:
-                begin: De
-                end: à
-                duration: Durée
-        slot:
-            lock: Bloquer
-            unlock: Débloquer
-            locked: Bloqué
-            unlocked: Débloqué
-    global_nomenclature:
-        title: Nomenclatures globales
-    nomenclature:
-        title: Nomenclatures
-        table:
-            title: Titre
-            depth: %depth% niveau|%depth% niveaux
-            read: Voir
-        link: Nomenclatures
-        create:
-            modal:
-                title: Créer une nomenclature
-                close: Fermer
-            button: Nouvelle nomenclature
-        read:
-            configuration:
-                title: Configuration
-            import:
-                title: Import
-                button: Importer
-            export:
-                title: Export
-                button: Exporter
-                help: Le fichier exporter contient une clé pour chaque ligne, la modification d'une de ces lignes modifiera l'élément correspondant. L'ajout d'une ligne sans clé créera un nouvel élément. La suppression n'est plus possible une fois que l'événement a des participants.
-            assign:
-                button: Assigner à un événement
-        assign:
-            modal:
-                title: Assigner à un événement
+change_password.link: 'Changer le mot de passe'
+change_password.title: 'Changer le mot de passe'
+event.activateAccount.password: 'Définir votre mot de passe'
+event.catalog.category.seeSheet: 'Voir la fiche'
+event.catalog.sheet.meetingRequest: 'Demander un rendez-vous'
+event.link.go_back_to_sheet: 'Retourner à la fiche'
+event.link.product.cancel: Annuler
+event.link.see_catalog: 'Voir le catalogue'
+event.link.see_meeting_proposition: 'Voir mes propositions de rendez-vous'
+event.link.see_meeting_request: 'Voir mes demandes de rendez-vous'
+event.link.see_my_sheet: 'Voir ma fiche %type%'
+event.link.see_schedule: 'Voir mon agenda %type%'
+event.meeting.approvedRequest.label: 'De %fromName% pour %toName%'
+event.meeting.approvedRequest.title: 'Accepter la proposition de rendez vous'
+event.meeting.cancelRequest.label: 'De %fromName% pour %toName%'
+event.meeting.cancelRequest.title: 'Annuler la demande de rendez-vous'
+event.meeting.createRequest.destination: 'Pour %toName% avec la fiche %fromName%'
+event.meeting.createRequest.title: 'Demande de rendez-vous'
+event.meeting.editRequest.destination: 'Pour %toName% avec la fiche %fromName%'
+event.meeting.editRequest.title: 'Modifiez une demande de rendez-vous'
+event.meeting.listProposition.accept: Accepter
+event.meeting.listProposition.actions: Actions
+event.meeting.listProposition.createdAt: 'Reçu le'
+event.meeting.listProposition.description: Description
+event.meeting.listProposition.edit: Modifier
+event.meeting.listProposition.from: 'Venant de'
+event.meeting.listProposition.informations: Informations
+event.meeting.listProposition.participants: 'Les participants'
+event.meeting.listProposition.refuse: Refuser
+event.meeting.listProposition.show: Voir
+event.meeting.listProposition.state: Statut
+event.meeting.listProposition.title: 'Liste de vos propositions de rendez-vous'
+event.meeting.listProposition.yourParticipants: 'Vos participants'
+event.meeting.listRequest.actions: Actions
+event.meeting.listRequest.cancel: Annuler
+event.meeting.listRequest.createdAt: 'Envoyé le'
+event.meeting.listRequest.edit: Modifier
+event.meeting.listRequest.informations: Informations
+event.meeting.listRequest.participants: 'Les participants'
+event.meeting.listRequest.show: Voir
+event.meeting.listRequest.state: Statut
+event.meeting.listRequest.title: 'Liste de vos demandes de rendez-vous'
+event.meeting.listRequest.to: 'A destination de'
+event.meeting.refusedRequest.label: 'De %fromName% pour %toName%'
+event.meeting.refusedRequest.title: 'Refuser la proposition de rendez vous'
+event.meeting.request.state.from.approved: Accepté
+event.meeting.request.state.from.cancelled: Annulé
+event.meeting.request.state.from.refused: Refusé
+event.meeting.request.state.from.sent: Envoyé
+event.meeting.request.state.to.approved: Accepté
+event.meeting.request.state.to.cancelled: Annulé
+event.meeting.request.state.to.refused: Refusé
+event.meeting.request.state.to.sent: Reçu
+event.meeting.showDetailsRequest.from: 'Provenant de'
+event.meeting.showDetailsRequest.message: 'Votre conversation'
+event.meeting.showDetailsRequest.participants: 'Les participants'
+event.meeting.showDetailsRequest.state: Statut
+event.meeting.showDetailsRequest.title: 'Détails de la demande de rendez-vous'
+event.meeting.showDetailsRequest.to: 'A destination de'
+event.schedule.columns.happening.title: Sous-événements
+event.schedule.columns.meeting.title: Rendez-vous
+event.schedule.columns.unavailability.title: Indisponibilités
+event.sheet.add_participant.title: 'Ajouter un participant'
+event.sheet.billing.title: Facturation
+event.sheet.block.add_participant.title: 'Remplir ce participant'
+event.sheet.block.buy_participant.option: Option
+event.sheet.block.buy_participant.title: 'Ajouter un participant'
+event.sheet.block.delete_participant.title: 'Supprimer ce participant'
+event.sheet.block.edit: Modifier
+event.sheet.block.participants.title: Participants
+event.sheet.block.update_participant.title: Modifier
+event.sheet.cart.column.product: Produit
+event.sheet.cart.column.quantity: Quantité
+event.sheet.cart.column.total: Total
+event.sheet.cart.column.unitPrice: 'Prix unitaire'
+event.sheet.cart.empty: 'Aucun produit dans le panier'
+event.sheet.cart.include: '{0} Inclus avec %product% |]0,Inf[ %count% inclus avec %product%'
+event.sheet.cart.includeTitle: 'Inclus avec %product%'
+event.sheet.cart.label.billingStep: 'Passer à l''étape de facturation'
+event.sheet.cart.label.totalPrice: Total
+event.sheet.cart.title: 'Récapitulatif de votre panier'
+event.sheet.cart.totalWithoutTaxes: 'Total HT'
+event.sheet.completed.complete: Complète
+event.sheet.completed.incomplete: Incomplète
+event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
+event.sheet.listOrders.title: 'Liste de vos commandes'
+event.sheet.package.column.choices: Choix
+event.sheet.package.column.description: Description
+event.sheet.package.column.label: Intitulé
+event.sheet.package.column.quantity: Quantité
+event.sheet.package.column.unitPrice: 'Prix unitaire'
+event.sheet.package.include: 'Inclus avec votre forfait'
+event.sheet.package.includeQuantity: '{0} Inclus avec votre forfait|{1} %count% est déjà inclus avec votre forfait|]1,Inf[ %count% sont déjà inclus avec votre forfait'
+event.sheet.package.participant.boughtNumber: '{0}|{1} Vous avez déjà ajouté %count% participant sur votre fiche|]1,Inf[ Vous avez déjà ajouté %count% participants sur votre fiche'
+event.sheet.package.products.title: 'Sélectionner des produits à ajouter à ma fiche'
+event.sheet.package.step.next: 'Choisir votre forfait'
+event.sheet.participant.already_exists: 'Ce participant est déjà ajouté'
+event.sheet.participant.email: 'Adresse email'
+event.sheet.participant.guest: Invité
+event.sheet.participant.owner: Propriétaire
+event.sheet.payment.description: 'Choisissez votre mode de paiement'
+event.sheet.payment.title: 'Mode de paiement'
+event.sheet.state.accepted: Acceptée
+event.sheet.state.pending: 'En attente'
+event.sheet.state.validated: Validée
+event.sheet.summary.action: Action
+event.sheet.summary.product: Produit
+event.sheet.summary.quantity: Quantité
+event.sheet.summary.title: 'Récapitulatif de participation'
+event.sheet.summary.total: Total
+event.sheet.summary.unit_price: 'Prix unitaire'
+event.sheet.summary.update_product: Modifier
+event.sheet.update_product.title: 'Modifier un produit commandé'
+login.forgotPassword: 'Mot de passe oublié ?'
+login.link: Connexion
+login.title: Connexion
+logout.confirmation: 'Êtes vous sûr de vouloir vous déconnecter de votre compte ?'
+logout.link: Déconnecter
+logout.title: Déconnecter
+message.admin.order.remove_row.confirm: 'Confirmer la suppression'
+message.admin.transaction.remove.confirm: 'Confirmer la suppression'
+new_password.title: 'Créer un nouveau mot de passe'
+notification.meeting_request.canceled.action: 'Demande de RDV annulée'
+notification.meeting_request.canceled.withMessage: 'Demande annulée par %sheetName% pour le motif suivant : "%message%"'
+notification.meeting_request.canceled.withoutMessage: 'Demande annulée par %sheetName%'
+notification.meeting_request.participant.added.message: 'Participant ajouté par %sheetName% pour le motif suivant : "%message%"'
+notification.meeting_request.participant.removed.message: 'Participant retiré par %sheetName% pour le motif suivant : "%message%"'
+notification.meeting_request.refused.action: 'Demande de RDV refusée'
+notification.meeting_request.refused.withMessage: 'Demande refusée par %sheetName% pour le motif suivant : "%message%"'
+notification.meeting_request.refused.withoutMessage: 'Demande refusée par %sheetName%'
+notification.participant.added.action: 'Participant ajouté'
+notification.participant.removed.action: 'Participant retiré'
+register.email_already_exists: 'Un compte associé à cette adresse mail existe déjà'
+reset_password.title: 'Demande de nouveau mot de passe'
+who.see_who_but_dont_see: '%seer% voit %seeable% mais ne voit pas :'
+who.the.category: 'la catégorie'
+who.the.type: 'le type'
