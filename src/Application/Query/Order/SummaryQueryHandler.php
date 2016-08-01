@@ -49,6 +49,7 @@ class SummaryQueryHandler
         return new SummaryView(
             $this->groupsViewQueryHandler->handle(
                 new GroupsViewQuery(
+                    $summaryQuery->sheet,
                     $summaryQuery->order,
                     $summaryQuery->locale
                 )

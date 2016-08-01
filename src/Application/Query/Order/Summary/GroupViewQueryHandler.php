@@ -70,6 +70,7 @@ class GroupViewQueryHandler
         }
 
         return new GroupView(
+            $groupViewQuery->sheet,
             $label,
             $groupViewQuery->type,
             $products

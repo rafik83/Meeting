@@ -1223,7 +1223,9 @@ services:
     components.step.step_command_factory:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\StepCommandFactory
         arguments:
-            - '@service_container'
+            - '@components.step.step_plan'
+            - '@components.step.step_participant'
+            - '@components.step.step_option'
 
     #
     # DateTime

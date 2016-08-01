@@ -12,9 +12,15 @@ namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
 use Proximum\Vimeet\Application\View\Order\ProductView;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class GroupViewQuery
 {
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
     /**
      * @var Order
      */
@@ -41,14 +47,22 @@ class GroupViewQuery
     public $planView;
 
     /**
+     * @param Sheet            $sheet
      * @param Order            $order
      * @param string           $locale
      * @param string           $type
      * @param int|null         $groupId
      * @param ProductView|null $planView
      */
-    public function __construct(Order $order, $locale, $type, $groupId = null, ProductView $planView = null)
-    {
+    public function __construct(
+        Sheet $sheet,
+        Order $order,
+        $locale,
+        $type,
+        $groupId = null,
+        ProductView $planView = null
+    ) {
+        $this->sheet    = $sheet;
         $this->order    = $order;
         $this->locale   = $locale;
         $this->type     = $type;

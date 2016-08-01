@@ -42,6 +42,7 @@ class GroupsViewQueryHandler
         if ($order->hasType(Product::TYPE_PLAN)) {
             $groupView = $this->groupViewQueryHandler->handle(
                 new GroupViewQuery(
+                    $groupsViewQuery->sheet,
                     $order,
                     $groupsViewQuery->locale,
                     Product::TYPE_PLAN
@@ -61,6 +62,7 @@ class GroupsViewQueryHandler
             $groupsView->addGroupView(
                 $this->groupViewQueryHandler->handle(
                     new GroupViewQuery(
+                        $groupsViewQuery->sheet,
                         $order,
                         $groupsViewQuery->locale,
                         Product::TYPE_PARTICIPANT,
@@ -75,6 +77,7 @@ class GroupsViewQueryHandler
             $groupsView->addGroupView(
                 $this->groupViewQueryHandler->handle(
                     new GroupViewQuery(
+                        $groupsViewQuery->sheet,
                         $order,
                         $groupsViewQuery->locale,
                         Product::TYPE_PLANNING,
@@ -89,6 +92,7 @@ class GroupsViewQueryHandler
             $groupsView->addGroupView(
                 $this->groupViewQueryHandler->handle(
                     new GroupViewQuery(
+                        $groupsViewQuery->sheet,
                         $order,
                         $groupsViewQuery->locale,
                         Product::TYPE_OPTION,

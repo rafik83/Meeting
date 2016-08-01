@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
-use Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
 use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
@@ -21,7 +20,6 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
-use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -96,17 +94,12 @@ class PackageController extends Controller
 
         $currentStep = $funnel->getStep($step);
 
-        $uncompletedStep = $funnel->getCurrentUncompletedStep();
-
-        if ($currentStep !== $uncompletedStep
-            && false !== $uncompletedStep
-            && $currentStep->index > $uncompletedStep->index
-        ) {
+        if (!$funnel->isStepAvailable($currentStep)) {
             return $this->redirectToRoute(
                 'event_package_step',
                 [
                     'sheet' => $sheet->getId(),
-                    'step'  => $uncompletedStep->index,
+                    'step'  => $funnel->getCurrentUncompletedStep()->index,
                 ]
             );
         }
@@ -373,10 +366,6 @@ class PackageController extends Controller
     public function summaryAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
-
-//        if (!empty($sheet->getOrders())) {
-//            throw $this->createNotFoundException('This sheet has already an order');
-//        }
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Package\Funnel;
 
-use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Funnel
@@ -76,6 +76,7 @@ class Funnel
 
     /**
      * @param $index
+     *
      * @return Step|null
      *
      * @throws \Exception
@@ -183,5 +184,23 @@ class Funnel
     public function getSheet()
     {
         return $this->sheet;
+    }
+
+    /**
+     * @param Step $step
+     *
+     * @return bool
+     */
+    public function isStepAvailable(Step $step)
+    {
+        $uncompletedStep = $this->getCurrentUncompletedStep();
+
+        if ($this->sheet->hasOrders()) {
+            return $this->hasStep($step->index);
+        }
+
+        return $step === $uncompletedStep
+        || false === $uncompletedStep
+        || $step->index <= $uncompletedStep->index;
     }
 }
