@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
 use Proximum\Vimeet\Application\View\Order\GroupsView;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
 class GroupsViewQueryHandler
 {
@@ -21,11 +23,20 @@ class GroupsViewQueryHandler
     private $groupViewQueryHandler;
 
     /**
-     * @param GroupViewQueryHandler $groupViewQueryHandler
+     * @var FunnelFactory
      */
-    public function __construct(GroupViewQueryHandler $groupViewQueryHandler)
-    {
+    private $funnelFactory;
+
+    /**
+     * @param GroupViewQueryHandler $groupViewQueryHandler
+     * @param FunnelFactory         $funnelFactory
+     */
+    public function __construct(
+        GroupViewQueryHandler $groupViewQueryHandler,
+        FunnelFactory $funnelFactory
+    ) {
         $this->groupViewQueryHandler = $groupViewQueryHandler;
+        $this->funnelFactory         = $funnelFactory;
     }
 
     /**
@@ -38,11 +49,13 @@ class GroupsViewQueryHandler
         $order      = $groupsViewQuery->order;
         $groupsView = new GroupsView();
         $planView   = null;
+        $funnel     = $this->funnelFactory->create($groupsViewQuery->sheet, $groupsViewQuery->locale);
 
         if ($order->hasType(Product::TYPE_PLAN)) {
             $groupView = $this->groupViewQueryHandler->handle(
                 new GroupViewQuery(
                     $groupsViewQuery->sheet,
+                    null, // no step link for type plan
                     $order,
                     $groupsViewQuery->locale,
                     Product::TYPE_PLAN
@@ -63,6 +76,7 @@ class GroupsViewQueryHandler
                 $this->groupViewQueryHandler->handle(
                     new GroupViewQuery(
                         $groupsViewQuery->sheet,
+                        $funnel->getStepByType(Step::TYPE_PARTICIPANT_PLANNING),
                         $order,
                         $groupsViewQuery->locale,
                         Product::TYPE_PARTICIPANT,
@@ -78,6 +92,7 @@ class GroupsViewQueryHandler
                 $this->groupViewQueryHandler->handle(
                     new GroupViewQuery(
                         $groupsViewQuery->sheet,
+                        $funnel->getStepByType(Step::TYPE_PARTICIPANT_PLANNING),
                         $order,
                         $groupsViewQuery->locale,
                         Product::TYPE_PLANNING,
@@ -88,11 +103,14 @@ class GroupsViewQueryHandler
             );
         }
 
+        $stepOption = $funnel->getStepByType(Step::TYPE_OPTIONS);
+
         foreach ($order->getGroupsIds() as $groupId) {
             $groupsView->addGroupView(
                 $this->groupViewQueryHandler->handle(
                     new GroupViewQuery(
                         $groupsViewQuery->sheet,
+                        $stepOption,
                         $order,
                         $groupsViewQuery->locale,
                         Product::TYPE_OPTION,

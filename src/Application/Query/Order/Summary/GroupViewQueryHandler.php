@@ -73,7 +73,8 @@ class GroupViewQueryHandler
             $groupViewQuery->sheet,
             $label,
             $groupViewQuery->type,
-            $products
+            $products,
+            (isset($groupViewQuery->step)) ? $groupViewQuery->step->index : null
         );
     }
 }

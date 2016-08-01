@@ -35,17 +35,24 @@ class GroupView
     public $products = [];
 
     /**
+     * @var null|int
+     */
+    public $stepIndex;
+
+    /**
      * @param Sheet         $sheet
      * @param string        $label
      * @param string        $type
      * @param ProductView[] $products
+     * @param null|int      $stepIndex
      */
-    public function __construct(Sheet $sheet, $label, $type, array $products = [])
+    public function __construct(Sheet $sheet, $label, $type, array $products = [], $stepIndex = null)
     {
-        $this->sheet    = $sheet;
-        $this->label    = $label;
-        $this->type     = $type;
-        $this->products = $products;
+        $this->sheet     = $sheet;
+        $this->label     = $label;
+        $this->type      = $type;
+        $this->products  = $products;
+        $this->stepIndex = $stepIndex;
     }
 
     /**

@@ -47,7 +47,7 @@ class Funnel
     /**
      * @param int $currentIndex
      *
-     * @return Step|null
+     * @return null|Step
      */
     public function getNextStep($currentIndex)
     {
@@ -77,7 +77,7 @@ class Funnel
     /**
      * @param $index
      *
-     * @return Step|null
+     * @return null|Step
      *
      * @throws \Exception
      */
@@ -87,7 +87,25 @@ class Funnel
             if ($this->steps[$index]->index === intval($index)) {
                 return $this->steps[$index];
             } else {
-                throw new \Exception(sprintf('Element found on index %s but with index %s ', $index, $this->steps[$index]->index));
+                throw new \Exception(
+                    sprintf('Element found on index %s but with index %s ', $index, $this->steps[$index]->index)
+                );
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $type
+     *
+     * @return null|Step
+     */
+    public function getStepByType($type)
+    {
+        foreach ($this->steps as $step) {
+            if ($step->type === $type) {
+                return $step;
             }
         }
 
@@ -121,7 +139,7 @@ class Funnel
     }
 
     /**
-     * @return Step|null
+     * @return null|Step
      */
     public function getCurrentUncompletedStep()
     {

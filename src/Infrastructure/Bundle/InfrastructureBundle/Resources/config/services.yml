@@ -1496,6 +1496,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
         arguments:
             - '@query.order.summary.group_view_query_handler'
+            - '@package.funnel.funnel_factory'
     query.order.summary.promotion_code_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodeViewQueryHandler
     query.order.summary.promotion_codes_view_query_handler:
