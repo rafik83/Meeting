@@ -20,16 +20,17 @@
 
   .header__info {
     position: absolute;
-    top: 40px;
+    top: 0;
     left: 290px;
     font-size: 15px;
-    line-height: 20px;
+    line-height: 115px;
+    height: 115px;
     color: $gradient-text-color;
 
-    > p {
-      margin: 0;
-
-      > span { text-transform: uppercase; }
+    > div {
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 20px;
     }
   }
 

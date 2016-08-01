@@ -11,12 +11,24 @@ default_event:
     path: /
     methods: [GET]
 
+#
+# Admin redirect
+#
+root_admin:
+    path: /admin/{_locale}
+    host: '%domain%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: admin_event_list
+        permanent: true
+    methods: [GET]
+
 default_admin:
     path: /admin
     host: '%domain%'
     defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: '/admin/%locale%/'
+        path: '/admin/%locale%/event'
         permanent: true
     methods: [GET]
 

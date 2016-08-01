@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Proximum\Vimeet\Application\Command\Participant\UpdateAvatar;
 use Proximum\Vimeet\Application\Command\Participant\UpdateAvatarHandler;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -21,7 +20,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -139,11 +138,11 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $editableText1 = new Object\EditableText('editable-text', [
+        $editableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $editableText1->setContentValue('foo');
-        $image = new Object\Image('image', [
+        $image = new TemplateObject\Image('image', [
             'tags' => ['participant_avatar', 'participant_data'],
         ], 'fr', 'fr');
         $image->setContentValue('path/to/file');
@@ -278,11 +277,11 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $editableText1 = new Object\EditableText('editable-text', [
+        $editableText1 = new TemplateObject\EditableText('editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $editableText1->setContentValue('foo');
-        $image = new Object\Image('image', [
+        $image = new TemplateObject\Image('image', [
             'tags' => ['participant_avatar', 'participant_data'],
         ], 'fr', 'fr');
         $image->setContentValue('path/to/file');

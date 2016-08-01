@@ -1,0 +1,25 @@
+{% if null != included %}
+    <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
+        <td class="col-md-6">
+            <p><b>{{ 'package.product.includedProduct'|trans }}</b> {{ included.label }}</p>
+        </td>
+        <td class="col-md-2">
+            <div class="product"></div>
+        </td>
+        <td class="col-md-2">
+            <p class="text-center">{{ included.quantity }}</p>
+        </td>
+        <td class="col-md-2">
+            <div class="product">
+                <span class="product-price text-center">
+                    {{ 'package.product.unitPrice'|trans({
+                        '%price%': included.total|localizednumber,
+                        '%currency%': included.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ included.vatMode)|trans
+                    })|html }}
+                </span>
+            </div>
+        </td>
+    </tr>
+{% endif %}
+

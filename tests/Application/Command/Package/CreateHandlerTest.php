@@ -14,7 +14,6 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Application\Command\Package\CreateHandler;
 use Proximum\Vimeet\Application\Command\Package\CreateResult;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

@@ -727,7 +727,6 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
@@ -1473,6 +1472,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\ProductViewQueryHandler
         arguments:
             - '@order.row.product_included_info_guesser'
+            - '@datetime'
     query.order.summary.group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler
         arguments:
@@ -1492,6 +1492,8 @@ services:
         arguments:
             - '@query.order.summary.groups_view_query_handler'
             - '@query.order.summary.promotion_codes_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
     query.order.pro_forma_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\ProFormaQueryHandler
         arguments:

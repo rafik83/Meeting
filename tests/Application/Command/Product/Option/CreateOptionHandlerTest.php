@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -32,7 +31,7 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $updatable           = true;
-        $updatableUntil      = new \DateTime();
+        $deletableUntil      = new \DateTime();
         $translations = [
             'fr' => [
                 'title'                     => 'foo',
@@ -55,7 +54,7 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax     = $availabilityMax;
         $create->updatable           = $updatable;
-        $create->updatableUntil      = $updatableUntil;
+        $create->deletableUntil      = $deletableUntil;
         $create->translations        = $translations;
         $create->file                = null;
 
@@ -70,7 +69,7 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
             $availabilityCurrent,
             $availabilityMax,
             $updatable,
-            $updatableUntil
+            $deletableUntil
         );
         $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional', '');
         $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional', '');

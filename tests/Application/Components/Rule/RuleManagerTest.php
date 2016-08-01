@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Components\Rule\RuleManager;
 use Proximum\Vimeet\Application\Components\Rule\RuleSorter;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;

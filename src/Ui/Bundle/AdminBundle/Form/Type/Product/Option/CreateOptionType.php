@@ -61,7 +61,7 @@ class CreateOptionType extends AbstractCreateType
             ->add('updatable', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('updatableUntil', DateTimePickerType::class, [
+            ->add('deletableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])
             ->add('buyableUntil', DateTimePickerType::class, [

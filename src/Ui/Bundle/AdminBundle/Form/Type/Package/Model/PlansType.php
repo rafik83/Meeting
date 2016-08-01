@@ -42,6 +42,7 @@ class PlansType extends AbstractType
                 'product_types'    => [Product::TYPE_PLAN],
                 'collection_group' => 'plans',
                 'error_bubbling'   => false,
+                'required'         => false,
             ])
         ;
     }

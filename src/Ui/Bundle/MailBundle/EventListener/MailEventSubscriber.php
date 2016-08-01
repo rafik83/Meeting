@@ -173,7 +173,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new ExpiredInvitationMail(
             $this->sender,
-            $event->getSheet()->getOwner(),
+            $event->getSheet()->getOwner()->getEmail(),
             'MailBundle:Mail:Sheet/Invitation/expiredInvitation.html.twig',
             'sheet_invitation_expired',
             $event->getSheet()->getOwner()->getLocale(),
@@ -313,7 +313,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getLocale(),
             $event->getEvent(),
             $event->getUser(),
-            $sheet
+            (!$sheet !== false) ? $sheet : null
         );
 
         $this->mailer->send($mail);

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use Proximum\Vimeet\Application\Command\Participant\UpdateCompany;
 use Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -21,7 +20,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -239,27 +238,27 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $objectCompany = new Object\EditableText('editable-text', [
+        $objectCompany = new TemplateObject\EditableText('editable-text', [
             'tags' => ["sheet_organization", "sheet_title", "sheet_data"],
         ], 'fr', 'fr');
         $objectCompany->setContentValue('oldFoo');
-        $objectUrl = new Object\Url('url', [
+        $objectUrl = new TemplateObject\Url('url', [
             'tags' => ["participant_website", "sheet_data"],
         ], 'fr', 'fr');
         $objectUrl->setContentValue('http://www.oldfoo.com');
-        $objectAddress = new Object\EditableText('editable-text', [
+        $objectAddress = new TemplateObject\EditableText('editable-text', [
             'tags' => ["participant_address", "sheet_data"],
         ], 'fr', 'fr');
         $objectAddress->setContentValue('10 rue de la oldFoo');
-        $objectZipCode = new Object\EditableText('editable-text', [
+        $objectZipCode = new TemplateObject\EditableText('editable-text', [
             'tags' => ["participant_zipcode", "sheet_data"],
         ], 'fr', 'fr');
         $objectZipCode->setContentValue('75002');
-        $objectCity = new Object\EditableText('editable-text', [
+        $objectCity = new TemplateObject\EditableText('editable-text', [
             'tags' => ["participant_city", "sheet_data"],
         ], 'fr', 'fr');
         $objectCity->setContentValue('oldFooVille');
-        $objectCountry = new Object\Country('country', [
+        $objectCountry = new TemplateObject\Country('country', [
             'tags' => ["participant_country", "sheet_data"],
         ], 'fr', 'fr');
         $objectCountry->setContentValue('EN');
@@ -277,27 +276,27 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedBlock = new Block('12', [], 'fr', 'fr');
 
 
-        $exObjectCompany = new Object\EditableText('editable-text', [
+        $exObjectCompany = new TemplateObject\EditableText('editable-text', [
             'tags' => ["sheet_organization", "sheet_title", "sheet_data"],
         ], 'fr', 'fr');
         $exObjectCompany->setContentValue('foo');
-        $exObjectUrl = new Object\Url('url', [
+        $exObjectUrl = new TemplateObject\Url('url', [
             'tags' => ["participant_website", "sheet_data"],
         ], 'fr', 'fr');
         $exObjectUrl->setContentValue('http://www.foo.com');
-        $exObjectAddress = new Object\EditableText('editable-text', [
+        $exObjectAddress = new TemplateObject\EditableText('editable-text', [
             'tags' => ["participant_address", "sheet_data"],
         ], 'fr', 'fr');
         $exObjectAddress->setContentValue('10 rue de la Foo');
-        $exObjectZipCode = new Object\EditableText('editable-text', [
+        $exObjectZipCode = new TemplateObject\EditableText('editable-text', [
             'tags' => ["participant_zipcode", "sheet_data"],
         ], 'fr', 'fr');
         $exObjectZipCode->setContentValue('75001');
-        $exObjectCity = new Object\EditableText('editable-text', [
+        $exObjectCity = new TemplateObject\EditableText('editable-text', [
             'tags' => ["participant_city", "sheet_data"],
         ], 'fr', 'fr');
         $exObjectCity->setContentValue('FooVille');
-        $exObjectCountry = new Object\Country('country', [
+        $exObjectCountry = new TemplateObject\Country('country', [
             'tags' => ["participant_country", "sheet_data"],
         ], 'fr', 'fr');
         $exObjectCountry->setContentValue('FR');

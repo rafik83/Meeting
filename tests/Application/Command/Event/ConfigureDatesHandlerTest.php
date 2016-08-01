@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
