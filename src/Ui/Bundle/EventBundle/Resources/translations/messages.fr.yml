@@ -74,6 +74,7 @@ order.transaction.mode.bank_card: 'Carte bleue'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
 order.transaction.mode.paypal: 'Paypal'
+order.transaction.no: 'Aucune'
 order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'

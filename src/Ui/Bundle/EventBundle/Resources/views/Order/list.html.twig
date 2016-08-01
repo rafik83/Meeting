@@ -72,6 +72,10 @@
                     <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">{{ 'order.transaction.no'|trans }}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
