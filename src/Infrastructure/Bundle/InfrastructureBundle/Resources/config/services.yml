@@ -1204,6 +1204,28 @@ services:
             - '%infrastructure.image_path%'
 
     #
+    # Step Component
+    #
+    components.step.step_option:
+        class: Proximum\Vimeet\Application\Components\Step\StepOption
+        arguments:
+            - '@order.merger'
+            - '@cart_manager'
+    components.step.step_participant:
+        class: Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning
+        arguments:
+            - '@order.merger'
+            - '@cart_manager'
+    components.step.step_plan:
+        class: Proximum\Vimeet\Application\Components\Step\StepPlan
+        arguments:
+            - '@cart_manager'
+    components.step.step_command_factory:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\StepCommandFactory
+        arguments:
+            - '@service_container'
+
+    #
     # DateTime
     #
     datetime:

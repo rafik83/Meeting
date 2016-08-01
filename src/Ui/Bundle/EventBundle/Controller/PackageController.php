@@ -110,10 +110,9 @@ class PackageController extends Controller
                 ]
             );
         }
-
-        $commandClass = $this->stepTypeAssociatedCommand($currentStep->type);
-        $command      = new $commandClass($sheet, $currentStep->index);
-        $this->assignProductsToCommand($command);
+        
+        $command = $this->get('components.step.step_command_factory')
+            ->create($currentStep->type, $sheet, $currentStep->index);
 
         $form = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
             'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
@@ -345,27 +344,6 @@ class PackageController extends Controller
     /**
      * @param $type
      *
-     * @return Step\AbstractStep
-     * @throws \Exception
-     */
-    private static function stepTypeAssociatedCommand($type)
-    {
-        $commands = [
-            FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
-            FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\SelectParticipantAndPlanning::class,
-            FunnelStep::TYPE_OPTIONS              => Step\SelectOptions::class,
-        ];
-
-        if (isset($commands[$type])) {
-            return $commands[$type];
-        } else {
-            throw new \Exception(sprintf('Command Package Step type %s not implemented', $type));
-        }
-    }
-
-    /**
-     * @param $type
-     *
      * @return AbstractType
      *
      * @throws \Exception
@@ -382,79 +360,6 @@ class PackageController extends Controller
             return $forms[$type];
         } else {
             throw new \Exception(sprintf('Form Package Step type %s not implemented', $type));
-        }
-    }
-
-    /**
-     * @param Step\AbstractStep $command
-     */
-    private function assignProductsToCommand(Step\AbstractStep $command)
-    {
-        $cartManager    = $this->get('cart_manager');
-        $cart           = $cartManager->getCart($command->sheet, $command->currentStep);
-        $orderMerger    = $this->get('order.merger');
-
-        if ($command->sheet->hasOrders()) {
-            $orderMerged = $orderMerger->merge($command->sheet->getOrders());
-        }
-
-        if ($command instanceof Step\SelectPlan) {
-            $selectedPlan = $cart->getPlanRow();
-
-            if (null !== $selectedPlan) {
-                $command->plan = $selectedPlan->getProduct();
-            }
-
-            return;
-        }
-
-        if ($command instanceof Step\SelectParticipantAndPlanning) {
-            $planningRow   = $cart->getPlanningRow();
-            $orderQuantity = 0;
-            $cartQuantity  = 0;
-
-            if (isset($orderMerged)) {
-                $planning      = $command->sheet->getPackage()->getPlanning();
-                $orderQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
-            }
-
-            if (null !== $planningRow) {
-                $cartQuantity = $planningRow->getQuantity();
-            }
-
-            $command->planningQuantity = $orderQuantity + $cartQuantity;
-
-            return;
-        }
-
-        if ($command instanceof Step\SelectOptions) {
-            /** @var CartRow[] $optionRows */
-            $optionRows = array_combine(
-                array_map(
-                    function (CartRow $cartRow) {
-                        return $cartRow->getProduct()->getId();
-                    },
-                    $cart->getOptionsRow()->toArray()
-                ),
-                $cart->getOptionsRow()->toArray()
-            );
-
-            $options = [];
-
-            foreach ($command->sheet->getPackage()->getOptions() as $option) {
-                $orderQuantity = 0;
-                $cartQuantity  = 0;
-
-                if (isset($orderMerged) && $product = $orderMerged->getRowForProduct($option)) {
-                    $orderQuantity = $product->getQuantity();
-                } elseif (isset($optionRows[$option->getId()])) {
-                    $cartQuantity = $optionRows[$option->getId()]->getQuantity();
-                }
-
-                $options[$option->getId()] = $orderQuantity + $cartQuantity;
-            }
-
-            $command->options = $options;
         }
     }
 
