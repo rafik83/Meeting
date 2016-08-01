@@ -25,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
@@ -38,6 +37,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -59,10 +59,12 @@ class PackageController extends Controller
 
         try {
             $sheet = $this->get('sheet.sheet_guesser')
-                          ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
+                ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
         } catch (\Exception $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!empty($sheet->getOrders())) {
             return $this->redirectToRoute('event_order_summary_total', [
@@ -86,7 +88,9 @@ class PackageController extends Controller
      */
     public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         if (!empty($sheet->getOrders())) {
             throw $this->createNotFoundException('This sheet has already an order');
@@ -269,6 +273,8 @@ class PackageController extends Controller
     public function addParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createNotFoundException(
                 sprintf(
@@ -312,15 +318,7 @@ class PackageController extends Controller
     public function removeParticipantAction(Request $request, Sheet $sheet, $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'The current user %s is not associated with this sheet %s',
-                    $this->getUser()->getId(),
-                    $sheet->getId()
-                )
-            );
-        }
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -456,7 +454,9 @@ class PackageController extends Controller
      */
     public function summaryAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         if (!empty($sheet->getOrders())) {
             throw $this->createNotFoundException('This sheet has already an order');
@@ -532,7 +532,9 @@ class PackageController extends Controller
         Sheet $sheet,
         PromotionCodeRow $promotionCodeRow
     ) {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         $remove = new Remove($sheet, $promotionCodeRow);
         $this->get('tactician.commandbus')->handle($remove);
@@ -564,7 +566,9 @@ class PackageController extends Controller
      */
     public function fillBillingInfoAction(EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         $this->addFlash('package_complete_billing_info', $sheet->getId());
 
@@ -576,12 +580,9 @@ class PackageController extends Controller
     /**
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
-     * @param User        $user
      */
-    private function authorizeAccess(EventDomain $eventDomain, Sheet $sheet, User $user = null)
+    private function authorizeAccess(EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
         if ($sheet->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createNotFoundException(
                 sprintf('Sheet %s not present on Event %s')
@@ -591,16 +592,6 @@ class PackageController extends Controller
         if (!$sheet->getPackage()->isPassable()) {
             throw $this->createNotFoundException(
                 sprintf('Package for sheet %s is not passable', $sheet->getId())
-            );
-        }
-
-        if (null === $user) {
-            throw $this->createNotFoundException('Unknown user');
-        }
-
-        if (!$sheet->hasUser($user)) {
-            throw $this->createNotFoundException(
-                sprintf('The user %s is not participant on the sheet %s', $user->getId(), $sheet->getId())
             );
         }
     }
