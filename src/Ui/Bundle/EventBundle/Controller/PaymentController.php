@@ -112,6 +112,44 @@ class PaymentController extends Controller
     }
 
     /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return RedirectResponse
+     */
+    public function payRemainingAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet
+    ) {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
+
+        if (0 >= $remainingToPay) {
+            return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
+        }
+
+        $transaction = new Transaction(
+            $sheet,
+            $remainingToPay,
+            new \DateTime(),
+            Mode::PAYMENT_PAYPAL,
+            '',
+            Transaction::STATE_PENDING,
+            $sheet->getEvent()->getCurrency()
+        );
+
+        $this->get('repository.transaction')->add($transaction);
+
+        return $this->redirectToRoute('event_package_payment_prepare_paypal', [
+            'sheet'       => $sheet->getId(),
+            'transaction' => $transaction->getId(),
+        ]);
+    }
+
+    /**
      * Only for debug
      */
     public function createTempTransactionAction(
