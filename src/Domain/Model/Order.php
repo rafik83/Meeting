@@ -295,10 +295,6 @@ class Order
             $total += $promotionCode->getPrice();
         }
 
-        foreach ($this->customRows as $customRow) {
-            $total += $customRow->getQuantity() * $customRow->getPrice();
-        }
-
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
             $total += $total * $this->vatRate / 100;
         }

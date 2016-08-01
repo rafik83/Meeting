@@ -725,5 +725,6 @@ admin:
         VAT: TVA
         add_line: Ajouter une ligne
         after: après
+        promotionCodes: Codes Promo
 
 

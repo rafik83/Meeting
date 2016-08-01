@@ -86,6 +86,26 @@
                 {% endfor %}
             {% endfor %}
 
+            {% if order_view.promotionCodes.promotionCodes is not empty %}
+                <tr class="active">
+                    <th colspan="5">{{ 'admin.order_edit.promotionCodes'|trans }}</th>
+                    <td class="text-right">
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% for promotionCode in order_view.promotionCodes.promotionCodes %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="text-left">{{ promotionCode.label }}</td>
+                    <td class="text-left">{{ promotionCode.description }}</td>
+                    <td class="text-right">{{ promotionCode.quantity }}</td>
+                    <td class="text-right">{{ promotionCode.total|number_format(2, ',', ' ') }} €</td>
+                    <td class="text-right">
+                    </td>
+                </tr>
+            {% endfor %}
+
             <tr class="info">
                 <th colspan="2"></th>
                 <th colspan="2">{{ 'admin.order_edit.total.withoutVAT'|trans }}</th>
