@@ -61,6 +61,8 @@ nomenclature.select_none: Aucun
 order.list.column.date: Date
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
+order.list.pay_remaining: 'Solder la totalité de ma participation'
+order.list.pro_forma.link: 'Voir la Pro Forma'
 order.list.remainingToPay: 'Reste à payer'
 order.list.title: 'Liste de vos commandes'
 order.transaction.list.column.date: Date
