@@ -100,4 +100,15 @@ class RowView
     {
         $this->customRows[] = $customRowView;
     }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        foreach ($this->customRows as $row) {
+            $this->total += $row->total;
+        }
+        return $this->total;
+    }
 }
