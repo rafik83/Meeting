@@ -1,3 +1,2 @@
-validators:
-    type:
-        required: Required participation type
+'Bad credentials.': 'Bad credentials.'
+validators.type.required: 'Required participation type'

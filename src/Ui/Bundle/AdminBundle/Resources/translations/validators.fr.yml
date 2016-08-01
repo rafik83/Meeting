@@ -1,71 +1,37 @@
-validators:
-    json:
-        invalid: Le JSON n'est pas valide
-    hexadecimal: Cette valeur doit être au format hexadécimal
-    field:
-        required: Ce champ est requis
-        notValid:
-            telephone: Le format du champ téléphone n'est pas correct
-            image: Le format de l'image n'est pas valide, les formats autorisés sont le jpeg, le png et le gif
-            url: Le format du champ url n'est pas valide
-    whitespace: Ce champ ne doit pas contenir d'espace
-    email: L'adresse e-mail saisie n'est pas valide
-    required:
-        email: L'adresse e-mail ne peut pas être vide
-        password: Le mot de passe ne peut pas être vide
-    emailDoesNotExist: L'email saisi n'existe pas
-    emailAlreadyExist: Cet email est déjà utilisé, vous ne pouvez pas l'utiliser
-    sameEmail: Vous utilisez déjà cet email
-    password:
-        min: Le mot de passe doit comporter au moins {{ limit }} caractères
-        mismatch: Les 2 mots de passe ne sont pas identiques
-    currentPassword: Le mot de passe actuel n'est pas correct
-    option:
-        quantityMustBeAdded: Vous devez ajouter une quantité si vous sélectionnez cette option
-        participant:
-            optionCanNotBeUnselected: Vous ne pouvez pas déselectionner cette option, vous devez d'abord supprimer des participants depuis votre fiche
-            alreadyAddedBoughtParticipant: Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche
-    constraint:
-        daterange: L'heure de début doit être antérieure à l'heure de fin
-        spot_reference_recipe:
-            range: La valeur de début doit être inférieure à la valeur de fin
-    position_meeting:
-        fromParticipants:
-            count:
-                min: Vous devez choisir au moins {{ limit }} participant
-        toParticipants:
-            count:
-                min: Vous devez choisir au moins {{ limit }} participant
-
-    unavailability:
-        participants:
-            count:
-                min: Vous devez choisir au moins {{ limit }} participant
-    spot:
-        reference:
-            unique: Cet identifiant est déjà utilisé
-    product:
-        quantity:
-            greaterOrEqual: La quantité min doit être inférieure à la quantité max
-            minRequired: Si vous définissez une quantité, vous devez définir un min et un max
-            maxRequired: Si vous définissez une quantité, vous devez définir un min et un max
-    promotion_code:
-        code:
-            already_exist: Ce code est déjà utilisé
-        promotion:
-            value:
-                free: Indiquez une valeur
-                percent_off: Indiquez un pourcentage entre 0 et 100
-                value_off: Indiquez un montant entre 0 et le prix du produit
-    meeting:
-        slot:
-            recipe:
-                date_range: La date de début doit être antérieure à la date de fin
-    nomenclature:
-        import:
-            error: Votre fichier comporte des erreurs
-            missing_keys: Vous ne pouvez plus supprimer d'élément de cette nomenclature car il y a déjà des inscriptions
-    event:
-        domain:
-            unique: Ce nom de domaine est déjà utilisé sur un autre événement
-    allowDepositMissingData: Si vous activez l'accompte, vous devez ajouter un accompte minimum, une date et un pourcentage
+validators.allowDepositMissingData: 'Si vous activez l''accompte, vous devez ajouter un accompte minimum, une date et un pourcentage'
+validators.constraint.daterange: 'L''heure de début doit être antérieure à l''heure de fin'
+validators.constraint.spot_reference_recipe.range: 'La valeur de début doit être inférieure à la valeur de fin'
+validators.currentPassword: 'Le mot de passe actuel n''est pas correct'
+validators.email: 'L''adresse e-mail saisie n''est pas valide'
+validators.emailAlreadyExist: 'Cet email est déjà utilisé, vous ne pouvez pas l''utiliser'
+validators.emailDoesNotExist: 'L''email saisi n''existe pas'
+validators.event.domain.unique: 'Ce nom de domaine est déjà utilisé sur un autre événement'
+validators.field.notValid.image: 'Le format de l''image n''est pas valide, les formats autorisés sont le jpeg, le png et le gif'
+validators.field.notValid.telephone: 'Le format du champ téléphone n''est pas correct'
+validators.field.notValid.url: 'Le format du champ url n''est pas valide'
+validators.field.required: 'Ce champ est requis'
+validators.hexadecimal: 'Cette valeur doit être au format hexadécimal'
+validators.json.invalid: 'Le JSON n''est pas valide'
+validators.meeting.slot.recipe.date_range: 'La date de début doit être antérieure à la date de fin'
+validators.nomenclature.import.error: 'Votre fichier comporte des erreurs'
+validators.nomenclature.import.missing_keys: 'Vous ne pouvez plus supprimer d''élément de cette nomenclature car il y a déjà des inscriptions'
+validators.option.participant.alreadyAddedBoughtParticipant: 'Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche'
+validators.option.participant.optionCanNotBeUnselected: 'Vous ne pouvez pas déselectionner cette option, vous devez d''abord supprimer des participants depuis votre fiche'
+validators.option.quantityMustBeAdded: 'Vous devez ajouter une quantité si vous sélectionnez cette option'
+validators.password.min: 'Le mot de passe doit comporter au moins {{ limit }} caractères'
+validators.password.mismatch: 'Les 2 mots de passe ne sont pas identiques'
+validators.position_meeting.fromParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
+validators.position_meeting.toParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
+validators.product.quantity.greaterOrEqual: 'La quantité min doit être inférieure à la quantité max'
+validators.product.quantity.maxRequired: 'Si vous définissez une quantité, vous devez définir un min et un max'
+validators.product.quantity.minRequired: 'Si vous définissez une quantité, vous devez définir un min et un max'
+validators.promotion_code.code.already_exist: 'Ce code est déjà utilisé'
+validators.promotion_code.promotion.value.free: 'Indiquez une valeur'
+validators.promotion_code.promotion.value.percent_off: 'Indiquez un pourcentage entre 0 et 100'
+validators.promotion_code.promotion.value.value_off: 'Indiquez un montant entre 0 et le prix du produit'
+validators.required.email: 'L''adresse e-mail ne peut pas être vide'
+validators.required.password: 'Le mot de passe ne peut pas être vide'
+validators.sameEmail: 'Vous utilisez déjà cet email'
+validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
+validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
+validators.whitespace: 'Ce champ ne doit pas contenir d''espace'
