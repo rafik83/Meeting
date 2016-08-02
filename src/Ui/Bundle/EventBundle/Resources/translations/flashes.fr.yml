@@ -4,3 +4,7 @@ flash.package.promotionCode.error.notFound: 'Code inexistant, veuillez renouvele
 flash.package.promotionCode.error.notUsed: 'Code non compatible avec la formule choisie'
 flash.package.promotionCode.error.outDated: 'Code périmé'
 flash.package.promotionCode.error.soldOut: 'Code épuisé'
+flash.payment.success: 'Paiement effectué avec succès.'
+flash.payment.cancelled: 'Paiement annulé'
+flash.payment.pending: 'Paiement en attente de validation'
+flash.payment.error: 'Le paiement n''a pas été effectué.'

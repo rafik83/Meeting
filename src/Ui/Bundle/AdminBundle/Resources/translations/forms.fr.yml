@@ -485,12 +485,14 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
+form.transaction.children.state.cancelled: 'Annulé'
 form.transaction.children.state.paid: Réglé
 form.transaction.children.state.pending: 'En attente'
 form.transaction.children.transaction_mode.bank_card: 'Carte bancaire'
 form.transaction.children.transaction_mode.bank_cash: Liquide
 form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
+form.transaction.children.transaction_mode.paypal: Paypal
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'

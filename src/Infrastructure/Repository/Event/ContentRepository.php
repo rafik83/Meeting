@@ -14,21 +14,20 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Content;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class ContentRepository implements ContentRepositoryInterface
 {
     /**
      * @var EntityManager
      */
-    private $manager;
+    private $entityManager;
 
     /**
-     * @param ManagerRegistry $registry
+     * @param EntityManager $entityManager
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->manager = $registry->getManager();
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -36,8 +35,8 @@ class ContentRepository implements ContentRepositoryInterface
      */
     public function add(Content $content)
     {
-        $this->manager->persist($content);
-        $this->manager->flush($content);
+        $this->entityManager->persist($content);
+        $this->entityManager->flush($content);
     }
 
     /**
@@ -45,7 +44,7 @@ class ContentRepository implements ContentRepositoryInterface
      */
     public function set(Content $content)
     {
-        $this->manager->flush($content);
+        $this->entityManager->flush($content);
     }
 
     /**
@@ -54,7 +53,7 @@ class ContentRepository implements ContentRepositoryInterface
     public function findByEventAndType(Event $event, $type)
     {
         $queryBuilder = $this
-            ->manager
+            ->entityManager
             ->createQueryBuilder()
             ->select('content')
             ->from(Content::class, 'content')

@@ -22,11 +22,9 @@ abstract class AbstractPaymentChoiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $modes = Mode::getPaymentModes();
-
         $builder
             ->add('mode', ChoiceType::class, [
-                'choices'      => $modes,
+                'choices'      => Mode::getPaymentModes(),
                 'choice_label' => function ($value) {
                     return sprintf('form.payment_choice.children.paymentMode.%s', $value);
                 },

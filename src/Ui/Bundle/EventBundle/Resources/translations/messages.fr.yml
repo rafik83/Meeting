@@ -68,9 +68,11 @@ order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: État
 order.transaction.list.column.total: Somme
 order.transaction.list.title: 'Liste de vos transactions'
-order.transaction.mode.bank_card: 'Carte bleu'
+order.transaction.mode.bank_card: 'Carte bleue'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
+order.transaction.mode.paypal: 'Paypal'
+order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
 package.funnel.payment: Paiement
