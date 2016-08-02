@@ -188,5 +188,6 @@ Feature: Complete my package
     And I should see "1"
     And I should see "Option E"
     And I should see "-2"
-    When I follow "package.summary.pay"
+    And I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
+    When I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/orders"
