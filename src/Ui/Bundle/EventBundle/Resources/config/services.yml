@@ -20,6 +20,12 @@ services:
             - '@vimeet_infrastructure.repository.category_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'category_view_param_converter' }
+    vimeet_app.param_converter.sheet_param_converter:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\SheetParamConverter
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: 'request.param_converter', priority: 2, converter: 'sheet_param_converter' }
 
     #
     # Security
