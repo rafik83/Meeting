@@ -32,20 +32,20 @@ Feature: Edit an order
     And I should see "1 389"
 
   Scenario: Update custom row
-    When I am logged with "test@test.com" on admin
-    When I follow "admin.edit_custom_row"
+    Given I am logged with "test@test.com" on admin
+    When I am on this page "/admin/fr/event/1/order/1/edit"
+    And I follow "admin.order_edit.edit_custom_row"
     Then the response status code should be 200
     When I fill in the following:
       | order_row_label    | Another awesome reduction |
-      | order_row_price    | -200                 |
-      | order_row_quantity | 2                    |
+      | order_row_price    | -200                      |
+      | order_row_quantity | 2                         |
     And I press "order_row_submit"
     Then the response status code should be 200
     And I should see "Another awesome reduction"
     And I should see "1 489"
 
   Scenario: Remove custom row
-    When I am logged with "test@test.com" on admin
-    And I follow "admin.remove_custom_row"
-    Then the response status code should be 200
-    And I should not see "Another awesome reduction"
+    Given I follow "admin.order_edit.remove_custom_row"
+    When the response status code should be 200
+    Then I should not see "Another awesome reduction"
