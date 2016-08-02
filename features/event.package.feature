@@ -63,20 +63,20 @@ Feature: Complete my package
     Then the "options_10" field should contain "1"
     Then the "options_11" field should contain "3"
 
-    Scenario: I can add a participant at step 2
-      Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
-      When I am on this page "/fr/sheet/1/package/step/2"
-      Then I should see "sheet.object.action.add"
-      And I follow "sheet.object.action.add"
-      And I should see "sheet.participant.sendInvite"
-      And I fill in the following:
-        | add_participant_firstName | Truc         |
-        | add_participant_lastName  | Test         |
-        | add_participant_email     | truc@test.fr |
-      Then I press "sheet.participant.sendInvite"
-      And I should be on this page "/fr/sheet/1/package/step/2"
-      And I should see "Truc TEST"
-      And I should see "TT"
+  Scenario: I can add a participant at step 2
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/step/2"
+    Then I should see "sheet.object.action.add"
+    And I follow "sheet.object.action.add"
+    And I should see "sheet.participant.sendInvite"
+    And I fill in the following:
+      | add_participant_firstName | Truc         |
+      | add_participant_lastName  | Test         |
+      | add_participant_email     | truc@test.fr |
+    Then I press "sheet.participant.sendInvite"
+    And I should be on this page "/fr/sheet/1/package/step/2"
+    And I should see "Truc TEST"
+    And I should see "TT"
 
   Scenario: I can fill my billing-info
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
@@ -142,11 +142,20 @@ Feature: Complete my package
 
   Scenario: I can see my package total summary:
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
-    When I am on this page "/fr/sheet"
-    And I follow "navigation.links.package.order_summary_total"
+    And I am on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_summary_total"
     Then I should be on this page "/fr/sheet/1/order/summary"
     And I should see "package.summary.title"
     And I should see "package.summary.promotion.label"
     And I should see "summary.total"
     And I should see "package.summary.totalVat"
     And I should see "summary.totalToPay"
+
+  Scenario: I can see the remaining amount to pay
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_list"
+    Then I should be on this page "/fr/sheet/1/orders"
+    And I should see "order.list.remainingToPay"
+    And I should see "2 811,20 €"
+    And I should see "order.list.pay_remaining"
