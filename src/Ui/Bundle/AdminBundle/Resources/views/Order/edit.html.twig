@@ -3,7 +3,7 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h3>{{ sheet_info }} | Commande {{ order.id }}</h3>
+    {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
 
     <table class="table table-condensed">
         <thead>

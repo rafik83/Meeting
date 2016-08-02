@@ -1,11 +1,11 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
 {% block form_title %}
-    Commande {{ order.id }} de {{ sheet_info }}
+    {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
 {% endblock form_title %}
 
 {% block form_content %}
-    <h4>Modifier une ligne</h4>
+    <h4>{{ 'admin.order_edit.update_line'|trans }}</h4>
 
     {{ form_row(form.label, {widget_columns: 6}) }}
     {{ form_row(form.price, {widget_columns: 6}) }}

@@ -1,7 +1,7 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
 {% block form_title %}
-    Commande {{ order.id }} de {{ sheet_info }}
+    {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
 {% endblock form_title %}
 
 {% block form_content %}
