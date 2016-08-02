@@ -10,7 +10,6 @@
 
 namespace Application\Command\Order;
 
-
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler;
 use Proximum\Vimeet\Domain\Model\Order;

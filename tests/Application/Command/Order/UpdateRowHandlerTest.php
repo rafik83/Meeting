@@ -46,11 +46,11 @@ class UpdateRowHandlerTest extends \PHPUnit_Framework_TestCase
 
         $rowRepository->set($row)->shouldBeCalled();
 
-        $add = new UpdateRow($row);
+        $updateRow = new UpdateRow($row);
 
         // Handler
         $handler = new UpdateRowHandler($rowRepository->reveal());
-        $handler->handle($add);
+        $handler->handle($updateRow);
     }
 }
 

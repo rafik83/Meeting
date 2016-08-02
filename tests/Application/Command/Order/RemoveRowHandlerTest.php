@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Order;
 
-
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\RemoveRowHandler;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -47,11 +46,11 @@ class RemoveRowHandlerTest extends \PHPUnit_Framework_TestCase
 
         $rowRepository->remove($row)->shouldBeCalled();
 
-        $add = new RemoveRow($row);
+        $removeRow = new RemoveRow($row);
 
         // Handler
         $handler = new RemoveRowHandler($rowRepository->reveal());
-        $handler->handle($add);
+        $handler->handle($removeRow);
     }
 }
 
