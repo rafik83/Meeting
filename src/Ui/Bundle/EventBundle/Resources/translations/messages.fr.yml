@@ -1,255 +1,171 @@
-"Bad credentials.": Identifiants incorrects
-
-gender:
-    man: Monsieur
-    woman: Madame
-
-select2:
-    no_results: Aucun résultat
-
-login:
-    connection: Connexion
-    memberArea: Espace membre
-    connect: Se connecter
-    forgotPassword: Mot de passe oublié ?
-
-
-account:
-    profile:
-        title: Profil
-        profile: Profil
-        company: Société / Organisme
-        contactInformation: Coordonnées
-        updateAvatar: Modifier la photo
-    update:
-        title: Modifier mon compte
-        profile:
-            title: Profil
-        company:
-            title: Société / Organisme
-        avatar:
-            title: Photo
-    update_email:
-        title: Changer mon email
-    change_password:
-        title: Changer le mot de passe
-        link: Changer le mot de passe
-
-common:
-    update: Modifier
-    need_help: Besoin d'aide
-    next: Suivant
-    validate: Valider
-    backToSheet: Retour à la fiche
-    backToPackage: Retour au forfait
-register:
-    register_as: S'inscrire en tant que :
-    already_registered: Déjà inscrit ?
-    register: Inscription
-    connect: Valider
-    finalize: Finaliser
-    step: Etape
-    privacy_policies: "Protection de la vie privée : conformement à la loi Informatique et Libertes du 6 janvier 1978 modifiee en 2004, vous disposez d’un droit d’acces et de rectification aux données personnelles/informations vous concernant en nous adressant un e-mail à (à déterminer)"
-    photo: |+
-        Pourquoi la photo du participant est utile ?
-        - Ne restez pas un anonyme pour vos futurs partenaire,
-        - Renforcez votre réseau professionel
-        - Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,
-        - Des cartes de visites complètes pour tous,
-        - Identifiez facilement les agendas de chacuns...
-
-sheet:
-    title: Fiche de présentation
-    object:
-        action:
-            add: "Ajouter:"
-            remove: "Supprimer:"
-            edit: Editer
-            backToSheet: Retour à la fiche
-    participant:
-        sendInvite: Envoyer l'invitation
-        remove: Supprimer de la fiche
-    edit:
-        object: Editer "%label%"
-
-    maxParticipantReached: Nombre maximum de participants atteint
-nomenclature:
-    select_all: Tous sélectionner
-    select_none: Aucun
-    back_to_sheet: Retour à la fiche
-
-package:
-    title: Forfait de participation
-    select: "Sélectionner:"
-    vatMode:
-        et: HT
-        ati: TTC
-    plans:
-        validate: Valider
-        seeMore: Voir la suite des prestations
-    participants:
-        add: Ajouter des participants
-        delete: Supprimer des participants
-        included: inclus
-    planning:
-        unitPrice: Prix unitaire
-        label: Intitulé & descriptions
-        quantity: Quantité
-        total: Total
-        quantityMax: Quantité maximum atteinte
-        quantityMin: Quantité minimum atteinte
-    participant_planning:
-        validate: Valider
-    options:
-        included: inclus
-    product:
-        selectOptions: Sélectionner vos options
-        unitPriceLabel: Prix unitaire
-        unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
-        priceWithCurrency: '%price% <sup>%currency%</sup>'
-        totalPrice: '<span class="product-total-price">%price%</span> <sup>%currency% %vatMode%</sup>'
-        label: Intitulé & descriptions
-        quantity: Quantité
-        total: Total
-        quantityMax: Quantité maximum atteinte
-        quantityMin: Quantité minimum atteinte
-        validate: Valider
-        available: Disponible
-        availability: '%availabilityCurrent% sur %availabilityMax%'
-        outOfStock: Epuisé
-        subjectedToValidationHelp: Sous réserve de validation
-        unavailable: Non disponible
-        includedProduct: 'Inclus:'
-        buyableUntil: Achetable jusqu'au %date%
-        deletableUntil: Supprimable jusqu'au %date%
-        notDeletableSince: Non supprimable depuis le %date%
-    summary:
-        pageTitle: Récapitulatif de votre forfait de participation
-        title: Récapitulatif
-        pay: Régler le forfait de participation
-        totalOfSummary: Total de la commande
-        total:
-            title: Forfait de participation
-        totalVat: '+ TVA applicable de %vat%%'
-        totalPlusVat: Total à régler
-        option: Option
-        promotion:
-            label: Offres de réductions
-            button:
-                label: Valider
-        billingInfo:
-            update: Modifier vos informations de facturation
-        columns:
-            title: Intitulé
-            unitPrice: Prix unitaire
-            quantity: Quantité
-            total: Total
-        seeTermsOfSale: Voir les conditions générales de vente
-    funnel:
-        summary: 'Récapitulatif & Facturation'
-        payment: Paiement
-    payment:
-        pay:
-            label: Payer
-        title: Paiement
-        total:
-            title: Total:
-            toPay: 'Le total à régler est de: %total%'
-        deposit:
-            title: Accompte:
-            toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
-billing_info:
-    title: Info de facturation
-
-navigation:
-    category:
-        member_space: Espace membre
-        billing: Facturation
-        sheet: Fiche de présentation
-        package: Forfait de participation
-        catalog: Catalogue des participants
-        happening: Gestion de rdv
-        planning: Agenda provisoire
-    links:
-        incoming: A venir
-        member_space:
-            profile: Profil
-            avatar: Photo
-            company: Société / Organisme
-        billing:
-            billing_info: Informations de facturation
-            order_history: Historique des commandes
-        sheet:
-            locale: Version
-        package:
-            summary: Récapitulatif
-            order_summary_total: Récapitulatif
-            payment: Paiement
-            order_list: Liste des commandes
-        catalog:
-            available_date: Disponible le
-        happening:
-            proposal: Propositions de RDV
-            waiting: Demandes en attente
-            accept: Acceptées
-            decline: Refusées
-            open_date: Disponible le
-        planning:
-            available_date: Disponible le
-            final_date: Publication le
-            unavailability: Ajouter une indisponibilité
-            conference: Conférences
-            flash_presentation: Présentations flash
-            my_schedule: Mon agenda
-            all_schedule: Tous les agendas
-pro_forma:
-    title: 'Pro Forma - %date%'
-    bankInfo:
-        title: Coordonnées bancaires:
-    vatNumber:
-        title: 'TVA Intracommunautaire:'
-    date:
-        title: 'Date:'
-summary:
-    total: 'Total de la commande:'
-    vatRate: 'TVA applicable %vatRate%%:'
-    totalToPay: 'Total à régler:'
-    promotionCode:
-        title: 'Offres de réductions'
-        free: 'Offert'
-    group:
-        option:
-            title: Options
-    product:
-        included: 'Inclus:'
-    column:
-        title: Intitulé
-        unitPrice: Prix unitaire
-        quantity: Quantité
-        total: Total
-
-order:
-    list:
-        title: Liste de vos commandes
-        column:
-            date: Date
-            pro_forma: Pro Forma
-            total: Total
-        remainingToPay: Reste à payer
-    transaction:
-        list:
-            title: Liste de vos transactions
-            column:
-                date: Date
-                state: État
-                total: Somme
-                mode: Mode
-        state:
-            pending: En attente
-            paid: Réglé
-            cancelled: Annulé
-        mode:
-            paypal: Paypal ou Carte bleue
-            bank_card: Carte bleue
-            bank_transfer: Transfert
-            bank_check: Chèque
+account.change_password.link: 'Changer le mot de passe'
+account.change_password.title: 'Changer le mot de passe'
+account.profile.company: 'Société / Organisme'
+account.profile.contactInformation: Coordonnées
+account.profile.profile: Profil
+account.profile.title: Profil
+account.profile.updateAvatar: 'Modifier la photo'
+account.update_email.title: 'Changer mon email'
+account.update.avatar.title: Photo
+account.update.company.title: 'Société / Organisme'
+account.update.profile.title: Profil
+account.update.title: 'Modifier mon compte'
+'Bad credentials.': 'Identifiants incorrects'
+billing_info.title: 'Info de facturation'
+common.backToPackage: 'Retour au forfait'
+common.backToSheet: 'Retour à la fiche'
+common.need_help: 'Besoin d''aide'
+common.next: Suivant
+common.update: Modifier
+common.validate: Valider
+gender.man: Monsieur
+gender.woman: Madame
+login.connect: 'Se connecter'
+login.connection: Connexion
+login.forgotPassword: 'Mot de passe oublié ?'
+login.memberArea: 'Espace membre'
+navigation.category.billing: Facturation
+navigation.category.catalog: 'Catalogue des participants'
+navigation.category.happening: 'Gestion de rdv'
+navigation.category.member_space: 'Espace membre'
+navigation.category.package: 'Forfait de participation'
+navigation.category.planning: 'Agenda provisoire'
+navigation.category.sheet: 'Fiche de présentation'
+navigation.links.billing.billing_info: 'Informations de facturation'
+navigation.links.billing.order_history: 'Historique des commandes'
+navigation.links.catalog.available_date: 'Disponible le'
+navigation.links.happening.accept: Acceptées
+navigation.links.happening.decline: Refusées
+navigation.links.happening.open_date: 'Disponible le'
+navigation.links.happening.proposal: 'Propositions de RDV'
+navigation.links.happening.waiting: 'Demandes en attente'
+navigation.links.incoming: 'A venir'
+navigation.links.member_space.avatar: Photo
+navigation.links.member_space.company: 'Société / Organisme'
+navigation.links.member_space.profile: Profil
+navigation.links.package.order_list: 'Liste des commandes'
+navigation.links.package.order_summary_total: Récapitulatif
+navigation.links.package.payment: Paiement
+navigation.links.package.summary: Récapitulatif
+navigation.links.planning.all_schedule: 'Tous les agendas'
+navigation.links.planning.available_date: 'Disponible le'
+navigation.links.planning.conference: Conférences
+navigation.links.planning.final_date: 'Publication le'
+navigation.links.planning.flash_presentation: 'Présentations flash'
+navigation.links.planning.my_schedule: 'Mon agenda'
+navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
+navigation.links.sheet.locale: Version
+nomenclature.back_to_sheet: 'Retour à la fiche'
+nomenclature.select_all: 'Tous sélectionner'
+nomenclature.select_none: Aucun
+order.list.column.date: Date
+order.list.column.pro_forma: 'Pro Forma'
+order.list.column.total: Total
+order.list.remainingToPay: 'Reste à payer'
+order.list.title: 'Liste de vos commandes'
+order.transaction.list.column.date: Date
+order.transaction.list.column.mode: Mode
+order.transaction.list.column.state: État
+order.transaction.list.column.total: Somme
+order.transaction.list.title: 'Liste de vos transactions'
+order.transaction.mode.bank_card: 'Carte bleue'
+order.transaction.mode.bank_check: Chèque
+order.transaction.mode.bank_transfer: Transfert
+order.transaction.mode.paypal: 'Paypal'
+order.transaction.state.cancelled: 'Annulé'
+order.transaction.state.paid: Réglé
+order.transaction.state.pending: 'En attente'
+package.funnel.payment: Paiement
+package.funnel.summary: 'Récapitulatif & Facturation'
+package.options.included: inclus
+package.participant_planning.validate: Valider
+package.participants.add: 'Ajouter des participants'
+package.participants.delete: 'Supprimer des participants'
+package.participants.included: inclus
+package.payment.deposit.title: 'Accompte:'
+package.payment.deposit.toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
+package.payment.pay.label: Payer
+package.payment.title: Paiement
+package.payment.total.title: 'Total:'
+package.payment.total.toPay: 'Le total à régler est de: %total%'
+package.planning.label: 'Intitulé & descriptions'
+package.planning.quantity: Quantité
+package.planning.quantityMax: 'Quantité maximum atteinte'
+package.planning.quantityMin: 'Quantité minimum atteinte'
+package.planning.total: Total
+package.planning.unitPrice: 'Prix unitaire'
+package.plans.seeMore: 'Voir la suite des prestations'
+package.plans.validate: Valider
+package.product.availability: '%availabilityCurrent% sur %availabilityMax%'
+package.product.available: Disponible
+package.product.buyableUntil: 'Achetable jusqu''au %date%'
+package.product.deletableUntil: 'Supprimable jusqu''au %date%'
+package.product.includedProduct: 'Inclus:'
+package.product.label: 'Intitulé & descriptions'
+package.product.notDeletableSince: 'Non supprimable depuis le %date%'
+package.product.outOfStock: Epuisé
+package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
+package.product.quantity: Quantité
+package.product.quantityMax: 'Quantité maximum atteinte'
+package.product.quantityMin: 'Quantité minimum atteinte'
+package.product.selectOptions: 'Sélectionner vos options'
+package.product.subjectedToValidationHelp: 'Sous réserve de validation'
+package.product.total: Total
+package.product.totalPrice: '<span class="product-total-price">%price%</span> <sup>%currency% %vatMode%</sup>'
+package.product.unavailable: 'Non disponible'
+package.product.unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
+package.product.unitPriceLabel: 'Prix unitaire'
+package.product.validate: Valider
+package.select: 'Sélectionner:'
+package.summary.billingInfo.update: 'Modifier vos informations de facturation'
+package.summary.columns.quantity: Quantité
+package.summary.columns.title: Intitulé
+package.summary.columns.total: Total
+package.summary.columns.unitPrice: 'Prix unitaire'
+package.summary.option: Option
+package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
+package.summary.pay: 'Régler le forfait de participation'
+package.summary.promotion.button.label: Valider
+package.summary.promotion.label: 'Offres de réductions'
+package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
+package.summary.title: Récapitulatif
+package.summary.total.title: 'Forfait de participation'
+package.summary.totalOfSummary: 'Total de la commande'
+package.summary.totalPlusVat: 'Total à régler'
+package.summary.totalVat: '+ TVA applicable de %vat%%'
+package.title: 'Forfait de participation'
+package.vatMode.ati: TTC
+package.vatMode.et: HT
+pro_forma.bankInfo.title: 'Coordonnées bancaires:'
+pro_forma.date.title: 'Date:'
+pro_forma.title: 'Pro Forma - %date%'
+pro_forma.vatNumber.title: 'TVA Intracommunautaire:'
+register.already_registered: 'Déjà inscrit ?'
+register.connect: Valider
+register.finalize: Finaliser
+register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaire,\n- Renforcez votre réseau professionel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacuns...\n"
+register.privacy_policies: 'Protection de la vie privée : conformement à la loi Informatique et Libertes du 6 janvier 1978 modifiee en 2004, vous disposez d’un droit d’acces et de rectification aux données personnelles/informations vous concernant en nous adressant un e-mail à (à déterminer)'
+register.register: Inscription
+register.register_as: 'S''inscrire en tant que :'
+register.step: Etape
+select2.no_results: 'Aucun résultat'
+sheet.edit.object: 'Editer "%label%"'
+sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
+sheet.object.action.add: 'Ajouter:'
+sheet.object.action.backToSheet: 'Retour à la fiche'
+sheet.object.action.edit: Editer
+sheet.object.action.remove: 'Supprimer:'
+sheet.participant.remove: 'Supprimer de la fiche'
+sheet.participant.sendInvite: 'Envoyer l''invitation'
+sheet.title: 'Fiche de présentation'
+summary.column.quantity: Quantité
+summary.column.title: Intitulé
+summary.column.total: Total
+summary.column.unitPrice: 'Prix unitaire'
+summary.group.option.title: Options
+summary.product.included: 'Inclus:'
+summary.promotionCode.free: Offert
+summary.promotionCode.title: 'Offres de réductions'
+summary.total: 'Total de la commande:'
+summary.totalToPay: 'Total à régler:'
+summary.vatRate: 'TVA applicable %vatRate%%:'

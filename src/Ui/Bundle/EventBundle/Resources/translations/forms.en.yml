@@ -1,6 +1,2 @@
-forms:
-    login:
-        email:
-            placeholder: Email
-        password:
-            placeholder: Password
+gender.man: gender.man
+gender.woman: gender.woman
