@@ -207,7 +207,7 @@ services:
     repository.event.content_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Event\ContentRepository
         arguments:
-            - '@doctrine'
+            - '@doctrine.orm.entity_manager'
     repository.promotion_code_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\PromotionCodeRepository
         arguments:
@@ -215,7 +215,11 @@ services:
     repository.cart_step_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartStepRepository
         arguments:
-            - '@doctrine'
+            - '@doctrine.orm.entity_manager'
+    repository.payment.notification_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Payment\NotificationRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -992,7 +996,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
         arguments:
             - '@repository.transaction'
-            - '@cart.convertor'
+            - '@cart.converter'
             - '@cart_manager'
             - '@payment.total_to_pay'
             - '@datetime'
@@ -1002,12 +1006,20 @@ services:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
         arguments:
             - '@repository.transaction'
-            - '@cart.convertor'
+            - '@cart.converter'
             - '@cart_manager'
             - '@payment.total_to_pay'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
+    command.order.create_handler:
+        class: Proximum\Vimeet\Application\Command\Order\CreateHandler
+        arguments:
+            - '@cart.converter'
+            - '@cart_manager'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Create }
     command.event.promotion_code.add_handler:
         class: Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler
         arguments:
@@ -1667,7 +1679,7 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
-    cart.convertor:
+    cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
@@ -1758,3 +1770,22 @@ services:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
+    # Payum
+    #
+    vimeet.payum.paypal.prepare_payment:
+        class: Proximum\Vimeet\Infrastructure\Payum\Paypal\PreparePayment
+        arguments:
+            - '@payum'
+            - '@repository.billing_info_repository'
+    vimeet.payum.paypal.capture_payment:
+        class: Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment
+        arguments:
+            - '@payum'
+            - '@repository.transaction'
+    vimeet.payum.paypal.action.store_notification:
+        class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
+        arguments:
+            - '@repository.payment.notification_repository'
+            - '@datetime'

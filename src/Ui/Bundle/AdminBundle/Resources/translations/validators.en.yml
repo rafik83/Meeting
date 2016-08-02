@@ -1,16 +1,8 @@
-validators:
-    field:
-        required: This field is required
-    email: Email address is not valid
-    password:
-        min: Password is too short, minimum is {{ limit }} characters
-        mismatch: Password mismatch
-    currentPassword: Current password is not correct
-    option:
-        participant:
-            optionCanNotBeUnselected: You can not disabled this option, you must first delete participant on your
-            alreadyAddedBoughtParticipant: You can not downgrade this option as you have already added participant to your sheet, you must first delete them from you sheet
-    unavailability:
-        participants:
-            count:
-                min: You must select at least {{ limit }} participants
+validators.currentPassword: 'Current password is not correct'
+validators.email: 'Email address is not valid'
+validators.field.required: 'This field is required'
+validators.option.participant.alreadyAddedBoughtParticipant: 'You can not downgrade this option as you have already added participant to your sheet, you must first delete them from you sheet'
+validators.option.participant.optionCanNotBeUnselected: 'You can not disabled this option, you must first delete participant on your'
+validators.password.min: 'Password is too short, minimum is {{ limit }} characters'
+validators.password.mismatch: 'Password mismatch'
+validators.unavailability.participants.count.min: 'You must select at least {{ limit }} participants'

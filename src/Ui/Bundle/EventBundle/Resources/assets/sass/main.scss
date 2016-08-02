@@ -72,3 +72,45 @@
     padding-right:0;
     padding-left:0;
 }
+
+.important {
+  position: relative;
+  color: $color-highlighted;
+  font-size: 15px;
+  padding: 20px;
+  border-radius: 5px;
+  background: $bg-container-color;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.3) inset;
+
+  p:last-child { margin-bottom: 0; }
+
+  h2 {
+    font-size: 15px;
+    text-transform: uppercase;
+  }
+
+  li {
+    margin-bottom: 20px;
+
+    &:before {
+      content: '◆';
+      float: left;
+      margin-top: -1px;
+      margin-right: 5px;
+    }
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  &.success,
+  &.fail {
+    color: #FFFFFF;
+
+    > .text-danger {
+      color: #FFFFFF;
+    }
+  }
+
+  &.success { background: $bg-success-color; }
+  &.fail { background: $bg-fail-color; }
+}
