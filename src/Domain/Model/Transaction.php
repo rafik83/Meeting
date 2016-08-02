@@ -143,6 +143,14 @@ class Transaction
     }
 
     /**
+     * @return int
+     */
+    public function getAmountInCents()
+    {
+        return (int) ($this->amount * 100);
+    }
+
+    /**
      * Get date
      *
      * @return \DateTimeInterface

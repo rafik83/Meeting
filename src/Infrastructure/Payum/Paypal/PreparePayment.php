@@ -81,7 +81,7 @@ class PreparePayment
             '%eventName%' => $transaction->getSheet()->getEvent()->getTitle(),
         ]);
 
-        $amount = $transaction->getAmount() * 100;
+        $amount = $transaction->getAmountInCents();
 
         /** @var Payment $payment */
         $payment = $storage->create();
