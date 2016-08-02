@@ -1,15 +1,9 @@
 <?php
 
 /*
-<<<<<<< HEAD
- * This file is part of the vimeet project.
- *
- * Copyright (C) 2016 Proximum
-=======
  * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) 2015 Proximum
->>>>>>> master
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,11 +20,8 @@ class Create
     public $sheet;
 
     /**
-<<<<<<< HEAD
      * Create constructor.
      *
-=======
->>>>>>> master
      * @param Sheet $sheet
      */
     public function __construct(Sheet $sheet)
