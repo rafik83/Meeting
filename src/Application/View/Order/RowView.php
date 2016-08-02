@@ -52,19 +52,48 @@ class RowView
      */
     public $includedProducts = [];
 
+    /**
+     * @var null|\DateTimeInterface
+     */
+    public $buyableUntil;
+
+    /**
+     * @var null|\DateTimeInterface
+     */
+    public $deletableUntil;
+
+    /**
+     * @var bool
+     */
+    public $isBuyable;
+
+    /**
+     * @var bool
+     */
+    public $isDeletable;
+
     /***
      * @var null|CustomRowView[]
      */
     public $customRows = [];
 
     /**
-     * @param int    $id
-     * @param int    $productId
-     * @param string $label
-     * @param float  $price
-     * @param int    $quantity
-     * @param string $vatMode
-     * @param string $currency
+     * @var int
+     */
+    public $productId;
+
+    /**
+     * @param int                     $id
+     * @param int                     $productId
+     * @param string                  $label
+     * @param float                   $price
+     * @param int                     $quantity
+     * @param string                  $vatMode
+     * @param string                  $currency
+     * @param null|\DateTimeInterface $buyableUntil
+     * @param null|\DateTimeInterface $deletableUntil
+     * @param bool                    $isBuyable
+     * @param bool                    $isDeletable
      */
     public function __construct(
         $id,
@@ -73,16 +102,23 @@ class RowView
         $price,
         $quantity,
         $vatMode,
-        $currency
+        $currency,
+        \DateTimeInterface $buyableUntil = null,
+        \DateTimeInterface $deletableUntil = null,
+        $isBuyable,
+        $isDeletable
     ) {
-        $this->id        = $id;
-        $this->productId = $productId;
-        $this->label     = $label;
-        $this->price     = $price;
-        $this->quantity  = $quantity;
-        $this->total     = $price * $quantity;
-        $this->vatMode   = $vatMode;
-        $this->currency  = $currency;
+        $this->id             = $id;
+        $this->label          = $label;
+        $this->price          = $price;
+        $this->quantity       = $quantity;
+        $this->total          = $price * $quantity;
+        $this->vatMode        = $vatMode;
+        $this->currency       = $currency;
+        $this->buyableUntil   = $buyableUntil;
+        $this->deletableUntil = $deletableUntil;
+        $this->isBuyable      = $isBuyable;
+        $this->isDeletable    = $isDeletable;
     }
 
     /**

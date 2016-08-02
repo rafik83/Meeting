@@ -23,42 +23,42 @@ class Row
     /**
      * @var Order
      */
-    protected $order;
+    private $order;
 
     /**
      * @var string
      */
-    protected $data = '';
+    private $data = '';
 
     /**
      * @var null|Product
      */
-    protected $product;
+    private $product;
 
     /**
      * @var int
      */
-    protected $quantity;
+    private $quantity;
 
     /**
      * @var float
      */
-    protected $price;
+    private $price;
 
     /**
      * @var null|int
      */
-    protected $groupId;
+    private $groupId;
 
     /**
      * @var null|Row
      */
-    protected $parentRow;
+    private $parentRow;
 
     /**
      * @var string
      */
-    protected $label;
+    private $label;
 
     /**
      * Row constructor.
@@ -88,7 +88,7 @@ class Row
         $this->price       = $price;
         $this->parentRow   = $parentRow;
 
-        if ($product != null) {
+        if (null !== $product) {
             $this->product = $product;
             $this->data    = $product->getSerializedData();
             $this->price   = $product->getUnitPrice();

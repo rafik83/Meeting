@@ -48,12 +48,36 @@ class IncludedProductView
     public $currency;
 
     /**
-     * @param int    $id
-     * @param string $label
-     * @param float  $price
-     * @param int    $quantity
-     * @param string $vatMode
-     * @param string $currency
+     * @var null|\DateTimeInterface
+     */
+    public $buyableUntil;
+
+    /**
+     * @var null|\DateTimeInterface
+     */
+    public $deletableUntil;
+
+    /**
+     * @var bool
+     */
+    public $isBuyable;
+
+    /**
+     * @var bool
+     */
+    public $isDeletable;
+
+    /**
+     * @param int                     $id
+     * @param string                  $label
+     * @param float                   $price
+     * @param int                     $quantity
+     * @param string                  $vatMode
+     * @param string                  $currency
+     * @param null|\DateTimeInterface $buyableUntil
+     * @param null|\DateTimeInterface $deletableUntil
+     * @param bool                    $isBuyable
+     * @param bool                    $isDeletable
      */
     public function __construct(
         $id,
@@ -61,14 +85,23 @@ class IncludedProductView
         $price,
         $quantity,
         $vatMode,
-        $currency
-    ) {
-        $this->id        = $id;
-        $this->label     = $label;
-        $this->price     = $price;
-        $this->quantity  = $quantity;
-        $this->total     = $price * $quantity;
-        $this->vatMode   = $vatMode;
-        $this->currency  = $currency;
+        $currency,
+        \DateTimeInterface $buyableUntil = null,
+        \DateTimeInterface $deletableUntil = null,
+        $isBuyable,
+        $isDeletable
+    )
+    {
+        $this->id             = $id;
+        $this->label          = $label;
+        $this->price          = $price;
+        $this->quantity       = $quantity;
+        $this->total          = $price * $quantity;
+        $this->vatMode        = $vatMode;
+        $this->currency       = $currency;
+        $this->buyableUntil   = $buyableUntil;
+        $this->deletableUntil = $deletableUntil;
+        $this->isBuyable      = $isBuyable;
+        $this->isDeletable    = $isDeletable;
     }
 }

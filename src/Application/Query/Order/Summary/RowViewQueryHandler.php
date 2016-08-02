@@ -23,11 +23,20 @@ class RowViewQueryHandler
     private $productIncludedInfoGuesser;
 
     /**
-     * @param ProductIncludedInfoGuesser $productIncludedInfoGuesser
+     * @var \DateTimeInterface
      */
-    public function __construct(ProductIncludedInfoGuesser $productIncludedInfoGuesser)
-    {
+    private $dateTime;
+
+    /**
+     * @param ProductIncludedInfoGuesser $productIncludedInfoGuesser
+     * @param \DateTimeInterface         $dateTime
+     */
+    public function __construct(
+        ProductIncludedInfoGuesser $productIncludedInfoGuesser,
+        \DateTimeInterface $dateTime
+    ) {
         $this->productIncludedInfoGuesser = $productIncludedInfoGuesser;
+        $this->dateTime                   = $dateTime;
     }
 
     /**
@@ -44,7 +53,11 @@ class RowViewQueryHandler
             $rowViewQuery->row->getPrice(),
             $rowViewQuery->row->getQuantity(),
             $rowViewQuery->order->getVatMode(),
-            $rowViewQuery->order->getCurrency()
+            $rowViewQuery->order->getCurrency(),
+            $rowViewQuery->row->getProduct()->getBuyableUntil(),
+            $rowViewQuery->row->getProduct()->getDeletableUntil(),
+            $rowViewQuery->row->getProduct()->isBuyable($this->dateTime),
+            $rowViewQuery->row->getProduct()->isDeletable($this->dateTime)
         );
 
         foreach ($rowViewQuery->order->getCustomRowsForProduct($rowViewQuery->row) as $customRow) {
@@ -70,7 +83,11 @@ class RowViewQueryHandler
                         $includedProduct['price'],
                         $includedProduct['quantity'],
                         $rowViewQuery->order->getVatMode(),
-                        $rowViewQuery->order->getCurrency()
+                        $rowViewQuery->order->getCurrency(),
+                        $rowViewQuery->row->getProduct()->getBuyableUntil(),
+                        $rowViewQuery->row->getProduct()->getDeletableUntil(),
+                        $rowViewQuery->row->getProduct()->isBuyable($this->dateTime),
+                        $rowViewQuery->row->getProduct()->isDeletable($this->dateTime)
                     )
                 );
             }

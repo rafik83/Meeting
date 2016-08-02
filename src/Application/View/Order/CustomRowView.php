@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+
 class CustomRowView
 {
     /**
@@ -48,72 +49,21 @@ class CustomRowView
     public $currency;
 
     /**
-     * @var ProductView[]
-     */
-    public $includedProducts = [];
-
-    /**
-     * @var null|\DateTimeInterface
-     */
-    public $buyableUntil;
-
-    /**
-     * @var null|\DateTimeInterface
-     */
-    public $deletableUntil;
-
-    /**
-     * @var bool
-     */
-    public $isBuyable;
-
-    /**
-     * @var bool
-     */
-    public $isDeletable;
-
-    /**
-     * @param int                     $id
-     * @param string                  $label
-     * @param float                   $price
-     * @param int                     $quantity
-     * @param string                  $vatMode
-     * @param string                  $currency
-     * @param null|\DateTimeInterface $buyableUntil
-     * @param null|\DateTimeInterface $deletableUntil
-     * @param bool                    $isBuyable
-     * @param bool                    $isDeletable
+     * @param int    $id
+     * @param string $label
+     * @param float  $price
+     * @param int    $quantity
      */
     public function __construct(
         $id,
         $label,
         $price,
-        $quantity,
-        $vatMode,
-        $currency,
-        \DateTimeInterface $buyableUntil = null,
-        \DateTimeInterface $deletableUntil = null,
-        $isBuyable,
-        $isDeletable
+        $quantity
     ) {
-        $this->id             = $id;
-        $this->label          = $label;
-        $this->price          = $price;
-        $this->quantity       = $quantity;
-        $this->total          = $price * $quantity;
-        $this->vatMode        = $vatMode;
-        $this->currency       = $currency;
-        $this->buyableUntil   = $buyableUntil;
-        $this->deletableUntil = $deletableUntil;
-        $this->isBuyable      = $isBuyable;
-        $this->isDeletable    = $isDeletable;
-    }
-
-    /**
-     * @param ProductView $productView
-     */
-    public function addIncludedProduct(ProductView $productView)
-    {
-        $this->includedProducts[] = $productView;
+        $this->id       = $id;
+        $this->label    = $label;
+        $this->price    = $price;
+        $this->quantity = $quantity;
+        $this->total    = $price * $quantity;
     }
 }
