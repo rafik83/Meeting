@@ -14,13 +14,14 @@ use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractType
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -40,14 +41,14 @@ class UpdateType extends AbstractType
             ->add('organiserEmail', TextType::class, [
                 'required' => false,
             ])
-            ->add('organiserWebsite', TextType::class, [
+            ->add('organiserWebsite', UrlType::class, [
                 'required' => false,
             ])
         ;
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -59,7 +60,7 @@ class UpdateType extends AbstractType
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {
