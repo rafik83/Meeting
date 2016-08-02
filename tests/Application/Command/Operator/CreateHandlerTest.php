@@ -20,7 +20,6 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

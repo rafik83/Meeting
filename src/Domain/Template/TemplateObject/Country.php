@@ -1,0 +1,60 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Template\TemplateObject;
+
+use Symfony\Component\Intl\Intl;
+
+class Country extends EditableObject implements ContentObjectInterface
+{
+    /**
+     * @param string $country
+     *
+     * @return Country
+     */
+    public function setCountry($country)
+    {
+        $this->data['country'] = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return isset($this->data['country']) ? $this->data['country'] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValue()
+    {
+        return $this->getCountry() ? $this->getCountry() : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentLabel()
+    {
+        return $this->getCountry() ? Intl::getRegionBundle()->getCountryName($this->getCountry()) : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContentValue($value)
+    {
+        $this->setCountry($value);
+    }
+}

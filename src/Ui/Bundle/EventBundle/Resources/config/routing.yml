@@ -489,6 +489,28 @@ event_package_payment:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Payment:paymentChoice }
 
+event_package_payment_prepare_paypal:
+    path: /sheet/{sheet}/package/payment/paypal/{transaction}
+    requirements:
+        sheet: \d+
+        transaction: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:preparePaypal }
+
+event_package_payment_done:
+    path: /sheet/{sheet}/package/payment/done
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:donePayment }
+
+create_transaction:
+    path: /sheet/{sheet}/create-transaction
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:createTempTransaction }
+
 #
 # Order
 #
@@ -506,3 +528,10 @@ event_pro_forma:
         order: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Order:proForma }
+
+event_order_summary_total:
+    path: /sheet/{sheet}/order/summary
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Order:summaryTotal }

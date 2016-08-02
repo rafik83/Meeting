@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOptionHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

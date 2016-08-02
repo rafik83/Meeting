@@ -15,61 +15,7 @@
     <body>
         {% block body %}
             <div class="wrapper">
-                <div class="header">
-                    {% if event is defined %}
-                        {% if event.logo != null %}
-                        <a href="{{ path('event') }}">
-                            <img src="{{ event.logo|imagine_filter('event_header_logo') }}" class="logo">
-                        </a>
-                        {% endif %}
-                        <div class="header__info">
-                            <p>{{ event.title }}</p>
-                            <p>{{ event.description(app.request.locale) }}</p>
-                        </div>
-                    {% endif %}
-
-                    <ul class="header__navigation">
-                        {% if event is defined %}
-                            {% for locale in event.locales if locale != app.request.locale %}
-                                <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if is_granted('ROLE_USER') %}
-                            <li class="notifs">
-                                <a href="">
-                                    <i class="icon-Retard"></i>
-                                    <span class="name">Notifications</span> <span class="notif">1</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="">
-                                    <i class="icon-Preferences_1"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-
-                        {% if is_granted('ROLE_USER') %}
-                            <li>
-                                <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
-                                    <i class="icon-Disconnect"></i>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
-                                    <i class="icon-Disconnect"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-
-                        <li>
-                            <a href="">
-                                <i class="icon-Appeler"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                {{ include('EventBundle:Common:header.html.twig') }}
 
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     {% set funnel = view is defined and view.funnel is defined %}
@@ -97,9 +43,9 @@
                 {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
             {% endif %}
 
-            {{ include('EventBundle::flashes.html.twig') }}
-
             <div class="container-fluid">
+                {{ include('EventBundle::flashes.html.twig') }}
+
                 {% block content %}{% endblock %}
             </div>
         {% endblock body %}

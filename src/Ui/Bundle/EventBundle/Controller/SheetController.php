@@ -156,13 +156,13 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Template\Object $object
+     * @param Template\TemplateObject $object
      * @param string          $locale
      * @param string          $key
      *
      * @return Form
      */
-    private function createObjectForm(Template\Object $object, $locale, $key)
+    private function createObjectForm(Template\TemplateObject $object, $locale, $key)
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -213,7 +213,7 @@ class SheetController extends Controller
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
-                if ($object instanceof Template\Object\Image) {
+                if ($object instanceof Template\TemplateObject\Image) {
                     $file = $form->get('file')->getData();
 
                     if ($file instanceof UploadedFile) {
@@ -499,7 +499,7 @@ class SheetController extends Controller
      * @param Template\TemplateData $templateData
      * @param string                $key
      *
-     * @return Template\Object
+     * @return Template\TemplateObject
      */
     private function getParticipantObject(Template\TemplateData $templateData, $key)
     {

@@ -14,7 +14,6 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssign;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;

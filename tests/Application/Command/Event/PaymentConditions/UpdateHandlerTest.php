@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event\PaymentConditions;
 
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 

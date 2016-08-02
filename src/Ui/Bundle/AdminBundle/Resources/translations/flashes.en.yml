@@ -1,28 +1,8 @@
-flash:
-    event:
-        register:
-            success: Your account is created
-        participation:
-            success: Your participate entry has been saved
-    change_password:
-        success: Your password has been updated
-    reset_password:
-        success: A mail was sent to explain the process to change your password
-    sheet:
-        add_participant:
-            success: The participant has been added
-        delete_participant:
-            success: The participant has been deleted
-            access_denied: You don't have the right to do this
-        update_participant:
-            success: The participant has been updated
-        update_block:
-            success: Information has been updated
-    package:
-        update_step:
-            success: Information has been updated
-        final_step:
-            success: Your package information has been saved
-    meeting_request:
-        edit:
-            success: You have changed the meeting request
+flash.meeting_request.edit.success: 'You have changed the meeting request'
+flash.package.final_step.success: 'Your package information has been saved'
+flash.package.update_step.success: 'Information has been updated'
+flash.sheet.add_participant.success: 'The participant has been added'
+flash.sheet.delete_participant.access_denied: 'You don''t have the right to do this'
+flash.sheet.delete_participant.success: 'The participant has been deleted'
+flash.sheet.update_block.success: 'Information has been updated'
+flash.sheet.update_participant.success: 'The participant has been updated'

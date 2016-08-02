@@ -58,6 +58,18 @@ Mot de passe: `vimeet360`
 
 User exhibitor: test@elao.com / p@ssw0rd
 
+### Localization
+
+Create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
+
+Pulling localization files:
+
+    ⇒ openl10n pull --locale=all
+
+Pushing localization files:
+
+    ⇒ openl10n push --locale=all
+
 ## Deployment
 
 ### Prepare migrations for preprod/prod

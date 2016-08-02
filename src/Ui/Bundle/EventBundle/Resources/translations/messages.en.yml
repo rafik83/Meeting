@@ -1,16 +1,10 @@
-common:
-    need_help: Need help
-    next: Next
-
-register:
-    register_as: Register as:
-    already_registered: Already registered?
-    register: Register
-
-package:
-    vatMode:
-        et: excl. VAT
-        ati: incl. VAT
-    product:
-        unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
-        totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'
+account.change_password.link: 'Change the password'
+'Bad credentials.': 'Bad credentials.'
+common.need_help: 'Need help'
+common.next: Next
+package.product.totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'
+package.product.unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
+package.vatMode.ati: 'incl. VAT'
+package.vatMode.et: 'excl. VAT'
+register.already_registered: 'Already registered?'
+register.register_as: 'Register as:'

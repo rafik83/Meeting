@@ -70,6 +70,7 @@ security:
         - { path: ^/admin/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: ^/admin, role: ROLE_ALLOWED_TO_ADMIN, host: '%domain%' }
+        - { path: ^/(\w+)/sheet, role: ROLE_USER }
 
     role_hierarchy:
         ROLE_ALLOWED_TO_ADMIN:    ['ROLE_ALLOWED_TO_SWITCH']

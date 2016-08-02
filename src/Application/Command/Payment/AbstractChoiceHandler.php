@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Payment;
 
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
@@ -67,7 +68,8 @@ abstract class AbstractChoiceHandler
      * @param AbstractChoice $choice
      * @param float          $total
      *
-     * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
+     * @return Transaction
+     * @throws MissingBillingInfoException
      */
     protected function handleChoice(AbstractChoice $choice, $total)
     {
@@ -86,5 +88,7 @@ abstract class AbstractChoiceHandler
         );
 
         $this->transactionRepository->add($transaction);
+
+        return $transaction;
     }
 }

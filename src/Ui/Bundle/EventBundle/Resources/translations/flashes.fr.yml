@@ -1,10 +1,10 @@
-flash:
-    package:
-        promotionCode:
-            error:
-                notFound: 'Code inexistant, veuillez renouveler votre saisie'
-                codeConflict: 'Code en concurrence avec un code existant'
-                notUsed: 'Code non compatible avec la formule choisie'
-                outDated: 'Code périmé'
-                soldOut: 'Code épuisé'
-                alreadyExist: 'Code déjà utilisé'
+flash.package.promotionCode.error.alreadyExist: 'Code déjà utilisé'
+flash.package.promotionCode.error.codeConflict: 'Code en concurrence avec un code existant'
+flash.package.promotionCode.error.notFound: 'Code inexistant, veuillez renouveler votre saisie'
+flash.package.promotionCode.error.notUsed: 'Code non compatible avec la formule choisie'
+flash.package.promotionCode.error.outDated: 'Code périmé'
+flash.package.promotionCode.error.soldOut: 'Code épuisé'
+flash.payment.success: 'Paiement effectué avec succès.'
+flash.payment.cancelled: 'Paiement annulé'
+flash.payment.pending: 'Paiement en attente de validation'
+flash.payment.error: 'Le paiement n''a pas été effectué.'

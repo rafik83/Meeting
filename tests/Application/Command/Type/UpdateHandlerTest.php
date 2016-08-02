@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Command\Type\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Template;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;

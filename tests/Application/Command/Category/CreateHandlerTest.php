@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Category;
 use Proximum\Vimeet\Application\Command\Category\Create;
 use Proximum\Vimeet\Application\Command\Category\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

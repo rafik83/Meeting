@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\MeetingSlot;
 
 use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
 use Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
