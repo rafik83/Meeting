@@ -37,7 +37,7 @@ class SheetParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        /** @var EventDomain $eventDomain */
+        /** @var null|EventDomain $eventDomain */
         $eventDomain = $request->attributes->get('eventDomain');
         $sheetId     = $request->attributes->get('sheet');
         $sheet       = $this->sheetRepository->getSheetById($sheetId);
@@ -46,7 +46,7 @@ class SheetParamConverter implements ParamConverterInterface
             throw new NotFoundHttpException('Sheet not found');
         }
 
-        if ($eventDomain->getEvent() !== $sheet->getEvent()) {
+        if (null !== $eventDomain && $eventDomain->getEvent() !== $sheet->getEvent()) {
             throw new NotFoundHttpException('Sheet not found in that event');
         }
 
