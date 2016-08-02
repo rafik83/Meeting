@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Domain\Model;
 
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;

@@ -1,0 +1,3 @@
+Proximum\Vimeet\Domain\Model\Payment\PaymentToken:
+    type:  entity
+    table: payment_token

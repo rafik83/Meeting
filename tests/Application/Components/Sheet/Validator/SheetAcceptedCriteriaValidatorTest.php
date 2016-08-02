@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Validator;
 
 use Proximum\Vimeet\Application\Components\Sheet\Validator\CriteriaValidatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Validator\SheetAcceptedCriteriaValidator;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;

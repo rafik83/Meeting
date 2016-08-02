@@ -25,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -172,7 +171,12 @@ class AddHandler
      */
     private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
     {
-        $event = new CompleteProfileEvent($user, $add->event, $participant, $add->locale);
+        $event = new CompleteProfileEvent(
+            $user,
+            $add->sheet->getEvent(),
+            $participant,
+            $add->locale
+        );
         $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $event);
     }
 

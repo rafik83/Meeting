@@ -135,7 +135,7 @@ Feature: Complete my package
     And I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/package/payment"
     And I should see "package.payment.total.toPay"
-    And I check the "form.payment_choice.children.paymentMode.bank_card" radio
+    And I check the "form.payment_choice.children.paymentMode.bank_check" radio
     Then I press "package.payment.pay.label"
     Then I should be on this page "/fr/sheet/1/orders"
     And I should see "order.transaction.state.pending"

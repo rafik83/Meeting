@@ -143,7 +143,7 @@ class PackageController extends Controller
                 $form_remove,
                 $participants,
                 $redirect
-            ) = $this->handleStepParticipant($request, $eventDomain, $sheet, $step);
+            ) = $this->handleStepParticipant($request, $sheet, $step);
 
             if ($redirect) {
                 return $this->redirectToRoute('event_package_step', [
@@ -176,20 +176,19 @@ class PackageController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param int         $step
      *
      * @return array|RedirectResponse
      */
-    private function handleStepParticipant(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
+    private function handleStepParticipant(Request $request, Sheet $sheet, $step)
     {
         $locale = $request->getLocale();
         $displayAddParticipantForm    = false;
         $displayRemoveParticipantForm = false;
         $redirect                     = false;
 
-        $addParticipant = new AddParticipant($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
+        $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
@@ -274,7 +273,7 @@ class PackageController extends Controller
 
         $locale         = $request->getLocale();
         $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
-        $addParticipant = new AddParticipant($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
+        $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),

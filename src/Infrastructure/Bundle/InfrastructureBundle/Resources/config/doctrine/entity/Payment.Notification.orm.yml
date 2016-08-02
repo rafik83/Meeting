@@ -1,0 +1,15 @@
+Proximum\Vimeet\Domain\Model\Payment\Notification:
+    type:  entity
+    table:  payment_notification
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        gatewayName:
+            type: text
+        details:
+            type: array
+        createdAt:
+            type: datetime

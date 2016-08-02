@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Command\Sheet\AcceptHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAccept;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;

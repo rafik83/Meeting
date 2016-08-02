@@ -10,13 +10,16 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Payment\Mode;
+
 /**
  * "Transaction".
  */
 class Transaction
 {
-    const STATE_PENDING = 'pending';
-    const STATE_PAID    = 'paid';
+    const STATE_PENDING   = 'pending';
+    const STATE_PAID      = 'paid';
+    const STATE_CANCELLED = 'cancelled';
 
     /**
      * @var int
@@ -191,5 +194,29 @@ class Transaction
     public function isPending()
     {
         return $this->state === self::STATE_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaypal()
+    {
+        return Mode::PAYMENT_PAYPAL === $this->getMode();
+    }
+
+    /**
+     * Set state to Paid
+     */
+    public function setPaid()
+    {
+        $this->state = self::STATE_PAID;
+    }
+
+    /**
+     * Set state to cancelled
+     */
+    public function setCancelled()
+    {
+        $this->state = self::STATE_CANCELLED;
     }
 }

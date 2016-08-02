@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Command\Spot\CreateHandler;
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchCreateHandlerTest extends \PHPUnit_Framework_TestCase

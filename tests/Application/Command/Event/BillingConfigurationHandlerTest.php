@@ -12,7 +12,6 @@ namespace Application\Command\Event;
 
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\BillingConfigurationHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

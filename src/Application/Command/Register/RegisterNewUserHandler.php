@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RegisterNewUserHandler
 {
@@ -35,26 +34,18 @@ class RegisterNewUserHandler
     private $saltGenerator;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @param UserRepositoryInterface  $userRepository
      * @param PasswordEncoderInterface $encoder
      * @param SaltGeneratorInterface   $saltGenerator
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
         PasswordEncoderInterface $encoder,
-        SaltGeneratorInterface $saltGenerator,
-        EventDispatcherInterface $eventDispatcher
+        SaltGeneratorInterface $saltGenerator
     ) {
-        $this->userRepository  = $userRepository;
-        $this->encoder         = $encoder;
-        $this->saltGenerator   = $saltGenerator;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->userRepository = $userRepository;
+        $this->encoder        = $encoder;
+        $this->saltGenerator  = $saltGenerator;
     }
 
     /**

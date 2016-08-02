@@ -17,21 +17,21 @@ use Symfony\Component\Validator\ConstraintValidator;
 class BlockValidator extends ConstraintValidator
 {
     private $objects = [
-        'button-link'   => ObjectConstraint::class,
-        'choice'        => ObjectConstraint::class,
-        'collection'    => ObjectConstraint::class,
-        'editable-text' => Object\EditableTextConstraint::class,
-        'image'         => ObjectConstraint::class,
-        'media'         => ObjectConstraint::class,
-        'nomenclature'  => Object\NomenclatureConstraint::class,
-        'participant'   => ObjectConstraint::class,
-        'tag'           => ObjectConstraint::class,
-        'text'          => ObjectConstraint::class,
-        'carousel'      => ObjectConstraint::class,
-        'telephone'     => Object\TelephoneConstraint::class,
-        'country'       => Object\CountryConstraint::class,
-        'url'           => Object\UrlConstraint::class,
-        'gender'        => Object\GenderConstraint::class,
+        'button-link'   => TemplateObjectConstraint::class,
+        'choice'        => TemplateObjectConstraint::class,
+        'collection'    => TemplateObjectConstraint::class,
+        'editable-text' => TemplateObject\EditableTextConstraint::class,
+        'image'         => TemplateObjectConstraint::class,
+        'media'         => TemplateObjectConstraint::class,
+        'nomenclature'  => TemplateObject\NomenclatureConstraint::class,
+        'participant'   => TemplateObjectConstraint::class,
+        'tag'           => TemplateObjectConstraint::class,
+        'text'          => TemplateObjectConstraint::class,
+        'carousel'      => TemplateObjectConstraint::class,
+        'telephone'     => TemplateObject\TelephoneConstraint::class,
+        'country'       => TemplateObject\CountryConstraint::class,
+        'url'           => TemplateObject\UrlConstraint::class,
+        'gender'        => TemplateObject\GenderConstraint::class,
     ];
 
     /**

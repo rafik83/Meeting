@@ -1,1393 +1,568 @@
-form:
-    vatMode:
-        et: HT
-        ati: TTC
-    type_template:
-        sheet:
-            base: Template de Participation de base
-            organizer: Mes templates de Participation
-        registration:
-            base: Template d'Inscription de base
-            organizer: Mes templates d'Inscription
-    field:
-        private: Champ privé
-    register:
-        children:
-            email:
-                label: Email
-            password:
-                children:
-                    first:
-                        label: Mot de passe
-                    second:
-                        label: Ressaisir le mot de passe
-            submit:
-                label: Envoyer
-    participant_create:
-        children:
-            data:
-                label: Participation
-            submit:
-                label: Envoyer
-    participant_update:
-        children:
-            data:
-                label: Participation
-            submit:
-                label: Envoyer
-    login:
-        children:
-            username:
-                label: Email
-            password:
-                label: Mot de passe
-            submit:
-                label: Se connecter
-    change_password:
-        children:
-            currentPassword:
-                label: Mot de passe actuel
-            plainPassword:
-                children:
-                    first:
-                        label: Nouveau mot de passe
-                    second:
-                        label: Ressaisir le nouveau mot de passe
-            submit:
-                label: Envoyer
-    activate_account_password:
-        children:
-            password:
-                children:
-                    first:
-                        label: Nouveau mot de passe
-                    second:
-                        label: Ressaisir le nouveau mot de passe
-            submit:
-                label: Envoyer
-    forgotten_password:
-        children:
-            email:
-                label: Entrez votre email
-            submit:
-                label: Envoyez
-    new_password:
-        children:
-            password:
-                children:
-                    first:
-                        label: Nouveau mot de passe
-                    second:
-                        label: Ressaisir le nouveau mot de passe
-            submit:
-                label: Envoyez
-    add_participant:
-        children:
-            email:
-                label: Email
-            data:
-                label: Coordonnées du participant
-            submit:
-                label: Envoyer
-    buy_participant:
-        children:
-            participantData:
-                children:
-                    email:
-                        label: Email
-            data:
-                label: Coordonnées du participant
-            submit:
-                label: Envoyer
-    update_block:
-        children:
-            data:
-                label: Modifier les informations
-            submit:
-                label: Envoyer
-    delete_participant:
-        children:
-            submit:
-                label: Supprimer
-    update_step:
-        children:
-            submit:
-                label: Valider et aller à la suite
-    add_products:
-        children:
-            submit:
-                label: Valider les produits
-    update_product:
-        children:
-            submit:
-                label: Valider
-    billing_update:
-        children:
-            submit:
-                label: Enregistrer
-    choose_payment_mode:
-        children:
-            submit:
-                label: Enregistrer
-    event_create:
-        children:
-            title:
-                label: Titre
-            locales:
-                label: Langues
-            domain:
-                label: Domaine (complet)
-                placeholder: "Nom de domaine complet de l'événement: *.vimeet.events"
-            timeZone:
-                label: Fuseau horaire
-            fallback:
-                label: Langue par défaut
-            logo:
-                label: Logo
-            country:
-                label: Pays
-            mode:
-                label: Mode
-            vat:
-                label: TVA
-            currency:
-                label: Devise
-                placeholder: -- Choisir une devise pour l'événement --
-            textColor:
-                label: Couleur du texte
-            leftColor:
-                label: Couleur habillage de gauche
-            rightColor:
-                label: Couleur habillage de droite
-            submit:
-                label: Enregistrer
-            organiserName:
-                label: Organisateur
-    event_update:
-        children:
-            title:
-                label: Titre
-            locales:
-                label: Langues
-            fallback:
-                label: Langue par défaut
-            logo:
-                label: Logo
-            country:
-                label: Pays
-            domain:
-                label: Domaine (complet)
-            timeZone:
-                label: Fuseau horaire
-            mode:
-                label: Mode
-            vat:
-                label: TVA
-            currency:
-                label: Devise
-                placeholder: -- Choisir une devise pour l'événement --
-            textColor:
-                label: Couleur du texte
-            leftColor:
-                label: Couleur habillage de gauche
-            rightColor:
-                label: Couleur habillage de droite
-            translations:
-                prototype:
-                    children:
-                        description:
-                            label: Description
-            organiserName:
-                label: Organisateur
-            submit:
-                label: Enregistrer
-    event_billing_configuration:
-        children:
-            legalInfo:
-                label: Informations légales
-            translations:
-                prototype:
-                    children:
-                        bankInfo:
-                            label: Informations banque
-                            placeholder: Iban...
-                        billingAddress:
-                            label: Adresse de paiement
-                        paymentCondition:
-                            label: Conditions de paiement
-                        paymentFooter:
-                            label: Pied de page
-                            placeholder: Exemple adresse, siret, capital ...
-            submit:
-                label: Enregistrer
-    who_see_who:
-        children:
-            seer:
-                label: Qui
-            seeable:
-                label: Voit
-            submit:
-                label: Ajouter
-    planning:
-        add_with_participant: Ajouter un planning supplémentaire avec le participant
-    type_update:
-        children:
-            rank:
-                label: Position
-            validationCriteria:
-                label: Critère de validation automatique des fiches de présentation
-                children:
-                    sheetAccepted:
-                        label: Fiche acceptée
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-            submit:
-                label: Enregistrer
-    type_create:
-        children:
-            rank:
-                label: Position
-            validationCriteria:
-                label: Critère de validation automatique des fiches de présentation
-                children:
-                    sheetAccepted:
-                        label: Fiche acceptée
-            template:
-                label: Template
-            sheetTemplate:
-                label: Template de présentation
-            registrationTemplate:
-                label: Template d'Inscription
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-            package:
-                label: Template de forfait de participation
-            submit:
-                label: Enregistrer
-    category_create:
-        children:
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-            types:
-                label: Sélectionner les types de participation
-            submit:
-                label: Enregistrer
-            position:
-                label: Position
-            picto:
-                label: Picto
-    category_update:
-        children:
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-            types:
-                label: Sélectionner les types de participation
-            submit:
-                label: Enregistrer
-            position:
-                label: Position
-            picto:
-                label: Picto
-    type_template_field_update:
-        children:
-            label:
-                label: Libellé
-            required:
-                label: Obligatoire
-            private:
-                label: Privé
-            submit:
-                label: Enregistrer
-    type_template_field_update_lib_choice:
-        children:
-            label:
-                label: Libellé
-            required:
-                label: Obligatoire
-            private:
-                label: Privé
-            choices:
-                label: Choix
-                label_add: Ajouter
-                label_delete: Supprimer
-                prototype:
-                    label: Libellé du choix
-            submit:
-                label: Enregistrer
-    dont_see_what:
-        children:
-            participant:
-                label: Participant
-            sheet:
-                label: Fiche
-            submit:
-                label: Enregistrer
-    meeting_request_filter:
-        children:
-            state:
-                label: Statut
-    meeting_request_create:
-        children:
-            participants:
-                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
-            description:
-                label: Motiver votre demande
-            submit:
-                label: Envoyer
-    meeting_request_update_from:
-        children:
-            participants:
-                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
-            description:
-                label: Expliquer pourquoi
-            submit:
-                label: Envoyer
-    meeting_request_update_to:
-        children:
-            participants:
-                label: Sélectionner les participants que vous souhaitez assigner à ce rendez-vous
-            description:
-                label: Expliquer pourquoi
-            submit:
-                label: Envoyer
-    meeting_request_approve:
-        children:
-            toParticipants:
-                label: Choisir des participants pour ce rendez-vous
-            submit:
-                label: Envoyer
-    meeting_request_message:
-        children:
-            message:
-                label: Expliquer pourquoi
-            submit:
-                label: Envoyer
-    meeting_request_refuse: 
-        children: 
-            message:
-                label: Expliquer pourquoi 
-            submit: 
-                label: Envoyer 
-    meeting_request_cancel:
-        children: 
-            message: 
-                label: Expliquer pourquoi 
-            submit:
-                label: Envoyer
-    add_unavailability:
-        children:
-            from:
-                label: De
-            to:
-                label: À
-            participants:
-                label: Participants concernés
-            submit:
-                label: Ajouter
-    update_unavailability:
-        children:
-            from:
-                label: De
-            to:
-                label: À
-            submit:
-                label: Modifier
-    participate_happening:
-        children:
-            participants:
-                label: Participants concernés
-            submit:
-                label: Participer
-    meeting_cancel:
-        children:
-            message:
-                label: Message
-            submit:
-                label: Confirmer
-    meeting_update:
-        children:
-            participants:
-                label: Participants
-            message:
-                label: Message
-            submit:
-                label: Enregistrer
-    position_meeting:
-        children:
-            fromParticipants:
-                label: Participants
-            toParticipants:
-                label: Participants
-            slot:
-                label: Créneau de rendez-vous
-            submit:
-                label: Placer
-    order_row:
-        children:
-            label:
-                label: Intitulé
-            description:
-                label: Description
-            price:
-                label: Prix unitaire
-            quantity:
-                label: Quantité
-            submit:
-                label: Enregistrer
-    create_transaction:
-        children:
-            amount:
-                label: Montant
-            date:
-                label: Date
-            mode:
-                label: Mode de paiement
-            reference:
-                label: Référence
-            state:
-                label: Statut
-            submit:
-                label: Enregistrer
-    update_transaction:
-        children:
-            amount:
-                label: Montant
-            date:
-                label: Date
-            mode:
-                label: Mode de paiement
-            reference:
-                label: Référence
-            state:
-                label: Statut
-            submit:
-                label: Enregistrer
-    transaction:
-        children:
-            transaction_mode:
-                bank_card: Carte bancaire
-                bank_transfer: Virement
-                bank_check: Chèque
-                bank_cash: Liquide
-            state:
-                pending: En attente
-                paid: Réglé
-    happening_create:
-        children:
-            category:
-                label: Catégorie
-            begin:
-                label: Date de début
-            end:
-                label: Date de fin
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-            talkings:
-                label:
-                    Intervenants
-                prototype:
-                    children:
-                        speaker:
-                            label: Intervenant
-                        position:
-                            label: Position
-                label_delete: Supprimer
-                label_add: Ajouter
-            submit:
-                label: Envoyer
-    happening_update:
-        children:
-            category:
-                label: Catégorie
-            begin:
-                label: Date de début
-            end:
-                label: Date de fin
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-            talkings:
-                label: Intervenants
-                prototype:
-                    children:
-                        speaker:
-                            label: Intervenant
-                        position:
-                            label: Position
-                label_add: Ajouter
-                label_delete: Supprimer
-            submit:
-                label: Envoyer
-    change_mail:
-        children:
-            mail:
-                label: Saisir votre nouvel email
-            submit:
-                label: Envoyer
-    create_speaker:
-        children:
-            firstname:
-                label: Prénom
-            lastname:
-                label: Nom
-            translations:
-                label: Fonction
-                children:
-                    position:
-                        label: Fonction
-            organization:
-                label: Société
-            logo:
-                label: Logo de la société
-            photo:
-                label: Photo de l'intervenant
-            submit:
-                label: Enregistrer
-    update_speaker:
-        children:
-            firstname:
-                label: Prénom
-            lastname:
-                label: Nom
-            translations:
-                label: Fonction
-                children:
-                    position:
-                        label: Fonction
-            organization:
-                label: Société
-            logo:
-                label: Logo de la société
-            photo:
-                label: Photo de l'intervenant
-            submit:
-                label: Enregistrer
-    filter_spot_type:
-        children:
-            reference:
-                label: Identifiant
-            size:
-                label: Taille en m²
-            meetingCapacity:
-                label: Nombre de RDV
-            seatCapacity:
-                label: Places assises
-            active:
-                label: Actif
-            filters:
-                all:
-                    label: Tous
-                yes:
-                    label: Oui
-                no:
-                    label: Non
-            submit:
-                label: Filtrer
-    spot_create:
-        children:
-            reference:
-                label: Identifiant
-            size:
-                label: Taille en m²
-            meetingCapacity:
-                label: Nombre de rendez-vous en simultané
-            seatCapacity:
-                label: Nombre de places assises
-            active:
-                label: Actif
-            filters:
-                all:
-                    label: Tous
-                yes:
-                    label: Oui
-                no:
-                    label: Non
-            submit:
-                label: Enregistrer
-    spot_batch_create:
-        children:
-            recipes:
-                label: Identifiants du lot
-                label_add: Ajouter
-                label_delete: Supprimer
-                prototype:
-                    children:
-                        prefix:
-                            label: Préfixe
-                        start:
-                            label: Début
-                        end:
-                            label: Fin
-            size:
-                label: Taille en m²
-            meetingCapacity:
-                label: Capacité du nombre de RDV
-            seatCapacity:
-                label: Capacité du nombre de places assises
-            active:
-                label: Actif
-            submit:
-                label: Enregistrer
-    admin_lib_add:
-        children:
-            submit:
-                label: Ajouter
-    template:
-        field:
-            type:
-                lib_text: Texte
-                lib_choice: Choix
-    admin_lib:
-        children:
-            label:
-                label: Titre du champ
-            required:
-                label: Requis
-            private:
-                label: Privé
-            tags:
-                label: Tags
-            submit:
-                label: Enregistrer
-    admin_lib_text:
-        children:
-            translatable:
-                label: Traductible
-            translationRequired:
-                label: Traduction requise
-    admin_lib_choice:
-        children:
-            placeholder:
-                label: Placeholder
-                help: "Exemple : \"Sélectionner un item\""
-            choices:
-                label: Choix
-                label_add: Ajouter un item
-                label_delete: Supprimer cet item
-                prototype:
-                    label: Libellé
-    sheet_filter:
-        children:
-            state:
-                label: Etat
-            completed:
-                label: Complétude
-            category:
-                label: Catégorie
-            type:
-                label: Type
-            follower:
-                label: Suivi commercial
-            text_search:
-                label: Titre de la fiche, nom ou email de participant
-    create_admin:
-        children:
-            email:
-                label: Email
-            password:
-                label: Mot de passe
-            firstname:
-                label: Prénom
-            lastname:
-                label: Nom
-            role:
-                label: Type
-            events:
-                label: Événements
-            submit:
-                label: Envoyer
-        role:
-            organizer: Organisateur
-            operator: Collaborateur
-            super_admin: Administrateur
-    update_admin:
-        children:
-            email:
-                label: Email
-            password:
-                label: Mot de passe
-            firstname:
-                label: Prénom
-            lastname:
-                label: Nom
-            role:
-                label: Type
-            events:
-                label: Événements
-            submit:
-                label: Envoyer
-        role:
-            super_admin: Admin
-            organizer: Organisateur
-            operator: Collaborateur
-    filter_admin:
-        role:
-            all: Tous les types
-            organizer: Organisateur
-            operator: Collaborateur
-            super_admin: Admin
-        event:
-            all: Tous les événements
-        children:
-            submit:
-                label: Filtrer
-    filter_operator:
-        event:
-            all: Tous les événements
-        children:
-            submit:
-                label: Filtrer
-    sheet_comment:
-        children:
-            submit:
-                label: Envoyer
-            text:
-                placeholder: Écrire un commentaire
-    create_operator:
-        children:
-            email:
-                label: Email
-            firstname:
-                label: Prénom
-            lastname:
-                label: Nom
-            submit:
-                label: Envoyer
-    update_operator:
-        children:
-            email:
-                label: Email
-            firstname:
-                label: Prénom
-            lastname:
-                label: Nom
-            events:
-                label: Événements disponible pour ce collaborateur
-            submit:
-                label: Envoyer
-    admin_activate_account_password:
-        children:
-            password:
-                children:
-                    first:
-                        label: Nouveau mot de passe
-                    second:
-                        label: Ressaisir le nouveau mot de passe
-            submit:
-                label: Envoyer
-    sheet_batch:
-        children:
-            validate:
-                label: Valider
-            validateComment:
-                label: Laisser un commentaire (optionnel)
-            assign:
-                label: Assigner
-            accept:
-                label: Accepter
-            follower:
-                label: Collaborateur
-    change_password_admin:
-        children:
-            currentPassword:
-                label: Mot de passe actuel
-            plainPassword:
-                children:
-                    first:
-                        label: Nouveau mot de passe
-                    second:
-                        label: Ressaisir le nouveau mot de passe
-            submit:
-                label: Envoyer
-    sheet_template_create:
-        children:
-            title:
-                label: Titre
-            locale:
-                label: Langue
-            close:
-                label: Annuler
-            submit:
-                label: Enregistrer
-    sheet_template_update:
-        children:
-            title:
-                label: Titre
-            fallback:
-                label: Langue par defaut
-            close:
-                label: Annuler
-            submit:
-                label: Enregistrer
-    organizer_sheet_template_create:
-        children:
-            title:
-                label: Titre
-            event:
-                label: Choisir un événement pour ce Template de fiche
-            close:
-                label: Annuler
-            submit:
-                label: Enregistrer
-    sheet_template_duplicate:
-        children:
-            title:
-                label: Titre
-            submit:
-                label: Enregistrer
-    organizer_sheet_template_duplicate:
-        children:
-            title:
-                label: Titre
-            event:
-                label: Choisir un événement pour ce Template de fiche
-            submit:
-                label: Enregistrer
-    filter:
-        label: Filtrer
-    filter_sheet_template_organizer:
-        children:
-            event:
-                label: Événement/Type(s)
-    sheet_template_add_locale:
-        children:
-            locale:
-                label: Langue
-            submit:
-                label: Ajouter
-    template_registration_update:
-        children:
-            title:
-                label: Titre du template
-            value:
-                label: Contenu du template
-            submit:
-                label: Enregistrer
-    package_create:
-        children:
-            title:
-                label: Titre du template
-            event:
-                label: Choisir un événement
-            submit:
-                label: Enregistrer
-    package_update:
-        children:
-            title:
-                label: Titre du template
-            plans:
-                children:
-                    enabled:
-                        label: Activé
-                    labels:
-                        label: Libellé de l'étape
-                    plans:
-                        label: Formules
-                        label_add: Ajouter une formule
-                        label_delete: "&times;"
-            participantAndPlanning:
-                children:
-                    enabled:
-                        label: Activé
-                    labels:
-                        label: Libellé de l'étape
-                    participant:
-                        label: Participant
-                    planning:
-                        label: Planning
-            options:
-                children:
-                    enabled:
-                        label: Activé
-                    labels:
-                        label: Libellé de l'étape
-                    groups:
-                        label: Groupes
-                        label_add: Ajouter un groupe
-                        label_delete: "&times;"
-                        prototype:
-                            children:
-                                item:
-                                    children:
-                                        labels:
-                                            label: Libellé du groupe
-                                        options:
-                                            label: Options
-                                            label_add: Ajouter une option
-                                            label_delete: "&times;"
-
-
-            templateData:
-                children:
-                    blocks:
-                        prototype:
-                            label: Libellé de l'étape
-                            children:
-                                enabled:
-                                    label: Etape activée
-            submit:
-                label: Enregistrer
-    product_create_option:
-        children:
-            name:
-                label: Nom backoffice du produit
-            file:
-                label: Image
-            unitPrice:
-                label: Prix unitaire (HT)
-            quantityMin:
-                label: Quantité min
-            quantityMax:
-                label: Quantité max
-            availabilityCurrent:
-                label: Stock actuel
-            availabilityMax:
-                label: Stock max
-            updatable:
-                label: Produit supprimable
-            deletableUntil:
-                label: Supprimable jusqu'aù
-            buyableUntil:
-                label: Achetable jusqu'aù
-            submit:
-                label: Enregistrer
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-                        addon:
-                            label: Texte optionnel sous le prix
-                        subjectedToValidationHelp:
-                            label: Message si soumis à validation
-            subjectedToValidation:
-                label: Ce produit est soumis à validation
-    product_update_option:
-        children:
-            name:
-                label: Nom backoffice du produit
-            file:
-                label: Image
-            unitPrice:
-                label: Prix unitaire (HT)
-            quantityMin:
-                label: Quantité min
-            quantityMax:
-                label: Quantité max
-            availabilityCurrent:
-                label: Stock actuel
-            availabilityMax:
-                label: Stock max
-            updatable:
-                label: Produit supprimable
-            deletableUntil:
-                label: Supprimable jusqu'aù
-            buyableUntil:
-                label: Achetable jusqu'aù
-            submit:
-                label: Enregistrer
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-                        addon:
-                            label: Texte optionnel sous le prix
-                        subjectedToValidationHelp:
-                            label: Message si soumis à validation
-            subjectedToValidation:
-                label: Ce produit est soumis à validation
-    product_create_plan:
-        children:
-            name:
-                label: Nom backoffice de la formule
-            file:
-                label: Image
-            unitPrice:
-                label: Prix unitaire (HT)
-            availabilityCurrent:
-                label: Stock actuel
-            availabilityMax:
-                label: Stock Max
-            submit:
-                label: Enregistrer
-            participantIncluded:
-                label: Nombre de participants inclus avec cette formule
-            productIncluded:
-                label: Produits liés à la formule
-                label_add: Ajouter un produit lié à cette formule
-                label_delete: Supprimer ce produit de la formule
-                prototype:
-                    label: Produits liés à la formule
-                    children:
-                        product:
-                            label: Produit
-                            placeholder: --- Choissisez un produit ---
-                        quantity:
-                            label: Quantité liée
-            features:
-                label: Prestations incluses avec cette formule
-                label_add: Ajouter une prestation incluse
-                label_delete: Supprimer cette prestation
-                prototype:
-                    children:
-                        title: Titre de la prestation
-                        description: Description de la prestation
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre de la formule
-                        heading:
-                            label: Titre de la description
-                        description:
-                            label: Contenu de la description
-                        addon:
-                            label: Texte optionnel sous le prix
-    product_update_plan:
-        children:
-            name:
-                label: Nom backoffice de la formule
-            file:
-                label: Image
-            unitPrice:
-                label: Prix unitaire (HT)
-            availabilityCurrent:
-                label: Stock actuel
-            availabilityMax:
-                label: Stock Max
-            submit:
-                label: Enregistrer
-            participantIncluded:
-                label: Nombre de participants inclus avec cette formule
-            productIncluded:
-                label: Produits liés à la formule
-                label_add: Ajouter un produit lié à cette formule
-                label_delete: Supprimer ce produit de la formule
-                prototype:
-                    label: Produits liés à la formule
-                    children:
-                        product:
-                            label: Produit
-                            placeholder: --- Choissisez un produit ---
-                        quantity:
-                            label: Quantité liée
-            features:
-                label: Prestations incluses avec cette formule
-                label_add: Ajouter une prestation incluse
-                label_delete: Supprimer cette prestation
-                prototype:
-                    children:
-                        title: Titre de la prestation
-                        description: Description de la prestation
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre de la formule
-                        heading:
-                            label: Titre de la description
-                        description:
-                            label: Contenu de la description
-                        addon:
-                            label: Texte optionnel sous le prix
-    product_create_participant:
-        children:
-            name:
-                label: Nom backoffice du participant
-            unitPrice:
-                label: Prix unitaire (HT)
-            quantityMax:
-                label: Quantité max
-            submit:
-                label: Enregistrer
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-    product_update_participant:
-        children:
-            name:
-                label: Nom backoffice du participant
-            unitPrice:
-                label: Prix unitaire (HT)
-            quantityMax:
-                label: Quantité max
-            submit:
-                label: Enregistrer
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-    product_create_planning:
-        children:
-            name:
-                label: Nom backoffice du planning
-            unitPrice:
-                label: Prix unitaire (HT)
-            quantityMax:
-                label: Quantité max
-            submit:
-                label: Enregistrer
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-    product_update_planning:
-        children:
-            name:
-                label: Nom backoffice du planning
-            unitPrice:
-                label: Prix unitaire (HT)
-            quantityMax:
-                label: Quantité max
-            submit:
-                label: Enregistrer
-            translations:
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        description:
-                            label: Description
-    billing_info_update:
-        children:
-            lastname:
-                label: Nom
-            firstname:
-                label: Prénom
-            function:
-                label: Fonction
-            phone:
-                label: Téléphone
-            mobile:
-                label: Mobile
-            email:
-                label: Email
-            company:
-                label: Société
-            street:
-                label: Adresse
-            zipcode:
-                label: Code postal
-            city:
-                label: Ville
-            country:
-                label: Pays
-            vatNumber:
-                label: N° de TVA
-            submit:
-                label: Enregistrer
-    content_update:
-        children:
-            submit:
-                label: Enregistrer
-    promotion_code_create:
-        children:
-            title:
-                label: Titre
-            code:
-                label: Code
-            validUntil:
-                label: Valide jusqu'au
-            stock:
-                label: Stock
-            submit:
-                label: Enregistrer
-            promotions:
-                label: Promotions
-                label_add: Ajouter
-                label_delete: Supprimer
-                prototype:
-                    children:
-                        product:
-                            label: Produit
-                        type:
-                            label: Type
-                        value:
-                            label: Valeur
-                        quantityMax:
-                            label: Quantité limitée à
-    promotion_code_update:
-        children:
-            title:
-                label: Titre
-            code:
-                label: Code
-            validUntil:
-                label: Valide jusqu'au
-            stock:
-                label: Stock
-            submit:
-                label: Enregistrer
-            promotions:
-                label: Promotions
-                label_add: Ajouter
-                label_delete: Supprimer
-                prototype:
-                    children:
-                        product:
-                            label: Produit
-                        type:
-                            label: Type
-                        value:
-                            label: Valeur
-                        quantityMax:
-                            label: Quantité limitée à
-    promotion_code_translation:
-        children:
-            label:
-                label: Libellé
-            description:
-                label: Description
-    product_choice:
-        group_by:
-            type:
-                plan: Formules
-                participant: Participants
-                planning: Plannings
-                option: Options
-    generate_slot:
-        children:
-            recipes:
-                prototype:
-                    children:
-                        begin:
-                            label: De
-                        end:
-                            label: à
-                        interval:
-                            label: Intervalle (en minutes)
-                        duration:
-                            label: Durée (en minutes)
-                label_add: Ajouter une plage
-                label_delete: "&times;"
-            submit:
-                label: Enregistrer
-    schedule_config:
-        children:
-            scale:
-                label: Echelle (en minutes)
-            submit:
-                label: Enregistrer
-    nomenclature_create_type:
-        children:
-            title:
-                label: Titre
-            submit:
-                label: Enregistrer
-    nomenclature_update_type:
-        children:
-            title:
-                label: Titre
-            sort:
-                label: Tri
-                choice:
-                    sort_alpha: Trier la nomenclature par ordre alphabétique
-                    sort_file: Conserver l'ordre du fichier
-            submit:
-                label: Enregistrer
-    nomenclature_import_type:
-        children:
-            file:
-                label: Fichier
-                help: Un import réinitialisera la nomenclature sauf si le fichier importé provient d'un export.
-            charset:
-                label: Encodage
-    nomenclature_export_type:
-        children:
-            charset:
-                label: Encodage
-    nomenclature_assign_type:
-        children:
-            event:
-                label: Événement
-                help: La nomenclature sera dupliquée pour être assignée à cet événement. Vous la retrouverez dans les nomenclatures de l'événement.
-            submit:
-                label: Assigner
-    event_practical_info_update:
-        children:
-            organiserName:
-                label: Organisateur
-            contactFirstName:
-                label: Prénom du contact
-            contactLastName:
-                label: Nom du contact
-            organiserPhone:
-                label: Téléphone de contact
-            organiserEmail:
-                label: E-mail de contact
-            organiserWebsite:
-                label: Site internet
-            submit:
-                label: Enregistrer
-    event_payment_conditions_update:
-        children:
-            allowDeposit:
-                label: Activer le paiement en acompte
-            minimumForDeposit:
-                label: Somme total à partir duquel l'acompte est applicable
-            depositUntil:
-                label: Date limite d'acceptation des acomptes
-            deposit:
-                label: Pourcentage de l'acompte
-    event_configure_date:
-        children:
-            catalogOnlineDate:
-                label: Mise en ligne du catalogue
-            happeningsOpenDate:
-                label: Ouverture des inscriptions aux sous-événements
-            schedulePublishDate:
-                label: Publication des agendas définitifs (RDV)
-            submit:
-                label: Enregistrer
-    event_configure_date:
-        children:
-            catalogOnlineDate:
-                label: Mise en ligne du catalogue
-            happeningsOpenDate:
-                label: Ouverture des inscriptions aux sous-événements
-            schedulePublishDate:
-                label: Publication des agendas définitifs (RDV)
-            submit:
-                label: Enregistrer
-    order:
-        filter_by_bought_product: Filtrer par produit acheté
+form.activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
+form.activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.activate_account_password.children.submit.label: Envoyer
+form.add_participant.children.data.label: 'Coordonnées du participant'
+form.add_participant.children.email.label: Email
+form.add_participant.children.submit.label: Envoyer
+form.add_products.children.submit.label: 'Valider les produits'
+form.add_unavailability.children.from.label: De
+form.add_unavailability.children.participants.label: 'Participants concernés'
+form.add_unavailability.children.submit.label: Ajouter
+form.add_unavailability.children.to.label: À
+form.admin_activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
+form.admin_activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.admin_activate_account_password.children.submit.label: Envoyer
+form.admin_lib_add.children.submit.label: Ajouter
+form.admin_lib_choice.children.choices.label: Choix
+form.admin_lib_choice.children.choices.label_add: 'Ajouter un item'
+form.admin_lib_choice.children.choices.label_delete: 'Supprimer cet item'
+form.admin_lib_choice.children.choices.prototype.label: Libellé
+form.admin_lib_choice.children.placeholder.help: 'Exemple : "Sélectionner un item"'
+form.admin_lib_choice.children.placeholder.label: Placeholder
+form.admin_lib_text.children.translatable.label: Traductible
+form.admin_lib_text.children.translationRequired.label: 'Traduction requise'
+form.admin_lib.children.label.label: 'Titre du champ'
+form.admin_lib.children.private.label: Privé
+form.admin_lib.children.required.label: Requis
+form.admin_lib.children.submit.label: Enregistrer
+form.admin_lib.children.tags.label: Tags
+form.billing_info_update.children.city.label: Ville
+form.billing_info_update.children.company.label: Société
+form.billing_info_update.children.country.label: Pays
+form.billing_info_update.children.email.label: Email
+form.billing_info_update.children.firstname.label: Prénom
+form.billing_info_update.children.function.label: Fonction
+form.billing_info_update.children.lastname.label: Nom
+form.billing_info_update.children.mobile.label: Mobile
+form.billing_info_update.children.phone.label: Téléphone
+form.billing_info_update.children.street.label: Adresse
+form.billing_info_update.children.submit.label: Enregistrer
+form.billing_info_update.children.vatNumber.label: 'N° de TVA'
+form.billing_info_update.children.zipcode.label: 'Code postal'
+form.billing_update.children.submit.label: Enregistrer
+form.buy_participant.children.data.label: 'Coordonnées du participant'
+form.buy_participant.children.participantData.children.email.label: Email
+form.buy_participant.children.submit.label: Envoyer
+form.category_create.children.picto.label: Picto
+form.category_create.children.position.label: Position
+form.category_create.children.submit.label: Enregistrer
+form.category_create.children.translations.prototype.children.title.label: Titre
+form.category_create.children.types.label: 'Sélectionner les types de participation'
+form.category_update.children.picto.label: Picto
+form.category_update.children.position.label: Position
+form.category_update.children.submit.label: Enregistrer
+form.category_update.children.translations.prototype.children.title.label: Titre
+form.category_update.children.types.label: 'Sélectionner les types de participation'
+form.change_mail.children.mail.label: 'Saisir votre nouvel email'
+form.change_mail.children.submit.label: Envoyer
+form.change_password_admin.children.currentPassword.label: 'Mot de passe actuel'
+form.change_password_admin.children.plainPassword.children.first.label: 'Nouveau mot de passe'
+form.change_password_admin.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.change_password_admin.children.submit.label: Envoyer
+form.change_password.children.currentPassword.label: 'Mot de passe actuel'
+form.change_password.children.plainPassword.children.first.label: 'Nouveau mot de passe'
+form.change_password.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.change_password.children.submit.label: Envoyer
+form.choose_payment_mode.children.submit.label: Enregistrer
+form.content_update.children.submit.label: Enregistrer
+form.create_admin.children.email.label: Email
+form.create_admin.children.events.label: Événements
+form.create_admin.children.firstname.label: Prénom
+form.create_admin.children.lastname.label: Nom
+form.create_admin.children.password.label: 'Mot de passe'
+form.create_admin.children.role.label: Type
+form.create_admin.children.submit.label: Envoyer
+form.create_admin.role.operator: Collaborateur
+form.create_admin.role.organizer: Organisateur
+form.create_admin.role.super_admin: Administrateur
+form.create_operator.children.email.label: Email
+form.create_operator.children.firstname.label: Prénom
+form.create_operator.children.lastname.label: Nom
+form.create_operator.children.submit.label: Envoyer
+form.create_speaker.children.firstname.label: Prénom
+form.create_speaker.children.lastname.label: Nom
+form.create_speaker.children.logo.label: 'Logo de la société'
+form.create_speaker.children.organization.label: Société
+form.create_speaker.children.photo.label: 'Photo de l''intervenant'
+form.create_speaker.children.submit.label: Enregistrer
+form.create_speaker.children.translations.children.position.label: Fonction
+form.create_speaker.children.translations.label: Fonction
+form.create_transaction.children.amount.label: Montant
+form.create_transaction.children.date.label: Date
+form.create_transaction.children.mode.label: 'Mode de paiement'
+form.create_transaction.children.reference.label: Référence
+form.create_transaction.children.state.label: Statut
+form.create_transaction.children.submit.label: Enregistrer
+form.delete_participant.children.submit.label: Supprimer
+form.dont_see_what.children.participant.label: Participant
+form.dont_see_what.children.sheet.label: Fiche
+form.dont_see_what.children.submit.label: Enregistrer
+form.event_billing_configuration.children.legalInfo.label: 'Informations légales'
+form.event_billing_configuration.children.submit.label: Enregistrer
+form.event_billing_configuration.children.translations.prototype.children.bankInfo.label: 'Informations banque'
+form.event_billing_configuration.children.translations.prototype.children.bankInfo.placeholder: Iban...
+form.event_billing_configuration.children.translations.prototype.children.billingAddress.label: 'Adresse de paiement'
+form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
+form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
+form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder: 'Exemple adresse, siret, capital ...'
+form.event_configure_date.children.catalogOnlineDate.label: 'Mise en ligne du catalogue'
+form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
+form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
+form.event_configure_date.children.submit.label: Enregistrer
+form.event_create.children.country.label: Pays
+form.event_create.children.currency.label: Devise
+form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
+form.event_create.children.domain.label: 'Domaine (complet)'
+form.event_create.children.domain.placeholder: 'Nom de domaine complet de l''événement: *.vimeet.events'
+form.event_create.children.fallback.label: 'Langue par défaut'
+form.event_create.children.leftColor.label: 'Couleur habillage de gauche'
+form.event_create.children.locales.label: Langues
+form.event_create.children.logo.label: Logo
+form.event_create.children.mode.label: Mode
+form.event_create.children.organiserName.label: Organisateur
+form.event_create.children.rightColor.label: 'Couleur habillage de droite'
+form.event_create.children.submit.label: Enregistrer
+form.event_create.children.textColor.label: 'Couleur du texte'
+form.event_create.children.timeZone.label: 'Fuseau horaire'
+form.event_create.children.title.label: Titre
+form.event_create.children.vat.label: TVA
+form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
+form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
+form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
+form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
+form.event_practical_info_update.children.contactFirstName.label: 'Prénom du contact'
+form.event_practical_info_update.children.contactLastName.label: 'Nom du contact'
+form.event_practical_info_update.children.organiserEmail.label: 'E-mail de contact'
+form.event_practical_info_update.children.organiserName.label: Organisateur
+form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de contact'
+form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
+form.event_practical_info_update.children.submit.label: Enregistrer
+form.event_update.children.country.label: Pays
+form.event_update.children.currency.label: Devise
+form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
+form.event_update.children.domain.label: 'Domaine (complet)'
+form.event_update.children.fallback.label: 'Langue par défaut'
+form.event_update.children.leftColor.label: 'Couleur habillage de gauche'
+form.event_update.children.locales.label: Langues
+form.event_update.children.logo.label: Logo
+form.event_update.children.mode.label: Mode
+form.event_update.children.organiserName.label: Organisateur
+form.event_update.children.rightColor.label: 'Couleur habillage de droite'
+form.event_update.children.submit.label: Enregistrer
+form.event_update.children.textColor.label: 'Couleur du texte'
+form.event_update.children.timeZone.label: 'Fuseau horaire'
+form.event_update.children.title.label: Titre
+form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
+form.event_update.children.vat.label: TVA
+form.field.private: 'Champ privé'
+form.filter_admin.children.submit.label: Filtrer
+form.filter_admin.event.all: 'Tous les événements'
+form.filter_admin.role.all: 'Tous les types'
+form.filter_admin.role.operator: Collaborateur
+form.filter_admin.role.organizer: Organisateur
+form.filter_admin.role.super_admin: Admin
+form.filter_operator.children.submit.label: Filtrer
+form.filter_operator.event.all: 'Tous les événements'
+form.filter_sheet_template_organizer.children.event.label: Événement/Type(s)
+form.filter_spot_type.children.active.label: Actif
+form.filter_spot_type.children.filters.all.label: Tous
+form.filter_spot_type.children.filters.no.label: Non
+form.filter_spot_type.children.filters.yes.label: Oui
+form.filter_spot_type.children.meetingCapacity.label: 'Nombre de RDV'
+form.filter_spot_type.children.reference.label: Identifiant
+form.filter_spot_type.children.seatCapacity.label: 'Places assises'
+form.filter_spot_type.children.size.label: 'Taille en m²'
+form.filter_spot_type.children.submit.label: Filtrer
+form.filter.label: Filtrer
+form.forgotten_password.children.email.label: 'Entrez votre email'
+form.forgotten_password.children.submit.label: Envoyez
+form.generate_slot.children.recipes.label_add: 'Ajouter une plage'
+form.generate_slot.children.recipes.label_delete: '&times;'
+form.generate_slot.children.recipes.prototype.children.begin.label: De
+form.generate_slot.children.recipes.prototype.children.duration.label: 'Durée (en minutes)'
+form.generate_slot.children.recipes.prototype.children.end.label: à
+form.generate_slot.children.recipes.prototype.children.interval.label: 'Intervalle (en minutes)'
+form.generate_slot.children.submit.label: Enregistrer
+form.happening_create.children.begin.label: 'Date de début'
+form.happening_create.children.category.label: Catégorie
+form.happening_create.children.end.label: 'Date de fin'
+form.happening_create.children.submit.label: Envoyer
+form.happening_create.children.talkings.label: Intervenants
+form.happening_create.children.talkings.label_add: Ajouter
+form.happening_create.children.talkings.label_delete: Supprimer
+form.happening_create.children.talkings.prototype.children.position.label: Position
+form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
+form.happening_create.children.translations.prototype.children.description.label: Description
+form.happening_create.children.translations.prototype.children.title.label: Titre
+form.happening_update.children.begin.label: 'Date de début'
+form.happening_update.children.category.label: Catégorie
+form.happening_update.children.end.label: 'Date de fin'
+form.happening_update.children.submit.label: Envoyer
+form.happening_update.children.talkings.label: Intervenants
+form.happening_update.children.talkings.label_add: Ajouter
+form.happening_update.children.talkings.label_delete: Supprimer
+form.happening_update.children.talkings.prototype.children.position.label: Position
+form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
+form.happening_update.children.translations.prototype.children.description.label: Description
+form.happening_update.children.translations.prototype.children.title.label: Titre
+form.login.children.password.label: 'Mot de passe'
+form.login.children.submit.label: 'Se connecter'
+form.login.children.username.label: Email
+form.meeting_cancel.children.message.label: Message
+form.meeting_cancel.children.submit.label: Confirmer
+form.meeting_request_approve.children.submit.label: Envoyer
+form.meeting_request_approve.children.toParticipants.label: 'Choisir des participants pour ce rendez-vous'
+form.meeting_request_cancel.children.message.label: 'Expliquer pourquoi'
+form.meeting_request_cancel.children.submit.label: Envoyer
+form.meeting_request_create.children.description.label: 'Motiver votre demande'
+form.meeting_request_create.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
+form.meeting_request_create.children.submit.label: Envoyer
+form.meeting_request_filter.children.state.label: Statut
+form.meeting_request_message.children.message.label: 'Expliquer pourquoi'
+form.meeting_request_message.children.submit.label: Envoyer
+form.meeting_request_refuse.children.message.label: 'Expliquer pourquoi'
+form.meeting_request_refuse.children.submit.label: Envoyer
+form.meeting_request_update_from.children.description.label: 'Expliquer pourquoi'
+form.meeting_request_update_from.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
+form.meeting_request_update_from.children.submit.label: Envoyer
+form.meeting_request_update_to.children.description.label: 'Expliquer pourquoi'
+form.meeting_request_update_to.children.participants.label: 'Sélectionner les participants que vous souhaitez assigner à ce rendez-vous'
+form.meeting_request_update_to.children.submit.label: Envoyer
+form.meeting_update.children.message.label: Message
+form.meeting_update.children.participants.label: Participants
+form.meeting_update.children.submit.label: Enregistrer
+form.new_password.children.password.children.first.label: 'Nouveau mot de passe'
+form.new_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.new_password.children.submit.label: Envoyez
+form.nomenclature_assign_type.children.event.help: 'La nomenclature sera dupliquée pour être assignée à cet événement. Vous la retrouverez dans les nomenclatures de l''événement.'
+form.nomenclature_assign_type.children.event.label: Événement
+form.nomenclature_assign_type.children.submit.label: Assigner
+form.nomenclature_create_type.children.submit.label: Enregistrer
+form.nomenclature_create_type.children.title.label: Titre
+form.nomenclature_export_type.children.charset.label: Encodage
+form.nomenclature_import_type.children.charset.label: Encodage
+form.nomenclature_import_type.children.file.help: 'Un import réinitialisera la nomenclature sauf si le fichier importé provient d''un export.'
+form.nomenclature_import_type.children.file.label: Fichier
+form.nomenclature_update_type.children.sort.choice.sort_alpha: 'Trier la nomenclature par ordre alphabétique'
+form.nomenclature_update_type.children.sort.choice.sort_file: 'Conserver l''ordre du fichier'
+form.nomenclature_update_type.children.sort.label: Tri
+form.nomenclature_update_type.children.submit.label: Enregistrer
+form.nomenclature_update_type.children.title.label: Titre
+form.order_row.children.description.label: Description
+form.order_row.children.label.label: Intitulé
+form.order_row.children.price.label: 'Prix unitaire'
+form.order_row.children.quantity.label: Quantité
+form.order_row.children.submit.label: Enregistrer
+form.order.filter_by_bought_product: 'Filtrer par produit acheté'
+form.organizer_sheet_template_create.children.close.label: Annuler
+form.organizer_sheet_template_create.children.event.label: 'Choisir un événement pour ce Template de fiche'
+form.organizer_sheet_template_create.children.submit.label: Enregistrer
+form.organizer_sheet_template_create.children.title.label: Titre
+form.organizer_sheet_template_duplicate.children.event.label: 'Choisir un événement pour ce Template de fiche'
+form.organizer_sheet_template_duplicate.children.submit.label: Enregistrer
+form.organizer_sheet_template_duplicate.children.title.label: Titre
+form.package_create.children.event.label: 'Choisir un événement'
+form.package_create.children.submit.label: Enregistrer
+form.package_create.children.title.label: 'Titre du template'
+form.package_update.children.options.children.enabled.label: Activé
+form.package_update.children.options.children.groups.label: Groupes
+form.package_update.children.options.children.groups.label_add: 'Ajouter un groupe'
+form.package_update.children.options.children.groups.label_delete: '&times;'
+form.package_update.children.options.children.groups.prototype.children.item.children.labels.label: 'Libellé du groupe'
+form.package_update.children.options.children.groups.prototype.children.item.children.options.label: Options
+form.package_update.children.options.children.groups.prototype.children.item.children.options.label_add: 'Ajouter une option'
+form.package_update.children.options.children.groups.prototype.children.item.children.options.label_delete: '&times;'
+form.package_update.children.options.children.labels.label: 'Libellé de l''étape'
+form.package_update.children.participantAndPlanning.children.enabled.label: Activé
+form.package_update.children.participantAndPlanning.children.labels.label: 'Libellé de l''étape'
+form.package_update.children.participantAndPlanning.children.participant.label: Participant
+form.package_update.children.participantAndPlanning.children.planning.label: Planning
+form.package_update.children.plans.children.enabled.label: Activé
+form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'
+form.package_update.children.plans.children.plans.label: Formules
+form.package_update.children.plans.children.plans.label_add: 'Ajouter une formule'
+form.package_update.children.plans.children.plans.label_delete: '&times;'
+form.package_update.children.submit.label: Enregistrer
+form.package_update.children.templateData.children.blocks.prototype.children.enabled.label: 'Etape activée'
+form.package_update.children.templateData.children.blocks.prototype.label: 'Libellé de l''étape'
+form.package_update.children.title.label: 'Titre du template'
+form.participant_create.children.data.label: Participation
+form.participant_create.children.submit.label: Envoyer
+form.participant_update.children.data.label: Participation
+form.participant_update.children.submit.label: Envoyer
+form.participate_happening.children.participants.label: 'Participants concernés'
+form.participate_happening.children.submit.label: Participer
+form.planning.add_with_participant: 'Ajouter un planning supplémentaire avec le participant'
+form.position_meeting.children.fromParticipants.label: Participants
+form.position_meeting.children.slot.label: 'Créneau de rendez-vous'
+form.position_meeting.children.submit.label: Placer
+form.position_meeting.children.toParticipants.label: Participants
+form.product_choice.group_by.type.option: Options
+form.product_choice.group_by.type.participant: Participants
+form.product_choice.group_by.type.plan: Formules
+form.product_choice.group_by.type.planning: Plannings
+form.product_create_option.children.availabilityCurrent.label: 'Stock actuel'
+form.product_create_option.children.availabilityMax.label: 'Stock max'
+form.product_create_option.children.buyableUntil.label: 'Achetable jusqu''aù'
+form.product_create_option.children.deletableUntil.label: 'Supprimable jusqu''aù'
+form.product_create_option.children.file.label: Image
+form.product_create_option.children.name.label: 'Nom backoffice du produit'
+form.product_create_option.children.quantityMax.label: 'Quantité max'
+form.product_create_option.children.quantityMin.label: 'Quantité min'
+form.product_create_option.children.subjectedToValidation.label: 'Ce produit est soumis à validation'
+form.product_create_option.children.submit.label: Enregistrer
+form.product_create_option.children.translations.prototype.children.addon.label: 'Texte optionnel sous le prix'
+form.product_create_option.children.translations.prototype.children.description.label: Description
+form.product_create_option.children.translations.prototype.children.subjectedToValidationHelp.label: 'Message si soumis à validation'
+form.product_create_option.children.translations.prototype.children.title.label: Titre
+form.product_create_option.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_create_option.children.updatable.label: 'Produit supprimable'
+form.product_create_participant.children.name.label: 'Nom backoffice du participant'
+form.product_create_participant.children.quantityMax.label: 'Quantité max'
+form.product_create_participant.children.submit.label: Enregistrer
+form.product_create_participant.children.translations.prototype.children.description.label: Description
+form.product_create_participant.children.translations.prototype.children.title.label: Titre
+form.product_create_participant.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_create_plan.children.availabilityCurrent.label: 'Stock actuel'
+form.product_create_plan.children.availabilityMax.label: 'Stock Max'
+form.product_create_plan.children.features.label: 'Prestations incluses avec cette formule'
+form.product_create_plan.children.features.label_add: 'Ajouter une prestation incluse'
+form.product_create_plan.children.features.label_delete: 'Supprimer cette prestation'
+form.product_create_plan.children.features.prototype.children.description: 'Description de la prestation'
+form.product_create_plan.children.features.prototype.children.title: 'Titre de la prestation'
+form.product_create_plan.children.file.label: Image
+form.product_create_plan.children.name.label: 'Nom backoffice de la formule'
+form.product_create_plan.children.participantIncluded.label: 'Nombre de participants inclus avec cette formule'
+form.product_create_plan.children.productIncluded.label: 'Produits liés à la formule'
+form.product_create_plan.children.productIncluded.label_add: 'Ajouter un produit lié à cette formule'
+form.product_create_plan.children.productIncluded.label_delete: 'Supprimer ce produit de la formule'
+form.product_create_plan.children.productIncluded.prototype.children.product.label: Produit
+form.product_create_plan.children.productIncluded.prototype.children.product.placeholder: '--- Choissisez un produit ---'
+form.product_create_plan.children.productIncluded.prototype.children.quantity.label: 'Quantité liée'
+form.product_create_plan.children.productIncluded.prototype.label: 'Produits liés à la formule'
+form.product_create_plan.children.submit.label: Enregistrer
+form.product_create_plan.children.translations.prototype.children.addon.label: 'Texte optionnel sous le prix'
+form.product_create_plan.children.translations.prototype.children.description.label: 'Contenu de la description'
+form.product_create_plan.children.translations.prototype.children.heading.label: 'Titre de la description'
+form.product_create_plan.children.translations.prototype.children.title.label: 'Titre de la formule'
+form.product_create_plan.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_create_planning.children.name.label: 'Nom backoffice du planning'
+form.product_create_planning.children.quantityMax.label: 'Quantité max'
+form.product_create_planning.children.submit.label: Enregistrer
+form.product_create_planning.children.translations.prototype.children.description.label: Description
+form.product_create_planning.children.translations.prototype.children.title.label: Titre
+form.product_create_planning.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_option.children.availabilityCurrent.label: 'Stock actuel'
+form.product_update_option.children.availabilityMax.label: 'Stock max'
+form.product_update_option.children.buyableUntil.label: 'Achetable jusqu''aù'
+form.product_update_option.children.deletableUntil.label: 'Supprimable jusqu''aù'
+form.product_update_option.children.file.label: Image
+form.product_update_option.children.name.label: 'Nom backoffice du produit'
+form.product_update_option.children.quantityMax.label: 'Quantité max'
+form.product_update_option.children.quantityMin.label: 'Quantité min'
+form.product_update_option.children.subjectedToValidation.label: 'Ce produit est soumis à validation'
+form.product_update_option.children.submit.label: Enregistrer
+form.product_update_option.children.translations.prototype.children.addon.label: 'Texte optionnel sous le prix'
+form.product_update_option.children.translations.prototype.children.description.label: Description
+form.product_update_option.children.translations.prototype.children.subjectedToValidationHelp.label: 'Message si soumis à validation'
+form.product_update_option.children.translations.prototype.children.title.label: Titre
+form.product_update_option.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_option.children.updatable.label: 'Produit supprimable'
+form.product_update_participant.children.name.label: 'Nom backoffice du participant'
+form.product_update_participant.children.quantityMax.label: 'Quantité max'
+form.product_update_participant.children.submit.label: Enregistrer
+form.product_update_participant.children.translations.prototype.children.description.label: Description
+form.product_update_participant.children.translations.prototype.children.title.label: Titre
+form.product_update_participant.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_plan.children.availabilityCurrent.label: 'Stock actuel'
+form.product_update_plan.children.availabilityMax.label: 'Stock Max'
+form.product_update_plan.children.features.label: 'Prestations incluses avec cette formule'
+form.product_update_plan.children.features.label_add: 'Ajouter une prestation incluse'
+form.product_update_plan.children.features.label_delete: 'Supprimer cette prestation'
+form.product_update_plan.children.features.prototype.children.description: 'Description de la prestation'
+form.product_update_plan.children.features.prototype.children.title: 'Titre de la prestation'
+form.product_update_plan.children.file.label: Image
+form.product_update_plan.children.name.label: 'Nom backoffice de la formule'
+form.product_update_plan.children.participantIncluded.label: 'Nombre de participants inclus avec cette formule'
+form.product_update_plan.children.productIncluded.label: 'Produits liés à la formule'
+form.product_update_plan.children.productIncluded.label_add: 'Ajouter un produit lié à cette formule'
+form.product_update_plan.children.productIncluded.label_delete: 'Supprimer ce produit de la formule'
+form.product_update_plan.children.productIncluded.prototype.children.product.label: Produit
+form.product_update_plan.children.productIncluded.prototype.children.product.placeholder: '--- Choissisez un produit ---'
+form.product_update_plan.children.productIncluded.prototype.children.quantity.label: 'Quantité liée'
+form.product_update_plan.children.productIncluded.prototype.label: 'Produits liés à la formule'
+form.product_update_plan.children.submit.label: Enregistrer
+form.product_update_plan.children.translations.prototype.children.addon.label: 'Texte optionnel sous le prix'
+form.product_update_plan.children.translations.prototype.children.description.label: 'Contenu de la description'
+form.product_update_plan.children.translations.prototype.children.heading.label: 'Titre de la description'
+form.product_update_plan.children.translations.prototype.children.title.label: 'Titre de la formule'
+form.product_update_plan.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_planning.children.name.label: 'Nom backoffice du planning'
+form.product_update_planning.children.quantityMax.label: 'Quantité max'
+form.product_update_planning.children.submit.label: Enregistrer
+form.product_update_planning.children.translations.prototype.children.description.label: Description
+form.product_update_planning.children.translations.prototype.children.title.label: Titre
+form.product_update_planning.children.unitPrice.label: 'Prix unitaire (HT)'
+form.promotion_code_create.children.code.label: Code
+form.promotion_code_create.children.promotions.label: Promotions
+form.promotion_code_create.children.promotions.label_add: Ajouter
+form.promotion_code_create.children.promotions.label_delete: Supprimer
+form.promotion_code_create.children.promotions.prototype.children.product.label: Produit
+form.promotion_code_create.children.promotions.prototype.children.quantityMax.label: 'Quantité limitée à'
+form.promotion_code_create.children.promotions.prototype.children.type.label: Type
+form.promotion_code_create.children.promotions.prototype.children.value.label: Valeur
+form.promotion_code_create.children.stock.label: Stock
+form.promotion_code_create.children.submit.label: Enregistrer
+form.promotion_code_create.children.title.label: Titre
+form.promotion_code_create.children.validUntil.label: 'Valide jusqu''au'
+form.promotion_code_translation.children.description.label: Description
+form.promotion_code_translation.children.label.label: Libellé
+form.promotion_code_update.children.code.label: Code
+form.promotion_code_update.children.promotions.label: Promotions
+form.promotion_code_update.children.promotions.label_add: Ajouter
+form.promotion_code_update.children.promotions.label_delete: Supprimer
+form.promotion_code_update.children.promotions.prototype.children.product.label: Produit
+form.promotion_code_update.children.promotions.prototype.children.quantityMax.label: 'Quantité limitée à'
+form.promotion_code_update.children.promotions.prototype.children.type.label: Type
+form.promotion_code_update.children.promotions.prototype.children.value.label: Valeur
+form.promotion_code_update.children.stock.label: Stock
+form.promotion_code_update.children.submit.label: Enregistrer
+form.promotion_code_update.children.title.label: Titre
+form.promotion_code_update.children.validUntil.label: 'Valide jusqu''au'
+form.register.children.email.label: Email
+form.register.children.password.children.first.label: 'Mot de passe'
+form.register.children.password.children.second.label: 'Ressaisir le mot de passe'
+form.register.children.submit.label: Envoyer
+form.schedule_config.children.scale.label: 'Echelle (en minutes)'
+form.schedule_config.children.submit.label: Enregistrer
+form.sheet_batch.children.accept.label: Accepter
+form.sheet_batch.children.assign.label: Assigner
+form.sheet_batch.children.follower.label: Collaborateur
+form.sheet_batch.children.validate.label: Valider
+form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
+form.sheet_comment.children.submit.label: Envoyer
+form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
+form.sheet_filter.children.category.label: Catégorie
+form.sheet_filter.children.completed.label: Complétude
+form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.state.label: Etat
+form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
+form.sheet_filter.children.type.label: Type
+form.sheet_template_add_locale.children.locale.label: Langue
+form.sheet_template_add_locale.children.submit.label: Ajouter
+form.sheet_template_create.children.close.label: Annuler
+form.sheet_template_create.children.locale.label: Langue
+form.sheet_template_create.children.submit.label: Enregistrer
+form.sheet_template_create.children.title.label: Titre
+form.sheet_template_duplicate.children.submit.label: Enregistrer
+form.sheet_template_duplicate.children.title.label: Titre
+form.sheet_template_update.children.close.label: Annuler
+form.sheet_template_update.children.fallback.label: 'Langue par defaut'
+form.sheet_template_update.children.submit.label: Enregistrer
+form.sheet_template_update.children.title.label: Titre
+form.spot_batch_create.children.active.label: Actif
+form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
+form.spot_batch_create.children.recipes.label: 'Identifiants du lot'
+form.spot_batch_create.children.recipes.label_add: Ajouter
+form.spot_batch_create.children.recipes.label_delete: Supprimer
+form.spot_batch_create.children.recipes.prototype.children.end.label: Fin
+form.spot_batch_create.children.recipes.prototype.children.prefix.label: Préfixe
+form.spot_batch_create.children.recipes.prototype.children.start.label: Début
+form.spot_batch_create.children.seatCapacity.label: 'Capacité du nombre de places assises'
+form.spot_batch_create.children.size.label: 'Taille en m²'
+form.spot_batch_create.children.submit.label: Enregistrer
+form.spot_create.children.active.label: Actif
+form.spot_create.children.filters.all.label: Tous
+form.spot_create.children.filters.no.label: Non
+form.spot_create.children.filters.yes.label: Oui
+form.spot_create.children.meetingCapacity.label: 'Nombre de rendez-vous en simultané'
+form.spot_create.children.reference.label: Identifiant
+form.spot_create.children.seatCapacity.label: 'Nombre de places assises'
+form.spot_create.children.size.label: 'Taille en m²'
+form.spot_create.children.submit.label: Enregistrer
+form.template_registration_update.children.submit.label: Enregistrer
+form.template_registration_update.children.title.label: 'Titre du template'
+form.template_registration_update.children.value.label: 'Contenu du template'
+form.template.field.type.lib_choice: Choix
+form.template.field.type.lib_text: Texte
+form.transaction.children.state.cancelled: 'Annulé'
+form.transaction.children.state.paid: Réglé
+form.transaction.children.state.pending: 'En attente'
+form.transaction.children.transaction_mode.bank_card: 'Carte bancaire'
+form.transaction.children.transaction_mode.bank_cash: Liquide
+form.transaction.children.transaction_mode.bank_check: Chèque
+form.transaction.children.transaction_mode.bank_transfer: Virement
+form.transaction.children.transaction_mode.paypal: Paypal
+form.type_create.children.package.label: 'Template de forfait de participation'
+form.type_create.children.rank.label: Position
+form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
+form.type_create.children.sheetTemplate.label: 'Template de présentation'
+form.type_create.children.submit.label: Enregistrer
+form.type_create.children.template.label: Template
+form.type_create.children.translations.prototype.children.description.label: Description
+form.type_create.children.translations.prototype.children.title.label: Titre
+form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
+form.type_create.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.type_template_field_update_lib_choice.children.choices.label: Choix
+form.type_template_field_update_lib_choice.children.choices.label_add: Ajouter
+form.type_template_field_update_lib_choice.children.choices.label_delete: Supprimer
+form.type_template_field_update_lib_choice.children.choices.prototype.label: 'Libellé du choix'
+form.type_template_field_update_lib_choice.children.label.label: Libellé
+form.type_template_field_update_lib_choice.children.private.label: Privé
+form.type_template_field_update_lib_choice.children.required.label: Obligatoire
+form.type_template_field_update_lib_choice.children.submit.label: Enregistrer
+form.type_template_field_update.children.label.label: Libellé
+form.type_template_field_update.children.private.label: Privé
+form.type_template_field_update.children.required.label: Obligatoire
+form.type_template_field_update.children.submit.label: Enregistrer
+form.type_template.registration.base: 'Template d''Inscription de base'
+form.type_template.registration.organizer: 'Mes templates d''Inscription'
+form.type_template.sheet.base: 'Template de Participation de base'
+form.type_template.sheet.organizer: 'Mes templates de Participation'
+form.type_update.children.rank.label: Position
+form.type_update.children.submit.label: Enregistrer
+form.type_update.children.translations.prototype.children.description.label: Description
+form.type_update.children.translations.prototype.children.title.label: Titre
+form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
+form.type_update.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.update_admin.children.email.label: Email
+form.update_admin.children.events.label: Événements
+form.update_admin.children.firstname.label: Prénom
+form.update_admin.children.lastname.label: Nom
+form.update_admin.children.password.label: 'Mot de passe'
+form.update_admin.children.role.label: Type
+form.update_admin.children.submit.label: Envoyer
+form.update_admin.role.operator: Collaborateur
+form.update_admin.role.organizer: Organisateur
+form.update_admin.role.super_admin: Admin
+form.update_block.children.data.label: 'Modifier les informations'
+form.update_block.children.submit.label: Envoyer
+form.update_operator.children.email.label: Email
+form.update_operator.children.events.label: 'Événements disponible pour ce collaborateur'
+form.update_operator.children.firstname.label: Prénom
+form.update_operator.children.lastname.label: Nom
+form.update_operator.children.submit.label: Envoyer
+form.update_product.children.submit.label: Valider
+form.update_speaker.children.firstname.label: Prénom
+form.update_speaker.children.lastname.label: Nom
+form.update_speaker.children.logo.label: 'Logo de la société'
+form.update_speaker.children.organization.label: Société
+form.update_speaker.children.photo.label: 'Photo de l''intervenant'
+form.update_speaker.children.submit.label: Enregistrer
+form.update_speaker.children.translations.children.position.label: Fonction
+form.update_speaker.children.translations.label: Fonction
+form.update_step.children.submit.label: 'Valider et aller à la suite'
+form.update_transaction.children.amount.label: Montant
+form.update_transaction.children.date.label: Date
+form.update_transaction.children.mode.label: 'Mode de paiement'
+form.update_transaction.children.reference.label: Référence
+form.update_transaction.children.state.label: Statut
+form.update_transaction.children.submit.label: Enregistrer
+form.update_unavailability.children.from.label: De
+form.update_unavailability.children.submit.label: Modifier
+form.update_unavailability.children.to.label: À
+form.vatMode.ati: TTC
+form.vatMode.et: HT
+form.who_see_who.children.seeable.label: Voit
+form.who_see_who.children.seer.label: Qui
+form.who_see_who.children.submit.label: Ajouter

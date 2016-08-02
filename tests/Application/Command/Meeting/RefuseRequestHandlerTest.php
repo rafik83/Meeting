@@ -11,11 +11,9 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;

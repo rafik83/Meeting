@@ -16,16 +16,6 @@ Proximum\Vimeet\Domain\Model\Event:
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
-        legalInformation: |+
-            TVA acquittée sur les encaissements
-            Pas d'escompte pour paiement anticipé
-        # vat mode :
-        # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
-        # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-        elementToJoinWithInvoice: |+
-            - Numéro de la Facture
-            - Nom de l'événement
-            - Montant net à payer
 
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
     configuration_asddays_2016:
@@ -40,7 +30,10 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:
         __construct: false
-        description: "ASD Days, le Rdv international dédié à l'Aéronautique, le Spatial, la Défense, la Sécurité et les Drones."
+        description: |+
+            ASD Days, le Rdv international dédié à l'Aéronautique,
+            le Spatial, la Défense, la Sécurité et les Drones
+            12 > 13 OCTOBRE 2016 - Aéroport d’Orly - Paris - FRANCE
         locale: fr
         event: '@event_asddays_2016'
         bankInfo: |+
@@ -59,7 +52,9 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
             Net à payer
     event_asddays_2016_en:
         __construct: false
-        description: "ASD Days, the international meeting dedicated to: Aerospace, Defence, Security & UAVs."
+        description: |+
+            ASD Days, the international meeting dedicated to:
+            Aerospace, Defence, Security & UAVs.
         locale: en
         event: '@event_asddays_2016'
         bankInfo: |+

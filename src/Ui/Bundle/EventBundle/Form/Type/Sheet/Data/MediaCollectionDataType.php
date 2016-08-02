@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object\MediaCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;

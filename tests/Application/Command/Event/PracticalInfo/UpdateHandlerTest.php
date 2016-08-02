@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event\PracticalInfo;
 
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
