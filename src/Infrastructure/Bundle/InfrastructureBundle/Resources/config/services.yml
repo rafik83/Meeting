@@ -1662,6 +1662,7 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
+            - '@order.merger'
     cart.convertor:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:

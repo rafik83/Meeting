@@ -58,8 +58,11 @@ class StepParticipantAndPlanning
         $cartQuantity  = 0;
 
         if (isset($orderMerged)) {
-            $planning      = $command->sheet->getPackage()->getPlanning();
-            $orderQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
+            $planning = $command->sheet->getPackage()->getPlanning();
+
+            if ($orderRow = $orderMerged->getRowForProduct($planning)) {
+                $orderQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
+            }
         }
 
         if (null !== $planningRow) {

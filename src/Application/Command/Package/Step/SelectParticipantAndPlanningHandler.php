@@ -52,7 +52,12 @@ class SelectParticipantAndPlanningHandler
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
         // Update participant cart row
-        $cart->resolveParticipantsQuantity();
+        if ($sheet->hasOrders()) {
+            $order = $this->merger->merge($sheet->getOrders());
+            $cart->resolveParticipantsQuantity($order);
+        } else {
+            $cart->resolveParticipantsQuantity();
+        }
 
         if (!$package->getPlanning()) {
             return;

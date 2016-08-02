@@ -419,4 +419,19 @@ class Order
 
         return null;
     }
+
+    /**
+     * @return int
+     */
+    public function countParticipant()
+    {
+        $participant = 0;
+        foreach($this->rows as $orderRow) {
+            if ($orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT) {
+                $participant += $orderRow->getQuantity();
+            }
+        }
+
+        return $participant;
+    }
 }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
@@ -88,7 +89,7 @@ class Cart
                 $row->setProduct($product)->setQuantity($quantity);
             }
 
-        } else if (0 !== $quantity) {
+        } elseif (0 !== $quantity) {
             $this->rows[] = new CartRow($this->sheet, $product, $quantity);
         }
 
@@ -98,16 +99,22 @@ class Cart
     /**
      * Set additionnal participant quantity
      *
+     * @param Order $order
+     *
      * @return Cart
      */
-    public function resolveParticipantsQuantity()
+    public function resolveParticipantsQuantity(Order $order = null)
     {
-        $additionnal = $this->sheet->countParticipant() - $this->getIncludedParticipantQuantity();
+        $orderParticipant = 0;
 
-        if ($additionnal > 0) {
-            $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
+        if (isset($order)) {
+            $orderParticipant = $order->countParticipant();
         }
 
+        $additionnal = $this->sheet->countParticipant() - $orderParticipant - $this->getIncludedParticipantQuantity();
+
+        $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
+        
         return $this;
     }
 
@@ -128,6 +135,7 @@ class Cart
      */
     public function getPlanRow()
     {
+        /** @var CartRow $cartRow */
         foreach ($this->rows as $cartRow) {
             if ($cartRow->getProduct()->isPlan()) {
                 return $cartRow;
