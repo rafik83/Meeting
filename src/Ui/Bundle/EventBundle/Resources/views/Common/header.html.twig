@@ -62,21 +62,23 @@
                 <h4 class="modal-title"><i class="icon-Appeler"></i> {{ 'event.info.contact'|trans }}</h4>
             </div>
             <div class="modal-body">
-            <strong class="highlight">{{ event.organiserName }}</strong><br>
-            {% if event.configuration.contactFirstName or event.configuration.contactLastName %}
-                {{ event.configuration.contactFirstName|capitalize }} {{ event.configuration.contactLastName|upper }}<br>
-            {% endif %}
-            {% if event.configuration.organiserPhone  %}
-                <i class="icon-Appeler"></i> {{ event.configuration.organiserPhone }}<br>
-            {% endif %}
-            {% if event.organiserEmail  %}
-                <i class="icon-Message_1"></i> {{ event.organiserEmail }}<br>
-            {% endif %}
-            {% if event.configuration.organiserWebsite  %}
-                <a href="{{ event.configuration.organiserWebsite }}" target="_blank" rel="external">
-                    {{ event.configuration.organiserWebsite }}
-                </a><br>
-            {% endif %}
+                <ul>
+                    <li><strong class="highlight">{{ event.organiserName }}</strong></li>
+                {% if event.configuration.contactFirstName or event.configuration.contactLastName %}
+                    <li>{{ event.configuration.contactFirstName|capitalize }} {{ event.configuration.contactLastName|upper }}</li>
+                {% endif %}
+                {% if event.configuration.organiserPhone  %}
+                    <li><i class="icon-Appeler"></i> {{ event.configuration.organiserPhone }}</li>
+                {% endif %}
+                {% if event.organiserEmail  %}
+                    <li><i class="icon-Message_1"></i> <a href="mailto:{{ event.organiserEmail }}">{{ event.organiserEmail }}</a></li>
+                {% endif %}
+                {% if event.configuration.organiserWebsite  %}
+                    <li><a href="{{ event.configuration.organiserWebsite }}" target="_blank" rel="external">
+                        {{ event.configuration.organiserWebsite }}
+                    </a></li>
+                {% endif %}
+                </ul>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
