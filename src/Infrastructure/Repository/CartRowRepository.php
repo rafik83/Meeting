@@ -59,9 +59,13 @@ class CartRowRepository implements CartRowRepositoryInterface
             ->delete()
             ->from(CartRow::class, 'cartRow')
             ->where('cartRow.sheet = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->andWhere('cartRow NOT IN (:cartRows)')
-            ->setParameter('cartRows', $cartRows);
+            ->setParameter('sheet', $sheet);
+
+        if (!empty($cartRows)) {
+            $queryBuilder
+                ->andWhere('cartRow NOT IN (:cartRows)')
+                ->setParameter('cartRows', $cartRows);
+        }
 
         $queryBuilder->getQuery()->execute();
     }

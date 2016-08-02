@@ -146,6 +146,7 @@ package:
             total: Total
         seeTermsOfSale: Voir les conditions générales de vente
         edit: Editer
+        empty: Votre panier est vide
     funnel:
         summary: 'Récapitulatif & Facturation'
         payment: Paiement
