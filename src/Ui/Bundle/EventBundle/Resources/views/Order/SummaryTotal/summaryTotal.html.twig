@@ -9,6 +9,12 @@
             <div class="product product--recap">
                 <div class="content-header clearfix">
                     <h2 class="pull-left">{{ 'package.summary.title'|trans }}</h2>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="{{ path('event_package_step', {
+                            'sheet': view.sheet.id,
+                            'step': 1
+                        }) }}">{{ 'package.summary.edit'|trans }}</a>
+                    </div>
                 </div>
 
                 <section class="object object--collection style--style-1 section">
@@ -53,14 +59,6 @@
                                 </ul>
                             </div>
                         </div>
-
-                        <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ path('event_package_step', {
-                                'sheet': view.sheet.id,
-                                'step': 1
-                            }) }}">{{ 'package.summary.edit'|trans }}</a>
-                        </div>
-
                     </div>
                 </section>
             </div>

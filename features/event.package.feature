@@ -150,3 +150,43 @@ Feature: Complete my package
     And I should see "summary.total"
     And I should see "package.summary.totalVat"
     And I should see "summary.totalToPay"
+
+  Scenario: I can edit my participation package:
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet"
+    And I follow "navigation.links.package.order_summary_total"
+    Then I should be on this page "/fr/sheet/1/order/summary"
+    And I should see "package.summary.title"
+    When I follow "package.summary.edit"
+    Then I should be on this page "/fr/sheet/1/package/step/1"
+    And I should see "Participants & plannings"
+    And I should see "Packs de rendez-vous"
+    And I should see "sheet.object.action.add"
+    And I follow "sheet.object.action.add"
+    And I should see "sheet.participant.sendInvite"
+    And I fill in the following:
+      | add_participant_firstName | John              |
+      | add_participant_lastName  | Doh               |
+      | add_participant_email     | johndoh@gmail.com |
+    Then I press "sheet.participant.sendInvite"
+    And I should be on this page "/fr/sheet/1/package/step/1"
+    And I should see "John Doh"
+    When I press "package.participant_planning.validate"
+    Then I should be on this page "/fr/sheet/1/package/step/2"
+    And I should see "Options d’exposition"
+    And I should see "Options d'exposition et de communication"
+    And I should see "Options de communication"
+    And I should see "package.product.subjectedToValidationHelp"
+    When I fill in the following:
+      | options_10 | 2 |
+      | options_11 | 1 |
+    # options_10 = Option D | 2 - 1 = 1  #
+    # options_11 = Option E | 1 - 3 = -2 #
+    And I press "package.product.validate"
+    Then I should be on this page "/fr/sheet/1/package/summary"
+    And I should see "Option D"
+    And I should see "1"
+    And I should see "Option E"
+    And I should see "-2"
+    When I follow "package.summary.pay"
+    Then I should be on this page "/fr/sheet/1/orders"
