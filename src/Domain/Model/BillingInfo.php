@@ -161,6 +161,14 @@ class BillingInfo
     }
 
     /**
+     * @return string
+     */
+    public function getCompleteName()
+    {
+        return $this->firstname . ' ' .  $this->lastname;
+    }
+
+    /**
      * Get function
      *
      * @return string

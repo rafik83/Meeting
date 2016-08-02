@@ -10,15 +10,21 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +42,7 @@ class PaymentController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
-        $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+        $funnel    = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
@@ -47,29 +53,43 @@ class PaymentController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $now            = new \DateTime();
-        $funnel         = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
-        $total          = $this->get('payment.total_to_pay')->getTotal($sheet);
+        $now   = new \DateTime();
+        $total = $this->get('payment.total_to_pay')->getTotal($sheet);
+
+        // If nothing to pay, create the order
+        if ($total <= 0) {
+            $create = new Create($sheet);
+            $this->get('tactician.commandbus')->handle($create);
+
+            return $this->redirectToRoute('event_order_list', [
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
         $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
 
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet);
-            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
-            ]);
+            $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
         } else {
             $paymentChoice = new Choice($sheet);
-            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
-            ]);
+            $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($paymentChoice);
-
+                /** @var Transaction $transaction */
+                $transaction = $this->get('tactician.commandbus')->handle($paymentChoice);
                 $this->consumePackageCompletedPaymentFlash();
 
-                // This will have to redirect to payment when needed
+                if ($transaction->isPaypal()) {
+                    return $this->redirectToRoute('event_package_payment_prepare_paypal', [
+                        'sheet'       => $sheet->getId(),
+                        'transaction' => $transaction->getId(),
+                    ]);
+                }
+
                 return $this->redirectToRoute('event_order_list', [
                     'sheet' => $sheet->getId(),
                 ]);
@@ -87,8 +107,78 @@ class PaymentController extends Controller
             'form'    => $form->createView(),
             'total'   => $total,
             'deposit' => $deposit,
-            'view'    => [ 'funnel' => $funnel]
+            'view'    => ['funnel' => $funnel]
         ]);
+    }
+
+    /**
+     * Only for debug
+     */
+    public function createTempTransactionAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet
+    ) {
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+
+        $transaction = new Transaction(
+            $sheet,
+            200,
+            new \DateTime(),
+            Mode::PAYMENT_PAYPAL,
+            '',
+            Transaction::STATE_PENDING,
+            $sheet->getEvent()->getCurrency()
+        );
+
+        $this->get('repository.transaction')->add($transaction);
+
+        return $this->redirectToRoute(
+            'event_package_payment_prepare_paypal',
+            ['sheet' => $sheet->getId(), 'transaction' => $transaction->getId()]
+        );
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param Transaction $transaction
+     *
+     * @return RedirectResponse
+     */
+    public function preparePaypalAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Transaction $transaction
+    ) {
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+
+        $captureToken = $status = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction);
+
+        return $this->redirect($captureToken->getTargetUrl());
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return Response
+     */
+    public function donePaymentAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    {
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
+
+        $status = $this->get('vimeet.payum.paypal.capture_payment')->process($request);
+
+        $this->addFlash(
+            CapturePayment::STATUS_SUCCESS === $status ? 'success' : 'error',
+            sprintf('flash.payment.%s', $status)
+        );
+
+        return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
     }
 
     /**
@@ -113,5 +203,16 @@ class PaymentController extends Controller
         $sheet = $this->container->get('session')->getFlashBag()->get('package_completed_payment');
 
         return $sheet;
+    }
+
+    /**
+     * @param Event $event
+     * @param Sheet $sheet
+     */
+    private function denyAccessIfUserNotAllowed(Event $event, Sheet $sheet)
+    {
+        if ($event !== $sheet->getEvent() || !$sheet->hasUser($this->getUser())) {
+            throw $this->createNotFoundException('This page is not accessible by this user');
+        }
     }
 }

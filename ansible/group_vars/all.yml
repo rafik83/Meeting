@@ -191,6 +191,7 @@ elao_php_configs:
       # App
       - upload_max_filesize: 8M
       - post_max_size: 8M
+      - memory_limit : 2048M
 
 elao_php_applications:
   - composer

@@ -1,233 +1,97 @@
-flash:
-    event:
-        register:
-            already_known:
-                login: Vous êtes déjà enregistré à cet événement, connectez-vous
-                message: |+
-                    VOTRE EMAIL EST DÉJÀ ENREGISTRÉ !
-                    Parce-que vous avez participé à un de nos événements, vous pouvez récuperer vos données… et gagnez un temps précieux !
-            success: Votre compte a bien été créé
-        participation:
-            success: Votre fiche de participation a été sauvegardée
-        schedule:
-            unavailability:
-                add:
-                    success: Votre indisponibilité a bien été ajoutée
-                update:
-                    success: L'indisponibilité a bien été mise à jour
-                remove:
-                    success: L'indisponibilité a bien été supprimée
-            happening:
-                participate:
-                    success: Vous participez désormais à cet événement.
-                unparticipate:
-                    success: Vous ne participez plus à cet événement.
-            meeting:
-                update:
-                    success: Le rendez-vous a été mis à jour.
-                cancel:
-                    success: Le rendez-vous a été annulé.
-    change_password:
-        success: Votre mot de passe a été changé
-    new_password:
-        success: Votre mot de passe a été changé
-    reset_password_token:
-        success: Un mail vous a été envoyé avec la procédure pour créer un nouveau mot de passe
-    sheet:
-        add_participant:
-            success: Le participant a bien été ajouté
-        delete_participant:
-            success: Le participant a bien été supprimé
-            access_denied: Vous n'avez pas les droits pour effectuer cette action
-        update_participant:
-            success: La fiche participant a bien été modifiée
-        update_block:
-            success: Les informations ont bien été enregistrées
-        update_billing:
-            success: Les informations de facturation ont bien été enregistrées
-    meeting_request:
-        create:
-            success: Votre demande de rendez-vous a bien été transmise
-        approved:
-            success: Vous avez bien validé la proposition de rendez-vous
-        refused:
-            success: Vous avez bien refusé la proposition de rendez-vous
-        cancelled:
-            success: Vous avez bien annulé la demande de rendez-vous
-        edit:
-            success: Vous avez bien modifié la demande de rendez-vous
-    package:
-        update_step:
-            success: Les informations ont bien été enregistrées
-        add_products:
-            success: L'ajout des produits a bien été pris en compte
-            empty: Pas de produits ajoutés
-        update_product:
-            added_updated_product_to_cart: La quantité de produit en plus a été ajoutée au panier
-            created_negative_order: Une commande à quantité négative a été créée
-        final_step:
-            success: Les informations de votre forfait ont bien été enregistrées
-        payment_mode:
-            success: Votre mode de paiement a bien été pris en compte
-        promotion:
-            delete:
-                success: Votre code promotionnel a bien été supprimé
-    admin:
-        reset_password_token:
-            success: Vous allez recevoir un email vous permettant de créer un nouveau mot de passe
-            expired: Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.
-        event:
-            create:
-                success: Votre événement a bien été ajouté
-            update:
-                success: L'événement a bien été mis à jour
-                asset:
-                    failed: La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire
-            who_see_what:
-                success: La règle a bien été mis à jour
-            billing:
-                configuration:
-                    success: La configuration de facturation a bien été mis à jour
-            paymentConditions:
-                update:
-                    success: Les conditions de paiement ont été modifiées avec succès
-            configure_dates:
-                success: Les dates ont bien été enregistrées
-        type:
-            create:
-                success: Le type a bien été créé
-            update:
-                success: Le type a bien été mis à jour
-        spot:
-            create:
-                success: Le lieu a bien été créé
-            batch_create:
-                success: Les lieux ont été créés
-                duplicate: "Les lieux avec les identifiants suivants n'ont pas pu être créé car les identifiants sont déjà utilisé : %references%"
-        spot_batch:
-            delete:
-                success: Les lieux sélectionnés ont bien été supprimés
-            disable:
-                success: Les lieux sélectionnés ont bien été désactivés
-        category:
-            create:
-                success: La catégorie a bien été créée
-            update:
-                success: La catégorie a bien été mise à jour
-        speaker:
-            create:
-                success: L'intervenant a bien été créé
-            update:
-                success: L'intervenant a bien été mis à jour
-        type_template_field:
-            create:
-                success: Le champ a bien été créé
-            update:
-                success: Le champ a bien été mis à jour
-            order:
-                success: L'ordre des champs a bien été enregistré
-        meeting_request:
-            position:
-                success: Le rendez-vous a bien été placé
-        order:
-            add_row:
-                success: La ligne a été ajoutée
-            update_row:
-                success: La ligne a été mise à jour
-            remove_row:
-                success: La ligne a été supprimée
-        transaction:
-            create:
-                success: La transaction a été créée
-            update:
-                success: La transaction a été mise à jour
-            remove:
-                success: La transaction a été supprimée
-        happening:
-            category:
-                update:
-                    success: La catégorie de sous événement a bien été mise à jour
-                create:
-                    success: La catégorie de sous événement a bien été créée
-            create:
-                success: Le sous événement a bien été créé
-            update:
-                success: Le sous événement a bien été mis à jour
-        sheet_batch:
-            validate:
-                success: "{0} aucune fiche n'a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées"
-            assign:
-                success: "{0} aucune fiche n'a été assignée.|{1} 1 fiche a été assignée à %name%|]1,Inf[ %count% fiches ont été assignées à %name%"
-        admin:
-            create:
-                success: Le nouvel utilisateur a bien été créé
-            update:
-                success: L'utilisateur a bien été modifié
-        sheet:
-            add_comment:
-                success: Votre commentaire a bien été ajouté
-        operator:
-            create:
-                success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
-            update:
-                success: 'Le collaborateur a été édité avec succès'
-        activate_account:
-            success: Votre compte a été activé avec succès
-        change_password:
-            success: Votre mot de passe a été changé
-        template:
-            registration:
-                update:
-                    success: Template d'Inscription modifié avec succès
-            package:
-                update:
-                    success: Template de forfait modifié avec succès
-                duplicate:
-                    success: Template de forfait dupliqué avec succès
-        product:
-            create:
-                success: Le produit a bien été créé
-            update:
-                success: Le produit a été modifié avec succès
-        package:
-            create:
-                success: La formule a bien été créée
-        nomenclature:
-            update:
-                success: La nomenclature a bien été mise à jour
-            import:
-                success: La nomenclature a bien été importée
-            assign:
-                success: La nomenclature a bien été assignée
-    activate_account:
-        success: Votre compte a été activé avec succès
-    change_mail:
-        success: Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l'activer
-    change_mail_activate:
-        success: Votre nouveau mail est maintenant associé à votre compte
-    template:
-        incomplete_translations:
-            warning: Vous avez des traductions manquantes.
-    billing:
-        update_info:
-            success: Vos informations de facturation ont été mis à jour
-    content:
-        update_terms-of-sale:
-            success: Les conditions générales de vente ont été mis à jour
-    promotion_code:
-        create:
-            success: Le code promotion a bien été créé
-        update:
-            success: Le code promotion a bien été mis à jour
-    schedule:
-        slot:
-            generate:
-                success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
-        configure:
-            success: Votre configuration a bien été enregistrer
-    admin.event.practicalInfo:
-        update:
-            success: Les informations pratiques ont bien été mises à jour
-    payment:
-        deposit:
-            notAvailable: "Nous sommes désolé, l'accompte n'est plus disponible"
+flash.activate_account.success: 'Votre compte a été activé avec succès'
+flash.admin.activate_account.success: 'Votre compte a été activé avec succès'
+flash.admin.admin.create.success: 'Le nouvel utilisateur a bien été créé'
+flash.admin.admin.update.success: 'L''utilisateur a bien été modifié'
+flash.admin.category.create.success: 'La catégorie a bien été créée'
+flash.admin.category.update.success: 'La catégorie a bien été mise à jour'
+flash.admin.change_password.success: 'Votre mot de passe a été changé'
+flash.admin.event.billing.configuration.success: 'La configuration de facturation a bien été mis à jour'
+flash.admin.event.configure_dates.success: 'Les dates ont bien été enregistrées'
+flash.admin.event.create.success: 'Votre événement a bien été ajouté'
+flash.admin.event.paymentConditions.update.success: 'Les conditions de paiement ont été modifiées avec succès'
+flash.admin.event.practicalInfo.update.success: 'Les informations pratiques ont bien été mises à jour'
+flash.admin.event.update.asset.failed: 'La génération du style des couleurs a échoué, vous pouvez resoumettre le formulaire'
+flash.admin.event.update.success: 'L''événement a bien été mis à jour'
+flash.admin.event.who_see_what.success: 'La règle a bien été mis à jour'
+flash.admin.happening.category.create.success: 'La catégorie de sous événement a bien été créée'
+flash.admin.happening.category.update.success: 'La catégorie de sous événement a bien été mise à jour'
+flash.admin.happening.create.success: 'Le sous événement a bien été créé'
+flash.admin.happening.update.success: 'Le sous événement a bien été mis à jour'
+flash.admin.meeting_request.position.success: 'Le rendez-vous a bien été placé'
+flash.admin.nomenclature.assign.success: 'La nomenclature a bien été assignée'
+flash.admin.nomenclature.import.success: 'La nomenclature a bien été importée'
+flash.admin.nomenclature.update.success: 'La nomenclature a bien été mise à jour'
+flash.admin.operator.create.success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
+flash.admin.operator.update.success: 'Le collaborateur a été édité avec succès'
+flash.admin.order.add_row.success: 'La ligne a été ajoutée'
+flash.admin.order.remove_row.success: 'La ligne a été supprimée'
+flash.admin.order.update_row.success: 'La ligne a été mise à jour'
+flash.admin.package.create.success: 'La formule a bien été créée'
+flash.admin.product.create.success: 'Le produit a bien été créé'
+flash.admin.product.update.success: 'Le produit a été modifié avec succès'
+flash.admin.reset_password_token.expired: 'Votre demande de réinitialisation de mot de passe a expirée. Vous pouvez en faire une nouvelle.'
+flash.admin.reset_password_token.success: 'Vous allez recevoir un email vous permettant de créer un nouveau mot de passe'
+flash.admin.sheet_batch.assign.success: '{0} aucune fiche n''a été assignée.|{1} 1 fiche a été assignée à %name%|]1,Inf[ %count% fiches ont été assignées à %name%'
+flash.admin.sheet_batch.validate.success: '{0} aucune fiche n''a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées'
+flash.admin.sheet.add_comment.success: 'Votre commentaire a bien été ajouté'
+flash.admin.speaker.create.success: 'L''intervenant a bien été créé'
+flash.admin.speaker.update.success: 'L''intervenant a bien été mis à jour'
+flash.admin.spot_batch.delete.success: 'Les lieux sélectionnés ont bien été supprimés'
+flash.admin.spot_batch.disable.success: 'Les lieux sélectionnés ont bien été désactivés'
+flash.admin.spot.batch_create.duplicate: 'Les lieux avec les identifiants suivants n''ont pas pu être créé car les identifiants sont déjà utilisé : %references%'
+flash.admin.spot.batch_create.success: 'Les lieux ont été créés'
+flash.admin.spot.create.success: 'Le lieu a bien été créé'
+flash.admin.template.package.duplicate.success: 'Template de forfait dupliqué avec succès'
+flash.admin.template.package.update.success: 'Template de forfait modifié avec succès'
+flash.admin.template.registration.update.success: 'Template d''Inscription modifié avec succès'
+flash.admin.transaction.create.success: 'La transaction a été créée'
+flash.admin.transaction.remove.success: 'La transaction a été supprimée'
+flash.admin.transaction.update.success: 'La transaction a été mise à jour'
+flash.admin.type_template_field.create.success: 'Le champ a bien été créé'
+flash.admin.type_template_field.order.success: 'L''ordre des champs a bien été enregistré'
+flash.admin.type_template_field.update.success: 'Le champ a bien été mis à jour'
+flash.admin.type.create.success: 'Le type a bien été créé'
+flash.admin.type.update.success: 'Le type a bien été mis à jour'
+flash.billing.update_info.success: 'Vos informations de facturation ont été mis à jour'
+flash.change_mail_activate.success: 'Votre nouveau mail est maintenant associé à votre compte'
+flash.change_mail.success: 'Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l''activer'
+flash.change_password.success: 'Votre mot de passe a été changé'
+flash.content.update_terms-of-sale.success: 'Les conditions générales de vente ont été mis à jour'
+flash.event.participation.success: 'Votre fiche de participation a été sauvegardée'
+flash.event.register.already_known.login: 'Vous êtes déjà enregistré à cet événement, connectez-vous'
+flash.event.register.already_known.message: "VOTRE EMAIL EST DÉJÀ ENREGISTRÉ !\nParce-que vous avez participé à un de nos événements, vous pouvez récuperer vos données… et gagnez un temps précieux !"
+flash.event.register.success: 'Votre compte a bien été créé'
+flash.event.schedule.happening.participate.success: 'Vous participez désormais à cet événement.'
+flash.event.schedule.happening.unparticipate.success: 'Vous ne participez plus à cet événement.'
+flash.event.schedule.meeting.cancel.success: 'Le rendez-vous a été annulé.'
+flash.event.schedule.meeting.update.success: 'Le rendez-vous a été mis à jour.'
+flash.event.schedule.unavailability.add.success: 'Votre indisponibilité a bien été ajoutée'
+flash.event.schedule.unavailability.remove.success: 'L''indisponibilité a bien été supprimée'
+flash.event.schedule.unavailability.update.success: 'L''indisponibilité a bien été mise à jour'
+flash.meeting_request.approved.success: 'Vous avez bien validé la proposition de rendez-vous'
+flash.meeting_request.cancelled.success: 'Vous avez bien annulé la demande de rendez-vous'
+flash.meeting_request.create.success: 'Votre demande de rendez-vous a bien été transmise'
+flash.meeting_request.edit.success: 'Vous avez bien modifié la demande de rendez-vous'
+flash.meeting_request.refused.success: 'Vous avez bien refusé la proposition de rendez-vous'
+flash.new_password.success: 'Votre mot de passe a été changé'
+flash.package.add_products.empty: 'Pas de produits ajoutés'
+flash.package.add_products.success: 'L''ajout des produits a bien été pris en compte'
+flash.package.final_step.success: 'Les informations de votre forfait ont bien été enregistrées'
+flash.package.payment_mode.success: 'Votre mode de paiement a bien été pris en compte'
+flash.package.promotion.delete.success: 'Votre code promotionnel a bien été supprimé'
+flash.package.update_product.added_updated_product_to_cart: 'La quantité de produit en plus a été ajoutée au panier'
+flash.package.update_product.created_negative_order: 'Une commande à quantité négative a été créée'
+flash.package.update_step.success: 'Les informations ont bien été enregistrées'
+flash.payment.deposit.notAvailable: 'Nous sommes désolé, l''accompte n''est plus disponible'
+flash.promotion_code.create.success: 'Le code promotion a bien été créé'
+flash.promotion_code.update.success: 'Le code promotion a bien été mis à jour'
+flash.reset_password_token.success: 'Un mail vous a été envoyé avec la procédure pour créer un nouveau mot de passe'
+flash.schedule.configure.success: 'Votre configuration a bien été enregistrer'
+flash.schedule.slot.generate.success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
+flash.sheet.add_participant.success: 'Le participant a bien été ajouté'
+flash.sheet.delete_participant.access_denied: 'Vous n''avez pas les droits pour effectuer cette action'
+flash.sheet.delete_participant.success: 'Le participant a bien été supprimé'
+flash.sheet.update_billing.success: 'Les informations de facturation ont bien été enregistrées'
+flash.sheet.update_block.success: 'Les informations ont bien été enregistrées'
+flash.sheet.update_participant.success: 'La fiche participant a bien été modifiée'
+flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
