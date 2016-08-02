@@ -45,12 +45,6 @@ class Add
      * @var bool
      */
     public $owner;
-
-    /**
-     * @var Event
-     */
-    public $event;
-
     /**
      * @var User
      */
@@ -59,15 +53,13 @@ class Add
     /**
      * @param User   $adder
      * @param Sheet  $sheet
-     * @param Event  $event
      * @param string $locale
      */
-    public function __construct(Sheet $sheet, Event $event, $locale, User $adder)
+    public function __construct(Sheet $sheet, $locale, User $adder)
     {
         $this->sheet  = $sheet;
-        $this->event  = $event;
         $this->locale = $locale;
         $this->owner  = false;
-        $this->adder = $adder;
+        $this->adder  = $adder;
     }
 }
