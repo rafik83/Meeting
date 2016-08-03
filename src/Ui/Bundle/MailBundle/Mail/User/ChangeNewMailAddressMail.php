@@ -8,13 +8,29 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
 class ChangeNewMailAddressMail extends Mail
 {
+    /**
+     * @var string
+     */
+    protected $subject = 'mail.changeMailNew.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:ChangeMail/newMail.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = 'change_mail_new';
+
     /**
      * @var string
      */
@@ -26,17 +42,16 @@ class ChangeNewMailAddressMail extends Mail
     private $user;
 
     /**
+     * @param Event  $event
      * @param string $sender
      * @param string $receiver
-     * @param string $template
-     * @param string $messageId
      * @param string $locale
      * @param string $token
      * @param User   $user
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $token, User $user)
+    public function __construct(Event $event, $sender, $receiver, $locale, $token, User $user)
     {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
+        parent::__construct($event, $sender, $receiver, $locale);
 
         $this->token = $token;
         $this->user  = $user;

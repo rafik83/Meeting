@@ -30,8 +30,8 @@ use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswo
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
@@ -122,19 +122,17 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onChangeMailAddressEvent(ChangeMailAddressEvent $event)
     {
         $oldMail = new ChangeOldMailAddressMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:ChangeMail/oldMail.html.twig',
-            'change_mail_old',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getMail()
         );
 
         $newMail = new ChangeNewMailAddressMail(
+            $event->getEvent(),
             $this->sender,
             $event->getChangeMailToken()->getMail(),
-            'MailBundle:Mail:ChangeMail/newMail.html.twig',
-            'change_mail_new',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken(),
             $event->getUser()

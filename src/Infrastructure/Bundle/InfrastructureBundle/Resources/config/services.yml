@@ -1226,7 +1226,7 @@ services:
         arguments:
             - '@mailer'
             - '@twig'
-
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
     # Proforma component

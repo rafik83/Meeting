@@ -10,10 +10,36 @@
 
 namespace Proximum\Vimeet\Application\Components\Mail;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
 class Mail
 {
+    /**
+     * @var Event
+     */
+    protected $event;
+
+    /**
+     * @var string
+     */
+    protected $subject;
+
+    /**
+     * @var array
+     */
+    protected $subjectParameters = [];
+
+    /**
+     * @var string
+     */
+    protected $template;
+
+    /**
+     * @var string
+     */
+    protected $messageId;
+
     /**
      * @var string
      */
@@ -37,33 +63,21 @@ class Mail
     /**
      * @var string
      */
-    private $template;
-
-    /**
-     * @var string
-     */
-    private $messageId;
-
-    /**
-     * @var string
-     */
     private $locale;
 
     /**
+     * @param Event     $event
      * @param string    $sender
      * @param string    $receiver
-     * @param string    $template
-     * @param string    $messageId
      * @param string    $locale
      * @param User|null $senderUser
      * @param User|null $receiverUser
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, User $senderUser = null, User $receiverUser = null)
+    public function __construct(Event $event, $sender, $receiver, $locale, User $senderUser = null, User $receiverUser = null)
     {
+        $this->event        = $event;
         $this->sender       = $sender;
         $this->receiver     = $receiver;
-        $this->template     = $template;
-        $this->messageId    = $messageId;
         $this->locale       = $locale;
         $this->receiverUser = $receiverUser;
         $this->senderUser   = $senderUser;
@@ -123,5 +137,29 @@ class Mail
     public function getReceiverUser()
     {
         return $this->receiverUser;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubjectParameters()
+    {
+        return $this->subjectParameters;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
     }
 }
