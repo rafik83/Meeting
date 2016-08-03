@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
+use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -15,11 +16,18 @@ class PlanningQuantityValidator extends ConstraintValidator
     private $quantityMaxGuesser;
 
     /**
-     * @param QuantityMaxGuesser $quantityMaxGuesser
+     * @var QuantityMinGuesser
      */
-    public function __construct(QuantityMaxGuesser $quantityMaxGuesser)
+    private $quantityMinGuesser;
+
+    /**
+     * @param QuantityMaxGuesser $quantityMaxGuesser
+     * @param QuantityMinGuesser $quantityMinGuesser
+     */
+    public function __construct(QuantityMaxGuesser $quantityMaxGuesser,  QuantityMinGuesser $quantityMinGuesser)
     {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
+        $this->quantityMinGuesser = $quantityMinGuesser;
     }
 
     /**
@@ -32,7 +40,21 @@ class PlanningQuantityValidator extends ConstraintValidator
         $sheet       = $selectParticipantAndPlanning->sheet;
         $quantityMax = $this->quantityMaxGuesser->getMaxPlanning($sheet);
 
-        if ($quantity < 0 || $quantity > $quantityMax) {
+        $quantityMin = $this->quantityMinGuesser->getMinProduct(
+            $selectParticipantAndPlanning->sheet,
+            $sheet->getPackage()->getPlanning(),
+            $quantity
+        );
+
+        if (false === $quantityMin) {
+            $this
+                ->context
+                ->buildViolation('package.product.quantityMinPromotionCode')
+                ->atPath('planningQuantity')
+                ->addViolation();
+        }
+
+        if ($quantity < $quantityMin || $quantity > $quantityMax) {
             $this
                 ->context
                 ->buildViolation('package.planning.quantity')
