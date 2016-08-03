@@ -54,24 +54,6 @@ class GroupView
     }
 
     /**
-     * @return float
-     */
-    public function getTotal()
-    {
-        $total = 0;
-
-        foreach($this->products as $product) {
-            $total += $product->getTotal();
-        }
-
-        foreach($this->customRows as $row) {
-            $total += $row->total;
-        }
-
-        return $total;
-    }
-
-    /**
      * @param RowView $product
      */
     public function addProduct(RowView $product)

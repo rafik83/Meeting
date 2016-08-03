@@ -142,9 +142,6 @@ class RowView
      */
     public function getTotal()
     {
-        foreach ($this->customRows as $row) {
-            $this->total += $row->total;
-        }
         return $this->total;
     }
 }

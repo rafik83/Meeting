@@ -40,11 +40,6 @@ class SummaryView
     public $vatRate;
 
     /**
-     * @var float
-     */
-    public $totalPlusVat;
-
-    /**
      * @var bool
      */
     public $vatApplicable;
@@ -70,6 +65,9 @@ class SummaryView
      * @param bool               $vatApplicable
      * @param float              $vatRate
      * @param string             $vatMode
+     * @param float              $totalWithoutVat
+     * @param float              $vatAmount
+     * @param float              $totalWithVat
      * @param string             $currency
      */
     public function __construct(
@@ -78,21 +76,19 @@ class SummaryView
         $vatApplicable,
         $vatRate,
         $vatMode,
+        $totalWithoutVat,
+        $vatAmount,
+        $totalWithVat,
         $currency
     ) {
-        $this->groups         = $groups;
-        $this->promotionCodes = $promotionCodes;
-        $this->total          = $groups->getTotal() + $promotionCodes->getTotal();
-        $this->vatApplicable  = $vatApplicable;
-        $this->vatRate        = $vatRate;
-        $this->totalPlusVat   = $this->total;
-        $this->vatMode        = $vatMode;
-        $this->currency       = $currency;
-
-        if ($vatApplicable) {
-            $this->vat          = ($this->total * $vatRate) / 100;
-            $this->totalPlusVat = $this->vat + $this->total;
-            $this->totalVatMode = Event::VAT_MODE_ATI;
-        }
+        $this->groups          = $groups;
+        $this->promotionCodes  = $promotionCodes;
+        $this->vatApplicable   = $vatApplicable;
+        $this->vatRate         = $vatRate;
+        $this->vatMode         = $vatMode;
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->vatAmount       = $vatAmount;
+        $this->totalWithVat    = $totalWithVat;
+        $this->currency        = $currency;
     }
 }

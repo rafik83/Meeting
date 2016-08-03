@@ -79,8 +79,8 @@
                             <td class="text-right">{{ customRow.quantity }}</td>
                             <td class="text-right">{{ customRow.total|number_format(2, ',', ' ') }} €</td>
                             <td class="text-right">
-                            <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"> {{ "admin.order_edit.edit_custom_row"|trans }} <i class="glyphicon glyphicon-edit"></i></a>
-                            <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"> {{ "admin.order_edit.remove_custom_row"|trans }} <i class="glyphicon glyphicon-remove"></i></a>
+                                <a href="{{ path('admin_sheet_order_update_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"> {{ "admin.order_edit.edit_custom_row"|trans }} <i class="glyphicon glyphicon-edit"></i></a>
+                                <a href="{{ path('admin_sheet_order_remove_row', { 'event': event.id, 'order': order.id, 'row': customRow.id }) }}"> {{ "admin.order_edit.remove_custom_row"|trans }} <i class="glyphicon glyphicon-remove"></i></a>
                             </td>
                         </tr>
                 {% endfor %}
@@ -88,9 +88,7 @@
 
             {% if order_view.promotionCodes.promotionCodes is not empty %}
                 <tr class="active">
-                    <th colspan="5">{{ 'admin.order_edit.promotionCodes'|trans }}</th>
-                    <td class="text-right">
-                    </td>
+                    <th colspan="6">{{ 'admin.order_edit.promotionCodes'|trans }}</th>
                 </tr>
             {% endif %}
 
@@ -101,28 +99,28 @@
                     <td class="text-left">{{ promotionCode.description }}</td>
                     <td class="text-right">{{ promotionCode.quantity }}</td>
                     <td class="text-right">{{ promotionCode.total|number_format(2, ',', ' ') }} €</td>
-                    <td class="text-right">
-                    </td>
+                    <td></td>
                 </tr>
             {% endfor %}
 
             <tr class="info">
                 <th colspan="2"></th>
                 <th colspan="2">{{ 'admin.order_edit.total.withoutVAT'|trans }}</th>
-                <th class="text-right">{{ order_view.total|number_format(2, ',', ' ') }} €</th>
+                <th class="text-right">{{ order_view.totalWithoutVat|number_format(2, ',', ' ') }} €</th>
                 <th></th>
             </tr>
             {% if order_view.vatApplicable %}
                 <tr>
                     <th colspan="2"></th>
-                    <th colspan="2">{{ 'admin.order_edit.VAT'|trans }}</th>
-                    <th class="text-right">{{ order_view.vat }}%</th>
+                    <th colspan="1">{{ 'admin.order_edit.VAT'|trans }}</th>
+                    <th colspan="1">{{ order_view.vatRate }}%</th>
+                    <th class="text-right">{{ order_view.vatAmount }} €</th>
                     <th></th>
                 </tr>
                 <tr>
                     <th colspan="2"></th>
                     <th colspan="2">{{ 'admin.order_edit.total.withVAT'|trans }}</th>
-                    <th class="text-right">{{ order_view.totalPlusVat|number_format(2, ',', ' ') }} €</th>
+                    <th class="text-right">{{ order_view.totalWithVat|number_format(2, ',', ' ') }} €</th>
                     <th></th>
                 </tr>
             {% endif %}

@@ -71,7 +71,10 @@ class SummaryQueryHandler
             ),
             $summaryQuery->order->isVatApplicable(),
             $summaryQuery->order->getVatRate(),
-            $summaryQuery->order->getVatMode(),
+            $summaryQuery->order->getTotalVatMode(),
+            $summaryQuery->order->getTotalWithoutVat(),
+            $summaryQuery->order->getVatAmount(),
+            $summaryQuery->order->getTotalWithVat(),
             $summaryQuery->order->getCurrency()
         );
     }

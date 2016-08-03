@@ -29,7 +29,7 @@ Feature: Edit an order
     And I press "order_row_submit"
     Then the response status code should be 200
     And I should see "My awesome reduction"
-    And I should see "1 389"
+    And I should see "1 566"
 
   Scenario: Update custom row
     Given I am logged with "test@test.com" on admin
@@ -43,7 +43,7 @@ Feature: Edit an order
     And I press "order_row_submit"
     Then the response status code should be 200
     And I should see "Another awesome reduction"
-    And I should see "1 489"
+    And I should see "1 666"
 
   Scenario: Remove custom row
     Given I follow "admin.order_edit.remove_custom_row"

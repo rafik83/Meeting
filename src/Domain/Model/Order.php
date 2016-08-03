@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Order\Row;
 
 /**
@@ -187,6 +188,8 @@ class Order
     }
 
     /**
+     * VAT mode of the total if applicable
+     *
      * @return string
      */
     public function getTotalVatMode()
@@ -266,18 +269,51 @@ class Order
     }
 
     /**
-     * @param Row $customRow
-     *
-     * @return Order
+     * @return float
      */
-    public function updateCustomRow(Row $customRow)
+    public function getTotalWithoutVat()
     {
-        foreach ($this->rows as $key => $row) {
-            if ($row->getId() == $customRow->getId()) {
-                $row->update($customRow);
-            }
+        $total = 0;
+
+        /** @var Row $row */
+        foreach ($this->rows->toArray() as $row) {
+            $total += $row->getQuantity() * $row->getPrice();
         }
-        return $this;
+
+        /** @var PromotionCode $promotionCode */
+        foreach ($this->promotionCodes->toArray() as $promotionCode) {
+            $total += $promotionCode->getPrice();
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getVatAmount()
+    {
+        $total = $this->getTotalWithoutVat();
+
+        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
+            return $total * $this->vatRate / 100;
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalWithVat()
+    {
+        $total = $this->getTotalWithoutVat();
+
+        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
+            $total += $this->getVatAmount();
+        }
+
+        return $total;
     }
 
     /**
@@ -285,21 +321,7 @@ class Order
      */
     public function getTotal()
     {
-        $total = 0;
-
-        foreach ($this->rows->toArray() as $row) {
-            $total += $row->getQuantity() * $row->getPrice();
-        }
-
-        foreach ($this->promotionCodes->toArray() as $promotionCode) {
-            $total += $promotionCode->getPrice();
-        }
-
-        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            $total += $total * $this->vatRate / 100;
-        }
-
-        return $total;
+        return $this->getTotalWithVat();
     }
 
     /**
