@@ -1,4 +1,4 @@
 Proximum\Vimeet\Domain\Model\Type:
     type_without_sheet:
         __construct: ["@event_rdv_carnot_2016"]
-        position: 5
+        position: -1
