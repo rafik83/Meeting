@@ -31,7 +31,7 @@ class CatalogController extends Controller
      */
     public function categoriesAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
             throw $this->createNotFoundException();
@@ -57,7 +57,7 @@ class CatalogController extends Controller
      */
     public function categoryAction(EventDomain $eventDomain, CategoryView $categoryView)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
             throw $this->createNotFoundException();
@@ -95,7 +95,7 @@ class CatalogController extends Controller
      */
     public function sheetAction(EventDomain $eventDomain, CategoryView $categoryView, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
             throw $this->createNotFoundException();
