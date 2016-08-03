@@ -153,8 +153,11 @@ class TypeController extends Controller
         }
 
         $remove = new Remove($type);
-        $this->get('tactician.commandbus')->handle($remove);
-        $this->addFlash('success', 'flash.admin.type.remove.success');
+        if (false === $this->get('tactician.commandbus')->handle($remove)) {
+            $this->addFlash('error', 'flash.admin.type.remove.error');
+        } else {
+            $this->addFlash('success', 'flash.admin.type.remove.success');
+        }
 
         return $this->redirectToRoute('admin_type_list', [
             'event' => $event->getId(),
