@@ -92,3 +92,12 @@ Feature: add type
     When I press "admin.type.remove.link"
     Then I should be on "/admin/fr/event/1/type"
     And I should see "flash.admin.type.remove.success"
+
+  Scenario: I try to remove a type that have a sheet
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I follow "admin.type.link"
+    Then I should be on "/admin/fr/event/1/type"
+    When I press "admin.type.remove.link"
+    Then I should be on "/admin/fr/event/1/type"
+    And I should see "flash.admin.type.remove.error"
