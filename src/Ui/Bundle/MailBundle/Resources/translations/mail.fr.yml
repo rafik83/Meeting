@@ -27,6 +27,9 @@ mail.event.preregister.body: "Cher(e) M/Mme %firstname% %lastname%,\n\nVotre dem
 mail.event.preregister.end: "Bien cordialement,"
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: 'Contact'
+mail.orderConfirm.subject: 'Confirmation de commande'
+mail.orderConfirm.body: 'Votre commande a bien été enregistrée.'
+mail.orderConfirm.end: 'Cordialement,'
 mail.register.body: "Cher(e) M/Mme %firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté Vimeet.\n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.\n"
 mail.register.end: "Bien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'

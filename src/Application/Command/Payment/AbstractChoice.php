@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Payment;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 abstract class AbstractChoice
 {
@@ -25,10 +26,17 @@ abstract class AbstractChoice
     public $sheet;
 
     /**
-     * @param Sheet $sheet
+     * @var User
      */
-    public function __construct(Sheet $sheet)
+    public $user;
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     */
+    public function __construct(Sheet $sheet, User $user)
     {
         $this->sheet = $sheet;
+        $this->user  = $user;
     }
 }

@@ -10,11 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Payment;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 abstract class AbstractChoiceHandler
 {
@@ -44,10 +47,16 @@ abstract class AbstractChoiceHandler
     protected $transactionRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * @param TransactionRepositoryInterface $transactionRepository
      * @param Cart\Converter                 $converter
      * @param Cart\CartManager               $cartManager
      * @param TotalToPay                     $totalToPay
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $datetime
      */
     public function __construct(
@@ -55,12 +64,14 @@ abstract class AbstractChoiceHandler
         Cart\Converter $converter,
         Cart\CartManager $cartManager,
         TotalToPay $totalToPay,
+        DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $datetime
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->converter             = $converter;
         $this->cartManager           = $cartManager;
         $this->totalToPay            = $totalToPay;
+        $this->eventDispatcher       = $eventDispatcher;
         $this->datetime              = $datetime;
     }
 
@@ -74,7 +85,10 @@ abstract class AbstractChoiceHandler
     protected function handleChoice(AbstractChoice $choice, $total)
     {
         // Convert cart to order
-        $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
+        $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
+
+        $event = new OrderConfirmEvent($order, $choice->user);
+        $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
 
         // Create Transaction
         $transaction = new Transaction(

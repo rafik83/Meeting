@@ -988,24 +988,23 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
-    command.payment.choice_handler:
-        class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
+    command.payment.abstract_choice_handler:
+        abstract: true
         arguments:
             - '@repository.transaction'
             - '@cart.converter'
             - '@cart_manager'
             - '@payment.total_to_pay'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+    command.payment.choice_handler:
+        class: Proximum\Vimeet\Application\Command\Payment\ChoiceHandler
+        parent: command.payment.abstract_choice_handler
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\Choice }
     command.payment.choice_with_deposit_handler:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
-        arguments:
-            - '@repository.transaction'
-            - '@cart.converter'
-            - '@cart_manager'
-            - '@payment.total_to_pay'
-            - '@datetime'
+        parent: command.payment.abstract_choice_handler
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
     command.order.create_handler:
@@ -1013,6 +1012,7 @@ services:
         arguments:
             - '@cart.converter'
             - '@cart_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Create }

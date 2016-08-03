@@ -58,7 +58,7 @@ class PaymentController extends Controller
 
         // If nothing to pay, create the order
         if ($total <= 0) {
-            $create = new Create($sheet);
+            $create = new Create($sheet, $this->getUser());
             $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('event_order_list', [
@@ -70,10 +70,10 @@ class PaymentController extends Controller
         $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
 
         if ($depositAllowed) {
-            $paymentChoice = new ChoiceWithDeposit($sheet);
+            $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
         } else {
-            $paymentChoice = new Choice($sheet);
+            $paymentChoice = new Choice($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
         }
 

@@ -1,7 +1,7 @@
-{% block subject %}
-    {{ 'mail.order.confirm.subject'|trans({}, 'mail', mail.locale) }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
-
+    {{ 'mail.orderConfirm.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    <br>
+    {{ 'mail.orderConfirm.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

@@ -190,10 +190,9 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
         $mail = new OrderConfirmMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            '',
-            'order_confirm',
             $event->getUser()->getLocale(),
             $event->getOrder(),
             $event->getUser(),

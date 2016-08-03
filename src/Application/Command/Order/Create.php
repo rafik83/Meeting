@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Order;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Create
 {
@@ -20,10 +21,17 @@ class Create
     public $sheet;
 
     /**
-     * @param Sheet $sheet
+     * @var User
      */
-    public function __construct(Sheet $sheet)
+    public $user;
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     */
+    public function __construct(Sheet $sheet, User $user)
     {
         $this->sheet = $sheet;
+        $this->user  = $user;
     }
 }
