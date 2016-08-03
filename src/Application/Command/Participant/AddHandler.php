@@ -26,7 +26,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddHandler
 {
@@ -56,7 +56,7 @@ class AddHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
@@ -73,7 +73,7 @@ class AddHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param TemplateDataFactory            $templateDataFactory
      * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
-     * @param EventDispatcherInterface       $eventDispatcher
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param CartManager                    $cartManager
      */
     public function __construct(
@@ -82,7 +82,7 @@ class AddHandler
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        EventDispatcherInterface $eventDispatcher,
+        DelayedEventDispatcher $eventDispatcher,
         CartManager $cartManager
     ) {
         $this->userRepository                = $userRepository;
