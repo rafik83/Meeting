@@ -1,6 +1,8 @@
-{% if object.hasTag('participant_mobile') %}
-    <i class="icon-Smartphone"></i>
-{% else %}
-    <i class="icon-Appeler"></i>
+{% if null != object.telephone %}
+    {% if object.hasTag('participant_mobile') %}
+        <i class="icon-Smartphone"></i>
+    {% else %}
+        <i class="icon-Appeler"></i>
+    {% endif %}
+    {{ object.telephone }}
 {% endif %}
-{{ object.telephone }}

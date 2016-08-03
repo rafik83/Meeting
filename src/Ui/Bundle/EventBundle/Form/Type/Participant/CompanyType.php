@@ -69,6 +69,7 @@ class CompanyType extends AbstractType
     private function addText($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, EditableTextInputDataType::class, [
+            'label'  => false,
             'locale' => $locale,
             'object' => $object,
         ]);
@@ -83,6 +84,7 @@ class CompanyType extends AbstractType
     private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
     {
         $builder->add($key, NomenclatureDataType::class, [
+            'label'       => false,
             'locale'      => $locale,
             'object'      => $object,
             'placeholder' => $object->getOption('label')[$locale],
@@ -98,6 +100,7 @@ class CompanyType extends AbstractType
     private function addUrl($key, FormBuilderInterface $builder, Template\TemplateObject\Url $object, $locale)
     {
         $builder->add($key, UrlDataType::class, [
+            'label'  => false,
             'locale' => $locale,
             'object' => $object,
         ]);
@@ -113,6 +116,7 @@ class CompanyType extends AbstractType
     private function addTelephone($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale, $country)
     {
         $builder->add($key, TelephoneDataType::class, [
+            'label'   => false,
             'locale'  => $locale,
             'object'  => $object,
             'country' => $country,
@@ -128,6 +132,7 @@ class CompanyType extends AbstractType
     private function addCountry($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, CountryDataType::class, [
+            'label'  => false,
             'locale' => $locale,
             'object' => $object,
         ]);

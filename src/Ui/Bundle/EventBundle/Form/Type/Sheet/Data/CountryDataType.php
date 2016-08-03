@@ -25,11 +25,10 @@ class CountryDataType extends AbstractType
     {
         $country = $options['object'];
         $locale  = $options['locale'];
-        $label   = $options['label'];
 
         $builder
             ->add('country', CountryType::class, [
-                'label'              => $label ? $country->getOption('label')[$locale] : false,
+                'label'              => $country->getOption('label', $locale),
                 'required'           => $country->getOption('required'),
                 'placeholder'        => $country->getOption('placeholder')[$locale],
                 'attr'               => [
@@ -48,7 +47,6 @@ class CountryDataType extends AbstractType
         $resolver->setRequired(['object', 'locale']);
         $resolver->setAllowedTypes('object', TemplateObject\Country::class);
         $resolver->setDefaults([
-            'label'      => false,
             'data_class' => TemplateObject\Country::class
         ]);
     }
