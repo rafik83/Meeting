@@ -65,15 +65,15 @@
                 <ul>
                     <li><strong class="highlight">{{ event.organiserName }}</strong></li>
                 {% if event.configuration.contactFirstName or event.configuration.contactLastName %}
-                    <li>{{ event.configuration.contactFirstName|capitalize }} {{ event.configuration.contactLastName|upper }}</li>
+                    <li>{{ event.configuration.contactFirstName|default('')|capitalize }} {{ event.configuration.contactLastName|default('')|upper }}</li>
                 {% endif %}
-                {% if event.configuration.organiserPhone  %}
+                {% if event.configuration.organiserPhone %}
                     <li><i class="icon-Appeler"></i> {{ event.configuration.organiserPhone }}</li>
                 {% endif %}
-                {% if event.organiserEmail  %}
+                {% if event.organiserEmail %}
                     <li><i class="icon-Message_1"></i> <a href="mailto:{{ event.organiserEmail }}">{{ event.organiserEmail }}</a></li>
                 {% endif %}
-                {% if event.configuration.organiserWebsite  %}
+                {% if event.configuration.organiserWebsite %}
                     <li><a href="{{ event.configuration.organiserWebsite }}" target="_blank" rel="external">
                         {{ event.configuration.organiserWebsite }}
                     </a></li>
