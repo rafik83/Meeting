@@ -1,1 +1,6 @@
+{% if object.hasTag('participant_mobile') %}
+    <i class="icon-Smartphone"></i>
+{% else %}
+    <i class="icon-Appeler"></i>
+{% endif %}
 {{ object.telephone }}
