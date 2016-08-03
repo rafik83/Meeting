@@ -76,22 +76,6 @@ class CompanyType extends AbstractType
     }
 
     /**
-     * @param string                       $key
-     * @param FormBuilderInterface         $builder
-     * @param Template\TemplateObject\Nomenclature $object
-     * @param string                       $locale
-     */
-    private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
-    {
-        $builder->add($key, NomenclatureDataType::class, [
-            'label'       => false,
-            'locale'      => $locale,
-            'object'      => $object,
-            'placeholder' => $object->getOption('label')[$locale],
-        ]);
-    }
-
-    /**
      * @param string               $key
      * @param FormBuilderInterface $builder
      * @param Template\TemplateObject\Url  $object
@@ -135,6 +119,22 @@ class CompanyType extends AbstractType
             'label'  => false,
             'locale' => $locale,
             'object' => $object,
+        ]);
+    }
+
+    /**
+     * @param string                       $key
+     * @param FormBuilderInterface         $builder
+     * @param Template\TemplateObject\Nomenclature $object
+     * @param string                       $locale
+     */
+    private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
+    {
+        $builder->add($key, NomenclatureDataType::class, [
+            'label'       => false,
+            'locale'      => $locale,
+            'object'      => $object,
+            'placeholder' => $object->getOption('label')[$locale],
         ]);
     }
 }
