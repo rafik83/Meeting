@@ -209,12 +209,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onSheetAddParticipant(SheetAddParticipantEvent $event)
     {
         $mail = new AddParticipantMail(
+            $event->getSheet()->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig',
-            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
             $event->getUser()->getLocale(),
-            $event->getSheet()->getEvent(),
             $event->getUser()
         );
 
@@ -258,17 +256,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserActivateAccount(UserActivateAccountEvent $event)
     {
-//        $mail = new UserActivateAccountMail(
-//            $this->sender,
-//            $event->getUser()->getEmail(),
-//            $event->getUser()->getLocale(),
-//            $event->getEvent(),
-//            $event->getActivateAccountToken()->getToken(),
-//            $event->getSender(),
-//            $event->getUser()
-//        );
+        $mail = new UserActivateAccountMail(
+            $event->getEvent(),
+            $this->sender,
+            $event->getUser()->getEmail(),
+            $event->getUser()->getLocale(),
+            $event->getActivateAccountToken()->getToken(),
+            $event->getSender(),
+            $event->getUser()
+        );
 
-//        $this->mailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**

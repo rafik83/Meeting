@@ -11,15 +11,26 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
 class ActivateAccountMail extends Mail
 {
     /**
-     * @var Event
+     * @var string
      */
-    private $event;
+    protected $subject = 'mail.activateAccount.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:User/activateAccount.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::USER_ACCOUNT_ACTIVATED;
 
     /**
      * @var string
@@ -29,8 +40,6 @@ class ActivateAccountMail extends Mail
     /**
      * @param string $sender
      * @param string $receiver
-     * @param string $template
-     * @param string $messageId
      * @param string $locale
      * @param Event  $event
      * @param string $token
@@ -38,28 +47,17 @@ class ActivateAccountMail extends Mail
      * @param User   $receiverUser
      */
     public function __construct(
+        Event $event,
         $sender,
         $receiver,
-        $template,
-        $messageId,
         $locale,
-        Event $event,
         $token,
         $senderUser,
         $receiverUser
     ) {
-        parent::__construct($sender, $receiver, $locale, $senderUser, $receiverUser);
+        parent::__construct($event, $sender, $receiver, $locale, $senderUser, $receiverUser);
 
-        $this->event = $event;
         $this->token = $token;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
     }
 
     /**
@@ -68,5 +66,15 @@ class ActivateAccountMail extends Mail
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubjectParameters()
+    {
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
     }
 }
