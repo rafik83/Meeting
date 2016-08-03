@@ -112,11 +112,10 @@ event_account_participant_profile:
     defaults: { _controller: EventBundle:Participant:updateProfile }
 
 event_account_participant_company:
-    path: /account/sheet/{sheet}/participant/{participant}/company
+    path: /account/sheet/{sheet}/company
     methods: [GET, POST]
     requirements:
         sheet: \d+
-        participant: \d+
     defaults: { _controller: EventBundle:Participant:updateCompany }
 
 event_account_participant_avatar:
