@@ -48,7 +48,7 @@ class ActivateAccountMail extends Mail
         $senderUser,
         $receiverUser
     ) {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale, $senderUser, $receiverUser);
+        parent::__construct($sender, $receiver, $locale, $senderUser, $receiverUser);
 
         $this->event = $event;
         $this->token = $token;

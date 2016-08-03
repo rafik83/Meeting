@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class Mail
 {
     /**
-     * @var Event
+     * @var Event|null
      */
     protected $event;
 
@@ -66,15 +66,21 @@ class Mail
     private $locale;
 
     /**
-     * @param Event     $event
-     * @param string    $sender
-     * @param string    $receiver
-     * @param string    $locale
-     * @param User|null $senderUser
-     * @param User|null $receiverUser
+     * @param Event|null $event
+     * @param string     $sender
+     * @param string     $receiver
+     * @param string     $locale
+     * @param User|null  $senderUser
+     * @param User|null  $receiverUser
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, User $senderUser = null, User $receiverUser = null)
-    {
+    public function __construct(
+        $event,
+        $sender,
+        $receiver,
+        $locale,
+        User $senderUser = null,
+        User $receiverUser = null
+    ) {
         $this->event        = $event;
         $this->sender       = $sender;
         $this->receiver     = $receiver;
@@ -156,7 +162,7 @@ class Mail
     }
 
     /**
-     * @return Event
+     * @return Event|null
      */
     public function getEvent()
     {

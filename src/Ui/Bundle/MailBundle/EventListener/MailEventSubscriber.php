@@ -229,8 +229,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new AdminActivateAccountMail(
             $this->sender,
             $event->getAdmin()->getEmail(),
-            'MailBundle:Mail:Admin/activateAccount.html.twig',
-            Events::ADMIN_ACCOUNT_ACTIVATED,
             $event->getLocale(),
             $event->getActivateAccountToken()->getToken()
         );
@@ -260,19 +258,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserActivateAccount(UserActivateAccountEvent $event)
     {
-        $mail = new UserActivateAccountMail(
-            $this->sender,
-            $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/activateAccount.html.twig',
-            Events::USER_ACCOUNT_ACTIVATED,
-            $event->getUser()->getLocale(),
-            $event->getEvent(),
-            $event->getActivateAccountToken()->getToken(),
-            $event->getSender(),
-            $event->getUser()
-        );
+//        $mail = new UserActivateAccountMail(
+//            $this->sender,
+//            $event->getUser()->getEmail(),
+//            $event->getUser()->getLocale(),
+//            $event->getEvent(),
+//            $event->getActivateAccountToken()->getToken(),
+//            $event->getSender(),
+//            $event->getUser()
+//        );
 
-        $this->mailer->send($mail);
+//        $this->mailer->send($mail);
     }
 
     /**
@@ -382,13 +378,13 @@ class MailEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            Events::ADMIN_ACCOUNT_ACTIVATED              => 'onAdminActivateAccount',
+            Events::ADMIN_PASSWORD_RESET                 => 'onAdminResetPassword',
             Events::SHEET_VALIDATED                      => 'onSheetValidated',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION   => 'onSheetAddParticipant',
             Events::SHEET_INVITATION_CLOSE_TO_EXPIRATION => 'onInvitationCloseToExpiration',
             Events::SHEET_INVITATION_EXPIRE              => 'onInvitationExpire',
             Events::USER_MAIL_CHANGED                    => 'onChangeMailAddressEvent',
-            Events::ADMIN_ACCOUNT_ACTIVATED              => 'onAdminActivateAccount',
-            Events::ADMIN_PASSWORD_RESET                 => 'onAdminResetPassword',
             Events::USER_ACCOUNT_ACTIVATED               => 'onUserActivateAccount',
             Events::USER_PASSWORD_RESET                  => 'onUserResetPassword',
             Events::USER_PROFILE_COMPLETED               => 'onUserCompleteProfile',

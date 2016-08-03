@@ -1,3 +1,4 @@
+admin.mail.activateAccount.activate: "Activer votre compte"
 admin.mail.activateAccount.body: "Bonjour,\nVous avez été invité en tant que collaborateur sur Vimeet\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:\n"
 admin.mail.activateAccount.end: "Cordialement,\nL'équipe Vimeet\n"
 admin.mail.activateAccount.subject: 'Activer votre compte'

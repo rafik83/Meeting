@@ -11,9 +11,25 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
 
 class ActivateAccountMail extends Mail
 {
+    /**
+     * @var string
+     */
+    protected $subject = 'admin.mail.activateAccount.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:Admin/activateAccount.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::ADMIN_ACCOUNT_ACTIVATED;
+
     /**
      * @var string
      */
@@ -22,14 +38,12 @@ class ActivateAccountMail extends Mail
     /**
      * @param string $sender
      * @param string $receiver
-     * @param string $template
-     * @param string $messageId
      * @param string $locale
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $token)
+    public function __construct($sender, $receiver, $locale, $token)
     {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
+        parent::__construct(null, $sender, $receiver, $locale);
 
         $this->token = $token;
     }
