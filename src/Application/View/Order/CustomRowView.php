@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
-
 class CustomRowView
 {
     /**
