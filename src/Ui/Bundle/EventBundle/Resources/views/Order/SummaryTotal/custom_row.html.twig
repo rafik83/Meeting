@@ -1,0 +1,32 @@
+{% if null != customRow %}
+    <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
+        <td class="col-md-6">
+            <p>{{ customRow.label }}</p>
+        </td>
+        <td class="col-md-2">
+            <div class="product">
+                <span class="product-price text-center">
+                    {{ 'package.product.unitPrice'|trans({
+                        '%price%': customRow.price|localizednumber,
+                        '%currency%': currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ vatMode)|trans
+                    })|html }}
+                </span>
+            </div>
+        </td>
+        <td class="col-md-2">
+            <p class="text-center">{{ customRow.quantity }}</p>
+        </td>
+        <td class="col-md-2">
+            <div class="product">
+                <span class="product-price text-center">
+                    {{ 'package.product.unitPrice'|trans({
+                        '%price%': customRow.total|localizednumber,
+                        '%currency%': currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ vatMode)|trans
+                    })|html }}
+                </span>
+            </div>
+        </td>
+    </tr>
+{% endif %}

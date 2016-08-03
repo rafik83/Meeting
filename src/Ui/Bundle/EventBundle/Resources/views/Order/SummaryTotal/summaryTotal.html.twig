@@ -23,7 +23,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{ include('EventBundle:Order/SummaryTotal:groups.html.twig', { groups: view.groups.groups }) }}
+                            {{ include('EventBundle:Order/SummaryTotal:groups.html.twig', { groups: view.groups.groups, order: order }) }}
                             {{ include('EventBundle:Order/SummaryTotal:promo-code-rows.html.twig', { promotionCodes: view.promotionCodes.promotionCodes }) }}
                             </tbody>
                         </table>
@@ -33,12 +33,12 @@
                             <div class="col-md-4 sum">
                                 <ul>
                                     <li>{{ 'summary.total'|trans }}
-                                        <span>{{ view.total|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.vatMode)|trans }}</span>
+                                        <span>{{ view.totalWithoutVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.vatMode)|trans }}</span>
                                     </li>
                                     <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vatRate }) }}
                                         <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
-                                                    '%price%': view.vat|localizednumber,
+                                                    '%price%': view.vatAmount|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
