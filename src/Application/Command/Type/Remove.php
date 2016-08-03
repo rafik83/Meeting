@@ -26,5 +26,6 @@ class Remove
      */
     public function __construct(Type $type)
     {
-        $this->type = $type;}
+        $this->type = $type;
+    }
 }
