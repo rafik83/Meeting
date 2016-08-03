@@ -61,7 +61,7 @@ class StepParticipantAndPlanning
             $planning = $command->sheet->getPackage()->getPlanning();
 
             if ($orderRow = $orderMerged->getRowForProduct($planning)) {
-                $orderQuantity = $orderMerged->getRowForProduct($planning)->getQuantity();
+                $orderQuantity = $orderRow->getQuantity();
             }
         }
 

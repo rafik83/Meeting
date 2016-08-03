@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
+use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -14,19 +15,29 @@ class OptionsValidator extends ConstraintValidator
      * @var QuantityMaxGuesser
      */
     private $quantityMaxGuesser;
-    
+
     /**
      * @var \DateTimeInterface
      */
     private $now;
 
     /**
+     * @var QuantityMinGuesser
+     */
+    private $quantityMinGuesser;
+
+    /**
      * @param QuantityMaxGuesser $quantityMaxGuesser
+     * @param QuantityMinGuesser $quantityMinGuesser
      * @param \DateTimeInterface $now
      */
-    public function __construct(QuantityMaxGuesser $quantityMaxGuesser, \DateTimeInterface $now)
-    {
+    public function __construct(
+        QuantityMaxGuesser $quantityMaxGuesser,
+        QuantityMinGuesser $quantityMinGuesser,
+        \DateTimeInterface $now
+    ) {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
+        $this->quantityMinGuesser = $quantityMinGuesser;
         $this->now                = $now;
     }
 
@@ -58,8 +69,17 @@ class OptionsValidator extends ConstraintValidator
             }
 
             $quantityMax = $this->quantityMaxGuesser->getMaxByProduct($selectOptions->sheet, $options[$id]);
+            $quantityMin = $this->quantityMinGuesser->getMinProduct($selectOptions->sheet, $options[$id], $quantity);
 
-            if ($quantity < 0 || $quantity > $quantityMax) {
+            if (false === $quantityMin) {
+                $this
+                    ->context
+                    ->buildViolation('package.product.quantityMinPromotionCode')
+                    ->atPath($id)
+                    ->addViolation();
+            }
+
+            if ($quantity < $quantityMin || $quantity > $quantityMax) {
                 $this
                     ->context
                     ->buildViolation('package.product.quantityNotMatch')

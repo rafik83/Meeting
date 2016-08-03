@@ -261,6 +261,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
+            - '@package.planning.quantity_min_guesser'
             - '@datetime'
         tags:
             - { name: validator.constraint_validator, alias: alias_name }

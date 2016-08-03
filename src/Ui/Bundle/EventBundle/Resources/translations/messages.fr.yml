@@ -123,6 +123,7 @@ package.summary.columns.title: Intitulé
 package.summary.columns.total: Total
 package.summary.columns.unitPrice: 'Prix unitaire'
 package.summary.edit: Modifier ma participation
+package.summary.empty: Votre panier est vide
 package.summary.option: Option
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
 package.summary.pay: 'Régler le forfait de participation'

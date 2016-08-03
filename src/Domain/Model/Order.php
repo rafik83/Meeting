@@ -434,4 +434,20 @@ class Order
 
         return $participant;
     }
+
+    /**
+     * @param $product
+     *
+     * @return bool
+     */
+    public function hasPromotionCodeForProduct($product)
+    {
+        foreach ($this->promotionCodes as $promotionCode) {
+            if ($promotionCode->getPromotionCode()->hasPromotion($product)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

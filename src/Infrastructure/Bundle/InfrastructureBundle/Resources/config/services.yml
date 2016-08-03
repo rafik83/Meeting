@@ -1640,6 +1640,10 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+    package.planning.quantity_min_guesser:
+            class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
+            arguments:
+                - '@order.merger'
     package.specification.vat_applicable:
         class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
         arguments:
