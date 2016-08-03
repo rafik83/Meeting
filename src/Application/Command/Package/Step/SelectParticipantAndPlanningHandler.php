@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Order\Merger;
 
@@ -46,7 +47,7 @@ class SelectParticipantAndPlanningHandler
         $package = $sheet->getPackage();
 
         if (!$package) {
-            throw new \Exception('Package not found');
+            throw new PackageNotFoundException('Package not found');
         }
 
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Step\StepOption;
 use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
 use Proximum\Vimeet\Application\Components\Step\StepPlan;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\Exception\StepNotImplementedException;
 use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
 class StepCommandFactory
@@ -73,7 +74,7 @@ class StepCommandFactory
                 return $this->stepOption->build($sheet, $stepIndex);
                 break;
             default:
-                throw new \Exception(sprintf('Command Package Step type %s not implemented', $type));
+                throw new StepNotImplementedException(sprintf('Command Package Step type %s not implemented', $type));
                 break;
         }
     }
