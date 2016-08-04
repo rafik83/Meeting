@@ -205,10 +205,20 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
-        $form         = $this->createObjectForm($object, $locale, $key);
+        $sheet              = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $object             = $templateData->getObject($key);
+        $form               = $this->createObjectForm($object, $locale, $key);
+        $levelsArchitecture = [];
+
+        if ($object instanceof Template\TemplateObject\Nomenclature) {
+            $nomenclature = $object->getNomenclatureModel();
+            $depth        = $nomenclature->getDepth();
+
+            if (3 === $depth) {
+                $levelsArchitecture = $nomenclature->getLevelsArchitecture();
+            }
+        }
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted()) {
@@ -250,16 +260,17 @@ class SheetController extends Controller
             : 'EventBundle:Sheet:sheet.html.twig';
 
         return $this->render($twig, [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'templateData'  => $templateData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'taggedData'    => $taggedData,
-            'form'          => $form->createView(),
-            'label'         => $label,
-            'uid'           => $key,
-            'participants'  => $participants,
+            'event'              => $eventDomain->getEvent(),
+            'sheet'              => $sheet,
+            'templateData'       => $templateData,
+            'locale'             => $locale,
+            'nomenclatures'      => $nomenclatures,
+            'taggedData'         => $taggedData,
+            'form'               => $form->createView(),
+            'label'              => $label,
+            'uid'                => $key,
+            'participants'       => $participants,
+            'levelsArchitecture' => $levelsArchitecture,
         ]);
     }
 
