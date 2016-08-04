@@ -44,7 +44,6 @@ class OrderConfirmMail extends Mail
     private $user;
 
     /**
-     * @param Event  $event
      * @param string $sender
      * @param string $receiver
      * @param string $locale
@@ -52,14 +51,13 @@ class OrderConfirmMail extends Mail
      * @param User   $user
      */
     public function __construct(
-        Event $event,
         $sender,
         $receiver,
         $locale,
         Order $order,
         User $user
     ) {
-        parent::__construct($event, $sender, $receiver, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $order->getSheet()->getEvent());
 
         $this->order = $order;
         $this->user  = $user;

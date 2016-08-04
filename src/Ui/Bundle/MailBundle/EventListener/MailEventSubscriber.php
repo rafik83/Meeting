@@ -144,13 +144,11 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
         $mail = new OrderConfirmMail(
-            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getOrder(),
-            $event->getUser(),
-            $event->getEvent()
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -195,8 +193,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new AdminResetPasswordMail(
             $this->sender,
             $event->getAdmin()->getEmail(),
-            'MailBundle:Mail:Admin/resetPassword.html.twig',
-            'admin_forgot_password',
             $event->getLocale(),
             $event->getForgottenPasswordToken()->getToken()
         );

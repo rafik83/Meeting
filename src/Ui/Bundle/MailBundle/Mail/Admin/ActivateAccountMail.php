@@ -43,7 +43,7 @@ class ActivateAccountMail extends Mail
      */
     public function __construct($sender, $receiver, $locale, $token)
     {
-        parent::__construct(null, $sender, $receiver, $locale);
+        parent::__construct($sender, $receiver, $locale);
 
         $this->token = $token;
     }

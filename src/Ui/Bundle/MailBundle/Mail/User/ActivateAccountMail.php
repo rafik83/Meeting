@@ -38,10 +38,10 @@ class ActivateAccountMail extends Mail
     private $token;
 
     /**
+     * @param Event  $event
      * @param string $sender
      * @param string $receiver
      * @param string $locale
-     * @param Event  $event
      * @param string $token
      * @param User   $senderUser
      * @param User   $receiverUser
@@ -55,7 +55,7 @@ class ActivateAccountMail extends Mail
         $senderUser,
         $receiverUser
     ) {
-        parent::__construct($event, $sender, $receiver, $locale, $senderUser, $receiverUser);
+        parent::__construct($sender, $receiver, $locale, $senderUser, $receiverUser, $event);
 
         $this->token = $token;
     }

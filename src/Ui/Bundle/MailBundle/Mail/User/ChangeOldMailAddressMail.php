@@ -44,7 +44,7 @@ class ChangeOldMailAddressMail extends Mail
      */
     public function __construct(Event $event, $sender, $receiver, $locale, $newMail)
     {
-        parent::__construct($event, $sender, $receiver, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $event);
         $this->newMail = $newMail;
     }
 

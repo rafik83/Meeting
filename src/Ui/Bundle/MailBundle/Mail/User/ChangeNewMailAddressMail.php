@@ -51,7 +51,7 @@ class ChangeNewMailAddressMail extends Mail
      */
     public function __construct(Event $event, $sender, $receiver, $locale, $token, User $user)
     {
-        parent::__construct($event, $sender, $receiver, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $event);
 
         $this->token = $token;
         $this->user  = $user;

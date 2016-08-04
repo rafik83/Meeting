@@ -38,15 +38,15 @@ class AddParticipantMail extends Mail
     private $user;
 
     /**
+     * @param Event  $event
      * @param string $sender
      * @param string $receiver
      * @param string $locale
-     * @param Event  $event
      * @param User   $user
      */
     public function __construct(Event $event, $sender, $receiver, $locale, User $user)
     {
-        parent::__construct($event, $sender, $receiver, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $event);
 
         $this->user = $user;
     }

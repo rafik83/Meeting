@@ -46,7 +46,7 @@ class SheetValidatedMail extends Mail
      */
     public function __construct(Sheet $sheet, $sender, $receiver, $locale)
     {
-        parent::__construct($sheet->getEvent(), $sender, $receiver, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $sheet->getEvent());
 
         $this->sheet = $sheet;
     }

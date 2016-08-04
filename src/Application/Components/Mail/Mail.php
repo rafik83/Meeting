@@ -66,27 +66,27 @@ class Mail
     private $locale;
 
     /**
-     * @param Event|null $event
      * @param string     $sender
      * @param string     $receiver
      * @param string     $locale
      * @param User|null  $senderUser
      * @param User|null  $receiverUser
+     * @param Event|null $event
      */
     public function __construct(
-        $event,
         $sender,
         $receiver,
         $locale,
         User $senderUser = null,
-        User $receiverUser = null
+        User $receiverUser = null,
+        Event $event = null
     ) {
-        $this->event        = $event;
         $this->sender       = $sender;
         $this->receiver     = $receiver;
         $this->locale       = $locale;
-        $this->receiverUser = $receiverUser;
         $this->senderUser   = $senderUser;
+        $this->receiverUser = $receiverUser;
+        $this->event        = $event;
     }
 
     /**
