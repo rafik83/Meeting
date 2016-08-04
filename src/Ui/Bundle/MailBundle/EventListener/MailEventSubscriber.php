@@ -250,13 +250,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserCompleteProfile(UserCompleteProfileEvent $event)
     {
         $mail = new UserCompleteProfileMail(
+            $event->getParticipant(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/completeProfile.html.twig',
-            Events::USER_PROFILE_COMPLETED,
-            $event->getLocale(),
-            $event->getEvent()->getTitle(),
-            $event->getParticipant()->getId()
+            $event->getLocale()
         );
 
         $this->mailer->send($mail);
@@ -286,12 +283,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserRegistered(UserRegisteredEvent $event)
     {
         $mail = new RegisterAccountMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/register.html.twig',
-            Events::USER_REGISTERED,
             $event->getLocale(),
-            $event->getEvent(),
             $event->getUser()
         );
 
