@@ -68,8 +68,6 @@ class MailerAdapter implements MailerInterface
 
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
-        dump($subject);
-        dump($body);
         $this->mailer->send($message);
     }
 }

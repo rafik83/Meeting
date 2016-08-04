@@ -38,12 +38,6 @@ mail.resetPassword.end: "Cordialement,"
 mail.resetPassword.subject: '[%event%] Mot de passe oublié'
 mail.sheet.add_participant_confirmation.body: "Bonjour %firstname% %lastname%,\n\nVotre invitation à %guestMail% pour l’événement %event% a bien été envoyée.\n\nBien cordialement,"
 mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
-mail.sheet.invitation_close_to_expiration.body: "Bonjour,\nVous avez reçu une invitation de %firstname% %lastname% pour l’événement %event%.\nPour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous\n"
-mail.sheet.invitation_close_to_expiration.end: "Bien cordialement"
-mail.sheet.invitation_close_to_expiration.subject: 'Votre invitation arrive à expiration'
-mail.sheet.invitation_expired.body: "Votre invitation à %guestMail% pour l’événement %event% est expirée.\n\nVous avez la possibilité de renvoyer une nouvelle invitation depuis votre espace membre %linkProfile%\n"
-mail.sheet.invitation_expired.end: "Bien cordialement"
-mail.sheet.invitation_expired.subject: 'Votre invitation est expirée'
 mail.sheet.validated.body: "Cher(e) M/Mme %firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.\n\nNous vous rappelons ci-dessous les prochaines étapes de votre participation :\n\n<ul>\n<li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>\n<li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %meetingLimitDate%. Ensuite l’ensemble des participants auront jusqu’au [date premier calcul] pour valider les différentes propositions reçues.</li>\n<li>Le %scheduleDate% votre planning provisoire sera disponible en ligne. Vous aurez ensuite jusqu’au [date fin optimisation] pour compléter votre sélection et optimiser votre participation.</li>\n<li>Le %eventOpenDate% à %eventCloseDate%, nous aurons le plaisir de vous accueillir à %eventPlace% pour l’ouverture. Toute notre équipe sera à votre disposition pour faire de votre participation un succès.</li></ul>"
 mail.sheet.validated.end: ""
 mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'

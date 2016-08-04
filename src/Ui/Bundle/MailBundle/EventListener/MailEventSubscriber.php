@@ -17,8 +17,6 @@ use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationCloseToExpiration;
-use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationExpire;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
@@ -35,8 +33,6 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExpiredInvitationMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\InvitationCloseToExpirationMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
@@ -140,46 +136,6 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $this->mailer->send($oldMail);
         $this->mailer->send($newMail);
-    }
-
-    /**
-     * Send mail to the guest for notice him of an invitation close to expiration
-     *
-     * @param SheetInvitationCloseToExpiration $event
-     */
-    public function onInvitationCloseToExpiration(SheetInvitationCloseToExpiration $event)
-    {
-        $mail = new InvitationCloseToExpirationMail(
-            $this->sender,
-            $event->getGuest()->getEmail(),
-            'MailBundle:Mail:Sheet/Invitation/closeToExpiration.html.twig',
-            'sheet_invitation_close_to_expiration',
-            $event->getUser()->getLocale(),
-            $event->getSheet()->getEvent(),
-            $event->getGuest()
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
-     * Send mail to the host for notice him of a guest expired invitation
-     *
-     * @param SheetInvitationExpire $event
-     */
-    public function onInvitationExpire(SheetInvitationExpire $event)
-    {
-        $mail = new ExpiredInvitationMail(
-            $this->sender,
-            $event->getSheet()->getOwner()->getEmail(),
-            'MailBundle:Mail:Sheet/Invitation/expiredInvitation.html.twig',
-            'sheet_invitation_expired',
-            $event->getSheet()->getOwner()->getLocale(),
-            $event->getSheet()->getEvent(),
-            $event->getGuest()
-        );
-
-        $this->mailer->send($mail);
     }
 
     /**
@@ -379,8 +335,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ADMIN_PASSWORD_RESET                 => 'onAdminResetPassword',
             Events::SHEET_VALIDATED                      => 'onSheetValidated',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION   => 'onSheetAddParticipant',
-            Events::SHEET_INVITATION_CLOSE_TO_EXPIRATION => 'onInvitationCloseToExpiration',
-            Events::SHEET_INVITATION_EXPIRE              => 'onInvitationExpire',
             Events::USER_MAIL_CHANGED                    => 'onChangeMailAddressEvent',
             Events::USER_ACCOUNT_ACTIVATED               => 'onUserActivateAccount',
             Events::USER_PASSWORD_RESET                  => 'onUserResetPassword',
