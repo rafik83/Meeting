@@ -29,7 +29,7 @@ class NotificationController extends Controller
      */
     public function listAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $notifications = $this
             ->get('notification.notification_view_factory')
@@ -48,7 +48,7 @@ class NotificationController extends Controller
      */
     public function unreadNumberAction(EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $count = $this
             ->get('notification.notification_view_factory')

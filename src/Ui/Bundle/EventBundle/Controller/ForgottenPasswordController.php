@@ -32,7 +32,7 @@ class ForgottenPasswordController extends Controller
      */
     public function forgottenPasswordAction(Request $request, EventDomain $eventDomain)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
 
