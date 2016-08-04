@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Cart\Converter;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
@@ -42,7 +44,7 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet  = new Sheet($event, $type, [], $owner, $datetime);
-        $choice = new ChoiceWithDeposit($sheet);
+        $choice = new ChoiceWithDeposit($sheet, $owner);
         $choice->mode    = Mode::PAYMENT_BANK_CARD;
         $choice->deposit = true;
 
@@ -69,13 +71,16 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR'
         );
 
+        $order = Order::createFromSheet($sheet, $datetime);
+
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
         $converter             = $this->prophesize(Converter::class);
         $totalToPay            = $this->prophesize(TotalToPay::class);
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $converter->toOrder($cart)->shouldBeCalled();
+        $converter->toOrder($cart)->shouldBeCalled()->willReturn($order);
         $totalToPay->getTotal($sheet)->shouldBeCalled()->willReturn(480);
         $transactionRepository->add($transaction)->shouldBeCalled();
 
@@ -85,6 +90,7 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             $converter->reveal(),
             $cartManager->reveal(),
             $totalToPay->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -105,7 +111,7 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet  = new Sheet($event, $type, [], $owner, $datetime);
-        $choice = new ChoiceWithDeposit($sheet);
+        $choice = new ChoiceWithDeposit($sheet, $owner);
         $choice->mode    = Mode::PAYMENT_BANK_CARD;
         $choice->deposit = false;
 
@@ -132,13 +138,16 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR'
         );
 
+        $order = Order::createFromSheet($sheet, $datetime);
+
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
         $converter             = $this->prophesize(Converter::class);
         $totalToPay            = $this->prophesize(TotalToPay::class);
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $converter->toOrder($cart)->shouldBeCalled();
+        $converter->toOrder($cart)->shouldBeCalled()->willReturn($order);
         $totalToPay->getTotal($sheet)->shouldBeCalled()->willReturn(480);
         $transactionRepository->add($transaction)->shouldBeCalled();
 
@@ -148,6 +157,7 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             $converter->reveal(),
             $cartManager->reveal(),
             $totalToPay->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
