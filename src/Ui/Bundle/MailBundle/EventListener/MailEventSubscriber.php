@@ -86,8 +86,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getSheet(),
             $this->sender,
             $owner->getEmail(),
-            'MailBundle:Mail:Sheet/sheetValidated.html.twig',
-            Events::SHEET_VALIDATED,
             $owner->getLocale()
         );
 
