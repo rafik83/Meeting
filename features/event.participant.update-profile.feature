@@ -49,9 +49,9 @@ Feature: Update participant profile
 
   Scenario: I can update the participant company
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
-    And I go to this page "/fr/account/sheet/1/company"
-    And I should see "account.update.company.title"
-    Then I fill in the following:
+    When I go to this page "/fr/account/sheet/1/company"
+    Then I should see "account.update.company.title"
+    And I fill in the following:
       | Nom (Société / Organisme) | Elao                  |
       | Site internet             | https://www.elao.com  |
       | Adresse                   | 10 rue Saint Marc     |
