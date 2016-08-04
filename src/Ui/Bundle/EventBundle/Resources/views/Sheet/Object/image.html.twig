@@ -1,6 +1,6 @@
 
 <div id="object-{{ uid }}" class="object object--image {{ 'style--' ~ item.style }}">
-    <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
+    <a id="object-image-edit" href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
         <div class="placeholder">
             {% if item.data is defined and item.data['image'] is defined and null != item.data['image'] %}
                 <img src="{{ item.data['image'] }}">

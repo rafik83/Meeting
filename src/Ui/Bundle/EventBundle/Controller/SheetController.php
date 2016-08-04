@@ -239,7 +239,7 @@ class SheetController extends Controller
 
                 $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
 
-                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+                return $this->redirectToRoute('event_sheet');
             } else {
                 $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
             }
@@ -481,7 +481,7 @@ class SheetController extends Controller
         $removeImage = new RemoveImage($object, $sheet, $templateData);
         $this->get('tactician.commandbus')->handle($removeImage);
 
-        return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+        return $this->redirectToRoute('event_sheet');
     }
 
     /**
