@@ -420,4 +420,61 @@ class Nomenclature
     {
         return $this->original;
     }
+
+    /**
+     * Count the number of items per column
+     *
+     * @return array
+     */
+    public function getLevelsArchitecture()
+    {
+        $levelsArchitecture = [];
+
+        if (3 === $this->depth) {
+            $itemsByColumn  = [
+                1 => [
+                    'items'        => 0,
+                    'secondLevels' => 0,
+                ],
+                2 => [
+                    'items'        => 0,
+                    'secondLevels' => 0,
+                ],
+                3 => [
+                    'items'        => 0,
+                    'secondLevels' => 0,
+                ],
+            ];
+
+            foreach ($this->getFirstLevel() as $firstLevelKey => $firstLevel) {
+                $currentColumn  = 1;
+                $totalItems     = count($firstLevel->getGrandChildren());
+                $numberByColumn = $totalItems / 3;
+
+                $levelsArchitecture[$firstLevelKey]['elements'] = $itemsByColumn;
+                $levelsArchitecture[$firstLevelKey]['numberOfColumns'] = 3;
+                foreach ($firstLevel->getChildren() as $secondLevel) {
+                    $numberOfChildren = count($secondLevel->getChildren());
+
+                    if ($levelsArchitecture[$firstLevelKey]['elements'][$currentColumn]['items'] > $numberByColumn) {
+                        $currentColumn++;
+                    }
+
+                    $levelsArchitecture[$firstLevelKey]['elements'][$currentColumn]['items'] += $numberOfChildren;
+                    $levelsArchitecture[$firstLevelKey]['elements'][$currentColumn]['secondLevels']++;
+                }
+
+                $levelsArchitecture[$firstLevelKey]['elements'][2]['secondLevels'] += $levelsArchitecture[$firstLevelKey]['elements'][1]['secondLevels'];
+                $levelsArchitecture[$firstLevelKey]['elements'][3]['secondLevels'] += $levelsArchitecture[$firstLevelKey]['elements'][2]['secondLevels'];
+                if ($levelsArchitecture[$firstLevelKey]['elements'][3]['items'] === 0) {
+                    $levelsArchitecture[$firstLevelKey]['numberOfColumns'] = 2;
+                }
+                if ($levelsArchitecture[$firstLevelKey]['elements'][2]['items'] === 0) {
+                    $levelsArchitecture[$firstLevelKey]['numberOfColumns'] = 1;
+                }
+            }
+        }
+
+        return $levelsArchitecture;
+    }
 }
