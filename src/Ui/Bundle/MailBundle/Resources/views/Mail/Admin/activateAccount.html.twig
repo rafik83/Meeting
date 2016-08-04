@@ -6,6 +6,7 @@
     {{ 'admin.mail.activateAccount.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
 
     <br>
+    <br>
     {{ macros.button(
         'admin.mail.activateAccount.activate'|trans({}, 'mail', mail.locale),
         url('admin_operator_activate_account', {'token': mail.token})

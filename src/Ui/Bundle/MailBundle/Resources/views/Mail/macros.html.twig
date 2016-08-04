@@ -1,6 +1,6 @@
 {% macro button(label, url) -%}
     <!--[if mso]>
-    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ url }}" style="height:40px;v-text-anchor:middle;width:300px;" arcsize="10%" stroke="f" fillcolor="#00A700">
+    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ url }}" style="height:40px;v-text-anchor:middle;width:250px;" arcsize="10%" stroke="f" fillcolor="#00A700">
         <w:anchorlock/>
         <center style="color:#ffffff;font-family: Helvetica, sans-serif;font-size:15px;">
             {{ label }}
@@ -9,7 +9,7 @@
     <![endif]-->
     <![if !mso]>
     <table cellspacing="0" cellpadding="0"><tr>
-        <td align="center" width="300" height="40" bgcolor="#00A700" style="-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;">
+        <td align="center" width="250" height="40" bgcolor="#00A700" style="-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;">
             <a href="{{ url }}" style="font-size:15px; font-family: Helvetica, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
                 <span style="color: #ffffff;">
                     {{ label }}

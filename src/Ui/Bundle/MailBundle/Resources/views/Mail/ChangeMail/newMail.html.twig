@@ -8,6 +8,7 @@
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>
+    <br>
     {{ macros.button(
         'mail.changeMailNew.validate'|trans({}, 'mail', mail.locale),
         url('event_activate_new_mail', {'token': mail.token})

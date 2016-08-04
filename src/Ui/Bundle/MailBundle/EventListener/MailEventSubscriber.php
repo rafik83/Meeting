@@ -25,7 +25,6 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
@@ -55,22 +54,15 @@ class MailEventSubscriber implements EventSubscriberInterface
     private $sender;
 
     /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
-    /**
      * MailEventSubscriber constructor.
      *
-     * @param MailerInterface          $mailer
-     * @param string                   $sender
-     * @param SheetRepositoryInterface $sheetRepository
+     * @param MailerInterface $mailer
+     * @param string          $sender
      */
-    public function __construct(MailerInterface $mailer, $sender, SheetRepositoryInterface $sheetRepository)
+    public function __construct(MailerInterface $mailer, $sender)
     {
-        $this->mailer          = $mailer;
-        $this->sender          = $sender;
-        $this->sheetRepository = $sheetRepository;
+        $this->mailer = $mailer;
+        $this->sender = $sender;
     }
 
     /**
@@ -224,12 +216,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserResetPassword(UserResetPasswordEvent $event)
     {
         $mail = new UserResetPasswordMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/resetPassword.html.twig',
-            'user_forgot_password',
             $event->getLocale(),
-            $event->getEvent()->getTitle(),
             $event->getForgottenPasswordToken()->getToken()
         );
 
@@ -243,18 +233,12 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
     {
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($event->getUser(), $event->getEvent());
-        $sheet  = reset($sheets);
-
         $mail = new ResetPasswordConfirmMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/resetPasswordConfirm.html.twig',
-            'user_reset_password_confirm',
             $event->getLocale(),
-            $event->getEvent(),
-            $event->getUser(),
-            (!$sheet !== false) ? $sheet : null
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -325,19 +309,19 @@ class MailEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::ADMIN_ACCOUNT_ACTIVATED              => 'onAdminActivateAccount',
-            Events::ADMIN_PASSWORD_RESET                 => 'onAdminResetPassword',
-            Events::SHEET_VALIDATED                      => 'onSheetValidated',
-            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION   => 'onSheetAddParticipant',
-            Events::USER_MAIL_CHANGED                    => 'onChangeMailAddressEvent',
-            Events::USER_ACCOUNT_ACTIVATED               => 'onUserActivateAccount',
-            Events::USER_PASSWORD_RESET                  => 'onUserResetPassword',
-            Events::USER_PROFILE_COMPLETED               => 'onUserCompleteProfile',
-            Events::USER_REGISTERED                      => 'onUserRegistered',
-            Events::USER_RESET_PASSWORD_CONFIRMED        => 'onUserResetPasswordConfirm',
-            Events::EVENT_PRE_REGISTERED                 => 'onUserPreRegistered',
-            Events::ORDER_CONFIRMED                      => 'onOrderConfirmed',
-            Events::TRANSACTION_CONFIRMED                => 'onTransactionConfirmed',
+            Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
+            Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
+            Events::SHEET_VALIDATED                    => 'onSheetValidated',
+            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
+            Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
+            Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
+            Events::USER_PASSWORD_RESET                => 'onUserResetPassword',
+            Events::USER_PROFILE_COMPLETED             => 'onUserCompleteProfile',
+            Events::USER_REGISTERED                    => 'onUserRegistered',
+            Events::USER_RESET_PASSWORD_CONFIRMED      => 'onUserResetPasswordConfirm',
+            Events::EVENT_PRE_REGISTERED               => 'onUserPreRegistered',
+            Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
+            Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
         ];
     }
 }
