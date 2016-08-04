@@ -112,8 +112,12 @@ class Order
      */
     public function getNumero()
     {
-        // A more complex Order numero need to be implemented
-        return (string) $this->id;
+        return sprintf(
+            '%s-%s-%s',
+            str_pad($this->getSheet()->getEvent()->getId(), 2, "0", STR_PAD_LEFT),
+            str_pad($this->getSheet()->getId(), 2, "0", STR_PAD_LEFT),
+            str_pad($this->getId(), 2, "0", STR_PAD_LEFT)
+        );
     }
 
     /**
