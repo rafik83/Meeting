@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Order\AddRow;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
 use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
@@ -115,6 +114,7 @@ class OrderController extends Controller
     public function addRowToGroupAction(Request $request, Event $event, Order $order, $group)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
@@ -156,6 +156,7 @@ class OrderController extends Controller
     public function addRowToProductAction(Request $request, Event $event, Order $order, Order\Row $row)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
@@ -199,6 +200,7 @@ class OrderController extends Controller
     public function updateRowAction(Request $request, Event $event, Order $order, Order\Row $row)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
@@ -238,6 +240,7 @@ class OrderController extends Controller
     public function removeRowAction(Event $event, Order $order, Order\Row $row)
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $this->get('tactician.commandbus')->handle(new RemoveRow($row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
