@@ -1,7 +1,17 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
 {% block body %}
-    {{ 'mail.orderConfirm.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.orderConfirm.body'|trans({'%orderNumero%': mail.order.numero, '%orderDate%': mail.order.createdAt|localizeddate('medium', 'none', mail.locale)}, 'mail', mail.locale)|html|nl2br }}
+
     <br>
+    <br>
+    {{ macros.button(
+        'mail.orderConfirm.linkToProForma'|trans({}, 'mail', mail.locale),
+        url('event_pro_forma', {'sheet': mail.order.sheet.id, 'order': mail.order.id})
+    ) }}
+    <br>
+
     {{ 'mail.orderConfirm.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

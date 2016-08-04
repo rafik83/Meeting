@@ -108,6 +108,15 @@ class Order
     }
 
     /**
+     * @return string
+     */
+    public function getNumero()
+    {
+        // A more complex Order numero need to be implemented
+        return (string) $this->id;
+    }
+
+    /**
      * @return Sheet
      */
     public function getSheet()
@@ -323,8 +332,8 @@ class Order
      */
     public function getRowForProduct(Product $product)
     {
-        foreach($this->rows as $row) {
-            if($row->getProduct() === $product) {
+        foreach ($this->rows as $row) {
+            if ($row->getProduct() === $product) {
                 return $row;
             }
         }
@@ -389,7 +398,7 @@ class Order
      */
     public function getOrderRowForProduct(Product $product)
     {
-        foreach($this->rows as $orderRow) {
+        foreach ($this->rows as $orderRow) {
             if ($orderRow->getProduct() === $product) {
                 return $orderRow;
             }
