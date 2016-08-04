@@ -21,8 +21,9 @@ mail.completeProfile.end: "Cordialement,"
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de pase a bien été changé'
-mail.event.preregister.body: "Cher(e) M/Mme %firstname% %lastname%,\n\nVotre demande d'inscription à %event% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur.\n\nPour vous identifier sur notre site lors de vos prochaines visites, cliquez sur <a href=\"%memberSpace%\">%memberSpace%\"</a> en haut de toutes les pages de notre site.\n\nVous trouverez ci-dessous le récapitulatif des informations saisies:"
+mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription à %event% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
 mail.event.preregister.end: "Bien cordialement,"
+mail.event.preregister.link: "Votre profil participant"
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: 'Contact'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'

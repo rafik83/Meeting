@@ -270,16 +270,11 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserPreRegistered(PreRegisterEvent $event)
     {
         $mail = new PreRegisteredMail(
+            $event->getParticipant(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:Event/preregister.html.twig',
-            Events::EVENT_PRE_REGISTERED,
             $event->getLocale(),
-            $event->getEvent(),
-            $event->getUser(),
-            $event->getParticipant(),
-            $event->getSheet(),
-            $event->getParticipantData()
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
