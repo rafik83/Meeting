@@ -1,6 +1,7 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
-{{ form_start(form) }}
+{% import 'EventBundle::macro.html.twig' as macros %}
+
 <div class="modal-header">
     <h4 class="modal-title" id="myModalLabel">
         <i class="icon-Document_1"></i>
@@ -8,34 +9,44 @@
     </h4>
 </div>
 <div class="modal-body">
-    {{ form_errors(form) }}
-
-    {% if object.type == 'image' %}
+    {% if object.type == 'image' and object.data is not empty %}
         <div class="object--image--preview">
             <div class="object--image--header">{{ 'sheet.object.image.label'|trans }}</div>
             <img src="{{ object.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
             <div class="object--image--footer">
-                <a class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'sheet.object.image.remove'|trans }}</a>
+                {{ macros.delete_button(
+                path('event_sheet_remove_image', {
+                    'key': uid,
+                    'locale': locale
+                }),
+                '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.image.remove'|trans,
+                {'class': 'btn btn-danger' }
+                ) }}
             </div>
         </div>
     {% endif %}
 
-    {% if form.vars.help|default(false) %}
-        {% if form.children.content is not defined or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined) %}
-            <p class="help-block">{{ form.vars.help }}</p>
-        {% endif %}
-    {% endif %}
+    {{ form_start(form, { 'attr': {'id': 'sheet_image_data' }}) }}
+    {{ form_errors(form) }}
 
-    {% for key, child in form if key != 'submit' %}
-        {{ form_row(child) }}
-    {% endfor %}
+    <div class="{{ (object.type == 'image') ? 'object--form--field' : '' }}">
+        {% if form.vars.help|default(false) %}
+            {% if form.children.content is not defined or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined) %}
+                <p class="help-block">{{ form.vars.help }}</p>
+            {% endif %}
+        {% endif %}
+
+        {% for key, child in form if key != 'submit' %}
+            {{ form_row(child) }}
+        {% endfor %}
+    </div>
 
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
     </button>
-
-    {{ form_widget(form.submit) }}
+    {{ form_widget(form.submit, { 'attr' : { 'form': 'sheet_image_data' }}) }}
+    {{ form_end(form) }}
 </div>
-{{ form_end(form) }}
+

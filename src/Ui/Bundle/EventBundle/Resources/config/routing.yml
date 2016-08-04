@@ -183,6 +183,14 @@ event_sheet_remove_participant:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:removeParticipant }
 
+event_sheet_remove_image:
+    path: /sheet/{locale}/{key}/image/remove
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [DELETE]
+    defaults: { _controller: EventBundle:Sheet:removeImage }
+
 event_sheet_handle_remove_participant:
     path:   /sheet/{locale}/{key}/participant/remove
     requirements:

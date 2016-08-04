@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
+use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
@@ -38,9 +39,9 @@ class SheetController extends Controller
     /**
      * Display the sheet in the choosen locale (independently from the interface locale).
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param string    $locale
+     * @param string      $locale
      *
      * @return RedirectResponse|Response
      */
@@ -48,8 +49,8 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $locale        = $locale ? : $request->getLocale();
-        $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $locale = $locale ?: $request->getLocale();
+        $sheet  = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
@@ -132,8 +133,8 @@ class SheetController extends Controller
      * Render the form of an object. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
-     * @param string    $locale
-     * @param string    $key
+     * @param string      $locale
+     * @param string      $key
      *
      * @return Response
      * @throws \Exception
@@ -156,13 +157,14 @@ class SheetController extends Controller
             'label'  => $label,
             'form'   => $form->createView(),
             'object' => $object,
+            'locale' => $locale,
         ]);
     }
 
     /**
      * @param Template\TemplateObject $object
-     * @param string          $locale
-     * @param string          $key
+     * @param string                  $locale
+     * @param string                  $key
      *
      * @return Form
      */
@@ -273,8 +275,8 @@ class SheetController extends Controller
      * Render the form of the addition of a participant. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
-     * @param string    $locale
-     * @param string    $key
+     * @param string      $locale
+     * @param string      $key
      *
      * @return Response
      * @throws \Exception
@@ -322,10 +324,10 @@ class SheetController extends Controller
     /**
      * Add a participant and display the sheet with the modal in case of form error.
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param string    $locale
-     * @param string    $key
+     * @param string      $locale
+     * @param string      $key
      *
      * @return Response
      * @throws \Exception
@@ -388,8 +390,8 @@ class SheetController extends Controller
 
     /**
      * @param EventDomain $eventDomain
-     * @param string    $locale
-     * @param string    $key
+     * @param string      $locale
+     * @param string      $key
      *
      * @throws \Exception
      * @return array
@@ -408,7 +410,8 @@ class SheetController extends Controller
 
         $remove = new Remove($sheet);
         $form   = $this->createForm(RemoveType::class, $remove, [
-            'action'       => $this->generateUrl('event_sheet_handle_remove_participant', ['locale' => $locale, 'key' => $key]),
+            'action'       => $this->generateUrl('event_sheet_handle_remove_participant',
+                ['locale' => $locale, 'key' => $key]),
             'participants' => $sheet->getParticipants(),
         ]);
 
@@ -423,8 +426,8 @@ class SheetController extends Controller
      * Render the form to remove participant. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
-     * @param string    $locale
-     * @param string    $key
+     * @param string      $locale
+     * @param string      $key
      *
      * @return Response
      * @throws \Exception
@@ -460,12 +463,34 @@ class SheetController extends Controller
     }
 
     /**
+     * @param EventDomain $eventDomain
+     * @param string      $locale
+     * @param string      $key
+     *
+     * @return RedirectResponse
+     */
+    public function removeImageAction(EventDomain $eventDomain, $locale, $key)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $object       = $templateData->getObject($key);
+
+        $removeImage = new RemoveImage($object, $sheet, $templateData);
+        $this->get('tactician.commandbus')->handle($removeImage);
+
+        return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+    }
+
+    /**
      * Remove a participant and display the sheet with the modal in case of form error.
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param string    $locale
-     * @param string    $key
+     * @param string      $locale
+     * @param string      $key
      *
      * @return Response
      * @throws \Exception
@@ -497,18 +522,17 @@ class SheetController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'        => $eventDomain->getEvent(),
-            'sheet'            => $sheet,
-            'templateData'     => $templateData,
-            'locale'           => $locale,
-            'nomenclatures'    => $nomenclatures,
-            'taggedData'       => $taggedData,
-            'form_remove'      => $form->createView(),
-            'label'            => $label,
-            'uid'              => $key,
-            'participants'     => $participants,
+            'event'         => $eventDomain->getEvent(),
+            'sheet'         => $sheet,
+            'templateData'  => $templateData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'taggedData'    => $taggedData,
+            'form_remove'   => $form->createView(),
+            'label'         => $label,
+            'uid'           => $key,
+            'participants'  => $participants,
         ]);
     }
 
