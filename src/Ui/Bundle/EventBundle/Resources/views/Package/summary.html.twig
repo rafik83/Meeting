@@ -61,10 +61,10 @@
                                                 })|html }}
                                             </span>
                                         </li>
-                                        <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vat }) }}
+                                        <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vatAmount }) }}
                                             <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
-                                                    '%price%': view.totalVat|localizednumber,
+                                                    '%price%': view.totalWithoutVat|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
@@ -74,7 +74,7 @@
                                         {% set totalVatMode = (view.mustPayVat ? 'ati' :  view.vatMode) %}
                                         <span>
                                             {{ 'package.product.unitPrice'|trans({
-                                                '%price%': view.totalPlusVat|localizednumber,
+                                                '%price%': view.totalWithVat|localizednumber,
                                                 '%currency%': view.currency|currency_symbol,
                                                 '%vatMode%': ('package.vatMode.' ~ totalVatMode)|trans
                                             })|html }}
