@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
@@ -26,12 +27,11 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Domain\Template;
 
 class SheetController extends Controller
 {
@@ -152,10 +152,10 @@ class SheetController extends Controller
         $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
-            'uid'   => $key,
-            'form'  => $form->createView(),
-            'label' => $label,
-            'type'  => $object->getType(),
+            'uid'    => $key,
+            'label'  => $label,
+            'form'   => $form->createView(),
+            'object' => $object,
         ]);
     }
 
