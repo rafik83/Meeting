@@ -57,9 +57,9 @@ class UpdateHandler
             $update->state
         ));
 
-        // If Transaction was not paid, now it is paid and there is an user attached to this transaction,
+        // if transaction was not paid and now it is paid
         // then send a notification to that user
-        if ($wasNotPaid && Transaction::STATE_PAID === $update->state && $update->transaction->hasUser()) {
+        if ($wasNotPaid && Transaction::STATE_PAID === $update->state) {
             $event = new TransactionConfirmEvent($update->transaction->getUser(), $update->transaction);
             $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $event);
         }

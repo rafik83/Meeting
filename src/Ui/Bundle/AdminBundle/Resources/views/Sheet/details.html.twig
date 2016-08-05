@@ -112,10 +112,8 @@
                 <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
                 <td>{{ transaction.reference }}</td>
                 <td>
-                    {% if transaction.user %}
-                        {{ transaction.user.account.completeName }}
-                        <br><small><a href="mailto:{{ transaction.user.email }}">{{ transaction.user.email }}</a></small>
-                    {% endif %}
+                    {{ transaction.user.account.completeName }}
+                    <br><small><a href="mailto:{{ transaction.user.email }}">{{ transaction.user.email }}</a></small>
                 </td>
                 <td class="text-right">
                     <div class="btn-group">

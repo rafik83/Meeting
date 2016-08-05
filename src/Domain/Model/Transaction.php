@@ -189,19 +189,11 @@ class Transaction
     }
 
     /**
-     * @return null|User
+     * @return User
      */
     public function getUser()
     {
-        return $this->user;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasUser()
-    {
-        return null !== $this->getUser();
+        return !$this->user ? $this->sheet->getOwner() : $this->user;
     }
 
     /**
