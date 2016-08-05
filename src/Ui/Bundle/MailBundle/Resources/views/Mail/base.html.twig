@@ -22,12 +22,12 @@
                                         <span style="line-height: 21px">
                                             {{ mail.event.description(mail.locale)|nl2br }}
 
-                                            {% if mail.event.configuration.organiserWebsite %}
-                                                <br>
-                                                <a href="{{ mail.event.configuration.organiserWebsite }}" style="color: #ffffff">
-                                                    {{ mail.event.configuration.organiserWebsite }}
-                                                </a>
-                                            {% endif %}
+                                            {% set website = mail.event.configuration.organiserWebsite ? mail.event.configuration.organiserWebsite : 'https://' ~ mail.event.domain %}
+
+                                            <br>
+                                            <a href="{{ website }}" style="color: #ffffff">
+                                                {{ website }}
+                                            </a>
                                         </span>
                                     </td>
                                     <td width="10%"></td>
