@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
         $locale = $request->getLocale();
 
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $sheets = $this
                 ->get('vimeet_infrastructure.repository.sheet_repository')
                 ->getSheetsByUserAndEvent($this->getUser(), $eventDomain->getEvent());
@@ -55,7 +55,7 @@ class HomeController extends Controller
                     new FormError($this->get('translator')->trans('validators.type.required', [], 'validators'))
                 );
             } else {
-                if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                     return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
                 }
 
