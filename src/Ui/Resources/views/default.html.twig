@@ -183,7 +183,7 @@
         </div>
 
         {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
-            {% set firstColumnInteration = loop.index - 1%}
+            {% set firstColumnIteration = loop.index - 1%}
             {{ block('nomenclature_first_over_three') }}
         {% endfor %}
     </div>
@@ -198,17 +198,17 @@
 
             <div class="row">
                 {% set colMdSize = "col-md-4" %}
-                {% if levelsArchitecture[firstColumnInteration]['numberOfColumns'] is defined and levelsArchitecture[firstColumnInteration]['numberOfColumns'] == 1 %}
+                {% if levelsArchitecture[firstColumnIteration]['numberOfColumns'] is defined and levelsArchitecture[firstColumnIteration]['numberOfColumns'] == 1 %}
                     {% set colMdSize = "col-md-12" %}
-                {% elseif levelsArchitecture[firstColumnInteration]['numberOfColumns'] is defined and levelsArchitecture[firstColumnInteration]['numberOfColumns'] == 2 %}
+                {% elseif levelsArchitecture[firstColumnIteration]['numberOfColumns'] is defined and levelsArchitecture[firstColumnIteration]['numberOfColumns'] == 2 %}
                     {% set colMdSize = "col-md-6" %}
                 {% endif %}
                 <div class="{{ colMdSize }}">
-                {% set secondColumnInteration = 1 %}
+                {% set secondColumnIteration = 1 %}
                 {% for second_level_item in first_level_item.childrenSorted(locale) %}
                     {% set loopIndex = loop.index %}
-                    {% if loopIndex > levelsArchitecture[firstColumnInteration]['elements'][secondColumnInteration]['secondLevels'] and secondColumnInteration < 3 %}
-                        {% set secondColumnInteration = secondColumnInteration + 1 %}
+                    {% if loopIndex > levelsArchitecture[firstColumnIteration]['elements'][secondColumnIteration]['secondLevels'] and secondColumnIteration < 3 %}
+                        {% set secondColumnIteration = secondColumnIteration + 1 %}
                     </div><div class="{{ colMdSize }}">
                     {% endif %}
                     {{ block('nomenclature_second_over_three') }}
