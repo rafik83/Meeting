@@ -4,17 +4,11 @@
 {% block title %}{{ event.title }}: {{ details.title }}{% endblock %}
 
 {% block content %}
-    <div class="panel panel-default pull-right">
-        <div class="panel-heading">
-            {{ 'admin.sheet.details.remainingToPay'|trans }}
-        </div>
-        <div class="panel-body text-center h1">
-            {{ details.remainingToPay|localizedcurrency(event.currency) }}
-        </div>
-    </div>
-
-    <h1>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span>
-    </h1>
+            <h1>
+                {{ details.title }}
+                <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span>
+                <span class="label label-{{ details.remainingToPay == 0 ? 'success' : 'danger' }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.remainingToPay'|trans }}">{{ details.remainingToPay|localizedcurrency(event.currency) }}</span>
+            </h1>
 
     <h3>{{ 'admin.sheet.details.participants'|trans }}</h3>
 
