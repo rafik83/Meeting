@@ -78,13 +78,7 @@ class RowView
     public $customRows = [];
 
     /**
-     * @var int
-     */
-    public $productId;
-
-    /**
      * @param int                     $id
-     * @param int                     $productId
      * @param string                  $label
      * @param float                   $price
      * @param int                     $quantity
@@ -97,7 +91,6 @@ class RowView
      */
     public function __construct(
         $id,
-        $productId,
         $label,
         $price,
         $quantity,

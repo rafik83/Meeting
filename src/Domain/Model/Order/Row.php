@@ -73,7 +73,7 @@ class Row
      */
     public function __construct(
         Order $order,
-        $product,
+        Product $product,
         $quantity,
         $groupId = null,
         $label = null,

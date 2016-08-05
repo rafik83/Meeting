@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;

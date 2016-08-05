@@ -31,23 +31,15 @@ class SummaryQueryHandler
     private $promotionCodesViewQueryHandler;
 
     /**
-     * @var CustomRowsViewQueryHandler
-     */
-    private $customRowsViewQueryHandler;
-
-    /**
      * @param GroupsViewQueryHandler         $groupsViewQueryHandler
      * @param PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
-     * @param CustomRowsViewQueryHandler     $customRowsViewQueryHandler
      */
     public function __construct(
         GroupsViewQueryHandler $groupsViewQueryHandler,
-        PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler,
-        CustomRowsViewQueryHandler $customRowsViewQueryHandler
+        PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
     ) {
         $this->groupsViewQueryHandler         = $groupsViewQueryHandler;
         $this->promotionCodesViewQueryHandler = $promotionCodesViewQueryHandler;
-        $this->customRowsViewQueryHandler     = $customRowsViewQueryHandler;
     }
     /**
      * @param SummaryQuery $summaryQuery

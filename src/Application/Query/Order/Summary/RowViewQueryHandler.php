@@ -48,7 +48,6 @@ class RowViewQueryHandler
     {
         $rowView = new RowView(
             $rowViewQuery->row->getId(),
-            $rowViewQuery->row->getProductId(),
             $rowViewQuery->row->getLabel($rowViewQuery->locale),
             $rowViewQuery->row->getPrice(),
             $rowViewQuery->row->getQuantity(),

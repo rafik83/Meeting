@@ -76,11 +76,6 @@ class Order
     private $groupsData;
 
     /**
-     * @var Row[]
-     */
-    private $customRows = [];
-
-    /**
      * @param Sheet             $sheet
      * @param bool              $vatApplicable
      * @param Order\BillingInfo $billingInfo
@@ -104,7 +99,6 @@ class Order
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
         $this->promotionCodes = new ArrayCollection();
-        $this->customRows     = new ArrayCollection();
     }
 
     /**
