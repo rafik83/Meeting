@@ -136,9 +136,10 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/payment"
     And I should see "package.payment.total.toPay"
     And I check the "form.payment_choice.children.paymentMode.bank_check" radio
-    Then I press "package.payment.pay.label"
+    When I press "package.payment.pay.label"
     Then I should be on this page "/fr/sheet/1/orders"
     And I should see "order.transaction.state.pending"
+    And the "order.confirm" mail should be sent to "user_asddays_1@proximum.com"
 
   Scenario: I can see my package total summary:
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
