@@ -29,8 +29,8 @@ class UpdateRowHandlerTest extends \PHPUnit_Framework_TestCase
 
         $parentRow = new Order\Row(
             $order->reveal(),
-            $product,
             1,
+            $product,
             5,
             "label",
             12.5

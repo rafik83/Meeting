@@ -64,8 +64,8 @@ class Row
      * Row constructor.
      *
      * @param Order        $order
-     * @param null|Product $product
      * @param int          $quantity
+     * @param null|Product $product
      * @param null|int     $groupId
      * @param string       $label
      * @param float        $price
@@ -74,11 +74,11 @@ class Row
     public function __construct(
         Order $order,
         $quantity,
+        Product $product = null,
         $groupId = null,
         $label = null,
         $price = null,
-        $parentRow = null,
-        Product $product = null
+        $parentRow = null
     ) {
         $this->order       = $order;
         $this->quantity    = $quantity;
@@ -272,10 +272,10 @@ class Row
         return new self(
             $order,
             $quantity,
+            null,
             $groupId,
             $label,
-            $price,
-            null
+            $price
         );
     }
 
@@ -298,11 +298,11 @@ class Row
         return new self(
             $order,
             $quantity,
+            null,
             $parentRow->getGroupId(),
             $label,
             $price,
-            $parentRow,
-            null
+            $parentRow
         );
     }
 
