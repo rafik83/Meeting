@@ -73,7 +73,7 @@ class Transaction
      * @param float              $amount
      * @param \DateTimeInterface $date
      * @param string             $mode
-     * @param string             $reference
+     * @param null|string        $reference
      * @param string             $state
      * @param string             $currency
      * @param User|null          $user
@@ -148,6 +148,14 @@ class Transaction
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountInCents()
+    {
+        return (int) ($this->amount * 100);
     }
 
     /**
@@ -242,5 +250,27 @@ class Transaction
     public function setCancelled()
     {
         $this->state = self::STATE_CANCELLED;
+    }
+
+    /**
+     * @param Sheet              $sheet
+     * @param User               $user
+     * @param float              $amount
+     * @param \DateTimeInterface $date
+     *
+     * @return Transaction
+     */
+    public static function createForPaypal(Sheet $sheet, User $user, $amount, \DateTimeInterface $date)
+    {
+        return new self(
+            $sheet,
+            $amount,
+            $date,
+            Mode::PAYMENT_PAYPAL,
+            null,
+            self::STATE_PENDING,
+            $sheet->getEvent()->getCurrency(),
+            $user
+        );
     }
 }

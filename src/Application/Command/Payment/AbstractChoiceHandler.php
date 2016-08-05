@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -90,17 +91,20 @@ abstract class AbstractChoiceHandler
         $event = new OrderConfirmEvent($order, $choice->user);
         $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
 
-        // Create Transaction
-        $transaction = new Transaction(
-            $choice->sheet,
-            $total,
-            $this->datetime,
-            $choice->mode,
-            null,
-            Transaction::STATE_PENDING,
-            $choice->sheet->getEvent()->getCurrency(),
-            $choice->user
-        );
+        if (Mode::PAYMENT_PAYPAL === $choice->mode) {
+            $transaction = Transaction::createForPaypal($choice->sheet, $choice->user, $total, $this->datetime);
+        } else {
+            $transaction = new Transaction(
+                $choice->sheet,
+                $total,
+                $this->datetime,
+                $choice->mode,
+                null,
+                Transaction::STATE_PENDING,
+                $choice->sheet->getEvent()->getCurrency(),
+                $choice->user
+            );
+        }
 
         $this->transactionRepository->add($transaction);
 
