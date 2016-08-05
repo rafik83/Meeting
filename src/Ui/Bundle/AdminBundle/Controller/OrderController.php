@@ -35,7 +35,6 @@ class OrderController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $locale = $event->getAvailableLocale($request->getLocale());
