@@ -451,8 +451,9 @@ class Nomenclature
                 $totalItems     = count($firstLevel->getGrandChildren());
                 $numberByColumn = $totalItems / 3;
 
-                $levelsArchitecture[$firstLevelKey]['elements'] = $itemsByColumn;
+                $levelsArchitecture[$firstLevelKey]['elements']        = $itemsByColumn;
                 $levelsArchitecture[$firstLevelKey]['numberOfColumns'] = 3;
+
                 foreach ($firstLevel->getChildren() as $secondLevel) {
                     $numberOfChildren = count($secondLevel->getChildren());
 
@@ -466,6 +467,7 @@ class Nomenclature
 
                 $levelsArchitecture[$firstLevelKey]['elements'][2]['secondLevels'] += $levelsArchitecture[$firstLevelKey]['elements'][1]['secondLevels'];
                 $levelsArchitecture[$firstLevelKey]['elements'][3]['secondLevels'] += $levelsArchitecture[$firstLevelKey]['elements'][2]['secondLevels'];
+
                 if ($levelsArchitecture[$firstLevelKey]['elements'][3]['items'] === 0) {
                     $levelsArchitecture[$firstLevelKey]['numberOfColumns'] = 2;
                 }
