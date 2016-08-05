@@ -22,6 +22,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AvatarType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\CompanyType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,7 +33,7 @@ class ParticipantController extends Controller
 {
     /**
      * @param Request     $request
-     * @param EventDomain   $eventDomain
+     * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      *
@@ -40,7 +41,8 @@ class ParticipantController extends Controller
      */
     public function seeAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $locale             = $request->getLocale();
         $user               = $this->getUser();
@@ -75,7 +77,7 @@ class ParticipantController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventDomain   $eventDomain
+     * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      *
@@ -83,7 +85,8 @@ class ParticipantController extends Controller
      */
     public function updateProfileAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $user               = $this->getUser();
         $locale             = $request->getLocale();
@@ -127,7 +130,7 @@ class ParticipantController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventDomain   $eventDomain
+     * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param Participant $participant
      * @param string      $key
@@ -136,8 +139,8 @@ class ParticipantController extends Controller
      */
     public function updateAvatarAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Participant $participant, $key)
     {
-        // to do: voter with sheet and user
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $user               = $this->getUser();
         $locale             = $request->getLocale();
@@ -214,7 +217,8 @@ class ParticipantController extends Controller
      */
     public function updateCompanyAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $user   = $this->getUser();
         $locale = $request->getLocale();

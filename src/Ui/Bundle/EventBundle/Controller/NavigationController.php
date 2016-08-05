@@ -26,7 +26,7 @@ class NavigationController extends Controller
      */
     public function menuAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $menuView = new MenuViewQuery($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
         $menuView = $this->get('tactician.commandbus.query')->handle($menuView);

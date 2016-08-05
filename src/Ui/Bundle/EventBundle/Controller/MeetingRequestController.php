@@ -46,7 +46,7 @@ class MeetingRequestController extends Controller
      */
     public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('You can not update this data');
@@ -76,7 +76,7 @@ class MeetingRequestController extends Controller
      */
     public function listPropositionAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createAccessDeniedException('You can not update this data');
@@ -108,7 +108,7 @@ class MeetingRequestController extends Controller
      */
     public function createRequestAction(Request $request, EventDomain $eventDomain, CategoryView $categoryView, Sheet $to, Sheet $from)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate($this->getUser(), $from, $to)) {
             throw $this->createAccessDeniedException('You are not allowed to create this meeting request.');
@@ -149,7 +149,7 @@ class MeetingRequestController extends Controller
      */
     public function approveRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
@@ -191,7 +191,7 @@ class MeetingRequestController extends Controller
      */
     public function refuseRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
@@ -230,7 +230,7 @@ class MeetingRequestController extends Controller
      */
     public function showRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $locale = $request->getLocale();
 
@@ -291,7 +291,7 @@ class MeetingRequestController extends Controller
      */
     public function cancelRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
@@ -330,7 +330,7 @@ class MeetingRequestController extends Controller
      */
     public function editRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
