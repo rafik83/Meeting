@@ -73,14 +73,13 @@ class Row
      */
     public function __construct(
         Order $order,
-        Product $product,
         $quantity,
         $groupId = null,
         $label = null,
         $price = null,
-        $parentRow = null
-    )
-    {
+        $parentRow = null,
+        Product $product = null
+    ) {
         $this->order       = $order;
         $this->quantity    = $quantity;
         $this->groupId     = $groupId;
@@ -272,11 +271,11 @@ class Row
     ) {
         return new self(
             $order,
-            null,
             $quantity,
             $groupId,
             $label,
-            $price
+            $price,
+            null
         );
     }
 
@@ -298,12 +297,12 @@ class Row
     ) {
         return new self(
             $order,
-            null,
             $quantity,
             $parentRow->getGroupId(),
             $label,
             $price,
-            $parentRow
+            $parentRow,
+            null
         );
     }
 
