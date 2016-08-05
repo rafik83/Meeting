@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class SummaryView
 {
     /**
@@ -88,5 +90,9 @@ class SummaryView
         $this->vatAmount       = $vatAmount;
         $this->totalWithVat    = $totalWithVat;
         $this->currency        = $currency;
+
+        if ($vatApplicable) {
+            $this->totalVatMode = Event::VAT_MODE_ATI;
+        }
     }
 }

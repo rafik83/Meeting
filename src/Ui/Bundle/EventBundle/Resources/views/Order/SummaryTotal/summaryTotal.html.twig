@@ -44,7 +44,7 @@
                                             </span>
                                     </li>
                                     <li class="total">{{ 'summary.totalToPay'|trans }}
-                                        <span>{{ view.totalWithVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.vatMode)|trans }}</span>
+                                        <span>{{ view.totalWithVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
                                     </li>
 
                                 </ul>
