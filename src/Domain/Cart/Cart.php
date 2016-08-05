@@ -113,8 +113,13 @@ class Cart
 
         $additionnal = $this->sheet->countParticipant() - $orderParticipant - $this->getIncludedParticipantQuantity();
 
+        // In case of a first order, the number of participant can not be negative
+        if (null === $order && $additionnal < 0) {
+            return $this;
+        }
+
         $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
-        
+
         return $this;
     }
 
