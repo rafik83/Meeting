@@ -128,7 +128,8 @@ class PaymentController extends Controller
             Mode::PAYMENT_PAYPAL,
             '',
             Transaction::STATE_PENDING,
-            $sheet->getEvent()->getCurrency()
+            $sheet->getEvent()->getCurrency(),
+            $this->getUser()
         );
 
         $this->get('repository.transaction')->add($transaction);

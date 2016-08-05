@@ -62,6 +62,11 @@ class Transaction
     private $currency;
 
     /**
+     * @var User|null
+     */
+    private $user;
+
+    /**
      * Transaction constructor.
      *
      * @param Sheet              $sheet
@@ -71,6 +76,7 @@ class Transaction
      * @param string             $reference
      * @param string             $state
      * @param string             $currency
+     * @param User|null          $user
      */
     public function __construct(
         Sheet $sheet,
@@ -79,7 +85,8 @@ class Transaction
         $mode,
         $reference,
         $state,
-        $currency
+        $currency,
+        User $user = null
     ) {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
@@ -88,6 +95,7 @@ class Transaction
         $this->reference = $reference;
         $this->state     = $state;
         $this->currency  = $currency;
+        $this->user      = $user;
     }
 
     /**
@@ -181,6 +189,22 @@ class Transaction
     }
 
     /**
+     * @return null|User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasUser()
+    {
+        return null !== $this->getUser();
+    }
+
+    /**
      * @return string
      */
     public function getCurrency()
@@ -194,6 +218,14 @@ class Transaction
     public function isPending()
     {
         return $this->state === self::STATE_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaid()
+    {
+        return $this->state === self::STATE_PAID;
     }
 
     /**

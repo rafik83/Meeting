@@ -98,7 +98,8 @@ abstract class AbstractChoiceHandler
             $choice->mode,
             null,
             Transaction::STATE_PENDING,
-            $choice->sheet->getEvent()->getCurrency()
+            $choice->sheet->getEvent()->getCurrency(),
+            $choice->user
         );
 
         $this->transactionRepository->add($transaction);

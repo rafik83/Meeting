@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Order\BillingInfo;
 
 /**
  * "Commande"
@@ -413,8 +412,7 @@ class Order
     }
 
     /**
-     * @param Sheet             $sheet
-     * @param DateTimeInterface $dateTime
+     * @param Sheet $sheet
      *
      * @return Order
      */
@@ -423,7 +421,7 @@ class Order
         return new self(
             $sheet,
             true,
-            new BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
+            new Order\BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
             [],
             $dateTime
         );

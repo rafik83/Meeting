@@ -10,7 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateHandler
 {
@@ -20,13 +24,22 @@ class UpdateHandler
     private $transactionRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * CreateHandler constructor.
      *
      * @param TransactionRepositoryInterface $transactionRepository
+     * @param DelayedEventDispatcher         $eventDispatcher
      */
-    public function __construct(TransactionRepositoryInterface $transactionRepository)
-    {
+    public function __construct(
+        TransactionRepositoryInterface $transactionRepository,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
         $this->transactionRepository = $transactionRepository;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -34,6 +47,8 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        $wasNotPaid = !$update->transaction->isPaid();
+
         $this->transactionRepository->set($update->transaction->update(
             $update->amount,
             $update->date,
@@ -41,5 +56,12 @@ class UpdateHandler
             $update->reference,
             $update->state
         ));
+
+        // If Transaction was not paid, now it is paid and there is an user attached to this transaction,
+        // then send a notification to that user
+        if ($wasNotPaid && Transaction::STATE_PAID === $update->state && $update->transaction->hasUser()) {
+            $event = new TransactionConfirmEvent($update->transaction->getUser(), $update->transaction);
+            $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $event);
+        }
     }
 }

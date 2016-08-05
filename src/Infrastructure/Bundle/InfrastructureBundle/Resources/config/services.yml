@@ -497,6 +497,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Transaction\UpdateHandler
         arguments:
             - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Update }
     command.transaction.remove_handler:

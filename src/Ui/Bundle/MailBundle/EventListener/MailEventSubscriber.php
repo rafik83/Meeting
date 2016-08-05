@@ -90,13 +90,11 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onTransactionConfirmed(TransactionConfirmEvent $event)
     {
         $mail = new TransactionConfirmMail(
+            $event->getTransaction(),
+            $event->getUser(),
             $this->sender,
             $event->getUser()->getEmail(),
-            '',
-            'transaction_confirm',
-            $event->getUser()->getLocale(),
-            $event->getUser(),
-            $event->getTransaction()
+            $event->getUser()->getLocale()
         );
 
         $this->mailer->send($mail);
