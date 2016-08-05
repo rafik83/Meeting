@@ -264,5 +264,6 @@ services:
             - '@package.planning.quantity_max_guesser'
             - '@package.planning.quantity_min_guesser'
             - '@datetime'
+            - '@order.merger'
         tags:
             - { name: validator.constraint_validator, alias: alias_name }
