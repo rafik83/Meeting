@@ -117,14 +117,12 @@ class Cart
             $includedParticipantQuantity = $this->getIncludedParticipantQuantity();
         }
 
-        $additionnal = $this->sheet->countParticipant() - $includedParticipantQuantity - $orderParticipant;
-        
-        if (isset($order) && $additionnal < 0) {
-            // remove more than included participant quantity
-            if($additionnal + $includedParticipantQuantity < 0) {
-                // set additionnal participant quantity to reverse included participant quantity
-                $additionnal = 0 - $includedParticipantQuantity;
-            }
+        $participantNumber = $this->sheet->countParticipant() - ($includedParticipantQuantity + $orderParticipant);
+
+        if ($participantNumber < 0) {
+            $additionnal = $participantNumber - ($this->sheet->countParticipant() - $includedParticipantQuantity);
+        } else {
+            $additionnal = $participantNumber;
         }
 
         // In case of a first order, the number of participant can not be negative
