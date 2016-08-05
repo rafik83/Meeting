@@ -450,4 +450,20 @@ class Order
 
         return false;
     }
+
+    /**
+     * Get product plan in order
+     *
+     * @return null|Product
+     */
+    public function getPlan()
+    {
+        foreach($this->rows as $row) {
+            if ($row->getType() === Product::TYPE_PLAN) {
+                return $row->getProduct();
+            }
+        }
+
+        return null;
+    }
 }

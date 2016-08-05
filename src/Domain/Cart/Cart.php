@@ -106,12 +106,18 @@ class Cart
     public function resolveParticipantsQuantity(Order $order = null)
     {
         $orderParticipant = 0;
+        $includedParticipantQuantity = 0;
 
         if (isset($order)) {
             $orderParticipant = $order->countParticipant();
+            if ($plan = $order->getPlan()) {
+                $includedParticipantQuantity = $plan->getIncludedParticipantQuantity();
+            }
+        } else {
+            $includedParticipantQuantity = $this->getIncludedParticipantQuantity();
         }
 
-        $additionnal = $this->sheet->countParticipant() - $orderParticipant - $this->getIncludedParticipantQuantity();
+        $additionnal = $this->sheet->countParticipant() - $orderParticipant - $includedParticipantQuantity;
 
         // In case of a first order, the number of participant can not be negative
         if (null === $order && $additionnal < 0) {

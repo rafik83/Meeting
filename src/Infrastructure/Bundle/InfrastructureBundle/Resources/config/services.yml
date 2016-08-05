@@ -1443,6 +1443,7 @@ services:
         arguments:
             - '@query.package.participant_view_query_handler'
             - '@cart_manager'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
     query.package.groups_view_query_handler:
