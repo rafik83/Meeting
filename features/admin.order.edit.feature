@@ -31,6 +31,16 @@ Feature: Edit an order
     And I should see "My awesome reduction"
     And I should see "1 566"
 
+  Scenario: Check new custom row in pro forma
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I go to this page "/fr"
+    Then I should be on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_list"
+    Then the response status code should be 200
+    When I follow "order.list.column.pro_forma"
+    Then the response status code should be 200
+    And I should see "1 566"
+
   Scenario: Update custom row
     Given I am logged with "test@test.com" on admin
     When I am on this page "/admin/fr/event/1/order/1/edit"
@@ -45,7 +55,29 @@ Feature: Edit an order
     And I should see "Another awesome reduction"
     And I should see "1 666"
 
+  Scenario: Check updated custom row in pro forma
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I go to this page "/fr"
+    Then I should be on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_list"
+    Then the response status code should be 200
+    When I follow "order.list.column.pro_forma"
+    Then the response status code should be 200
+    And I should see "1 666"
+
   Scenario: Remove custom row
-    Given I follow "admin.order_edit.remove_custom_row"
+    Given I am logged with "test@test.com" on admin
+    When I am on this page "/admin/fr/event/1/order/1/edit"
+    And I follow "admin.order_edit.remove_custom_row"
     When the response status code should be 200
     Then I should not see "Another awesome reduction"
+
+  Scenario: Check removed custom row in pro forma
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I go to this page "/fr"
+    Then I should be on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_list"
+    Then the response status code should be 200
+    When I follow "order.list.column.pro_forma"
+    Then the response status code should be 200
+    And I should see "2 066"
