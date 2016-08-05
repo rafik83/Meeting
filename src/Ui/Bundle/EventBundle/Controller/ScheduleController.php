@@ -39,7 +39,7 @@ class ScheduleController extends Controller
      */
     public function displayAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('domain.key_dates.checker.schedule_access_checker')
             ->allowedToAccess($eventDomain->getEvent())
@@ -73,7 +73,7 @@ class ScheduleController extends Controller
      */
     public function addUnavailabilityAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($sheet->getEvent() !== $eventDomain->getEvent() || null === $sheet->getUserParticipant($this->getUser())) {
             throw $this->createNotFoundException('The current User is not allowed to create an unavailibity');
@@ -111,7 +111,7 @@ class ScheduleController extends Controller
      */
     public function updateUnavailabilityAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Unavailability $unavailability)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
@@ -152,7 +152,7 @@ class ScheduleController extends Controller
      */
     public function removeUnavailabilityAction(EventDomain $eventDomain, Sheet $sheet, Unavailability $unavailability)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || null === $sheet->getUserParticipant($this->getUser())
@@ -177,7 +177,7 @@ class ScheduleController extends Controller
      */
     public function participateHappeningAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this
             ->get('domain.key_dates.checker.happenings_access_checker')
@@ -234,7 +234,7 @@ class ScheduleController extends Controller
      */
     public function unparticipateHappeningAction(EventDomain $eventDomain, Sheet $sheet, Happening $happening, Participant $participant)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if ($happening->getEvent()->getId() !== $eventDomain->getEvent()->getId()
             || $sheet->getEvent()->getId() !== $eventDomain->getEvent()->getId()

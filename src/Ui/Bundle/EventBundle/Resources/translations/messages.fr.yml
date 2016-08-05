@@ -61,6 +61,8 @@ nomenclature.select_none: Aucun
 order.list.column.date: Date
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
+order.list.pay_remaining: 'Solder la totalité de ma participation'
+order.list.pro_forma.link: 'Voir la Pro Forma'
 order.list.remainingToPay: 'Reste à payer'
 order.list.title: 'Liste de vos commandes'
 order.transaction.list.column.date: Date
@@ -72,9 +74,11 @@ order.transaction.mode.bank_card: 'Carte bleue'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
 order.transaction.mode.paypal: 'Paypal'
+order.transaction.no: 'Aucune'
 order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
+order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
 package.options.included: inclus
