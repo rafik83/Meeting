@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\User;
 
