@@ -1,0 +1,38 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'order.transaction.howtopay'|trans }}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            <h1>
+                <i class="glyphicon glyphicon-info-sign"></i>
+                {{ 'order.transaction.howtopay'|trans }}
+            </h1>
+        </header>
+        <div class="main__container">
+            <div class="payment--info">
+                <div class="payment--info-block">
+                    <h2>{{ 'package.payment.billingAddress'|trans }}:</h2>
+                    <ul>
+                        <li>{{ event.organiserName }}</li>
+                        <li>{{ event.billingAddress(locale)|nl2br }}</li>
+                        <li>{{ event.organiserEmail }}</li>
+                    </ul>
+                </div>
+
+                <div class="payment--info-block">
+                    <h2>{{ 'package.payment.bankInfo'|trans }}:</h2>
+                    <p>{{ event.bankInfo(locale)|nl2br }}</p>
+                    <div>
+                        {{ event.paymentCondition(locale)|nl2br }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

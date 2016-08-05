@@ -512,14 +512,16 @@ class SheetController extends Controller
     }
 
     /**
+     * @param Request     $request
      * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function paymentInfoAction(EventDomain $eventDomain)
+    public function paymentInfoAction(Request $request, EventDomain $eventDomain)
     {
         return $this->render('EventBundle:Sheet:paymentInfo.html.twig', [
-            'event' => $eventDomain->getEvent()
+            'event'  => $eventDomain->getEvent(),
+            'locale' => $request->getLocale(),
         ]);
     }
 
