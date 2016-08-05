@@ -68,7 +68,8 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             Mode::PAYMENT_BANK_CARD,
             null,
             Transaction::STATE_PENDING,
-            'EUR'
+            'EUR',
+            $owner
         );
 
         $order = Order::createFromSheet($sheet, $datetime);
@@ -135,7 +136,8 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             Mode::PAYMENT_BANK_CARD,
             null,
             Transaction::STATE_PENDING,
-            'EUR'
+            'EUR',
+            $owner
         );
 
         $order = Order::createFromSheet($sheet, $datetime);
