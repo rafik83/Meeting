@@ -109,7 +109,8 @@ class PaymentController extends Controller
             'form'    => $form->createView(),
             'total'   => $total,
             'deposit' => $deposit,
-            'view'    => ['funnel' => $funnel]
+            'view'    => ['funnel' => $funnel],
+            'locale'  => $request->getLocale()
         ]);
     }
 

@@ -2,6 +2,7 @@ var $                     = require('jquery'),
     PubSub                = require('pubsub-js'),
     Confirm               = require('./components/_Confirm'),
     ChoiceDescription     = require('./components/_ChoiceDescription'),
+    ChoicePaymentInfo     = require('./components/_ChoiceDescription'),
     AjaxForm              = require('./components/_AjaxForm'),
     CheckAllButton        = require('./components/_CheckAllButton'),
     SelectParent          = require('./components/_SelectParent'),
@@ -70,6 +71,7 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) { new ChoiceDescription(element); });
+    [].forEach.call(target.querySelectorAll('[data-payment-info]'), function (element) { new ChoicePaymentInfo(element); });
     [].forEach.call(target.querySelectorAll('[data-text-max-length-indicator]'), function (element) { new EditableTextIndicator(element, element.getAttribute('data-text-max-length-indicator'), element.getAttribute('data-text-max-length-translations')); });
     [].forEach.call(target.querySelectorAll('[data-check-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-check-all-button'), true) });
     [].forEach.call(target.querySelectorAll('[data-uncheck-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false) });

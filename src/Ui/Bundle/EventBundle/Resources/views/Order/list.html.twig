@@ -59,6 +59,7 @@
             <th>{{ 'order.transaction.list.column.state'|trans }}</th>
             <th>{{ 'order.transaction.list.column.mode'|trans }}</th>
             <th>{{ 'order.transaction.list.column.total'|trans }}</th>
+            <th></th>
             </thead>
             <tbody>
             {% for transaction in transactions %}
@@ -67,6 +68,11 @@
                     <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</td>
                     <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                    <td>
+                        {% if transaction.isRequiredPaymentInfo %}
+                            <a href="{{ path('event_sheet_payment_info') }}">{{ 'order.transaction.howtopay'|trans }}</a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

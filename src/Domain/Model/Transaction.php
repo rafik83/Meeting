@@ -219,4 +219,12 @@ class Transaction
     {
         $this->state = self::STATE_CANCELLED;
     }
+
+    /**
+     * @return bool
+     */
+    public function isRequiredPaymentInfo()
+    {
+        return in_array($this->mode, Mode::getModeThatRequiredPaymentInfo());
+    }
 }

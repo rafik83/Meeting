@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment;
 
 use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,6 +32,12 @@ abstract class AbstractPaymentChoiceType extends AbstractType
                 'expanded'     => true,
                 'multiple'     => false,
                 'required'     => true,
+                'choice_attr'  => function ($paymentMode) {
+                    if (in_array($paymentMode, Mode::getModeThatRequiredPaymentInfo())) {
+                        return ['data-payment-info' => 1];
+                    }
+                    return ['data-payment-info' => 0];
+                },
             ])
         ;
     }
