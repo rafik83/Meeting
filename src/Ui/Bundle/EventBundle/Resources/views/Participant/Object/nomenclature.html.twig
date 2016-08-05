@@ -1,4 +1,3 @@
-{% set objectTags = object.getTags %}
-{% if 'sheet_organization_turnover' not in objectTags and 'sheet_organization_staff' not in objectTags and 'participant_position' not in objectTags %}
+{% if object.isDisplayOnCompanyProfile %}
     {{ object.nomenclatureLabel }}
 {% endif %}
