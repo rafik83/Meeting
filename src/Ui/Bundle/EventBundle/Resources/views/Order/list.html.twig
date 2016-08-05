@@ -25,7 +25,7 @@
                         {% for order in orders %}
                             <tr>
                                 <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}">{{ 'order.list.column.pro_forma'|trans }}</a></td>
+                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
                                 <td>{{ order.total|localizedcurrency(order.currency) }}</td>
                             </tr>
                         {% endfor %}
@@ -39,6 +39,10 @@
                     </div>
                     <div class="panel-body text-center h1">
                         {{ remainingToPay|localizedcurrency(event.currency) }}
+
+                        {% if 0 < remainingToPay %}
+                            <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'order.list.pay_remaining'|trans }}</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -67,6 +71,10 @@
                     <td>{{ ('order.transaction.state.' ~ transaction.state)|trans }}</td>
                     <td>{{ ('order.transaction.mode.' ~ transaction.mode)|trans }}</td>
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">{{ 'order.transaction.no'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>
