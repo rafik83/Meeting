@@ -261,7 +261,7 @@ class Order
     public function removeCustomRow(Row $customRow)
     {
         foreach ($this->rows as $key => $row) {
-            if ($row->getId() == $customRow->getId()) {
+            if ($row->getId() === $customRow->getId()) {
                 $this->rows->remove($key);
             }
         }

@@ -90,8 +90,7 @@ class IncludedProductView
         \DateTimeInterface $deletableUntil = null,
         $isBuyable,
         $isDeletable
-    )
-    {
+    ) {
         $this->id             = $id;
         $this->label          = $label;
         $this->price          = $price;

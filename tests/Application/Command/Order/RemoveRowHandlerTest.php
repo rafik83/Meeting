@@ -53,4 +53,3 @@ class RemoveRowHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->handle($removeRow);
     }
 }
-

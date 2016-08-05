@@ -34,9 +34,9 @@ class CustomRowsViewQueryHandler
      */
     public function handle(CustomRowsViewQuery $customRowsViewQuery)
     {
-        $locale             = $customRowsViewQuery->locale;
-        $order              = $customRowsViewQuery->order;
-        $customRowsView     = new CustomRowsView();
+        $customRowsView = new CustomRowsView();
+        $locale         = $customRowsViewQuery->locale;
+        $order          = $customRowsViewQuery->order;
 
         foreach ($order->getCustomRows() as $customRow) {
             $customRowsView->addCustomRow(
