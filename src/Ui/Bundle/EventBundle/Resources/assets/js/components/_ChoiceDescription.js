@@ -17,7 +17,6 @@ function ChoicePaymentInfo(element) {
 ChoicePaymentInfo.prototype.onChange = function (event) {
     var paymentInfo = event.currentTarget.getAttribute('data-payment-info');
 
-    console.log(paymentInfo);
     if (1 == paymentInfo) {
         this.target.classList.remove('hide');
         return;
