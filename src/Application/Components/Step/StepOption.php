@@ -51,8 +51,8 @@ class StepOption
         $command = new SelectOptions($sheet, $stepIndex);
         $cart    = $this->cartManager->getCart($command->sheet, $command->currentStep);
 
-        if ($command->sheet->hasOrders()) {
-            $orderMerged = $this->orderMerger->merge($command->sheet->getOrders());
+        if ($sheet->hasOrders()) {
+            $orderMerged = $this->orderMerger->merge($sheet->getOrders());
         }
 
         /** @var CartRow[] $optionRows */
@@ -66,9 +66,10 @@ class StepOption
             $cart->getOptionsRow()->toArray()
         );
 
-        $options = [];
+        $options          = [];
+        $availableOptions = $command->sheet->getPackage()->getAvailablesOptions(new \DateTime());
 
-        foreach ($command->sheet->getPackage()->getAvailablesOptions(new \DateTime()) as $option) {
+        foreach ($availableOptions as $option) {
             $orderQuantity = 0;
             $cartQuantity  = 0;
 

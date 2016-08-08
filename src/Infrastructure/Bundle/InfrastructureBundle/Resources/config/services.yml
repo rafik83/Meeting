@@ -1462,6 +1462,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
         arguments:
             - '@cart_manager'
+            - '@order.merger'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
