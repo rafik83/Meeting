@@ -5,14 +5,19 @@
 {% block title 'billing_info.title'|trans %}
 
 {% block content %}
-    <div class="profile__content">
+
         <section class="main">
-            <header>
-                <h1>{{ 'billing_info.title'|trans }}</h1>
-            </header>
-            <div class="main__content">
-                {{ form(form, { 'attr': { 'class': 'styled-form form-with-label' } }) }}
+            {% if view is not empty and view.funnel is defined and view.funnel is not null %}
+                {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
+            {% endif %}
+
+            <div class="profile__content">
+                <header>
+                    <h1>{{ 'billing_info.title'|trans }}</h1>
+                </header>
+                <div class="main__content">
+                    {{ form(form, { 'attr': { 'class': 'styled-form form-with-label' } }) }}
+                </div>
             </div>
         </section>
-    </div>
 {% endblock %}

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -51,8 +51,11 @@ class BillingController extends Controller
         $form    = $this->createForm(UpdateInfoType::class, $command, ['submit' => true, 'country' => $country]);
 
         $packageCompleteBilling = $this->getPackageCompleteBilling();
+        $funnel = null;
+
         if (null !== $packageCompleteBilling) {
             $this->addFlash('package_complete_billing_info', $packageCompleteBilling);
+            $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -71,13 +74,14 @@ class BillingController extends Controller
         }
 
         return $this->render('EventBundle:Billing:info.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
+            'event'  => $eventDomain->getEvent(),
+            'form'   => $form->createView(),
+            'view'   => ['funnel' => $funnel]
         ]);
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     private function getPackageCompleteBilling()
     {
