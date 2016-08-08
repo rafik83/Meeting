@@ -295,7 +295,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $promotionCodeRepository->reveal(),
             $this->datetime,
             $orderMerger->reveal());
-        
+
         $handler->handle($add);
     }
 }
