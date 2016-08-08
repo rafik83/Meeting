@@ -503,6 +503,14 @@ event_package_payment_done:
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:donePayment }
 
+event_package_payment_pay_remaining:
+    path: /sheet/{sheet}/package/payment/pay-remaining
+    requirements:
+        sheet: \d+
+        transaction: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:payRemaining }
+
 create_transaction:
     path: /sheet/{sheet}/create-transaction
     requirements:
