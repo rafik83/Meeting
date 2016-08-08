@@ -97,10 +97,11 @@ Feature: Edit my package
     And the "tr[data-product-id='6']" element should contain "-2"
     And the "tr[data-product-id='7']" element should contain "1"
 
-  Scenario: I can't remove a product that is not deletable
+  Scenario: I can't remove a product that is not deletable or buyable
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/step/2"
+    And I should see "package.product.unavailable"
     When I fill in "options[11]" with "2"
     Then I press "package.product.validate"
     And I should be on this page "/fr/sheet/1/package/step/2"
