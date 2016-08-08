@@ -1,4 +1,3 @@
-
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
         __construct: false
