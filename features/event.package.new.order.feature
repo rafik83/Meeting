@@ -97,10 +97,19 @@ Feature: Edit my package
     And the "tr[data-product-id='6']" element should contain "-2"
     And the "tr[data-product-id='7']" element should contain "1"
 
-#  Scenario: I can pay my updated package
-#    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
-#    When I am on this page "/fr"
-#    Then I go to this page "/fr/sheet/1/package/summary"
-#    And I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
-#    When I press "package.summary.pay"
-#    Then I should be on this page "/fr/sheet/1/orders"
+  Scenario: I can't remove a product that is not deletable
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr"
+    Then I go to this page "/fr/sheet/1/package/step/2"
+    When I fill in "options[11]" with "2"
+    Then I press "package.product.validate"
+    And I should be on this page "/fr/sheet/1/package/step/2"
+    And I should see "package.product.productNotDeletable"
+
+  Scenario: I can pay my updated package
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr"
+    Then I go to this page "/fr/sheet/1/package/summary"
+    And I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
+    When I press "package.summary.pay"
+    Then I should be on this page "/fr/sheet/1/orders"
