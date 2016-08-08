@@ -25,7 +25,8 @@
 
                 <div class="payment--info-block">
                     <h2>{{ 'package.payment.bankInfo'|trans }}:</h2>
-                    <p>{{ event.bankInfo(locale)|nl2br }}</p>
+                    <div>{{ event.bankInfo(locale)|nl2br }}</div>
+                    <br>
                     <div>
                         {{ event.paymentCondition(locale)|nl2br }}
                     </div>

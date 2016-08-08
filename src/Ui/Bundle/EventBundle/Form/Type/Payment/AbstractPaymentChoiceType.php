@@ -32,6 +32,7 @@ abstract class AbstractPaymentChoiceType extends AbstractType
                 'multiple'     => false,
                 'required'     => true,
                 'choice_attr'  => function ($paymentMode) {
+                    /** @var string paymentMode */
                     if (in_array($paymentMode, Mode::getModeThatRequiredPaymentInfo())) {
                         return ['data-payment-info' => 1];
                     }

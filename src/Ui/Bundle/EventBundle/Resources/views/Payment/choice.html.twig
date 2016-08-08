@@ -36,17 +36,18 @@
             </div>
 
             <div id="payment-info-block" class="info__content styled-form hide">
+                <h2>{{ 'order.transaction.howtopay'|trans }}</h2>
                 <ul>
                     <li>{{ event.organiserName }}</li>
-                    <li>{{ event.billingAddress(locale)|nl2br }}</li>
+                    <li>{{ event.billingAddress(app.request.locale)|nl2br }}</li>
                     <li>{{ event.organiserEmail }}</li>
                 </ul>
                 <div class="form-info">
                     <div>{{ 'package.payment.bankInfo'|trans }}:</div>
-                    <div>{{ event.bankInfo(locale)|nl2br }}</div>
+                    <div>{{ event.bankInfo(app.request.locale)|nl2br }}</div>
                 </div>
                 <div>
-                    {{ event.paymentCondition(locale)|nl2br }}
+                    {{ event.paymentCondition(app.request.locale)|nl2br }}
                 </div>
             </div>
 
