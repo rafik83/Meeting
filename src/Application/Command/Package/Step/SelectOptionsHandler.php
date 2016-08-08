@@ -62,21 +62,12 @@ class SelectOptionsHandler
 
         $cart->clearOptions();
 
-        if ($sheetHasOrders = $sheet->hasOrders()) {
+        if ($sheet->hasOrders()) {
             $orderMerged = $this->merger->merge($sheet->getOrders());
-            $plan        = $orderMerged->getPlan();
         }
 
         foreach ($selectOptions->options as $id => $quantity) {
-            $orderQuantity          = 0;
-            $includedOptionQuantity = 0;
-
-            // handle option included
-            if (isset($plan)) {
-                if ($productIncluded = $plan->getIncludedOptionById($id)) {
-                    $includedOptionQuantity = $productIncluded->getQuantity();
-                }
-            }
+            $orderQuantity = 0;
 
             // handle new order
             if (isset($orderMerged)) {
@@ -85,15 +76,7 @@ class SelectOptionsHandler
                 }
             }
 
-            $optionNumber = $quantity - ($includedOptionQuantity + $orderQuantity);
-
-            if ($optionNumber < 0) {
-                $additionnal = $optionNumber - ($quantity - $includedOptionQuantity);
-            } else {
-                $additionnal = $optionNumber;
-            }
-
-            $cart->setProduct($options[$id], $additionnal);
+            $cart->setProduct($options[$id], $quantity - $orderQuantity);
         }
 
         $this->cartManager->save($cart);

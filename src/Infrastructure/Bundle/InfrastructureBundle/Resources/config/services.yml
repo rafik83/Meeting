@@ -1642,6 +1642,7 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+            - '@order.merger'
     package.planning.quantity_min_guesser:
             class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
             arguments:

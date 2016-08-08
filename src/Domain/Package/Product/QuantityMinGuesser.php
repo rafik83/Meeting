@@ -24,11 +24,11 @@ class QuantityMinGuesser
     /**
      * QuantityMinGuesser constructor.
      *
-     * @param Merger      $merger
+     * @param Merger $merger
      */
     public function __construct(Merger $merger)
     {
-        $this->merger      = $merger;
+        $this->merger = $merger;
     }
 
     /**
@@ -45,6 +45,7 @@ class QuantityMinGuesser
         }
 
         $order = $this->merger->merge($sheet->getOrders());
+
         if ($order->hasPromotionCodeForProduct($product)) {
             if ($orderRow = $order->getRowForProduct($product)) {
                 if ($quantity < $orderRow->getQuantity()) {
