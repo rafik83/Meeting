@@ -30,6 +30,7 @@ Feature: Edit an order
     Then the response status code should be 200
     And I should see "My awesome reduction"
     And I should see "1 566"
+    And I should see "-500"
 
   Scenario: Check new custom row in pro forma
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
@@ -40,6 +41,7 @@ Feature: Edit an order
     When I follow "order.list.column.pro_forma"
     Then the response status code should be 200
     And I should see "1 566"
+    And I should see "-500"
 
   Scenario: Update custom row
     Given I am logged with "test@test.com" on admin
@@ -54,6 +56,7 @@ Feature: Edit an order
     Then the response status code should be 200
     And I should see "Another awesome reduction"
     And I should see "1 666"
+    And I should see "-400"
 
   Scenario: Check updated custom row in pro forma
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
@@ -64,6 +67,7 @@ Feature: Edit an order
     When I follow "order.list.column.pro_forma"
     Then the response status code should be 200
     And I should see "1 666"
+    And I should see "-400"
 
   Scenario: Remove custom row
     Given I am logged with "test@test.com" on admin
@@ -81,3 +85,4 @@ Feature: Edit an order
     When I follow "order.list.column.pro_forma"
     Then the response status code should be 200
     And I should see "2 066"
+    And I should not see "-400"
