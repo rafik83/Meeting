@@ -7,7 +7,7 @@
 {% block content %}
 
         <section class="main">
-            {% if view is not empty and view.funnel is defined and view.funnel is not null %}
+            {% if view is not empty %}
                 {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
             {% endif %}
 
