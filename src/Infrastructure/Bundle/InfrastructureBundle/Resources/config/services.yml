@@ -1522,10 +1522,6 @@ services:
             - '@query.order.summary.promotion_code_view_query_handler'
     query.order.summary.custom_row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowViewQueryHandler
-    query.order.summary.custom_rows_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowsViewQueryHandler
-        arguments:
-            - '@query.order.summary.custom_row_view_query_handler'
     query.order.summary_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
         arguments:
