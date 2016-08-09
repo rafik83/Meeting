@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing;
 
+use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +27,18 @@ class UpdateInfoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $gender  = new Gender('gender', [], '', '');
+
         $builder
+            ->add('gender', ChoiceType::class, [
+                'choices'  => $gender->getGenders(),
+                'choice_label' => function ($value) {
+                    return sprintf('gender.%s', $value);
+                },
+                'expanded' => true,
+                'multiple' => false,
+                'required' => true,
+            ])
             ->add('lastname', TextType::class, ['required' => true])
             ->add('firstname', TextType::class, ['required' => true])
             ->add('function', TextType::class, ['required' => false])
