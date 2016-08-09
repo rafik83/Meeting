@@ -32,6 +32,7 @@ form.billing_info_update.children.country.label: Pays
 form.billing_info_update.children.email.label: Email
 form.billing_info_update.children.firstname.label: Prénom
 form.billing_info_update.children.function.label: Fonction
+form.billing_info_update.children.gender.label: Genre
 form.billing_info_update.children.lastname.label: Nom
 form.billing_info_update.children.mobile.label: Mobile
 form.billing_info_update.children.phone.label: Téléphone
