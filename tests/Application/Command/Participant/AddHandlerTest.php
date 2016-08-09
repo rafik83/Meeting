@@ -143,7 +143,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData->addChild(0, '811f6edf', $block);
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldBeCalled()->willReturn($templateData);
 
-        $add            = new Add($sheet, $event, 'fr', $user);
+        $add            = new Add($sheet, 'fr', $user);
         $add->email     = 'test@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';
@@ -218,7 +218,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateDataFactory->createRegistrationFromType($type, 'fr')->shouldNotBeCalled();
 
-        $add            = new Add($sheet, $event, 'fr', $user);
+        $add            = new Add($sheet, 'fr', $user);
         $add->email     = 'test2@test.com';
         $add->firstName = 'jean';
         $add->lastName  = 'truc';

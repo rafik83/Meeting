@@ -23,6 +23,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -45,7 +46,7 @@ class SheetController extends Controller
      */
     public function sheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
@@ -139,9 +140,12 @@ class SheetController extends Controller
      */
     public function formAction(EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
@@ -178,7 +182,6 @@ class SheetController extends Controller
             throw $this->createNotFoundException('No form found for this object');
         }
 
-
         return $this->createForm($types[$object->getType()], $object, [
             'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
             'submit'      => true,
@@ -203,9 +206,12 @@ class SheetController extends Controller
      */
     public function updateAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
@@ -275,9 +281,11 @@ class SheetController extends Controller
      */
     public function addParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$sheet->canBuyParticipant()) {
             throw $this->createNotFoundException(
@@ -299,7 +307,7 @@ class SheetController extends Controller
 
         $label = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
+        $addParticipant = new Add($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
@@ -324,16 +332,19 @@ class SheetController extends Controller
      */
     public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         if (!$sheet->canBuyParticipant()) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
         }
 
-        $addParticipant = new Add($sheet, $eventDomain->getEvent(), $locale, $this->getUser());
+        $addParticipant = new Add($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
@@ -385,9 +396,11 @@ class SheetController extends Controller
      */
     private function removeParticipantData($eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -419,6 +432,8 @@ class SheetController extends Controller
     public function removeParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
         list ($form, $sheet) = $this->removeParticipantData($eventDomain, $locale, $key);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
@@ -458,6 +473,8 @@ class SheetController extends Controller
     public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
         list ($form, $sheet, $remove) = $this->removeParticipantData($eventDomain, $locale, $key);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
