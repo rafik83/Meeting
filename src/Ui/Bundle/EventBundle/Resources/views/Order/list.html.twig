@@ -74,7 +74,7 @@
                     <td>{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
                     <td>
                         {% if transaction.isRequiredPaymentInfo %}
-                            <a href="{{ path('event_sheet_payment_info') }}" target="_blank">{{ 'order.transaction.howtopay'|trans }}</a>
+                            <a href="{{ path('event_payment_info') }}" target="_blank">{{ 'order.transaction.howtopay'|trans }}</a>
                         {% endif %}
                     </td>
                 </tr>
