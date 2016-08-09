@@ -240,7 +240,12 @@ services:
         tags:
             - { name: security.voter }
         public: false
-
+    security.app.user_checker:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
+        arguments:
+            - '@request_stack'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Services
