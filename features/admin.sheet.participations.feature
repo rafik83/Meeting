@@ -26,3 +26,13 @@ Feature: Edit participant status
     Then I check "sheet_batch_ids_4"
     And I press "form.sheet_batch.children.validate.label"
     Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com"
+
+  Scenario: I can enable or disable participant registration
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to "/admin/fr/event/1/sheet"
+    Then I should see "admin.sheet.title"
+    And I check "sheet_batch_ids_4"
+    When I press "form.sheet_batch.children.disable.label"
+    Then I should be on this page "/admin/fr/event/1/sheet"
+    And I should see "admin.sheet.disable"
