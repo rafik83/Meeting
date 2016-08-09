@@ -8,13 +8,23 @@
         <div class="row">
             <div class="col-md-offset-8 col-md-4">
                 <b>{{ pro_forma.billingInfo.company }}</b><br>
-                {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>
+                {{ pro_forma.billingInfo.gender }} {{ pro_forma.billingInfo.firstName }} {{ pro_forma.billingInfo.lastName }}<br>
                 {{ pro_forma.billingInfo.address.street }}<br>
                 {{ pro_forma.billingInfo.address.zipCode }} {{ pro_forma.billingInfo.address.city }}<br>
                 {{ pro_forma.billingInfo.address.country|country }}<br>
                 {% if pro_forma.billingInfo.vatNumber %}
                     <b>{{ 'pro_forma.vatNumber.title'|trans }}</b> {{ pro_forma.billingInfo.vatNumber }}
                 {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <b>{{ event.title }}</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <b>N° pro-forma</b> {{ (event.id >= 10) ? event.id : "0" ~ event.id }}-{{ (sheet.id >= 10) ? sheet.id : "0" ~ sheet.id }}-{{ (order.id >= 10) ? order.id : "0" ~ order.id }}
             </div>
         </div>
         <div class="row">
