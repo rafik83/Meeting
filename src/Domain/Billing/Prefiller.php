@@ -58,7 +58,8 @@ class Prefiller
                     $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ZIPCODE),
                     $templateData->getTaggedContentLabel(Tag::PARTICIPANT_CITY),
                     $templateData->getTaggedContentValue(Tag::PARTICIPANT_COUNTRY)
-                )
+                ),
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_GENDER)
             );
         }
     }
@@ -83,7 +84,8 @@ class Prefiller
                 $user->getAccount()->getZipCode(),
                 $user->getAccount()->getCity(),
                 $user->getAccount()->getCountry()
-            )
+            ),
+            $user->getAccount()->getGender()
         );
     }
 }

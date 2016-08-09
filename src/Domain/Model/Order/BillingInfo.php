@@ -65,6 +65,11 @@ class BillingInfo
     private $vatNumber;
 
     /**
+     * @var string
+     */
+    private $gender;
+
+    /**
      * BillingInfo constructor.
      *
      * @param string  $lastName
@@ -86,7 +91,8 @@ class BillingInfo
         $email,
         $company,
         Address $address,
-        $vatNumber
+        $vatNumber,
+        $gender
     ) {
         $this->lastName  = $lastName;
         $this->firstName = $firstName;
@@ -97,6 +103,7 @@ class BillingInfo
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
+        $this->gender    = $gender;
     }
 
     /**
@@ -191,5 +198,13 @@ class BillingInfo
     public function getVatNumber()
     {
         return $this->vatNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
     }
 }

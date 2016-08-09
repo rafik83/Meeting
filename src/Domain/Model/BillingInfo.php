@@ -86,6 +86,11 @@ class BillingInfo
     private $vatNumber;
 
     /**
+     * @var string
+     */
+    private $gender;
+
+    /**
      * BillingInfo constructor.
      *
      * @param Sheet $sheet
@@ -106,9 +111,20 @@ class BillingInfo
      * @param string  $company
      * @param Address $address
      * @param string  $vatNumber
+     * @param string  $gender
      */
-    public function update($lastname, $firstname, $function, $phone, $mobile, $email, $company, Address $address, $vatNumber)
-    {
+    public function update(
+        $lastname,
+        $firstname,
+        $function,
+        $phone,
+        $mobile,
+        $email,
+        $company,
+        Address $address,
+        $vatNumber,
+        $gender
+    ) {
         $this->lastname  = $lastname;
         $this->firstname = $firstname;
         $this->function  = $function;
@@ -118,6 +134,7 @@ class BillingInfo
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
+        $this->gender    = $gender;
     }
 
     /**
@@ -239,6 +256,14 @@ class BillingInfo
     }
 
     /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
      * @param string  $firstname
      * @param string  $lastname
      * @param string  $function
@@ -247,11 +272,21 @@ class BillingInfo
      * @param string  $mobile
      * @param string  $email
      * @param Address $address
+     * @param string  $gender
      *
      * @return BillingInfo
      */
-    public function prefill($firstname, $lastname, $function, $company, $phone, $mobile, $email, Address $address)
-    {
+    public function prefill(
+        $firstname,
+        $lastname,
+        $function,
+        $company,
+        $phone,
+        $mobile,
+        $email,
+        Address $address,
+        $gender
+    ) {
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->function  = $function;
@@ -260,6 +295,7 @@ class BillingInfo
         $this->mobile    = $mobile;
         $this->email     = $email;
         $this->address   = $address;
+        $this->gender    = $gender;
 
         return $this;
     }
@@ -276,6 +312,7 @@ class BillingInfo
             && null !== $this->address->getStreet()
             && null !== $this->address->getZipcode()
             && null !== $this->address->getCity()
-            && null !== $this->address->getCountry();
+            && null !== $this->address->getCountry()
+            && null !== $this->gender;
     }
 }
