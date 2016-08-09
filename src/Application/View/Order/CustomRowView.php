@@ -52,17 +52,20 @@ class CustomRowView
      * @param string $label
      * @param float  $price
      * @param int    $quantity
+     * @param string $currency
      */
     public function __construct(
         $id,
         $label,
         $price,
-        $quantity
+        $quantity,
+        $currency
     ) {
         $this->id       = $id;
         $this->label    = $label;
         $this->price    = $price;
         $this->quantity = $quantity;
         $this->total    = $price * $quantity;
+        $this->currency = $currency;
     }
 }
