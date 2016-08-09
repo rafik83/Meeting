@@ -40,6 +40,8 @@
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
+                        <li>{{ form_widget(batch_form.enable) }}</li>
+                        <li>{{ form_widget(batch_form.disable) }}</li>
                     {% endblock actions %}
                 {% endembed %}
             </div>
@@ -98,6 +100,12 @@
                                 data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
                             {% endif %}
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                        <br>
+                        {% if sheet.isEnabled %}
+                            <span class="label label-success">{{ 'admin.sheet.enable'|trans }}</span>
+                        {% else %}
+                            <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
+                        {% endif %}
                     </td>
                     <td>
                         <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">

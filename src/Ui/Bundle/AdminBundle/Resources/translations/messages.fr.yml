@@ -257,6 +257,8 @@ admin.sheet.trace.auto: automatiquement
 admin.sheet.trace.comment: 'avec le commentaire: %comment%'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.type: Type
+admin.sheet.enable: Activer
+admin.sheet.disable: Desactiver
 admin.sheet.validate: Valider
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui

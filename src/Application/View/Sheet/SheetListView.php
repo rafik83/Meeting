@@ -101,12 +101,18 @@ class SheetListView
     public $completed;
 
     /**
+     * @var bool
+     */
+    public $enabled;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
      * @param string               $title
      * @param string               $state
      * @param bool                 $completed
+     * @param                      $enabled
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
@@ -121,6 +127,7 @@ class SheetListView
         $title,
         $state,
         $completed,
+        $enabled,
         array $categories,
         $type,
         SheetParticipantView $owner,
@@ -134,6 +141,7 @@ class SheetListView
         $this->title              = $title;
         $this->state              = $state;
         $this->completed          = $completed;
+        $this->enabled            = $enabled;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;
@@ -155,5 +163,13 @@ class SheetListView
     public function isIncomplete()
     {
         return false === $this->completed;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return true === $this->enabled;
     }
 }

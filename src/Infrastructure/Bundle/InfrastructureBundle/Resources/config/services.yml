@@ -589,6 +589,12 @@ services:
             - '@command.sheet.validate_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
+    command.sheet.batch_enable_disable_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:
@@ -650,6 +656,7 @@ services:
             - '@command.sheet.batch_validate_handler'
             - '@command.sheet.batch_assign_handler'
             - '@command.sheet.batch_accept_handler'
+            - '@command.sheet.batch_enable_disable_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
     command.sheet.accept_handler:

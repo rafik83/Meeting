@@ -22,6 +22,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: string
         completed:
             type: boolean
+        enable:
+            type: boolean
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -36,6 +36,16 @@ class Batch
     public $assign;
 
     /**
+     * @var bool
+     */
+    public $enable;
+
+    /**
+     * @var bool
+     */
+    public $disable;
+
+    /**
      * @var Admin
      */
     public $follower;
