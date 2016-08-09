@@ -44,7 +44,8 @@ class UpdateInfoHandler
             $updateInfo->email,
             $updateInfo->company,
             new Address($updateInfo->street, $updateInfo->zipcode, $updateInfo->city, $updateInfo->country),
-            $updateInfo->vatNumber
+            $updateInfo->vatNumber,
+            $updateInfo->gender
         );
 
         if ($updateInfo->billingInfo->getId()) {
