@@ -114,7 +114,7 @@
                     <th colspan="2"></th>
                     <th colspan="1">{{ 'admin.order_edit.VAT'|trans }}</th>
                     <th colspan="1">{{ order_view.vatRate }}%</th>
-                    <th class="text-right">{{ order_view.vatAmount }} €</th>
+                    <th class="text-right">{{ order_view.vatAmount|number_format(2, ',', ' ') }} €</th>
                     <th></th>
                 </tr>
                 <tr>
