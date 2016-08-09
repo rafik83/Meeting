@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchEnableDisableHandler
 {
@@ -20,13 +23,22 @@ class BatchEnableDisableHandler
     private $sheetRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * BatchEnableDisableHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param DelayedEventDispatcher $eventDispatcher
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
         $this->sheetRepository = $sheetRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -41,6 +53,16 @@ class BatchEnableDisableHandler
 
         foreach($sheets as $sheet) {
             $this->sheetRepository->set($sheet->setEnable($batchEnableDisable->state));
+
+            $this->eventDispatcher->dispatch(
+                Events::SHEET_ENABLE_DISABLE,
+                new SheetEnableDisableEvent(
+                    $sheet,
+                    $batchEnableDisable->admin,
+                    new \DateTime(),
+                    $batchEnableDisable->state
+                )
+            );
         }
 
         return new BatchResult(count($sheets));

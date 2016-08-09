@@ -256,6 +256,8 @@ admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement
 admin.sheet.trace.comment: 'avec le commentaire: %comment%'
 admin.sheet.trace.validate: 'Validée le %at%'
+admin.sheet.trace.disable: 'Désactivé le %at%'
+admin.sheet.trace.enable: 'Activé le %at%'
 admin.sheet.type: Type
 admin.sheet.enable: Activer
 admin.sheet.disable: Desactiver

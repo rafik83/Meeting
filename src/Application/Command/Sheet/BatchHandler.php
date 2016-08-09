@@ -79,7 +79,9 @@ class BatchHandler
         if ($batch->enable || $batch->disable) {
             $state = (true === $batch->enable) ? true : false;
 
-            return $this->batchEnableDisableHandler->handle(new BatchEnableDisable($batch->ids, $state));
+            return $this->batchEnableDisableHandler->handle(
+                new BatchEnableDisable($batch->ids, $state, $batch->admin)
+            );
         }
 
         return new BatchResult(0);

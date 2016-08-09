@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Admin;
+
 class BatchEnableDisable
 {
     /**
@@ -23,14 +25,21 @@ class BatchEnableDisable
     public $state;
 
     /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
      * BatchValidate constructor.
      *
      * @param array $ids
      * @param bool  $state
+     * @param Admin $admin
      */
-    public function __construct(array $ids, $state)
+    public function __construct(array $ids, $state, Admin $admin)
     {
         $this->ids   = $ids;
         $this->state = $state;
+        $this->admin = $admin;
     }
 }
