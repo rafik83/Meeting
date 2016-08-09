@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Application\Exception\Type\TypeUsedBySheetException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -42,12 +43,13 @@ class RemoveHandler
     /**
      * @param Remove $remove
      *
-     * @return null|bool
+     * @return bool|null
+     * @throws TypeUsedBySheetException
      */
     public function handle(Remove $remove)
     {
         if ($this->sheetRepository->isThereAtLeastOneByType($remove->type)) {
-            return false;
+            throw new TypeUsedBySheetException();
         }
 
         $this->typeRepository->remove($remove->type);
