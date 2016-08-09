@@ -14,7 +14,7 @@
 
             {% if product.customRows is not empty %}
                 {% for customRow in product.customRows %}
-                    {{ include('EventBundle:Order/Summary:custom_row.html.twig', {customRow: customRow, vatMode: product.vatMode}) }}
+                    {{ include('EventBundle:Order/Summary:custom_row.html.twig', {customRow: customRow}) }}
                 {% endfor %}
             {% endif %}
         {% endfor %}
@@ -22,7 +22,7 @@
 
     {% if group.customRows is not empty %}
         {% for customRow in group.customRows %}
-            {{ include('EventBundle:Order/Summary:custom_row.html.twig', {customRow: customRow, vatMode: order.vatMode}) }}
+            {{ include('EventBundle:Order/Summary:custom_row.html.twig', {customRow: customRow}) }}
         {% endfor %}
     {% endif %}
 {% endif %}

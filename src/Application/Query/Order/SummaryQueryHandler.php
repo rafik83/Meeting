@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Order;
 
-use Proximum\Vimeet\Application\Query\Order\Summary\CustomRowsViewQuery;
-use Proximum\Vimeet\Application\Query\Order\Summary\CustomRowsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;

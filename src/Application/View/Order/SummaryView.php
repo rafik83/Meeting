@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class SummaryView
 {
     /**

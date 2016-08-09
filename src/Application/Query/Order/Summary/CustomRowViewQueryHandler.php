@@ -28,7 +28,8 @@ class CustomRowViewQueryHandler
             $customRowViewQuery->row->getLabel($locale),
             $customRowViewQuery->row->getPrice(),
             $customRowViewQuery->row->getQuantity(),
-            $customRowViewQuery->row->getOrder()->getCurrency()
+            $customRowViewQuery->row->getOrder()->getCurrency(),
+            $customRowViewQuery->row->getOrder()->getVatMode()
         );
     }
 }
