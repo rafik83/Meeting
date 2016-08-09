@@ -1,4 +1,4 @@
-{% if group is defined and group.products is not empty %}
+{% if group is defined and group.products is not empty or group.customRows is not empty %}
     <tr>
         <td colspan="4" class="active">
             {% if group.type == 'option' %}
