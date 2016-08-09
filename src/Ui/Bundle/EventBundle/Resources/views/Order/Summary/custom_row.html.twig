@@ -1,8 +1,8 @@
 {% if customRow is defined %}
     <tr>
         <td>{{ customRow.label }}</td>
-        <td class="text-center">{{ customRow.price|localizedcurrency(currency) }} {{ ('package.vatMode.' ~ vatMode)|trans }}</td>
+        <td class="text-center">{{ customRow.price|localizedcurrency(customRow.currency) }} {{ ('package.vatMode.' ~ vatMode)|trans }}</td>
         <td class="text-center">{{ customRow.quantity }}</td>
-        <td class="text-center">{{ customRow.total|localizedcurrency(currency) }} {{ ('package.vatMode.' ~ vatMode)|trans }}</td>
+        <td class="text-center">{{ customRow.total|localizedcurrency(customRow.currency) }} {{ ('package.vatMode.' ~ vatMode)|trans }}</td>
     </tr>
 {% endif %}
