@@ -107,6 +107,15 @@ Feature: Edit my package
     And I should be on this page "/fr/sheet/1/package/step/2"
     And I should see "package.product.productNotDeletable"
 
+  Scenario: I can't use a promotion code for a negative product quantity
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr"
+    Then I go to this page "/fr/sheet/1/package/summary"
+    And I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS10"
+    And I press "package.summary.promotion.button.label"
+    Then I should be on this page "/fr/sheet/1/package/summary#summary-promo-code-row"
+    And I should see "flash.package.promotionCode.error.negativeRow"
+
   Scenario: I can pay my updated package
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr"

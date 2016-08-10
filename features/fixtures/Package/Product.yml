@@ -380,3 +380,27 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         rank: 5
         group: '@package_group_3_asd_days'
         option: '@product_option_8_asddays'
+
+Proximum\Vimeet\Domain\Model\PromotionCode:
+    promotion_code_asddays_2016:
+        __construct: ['@event_asddays_2016', 'Assdays Promotion Code', 'ASDDAYS10', 50]
+
+Proximum\Vimeet\Domain\Model\PromotionCodeTranslation:
+    promotion_code_assdays_2016_translation:
+        __construct: ['@promotion_code_asddays_2016', 'fr', 'Assdays Promotion Code', 'Assdays Promotion Code Description']
+
+Proximum\Vimeet\Domain\Model\Promotion:
+    promotion_01_asddays_2016:
+        __construct: false
+        promotionCode: '@promotion_code_asddays_2016'
+        product: '@product_plan_2_asddays'
+        type: 'percent_off'
+        value: 50
+        quantityMax: 1
+    promotion_02_asddays_2016:
+        __construct: false
+        promotionCode: '@promotion_code_asddays_2016'
+        product: '@product_option_2_asddays'
+        type: 'percent_off'
+        value: 50
+        quantityMax: 2
