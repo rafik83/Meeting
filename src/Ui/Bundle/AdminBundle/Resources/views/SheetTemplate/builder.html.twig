@@ -43,9 +43,17 @@
                 <div class="template-container container-fluid block-inner" id="template-container">
                     {% for uid, item in template.value|default([]) %}
                         {% if item.component == 'block' %}
-                            {{ include('AdminBundle:Template/Block:' ~ item.type ~ '.html.twig', { 'uid': uid, 'children': item.children, 'config': item.config, 'locale': locale, 'fallback': template.fallback, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags }, false) }}
+                            {{ include('AdminBundle:Template/Block:' ~ item.type ~ '.html.twig', {
+                                'uid': uid, 'children': item.children, 'config': item.config, 'locale': locale,
+                                'fallback': template.fallback, 'nomenclatures': nomenclatures,
+                                'sheet_tags': sheet_tags, 'products': products
+                            }, false) }}
                         {% elseif item.component == 'object' %}
-                            {{ include('AdminBundle:Template/Object:' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'locale': locale, 'fallback': template.fallback, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags }, false) }}
+                            {{ include('AdminBundle:Template/Object:' ~ item.type ~ '.html.twig', {
+                                'uid': uid, 'config': item.config, 'locale': locale,
+                                'fallback': template.fallback, 'nomenclatures': nomenclatures,
+                                'sheet_tags': sheet_tags, 'products': products
+                            }, false) }}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -70,10 +78,10 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="blocks">
                         <div id="block-list" class="block-list">
-                            {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags }, false) }}
-                            {{ include('AdminBundle:Template/Block:4-8.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags }, false) }}
-                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags }, false) }}
-                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags }, false) }}
+                            {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                            {{ include('AdminBundle:Template/Block:4-8.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="objects">
@@ -82,7 +90,7 @@
                             {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}
                             {{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale }, false) }}
+                            {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products }, false) }}
                             {{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}
                             {{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:nomenclature.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}

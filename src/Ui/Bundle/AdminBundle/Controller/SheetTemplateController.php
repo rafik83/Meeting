@@ -231,10 +231,21 @@ class SheetTemplateController extends Controller
         }
 
         // Queries
-        $respository   = $this->get('repository.nomenclature_repository');
-        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
-        $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
-        $nomenclatures = $template->getEvent() ? $respository->findByEvent($template->getEvent()) : $respository->findGlobals();
+        $nomenclatureRepository = $this->get('repository.nomenclature_repository');
+        $productRepository      = $this->get('vimeet_infrastructure.repository.product_repository');
+        $completeness           = $this->get('sheet.template.completeness_calculator')->compute($template);
+
+        $incompletes = array_keys(array_filter($completeness, function ($percent) {
+            return $percent < 100;
+        }));
+
+        $nomenclatures = $template->getEvent() ?
+            $nomenclatureRepository->findByEvent($template->getEvent()) :
+            $nomenclatureRepository->findGlobals();
+
+        $products = $template->getEvent() ?
+            $productRepository->findByEvent($template->getEvent()) :
+            null;
 
         // Add warning if some locales translations are incompletes
         if (!empty($incompletes)) {
@@ -248,6 +259,7 @@ class SheetTemplateController extends Controller
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures,
+            'products'        => $products,
             'sheet_tags'      => Tag::getSheetTags(),
             'event'           => $template->getEvent(),
         ]);
