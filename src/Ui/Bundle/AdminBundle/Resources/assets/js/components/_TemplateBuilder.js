@@ -894,6 +894,7 @@ MediaObject.prototype.fill = function ()
     this.form.set('translatable', this.config.translatable);
     this.form.set('max', this.config.max);
     this.form.set('default', this.config.default);
+    this.form.set('products', this.config.products);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -906,6 +907,7 @@ MediaObject.prototype.save = function ()
     this.config.translatable                  = this.form.get('translatable');
     this.config.max                           = this.form.get('max');
     this.config.default                       = this.form.get('default');
+    this.config.products                      = this.form.get('products');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
