@@ -98,6 +98,14 @@ class CartRow
     }
 
     /**
+     * @return bool
+     */
+    public function isNegative()
+    {
+        return true === ($this->quantity < 0);
+    }
+
+    /**
      * Set quantity
      *
      * @param int $quantity
