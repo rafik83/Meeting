@@ -257,6 +257,7 @@ class Order
         foreach ($this->rows as $key => $row) {
             if ($row->getId() === $customRow->getId()) {
                 $this->rows->remove($key);
+                return $this;
             }
         }
         return $this;

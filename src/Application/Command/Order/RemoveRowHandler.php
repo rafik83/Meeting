@@ -31,7 +31,7 @@ class RemoveRowHandler
     /**
      * @param RemoveRow $removeRow
      *
-     * @throws \Exception
+     * @throws RemoveProductNotAllowedException
      */
     public function handle(RemoveRow $removeRow)
     {
