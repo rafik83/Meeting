@@ -1504,6 +1504,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\RowViewQueryHandler
         arguments:
             - '@order.row.product_included_info_guesser'
+            - '@query.order.summary.custom_row_view_query_handler'
             - '@datetime'
     query.order.summary.group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler

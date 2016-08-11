@@ -28,14 +28,22 @@ class RowViewQueryHandler
     private $dateTime;
 
     /**
+     * @var CustomRowViewQueryHandler
+     */
+    private $customRowViewQueryHandler;
+
+    /**
      * @param ProductIncludedInfoGuesser $productIncludedInfoGuesser
+     * @param CustomRowViewQueryHandler  $customRowViewQueryHandler
      * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         ProductIncludedInfoGuesser $productIncludedInfoGuesser,
+        CustomRowViewQueryHandler $customRowViewQueryHandler,
         \DateTimeInterface $dateTime
     ) {
         $this->productIncludedInfoGuesser = $productIncludedInfoGuesser;
+        $this->customRowViewQueryHandler  = $customRowViewQueryHandler;
         $this->dateTime                   = $dateTime;
     }
 
@@ -61,13 +69,11 @@ class RowViewQueryHandler
         );
 
         foreach ($rowViewQuery->order->getCustomRowsForProduct($rowViewQuery->row) as $customRow) {
-            $rowView->addCustomRow(new CustomRowView(
-                $customRow->getId(),
-                $customRow->getLabel(),
-                $customRow->getPrice(),
-                $customRow->getQuantity(),
-                $customRow->getOrder()->getCurrency()
-            ));
+            $rowView->addCustomRow(
+                $this->customRowViewQueryHandler->handle(
+                    new CustomRowViewQuery($customRow, $rowViewQuery->locale)
+                )
+            );
         }
 
         if ($rowViewQuery->row->hasIncludedProduct()) {
