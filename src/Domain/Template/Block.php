@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class Block extends AbstractChild
 {
@@ -435,5 +435,18 @@ class Block extends AbstractChild
         }
 
         return $this;
+    }
+
+    /**
+     * @param string            $fieldName
+     * @param array|string|null $emptyValue
+     */
+    public function removeField($fieldName, $emptyValue)
+    {
+        foreach ($this->getObjects() as $object) {
+            if ($object->getOption($fieldName)) {
+                $object->setOption($fieldName, $emptyValue);
+            }
+        }
     }
 }

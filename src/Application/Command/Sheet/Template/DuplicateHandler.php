@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 
 class DuplicateHandler
 {
@@ -26,15 +27,25 @@ class DuplicateHandler
     private $dateTime;
 
     /**
+     * @var TemplateRemoveField
+     */
+    private $templateRemoveField;
+
+    /**
      * DuplicateHandler constructor.
      *
      * @param SheetTemplateRepositoryInterface $templateRepository
      * @param \DateTimeInterface               $dateTime
+     * @param TemplateRemoveField              $templateRemoveField
      */
-    public function __construct(SheetTemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
-    {
-        $this->templateRepository = $templateRepository;
-        $this->dateTime           = $dateTime;
+    public function __construct(
+        SheetTemplateRepositoryInterface $templateRepository,
+        \DateTimeInterface $dateTime,
+        TemplateRemoveField $templateRemoveField
+    ) {
+        $this->templateRepository  = $templateRepository;
+        $this->dateTime            = $dateTime;
+        $this->templateRemoveField = $templateRemoveField;
     }
 
     /**
@@ -44,9 +55,17 @@ class DuplicateHandler
      */
     public function handle(Duplicate $duplicate)
     {
+        $value = $duplicate->template->getValue();
+
+        if (null !== $duplicate->template->getEvent()
+            && $duplicate->template->getEvent() !== $duplicate->event
+        ) {
+            $value = $this->templateRemoveField->remove($duplicate->template, 'products', []);
+        }
+
         $template = new SheetTemplate(
             $duplicate->title,
-            $duplicate->template->getValue(),
+            $value,
             $duplicate->template->getLocales(),
             $duplicate->template->getFallback(),
             $this->dateTime
