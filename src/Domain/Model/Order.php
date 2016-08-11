@@ -406,12 +406,16 @@ class Order
     }
 
     /**
-     * @param Product $product
+     * @param Product|null $product
      *
      * @return null|Order\Row
      */
-    public function getRowForProduct(Product $product)
+    public function getRowForProduct(Product $product = null)
     {
+        if (null === $product) {
+            return null;
+        }
+
         foreach($this->rows as $row) {
             if($row->getProduct() === $product) {
                 return $row;
