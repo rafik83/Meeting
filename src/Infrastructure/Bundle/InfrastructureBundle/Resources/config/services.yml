@@ -589,6 +589,13 @@ services:
             - '@command.sheet.validate_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
+    command.sheet.remove_image_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\RemoveImageHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:
