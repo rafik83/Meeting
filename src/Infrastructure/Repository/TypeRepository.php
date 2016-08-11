@@ -395,7 +395,7 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * @param Type $type
+     * {@inheritdoc}
      */
     public function remove(Type $type)
     {
