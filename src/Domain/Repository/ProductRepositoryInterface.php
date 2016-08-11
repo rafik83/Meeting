@@ -53,4 +53,11 @@ interface ProductRepositoryInterface
      * @param Product $product
      */
     public function update(Product $product);
+
+    /**
+     * @param array $productIds
+     *
+     * @return Product[]
+     */
+    public function findProductByIds(array $productIds);
 }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +25,7 @@ class ImageDataType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Object\Image $image */
+        /** @var TemplateObject\Image $image */
         $image = $options['object'];
 
         $builder->add('file', FileType::class, [
@@ -38,6 +39,18 @@ class ImageDataType extends AbstractType
                 new Image(['mimeTypes' => TemplateObject\Image::supportedMimeType()]),
             ]
         ]);
+
+        if (null !== $image->getBuyableProducts()) {
+            $builder
+                ->add('selectedProduct', ChoiceType::class, [
+                    'expanded'    => true,
+                    'multiple'    => false,
+                    'label'       => false,
+                    'choice_name' => 'id',
+                    'choices'     => $image->getBuyableProducts(),
+                    'required'    => true,
+                ]);
+        }
     }
 
     /**

@@ -36,9 +36,29 @@
             {% endif %}
         {% endif %}
 
-        {% for key, child in form if key != 'submit' %}
+        {% for key, child in form if key != 'submit' and key != 'selectedProduct' %}
             {{ form_row(child) }}
         {% endfor %}
+
+        {% if object.isBuyable %}
+            <table class="table">
+                {% for product in object.buyableProducts %}
+                    <tr class="buyable-product-line">
+                        <td class="col-xs-1">
+                            <div class="buyable-product-row">{{ form_widget(form.selectedProduct[product.id]) }}</div>
+                        </td>
+                        <td class="col-xs-8">
+                            <div class="buyable-product-row">{{ product.name }}</div>
+                        </td>
+                        <td class="col-xs-4">
+                            <div class="buyable-product-row product-price">{{ product.unitPrice }}
+                                <sup>{{ currency|currency_symbol(app.request.locale) }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
     </div>
 
 </div>
