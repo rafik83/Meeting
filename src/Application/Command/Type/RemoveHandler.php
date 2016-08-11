@@ -43,7 +43,6 @@ class RemoveHandler
     /**
      * @param Remove $remove
      *
-     * @return bool|null
      * @throws TypeUsedBySheetException
      */
     public function handle(Remove $remove)
