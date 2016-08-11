@@ -427,7 +427,9 @@ class Order
     {
         $participant = 0;
         foreach($this->rows as $orderRow) {
-            if ($orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT) {
+            if (null !== $orderRow->getProduct()
+                && $orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT
+            ) {
                 $participant += $orderRow->getQuantity();
             }
         }
