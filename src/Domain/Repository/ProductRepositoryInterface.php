@@ -30,6 +30,13 @@ interface ProductRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return Product[]
+     */
+    public function findOptionsByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
      * @return array
      */
     public function countByEvent(Event $event);

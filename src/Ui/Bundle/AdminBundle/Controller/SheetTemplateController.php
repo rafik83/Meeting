@@ -244,7 +244,7 @@ class SheetTemplateController extends Controller
             $nomenclatureRepository->findGlobals();
 
         $products = $template->getEvent() ?
-            $productRepository->findByEvent($template->getEvent()) :
+            $productRepository->findOptionsByEvent($template->getEvent()) :
             null;
 
         // Add warning if some locales translations are incompletes
