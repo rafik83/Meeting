@@ -17,7 +17,7 @@
             <div class="wrapper">
                 {{ include('EventBundle:Common:header.html.twig') }}
 
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     {% set funnel = view is defined and view.funnel is defined %}
                     <div class="sub-header">
                         {{ render(controller('EventBundle:Navigation:menu')) }}

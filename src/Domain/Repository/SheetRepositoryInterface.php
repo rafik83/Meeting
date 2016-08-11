@@ -72,7 +72,7 @@ interface SheetRepositoryInterface
     /**
      * @param int $sheetId
      *
-     * @return Sheet
+     * @return null|Sheet
      */
     public function getSheetById($sheetId);
 

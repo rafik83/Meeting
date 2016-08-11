@@ -139,6 +139,7 @@ admin.operator_list.table.title.lastname: Nom
 admin.operator_list.title: 'Liste des collaborateurs'
 admin.operator.create.title: 'Créer un nouveau collaborateur'
 admin.operator.update.title: 'Editer un collaborateur'
+admin.order.edit: 'Modification commande:'
 admin.order_edit.add_line: Ajouter une ligne
 admin.order_edit.after: après
 admin.order_edit.columns.product: Produit

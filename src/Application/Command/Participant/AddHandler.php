@@ -171,7 +171,12 @@ class AddHandler
      */
     private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
     {
-        $event = new CompleteProfileEvent($user, $add->event, $participant, $add->locale);
+        $event = new CompleteProfileEvent(
+            $user,
+            $add->sheet->getEvent(),
+            $participant,
+            $add->locale
+        );
         $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $event);
     }
 

@@ -65,7 +65,8 @@ class RowViewQueryHandler
                 $customRow->getId(),
                 $customRow->getLabel(),
                 $customRow->getPrice(),
-                $customRow->getQuantity()
+                $customRow->getQuantity(),
+                $customRow->getOrder()->getCurrency()
             ));
         }
 

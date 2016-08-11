@@ -18,11 +18,11 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
-use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +39,8 @@ class PaymentController extends Controller
      */
     public function paymentChoiceAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
         $funnel    = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
@@ -112,6 +113,35 @@ class PaymentController extends Controller
     }
 
     /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return RedirectResponse
+     */
+    public function payRemainingAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet
+    ) {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
+
+        if (0 >= $remainingToPay) {
+            return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
+        }
+
+        $transaction = Transaction::createForPaypal($sheet, $remainingToPay, new \DateTime());
+        $this->get('repository.transaction')->add($transaction);
+
+        return $this->redirectToRoute('event_package_payment_prepare_paypal', [
+            'sheet'       => $sheet->getId(),
+            'transaction' => $transaction->getId(),
+        ]);
+    }
+
+    /**
      * Only for debug
      */
     public function createTempTransactionAction(
@@ -121,16 +151,7 @@ class PaymentController extends Controller
     ) {
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $transaction = new Transaction(
-            $sheet,
-            200,
-            new \DateTime(),
-            Mode::PAYMENT_PAYPAL,
-            '',
-            Transaction::STATE_PENDING,
-            $sheet->getEvent()->getCurrency()
-        );
-
+        $transaction = Transaction::createForPaypal($sheet, rand(1, 200), new \DateTime());
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute(
@@ -155,7 +176,7 @@ class PaymentController extends Controller
     ) {
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $captureToken = $status = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction);
+        $captureToken = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction, $request->getLocale());
 
         return $this->redirect($captureToken->getTargetUrl());
     }

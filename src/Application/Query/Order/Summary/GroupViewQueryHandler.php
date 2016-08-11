@@ -21,20 +21,20 @@ class GroupViewQueryHandler
     private $rowViewQueryHandler;
 
     /**
-     * @var CustomRowsViewQueryHandler
+     * @var CustomRowViewQueryHandler
      */
     private $customRowViewQueryHandler;
 
     /**
      * @param RowViewQueryHandler       $rowViewQueryHandler
-     * @param CustomRowViewQueryHandler $customRowsViewQueryHandler
+     * @param CustomRowViewQueryHandler $customRowViewQueryHandler
      */
     public function __construct(
         RowViewQueryHandler $rowViewQueryHandler,
-        CustomRowViewQueryHandler $customRowsViewQueryHandler
+        CustomRowViewQueryHandler $customRowViewQueryHandler
     ) {
         $this->rowViewQueryHandler       = $rowViewQueryHandler;
-        $this->customRowViewQueryHandler = $customRowsViewQueryHandler;
+        $this->customRowViewQueryHandler = $customRowViewQueryHandler;
     }
 
     /**
