@@ -53,7 +53,7 @@ class BillingController extends Controller
         $packageCompleteBilling = $this->getFlash('package_complete_billing_info');
         $funnel = null;
 
-        if (null != $this->getFlash('package_funnel_billing_info')) {
+        if (null !== $this->getFlash('package_funnel_billing_info')) {
             $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
             $this->addFlash('package_funnel_billing_info', true);
         }
