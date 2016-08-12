@@ -295,6 +295,7 @@ services:
             arguments:
                 - '@vimeet_infrastructure.repository.type_repository'
                 - '@vimeet_infrastructure.repository.sheet_repository'
+                - '@vimeet_infrastructure.repository.rule_repository'
             tags:
                 - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Remove }
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
