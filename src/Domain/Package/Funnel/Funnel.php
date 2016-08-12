@@ -205,7 +205,7 @@ class Funnel
      */
     public function hasOneCompleted()
     {
-        if (null == $this->cartStep) {
+        if (null === $this->cartStep) {
             return false;
         }
 
