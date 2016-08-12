@@ -419,15 +419,15 @@ class Cart
      */
     public function isCartRowPositive(PromotionCode $promotionCode)
     {
-        $cartRowPositiveState = true;
-
         foreach ($promotionCode->getPromotions() as $promotion) {
             if ($cartRow = $this->getCartRowForProduct($promotion->getProduct())) {
-                ($cartRow->isNegative()) ? $cartRowPositiveState = false : $cartRowPositiveState = true;
+                if (!$cartRow->isNegative()) {
+                    return true;
+                }
             }
         }
 
-        return $cartRowPositiveState;
+        return false;
     }
 
     /**
