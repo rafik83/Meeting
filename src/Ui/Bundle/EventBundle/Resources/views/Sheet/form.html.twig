@@ -41,6 +41,7 @@
         {% endfor %}
 
         {% if object.isBuyable %}
+            <p class="help-block">{{ 'sheet.object.image.product.label'|trans }}</p>
             <table class="table">
                 {% for product in object.buyableProducts %}
                     <tr class="buyable-product-line">

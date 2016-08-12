@@ -46,7 +46,9 @@ class TemplateProductGuesser
 
         foreach ($object->getProducts() as $productId) {
             if ($option = $package->getOptionById((int)$productId)) {
-                $products[] = $option;
+                if ($option->isBuyable($this->dateTime)) {
+                    $products[] = $option;
+                }
             }
         }
 

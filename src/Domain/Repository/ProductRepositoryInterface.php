@@ -60,4 +60,11 @@ interface ProductRepositoryInterface
      * @return Product[]
      */
     public function findProductByIds(array $productIds);
+
+    /**
+     * @param int $productId
+     *
+     * @return null|Product
+     */
+    public function findById($productId);
 }

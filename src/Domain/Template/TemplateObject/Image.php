@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
+use Proximum\Vimeet\Domain\Model\Product;
+
 class Image extends EditableObject implements ContentObjectInterface
 {
     /**
@@ -76,5 +78,21 @@ class Image extends EditableObject implements ContentObjectInterface
             "image/png",
             "image/x-png",
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getSelectedProduct()
+    {
+        return isset($this->data['product']) ? $this->data['product'] : null;
+    }
+
+    /**
+     * @param Product $selectedProduct
+     */
+    public function setSelectedProduct(Product $selectedProduct)
+    {
+        $this->data['product'] = $selectedProduct->getId();
     }
 }

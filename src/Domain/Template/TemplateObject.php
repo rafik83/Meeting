@@ -25,11 +25,6 @@ class TemplateObject extends AbstractChild
     private $buyableProducts;
 
     /**
-     * @var Product
-     */
-    private $selectedProduct;
-
-    /**
      * {@inheritdoc}
      */
     public function getComponent()
@@ -205,21 +200,5 @@ class TemplateObject extends AbstractChild
     public function setBuyableProducts($products)
     {
         $this->buyableProducts = $products;
-    }
-
-    /**
-     * @return Product
-     */
-    public function getSelectedProduct()
-    {
-        return $this->selectedProduct;
-    }
-
-    /**
-     * @param Product $selectedProduct
-     */
-    public function setSelectedProduct($selectedProduct)
-    {
-        $this->selectedProduct = $selectedProduct;
     }
 }

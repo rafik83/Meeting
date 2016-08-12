@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -20,6 +22,21 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class ImageDataType extends AbstractType
 {
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * ImageDataType constructor.
+     *
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +58,7 @@ class ImageDataType extends AbstractType
         ]);
 
         if (null !== $image->getBuyableProducts()) {
+
             $builder
                 ->add('selectedProduct', ChoiceType::class, [
                     'expanded'    => true,
@@ -50,6 +68,9 @@ class ImageDataType extends AbstractType
                     'choices'     => $image->getBuyableProducts(),
                     'required'    => true,
                 ]);
+
+            $builder->get('selectedProduct')
+                ->addModelTransformer(new IdToProductTransformer($this->productRepository));
         }
     }
 

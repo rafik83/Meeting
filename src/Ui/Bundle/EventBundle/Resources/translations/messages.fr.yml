@@ -160,6 +160,7 @@ sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Editer
 sheet.object.action.remove: 'Supprimer:'
 sheet.object.image.label: 'Votre image actuelle'
+sheet.object.image.product.label: 'Produits liés'
 sheet.object.image.remove: 'Supprimer cette image'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
