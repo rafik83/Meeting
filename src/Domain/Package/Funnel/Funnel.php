@@ -209,7 +209,13 @@ class Funnel
             return false;
         }
 
-        return $this->countStep() === $this->cartStep->getCurrentStep();
+        foreach ($this->steps as $step) {
+            if (true === $step->completed) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
