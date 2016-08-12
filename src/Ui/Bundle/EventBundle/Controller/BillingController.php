@@ -50,12 +50,16 @@ class BillingController extends Controller
         $command = new UpdateInfo($info);
         $form    = $this->createForm(UpdateInfoType::class, $command, ['submit' => true, 'country' => $country]);
 
-        $packageCompleteBilling = $this->getPackageCompleteBilling();
+        $packageCompleteBilling = $this->getFlash('package_complete_billing_info');
         $funnel = null;
+
+        if (null != $this->getFlash('package_funnel_billing_info')) {
+            $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+            $this->addFlash('package_funnel_billing_info', true);
+        }
 
         if (null !== $packageCompleteBilling) {
             $this->addFlash('package_complete_billing_info', $packageCompleteBilling);
-            $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
         }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -81,11 +85,24 @@ class BillingController extends Controller
     }
 
     /**
-     * @return null|string
+     * Route used in navigation menu to redirect into billing info form
+     * and clean flash to prevent the funnel display
      */
-    private function getPackageCompleteBilling()
+    public function infoClearFlashAction(Sheet $sheet)
     {
-        $sheet = $this->container->get('session')->getFlashBag()->get('package_complete_billing_info');
+        $this->container->get('session')->getFlashBag()->set('package_funnel_billing_info', null);
+        return $this->redirectToRoute('event_billing_info', [
+            'sheet' => $sheet->getId(),
+            ]
+        );
+    }
+
+    /**
+     * @return null|mixed
+     */
+    private function getFlash($flash)
+    {
+        $sheet = $this->container->get('session')->getFlashBag()->get($flash);
 
         return array_shift($sheet);
     }

@@ -7,16 +7,18 @@
 {% block content %}
 
         <section class="main">
-            {% if view is not empty %}
+            {% if view.funnel is not empty %}
                 {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
             {% endif %}
 
-            <div class="profile__content">
-                <header>
-                    <h1>{{ 'billing_info.title'|trans }}</h1>
-                </header>
-                <div class="main__content">
-                    {{ form(form, { 'attr': { 'class': 'styled-form form-with-label' } }) }}
+            <div class="billing-info">
+                <div class="profile__content">
+                    <header>
+                        <h1>{{ 'billing_info.title'|trans }}</h1>
+                    </header>
+                    <div class="main__content">
+                        {{ form(form, { 'attr': { 'class': 'styled-form form-with-label' } }) }}
+                    </div>
                 </div>
             </div>
         </section>
