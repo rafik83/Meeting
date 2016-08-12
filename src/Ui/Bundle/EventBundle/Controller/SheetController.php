@@ -259,15 +259,16 @@ class SheetController extends Controller
 
         return $this->render($twig, [
             'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'templateData'  => $templateData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'taggedData'    => $taggedData,
             'form'          => $form->createView(),
             'label'         => $label,
-            'uid'           => $key,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'object'        => $object,
             'participants'  => $participants,
+            'sheet'         => $sheet,
+            'taggedData'    => $taggedData,
+            'templateData'  => $templateData,
+            'uid'           => $key,
         ]);
     }
 
