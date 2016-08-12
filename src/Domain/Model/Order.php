@@ -341,7 +341,9 @@ class Order
     public function getRowByProductId($id)
     {
         foreach ($this->rows as $row) {
-            if ($row->getProduct()->getId() === $id) {
+            if (null !== $row->getProduct()
+                && $row->getProduct()->getId() === $id
+            ) {
                 return $row;
             }
         }
