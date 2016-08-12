@@ -49,7 +49,7 @@ class FunnelFactory
         $funnel  = new Funnel($sheet);
 
         $cartStep = $this->cartStepRepository->findBySheet($sheet);
-        $cart    = $this->cartManager->getCart($sheet);
+        $cart     = $this->cartManager->getCart($sheet);
 
         if (null !== $cartStep) {
             $cart->setCurrentStep($cartStep->getCurrentStep());

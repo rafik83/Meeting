@@ -121,7 +121,7 @@ class PackageController extends Controller
 
             $nextStep = $funnel->getNextStep($step);
 
-            if ($nextStep) {
+            if (null !== $nextStep) {
                 return $this->redirectToRoute(
                     'event_package_step',
                     ['sheet' => $sheet->getId(), 'step' => $nextStep->index]
@@ -371,7 +371,7 @@ class PackageController extends Controller
         if (!$funnel->isCompleted()) {
             return $this->redirectToRoute('event_package_step', [
                 'sheet' => $sheet->getId(),
-                'step'  => 1,
+                'step'  => (null !== $funnel->getCartStep()) ? $funnel->getCartStep()->getCurrentStep() : 1,
             ]);
         }
 

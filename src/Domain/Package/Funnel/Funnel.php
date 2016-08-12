@@ -187,6 +187,10 @@ class Funnel
      */
     public function isCompleted()
     {
+        if ($this->sheet->hasOrders()) {
+            return $this->hasOneCompleted();
+        }
+
         if (null !== $this->cartStep) {
             return $this->countStep() < $this->cartStep->getCurrentStep();
         } elseif (null !== $this->cart) {
@@ -194,6 +198,18 @@ class Funnel
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOneCompleted()
+    {
+        if (null == $this->cartStep) {
+            return false;
+        }
+
+        return $this->countStep() === $this->cartStep->getCurrentStep();
     }
 
     /**
