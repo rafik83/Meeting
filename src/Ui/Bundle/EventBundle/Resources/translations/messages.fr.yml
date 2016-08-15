@@ -18,6 +18,8 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+event.info.contact: 'Informations pratiques'
+event.info.close: 'Fermer'
 gender.man: Monsieur
 gender.woman: Madame
 login.connect: 'Se connecter'
