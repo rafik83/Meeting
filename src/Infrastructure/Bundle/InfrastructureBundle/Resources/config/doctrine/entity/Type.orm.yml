@@ -22,7 +22,7 @@ Proximum\Vimeet\Domain\Model\Type:
             targetEntity: Proximum\Vimeet\Domain\Model\TypeTranslation
             mappedBy: type
             indexBy: locale
-            cascade: ["persist"]
+            cascade: ["persist", "remove"]
     manyToMany:
         categories:
             targetEntity: Proximum\Vimeet\Domain\Model\Category

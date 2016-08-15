@@ -325,6 +325,7 @@ admin.type.link: 'Types de participation'
 admin.type.position: Position
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.type.remove.link: Supprimer
 admin.type.update.title: 'Modifier le type de participation'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'

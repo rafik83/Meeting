@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
+use Proximum\Vimeet\Application\Command\Type\Remove;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
+use Proximum\Vimeet\Application\Exception\Type\TypeUsedBySheetException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
@@ -65,7 +67,8 @@ class TypeController extends Controller
         $form   = $this->createForm(TypeCreateType::class, $create, [
             'action'       => $this->generateUrl('admin_type_create', ['event' => $event->getId()]),
             'method'       => 'POST',
-            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser()),
+            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')
+                                   ->getListByAdmin($this->getUser()),
             'currentEvent' => $event,
         ]);
         $form->add('submit', SubmitType::class);
@@ -108,9 +111,11 @@ class TypeController extends Controller
 
         $update = new Update($type, $request->getLocale());
         $form   = $this->createForm(TypeUpdateType::class, $update, [
-            'action'       => $this->generateUrl('admin_type_update', ['event' => $event->getId(), 'type' => $type->getId()]),
+            'action'       => $this->generateUrl('admin_type_update',
+                ['event' => $event->getId(), 'type' => $type->getId()]),
             'method'       => 'POST',
-            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser()),
+            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')
+                                   ->getListByAdmin($this->getUser()),
             'currentEvent' => $event,
             'type'         => $type,
         ]);
@@ -134,6 +139,33 @@ class TypeController extends Controller
         return $this->render('AdminBundle:Type:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     *
+     * @return RedirectResponse
+     */
+    public function removeAction(Event $event, Type $type)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $type->getEvent()) {
+            throw $this->createNotFoundException('Type not found.');
+        }
+
+        $remove = new Remove($type);
+        try {
+            $this->get('tactician.commandbus')->handle($remove);
+            $this->addFlash('success', 'flash.admin.type.remove.success');
+        } catch (TypeUsedBySheetException $exception) {
+            $this->addFlash('error', 'flash.admin.type.remove.error');
+        }
+
+        return $this->redirectToRoute('admin_type_list', [
+            'event' => $event->getId(),
         ]);
     }
 }
