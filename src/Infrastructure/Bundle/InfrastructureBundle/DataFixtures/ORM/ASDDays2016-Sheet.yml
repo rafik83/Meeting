@@ -131,3 +131,13 @@ Proximum\Vimeet\Domain\Model\Transaction:
         reference: TRANSCATION_02
         state: pending
         currency: EUR
+    transaction_3:
+        __construct: false
+        sheet: '@sheet_asddays_1'
+        amount: 125
+        date: <dateTimeBetween('-1days', 'now')>
+        mode: bank_check
+        reference: TRANSCATION_03
+        state: pending
+        currency: EUR
+

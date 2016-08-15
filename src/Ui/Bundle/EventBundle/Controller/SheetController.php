@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
@@ -26,12 +27,11 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Domain\Template;
 
 class SheetController extends Controller
 {
@@ -507,18 +507,17 @@ class SheetController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'        => $eventDomain->getEvent(),
-            'sheet'            => $sheet,
-            'templateData'     => $templateData,
-            'locale'           => $locale,
-            'nomenclatures'    => $nomenclatures,
-            'taggedData'       => $taggedData,
-            'form_remove'      => $form->createView(),
-            'label'            => $label,
-            'uid'              => $key,
-            'participants'     => $participants,
+            'event'         => $eventDomain->getEvent(),
+            'sheet'         => $sheet,
+            'templateData'  => $templateData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'taggedData'    => $taggedData,
+            'form_remove'   => $form->createView(),
+            'label'         => $label,
+            'uid'           => $key,
+            'participants'  => $participants,
         ]);
     }
 

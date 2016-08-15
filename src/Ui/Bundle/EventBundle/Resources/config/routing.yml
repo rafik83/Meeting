@@ -190,7 +190,6 @@ event_sheet_handle_remove_participant:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
 
-
 #
 # Sheet Billing
 #
@@ -517,6 +516,11 @@ create_transaction:
         sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:createTempTransaction }
+
+event_payment_info:
+    path: /sheet/payment
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:paymentInfo }
 
 #
 # Order

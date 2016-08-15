@@ -81,6 +81,7 @@ order.transaction.no: 'Aucune'
 order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
+order.transaction.howtopay: 'Comment payer ?'
 order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
@@ -176,3 +177,5 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande:'
 summary.totalToPay: 'Total à régler:'
 summary.vatRate: 'TVA applicable %vatRate%%:'
+package.payment.bankInfo: 'Coordonnées bancaires'
+package.payment.billingAddress: 'Adresse de facturation'

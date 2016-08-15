@@ -65,6 +65,12 @@ body {
 
 .content-large { margin-top: 30px; }
 
+.payment--info {
+  .payment--info-block {
+    padding: 15px;
+  }
+}
+
 .highlight {
   color: $color-highlighted;
   font-family: OpenSans;
