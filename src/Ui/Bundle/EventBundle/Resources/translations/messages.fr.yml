@@ -60,6 +60,7 @@ navigation.links.sheet.locale: Version
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
+nomenclature.submit: 'Enregistrer'
 order.list.column.date: Date
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
