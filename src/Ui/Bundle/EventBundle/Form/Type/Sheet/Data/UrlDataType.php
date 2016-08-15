@@ -25,11 +25,10 @@ class UrlDataType extends AbstractType
     {
         $url    = $options['object'];
         $locale = $options['locale'];
-        $label  = $options['label'];
 
         $builder
             ->add('url', UrlType::class, [
-                'label'              => $label ? $url->getOption('label')[$locale] : false,
+                'label'              => $url->getOption('label', $locale),
                 'required'           => $url->getOption('required'),
                 'placeholder'        => $url->getOption('placeholder')[$locale],
                 'translation_domain' => false,
@@ -45,7 +44,6 @@ class UrlDataType extends AbstractType
         $resolver->setRequired(['object', 'locale']);
         $resolver->setAllowedTypes('object', TemplateObject\Url::class);
         $resolver->setDefaults([
-            'label'      => false,
             'data_class' => TemplateObject\Url::class
         ]);
     }
