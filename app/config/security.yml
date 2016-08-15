@@ -56,7 +56,7 @@ security:
                 name: user_remembered
                 remember_me_parameter: login[rememberMe]
                 secret:   '%secret%'
-                lifetime: 604800
+                lifetime: 2592000
                 path:     /
             logout:
                 path: event_logout

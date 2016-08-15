@@ -68,7 +68,6 @@ class NomenclatureDataType extends AbstractType
         $resolver->setRequired(['locale', 'object', 'placeholder']);
         $resolver->setDefaults(
             [
-                'label'       => false,
                 'data_class'  => TemplateObject\Nomenclature::class,
                 'placeholder' => null,
                 'help'        => null,
@@ -101,6 +100,7 @@ class NomenclatureDataType extends AbstractType
             ChoiceType::class,
             [
                 'choices'                   => $nomenclature->getLastLevel(),
+                'label'                     => $object->getOption('label', $options['locale']),
                 'expanded'                  => true,
                 'multiple'                  => false,
                 'required'                  => $object->getOption('required'),
@@ -130,6 +130,7 @@ class NomenclatureDataType extends AbstractType
             [
                 'nomenclature' => $nomenclature,
                 'locale'       => $options['locale'],
+                'label'        => $object->getOption('label', $options['locale']),
                 'required'     => $object->getOption('required'),
             ]
         );
@@ -154,7 +155,7 @@ class NomenclatureDataType extends AbstractType
                 'nomenclature' => $nomenclature,
                 'locale'       => $options['locale'],
                 'placeholder'  => $options['placeholder'],
-                'label'        => false,
+                'label'        => $object->getOption('label', $options['locale']),
                 'required'     => $object->getOption('required'),
             ]
         );

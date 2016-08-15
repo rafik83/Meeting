@@ -54,12 +54,12 @@ class Order
     private $currency;
 
     /**
-     * @var Order\Row[]
+     * @var ArrayCollection Order\Row
      */
     private $rows = [];
 
     /**
-     * @var Order\PromotionCode[]
+     * @var ArrayCollection of Order\PromotionCode
      */
     private $promotionCodes = [];
 

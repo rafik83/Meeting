@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         owner: '@user_asddays_1'
         data:
             # Titre de la fiche
-            dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
+            dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
             # Image
             1b9a00b3: { file: "onera.jpg" }
             # Lien

@@ -13,10 +13,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
@@ -38,7 +38,12 @@ class TypeController extends Controller
 
         $types = $this
             ->get('vimeet_infrastructure.repository.type_repository')
-            ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
+            ->paginate(
+                $request->query->get('page', 1),
+                20,
+                $event->getId(),
+                $event->getAvailableLocale($request->getLocale())
+            );
 
         return $this->render('AdminBundle:Type:list.html.twig', [
             'event' => $event,
@@ -101,10 +106,13 @@ class TypeController extends Controller
             throw $this->createNotFoundException('Type not found.');
         }
 
-        $update = new Update($type);
+        $update = new Update($type, $request->getLocale());
         $form   = $this->createForm(TypeUpdateType::class, $update, [
-            'action' => $this->generateUrl('admin_type_update', ['event' => $event->getId(), 'type' => $type->getId()]),
-            'method' => 'POST',
+            'action'       => $this->generateUrl('admin_type_update', ['event' => $event->getId(), 'type' => $type->getId()]),
+            'method'       => 'POST',
+            'events'       => $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser()),
+            'currentEvent' => $event,
+            'type'         => $type,
         ]);
         $form->add('submit', SubmitType::class);
 

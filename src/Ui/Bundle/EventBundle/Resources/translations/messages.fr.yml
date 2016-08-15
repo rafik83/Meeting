@@ -18,6 +18,8 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+event.info.contact: 'Informations pratiques'
+event.info.close: 'Fermer'
 gender.man: Monsieur
 gender.woman: Madame
 login.connect: 'Se connecter'
@@ -58,6 +60,7 @@ navigation.links.sheet.locale: Version
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
+nomenclature.submit: 'Enregistrer'
 order.list.column.date: Date
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
