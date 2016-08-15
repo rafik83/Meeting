@@ -19,18 +19,19 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Domain\Template;
 
 class SheetController extends Controller
 {
@@ -45,7 +46,7 @@ class SheetController extends Controller
      */
     public function sheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $locale        = $locale ? : $request->getLocale();
         $sheet         = $this->getUserSheet($eventDomain->getEvent(), $locale);
@@ -139,9 +140,12 @@ class SheetController extends Controller
      */
     public function formAction(EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
         $form         = $this->createObjectForm($object, $locale, $key);
@@ -178,7 +182,6 @@ class SheetController extends Controller
             throw $this->createNotFoundException('No form found for this object');
         }
 
-
         return $this->createForm($types[$object->getType()], $object, [
             'action'      => $this->generateUrl('event_sheet_update', ['locale' => $locale, 'key' => $key]),
             'submit'      => true,
@@ -203,12 +206,24 @@ class SheetController extends Controller
      */
     public function updateAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $sheet        = $this->getUserSheet($eventDomain->getEvent(), $locale);
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
-        $form         = $this->createObjectForm($object, $locale, $key);
+        $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $object             = $templateData->getObject($key);
+        $form               = $this->createObjectForm($object, $locale, $key);
+        $levelsArchitecture = [];
+
+        if ($object instanceof Template\TemplateObject\Nomenclature) {
+            $nomenclature = $object->getNomenclatureModel();
+            $depth        = $nomenclature->getDepth();
+
+            if (3 === $depth) {
+                $levelsArchitecture = $nomenclature->getLevelsArchitecture();
+            }
+        }
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted()) {
@@ -250,16 +265,17 @@ class SheetController extends Controller
             : 'EventBundle:Sheet:sheet.html.twig';
 
         return $this->render($twig, [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'templateData'  => $templateData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'taggedData'    => $taggedData,
-            'form'          => $form->createView(),
-            'label'         => $label,
-            'uid'           => $key,
-            'participants'  => $participants,
+            'event'              => $eventDomain->getEvent(),
+            'sheet'              => $sheet,
+            'templateData'       => $templateData,
+            'locale'             => $locale,
+            'nomenclatures'      => $nomenclatures,
+            'taggedData'         => $taggedData,
+            'form'               => $form->createView(),
+            'label'              => $label,
+            'uid'                => $key,
+            'participants'       => $participants,
+            'levelsArchitecture' => $levelsArchitecture,
         ]);
     }
 
@@ -275,9 +291,11 @@ class SheetController extends Controller
      */
     public function addParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if (!$sheet->canBuyParticipant()) {
             throw $this->createNotFoundException(
@@ -324,9 +342,12 @@ class SheetController extends Controller
      */
     public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         if (!$sheet->canBuyParticipant()) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
@@ -385,9 +406,11 @@ class SheetController extends Controller
      */
     private function removeParticipantData($eventDomain, $locale, $key)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -419,6 +442,8 @@ class SheetController extends Controller
     public function removeParticipantAction(EventDomain $eventDomain, $locale, $key)
     {
         list ($form, $sheet) = $this->removeParticipantData($eventDomain, $locale, $key);
+
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
@@ -459,6 +484,8 @@ class SheetController extends Controller
     {
         list ($form, $sheet, $remove) = $this->removeParticipantData($eventDomain, $locale, $key);
 
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -480,18 +507,17 @@ class SheetController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'        => $eventDomain->getEvent(),
-            'sheet'            => $sheet,
-            'templateData'     => $templateData,
-            'locale'           => $locale,
-            'nomenclatures'    => $nomenclatures,
-            'taggedData'       => $taggedData,
-            'form_remove'      => $form->createView(),
-            'label'            => $label,
-            'uid'              => $key,
-            'participants'     => $participants,
+            'event'         => $eventDomain->getEvent(),
+            'sheet'         => $sheet,
+            'templateData'  => $templateData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'taggedData'    => $taggedData,
+            'form_remove'   => $form->createView(),
+            'label'         => $label,
+            'uid'           => $key,
+            'participants'  => $participants,
         ]);
     }
 

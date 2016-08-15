@@ -6,7 +6,7 @@
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}
-                <li>{{ tag['label']|localize(locale, fallback) }} : {{ taggedData[tag.tag]|default([])|join(', ') }}</li>
+                <li><a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >{{ tag['label']|localize(locale, fallback) }} : {{ taggedData[tag.tag]|default([])|join(', ') }}</a></li>
             {% endfor %}
             
             {% if item.collectionEnabled %}

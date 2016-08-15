@@ -33,7 +33,7 @@ class SecurityController extends Controller
      */
     public function loginFirstStepAction(Request $request, EventDomain $eventDomain)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
 
@@ -81,7 +81,7 @@ class SecurityController extends Controller
      */
     public function loginSecondStepAction(Request $request, EventDomain $eventDomain)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
 
@@ -136,7 +136,7 @@ class SecurityController extends Controller
      */
     public function logoutConfirmationAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         return $this->render('EventBundle:Security:logout_confirmation.html.twig', [
             'event'  => $eventDomain->getEvent(),

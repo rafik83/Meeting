@@ -1730,6 +1730,8 @@ services:
         arguments:
             - '@payum'
             - '@repository.billing_info_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     vimeet.payum.paypal.capture_payment:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment
         arguments:

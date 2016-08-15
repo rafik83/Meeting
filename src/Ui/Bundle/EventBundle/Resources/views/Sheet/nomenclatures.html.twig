@@ -3,7 +3,7 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
 {% block title %}
-
+    {{ event.title }}: {{ 'sheet.title'|trans }}
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,8 @@
             {% for key, child in form if key != 'submit' %}
                 {{ form_row(child, {
                     'sheet_uri': path('event_sheet', { 'sheet': sheet.id }),
-                    'nomenclature_label': label
+                    'nomenclature_label': label,
+                    'levelsArchitecture': levelsArchitecture
                 }) }}
             {% endfor %}
             <div class="text-right mg-bt mg-tp clearboth">
