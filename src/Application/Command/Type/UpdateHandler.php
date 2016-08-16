@@ -11,6 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class UpdateHandler
@@ -21,11 +26,28 @@ class UpdateHandler
     private $typeRepository;
 
     /**
-     * @param TypeRepositoryInterface $typeRepository
+     * @var SheetTemplateCloner
      */
-    public function __construct(TypeRepositoryInterface $typeRepository)
-    {
-        $this->typeRepository = $typeRepository;
+    private $sheetTemplateCloner;
+
+    /**
+     * @var RegistrationTemplateCloner
+     */
+    private $registrationTemplateCloner;
+
+    /**
+     * @param TypeRepositoryInterface    $typeRepository
+     * @param SheetTemplateCloner        $sheetTemplateCloner
+     * @param RegistrationTemplateCloner $registrationTemplateCloner
+     */
+    public function __construct(
+        TypeRepositoryInterface $typeRepository,
+        SheetTemplateCloner $sheetTemplateCloner,
+        RegistrationTemplateCloner $registrationTemplateCloner
+    ) {
+        $this->typeRepository             = $typeRepository;
+        $this->sheetTemplateCloner        = $sheetTemplateCloner;
+        $this->registrationTemplateCloner = $registrationTemplateCloner;
     }
 
     /**
@@ -38,10 +60,24 @@ class UpdateHandler
         $type = $update->type;
         $type->setPosition($update->rank);
 
+        if ($update->sheetTemplate !== $type->getSheetTemplate()) {
+            $type->setSheetTemplate($this->getSheetTemplate($update, $type));
+        }
+
+        if ($update->registrationTemplate !== $type->getRegistrationTemplate()) {
+            $type->setRegistrationTemplate($this->getRegistrationTemplate($update, $type));
+        }
+
+        if ($update->package !== $type->getPackage()) {
+            $type->setPackage($update->package);
+        }
+
         $localesTitleAlreadyExists = [];
 
         foreach ($update->translations as $locale => $translation) {
-            if ($this->typeRepository->typeExists($update->type->getEvent(), $locale, $translation['title'], $update->type)) {
+            if ($this->typeRepository->typeExists(
+                $update->type->getEvent(), $locale, $translation['title'], $update->type
+            )) {
                 $localesTitleAlreadyExists[] = $locale;
             } else {
                 $type->translate($locale, $translation['title'], $translation['description']);
@@ -57,5 +93,39 @@ class UpdateHandler
         }
 
         $this->typeRepository->set($type);
+    }
+
+    /**
+     * @param Update $update
+     * @param Type   $type
+     *
+     * @return SheetTemplate
+     */
+    private function getSheetTemplate(Update $update, Type $type)
+    {
+        return $update->sheetTemplate->getEvent() === $update->type->getEvent()
+            ? $update->sheetTemplate
+            : $this->sheetTemplateCloner->duplicate(
+                $update->sheetTemplate,
+                $update->type->getEvent(),
+                $type->getTitle($update->type->getEvent()->getAvailableLocale($update->locale))
+            );
+    }
+
+    /**
+     * @param Update $update
+     * @param Type   $type
+     *
+     * @return RegistrationTemplate
+     */
+    private function getRegistrationTemplate(Update $update, Type $type)
+    {
+        return $update->registrationTemplate->getEvent() === $update->type->getEvent()
+            ? $update->registrationTemplate
+            : $this->registrationTemplateCloner->duplicate(
+                $update->registrationTemplate,
+                $update->type->getEvent(),
+                $type->getTitle($update->type->getEvent()->getAvailableLocale($update->locale))
+            );
     }
 }

@@ -28,9 +28,8 @@ class FilterAdminType extends AbstractType
     {
         $builder
             ->add('role', ChoiceType::class, [
-                'label'             => false,
-                'choices_as_values' => true,
-                'choices'           => [
+                'label'   => false,
+                'choices' => [
                     'form.filter_admin.role.all'         => null,
                     'form.filter_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
                     'form.filter_admin.role.operator'    => Admin::ROLE_OPERATOR,

@@ -221,11 +221,21 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $object             = $templateData->getObject($key);
+        $form               = $this->createObjectForm($object, $locale, $key);
+        $levelsArchitecture = [];
+
+        if ($object instanceof Template\TemplateObject\Nomenclature) {
+            $nomenclature = $object->getNomenclatureModel();
+            $depth        = $nomenclature->getDepth();
+
+            if (3 === $depth) {
+                $levelsArchitecture = $nomenclature->getLevelsArchitecture();
+            }
+        }
 
         $products = $this->get('package.product.template_product_guesser')->getProducts(
             $object,
@@ -285,6 +295,7 @@ class SheetController extends Controller
             'object'        => $object,
             'currency'      => $eventDomain->getEvent()->getCurrency(),
             'vatMode'       => $eventDomain->getEvent()->getMode(),
+            'levelsArchitecture' => $levelsArchitecture,
         ]);
     }
 

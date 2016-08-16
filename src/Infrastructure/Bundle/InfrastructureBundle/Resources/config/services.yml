@@ -278,6 +278,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Update }
     vimeet_infrastructure.vimeet.application.command.type.create_handler:
@@ -288,6 +290,14 @@ services:
             - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Create }
+    vimeet_infrastructure.vimeet.application.command.type.remove_handler:
+            class: Proximum\Vimeet\Application\Command\Type\RemoveHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.type_repository'
+                - '@vimeet_infrastructure.repository.sheet_repository'
+                - '@vimeet_infrastructure.repository.rule_repository'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Remove }
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
         class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
         arguments:
@@ -1721,7 +1731,6 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
         arguments:
             - '@repository.nomenclature_repository'
-
     #
     # Event
     #

@@ -8,7 +8,7 @@
 
 {% block content %}
     <section class="main">
-    {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
+        {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
         <div class="profile__content">
             <header>
                 <h1><i class="icon-Paiement_1"></i> {{ 'package.payment.title'|trans }}</h1>
@@ -23,7 +23,7 @@
                 <hr>
                 {{ form_start(form) }}
                 {{ form_row(form.mode) }}
-                {% if form.deposit is defined  %}
+                {% if form.deposit is defined %}
                     {{ form_row(form.deposit) }}
                 {% endif %}
                 <div class="validation">
@@ -34,6 +34,23 @@
                 {{ form_rest(form) }}
                 {{ form_end(form) }}
             </div>
+
+            <div id="payment-info-block" class="info__content styled-form hide">
+                <h2>{{ 'order.transaction.howtopay'|trans }}</h2>
+                <ul>
+                    <li>{{ event.organiserName }}</li>
+                    <li>{{ event.billingAddress(app.request.locale)|nl2br }}</li>
+                    <li>{{ event.organiserEmail }}</li>
+                </ul>
+                <div class="form-info">
+                    <div>{{ 'package.payment.bankInfo'|trans }}:</div>
+                    <div>{{ event.bankInfo(app.request.locale)|nl2br }}</div>
+                </div>
+                <div>
+                    {{ event.paymentCondition(app.request.locale)|nl2br }}
+                </div>
+            </div>
+
         </div>
     </section>
 {% endblock %}
