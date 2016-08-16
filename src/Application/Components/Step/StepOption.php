@@ -41,14 +41,15 @@ class StepOption
     }
 
     /**
-     * @param Sheet $sheet
-     * @param int   $stepIndex
+     * @param Sheet  $sheet
+     * @param int    $stepIndex
+     * @param string $locale
      *
      * @return SelectOptions
      */
-    public function build(Sheet $sheet, $stepIndex)
+    public function build(Sheet $sheet, $stepIndex, $locale)
     {
-        $command = new SelectOptions($sheet, $stepIndex);
+        $command = new SelectOptions($sheet, $stepIndex, $locale);
         $cart    = $this->cartManager->getCart($command->sheet, $command->currentStep);
 
         if ($sheet->hasOrders()) {

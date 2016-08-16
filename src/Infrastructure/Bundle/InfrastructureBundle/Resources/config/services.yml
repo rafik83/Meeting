@@ -868,7 +868,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
         arguments:
             - '@cart_manager'
-            - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
@@ -1358,6 +1357,11 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.template_data_factory'
+    template.product_info_guesser:
+        class: Proximum\Vimeet\Domain\Template\ProductInfoGuesser
+        arguments:
+            - '@template.template_data_factory'
+            - '@transformer.product.id_to_product_transformer'
 
     #
     # Spot component

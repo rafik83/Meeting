@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -39,7 +40,14 @@ class RemoveImageHandlerTest extends \PHPUnit_Framework_TestCase
         $localFileStorage = $this->prophesize(LocalFileStorageAdapter::class);
         $localFileStorage->remove($image->getImage())->shouldBeCalled();
 
-        $handler = new RemoveImageHandler($sheetRepository->reveal(), $localFileStorage->reveal());
+        $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
+
+        $handler = new RemoveImageHandler(
+            $sheetRepository->reveal(),
+            $localFileStorage->reveal(),
+            $buyableObjectResolver->reveal()
+        );
+
         $handler->handle($removeImage);
     }
 }

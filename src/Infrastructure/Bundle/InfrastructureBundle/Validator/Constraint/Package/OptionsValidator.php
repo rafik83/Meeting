@@ -3,10 +3,13 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
+use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -33,14 +36,21 @@ class OptionsValidator extends ConstraintValidator
     private $merger;
 
     /**
+     * @var ProductInfoGuesser
+     */
+    private $productInfoGuesser;
+
+    /**
      * @param QuantityMaxGuesser $quantityMaxGuesser
      * @param QuantityMinGuesser $quantityMinGuesser
+     * @param ProductInfoGuesser $productInfoGuesser
      * @param \DateTimeInterface $now
      * @param Merger             $merger
      */
     public function __construct(
         QuantityMaxGuesser $quantityMaxGuesser,
         QuantityMinGuesser $quantityMinGuesser,
+        ProductInfoGuesser $productInfoGuesser,
         \DateTimeInterface $now,
         Merger $merger
     ) {
@@ -48,6 +58,7 @@ class OptionsValidator extends ConstraintValidator
         $this->quantityMinGuesser = $quantityMinGuesser;
         $this->now                = $now;
         $this->merger             = $merger;
+        $this->productInfoGuesser = $productInfoGuesser;
     }
 
     /**
@@ -81,29 +92,12 @@ class OptionsValidator extends ConstraintValidator
                 continue;
             }
 
-            $quantityMax = $this->quantityMaxGuesser->getMaxByProduct($selectOptions->sheet, $options[$id]);
-            $quantityMin = $this->quantityMinGuesser->getMinProduct($selectOptions->sheet, $options[$id], $quantity);
-
-            if (false === $quantityMin) {
-                $this
-                    ->context
-                    ->buildViolation('package.product.quantityMinPromotionCode')
-                    ->atPath($id)
-                    ->addViolation();
-            }
-
-            if ($quantity < $quantityMin || $quantity > $quantityMax) {
-                $this
-                    ->context
-                    ->buildViolation('package.product.quantityNotMatch')
-                    ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
-                    ->atPath($id)
-                    ->addViolation();
-            }
+            $quantityMin = $this->getQuantityMin($selectOptions->sheet, $selectOptions->locale, $options, $id, $quantity);
+            $quantityMax = $this->getQuantityMax($selectOptions->sheet, $options, $id);
 
             if (isset($order) && !$options[$id]->isDeletable($this->now)) {
-                if($orderRow = $order->getRowForProduct($options[$id])) {
-                    if($quantity < $orderRow->getQuantity()) {
+                if ($orderRow = $order->getRowForProduct($options[$id])) {
+                    if ($quantity < $orderRow->getQuantity()) {
                         $this
                             ->context
                             ->buildViolation('package.product.productNotDeletable')
@@ -112,6 +106,87 @@ class OptionsValidator extends ConstraintValidator
                     }
                 }
             }
+
+            $this->validateQuantity($quantity, $quantityMin, $quantityMax, $id);
+        }
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param int    $options
+     * @param int    $id
+     * @param int    $quantity
+     *
+     * @return false|int
+     */
+    private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity)
+    {
+        $quantityMin = 0;
+
+        $linkedProduct = $this->productInfoGuesser->guessProduct(
+            $sheet,
+            $options[$id],
+            $locale
+        );
+
+        if (null !== $linkedProduct && $quantity < BuyableObjectResolver::BUYABLE_DEFAULT_QUANTITY) {
+            $this
+                ->context
+                ->buildViolation('package.product.quantityMinPayableOption')
+                ->atPath($id)
+                ->addViolation();
+        } else {
+            $quantityMin = $this->quantityMinGuesser->getMinProduct(
+                $sheet,
+                $options[$id],
+                $quantity
+            );
+        }
+
+        if (false === $quantityMin) {
+            $this
+                ->context
+                ->buildViolation('package.product.quantityMinPromotionCode')
+                ->atPath($id)
+                ->addViolation();
+        }
+
+        return $quantityMin;
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param int   $options
+     * @param int   $id
+     *
+     * @return int
+     */
+    private function getQuantityMax(Sheet $sheet, $options, $id)
+    {
+        $quantityMax = $this->quantityMaxGuesser->getMaxByProduct(
+            $sheet,
+            $options[$id]
+        );
+
+        return $quantityMax;
+    }
+
+    /**
+     * @param int $quantity
+     * @param int $quantityMin
+     * @param int $quantityMax
+     * @param int $fieldId
+     */
+    private function validateQuantity($quantity, $quantityMin, $quantityMax, $fieldId)
+    {
+        if ($quantity < $quantityMin || $quantity > $quantityMax) {
+            $this
+                ->context
+                ->buildViolation('package.product.quantityNotMatch')
+                ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
+                ->atPath($fieldId)
+                ->addViolation();
         }
     }
 }

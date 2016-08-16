@@ -281,6 +281,7 @@ services:
         arguments:
             - '@package.planning.quantity_max_guesser'
             - '@package.planning.quantity_min_guesser'
+            - '@template.product_info_guesser'
             - '@datetime'
             - '@order.merger'
         tags:
