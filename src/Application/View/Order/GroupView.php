@@ -10,8 +10,15 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class GroupView
 {
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
     /**
      * @var string
      */
@@ -23,20 +30,29 @@ class GroupView
     public $type;
 
     /**
-     * @var array
+     * @var ProductView[]
      */
     public $products = [];
 
     /**
-     * @param string $label
-     * @param string $type
-     * @param array  $products
+     * @var null|int
      */
-    public function __construct($label, $type, array $products = [])
+    public $stepIndex;
+
+    /**
+     * @param Sheet         $sheet
+     * @param string        $label
+     * @param string        $type
+     * @param ProductView[] $products
+     * @param null|int      $stepIndex
+     */
+    public function __construct(Sheet $sheet, $label, $type, array $products = [], $stepIndex = null)
     {
-        $this->label    = $label;
-        $this->type     = $type;
-        $this->products = $products;
+        $this->sheet     = $sheet;
+        $this->label     = $label;
+        $this->type      = $type;
+        $this->products  = $products;
+        $this->stepIndex = $stepIndex;
     }
 
     /**

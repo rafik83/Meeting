@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Package\Product;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Merger;
 
 class QuantityMaxGuesser
 {
@@ -22,11 +23,18 @@ class QuantityMaxGuesser
     private $cartManager;
 
     /**
-     * @param CartManager $cartManager
+     * @var Merger
      */
-    public function __construct(CartManager $cartManager)
+    private $merger;
+
+    /**
+     * @param CartManager $cartManager
+     * @param Merger      $merger
+     */
+    public function __construct(CartManager $cartManager, Merger $merger)
     {
         $this->cartManager = $cartManager;
+        $this->merger      = $merger;
     }
 
     /**
@@ -37,7 +45,7 @@ class QuantityMaxGuesser
     public function getMaxPlanning(Sheet $sheet)
     {
         $planning = $sheet->getPackage()->getPlanning();
-        
+
         if (!$planning) {
             return 0;
         }
@@ -74,11 +82,21 @@ class QuantityMaxGuesser
     public function getMaxByProduct(Sheet $sheet, Product $product)
     {
         $cart              = $this->cartManager->getCart($sheet);
-        $selectedPlan      = $cart->getPlanRow();
         $remainingQuantity = INF;
+        $selectedPlan      = null;
+
+        if (null !== $cart->getPlanRow()) {
+            $selectedPlan = $cart->getPlanRow()->getProduct();
+        }
+
+        // handle new order
+        if ($sheet->hasOrders()) {
+            $orderMerged  = $this->merger->merge($sheet->getOrders());
+            $selectedPlan = $orderMerged->getPlan();
+        }
 
         if ($selectedPlan) {
-            $includedProduct = $selectedPlan->getProduct()->getIncludedProduct($product);
+            $includedProduct = $selectedPlan->getIncludedProduct($product);
 
             if ($includedProduct) {
                 $remainingQuantity = $product->getQuantityMax() - $includedProduct->getQuantity();

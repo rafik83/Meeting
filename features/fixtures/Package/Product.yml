@@ -4,11 +4,13 @@ Proximum\Vimeet\Domain\Model\Product:
         __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', '', 1690, '', ''] }
         quantityMax: 1
         updatable: false
+        buyableUntil: ~
         deletableUntil: ~
     product_plan_2_asddays:
         __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', '', 2880, '', '' ] }
         quantityMax: 1
         updatable: false
+        buyableUntil: ~
         deletableUntil: ~
     # participants
     product_participant_1_asddays:
@@ -51,6 +53,11 @@ Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
         quantity: 2
         product: '@product_plan_1_asddays'
         included: '@product_participant_1_asddays'
+    product_included_planning_1_assddays_fr:
+        __construct: false
+        quantity: 1
+        product: '@product_plan_1_asddays'
+        included: '@product_planning_1_asddays'
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_asddays_fr:
@@ -246,130 +253,6 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         addon: ''
         locale: 'en'
 
-Proximum\Vimeet\Domain\Model\Product\Feature:
-    feature_1:
-        __construct: false
-        product: '@product_plan_1_asddays'
-    feature_2:
-        __construct: false
-        product: '@product_plan_1_asddays'
-    feature_3:
-        __construct: false
-        product: '@product_plan_1_asddays'
-    feature_4:
-        __construct: false
-        product: '@product_plan_2_asddays'
-    feature_5:
-        __construct: false
-        product: '@product_plan_2_asddays'
-    feature_6:
-        __construct: false
-        product: '@product_plan_2_asddays'
-    feature_7:
-        __construct: false
-        product: '@product_plan_2_asddays'
-    feature_8:
-        __construct: false
-        product: '@product_plan_2_asddays'
-
-Proximum\Vimeet\Domain\Model\Product\FeatureTranslation:
-    feature_translation_1_fr:
-        __construct: false
-        feature: '@feature_1'
-        locale: 'fr'
-        title: 'Presta 1'
-        description: 'Description Presta 1'
-    feature_translation_1_en:
-        __construct: false
-        feature: '@feature_1'
-        locale: 'en'
-        title: 'Presta 1'
-        description: 'Description Presta 1'
-    feature_translation_2_fr:
-        __construct: false
-        feature: '@feature_2'
-        locale: 'fr'
-        title: 'Presta 2'
-        description: 'Description Presta 2'
-    feature_translation_2_en:
-        __construct: false
-        feature: '@feature_2'
-        locale: 'en'
-        title: 'Presta 2'
-        description: 'Description Presta 2'
-    feature_translation_3_fr:
-        __construct: false
-        feature: '@feature_3'
-        locale: 'fr'
-        title: 'Presta 3'
-        description: 'Description Presta 3'
-    feature_translation_3_en:
-        __construct: false
-        feature: '@feature_3'
-        locale: 'en'
-        title: 'Presta 3'
-        description: 'Description Presta 3'
-    feature_translation_4_fr:
-        __construct: false
-        feature: '@feature_4'
-        locale: 'fr'
-        title: 'Presta 4'
-        description: 'Description Presta 4'
-    feature_translation_4_en:
-        __construct: false
-        feature: '@feature_4'
-        locale: 'en'
-        title: 'Presta 4'
-        description: 'Description Presta 4'
-    feature_translation_5_fr:
-        __construct: false
-        feature: '@feature_5'
-        locale: 'fr'
-        title: 'Presta 5'
-        description: 'Description Presta 5'
-    feature_translation_5_en:
-        __construct: false
-        feature: '@feature_5'
-        locale: 'en'
-        title: 'Presta 5'
-        description: 'Description Presta 5'
-    feature_translation_6_fr:
-        __construct: false
-        feature: '@feature_6'
-        locale: 'fr'
-        title: 'Presta 6'
-        description: 'Description Presta 6'
-    feature_translation_6_en:
-        __construct: false
-        feature: '@feature_6'
-        locale: 'en'
-        title: 'Presta 6'
-        description: 'Description Presta 6'
-    feature_translation_7_fr:
-        __construct: false
-        feature: '@feature_7'
-        locale: 'fr'
-        title: 'Presta 7'
-        description: 'Description Presta 7'
-    feature_translation_7_en:
-        __construct: false
-        feature: '@feature_7'
-        locale: 'en'
-        title: 'Presta 7'
-        description: 'Description Presta 7'
-    feature_translation_8_fr:
-        __construct: false
-        feature: '@feature_8'
-        locale: 'fr'
-        title: 'Presta 8'
-        description: 'Description Presta 8'
-    feature_translation_8_en:
-        __construct: false
-        feature: '@feature_8'
-        locale: 'en'
-        title: 'Presta 8'
-        description: 'Description Presta 8'
-
 Proximum\Vimeet\Domain\Model\Package:
     package_asd_days:
         __construct: false
@@ -501,14 +384,10 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
 Proximum\Vimeet\Domain\Model\PromotionCode:
     promotion_code_asddays_2016:
         __construct: ['@event_asddays_2016', 'Assdays Promotion Code', 'ASDDAYS10', 50]
-    promotion_code_02_asddays_2016:
-        __construct: ['@event_asddays_2016', 'Assdays Promotion Code 2', 'ASDDAYS20', 50]
 
 Proximum\Vimeet\Domain\Model\PromotionCodeTranslation:
     promotion_code_assdays_2016_translation:
         __construct: ['@promotion_code_asddays_2016', 'fr', 'Assdays Promotion Code', 'Assdays Promotion Code Description']
-    promotion_code_02_assdays_2016_translation:
-        __construct: ['@promotion_code_02_asddays_2016', 'fr', 'Assdays Promotion Code 2', 'Assdays Promotion Code Description 2']
 
 Proximum\Vimeet\Domain\Model\Promotion:
     promotion_01_asddays_2016:
@@ -517,14 +396,11 @@ Proximum\Vimeet\Domain\Model\Promotion:
         product: '@product_plan_2_asddays'
         type: 'percent_off'
         value: 50
+        quantityMax: 1
     promotion_02_asddays_2016:
         __construct: false
         promotionCode: '@promotion_code_asddays_2016'
         product: '@product_option_2_asddays'
-        type: 'value_off'
-        value: 5
-    promotion_03_asddays_2016:
-        __construct: false
-        promotionCode: '@promotion_code_02_asddays_2016'
-        product: '@product_participant_1_asddays'
-        type: 'free'
+        type: 'percent_off'
+        value: 50
+        quantityMax: 2

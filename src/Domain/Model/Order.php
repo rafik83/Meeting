@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -323,8 +324,26 @@ class Order
      */
     public function getRowForProduct(Product $product)
     {
-        foreach($this->rows as $row) {
-            if($row->getProduct() === $product) {
+        foreach ($this->rows as $row) {
+            if ($row->getProduct() === $product) {
+                return $row;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return null|Order\Row
+     */
+    public function getRowByProductId($id)
+    {
+        foreach ($this->rows as $row) {
+            if (null !== $row->getProduct()
+                && $row->getProduct()->getId() === $id
+            ) {
                 return $row;
             }
         }
@@ -367,14 +386,20 @@ class Order
     }
 
     /**
-     * @param Order\PromotionCode $promotionCode
+     * @param Order\PromotionCode|ModelPromotionCode $promotionCode
      *
      * @return bool
      */
-    public function hasPromotionCode(Order\PromotionCode $promotionCode)
+    public function hasPromotionCode($promotionCode)
     {
         foreach ($this->promotionCodes as $promoCode) {
-            if ($promoCode === $promotionCode) {
+            if ($promotionCode instanceof ModelPromotionCode
+                && $promoCode->getPromotionCode() === $promotionCode
+            ) {
+                return true;
+            } elseif ($promotionCode instanceof Order\PromotionCode
+                && $promoCode === $promotionCode
+            ) {
                 return true;
             }
         }
@@ -389,9 +414,58 @@ class Order
      */
     public function getOrderRowForProduct(Product $product)
     {
-        foreach($this->rows as $orderRow) {
+        foreach ($this->rows as $orderRow) {
             if ($orderRow->getProduct() === $product) {
                 return $orderRow;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return int
+     */
+    public function countParticipant()
+    {
+        $participant = 0;
+        foreach($this->rows as $orderRow) {
+            if (null !== $orderRow->getProduct()
+                && $orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT
+            ) {
+                $participant += $orderRow->getQuantity();
+            }
+        }
+
+        return $participant;
+    }
+
+    /**
+     * @param $product
+     *
+     * @return bool
+     */
+    public function hasPromotionCodeForProduct($product)
+    {
+        foreach ($this->promotionCodes as $promotionCode) {
+            if ($promotionCode->getPromotionCode()->hasPromotion($product)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get product plan in order
+     *
+     * @return null|Product
+     */
+    public function getPlan()
+    {
+        foreach($this->rows as $row) {
+            if ($row->getType() === Product::TYPE_PLAN) {
+                return $row->getProduct();
             }
         }
 

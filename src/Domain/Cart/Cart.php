@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
@@ -19,6 +20,8 @@ use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNegativeRowException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
@@ -82,13 +85,13 @@ class Cart
         if ($this->hasProduct($product)) {
             $row = $this->getRow($product);
 
-            if ($quantity > 0) {
-                $row->setProduct($product)->setQuantity($quantity);
-            } else {
+            if (0 === $quantity) {
                 $this->rows->removeElement($row);
+            } else {
+                $row->setProduct($product)->setQuantity($quantity);
             }
 
-        } elseif ($quantity > 0) {
+        } elseif (0 !== $quantity) {
             $this->rows[] = new CartRow($this->sheet, $product, $quantity);
         }
 
@@ -98,15 +101,38 @@ class Cart
     /**
      * Set additionnal participant quantity
      *
+     * @param Order $order
+     *
      * @return Cart
      */
-    public function resolveParticipantsQuantity()
+    public function resolveParticipantsQuantity(Order $order = null)
     {
-        $additionnal = $this->sheet->countParticipant() - $this->getIncludedParticipantQuantity();
+        $orderParticipant            = 0;
+        $includedParticipantQuantity = 0;
 
-        if ($additionnal > 0) {
-            $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
+        if (isset($order)) {
+            $orderParticipant = $order->countParticipant();
+            if ($plan = $order->getPlan()) {
+                $includedParticipantQuantity = $plan->getIncludedParticipantQuantity();
+            }
+        } else {
+            $includedParticipantQuantity = $this->getIncludedParticipantQuantity();
         }
+
+        $participantNumber = $this->sheet->countParticipant() - ($includedParticipantQuantity + $orderParticipant);
+
+        if ($participantNumber < 0) {
+            $additionnal = $participantNumber - ($this->sheet->countParticipant() - $includedParticipantQuantity);
+        } else {
+            $additionnal = $participantNumber;
+        }
+
+        // In case of a first order, the number of participant can not be negative
+        if (null === $order && $additionnal < 0) {
+            return $this;
+        }
+
+        $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
 
         return $this;
     }
@@ -128,6 +154,7 @@ class Cart
      */
     public function getPlanRow()
     {
+        /** @var CartRow $cartRow */
         foreach ($this->rows as $cartRow) {
             if ($cartRow->getProduct()->isPlan()) {
                 return $cartRow;
@@ -314,11 +341,7 @@ class Cart
      * @param PromotionCode      $promotionCode
      * @param \DateTimeInterface $dateTime
      *
-     * @throws PromotionCodeOutDatedException
-     * @throws PromotionCodeSoldOutException
-     * @throws PromotionCodeAlreadyExistException
-     * @throws PromotionCodeNotUsedException
-     * @throws PromotionCodeConflictException
+     * @throws PromotionCodeException
      *
      * @return Cart
      */
@@ -342,6 +365,10 @@ class Cart
 
         if ($this->isPromotionHaveConflict($promotionCode)) {
             throw new PromotionCodeConflictException();
+        }
+
+        if (!$this->isCartRowPositive($promotionCode)) {
+            throw new PromotionCodeNegativeRowException();
         }
 
         $this->promotionCodeRows->add(new PromotionCodeRow($this->sheet, $promotionCode));
@@ -386,6 +413,24 @@ class Cart
     }
 
     /**
+     * @param PromotionCode $promotionCode
+     *
+     * @return bool
+     */
+    public function isCartRowPositive(PromotionCode $promotionCode)
+    {
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            if ($cartRow = $this->getCartRowForProduct($promotion->getProduct())) {
+                if (!$cartRow->isNegative()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get total discount for a specific promotion code
      *
      * @param PromotionCode $promotionCode
@@ -397,6 +442,12 @@ class Cart
         $total = 0;
         foreach ($promotionCode->getPromotions() as $promotion) {
             if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
+
+                // don't apply promo code on cart row negative quantity
+                if ($cartRow->getQuantity() < 0) {
+                    continue;
+                }
+
                 // don't use promotion quantity max if promotion type value off
                 if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
                     $total -= $promotion->getDiscount();
