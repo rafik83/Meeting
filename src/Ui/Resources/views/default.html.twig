@@ -123,6 +123,7 @@
         <section class="object object--collection style--style-1 section">
             <div class="row">
                 {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
+                    {% set firstColumnIteration = loop.index - 1 %}
                     {{ block('nomenclature_first_over_two') }}
                 {% endfor %}
             </div>
@@ -185,7 +186,7 @@
         </div>
 
         {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
-            {% set firstColumnIteration = loop.index - 1%}
+            {% set firstColumnIteration = loop.index - 1 %}
             {{ block('nomenclature_first_over_three') }}
         {% endfor %}
     </div>
