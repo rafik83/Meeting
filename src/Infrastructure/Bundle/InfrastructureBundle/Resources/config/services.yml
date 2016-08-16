@@ -604,6 +604,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.local_file_storage'
+            - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
     command.admin.create_handler:
@@ -784,6 +785,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
     command.product.create_option_handler:
@@ -866,6 +868,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
         arguments:
             - '@cart_manager'
+            - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
@@ -1597,6 +1600,14 @@ services:
             - '@template.participant_info_guesser'
 
     #
+    # Product Transformer
+    #
+    transformer.product.id_to_product_transformer:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+
+    #
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
@@ -1648,6 +1659,12 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
+    buyable_object_resolver:
+        class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
+        arguments:
+            - '@cart_manager'
+            - '@template.template_data_factory'
+            - '@transformer.product.id_to_product_transformer'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:

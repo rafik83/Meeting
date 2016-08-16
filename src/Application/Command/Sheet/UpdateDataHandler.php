@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UpdateDataHandler
@@ -20,13 +21,22 @@ class UpdateDataHandler
     private $sheetRepository;
 
     /**
+     * @var BuyableObjectResolver
+     */
+    private $buyableObjectResolver;
+
+    /**
      * UpdateDataHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param BuyableObjectResolver    $buyableObjectResolver
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
-    {
-        $this->sheetRepository = $sheetRepository;
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        BuyableObjectResolver $buyableObjectResolver
+    ) {
+        $this->sheetRepository       = $sheetRepository;
+        $this->buyableObjectResolver = $buyableObjectResolver;
     }
 
     /**
@@ -34,6 +44,7 @@ class UpdateDataHandler
      */
     public function handle(UpdateData $command)
     {
-        $this->sheetRepository->set($command->sheet->setData($command->data));
+        $this->buyableObjectResolver->updateCart($command->sheet, $command->templateData);
+        $this->sheetRepository->set($command->sheet->setData($command->templateData->getData()));
     }
 }

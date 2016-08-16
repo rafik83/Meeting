@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
@@ -26,17 +27,25 @@ class RemoveImageHandler
     private $sheetRepository;
 
     /**
+     * @var BuyableObjectResolver
+     */
+    private $buyableObjectResolver;
+
+    /**
      * RemoveImageHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param LocalFileStorageAdapter  $localFileStorageAdapter
+     * @param BuyableObjectResolver    $buyableObjectResolver
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        LocalFileStorageAdapter $localFileStorageAdapter
+        LocalFileStorageAdapter $localFileStorageAdapter,
+        BuyableObjectResolver $buyableObjectResolver
     ) {
         $this->localFileStorageAdapter = $localFileStorageAdapter;
         $this->sheetRepository         = $sheetRepository;
+        $this->buyableObjectResolver   = $buyableObjectResolver;
     }
 
     /**
@@ -44,6 +53,8 @@ class RemoveImageHandler
      */
     public function handle(RemoveImage $removeImage)
     {
+        $this->buyableObjectResolver->removeImage($removeImage->sheet, $removeImage->image);
+
         $imagePath = $removeImage->image->getImage();
         $removeImage->image->setData([]);
 

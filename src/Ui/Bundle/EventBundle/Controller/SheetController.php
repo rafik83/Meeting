@@ -225,7 +225,6 @@ class SheetController extends Controller
 
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object             = $templateData->getObject($key);
-        $form               = $this->createObjectForm($object, $locale, $key);
         $levelsArchitecture = [];
 
         if ($object instanceof Template\TemplateObject\Nomenclature) {
@@ -243,7 +242,6 @@ class SheetController extends Controller
         );
 
         $object->setBuyableProducts($products);
-
         $form = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
@@ -264,7 +262,7 @@ class SheetController extends Controller
                 }
             }
 
-            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
+            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData));
 
             return $this->redirectToRoute('event_sheet');
         }
@@ -282,19 +280,19 @@ class SheetController extends Controller
             : 'EventBundle:Sheet:sheet.html.twig';
 
         return $this->render($twig, [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'templateData'  => $templateData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'taggedData'    => $taggedData,
-            'form'          => $form->createView(),
-            'label'         => $label,
-            'uid'           => $key,
-            'participants'  => $participants,
-            'object'        => $object,
-            'currency'      => $eventDomain->getEvent()->getCurrency(),
-            'vatMode'       => $eventDomain->getEvent()->getMode(),
+            'event'              => $eventDomain->getEvent(),
+            'sheet'              => $sheet,
+            'templateData'       => $templateData,
+            'locale'             => $locale,
+            'nomenclatures'      => $nomenclatures,
+            'taggedData'         => $taggedData,
+            'form'               => $form->createView(),
+            'label'              => $label,
+            'uid'                => $key,
+            'participants'       => $participants,
+            'object'             => $object,
+            'currency'           => $eventDomain->getEvent()->getCurrency(),
+            'vatMode'            => $eventDomain->getEvent()->getMode(),
             'levelsArchitecture' => $levelsArchitecture,
         ]);
     }

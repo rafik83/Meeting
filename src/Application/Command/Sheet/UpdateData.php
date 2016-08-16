@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class UpdateData
 {
@@ -20,19 +21,20 @@ class UpdateData
     public $sheet;
 
     /**
-     * @var array
+     * @var TemplateData
      */
-    public $data;
+    public $templateData;
 
     /**
      * UpdateData constructor.
      *
-     * @param Sheet $sheet
-     * @param array $data
+     * @param Sheet        $sheet
+     * @param TemplateData $templateData
+     *
      */
-    public function __construct(Sheet $sheet, array $data)
+    public function __construct(Sheet $sheet, TemplateData $templateData)
     {
-        $this->sheet = $sheet;
-        $this->data  = $data;
+        $this->sheet        = $sheet;
+        $this->templateData = $templateData;
     }
 }

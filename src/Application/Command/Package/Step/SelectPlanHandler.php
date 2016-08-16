@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 
 class SelectPlanHandler
@@ -20,13 +21,22 @@ class SelectPlanHandler
     private $cartManager;
 
     /**
+     * @var BuyableObjectResolver
+     */
+    private $buyableObjectResolver;
+
+    /**
      * SelectPlanHandler constructor.
      *
-     * @param CartManager $cartManager
+     * @param CartManager           $cartManager
+     * @param BuyableObjectResolver $buyableObjectResolver
      */
-    public function __construct(CartManager $cartManager)
-    {
-        $this->cartManager = $cartManager;
+    public function __construct(
+        CartManager $cartManager,
+        BuyableObjectResolver $buyableObjectResolver
+    ) {
+        $this->cartManager           = $cartManager;
+        $this->buyableObjectResolver = $buyableObjectResolver;
     }
 
     /**
@@ -38,8 +48,11 @@ class SelectPlanHandler
 
         $previousPlan = $cart->getPlanRow();
 
-        if (!$previousPlan || $previousPlan->getProduct() !== $selectPlan->plan) {
+        if (null !== $previousPlan && $previousPlan->getProduct() !== $selectPlan->plan) {
             $cart->clear();
+        }
+
+        if (null === $previousPlan || $previousPlan->getProduct() !== $selectPlan->plan) {
             $this->cartManager->deleteCartStep($cart);
             $cart->setProduct($selectPlan->plan, 1);
             $this->cartManager->save($cart);

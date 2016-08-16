@@ -81,7 +81,7 @@ class Image extends EditableObject implements ContentObjectInterface
     }
 
     /**
-     * @return int
+     * @return null|int
      */
     public function getSelectedProduct()
     {

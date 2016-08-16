@@ -427,4 +427,12 @@ class Cart
 
         return $total;
     }
+
+    /**
+     * @param CartRow $cartRow
+     *
+     */
+    public function removeRow(CartRow $cartRow) {
+        $this->rows->removeElement($cartRow);
+    }
 }
