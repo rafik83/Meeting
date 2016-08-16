@@ -141,7 +141,7 @@
                     {% for second_label_item in first_level_item.childrenSorted(locale) %}
                         <tr>
                             <td>
-                                {{ form_row(form[second_label_item.key], { 'attr': { 'class': 'item' }, 'simple': true }) }}
+                                {{ form_row(form[second_label_item.key], { 'attr': { 'class': 'item item-' ~ first_level_item.key }, 'simple': true }) }}
                             </td>
                         </tr>
                     {% endfor %}
@@ -150,8 +150,9 @@
             </div>
 
             <p class="link-table pull-right">
-                <a href="#">{{ 'nomenclature.select_all'|trans }}</a> /
-                <a href="#">{{ 'nomenclature.select_none'|trans}}</a>
+                <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
+                /
+                <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
             </p>
         </div>
     </div>
