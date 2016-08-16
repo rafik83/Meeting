@@ -444,6 +444,13 @@ class Nomenclature
         return $levelsArchitecture;
     }
 
+    /**
+     * @param Nomenclature|NomenclatureItem $currentLevel
+     * @param array                         $levelsArchitecture
+     * @param int|null                      $firstLevelKey
+     *
+     * @return array
+     */
     private function buildArchitectureLevel($currentLevel, $levelsArchitecture, $firstLevelKey = null)
     {
         $itemsByColumn  = [
