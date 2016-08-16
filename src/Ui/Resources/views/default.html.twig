@@ -122,8 +122,20 @@
 
         <section class="object object--collection style--style-1 section">
             <div class="row">
+                {% set colMdSize = "col-md-4" %}
+                {% if levelsArchitecture['numberOfColumns'] is defined and levelsArchitecture['numberOfColumns'] == 1 %}
+                    {% set colMdSize = "col-md-12" %}
+                {% elseif levelsArchitecture['numberOfColumns'] is defined and levelsArchitecture['numberOfColumns'] == 2 %}
+                    {% set colMdSize = "col-md-6" %}
+                {% endif %}
+                <div class="{{ colMdSize }}">
+                {% set secondColumnIteration = 1 %}
                 {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
-                    {% set firstColumnIteration = loop.index - 1 %}
+                    {% set loopIndex = loop.index %}
+                    {% if loopIndex > levelsArchitecture['elements'][secondColumnIteration]['secondLevels'] and secondColumnIteration < 3 %}
+                        {% set secondColumnIteration = secondColumnIteration + 1 %}
+                    </div><div class="{{ colMdSize }}">
+                    {% endif %}
                     {{ block('nomenclature_first_over_two') }}
                 {% endfor %}
             </div>
@@ -132,30 +144,28 @@
 {% endblock nomenclature_checkboxes_two_levels %}
 
 {% block nomenclature_first_over_two %}
-    <div class="col-md-4">
-        <div class="object--nomenclature">
-            <h3 class="title-table">{{ first_level_item.label(locale) }}</h3>
+    <div class="object--nomenclature">
+        <h3 class="title-table">{{ first_level_item.label(locale) }}</h3>
 
-            <div class="border-table with-title">
-                <table class="table table-striped">
-                    <tbody>
-                    {% for second_label_item in first_level_item.childrenSorted(locale) %}
-                        <tr>
-                            <td>
-                                {{ form_row(form[second_label_item.key], { 'attr': { 'class': 'item item-' ~ first_level_item.key }, 'simple': true }) }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <p class="link-table pull-right">
-                <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
-                /
-                <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
-            </p>
+        <div class="border-table with-title">
+            <table class="table table-striped">
+                <tbody>
+                {% for second_label_item in first_level_item.childrenSorted(locale) %}
+                    <tr>
+                        <td>
+                            {{ form_row(form[second_label_item.key], { 'attr': { 'class': 'item item-' ~ first_level_item.key }, 'simple': true }) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+
+        <p class="link-table pull-right">
+            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
+            /
+            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
+        </p>
     </div>
 {% endblock nomenclature_first_over_two %}
 
