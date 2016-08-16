@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Event\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher;
@@ -27,18 +28,18 @@ class SheetAddParticipantEvent extends EventDispatcher\Event
     private $user;
 
     /**
-     * @var User
+     * @var Participant
      */
     private $guest;
 
     /**
      * SheetAddParticipantEvent constructor.
      *
-     * @param Sheet $sheet
-     * @param User  $guest
-     * @param User  $user
+     * @param Sheet       $sheet
+     * @param Participant $guest
+     * @param User        $user
      */
-    public function __construct(Sheet $sheet, User $guest, User $user)
+    public function __construct(Sheet $sheet, Participant $guest, User $user)
     {
         $this->sheet = $sheet;
         $this->user  = $user;
@@ -62,7 +63,7 @@ class SheetAddParticipantEvent extends EventDispatcher\Event
     }
 
     /**
-     * @return User
+     * @return Participant
      */
     public function getGuest()
     {

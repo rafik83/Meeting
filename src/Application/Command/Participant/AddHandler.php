@@ -132,7 +132,7 @@ class AddHandler
                 $this->sendCompleteProfileEvent($add, $user, $participant);
             } else {
                 $this->sendActivationEvent($add, $user); // send to the guest
-                $this->sendActivationConfirmEvent($add, $user); // send to the owner
+                $this->sendActivationConfirmEvent($add, $participant); // send to the owner
             }
         }
 
@@ -155,10 +155,10 @@ class AddHandler
     /**
      * Send confirm invitation email send to the sheet owner
      *
-     * @param Add  $add
-     * @param User $guest
+     * @param Add         $add
+     * @param Participant $guest
      */
-    private function sendActivationConfirmEvent(Add $add, User $guest)
+    private function sendActivationConfirmEvent(Add $add, Participant $guest)
     {
         $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->adder);
         $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $event);

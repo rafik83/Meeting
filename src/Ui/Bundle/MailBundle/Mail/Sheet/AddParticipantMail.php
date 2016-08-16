@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
 class AddParticipantMail extends Mail
@@ -38,17 +39,24 @@ class AddParticipantMail extends Mail
     private $user;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param User   $user
+     * @var Participant
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, User $user)
+    private $guest;
+
+    /**
+     * @param Event       $event
+     * @param string      $sender
+     * @param string      $receiver
+     * @param string      $locale
+     * @param User        $user
+     * @param Participant $guest
+     */
+    public function __construct(Event $event, $sender, $receiver, $locale, User $user, Participant $guest)
     {
         parent::__construct($sender, $receiver, $locale, null, null, $event);
 
-        $this->user = $user;
+        $this->user  = $user;
+        $this->guest = $guest;
     }
 
     /**
@@ -57,5 +65,13 @@ class AddParticipantMail extends Mail
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return Participant
+     */
+    public function getGuest()
+    {
+        return $this->guest;
     }
 }
