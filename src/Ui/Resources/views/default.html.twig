@@ -113,6 +113,7 @@
             </h1>
 
             {% if sheet_uri is defined %}
+                <button class="btn btn-primary pull-right mg-left" type="submit">{{ 'nomenclature.submit'|trans }}</button>
                 <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
                     <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
                 </a>
