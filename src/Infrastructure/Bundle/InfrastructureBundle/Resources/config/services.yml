@@ -868,6 +868,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
         arguments:
             - '@cart_manager'
+            - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
@@ -1711,6 +1712,7 @@ services:
             - '@cart_manager'
             - '@template.template_data_factory'
             - '@transformer.product.id_to_product_transformer'
+            - '@template.product_info_guesser'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:

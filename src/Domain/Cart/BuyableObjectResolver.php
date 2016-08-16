@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Cart;
 
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
@@ -36,20 +38,28 @@ class BuyableObjectResolver
     private $templateDataFactory;
 
     /**
+     * @var ProductInfoGuesser
+     */
+    private $productInfoGuesser;
+
+    /**
      * TemplateCartManager constructor.
      *
      * @param CartManager            $cartManager
      * @param TemplateDataFactory    $templateDataFactory
      * @param IdToProductTransformer $productTransformer
+     * @param ProductInfoGuesser     $productInfoGuesser
      */
     public function __construct(
         CartManager $cartManager,
         TemplateDataFactory $templateDataFactory,
-        IdToProductTransformer $productTransformer
+        IdToProductTransformer $productTransformer,
+        ProductInfoGuesser $productInfoGuesser
     ) {
         $this->cartManager         = $cartManager;
         $this->templateDataFactory = $templateDataFactory;
         $this->productTransformer  = $productTransformer;
+        $this->productInfoGuesser  = $productInfoGuesser;
     }
 
     /**
@@ -62,6 +72,42 @@ class BuyableObjectResolver
 
         foreach ($templateData->getImageObjects() as $image) {
             $this->addImage($image, $cart);
+        }
+
+        $this->cartManager->save($cart);
+    }
+
+    /**
+     * @param Sheet   $sheet
+     * @param Product $plan
+     */
+    public function resolvePlan(Sheet $sheet, Product $plan)
+    {
+        $cart = $this->cartManager->getCart($sheet);
+
+        foreach ($plan->getIncludedOptionProduct() as $optionIncluded) {
+            // get product in template data
+            $linkedProduct = $this->productInfoGuesser->guessProduct(
+                $sheet,
+                $optionIncluded->getIncluded(),
+                'fr'
+            );
+
+            if (null === $linkedProduct) {
+                continue;
+            }
+
+            $cartRow = $cart->getCartRowForProduct($linkedProduct);
+
+            if (null !== $linkedProduct && null !== $cartRow) {
+                $quantity = $cartRow->getQuantity() - $optionIncluded->getQuantity();
+
+                if ($quantity <= 0) {
+                    $cart->removeRow($cartRow);
+                } else {
+                    $cartRow->setQuantity($quantity);
+                }
+            }
         }
 
         $this->cartManager->save($cart);

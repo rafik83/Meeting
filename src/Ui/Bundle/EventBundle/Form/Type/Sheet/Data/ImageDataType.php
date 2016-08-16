@@ -59,6 +59,10 @@ class ImageDataType extends AbstractType
 
         if (null !== $image->getBuyableProducts()) {
 
+            $selectedRadio = count($image->getBuyableProducts()) === 1 ?
+                $image->getBuyableProducts()[0]->getId() :
+                $image->getSelectedProduct();
+
             $builder
                 ->add('selectedProduct', ChoiceType::class, [
                     'expanded'    => true,
@@ -67,6 +71,7 @@ class ImageDataType extends AbstractType
                     'choice_name' => 'id',
                     'choices'     => $image->getBuyableProducts(),
                     'required'    => true,
+                    'data'        => $selectedRadio
                 ]);
 
             $builder->get('selectedProduct')
