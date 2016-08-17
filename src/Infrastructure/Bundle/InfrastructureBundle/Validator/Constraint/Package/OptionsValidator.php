@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -67,6 +68,7 @@ class OptionsValidator extends ConstraintValidator
      */
     public function validate($selectOptions, Constraint $constraint)
     {
+        $order   = null;
         $options = $selectOptions->sheet->getPackage()->getAvailablesOptions($this->now);
         $options = array_combine(
             array_map(
@@ -92,7 +94,8 @@ class OptionsValidator extends ConstraintValidator
                 continue;
             }
 
-            $quantityMin = $this->getQuantityMin($selectOptions->sheet, $selectOptions->locale, $options, $id, $quantity);
+            $quantityMin = $this->getQuantityMin($selectOptions->sheet, $selectOptions->locale, $options, $id,
+                (int)$quantity, $order);
             $quantityMax = $this->getQuantityMax($selectOptions->sheet, $options, $id);
 
             if (isset($order) && !$options[$id]->isDeletable($this->now)) {
@@ -117,10 +120,11 @@ class OptionsValidator extends ConstraintValidator
      * @param int    $options
      * @param int    $id
      * @param int    $quantity
+     * @param Order  $order
      *
      * @return false|int
      */
-    private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity)
+    private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity, Order $order = null)
     {
         $quantityMin = 0;
 
@@ -130,12 +134,16 @@ class OptionsValidator extends ConstraintValidator
             $locale
         );
 
-        if (null !== $linkedProduct && $quantity < BuyableObjectResolver::PAYABLE_OPTION_QUANTITY) {
-            $this
-                ->context
-                ->buildViolation('package.product.quantityMinPayableOption')
-                ->atPath($id)
-                ->addViolation();
+        if (null !== $linkedProduct) {
+            $quantity = $this->resolveQuantityMin($quantity, $linkedProduct, $order);
+
+            if ($quantity < BuyableObjectResolver::PAYABLE_OPTION_QUANTITY) {
+                $this
+                    ->context
+                    ->buildViolation('package.product.quantityMinPayableOption')
+                    ->atPath($id)
+                    ->addViolation();
+            }
         } else {
             $quantityMin = $this->quantityMinGuesser->getMinProduct(
                 $sheet,
@@ -173,6 +181,8 @@ class OptionsValidator extends ConstraintValidator
     }
 
     /**
+     * Validate minimum and maximum quantity violation
+     *
      * @param int $quantity
      * @param int $quantityMin
      * @param int $quantityMax
@@ -188,5 +198,26 @@ class OptionsValidator extends ConstraintValidator
                 ->atPath($fieldId)
                 ->addViolation();
         }
+    }
+
+    /**
+     * Resolve minimum quantity by handling included product in plan
+     *
+     * @param int     $quantity
+     * @param Product $linkedProduct
+     * @param Order   $order
+     *
+     * @return int
+     */
+    private function resolveQuantityMin($quantity, Product $linkedProduct, Order $order = null)
+    {
+        if (null !== $order && $plan = $order->getPlan()) {
+            $includedProduct = $plan->getIncludedProduct($linkedProduct);
+            if (null !== $includedProduct) {
+                $quantity = $quantity + $includedProduct->getQuantity();
+            }
+        }
+
+        return $quantity;
     }
 }
