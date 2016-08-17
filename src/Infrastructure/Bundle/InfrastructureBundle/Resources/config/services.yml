@@ -1713,6 +1713,7 @@ services:
             - '@template.template_data_factory'
             - '@transformer.product.id_to_product_transformer'
             - '@template.product_info_guesser'
+            - '@order.merger'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:

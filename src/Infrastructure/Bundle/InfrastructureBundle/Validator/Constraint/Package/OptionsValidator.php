@@ -130,7 +130,7 @@ class OptionsValidator extends ConstraintValidator
             $locale
         );
 
-        if (null !== $linkedProduct && $quantity < BuyableObjectResolver::BUYABLE_DEFAULT_QUANTITY) {
+        if (null !== $linkedProduct && $quantity < BuyableObjectResolver::PAYABLE_OPTION_QUANTITY) {
             $this
                 ->context
                 ->buildViolation('package.product.quantityMinPayableOption')

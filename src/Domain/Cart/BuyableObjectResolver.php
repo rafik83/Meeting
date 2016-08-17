@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\Id
 
 class BuyableObjectResolver
 {
-    const BUYABLE_DEFAULT_QUANTITY = 1;
+    const PAYABLE_OPTION_QUANTITY = 1;
 
     /**
      * @var CartManager
@@ -43,23 +44,31 @@ class BuyableObjectResolver
     private $productInfoGuesser;
 
     /**
+     * @var Merger
+     */
+    private $orderMerger;
+
+    /**
      * TemplateCartManager constructor.
      *
      * @param CartManager            $cartManager
      * @param TemplateDataFactory    $templateDataFactory
      * @param IdToProductTransformer $productTransformer
      * @param ProductInfoGuesser     $productInfoGuesser
+     * @param Merger                 $orderMerger
      */
     public function __construct(
         CartManager $cartManager,
         TemplateDataFactory $templateDataFactory,
         IdToProductTransformer $productTransformer,
-        ProductInfoGuesser $productInfoGuesser
+        ProductInfoGuesser $productInfoGuesser,
+        Merger $orderMerger
     ) {
         $this->cartManager         = $cartManager;
         $this->templateDataFactory = $templateDataFactory;
         $this->productTransformer  = $productTransformer;
         $this->productInfoGuesser  = $productInfoGuesser;
+        $this->orderMerger         = $orderMerger;
     }
 
     /**
@@ -71,7 +80,9 @@ class BuyableObjectResolver
         $cart = $this->cartManager->getCart($sheet);
 
         foreach ($templateData->getImageObjects() as $image) {
-            $this->addImage($image, $cart);
+            if ($image->getSelectedProduct()) {
+                $this->addImage($image, $cart);
+            }
         }
 
         $this->cartManager->save($cart);
@@ -119,13 +130,32 @@ class BuyableObjectResolver
      */
     public function addImage(Image $image, Cart $cart)
     {
-        if (!$image->getSelectedProduct()) {
-            return;
+        $plan        = null;
+        $orderMerged = null;
+
+        if ($cart->getSheet()->hasOrders()) {
+            $orderMerged = $this->orderMerger->merge($cart->getSheet()->getOrders());
+            $plan        = $orderMerged->getPlan();
         }
 
         if ($product = $this->productTransformer->transform($image->getSelectedProduct())) {
-            if (!$cart->hasProduct($product)) {
-                $cart->setProduct($product, self::BUYABLE_DEFAULT_QUANTITY);
+            // handle product included
+            if (null !== $plan && $plan->getIncludedProduct($product)) {
+                return;
+            }
+
+            $cartRow  = $cart->getCartRowForProduct($product);
+
+            // handle first order
+            if (null === $cartRow) {
+                $cart->setProduct($product, self::PAYABLE_OPTION_QUANTITY);
+            } elseif (null !== $orderMerged) {
+                // handle new order
+                $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
+
+                if ($quantity < 1) {
+                    $cartRow->setQuantity($cartRow->getQuantity() + self::PAYABLE_OPTION_QUANTITY);
+                }
             }
         }
     }
@@ -151,9 +181,9 @@ class BuyableObjectResolver
         $updatedQuantity = 0;
 
         if ($cartRow->getQuantity() > 0) {
-            $updatedQuantity = $cartRow->getQuantity() - self::BUYABLE_DEFAULT_QUANTITY;
+            $updatedQuantity = $cartRow->getQuantity() - self::PAYABLE_OPTION_QUANTITY;
         } elseif ($cartRow->getQuantity() < 0) {
-            $updatedQuantity = $cartRow->getQuantity() + self::BUYABLE_DEFAULT_QUANTITY;
+            $updatedQuantity = $cartRow->getQuantity() + self::PAYABLE_OPTION_QUANTITY;
         }
 
         if ($updatedQuantity === 0) {

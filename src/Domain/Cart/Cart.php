@@ -481,9 +481,41 @@ class Cart
 
     /**
      * @param CartRow $cartRow
-     *
      */
-    public function removeRow(CartRow $cartRow) {
+    public function removeRow(CartRow $cartRow)
+    {
         $this->rows->removeElement($cartRow);
+    }
+
+    /**
+     * Merge and resolve cart row quantity and order merged row quantity
+     *
+     * @param Product    $product
+     * @param null|Order $order
+     *
+     * @return int
+     */
+    public function getOrderCartQuantity(Product $product, Order $order = null)
+    {
+        $mergedQuantity = 0;
+        $cartQuantity   = 0;
+        $cartRow        = $this->getCartRowForProduct($product);
+
+        // handle first order
+        if (null !== $cartRow) {
+            $cartQuantity = $cartRow->getQuantity();
+        }
+
+        // handle new order
+        if (isset($order) && $product = $order->getRowForProduct($product)) {
+            $orderQuantity  = $product->getQuantity();
+            $mergedQuantity = $orderQuantity;
+
+            if (null !== $cartRow) {
+                $mergedQuantity = $orderQuantity + $cartQuantity;
+            }
+        }
+
+        return $mergedQuantity;
     }
 }

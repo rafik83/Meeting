@@ -135,6 +135,54 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         description: ''
         addon: ''
         locale: 'en'
+    product_option_3_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_3_rdv_carnot'
+        title: 'Option A'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_3_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_3_rdv_carnot'
+        title: 'Option A'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_4_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_4_rdv_carnot'
+        title: 'Option B'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_4_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_4_rdv_carnot'
+        title: 'Option B'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_5_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_5_rdv_carnot'
+        title: 'Option C'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_5_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_5_rdv_carnot'
+        title: 'Option C'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
 
 Proximum\Vimeet\Domain\Model\Product\Feature:
     feature_1_rdv_carnot:
