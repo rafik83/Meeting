@@ -106,7 +106,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetAddConfirmationEvent = new SheetAddParticipantEvent(
             $expectedSheet,
-            $expectedUser,
+            $expectedParticipant,
             $user
         );
 
