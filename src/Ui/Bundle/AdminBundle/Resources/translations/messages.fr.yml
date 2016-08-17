@@ -145,10 +145,11 @@ admin.order_edit.columns.product: Produit
 admin.order_edit.columns.quantity: Quantité
 admin.order_edit.columns.total: Total
 admin.order_edit.columns.unitPrice: Prix unitaire
-admin.order_edit.command_name: Commande %id% de %sheetName%
+admin.order_edit.command_name: N°%id% de %sheetName%
 admin.order_edit.edit_custom_row: ''
 admin.order_edit.includedProduct: Inclus
 admin.order_edit.link: Modifier
+admin.order_edit.list_command.label: Commandes
 admin.order_edit.promotionCodes: Codes Promo
 admin.order_edit.remove_custom_row: ''
 admin.order_edit.total.withoutVAT: Total HT
