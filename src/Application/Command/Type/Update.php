@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class Update
@@ -35,12 +38,37 @@ class Update
     public $rank;
 
     /**
+     * @var SheetTemplate
+     */
+    public $sheetTemplate;
+
+    /**
+     * @var Package
+     */
+    public $package;
+
+    /**
+     * @var RegistrationTemplate
+     */
+    public $registrationTemplate;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * Update constructor.
      *
-     * @param Type $type
+     * @param Type   $type
+     * @param string $locale
      */
-    public function __construct(Type $type)
+    public function __construct(Type $type, $locale)
     {
+        $this->sheetTemplate                       = $type->getSheetTemplate();
+        $this->package                             = $type->getPackage();
+        $this->registrationTemplate                = $type->getRegistrationTemplate();
+        $this->locale                              = $locale;
         $this->type                                = $type;
         $this->rank                                = $type->getPosition();
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();

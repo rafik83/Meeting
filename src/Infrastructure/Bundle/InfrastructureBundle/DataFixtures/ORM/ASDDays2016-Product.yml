@@ -35,15 +35,15 @@ Proximum\Vimeet\Domain\Model\Product:
     product_option_3_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option A', '', 29, 2, '', '', true, null] }
     product_option_4_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option B', '', 44, 10, '', '', true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option B', '', 44, 10, '', '', true, null, false, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_5_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 49, 10, 0, 50, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option C', '', 49, 10, 50, 50, true, null] }
     product_option_6_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option D', '', 19, 3, 2, 100, true, null] }
     product_option_7_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option E', '', 199, 4, 5, 10, true, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_8_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option F', '', 59, 4, 3, 4, true, null, false, "<dateTimeBetween('-10days', '-2days')>"] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option F', '', 59, 20, 20, 20, true, null, false, null] }
 
 Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     product_included_plan_1_asddays_fr:

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface
@@ -220,5 +221,18 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
     public function isCheckboxes()
     {
         return $this->getMode() === 'checkboxes';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisplayOnCompanyProfile()
+    {
+        $tags = $this->getTags();
+
+        return !in_array(Tag::PARTICIPANT_POSITION, $tags)
+            && !in_array(Tag::SHEET_ORGANIZATION_STAFF, $tags)
+            && !in_array(Tag::SHEET_ORGANIZATION_TURNOVER, $tags)
+        ;
     }
 }

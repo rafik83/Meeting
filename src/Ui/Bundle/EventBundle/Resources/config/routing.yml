@@ -112,11 +112,10 @@ event_account_participant_profile:
     defaults: { _controller: EventBundle:Participant:updateProfile }
 
 event_account_participant_company:
-    path: /account/sheet/{sheet}/participant/{participant}/company
+    path: /account/sheet/{sheet}/company
     methods: [GET, POST]
     requirements:
         sheet: \d+
-        participant: \d+
     defaults: { _controller: EventBundle:Participant:updateCompany }
 
 event_account_participant_avatar:
@@ -198,7 +197,6 @@ event_sheet_handle_remove_participant:
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
-
 
 #
 # Sheet Billing
@@ -512,12 +510,25 @@ event_package_payment_done:
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:donePayment }
 
+event_package_payment_pay_remaining:
+    path: /sheet/{sheet}/package/payment/pay-remaining
+    requirements:
+        sheet: \d+
+        transaction: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:payRemaining }
+
 create_transaction:
     path: /sheet/{sheet}/create-transaction
     requirements:
         sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:createTempTransaction }
+
+event_payment_info:
+    path: /sheet/payment
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:paymentInfo }
 
 #
 # Order

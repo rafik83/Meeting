@@ -116,6 +116,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+    vimeet_infrastructure.repository.order_row_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Order\RowRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.product_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
         arguments:
@@ -278,6 +282,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Type\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@template.sheet.sheet_template_cloner'
+            - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Update }
     vimeet_infrastructure.vimeet.application.command.type.create_handler:
@@ -288,6 +294,14 @@ services:
             - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Create }
+    vimeet_infrastructure.vimeet.application.command.type.remove_handler:
+            class: Proximum\Vimeet\Application\Command\Type\RemoveHandler
+            arguments:
+                - '@vimeet_infrastructure.repository.type_repository'
+                - '@vimeet_infrastructure.repository.sheet_repository'
+                - '@vimeet_infrastructure.repository.rule_repository'
+            tags:
+                - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Remove }
     vimeet_infrastructure.vimeet.application.command.spot.create_handler:
         class: Proximum\Vimeet\Application\Command\Spot\CreateHandler
         arguments:
@@ -861,6 +875,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler
         arguments:
             - '@cart_manager'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
     command.package.step.select_options_handler:
@@ -868,6 +883,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@datetime'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
@@ -1029,6 +1045,7 @@ services:
            - '@cart_manager'
            - '@repository.promotion_code_repository'
            - '@datetime'
+           - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Add }
     command.event.promotion_code.remove_handler:
@@ -1037,8 +1054,41 @@ services:
            - '@repository.promotion_code_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
+    command.order.create_handler:
+        class: Proximum\Vimeet\Application\Command\Order\CreateHandler
+        arguments:
+            - '@cart.convertor'
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Create }
 
+    command.order.add_row_to_product_handler:
+        class: Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToProduct }
 
+    command.order.add_row_to_group_handler:
+        class: Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToGroup }
+
+    command.order.update_row_handler:
+        class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_row_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\UpdateRow }
+
+    command.order.remove_row_handler:
+        class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_row_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
     #
     # Security
     #
@@ -1218,6 +1268,30 @@ services:
             - '%infrastructure.bundle_guideline_path%'
             - '%infrastructure.font_path%'
             - '%infrastructure.image_path%'
+
+    #
+    # Step Component
+    #
+    components.step.step_option:
+        class: Proximum\Vimeet\Application\Components\Step\StepOption
+        arguments:
+            - '@order.merger'
+            - '@cart_manager'
+    components.step.step_participant:
+        class: Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning
+        arguments:
+            - '@order.merger'
+            - '@cart_manager'
+    components.step.step_plan:
+        class: Proximum\Vimeet\Application\Components\Step\StepPlan
+        arguments:
+            - '@cart_manager'
+    components.step.step_command_factory:
+        class: Proximum\Vimeet\Application\Components\Step\StepCommandFactory
+        arguments:
+            - '@components.step.step_plan'
+            - '@components.step.step_participant'
+            - '@components.step.step_option'
 
     #
     # DateTime
@@ -1417,6 +1491,7 @@ services:
         arguments:
             - '@query.package.participant_view_query_handler'
             - '@cart_manager'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
     query.package.groups_view_query_handler:
@@ -1435,6 +1510,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
         arguments:
             - '@cart_manager'
+            - '@order.merger'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
@@ -1448,6 +1524,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler
         arguments:
             - '@query.package.summary.product_view_query_handler'
+            - '@query.order.summary.custom_row_view_query_handler'
     query.package.summary.planning_group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
         arguments:
@@ -1475,25 +1552,30 @@ services:
             - '@query.package.summary.promotion_code_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
-    query.order.summary.product_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Order\Summary\ProductViewQueryHandler
+    query.order.summary.row_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\RowViewQueryHandler
         arguments:
             - '@order.row.product_included_info_guesser'
+            - '@query.order.summary.custom_row_view_query_handler'
             - '@datetime'
     query.order.summary.group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupViewQueryHandler
         arguments:
-            - '@query.order.summary.product_view_query_handler'
+            - '@query.order.summary.row_view_query_handler'
+            - '@query.order.summary.custom_row_view_query_handler'
     query.order.summary.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
         arguments:
             - '@query.order.summary.group_view_query_handler'
+            - '@package.funnel.funnel_factory'
     query.order.summary.promotion_code_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodeViewQueryHandler
     query.order.summary.promotion_codes_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler
         arguments:
             - '@query.order.summary.promotion_code_view_query_handler'
+    query.order.summary.custom_row_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Order\Summary\CustomRowViewQueryHandler
     query.order.summary_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\SummaryQueryHandler
         arguments:
@@ -1613,6 +1695,11 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+            - '@order.merger'
+    package.planning.quantity_min_guesser:
+            class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
+            arguments:
+                - '@order.merger'
     package.specification.vat_applicable:
         class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
         arguments:
@@ -1628,6 +1715,7 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
+            - '@order.merger'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:
@@ -1678,6 +1766,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.transaction'
+    order.merger:
+        class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
 
@@ -1711,7 +1801,6 @@ services:
         class: Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner
         arguments:
             - '@repository.nomenclature_repository'
-
     #
     # Event
     #
@@ -1728,6 +1817,8 @@ services:
         arguments:
             - '@payum'
             - '@repository.billing_info_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     vimeet.payum.paypal.capture_payment:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment
         arguments:

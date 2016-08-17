@@ -393,4 +393,13 @@ class TypeRepository implements TypeRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult() ? true : false;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Type $type)
+    {
+        $this->entityManager->remove($type);
+        $this->entityManager->flush();
+    }
 }

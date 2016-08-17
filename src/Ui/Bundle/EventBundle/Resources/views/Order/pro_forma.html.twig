@@ -22,7 +22,7 @@
                 <b>{{ 'pro_forma.date.title'|trans }}</b> {{ pro_forma.order.createdAt|localizeddate('medium', 'short', app.request.locale) }}
             </div>
         </div>
-        {{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary}) }}
+        {{ include('EventBundle:Order/Summary:summary.html.twig', {summary: pro_forma.summary, order: pro_forma.order}) }}
         <div class="row">
             <div class="col-md-4">
                 {{ pro_forma.billingAddress|nl2br }}<br>

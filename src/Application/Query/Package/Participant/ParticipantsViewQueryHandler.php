@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Order\Merger;
 
 class ParticipantsViewQueryHandler
 {
@@ -26,12 +27,23 @@ class ParticipantsViewQueryHandler
     private $cartManager;
 
     /**
-     * @param ParticipantViewQueryHandler $participantViewQueryHandler
-     * @param CartManager $cartManager
+     * @var Merger
      */
-    public function __construct(ParticipantViewQueryHandler $participantViewQueryHandler, CartManager $cartManager) {
+    private $orderMerger;
+
+    /**
+     * @param ParticipantViewQueryHandler $participantViewQueryHandler
+     * @param CartManager                 $cartManager
+     * @param Merger                      $orderMerger
+     */
+    public function __construct(
+        ParticipantViewQueryHandler $participantViewQueryHandler,
+        CartManager $cartManager,
+        Merger $orderMerger
+    ) {
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->cartManager                 = $cartManager;
+        $this->orderMerger                 = $orderMerger;
     }
 
     /**
@@ -43,11 +55,18 @@ class ParticipantsViewQueryHandler
         $cart               = $this->cartManager->getCart($participantsViewQuery->sheet);
         $locale             = $participantsViewQuery->locale;
         $participantProduct = $participantsViewQuery->sheet->getPackage()->getParticipant();
-        $selectedPlan       = $cart->getPlanRow();
-        $numberIncluded     = 0;
+
+        if ($participantsViewQuery->sheet->hasOrders()) {
+            $orderMerged  = $this->orderMerger->merge($participantsViewQuery->sheet->getOrders());
+            $selectedPlan = $orderMerged->getPlan();
+        } else {
+            $selectedPlan = $cart->getPlanRow()->getProduct();
+        }
+
+        $numberIncluded = 0;
 
         if ($selectedPlan) {
-            $participantProductIncluded = $selectedPlan->getProduct()->getIncludedParticipantProduct();
+            $participantProductIncluded = $selectedPlan->getIncludedParticipantProduct();
 
             if ($participantProductIncluded) {
                 $numberIncluded = $participantProductIncluded->getQuantity();

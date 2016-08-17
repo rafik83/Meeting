@@ -50,6 +50,9 @@ class GroupsView
         $this->groups           = $groups;
     }
 
+    /**
+     * @return float|int
+     */
     public function getTotal()
     {
         $total = 0;

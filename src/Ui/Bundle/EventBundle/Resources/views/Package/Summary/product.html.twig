@@ -1,5 +1,5 @@
 {% if null != product %}
-    <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
+    <tr {% if stripped is defined and stripped %}class="even"{% endif %} data-product-id="{{ product.id }}">
         <td class="col-md-6">
             <p>{{ product.title }}</p>
         </td>

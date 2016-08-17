@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Query\Order\ProFormaQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -112,7 +111,7 @@ class OrderController extends Controller
         $orders = $this->get('vimeet_infrastructure.repository.order_repository')
             ->findBySheet($sheet);
 
-        $orderMerger = new Merger();
+        $orderMerger = $this->get('order.merger');
         $order       = $orderMerger->merge($orders);
 
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
@@ -124,6 +123,7 @@ class OrderController extends Controller
         return $this->render('EventBundle:Order/SummaryTotal:summaryTotal.html.twig', [
             'event' => $eventDomain->getEvent(),
             'sheet' => $sheet,
+            'order' => $order,
             'view'  => $view,
         ]);
     }

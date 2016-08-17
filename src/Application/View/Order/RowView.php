@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
-class ProductView
+class RowView
 {
     /**
      * @var int
@@ -48,7 +48,7 @@ class ProductView
     public $currency;
 
     /**
-     * @var ProductView[]
+     * @var IncludedProductView[]
      */
     public $includedProducts = [];
 
@@ -72,8 +72,19 @@ class ProductView
      */
     public $isDeletable;
 
+    /***
+     * @var null|CustomRowView[]
+     */
+    public $customRows = [];
+
+    /**
+     * @var int
+     */
+    public $productId;
+
     /**
      * @param int                     $id
+     * @param int                     $productId
      * @param string                  $label
      * @param float                   $price
      * @param int                     $quantity
@@ -86,6 +97,7 @@ class ProductView
      */
     public function __construct(
         $id,
+        $productId,
         $label,
         $price,
         $quantity,
@@ -107,13 +119,30 @@ class ProductView
         $this->deletableUntil = $deletableUntil;
         $this->isBuyable      = $isBuyable;
         $this->isDeletable    = $isDeletable;
+        $this->productId      = $productId;
     }
 
     /**
-     * @param ProductView $productView
+     * @param IncludedProductView $productView
      */
-    public function addIncludedProduct(ProductView $productView)
+    public function addIncludedProduct(IncludedProductView $productView)
     {
         $this->includedProducts[] = $productView;
+    }
+
+    /**
+     * @param CustomRowView $customRowView
+     */
+    public function addCustomRow(CustomRowView $customRowView)
+    {
+        $this->customRows[] = $customRowView;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
     }
 }

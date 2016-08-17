@@ -597,6 +597,32 @@ class Product
     }
 
     /**
+     * @return ProductIncluded[]
+     */
+    public function getIncludedOptionProduct()
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
+            return $productIncluded->getIncluded()->isOption();
+        })->toArray();
+    }
+
+    /**
+     * @param int $productId
+     *
+     * @return null|ProductIncluded
+     */
+    public function getIncludedOptionById($productId)
+    {
+        foreach ($this->getIncludedOptionProduct() as $option) {
+            if ($option->getIncluded()->getId() === $productId) {
+                return $option;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return string
      */
     public function getVatMode()

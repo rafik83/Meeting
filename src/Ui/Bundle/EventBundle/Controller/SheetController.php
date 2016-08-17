@@ -211,12 +211,21 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale);
-
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
-        $form         = $this->createObjectForm($object, $locale, $key);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $object             = $templateData->getObject($key);
+        $form               = $this->createObjectForm($object, $locale, $key);
+        $levelsArchitecture = [];
+
+        if ($object instanceof Template\TemplateObject\Nomenclature) {
+            $nomenclature = $object->getNomenclatureModel();
+            $depth        = $nomenclature->getDepth();
+
+            if (3 === $depth) {
+                $levelsArchitecture = $nomenclature->getLevelsArchitecture();
+            }
+        }
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted()) {
@@ -258,17 +267,18 @@ class SheetController extends Controller
             : 'EventBundle:Sheet:sheet.html.twig';
 
         return $this->render($twig, [
-            'event'         => $eventDomain->getEvent(),
-            'form'          => $form->createView(),
-            'label'         => $label,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'object'        => $object,
-            'participants'  => $participants,
-            'sheet'         => $sheet,
-            'taggedData'    => $taggedData,
-            'templateData'  => $templateData,
-            'uid'           => $key,
+            'event'              => $eventDomain->getEvent(),
+            'form'               => $form->createView(),
+            'label'              => $label,
+            'levelsArchitecture' => $levelsArchitecture,
+            'locale'             => $locale,
+            'nomenclatures'      => $nomenclatures,
+            'object'             => $object,
+            'participants'       => $participants,
+            'sheet'              => $sheet,
+            'taggedData'         => $taggedData,
+            'templateData'       => $templateData,
+            'uid'                => $key,
         ]);
     }
 
@@ -349,7 +359,10 @@ class SheetController extends Controller
 
         $addParticipant = new Add($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
-            'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
+            'action' => $this->generateUrl('event_sheet_handle_participant', [
+                'locale' => $locale,
+                'key'    => $key
+            ]),
         ]);
 
         // Handle the form, update the object and redirect to the sheet if valid

@@ -28,10 +28,10 @@ class Row
     /**
      * @var string
      */
-    private $data;
+    private $data = '';
 
     /**
-     * @var Product
+     * @var null|Product
      */
     private $product;
 
@@ -51,21 +51,47 @@ class Row
     private $groupId;
 
     /**
+     * @var null|Row
+     */
+    private $parentRow;
+
+    /**
+     * @var string
+     */
+    private $label;
+
+    /**
      * Row constructor.
      *
-     * @param Order    $order
-     * @param Product  $product
-     * @param int      $quantity
-     * @param int|null $groupId
+     * @param Order        $order
+     * @param int          $quantity
+     * @param null|Product $product
+     * @param null|int     $groupId
+     * @param string       $label
+     * @param float        $price
+     * @param null|Row     $parentRow
      */
-    public function __construct(Order $order, Product $product, $quantity, $groupId = null)
-    {
-        $this->order    = $order;
-        $this->quantity = $quantity;
-        $this->data     = $product->getSerializedData();
-        $this->product  = $product;
-        $this->price    = $product->getUnitPrice();
-        $this->groupId  = $groupId;
+    public function __construct(
+        Order $order,
+        $quantity,
+        Product $product = null,
+        $groupId = null,
+        $label = null,
+        $price = null,
+        $parentRow = null
+    ) {
+        $this->order       = $order;
+        $this->quantity    = $quantity;
+        $this->groupId     = $groupId;
+        $this->label       = $label;
+        $this->price       = $price;
+        $this->parentRow   = $parentRow;
+
+        if (null !== $product) {
+            $this->product = $product;
+            $this->data    = $product->getSerializedData();
+            $this->price   = $product->getUnitPrice();
+        }
     }
 
     /**
@@ -174,7 +200,7 @@ class Row
      *
      * @return string
      */
-    public function getLabel($locale, $fallback = null)
+    public function getLabelFromData($locale, $fallback = null)
     {
         $data = json_decode($this->data, true);
 
@@ -197,6 +223,90 @@ class Row
     }
 
     /**
+     * @param string      $locale
+     * @param null|string $fallback
+     *
+     * @return string
+     */
+    public function getLabel($locale = null, $fallback = null)
+    {
+        if (!empty($this->data) && null !== $locale) {
+            return $this->getLabelFromData($locale, $fallback);
+        }
+
+        return $this->label;
+    }
+
+    /**
+     * @return null|Row
+     */
+    public function getParentRow()
+    {
+        return $this->parentRow;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParentRow()
+    {
+        return null !== $this->parentRow;
+    }
+
+    /**
+     * @param Order    $order
+     * @param int      $quantity
+     * @param null|int $groupId
+     * @param string   $label
+     * @param float    $price
+     *
+     * @return Row
+     */
+    public static function createCustomRowToGroup(
+        Order $order,
+        $quantity,
+        $groupId,
+        $label,
+        $price
+    ) {
+        return new self(
+            $order,
+            $quantity,
+            null,
+            $groupId,
+            $label,
+            $price
+        );
+    }
+
+    /**
+     * @param Order  $order
+     * @param Row    $parentRow
+     * @param string $label
+     * @param int    $quantity
+     * @param float  $price
+     *
+     * @return Row
+     */
+    public static function createCustomRowToProduct(
+        Order $order,
+        Row $parentRow,
+        $label,
+        $quantity,
+        $price
+    ) {
+        return new self(
+            $order,
+            $quantity,
+            null,
+            $parentRow->getGroupId(),
+            $label,
+            $price,
+            $parentRow
+        );
+    }
+
+    /**
      * @return bool
      */
     public function hasIncludedProduct()
@@ -204,5 +314,25 @@ class Row
         $data = json_decode($this->data, true);
 
         return isset($data['productsIncluded']) && !empty($data['productsIncluded']) ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProduct()
+    {
+        return null !== $this->getProduct();
+    }
+
+    /**
+     * @param string $label
+     * @param float  $price
+     * @param int    $quantity
+     */
+    public function update($label, $price, $quantity)
+    {
+        $this->label    = $label;
+        $this->price    = $price;
+        $this->quantity = $quantity;
     }
 }

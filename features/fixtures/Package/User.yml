@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\User:
+    user_new_order_1:
+        __construct: false
+        email: "user_new_order_1@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    user_new_order_2:
+        __construct: false
+        email: "user_new_order_2@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_asddays_2:
+        __construct: false
+        user: "@user_new_order_1"
+        sheet: "@sheet_asddays_1"
+        active: true
+        data:
+            541f84d4: { text: "Paul" }
+            838197c7: { text: "Boiseau" }
+            1efb9cbb: { telephone: "+33909090909" }
+    participant_asddays_3:
+        __construct: false
+        user: "@user_new_order_2"
+        sheet: "@sheet_asddays_1"
+        active: true
+        data:
+            541f84d4: { text: "Jean" }
+            838197c7: { text: "Dupond" }
+            1efb9cbb: { telephone: "+33909090909" }
