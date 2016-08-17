@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 
@@ -34,11 +33,6 @@ class BuyableObjectResolver
     private $productTransformer;
 
     /**
-     * @var TemplateDataFactory
-     */
-    private $templateDataFactory;
-
-    /**
      * @var ProductInfoGuesser
      */
     private $productInfoGuesser;
@@ -52,23 +46,20 @@ class BuyableObjectResolver
      * TemplateCartManager constructor.
      *
      * @param CartManager            $cartManager
-     * @param TemplateDataFactory    $templateDataFactory
      * @param IdToProductTransformer $productTransformer
      * @param ProductInfoGuesser     $productInfoGuesser
      * @param Merger                 $orderMerger
      */
     public function __construct(
         CartManager $cartManager,
-        TemplateDataFactory $templateDataFactory,
         IdToProductTransformer $productTransformer,
         ProductInfoGuesser $productInfoGuesser,
         Merger $orderMerger
     ) {
-        $this->cartManager         = $cartManager;
-        $this->templateDataFactory = $templateDataFactory;
-        $this->productTransformer  = $productTransformer;
-        $this->productInfoGuesser  = $productInfoGuesser;
-        $this->orderMerger         = $orderMerger;
+        $this->cartManager        = $cartManager;
+        $this->productTransformer = $productTransformer;
+        $this->productInfoGuesser = $productInfoGuesser;
+        $this->orderMerger        = $orderMerger;
     }
 
     /**
@@ -144,18 +135,18 @@ class BuyableObjectResolver
                 return;
             }
 
-            $cartRow  = $cart->getCartRowForProduct($product);
+            $cartRow = $cart->getCartRowForProduct($product);
 
-            // handle first order
-            if (null === $cartRow) {
-                $cart->setProduct($product, self::PAYABLE_OPTION_QUANTITY);
-            } elseif (null !== $orderMerged) {
-                // handle new order
+            // handle new order
+            if ($orderMerged) {
                 $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
 
                 if ($quantity < 1) {
                     $cartRow->setQuantity($cartRow->getQuantity() + self::PAYABLE_OPTION_QUANTITY);
                 }
+            } elseif (null === $cartRow) {
+                // first order
+                $cart->setProduct($product, self::PAYABLE_OPTION_QUANTITY);
             }
         }
     }

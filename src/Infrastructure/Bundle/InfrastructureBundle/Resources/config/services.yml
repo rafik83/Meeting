@@ -1710,7 +1710,6 @@ services:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:
             - '@cart_manager'
-            - '@template.template_data_factory'
             - '@transformer.product.id_to_product_transformer'
             - '@template.product_info_guesser'
             - '@order.merger'
