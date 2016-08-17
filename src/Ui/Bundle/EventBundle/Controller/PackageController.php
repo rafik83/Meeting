@@ -380,6 +380,7 @@ class PackageController extends Controller
         // Redirect to the billing info action if the billing info are not completed
         if (null === $billingInfo || !$billingInfo->isCompleted()) {
             $this->addFlash('package_complete_billing_info', $sheet->getId());
+            $this->addFlash('package_funnel_billing_info', true);
 
             return $this->redirectToRoute('event_billing_info', [
                 'sheet' => $sheet->getId(),
@@ -475,6 +476,7 @@ class PackageController extends Controller
         $this->authorizeAccess($eventDomain, $sheet);
 
         $this->addFlash('package_complete_billing_info', $sheet->getId());
+        $this->addFlash('package_funnel_billing_info', $sheet->getId());
 
         return $this->redirectToRoute('event_billing_info', [
             'sheet' => $sheet->getId(),

@@ -209,6 +209,12 @@ event_billing_info:
         sheet: \d+
     defaults: { _controller: EventBundle:Billing:info }
 
+event_billing_info_clear_flash:
+    path:     /sheet/{sheet}/billing-info-from-menu
+    methods:  [GET, POST]
+    requirements:
+        sheet: \d+
+    defaults: { _controller: EventBundle:Billing:infoClearFlash }
 #
 # Authentication
 #
