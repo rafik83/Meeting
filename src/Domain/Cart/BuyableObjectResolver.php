@@ -14,8 +14,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
-use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 
 class BuyableObjectResolver
@@ -63,17 +62,21 @@ class BuyableObjectResolver
     }
 
     /**
-     * @param Sheet        $sheet
-     * @param TemplateData $templateData
+     * @param Sheet          $sheet
+     * @param TemplateObject $object
      */
-    public function updateCart(Sheet $sheet, TemplateData $templateData)
+    public function updateCart(Sheet $sheet, TemplateObject $object)
     {
         $cart = $this->cartManager->getCart($sheet);
 
-        foreach ($templateData->getImageObjects() as $image) {
-            if ($image->getSelectedProduct()) {
-                $this->addImage($image, $cart);
-            }
+        if (!$object->getSelectedProduct()) {
+            return;
+        }
+
+        if ($object instanceof TemplateObject\Image ||
+            $object instanceof TemplateObject\MediaCollection
+        ) {
+            $this->addPayableProduct($object, $cart);
         }
 
         $this->cartManager->save($cart);
@@ -116,10 +119,10 @@ class BuyableObjectResolver
     }
 
     /**
-     * @param Image $image
-     * @param Cart  $cart
+     * @param TemplateObject $image
+     * @param Cart           $cart
      */
-    public function addImage(Image $image, Cart $cart)
+    public function addPayableProduct(TemplateObject $image, Cart $cart)
     {
         $plan        = null;
         $orderMerged = null;
@@ -152,10 +155,10 @@ class BuyableObjectResolver
     }
 
     /**
-     * @param Sheet $sheet
-     * @param Image $image
+     * @param Sheet                $sheet
+     * @param TemplateObject\Image $image
      */
-    public function removeImage(Sheet $sheet, Image $image)
+    public function removeImage(Sheet $sheet, TemplateObject\Image $image)
     {
         if (!$image->getSelectedProduct()) {
             return;

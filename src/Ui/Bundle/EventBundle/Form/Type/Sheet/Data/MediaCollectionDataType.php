@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,10 +22,28 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class MediaCollectionDataType extends AbstractType
 {
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * ImageDataType constructor.
+     *
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var MediaCollection $media */
+        $media = $options['object'];
+
         $builder
             ->add('medias', CollectionType::class, [
                 'entry_type'    => MediaDataType::class,
@@ -38,6 +59,27 @@ class MediaCollectionDataType extends AbstractType
                 'max'           => $options['data']->getMax(),
             ])
         ;
+
+        if (null !== $media->getBuyableProducts()) {
+
+            $selectedRadio = count($media->getBuyableProducts()) === 1 ?
+                $media->getBuyableProducts()[0]->getId() :
+                $media->getSelectedProduct();
+
+            $builder
+                ->add('selectedProduct', ChoiceType::class, [
+                    'expanded'    => true,
+                    'multiple'    => false,
+                    'label'       => false,
+                    'choice_name' => 'id',
+                    'choices'     => $media->getBuyableProducts(),
+                    'required'    => true,
+                    'data'        => $selectedRadio
+                ]);
+
+            $builder->get('selectedProduct')
+                ->addModelTransformer(new IdToProductTransformer($this->productRepository));
+        }
     }
 
     /**

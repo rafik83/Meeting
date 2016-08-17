@@ -44,7 +44,7 @@ class UpdateDataHandler
      */
     public function handle(UpdateData $command)
     {
-        $this->buyableObjectResolver->updateCart($command->sheet, $command->templateData);
+        $this->buyableObjectResolver->updateCart($command->sheet, $command->object);
         $this->sheetRepository->set($command->sheet->setData($command->templateData->getData()));
     }
 }

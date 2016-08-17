@@ -201,4 +201,20 @@ class TemplateObject extends AbstractChild
     {
         $this->buyableProducts = $products;
     }
+
+    /**
+     * @return null|int
+     */
+    public function getSelectedProduct()
+    {
+        return isset($this->data['product']) ? $this->data['product'] : null;
+    }
+
+    /**
+     * @param Product $selectedProduct
+     */
+    public function setSelectedProduct(Product $selectedProduct)
+    {
+        $this->data['product'] = $selectedProduct->getId();
+    }
 }

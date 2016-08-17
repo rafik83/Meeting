@@ -262,7 +262,7 @@ class SheetController extends Controller
                 }
             }
 
-            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData));
+            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
 
             return $this->redirectToRoute('event_sheet');
         }
