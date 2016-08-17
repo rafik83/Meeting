@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Order;
 
-use Proximum\Vimeet\Application\Query\Order\Summary\CustomRowsViewQuery;
-use Proximum\Vimeet\Application\Query\Order\Summary\CustomRowsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;
@@ -63,9 +61,10 @@ class SummaryQueryHandler
             ),
             $summaryQuery->order->isVatApplicable(),
             $summaryQuery->order->getVatRate(),
+            $summaryQuery->order->getVatAmount(),
+            $summaryQuery->order->getVatMode(),
             $summaryQuery->order->getTotalVatMode(),
             $summaryQuery->order->getTotalWithoutVat(),
-            $summaryQuery->order->getVatAmount(),
             $summaryQuery->order->getTotalWithVat(),
             $summaryQuery->order->getCurrency()
         );

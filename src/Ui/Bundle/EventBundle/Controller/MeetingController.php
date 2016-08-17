@@ -35,7 +35,7 @@ class MeetingController extends Controller
      */
     public function displayAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $locale = $request->getLocale();
 
@@ -73,7 +73,7 @@ class MeetingController extends Controller
      */
     public function cancelAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $cancel = new Cancel($meeting, $this->getUser(), $sheet, new \DateTimeImmutable());
         $form   = $this->createForm(CancelType::class, $cancel);
@@ -103,7 +103,7 @@ class MeetingController extends Controller
      */
     public function updateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Meeting $meeting)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $update = new Update($meeting, $sheet, $this->getUser(), new \DateTimeImmutable());
         $form   = $this->createForm(UpdateType::class, $update, ['submit' => true]);

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,8 @@ class OrderController extends Controller
      */
     public function listAction(EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $balance = $this->get('order.balance');
         $orders  = $balance->getOrders($sheet);
@@ -62,7 +64,8 @@ class OrderController extends Controller
      */
     public function proFormaAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Order $order)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
@@ -95,7 +98,8 @@ class OrderController extends Controller
      */
     public function summaryTotalAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())

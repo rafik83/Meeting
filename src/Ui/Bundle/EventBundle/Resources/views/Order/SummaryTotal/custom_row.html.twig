@@ -8,8 +8,8 @@
                 <span class="product-price text-center">
                     {{ 'package.product.unitPrice'|trans({
                         '%price%': customRow.price|localizednumber,
-                        '%currency%': currency|currency_symbol,
-                        '%vatMode%': ('package.vatMode.' ~ vatMode)|trans
+                        '%currency%': customRow.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ customRow.vatMode)|trans
                     })|html }}
                 </span>
             </div>
@@ -22,8 +22,8 @@
                 <span class="product-price text-center">
                     {{ 'package.product.unitPrice'|trans({
                         '%price%': customRow.total|localizednumber,
-                        '%currency%': currency|currency_symbol,
-                        '%vatMode%': ('package.vatMode.' ~ vatMode)|trans
+                        '%currency%': customRow.currency|currency_symbol,
+                        '%vatMode%': ('package.vatMode.' ~ customRow.vatMode)|trans
                     })|html }}
                 </span>
             </div>

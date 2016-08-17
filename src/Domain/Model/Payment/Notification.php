@@ -45,4 +45,36 @@ class Notification
         $this->gatewayName = $gatewayName;
         $this->createdAt   = $createdAt;
     }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGatewayName()
+    {
+        return $this->gatewayName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
 }

@@ -41,7 +41,7 @@ class ActivateAccountController extends Controller
             throw $this->createNotFoundException('The token is expired.');
         }
 
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
@@ -71,7 +71,7 @@ class ActivateAccountController extends Controller
      */
     public function completeProfileAction(Participant $participant)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $this->get('adapter.authentication_manager')->disconnect();
         }
 

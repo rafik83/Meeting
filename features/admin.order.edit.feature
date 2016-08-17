@@ -38,7 +38,7 @@ Feature: Edit an order
     Then I should be on this page "/fr/sheet"
     When I follow "navigation.links.package.order_list"
     Then the response status code should be 200
-    When I follow "order.list.column.pro_forma"
+    When I follow "order.list.pro_forma.link"
     Then the response status code should be 200
     And I should see "1 566"
     And I should see "-500"
@@ -64,7 +64,7 @@ Feature: Edit an order
     Then I should be on this page "/fr/sheet"
     When I follow "navigation.links.package.order_list"
     Then the response status code should be 200
-    When I follow "order.list.column.pro_forma"
+    When I follow "order.list.pro_forma.link"
     Then the response status code should be 200
     And I should see "1 666"
     And I should see "-400"
@@ -82,7 +82,7 @@ Feature: Edit an order
     Then I should be on this page "/fr/sheet"
     When I follow "navigation.links.package.order_list"
     Then the response status code should be 200
-    When I follow "order.list.column.pro_forma"
+    When I follow "order.list.pro_forma.link"
     Then the response status code should be 200
     And I should see "2 066"
     And I should not see "-400"
