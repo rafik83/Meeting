@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Command\Type\UpdateHandler;
+use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -34,17 +36,25 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $type = new Type($event);
         $type->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $type->getValidationCriteria()->setSheetAccepted(true);
-        $create = new Update($type);
-        $create->translations['fr']['title'] = 'truc';
+
+        $create                                      = new Update($type, 'fr');
+        $create->translations['fr']['title']         = 'truc';
         $create->validationCriteria['sheetAccepted'] = false;
 
         //Mock
-        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+        $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);
+        $sheetTemplateCloner        = $this->prophesize(SheetTemplateCloner::class);
+        $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
+
         $typeRepository->set($expectedType)->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'truc', $type)->willReturn(false);
 
         //Handler
-        $handler = new UpdateHandler($typeRepository->reveal());
+        $handler = new UpdateHandler(
+            $typeRepository->reveal(),
+            $sheetTemplateCloner->reveal(),
+            $registrationTemplateCloner->reveal()
+        );
         $handler->handle($create);
     }
 }

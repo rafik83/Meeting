@@ -23,8 +23,7 @@ class TransactionModeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices_as_values' => true,
-            'choices'           => Mode::getTransactionModes(),
+            'choices'      => Mode::getTransactionModes(),
             'choice_label' => function ($value) {
                 return sprintf('form.transaction.children.transaction_mode.%s', $value);
             },
