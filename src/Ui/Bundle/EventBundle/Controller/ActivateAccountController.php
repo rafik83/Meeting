@@ -29,15 +29,21 @@ class ActivateAccountController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function passwordAction(Request $request, EventDomain $eventDomain, ActivateAccountToken $activateAccountToken)
-    {
+    public function passwordAction(
+        Request $request,
+        EventDomain $eventDomain,
+        ActivateAccountToken $activateAccountToken
+    ) {
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();
 
         // We must refresh sheet to make behat feature working ...
         $this->getDoctrine()->getManager()->refresh($sheet);
 
-        if ($activateAccountToken->isExpired(new \DateTime()) || !$sheet->hasUser($user)) {
+        if ($activateAccountToken->isExpired(new \DateTime())
+            || !$sheet->hasUser($user)
+            || $activateAccountToken->getSheet()->getEvent() !== $eventDomain->getEvent()
+        ) {
             throw $this->createNotFoundException('The token is expired.');
         }
 
