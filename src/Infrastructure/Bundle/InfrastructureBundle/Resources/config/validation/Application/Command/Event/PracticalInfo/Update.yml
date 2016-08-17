@@ -2,3 +2,5 @@ Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update:
     properties:
         organiserName:
             - NotBlank: ~
+        organiserWebsite:
+            - Url: ~

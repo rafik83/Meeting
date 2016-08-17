@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
@@ -65,13 +66,14 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
             );
 
         $cartManager = $this->prophesize(CartManager::class);
+        $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldBeCalled();
 
         $command                   = new SelectParticipantAndPlanning($sheet, 1);
         $command->planningQuantity = 1;
 
-        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal());
+        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal(), $orderMerger->reveal());
         $handler->handle($command);
     }
 
@@ -126,13 +128,14 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
             1);
 
         $cartManager = $this->prophesize(CartManager::class);
+        $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldBeCalled();
 
         $command                   = new SelectParticipantAndPlanning($sheet, 1);
         $command->planningQuantity = 0;
 
-        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal());
+        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal(), $orderMerger->reveal());
         $handler->handle($command);
     }
 }

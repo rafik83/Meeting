@@ -10,11 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
-use Proximum\Vimeet\Application\View\Order\ProductView;
+use Proximum\Vimeet\Application\View\Order\RowView;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
 class GroupViewQuery
 {
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
     /**
      * @var Order
      */
@@ -36,19 +43,35 @@ class GroupViewQuery
     public $locale;
 
     /**
-     * @var null|ProductView
+     * @var null|RowView
      */
     public $planView;
 
     /**
+     * @var null|Step
+     */
+    public $step;
+
+    /**
+     * @param Sheet            $sheet
+     * @param null|Step        $step
      * @param Order            $order
      * @param string           $locale
      * @param string           $type
      * @param int|null         $groupId
-     * @param ProductView|null $planView
+     * @param RowView|null $planView
      */
-    public function __construct(Order $order, $locale, $type, $groupId = null, ProductView $planView = null)
-    {
+    public function __construct(
+        Sheet $sheet,
+        Step $step = null,
+        Order $order,
+        $locale,
+        $type,
+        $groupId = null,
+        RowView $planView = null
+    ) {
+        $this->sheet    = $sheet;
+        $this->step     = $step;
         $this->order    = $order;
         $this->locale   = $locale;
         $this->type     = $type;

@@ -1,5 +1,5 @@
 {% if null != groups and groups is not empty %}
     {% for group in groups %}
-        {{ include('EventBundle:Order/SummaryTotal:group.html.twig', {group: group}) }}
+        {{ include('EventBundle:Order/SummaryTotal:group.html.twig', { group: group }) }}
     {% endfor %}
 {% endif %}

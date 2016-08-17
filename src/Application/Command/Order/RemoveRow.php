@@ -10,36 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
-use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 
 class RemoveRow
 {
     /**
-     * @var Order
-     */
-    public $order;
-
-    /**
-     * @var string
-     */
-    public $group;
-
-    /**
-     * @var string
+     * @var Row
      */
     public $row;
 
     /**
-     * RemoveRow constructor.
-     *
-     * @param Order  $order
-     * @param string $group
-     * @param string $row
+     * @param Row $row
      */
-    public function __construct(Order $order, $group, $row)
+    public function __construct(Row $row)
     {
-        $this->order = $order;
-        $this->group = $group;
-        $this->row   = $row;
+        $this->row = $row;
     }
 }

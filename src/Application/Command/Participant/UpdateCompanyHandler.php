@@ -44,7 +44,8 @@ class UpdateCompanyHandler
     public function handle(UpdateCompany $updateCompany)
     {
         $participant  = $updateCompany->participant;
-        $companyData  = $updateCompany->participant->getSheet()->getRegistrationData();
+        $sheet        = $updateCompany->sheet;
+        $companyData  = $sheet->getRegistrationData();
         $templateData = $updateCompany->templateData;
 
         foreach ($updateCompany->data as $key => $value) {
@@ -56,11 +57,11 @@ class UpdateCompanyHandler
             }
         }
 
-        $participant->getSheet()->setRegistrationData($companyData);
+        $sheet->setRegistrationData($companyData);
 
-        $this->sheetRepository->set($participant->getSheet());
+        $this->sheetRepository->set($sheet);
 
-        if ($participant->getUser() === $updateCompany->user) {
+        if ($participant !== null && $participant->getUser() === $updateCompany->user) {
             $this->accountSynchronizer->set($templateData, $updateCompany->participant->getUser());
         }
     }

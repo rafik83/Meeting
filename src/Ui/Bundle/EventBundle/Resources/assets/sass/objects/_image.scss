@@ -12,14 +12,34 @@
             box-shadow: 0 10px 10px 0 rgba(0,0,0,0.2);
             text-align: center;
 
-            img {
-                max-height: 160px;
-                max-width: 100%;
-            }
-
             div {
                 padding-top: 65px;
             }
         }
     }
+
+    img {
+        max-height: 160px;
+        max-width: 100%;
+    }
+}
+
+.object--image--preview {
+    text-align: center;
+    img {
+        max-height: 160px;
+        max-width: 100%;
+    }
+
+    .object--image--header {
+        padding-bottom: 10px;
+    }
+
+    .object--image--footer {
+        padding-top: 10px;
+    }
+}
+
+.object--form--field {
+    margin-top: 30px;
 }

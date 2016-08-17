@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SummaryView
 {
@@ -32,17 +32,7 @@ class SummaryView
     /**
      * @var float
      */
-    public $vat;
-
-    /**
-     * @var float
-     */
     public $vatRate;
-
-    /**
-     * @var float
-     */
-    public $totalPlusVat;
 
     /**
      * @var bool
@@ -65,34 +55,66 @@ class SummaryView
     public $currency;
 
     /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var float
+     */
+    public $vatAmount;
+
+    /**
+     * @var float
+     */
+    public $totalWithoutVat;
+
+    /**
+     * @var float
+     */
+    public $totalWithVat;
+
+    /**
+     * @var float
+     */
+    public $totalPlusVat;
+
+    /**
      * @param GroupsView         $groups
      * @param PromotionCodesView $promotionCodes
      * @param bool               $vatApplicable
      * @param float              $vatRate
+     * @param float              $vatAmount
      * @param string             $vatMode
+     * @param string             $totalVatMode
+     * @param float              $totalWithoutVat
+     * @param float              $totalWithVat
      * @param string             $currency
+     * @param Sheet              $sheet
      */
     public function __construct(
         GroupsView $groups,
         PromotionCodesView $promotionCodes,
         $vatApplicable,
         $vatRate,
+        $vatAmount,
         $vatMode,
-        $currency
+        $totalVatMode,
+        $totalWithoutVat,
+        $totalWithVat,
+        $currency,
+        Sheet $sheet
     ) {
-        $this->groups         = $groups;
-        $this->promotionCodes = $promotionCodes;
-        $this->total          = $groups->getTotal() + $promotionCodes->getTotal();
-        $this->vatApplicable  = $vatApplicable;
-        $this->vatRate        = $vatRate;
-        $this->totalPlusVat   = $this->total;
-        $this->vatMode        = $vatMode;
-        $this->currency       = $currency;
-
-        if ($vatApplicable) {
-            $this->vat          = ($this->total * $vatRate) / 100;
-            $this->totalPlusVat = $this->vat + $this->total;
-            $this->totalVatMode = Event::VAT_MODE_ATI;
-        }
+        $this->groups          = $groups;
+        $this->promotionCodes  = $promotionCodes;
+        $this->vatApplicable   = $vatApplicable;
+        $this->vatRate         = $vatRate;
+        $this->vatAmount       = $vatAmount;
+        $this->vatMode         = $vatMode;
+        $this->totalVatMode    = $totalVatMode;
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->totalWithVat    = $totalWithVat;
+        $this->currency        = $currency;
+        $this->sheet           = $sheet;
     }
 }

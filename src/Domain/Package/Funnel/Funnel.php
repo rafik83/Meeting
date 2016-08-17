@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Package\Funnel;
 
-use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Funnel
@@ -47,7 +47,7 @@ class Funnel
     /**
      * @param int $currentIndex
      *
-     * @return Step|null
+     * @return null|Step
      */
     public function getNextStep($currentIndex)
     {
@@ -76,7 +76,8 @@ class Funnel
 
     /**
      * @param $index
-     * @return Step|null
+     *
+     * @return null|Step
      *
      * @throws \Exception
      */
@@ -86,7 +87,25 @@ class Funnel
             if ($this->steps[$index]->index === intval($index)) {
                 return $this->steps[$index];
             } else {
-                throw new \Exception(sprintf('Element found on index %s but with index %s ', $index, $this->steps[$index]->index));
+                throw new \Exception(
+                    sprintf('Element found on index %s but with index %s ', $index, $this->steps[$index]->index)
+                );
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $type
+     *
+     * @return null|Step
+     */
+    public function getStepByType($type)
+    {
+        foreach ($this->steps as $step) {
+            if ($step->type === $type) {
+                return $step;
             }
         }
 
@@ -120,7 +139,7 @@ class Funnel
     }
 
     /**
-     * @return Step|null
+     * @return null|Step
      */
     public function getCurrentUncompletedStep()
     {
@@ -168,6 +187,10 @@ class Funnel
      */
     public function isCompleted()
     {
+        if ($this->sheet->hasOrders()) {
+            return $this->hasOneCompleted();
+        }
+
         if (null !== $this->cartStep) {
             return $this->countStep() < $this->cartStep->getCurrentStep();
         } elseif (null !== $this->cart) {
@@ -178,10 +201,46 @@ class Funnel
     }
 
     /**
+     * @return bool
+     */
+    public function hasOneCompleted()
+    {
+        if (null === $this->cartStep) {
+            return false;
+        }
+
+        foreach ($this->steps as $step) {
+            if (true === $step->completed) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return Sheet
      */
     public function getSheet()
     {
         return $this->sheet;
+    }
+
+    /**
+     * @param Step $step
+     *
+     * @return bool
+     */
+    public function isStepAvailable(Step $step)
+    {
+        $uncompletedStep = $this->getCurrentUncompletedStep();
+
+        if ($this->sheet->hasOrders()) {
+            return $this->hasStep($step->index);
+        }
+
+        return $step === $uncompletedStep
+        || false === $uncompletedStep
+        || $step->index <= $uncompletedStep->index;
     }
 }

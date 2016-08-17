@@ -237,6 +237,14 @@ class Transaction
     }
 
     /**
+     * @return bool
+     */
+    public function isRequiredPaymentInfo()
+    {
+        return in_array($this->mode, Mode::getModeThatRequiredPaymentInfo());
+    }
+
+    /**
      * @param Sheet              $sheet
      * @param float              $amount
      * @param \DateTimeInterface $date

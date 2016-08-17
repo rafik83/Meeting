@@ -420,7 +420,6 @@ class Sheet implements TraceableInterface
         return $this->participants->contains($participant);
     }
 
-
     /**
      * @param User $user
      *
@@ -568,5 +567,13 @@ class Sheet implements TraceableInterface
         }
 
         return $users->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOrders()
+    {
+        return (count($this->getOrders()) > 0);
     }
 }
