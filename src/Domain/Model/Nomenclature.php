@@ -430,8 +430,7 @@ class Nomenclature
     {
         $levelsArchitecture = [];
 
-        if (2 === $this->depth || 3 === $this->depth) {
-
+        if ($this->depth >= 2) {
             if (2 === $this->depth) {
                 $levelsArchitecture = $this->buildArchitectureLevel($this, $levelsArchitecture, null);
             } else {
