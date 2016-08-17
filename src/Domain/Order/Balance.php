@@ -85,7 +85,7 @@ class Balance
         $transactions = $this->getTransactions($sheet);
 
         return array_reduce($transactions, function ($carry, Transaction $transaction) {
-            if ($transaction->isPending()) {
+            if (!$transaction->isPaid()) {
                 return $carry;
             }
 
@@ -108,7 +108,7 @@ class Balance
                 return 0;
             }
 
-            if ($transaction->isPending()) {
+            if (!$transaction->isPaid()) {
                 return $carry;
             }
 

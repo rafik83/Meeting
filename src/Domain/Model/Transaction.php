@@ -207,6 +207,14 @@ class Transaction
     /**
      * @return bool
      */
+    public function isPaid()
+    {
+        return $this->state === self::STATE_PAID;
+    }
+
+    /**
+     * @return bool
+     */
     public function isPaypal()
     {
         return Mode::PAYMENT_PAYPAL === $this->getMode();
