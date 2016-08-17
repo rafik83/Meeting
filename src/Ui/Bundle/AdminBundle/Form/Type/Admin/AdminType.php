@@ -39,13 +39,12 @@ abstract class AdminType extends AbstractType
                 'required' => true,
             ])
             ->add('role', ChoiceType::class, [
-                'choices' => [
+                'choices'  => [
                     'form.create_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
                     'form.create_admin.role.operator'    => Admin::ROLE_OPERATOR,
                     'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
                 ],
-                'choices_as_values' => true,
-                'required'          => true,
+                'required' => true,
             ])
             ->add('events', EventChoiceType::class, [
                 'required'    => false,

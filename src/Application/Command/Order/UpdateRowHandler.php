@@ -10,32 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 
 class UpdateRowHandler
 {
     /**
-     * @var OrderRepositoryInterface
+     * @var RowRepositoryInterface
      */
-    private $orderRepository;
+    private $rowRepository;
 
     /**
-     * UpdateRowHandler constructor.
-     *
-     * @param OrderRepositoryInterface $orderRepository
+     * @param RowRepositoryInterface $rowRepository
      */
-    public function __construct(OrderRepositoryInterface $orderRepository)
+    public function __construct(RowRepositoryInterface $rowRepository)
     {
-        $this->orderRepository = $orderRepository;
+        $this->rowRepository = $rowRepository;
     }
 
     /**
      * @param UpdateRow $updateRow
-     *
-     * @deprecated must be rewrited in order to update a row in db
      */
     public function handle(UpdateRow $updateRow)
     {
-        $this->orderRepository->set($updateRow->order);
+        $updateRow->row->update($updateRow->label, $updateRow->price, $updateRow->quantity);
+        $this->rowRepository->set($updateRow->row);
     }
 }

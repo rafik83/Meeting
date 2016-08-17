@@ -154,6 +154,24 @@ class TemplateDataFactory
     }
 
     /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function createCompanyTemplate(Sheet $sheet, $locale)
+    {
+        return $this
+            ->loadNomenclatures($sheet->getEvent())
+            ->create(
+                $sheet->getType()->getRegistrationTemplate()->getValue(),
+                $sheet->getRegistrationData(),
+                $locale,
+                $sheet->getType()->getRegistrationTemplate()->getFallback()
+            );
+    }
+
+    /**
      * @param AbstractTemplate $template
      * @param array            $data
      * @param string|null      $locale

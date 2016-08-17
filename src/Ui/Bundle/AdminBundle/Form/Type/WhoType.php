@@ -52,14 +52,16 @@ class WhoType extends AbstractType
     {
         $resolver->setRequired(['event', 'locale']);
         $resolver->setDefaults([
-            'choices' => function (Options $options) {
+            'choices'      => function (Options $options) {
                 return [
-                    'Categorie' => $this->categoryRepository->getCategoriesByEvent($options['event'], $options['locale']),
+                    'Categorie' => $this->categoryRepository->getCategoriesByEvent(
+                        $options['event'],
+                        $options['locale']
+                    ),
                     'Type'      => $this->typeRepository->getTypesByEvent($options['event']),
                 ];
             },
-            'choices_as_values' => true,
-            'choice_label'      => function (Options $options) {
+            'choice_label' => function (Options $options) {
                 return function ($choice) use ($options) {
                     if ($choice instanceof Type || $choice instanceof Category) {
                         return $choice->getTranslations()->containsKey($options['locale'])
@@ -67,7 +69,7 @@ class WhoType extends AbstractType
                             : '';
                     }
 
-                    return (string) $choice;
+                    return (string)$choice;
                 };
             },
             'choice_value' => function ($choice) {

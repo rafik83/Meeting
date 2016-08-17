@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
@@ -87,6 +88,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $orderMerger             = $this->prophesize(Merger::class);
 
         $add = new Add($this->sheet, 'PROMOCODE50');
 
@@ -100,7 +102,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->save($expectedCart)->shouldBeCalled();
 
         // Handler
-        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler = new AddHandler(
+            $cartManager->reveal(),
+            $promotionCodeRepository->reveal(),
+            $this->datetime,
+            $orderMerger->reveal()
+        );
         $handler->handle($add);
     }
 
@@ -114,6 +121,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $orderMerger             = $this->prophesize(Merger::class);
 
         $add = new Add($this->sheet, 'PROMO_CODE_NOT_EXIST');
 
@@ -126,7 +134,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         // Handler
-        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler = new AddHandler(
+            $cartManager->reveal(),
+            $promotionCodeRepository->reveal(),
+            $this->datetime,
+            $orderMerger->reveal());
+
         $handler->handle($add);
     }
 
@@ -144,6 +157,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $orderMerger             = $this->prophesize(Merger::class);
 
         $add = new Add($this->sheet, 'PROMOCODE50');
 
@@ -157,7 +171,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->save($expectedCart)->shouldNotBeCalled();
 
         // Handler
-        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler = new AddHandler(
+            $cartManager->reveal(),
+            $promotionCodeRepository->reveal(),
+            $this->datetime,
+            $orderMerger->reveal());
+
         $handler->handle($add);
     }
 
@@ -176,6 +195,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $orderMerger             = $this->prophesize(Merger::class);
 
         $add = new Add($this->sheet, 'PROMOCODE50');
 
@@ -189,7 +209,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->save($expectedCart)->shouldNotBeCalled();
 
         // Handler
-        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler = new AddHandler(
+            $cartManager->reveal(),
+            $promotionCodeRepository->reveal(),
+            $this->datetime,
+            $orderMerger->reveal());
+
         $handler->handle($add);
     }
 
@@ -209,6 +234,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $orderMerger             = $this->prophesize(Merger::class);
 
         $add = new Add($this->sheet, 'PROMOCODE50');
 
@@ -222,7 +248,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->save($expectedCart)->shouldNotBeCalled();
 
         // Handler
-        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler = new AddHandler(
+            $cartManager->reveal(),
+            $promotionCodeRepository->reveal(),
+            $this->datetime,
+            $orderMerger->reveal());
+
         $handler->handle($add);
     }
 
@@ -245,6 +276,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $cartManager             = $this->prophesize(CartManager::class);
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $orderMerger             = $this->prophesize(Merger::class);
 
         $add = new Add($this->sheet, 'PROMOCODE10');
 
@@ -258,7 +290,12 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->save($expectedCart)->shouldNotBeCalled();
 
         // Handler
-        $handler = new AddHandler($cartManager->reveal(), $promotionCodeRepository->reveal(), $this->datetime);
+        $handler = new AddHandler(
+            $cartManager->reveal(),
+            $promotionCodeRepository->reveal(),
+            $this->datetime,
+            $orderMerger->reveal());
+
         $handler->handle($add);
     }
 }

@@ -11,13 +11,14 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\EventInterface;
-use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
 
 class SheetRepository implements SheetRepositoryInterface
 {
@@ -202,10 +203,7 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
-     * @param User  $user
-     * @param array $types
-     *
-     * @return Sheet[]
+     * {@inheritdoc}
      */
     public function getUserSheetsByTypes(User $user, array $types)
     {
@@ -279,6 +277,24 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet.event = :event')
             ->setParameter('event', $event);
 
-        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+        return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isThereAtLeastOneByType(Type $type)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.type = :type')
+            ->setParameter('type', $type)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

@@ -30,6 +30,7 @@ framework:
         handler_id:     ~
         name:           vimeet
         gc_probability: ~
+        cookie_lifetime: 86400
     fragments:       ~
     http_method_override: true
     assets: ~
@@ -209,6 +210,10 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail: { size: [250, 100], mode: inset }
+        event_sheet_image:
+            quality: 100
+            filters:
+                thumbnail: { size: [800, 320], mode: inset }
 
 # Doctrine migrations configuration
 doctrine_migrations:
