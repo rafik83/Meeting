@@ -4,7 +4,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
+use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -14,20 +16,38 @@ class OptionsValidator extends ConstraintValidator
      * @var QuantityMaxGuesser
      */
     private $quantityMaxGuesser;
-    
+
     /**
      * @var \DateTimeInterface
      */
     private $now;
 
     /**
-     * @param QuantityMaxGuesser $quantityMaxGuesser
-     * @param \DateTimeInterface $now
+     * @var QuantityMinGuesser
      */
-    public function __construct(QuantityMaxGuesser $quantityMaxGuesser, \DateTimeInterface $now)
-    {
+    private $quantityMinGuesser;
+
+    /**
+     * @var Merger
+     */
+    private $merger;
+
+    /**
+     * @param QuantityMaxGuesser $quantityMaxGuesser
+     * @param QuantityMinGuesser $quantityMinGuesser
+     * @param \DateTimeInterface $now
+     * @param Merger             $merger
+     */
+    public function __construct(
+        QuantityMaxGuesser $quantityMaxGuesser,
+        QuantityMinGuesser $quantityMinGuesser,
+        \DateTimeInterface $now,
+        Merger $merger
+    ) {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
+        $this->quantityMinGuesser = $quantityMinGuesser;
         $this->now                = $now;
+        $this->merger             = $merger;
     }
 
     /**
@@ -47,6 +67,10 @@ class OptionsValidator extends ConstraintValidator
             $options
         );
 
+        if ($selectOptions->sheet->hasOrders()) {
+            $order = $this->merger->merge($selectOptions->sheet->getOrders());
+        }
+
         foreach ($selectOptions->options as $id => $quantity) {
             if (!isset($options[$id])) {
                 $this
@@ -58,14 +82,35 @@ class OptionsValidator extends ConstraintValidator
             }
 
             $quantityMax = $this->quantityMaxGuesser->getMaxByProduct($selectOptions->sheet, $options[$id]);
+            $quantityMin = $this->quantityMinGuesser->getMinProduct($selectOptions->sheet, $options[$id], $quantity);
 
-            if ($quantity < 0 || $quantity > $quantityMax) {
+            if (false === $quantityMin) {
+                $this
+                    ->context
+                    ->buildViolation('package.product.quantityMinPromotionCode')
+                    ->atPath($id)
+                    ->addViolation();
+            }
+
+            if ($quantity < $quantityMin || $quantity > $quantityMax) {
                 $this
                     ->context
                     ->buildViolation('package.product.quantityNotMatch')
                     ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
                     ->atPath($id)
                     ->addViolation();
+            }
+
+            if (isset($order) && !$options[$id]->isDeletable($this->now)) {
+                if($orderRow = $order->getRowForProduct($options[$id])) {
+                    if($quantity < $orderRow->getQuantity()) {
+                        $this
+                            ->context
+                            ->buildViolation('package.product.productNotDeletable')
+                            ->atPath($id)
+                            ->addViolation();
+                    }
+                }
             }
         }
     }

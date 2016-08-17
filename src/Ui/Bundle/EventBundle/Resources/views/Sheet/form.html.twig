@@ -1,16 +1,35 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
-{{ form_start(form) }}
-    <div class="modal-header">
-        {# <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> #}
-        <h4 class="modal-title" id="myModalLabel">
-            <i class="icon-Document_1"></i>
-            {{ 'sheet.object.action.edit'|trans }}: "{{ label }}"
-        </h4>
-    </div>
-    <div class="modal-body">
-        {{ form_errors(form) }}
+{% import 'EventBundle::macro.html.twig' as macros %}
 
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        <i class="icon-Document_1"></i>
+        {{ 'sheet.object.action.edit'|trans }}: "{{ label }}"
+    </h4>
+</div>
+<div class="modal-body">
+    {% if object.type == 'image' and object.getImage() is not null %}
+        <div class="object--image--preview">
+            <div class="object--image--header">{{ 'sheet.object.image.label'|trans }}</div>
+            <img src="{{ object.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
+            <div class="object--image--footer">
+                {{ macros.delete_button(
+                path('event_sheet_remove_image', {
+                    'key': uid,
+                    'locale': locale
+                }),
+                '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.image.remove'|trans,
+                {'class': 'btn btn-danger' }
+                ) }}
+            </div>
+        </div>
+    {% endif %}
+
+    {{ form_start(form, { 'attr': {'id': 'sheet_image_data' }}) }}
+    {{ form_errors(form) }}
+
+    <div class="{{ (object.type == 'image') ? 'object--form--field' : '' }}">
         {% if form.vars.help|default(false) %}
             {% if form.children.content is not defined or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined) %}
                 <p class="help-block">{{ form.vars.help }}</p>
@@ -20,44 +39,14 @@
         {% for key, child in form if key != 'submit' %}
             {{ form_row(child) }}
         {% endfor %}
-
-        {# liens dans le form
-
-            <div class="form-group">
-                <a href="#">
-                    <i class="icon-Info_1"></i>
-                    Option payante
-                </a>
-            </div>
-
-            <div class="form-group">
-                <a href="#">
-                    <i class="icon-Inserer_1"></i>
-                    Ajouter un autre champs
-                </a>
-            </div>
-        #}
-
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
-            <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
-        </button>
 
-        {# liens à la place du btn-back
-            le btn-back passe à droite
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
+    </button>
+    {{ form_widget(form.submit, { 'attr' : { 'form': 'sheet_image_data' }}) }}
+    {{ form_end(form) }}
+</div>
 
-            <a href="#" class="pull-left">
-                <i class="icon-Effacer"></i>
-                Supprimer le participant
-            </a>
-
-            <a href="#" class="pull-left">
-                <i class="icon-Appeler"></i>
-                Besoin d'aide ?
-            </a>
-        #}
-
-        {{ form_widget(form.submit) }}
-    </div>
-{{ form_end(form) }}

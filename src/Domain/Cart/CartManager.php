@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
@@ -34,18 +35,26 @@ class CartManager
     private $promotionCodeRowRepository;
 
     /**
+     * @var Merger
+     */
+    private $orderMerger;
+
+    /**
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
+     * @param Merger                              $orderMerger
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
-        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
+        PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
+        Merger $orderMerger
     ) {
         $this->cartRowRepository          = $cartRowRepository;
         $this->cartStepRepository         = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
+        $this->orderMerger                = $orderMerger;
     }
 
     /**
@@ -71,10 +80,20 @@ class CartManager
     {
         $cart = $this->getCart($sheet, null);
 
-        if ($cart->getPlanRow()) {
-            $cart->resolveParticipantsQuantity();
+        if ($sheet->hasOrders()) {
+            $order = $this->orderMerger->merge($sheet->getOrders());
+            $cart->resolveParticipantsQuantity($order);
             $this->save($cart);
+
+            return;
         }
+
+        if ($sheet->getPackage()->isPlansEnabled() && !$cart->getPlanRow()) {
+            return;
+        }
+
+        $cart->resolveParticipantsQuantity();
+        $this->save($cart);
     }
 
     /**

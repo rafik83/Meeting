@@ -18,82 +18,98 @@
                        href="{{ path('event_package_summary_fill_billing_info', {'sheet': sheet.id}) }}"><i
                                 class="icon-Paiement_1"></i> {{ 'package.summary.billingInfo.update'|trans }}</a>
                 </div>
+                {% if not view.isEmpty %}
+                    <section class="object object--collection style--style-1 section">
+                        <div class="form--table--head">
+                            <table class="table table--recap">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-6">{{ 'package.summary.columns.title'|trans }}</th>
+                                    <th class="text-center col-md-2">{{ 'package.summary.columns.unitPrice'|trans }}</th>
+                                    <th class="text-center col-md-2">{{ 'package.summary.columns.quantity'|trans }}</th>
+                                    <th class="text-center col-md-2">{{ 'package.summary.columns.total'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{ include('EventBundle:Package/Summary:plan.html.twig', {
+                                    planGroup: view.groups.planGroup
+                                }) }}
+                                {{ include('EventBundle:Package/Summary:participant.html.twig', {
+                                    participantGroup: view.groups.participantGroup
+                                }) }}
+                                {{ include('EventBundle:Package/Summary:planning.html.twig', {
+                                    planningGroup: view.groups.planningGroup
+                                }) }}
+                                {{ include('EventBundle:Package/Summary:groups.html.twig', {
+                                    groups: view.groups.groups
+                                }) }}
+                                {{ include('EventBundle:Package/Summary:promo-code.html.twig', {
+                                    form: formPromotionCode
+                                }) }}
+                                {{ include('EventBundle:Package/Summary:promo-code-rows.html.twig', {
+                                    promoRows: view.promotionCodes.promotionCodes
+                                }) }}
+                                </tbody>
+                            </table>
 
-                <section class="object object--collection style--style-1 section">
-                    <div class="form--table--head">
-                        <table class="table table--recap">
-                            <thead>
-                            <tr>
-                                <th class="col-md-6">{{ 'package.summary.columns.title'|trans }}</th>
-                                <th class="text-center col-md-2">{{ 'package.summary.columns.unitPrice'|trans }}</th>
-                                <th class="text-center col-md-2">{{ 'package.summary.columns.quantity'|trans }}</th>
-                                <th class="text-center col-md-2">{{ 'package.summary.columns.total'|trans }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {{ include('EventBundle:Package/Summary:plan.html.twig', {planGroup: view.groups.planGroup}) }}
-                            {{ include('EventBundle:Package/Summary:participant.html.twig', {participantGroup: view.groups.participantGroup}) }}
-                            {{ include('EventBundle:Package/Summary:planning.html.twig', {planningGroup: view.groups.planningGroup}) }}
-                            {{ include('EventBundle:Package/Summary:groups.html.twig', {groups: view.groups.groups}) }}
-                            {{ include('EventBundle:Package/Summary:promo-code.html.twig', {form: formPromotionCode}) }}
-                            {{ include('EventBundle:Package/Summary:promo-code-rows.html.twig', { promoRows: view.promotionCodes.promotionCodes }) }}
-                            </tbody>
-                        </table>
-                        {{ form_start(formTermsOfSale) }}
-                        <div class="row end-table">
-                            {# promotion code errors #}
-                            {% include('EventBundle:Package/Flash:promotionError.html.twig') %}
-                            <div class="col-md-8 cgv">
-                                {{ form_row(formTermsOfSale.termsOfSale) }}
-                                <a href="{{ path('event_content_terms_of_sale') }}"
-                                   target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
-                            </div>
-                            <div class="col-md-4 sum">
-                                <ul>
-                                    {% if view.mustPayVat %}
-                                        <li>
-                                            {{ 'package.summary.totalOfSummary'|trans }}
-                                            <span>
+                            {{ form_start(formTermsOfSale) }}
+                            <div class="row end-table">
+                                {# promotion code errors #}
+                                {% include('EventBundle:Package/Flash:promotionError.html.twig') %}
+                                <div class="col-md-8 cgv">
+                                    {{ form_row(formTermsOfSale.termsOfSale) }}
+                                    <a href="{{ path('event_content_terms_of_sale') }}"
+                                       target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
+                                </div>
+                                <div class="col-md-4 sum">
+                                    <ul>
+                                        {% if view.mustPayVat %}
+                                            <li>
+                                                {{ 'package.summary.totalOfSummary'|trans }}
+                                                <span>
                                                 {{ 'package.product.unitPrice'|trans({
                                                     '%price%': view.total|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                     '%vatMode%': ('package.vatMode.' ~ view.vatMode)|trans
                                                 })|html }}
                                             </span>
-                                        </li>
-                                        <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vat }) }}
-                                            <span>
+                                            </li>
+                                            <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vat }) }}
+                                                <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
                                                     '%price%': view.totalVat|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
-                                        </li>
-                                    {% endif %}
-                                    <li class="total">{{ 'package.summary.totalPlusVat'|trans }}
-                                        {% set totalVatMode = (view.mustPayVat ? 'ati' :  view.vatMode) %}
-                                        <span>
+                                            </li>
+                                        {% endif %}
+                                        <li class="total">{{ 'package.summary.totalPlusVat'|trans }}
+                                            {% set totalVatMode = (view.mustPayVat ? 'ati' :  view.vatMode) %}
+                                            <span>
                                             {{ 'package.product.unitPrice'|trans({
                                                 '%price%': view.totalPlusVat|localizednumber,
                                                 '%currency%': view.currency|currency_symbol,
                                                 '%vatMode%': ('package.vatMode.' ~ totalVatMode)|trans
                                             })|html }}
                                         </span>
-                                    </li>
-                                </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary pull-right">
-                                    <i class="icon-Paiement_1"></i>{{ 'package.summary.pay'|trans }}
-                                </button>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary pull-right">
+                                        <i class="icon-Paiement_1"></i>{{ 'package.summary.pay'|trans }}
+                                    </button>
+                                </div>
                             </div>
+                            {{ form_end(formTermsOfSale) }}
                         </div>
-                        {{ form_end(formTermsOfSale) }}
-                    </div>
-                </section>
+                    </section>
+                {% else %}
+                    <p>{{ 'package.summary.empty'|trans }}</p>
+                {% endif %}
             </div>
         </div>
     </section>

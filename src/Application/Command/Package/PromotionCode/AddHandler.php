@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Package\PromotionCode;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
@@ -36,20 +37,28 @@ class AddHandler
     private $datetime;
 
     /**
+     * @var Merger
+     */
+    private $orderMerger;
+
+    /**
      * AddHandler constructor.
      *
      * @param CartManager                      $cartManager
      * @param PromotionCodeRepositoryInterface $promotionCodeRepository
      * @param \DateTimeInterface               $datetime
+     * @param Merger                           $orderMerger
      */
     public function __construct(
         CartManager $cartManager,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        Merger $orderMerger
     ) {
         $this->cartManager             = $cartManager;
         $this->promotionCodeRepository = $promotionCodeRepository;
         $this->datetime                = $datetime;
+        $this->orderMerger             = $orderMerger;
     }
 
     /**
@@ -72,6 +81,13 @@ class AddHandler
 
         if (null === $promotionCode) {
             throw new PromotionCodeNotFoundException();
+        }
+
+        if ($add->sheet->hasOrders()) {
+            $order = $this->orderMerger->merge($add->sheet->getOrders());
+            if ($order->hasPromotionCode($promotionCode)) {
+                throw new PromotionCodeAlreadyExistException();
+            }
         }
 
         $cart->apply($promotionCode, $this->datetime);
