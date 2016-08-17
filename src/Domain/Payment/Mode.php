@@ -35,6 +35,17 @@ class Mode
     /**
      * @return array
      */
+    public static function getModeThatRequiredPaymentInfo()
+    {
+        return [
+            self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
+            self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public static function getTransactionModes()
     {
         return [

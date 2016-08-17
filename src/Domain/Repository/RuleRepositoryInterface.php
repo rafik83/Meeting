@@ -42,6 +42,13 @@ interface RuleRepositoryInterface
     public function getBySeerTypeAndSeeableType(Type $seer, Type $seeable);
 
     /**
+     * @param Type $seer
+     *
+     * @return Rule[]
+     */
+    public function getByType(Type $seer);
+
+    /**
      * @param Rule $rule
      *
      * @return Rule

@@ -16,16 +16,25 @@ use Proximum\Vimeet\Domain\Model\Product;
 class GroupViewQueryHandler
 {
     /**
-     * @var ProductViewQueryHandler
+     * @var RowViewQueryHandler
      */
-    private $productViewQueryHandler;
+    private $rowViewQueryHandler;
 
     /**
-     * @param ProductViewQueryHandler $productViewQueryHandler
+     * @var CustomRowViewQueryHandler
      */
-    public function __construct(ProductViewQueryHandler $productViewQueryHandler)
-    {
-        $this->productViewQueryHandler = $productViewQueryHandler;
+    private $customRowViewQueryHandler;
+
+    /**
+     * @param RowViewQueryHandler       $rowViewQueryHandler
+     * @param CustomRowViewQueryHandler $customRowViewQueryHandler
+     */
+    public function __construct(
+        RowViewQueryHandler $rowViewQueryHandler,
+        CustomRowViewQueryHandler $customRowViewQueryHandler
+    ) {
+        $this->rowViewQueryHandler       = $rowViewQueryHandler;
+        $this->customRowViewQueryHandler = $customRowViewQueryHandler;
     }
 
     /**
@@ -35,21 +44,31 @@ class GroupViewQueryHandler
      */
     public function handle(GroupViewQuery $groupViewQuery)
     {
-        $label    = '';
-        $locale   = $groupViewQuery->locale;
-        $order    = $groupViewQuery->order;
-        $products = [];
+        $label      = '';
+        $locale     = $groupViewQuery->locale;
+        $order      = $groupViewQuery->order;
+        $products   = [];
+        $customRows = [];
 
         if ($groupViewQuery->type === Product::TYPE_OPTION) {
             $label = $order->getGroupLabel($groupViewQuery->groupId, $locale);
 
-            foreach ($order->getRowForGroupId($groupViewQuery->groupId) as $row) {
-                $products[] = $this->productViewQueryHandler->handle(
-                    new ProductViewQuery(
+            foreach ($order->getProductRowsForGroupId($groupViewQuery->groupId) as $row) {
+                $products[] = $this->rowViewQueryHandler->handle(
+                    new RowViewQuery(
                         $order,
                         $row,
                         $locale,
                         $groupViewQuery->planView
+                    )
+                );
+            }
+
+            foreach ($order->getCustomRowsForGroupId($groupViewQuery->groupId) as $row) {
+                $customRows[] = $this->customRowViewQueryHandler->handle(
+                    new CustomRowViewQuery(
+                        $row,
+                        $locale
                     )
                 );
             }
@@ -58,8 +77,8 @@ class GroupViewQueryHandler
 
             if (null !== $product) {
                 $label = $product->getLabel($locale);
-                $products[] = $this->productViewQueryHandler->handle(
-                    new ProductViewQuery(
+                $products[] = $this->rowViewQueryHandler->handle(
+                    new RowViewQuery(
                         $order,
                         $product,
                         $locale,
@@ -73,7 +92,9 @@ class GroupViewQueryHandler
             $groupViewQuery->sheet,
             $label,
             $groupViewQuery->type,
+            $groupViewQuery->groupId,
             $products,
+            $customRows,
             (isset($groupViewQuery->step)) ? $groupViewQuery->step->index : null
         );
     }

@@ -117,7 +117,7 @@ class PaymentController extends Controller
             'form'    => $form->createView(),
             'total'   => $total,
             'deposit' => $deposit,
-            'view'    => ['funnel' => $funnel]
+            'view'    => ['funnel' => $funnel],
         ]);
     }
 
@@ -209,6 +209,20 @@ class PaymentController extends Controller
         );
 
         return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function paymentInfoAction(Request $request, EventDomain $eventDomain)
+    {
+        return $this->render('EventBundle:Sheet:paymentInfo.html.twig', [
+            'event'  => $eventDomain->getEvent(),
+            'locale' => $request->getLocale(),
+        ]);
     }
 
     /**

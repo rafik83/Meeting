@@ -41,11 +41,6 @@ class SummaryView
     public $vatRate;
 
     /**
-     * @var float
-     */
-    public $totalPlusVat;
-
-    /**
      * @var bool
      */
     public $vatApplicable;
@@ -71,11 +66,30 @@ class SummaryView
     public $sheet;
 
     /**
+     * @var float
+     */
+    public $vatAmount;
+
+    /**
+     * @var float
+     */
+    public $totalWithoutVat;
+
+    /**
+     * @var float
+     */
+    public $totalWithVat;
+
+    /**
      * @param GroupsView         $groups
      * @param PromotionCodesView $promotionCodes
      * @param bool               $vatApplicable
      * @param float              $vatRate
+     * @param float              $vatAmount
      * @param string             $vatMode
+     * @param string             $totalVatMode
+     * @param float              $totalWithoutVat
+     * @param float              $totalWithVat
      * @param string             $currency
      * @param Sheet              $sheet
      */
@@ -84,19 +98,25 @@ class SummaryView
         PromotionCodesView $promotionCodes,
         $vatApplicable,
         $vatRate,
+        $vatAmount,
         $vatMode,
+        $totalVatMode,
+        $totalWithoutVat,
+        $totalWithVat,
         $currency,
         Sheet $sheet
     ) {
-        $this->groups         = $groups;
-        $this->promotionCodes = $promotionCodes;
-        $this->total          = $groups->getTotal() + $promotionCodes->getTotal();
-        $this->vatApplicable  = $vatApplicable;
-        $this->vatRate        = $vatRate;
-        $this->totalPlusVat   = $this->total;
-        $this->vatMode        = $vatMode;
-        $this->currency       = $currency;
-        $this->sheet          = $sheet;
+        $this->groups          = $groups;
+        $this->promotionCodes  = $promotionCodes;
+        $this->vatApplicable   = $vatApplicable;
+        $this->vatRate         = $vatRate;
+        $this->vatAmount       = $vatAmount;
+        $this->vatMode         = $vatMode;
+        $this->totalVatMode    = $totalVatMode;
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->totalWithVat    = $totalWithVat;
+        $this->currency        = $currency;
+        $this->sheet           = $sheet;
 
         if ($vatApplicable) {
             $this->vat          = ($this->total * $vatRate) / 100;

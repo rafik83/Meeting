@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
-class AddRowHandler
+class AddRowToGroupHandler
 {
     /**
      * @var OrderRepositoryInterface
@@ -30,12 +31,20 @@ class AddRowHandler
     }
 
     /**
-     * @param AddRow $addRow
-     *
-     * @deprecated must be rewrited in order to insert a row in db
+     * @param AddRowToGroup $addRow
      */
-    public function handle(AddRow $addRow)
+    public function handle(AddRowToGroup $addRow)
     {
+        $customRow = Row::createCustomRowToGroup(
+            $addRow->order,
+            $addRow->quantity,
+            $addRow->groupId,
+            $addRow->label,
+            $addRow->price
+        );
+
+        $addRow->order->addCustomRow($customRow);
         $this->orderRepository->set($addRow->order);
     }
 }
+

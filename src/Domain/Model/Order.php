@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 
 /**
  * "Commande"
@@ -55,12 +57,12 @@ class Order
     private $currency;
 
     /**
-     * @var Order\Row[]
+     * @var ArrayCollection Order\Row
      */
     private $rows = [];
 
     /**
-     * @var Order\PromotionCode[]
+     * @var ArrayCollection of Order\PromotionCode
      */
     private $promotionCodes = [];
 
@@ -181,6 +183,8 @@ class Order
     }
 
     /**
+     * VAT mode of the total if applicable
+     *
      * @return string
      */
     public function getTotalVatMode()
@@ -201,7 +205,7 @@ class Order
     }
 
     /**
-     * @return Order\Row[]
+     * @return Row[]
      */
     public function getRows()
     {
@@ -209,11 +213,11 @@ class Order
     }
 
     /**
-     * @param Order\Row $row
+     * @param Row $row
      *
      * @return Order
      */
-    public function addRow(Order\Row $row)
+    public function addRow(Row $row)
     {
         $this->rows->add($row);
 
@@ -233,25 +237,86 @@ class Order
     }
 
     /**
+     * @param Row $customRow
+     *
+     * @return Order
+     */
+    public function addCustomRow(Row $customRow)
+    {
+        $this->rows->add($customRow);
+
+        return $this;
+    }
+
+    /**
+     * @param Row $customRow
+     *
+     * @return Order
+     */
+    public function removeCustomRow(Row $customRow)
+    {
+        foreach ($this->rows as $key => $row) {
+            if ($row->getId() === $customRow->getId()) {
+                $this->rows->remove($key);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * @return float
      */
-    public function getTotal()
+    public function getTotalWithoutVat()
     {
         $total = 0;
 
+        /** @var Row $row */
         foreach ($this->rows->toArray() as $row) {
             $total += $row->getQuantity() * $row->getPrice();
         }
 
+        /** @var PromotionCode $promotionCode */
         foreach ($this->promotionCodes->toArray() as $promotionCode) {
             $total += $promotionCode->getPrice();
         }
 
+        return $total;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getVatAmount()
+    {
+        $total = $this->getTotalWithoutVat();
+
         if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
-            $total += $total * $this->vatRate / 100;
+            return $total * $this->vatRate / 100;
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalWithVat()
+    {
+        $total = $this->getTotalWithoutVat();
+
+        if ($this->vatMode === Event::VAT_MODE_ET && $this->vatApplicable) {
+            $total += $this->getVatAmount();
         }
 
         return $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->getTotalWithVat();
     }
 
     /**
@@ -308,24 +373,53 @@ class Order
     /**
      * @param $groupId
      *
-     * @return array
+     * @return false|Order\Row[]
      */
-    public function getRowForGroupId($groupId)
+    public function getProductRowsForGroupId($groupId)
     {
         return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
-            return $row->getGroupId() === $groupId;
+            return $row->isProduct() && $row->getGroupId() === $groupId;
         });
     }
 
     /**
-     * @param Product $product
+     * @param int $groupId
+     *
+     * @return false|Order\Row[]
+     */
+    public function getCustomRowsForGroupId($groupId)
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+            return !$row->isProduct() && $row->getGroupId() === $groupId && !$row->hasParentRow();
+        });
+    }
+
+    /**
+     * @param Row $parentRow
+     *
+     * @return false|Order\Row[]
+     */
+    public function getCustomRowsForProduct(Row $parentRow)
+    {
+        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
+            return !$row->isProduct() && $parentRow === $row->getParentRow();
+        });
+    }
+
+    /**
+     * @param Product|null $product
      *
      * @return null|Order\Row
      */
-    public function getRowForProduct(Product $product)
+    public function getRowForProduct(Product $product = null)
     {
+        if (null === $product) {
+            return null;
+        }
+
         foreach ($this->rows as $row) {
-            if ($row->getProduct() === $product) {
+            if (null !== $row->getProduct()
+              && $row->getProduct() === $product) {
                 return $row;
             }
         }
@@ -334,7 +428,7 @@ class Order
     }
 
     /**
-     * @param $id
+     * @param null|int $id
      *
      * @return null|Order\Row
      */
@@ -415,7 +509,9 @@ class Order
     public function getOrderRowForProduct(Product $product)
     {
         foreach ($this->rows as $orderRow) {
-            if ($orderRow->getProduct() === $product) {
+            if (null !== $orderRow->getProduct()
+                && $orderRow->getProduct() === $product
+            ) {
                 return $orderRow;
             }
         }

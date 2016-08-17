@@ -1,4 +1,4 @@
-{% if null != group and group.products is not empty %}
+{% if null != group and group.products is not empty or group.customRows is not empty %}
     {% set stripped = true %}
     <tr class="title">
         <td class="col-md-6">
@@ -21,5 +21,18 @@
         {% if null != product %}
             {{ include('EventBundle:Order/SummaryTotal:product.html.twig', {product: product, stripped: stripped}) }}
         {% endif %}
+
+        {% if product.customRows is not empty %}
+            {% for customRow in product.customRows %}
+                {{ include('EventBundle:Order/SummaryTotal:custom_row.html.twig', {customRow: customRow}) }}
+            {% endfor %}
+        {% endif %}
+
     {% endfor %}
+
+    {% if group.customRows is not empty %}
+        {% for customRow in group.customRows %}
+            {{ include('EventBundle:Order/SummaryTotal:custom_row.html.twig', {customRow: customRow}) }}
+        {% endfor %}
+    {% endif %}
 {% endif %}
