@@ -49,16 +49,16 @@ class FunnelFactory
         $funnel  = new Funnel($sheet);
 
         $cartStep = $this->cartStepRepository->findBySheet($sheet);
-        $cart    = $this->cartManager->getCart($sheet);
+        $cart     = $this->cartManager->getCart($sheet);
 
         if (null !== $cartStep) {
             $cart->setCurrentStep($cartStep->getCurrentStep());
         }
 
         $funnel->setCart($cart);
-        $funnel->setCartStep($cartStep);
+        $funnel->setCartStep($cartStep); // ??? $cartStep peut etre à null ici
 
-        if ($package->isPlansEnabled()) {
+        if ($package->isPlansEnabled() && !$sheet->hasOrders()) {
             $step = new Step($this->getNextIndex($funnel), $package->getPlansLabel($locale), Step::TYPE_PLAN);
 
             if (null !== $cart->getCurrentStep() && $cart->getCurrentStep() > $this->getNextIndex($funnel)) {

@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Command\Order;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Domain\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Cart\Converter;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 

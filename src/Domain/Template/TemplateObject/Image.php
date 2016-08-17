@@ -32,6 +32,9 @@ class Image extends EditableObject implements ContentObjectInterface
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getImage()
     {
         return isset($this->data['image']) ? $this->data['image'] : null;
