@@ -9,6 +9,12 @@
             <div class="product product--recap">
                 <div class="content-header clearfix">
                     <h2 class="pull-left">{{ 'package.summary.title'|trans }}</h2>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="{{ path('event_package_step', {
+                            'sheet': view.sheet.id,
+                            'step': 1
+                        }) }}">{{ 'package.summary.edit'|trans }}</a>
+                    </div>
                 </div>
 
                 <section class="object object--collection style--style-1 section">
@@ -23,8 +29,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{ include('EventBundle:Order/SummaryTotal:groups.html.twig', { groups: view.groups.groups }) }}
-                            {{ include('EventBundle:Order/SummaryTotal:promo-code-rows.html.twig', { promotionCodes: view.promotionCodes.promotionCodes }) }}
+                            {{ include('EventBundle:Order/SummaryTotal:groups.html.twig', {
+                                groups: view.groups.groups
+                            }) }}
+                            {{ include('EventBundle:Order/SummaryTotal:promo-code-rows.html.twig', {
+                                promotionCodes: view.promotionCodes.promotionCodes
+                            }) }}
                             </tbody>
                         </table>
                         <div class="row end-table">
@@ -46,7 +56,6 @@
                                     <li class="total">{{ 'summary.totalToPay'|trans }}
                                         <span>{{ view.totalWithVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>

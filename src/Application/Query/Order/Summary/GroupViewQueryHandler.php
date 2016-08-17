@@ -89,11 +89,13 @@ class GroupViewQueryHandler
         }
 
         return new GroupView(
+            $groupViewQuery->sheet,
             $label,
             $groupViewQuery->type,
             $groupViewQuery->groupId,
             $products,
-            $customRows
+            $customRows,
+            (isset($groupViewQuery->step)) ? $groupViewQuery->step->index : null
         );
     }
 }

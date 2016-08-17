@@ -868,6 +868,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler
         arguments:
             - '@cart_manager'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
     command.package.step.select_options_handler:
@@ -875,6 +876,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@datetime'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
@@ -1036,6 +1038,7 @@ services:
            - '@cart_manager'
            - '@repository.promotion_code_repository'
            - '@datetime'
+           - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Add }
     command.event.promotion_code.remove_handler:
@@ -1044,7 +1047,13 @@ services:
            - '@repository.promotion_code_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove }
-
+    command.order.create_handler:
+        class: Proximum\Vimeet\Application\Command\Order\CreateHandler
+        arguments:
+            - '@cart.convertor'
+            - '@cart_manager'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Create }
 
     command.order.add_row_to_product_handler:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler
@@ -1254,6 +1263,30 @@ services:
             - '%infrastructure.image_path%'
 
     #
+    # Step Component
+    #
+    components.step.step_option:
+        class: Proximum\Vimeet\Application\Components\Step\StepOption
+        arguments:
+            - '@order.merger'
+            - '@cart_manager'
+    components.step.step_participant:
+        class: Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning
+        arguments:
+            - '@order.merger'
+            - '@cart_manager'
+    components.step.step_plan:
+        class: Proximum\Vimeet\Application\Components\Step\StepPlan
+        arguments:
+            - '@cart_manager'
+    components.step.step_command_factory:
+        class: Proximum\Vimeet\Application\Components\Step\StepCommandFactory
+        arguments:
+            - '@components.step.step_plan'
+            - '@components.step.step_participant'
+            - '@components.step.step_option'
+
+    #
     # DateTime
     #
     datetime:
@@ -1451,6 +1484,7 @@ services:
         arguments:
             - '@query.package.participant_view_query_handler'
             - '@cart_manager'
+            - '@order.merger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
     query.package.groups_view_query_handler:
@@ -1469,6 +1503,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQueryHandler
         arguments:
             - '@cart_manager'
+            - '@order.merger'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
@@ -1525,6 +1560,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler
         arguments:
             - '@query.order.summary.group_view_query_handler'
+            - '@package.funnel.funnel_factory'
     query.order.summary.promotion_code_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodeViewQueryHandler
     query.order.summary.promotion_codes_view_query_handler:
@@ -1652,6 +1688,11 @@ services:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser
         arguments:
             - '@cart_manager'
+            - '@order.merger'
+    package.planning.quantity_min_guesser:
+            class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
+            arguments:
+                - '@order.merger'
     package.specification.vat_applicable:
         class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
         arguments:
@@ -1667,6 +1708,7 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
+            - '@order.merger'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
         arguments:
@@ -1717,6 +1759,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@repository.transaction'
+    order.merger:
+        class: Proximum\Vimeet\Domain\Order\Merger
     order.row.product_included_info_guesser:
         class: Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser
 

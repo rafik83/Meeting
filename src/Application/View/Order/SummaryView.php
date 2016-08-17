@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class SummaryView
 {
     /**
@@ -58,6 +61,26 @@ class SummaryView
     public $currency;
 
     /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var float
+     */
+    public $vatAmount;
+
+    /**
+     * @var float
+     */
+    public $totalWithoutVat;
+
+    /**
+     * @var float
+     */
+    public $totalWithVat;
+
+    /**
      * @param GroupsView         $groups
      * @param PromotionCodesView $promotionCodes
      * @param bool               $vatApplicable
@@ -68,6 +91,7 @@ class SummaryView
      * @param float              $totalWithoutVat
      * @param float              $totalWithVat
      * @param string             $currency
+     * @param Sheet              $sheet
      */
     public function __construct(
         GroupsView $groups,
@@ -79,7 +103,8 @@ class SummaryView
         $totalVatMode,
         $totalWithoutVat,
         $totalWithVat,
-        $currency
+        $currency,
+        Sheet $sheet
     ) {
         $this->groups          = $groups;
         $this->promotionCodes  = $promotionCodes;
@@ -91,5 +116,12 @@ class SummaryView
         $this->totalWithoutVat = $totalWithoutVat;
         $this->totalWithVat    = $totalWithVat;
         $this->currency        = $currency;
+        $this->sheet           = $sheet;
+
+        if ($vatApplicable) {
+            $this->vat          = ($this->total * $vatRate) / 100;
+            $this->totalPlusVat = $this->vat + $this->total;
+            $this->totalVatMode = Event::VAT_MODE_ATI;
+        }
     }
 }

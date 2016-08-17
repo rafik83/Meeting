@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
-use Proximum\Vimeet\Application\View\Order\CustomRowView;
 use Proximum\Vimeet\Application\View\Order\IncludedProductView;
 use Proximum\Vimeet\Application\View\Order\RowView;
 use Proximum\Vimeet\Domain\Order\Row\ProductIncludedInfoGuesser;
