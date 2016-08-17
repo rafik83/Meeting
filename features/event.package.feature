@@ -152,6 +152,19 @@ Feature: Complete my package
     And I should see "package.summary.totalVat"
     And I should see "summary.totalToPay"
 
+  Scenario: I can see how to pay in my transaction list
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet"
+    And I follow "navigation.links.package.order_list"
+    Then I should be on this page "/fr/sheet/1/orders"
+    And I should see "order.list.title"
+    And I should see "order.transaction.list.title"
+    And I should see "order.transaction.howtopay"
+    When I follow "order.transaction.howtopay"
+    Then I should be on this page "/fr/sheet/payment"
+    And I should see "package.payment.billingAddress"
+    And I should see "package.payment.bankInfo"
+
   Scenario: I can see the remaining amount to pay
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I am on this page "/fr/sheet"

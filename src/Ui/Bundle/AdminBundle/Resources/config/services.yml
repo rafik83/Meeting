@@ -114,6 +114,12 @@ services:
             - '%infrastructure.supported_currencies%'
         tags:
             - { name: form.type }
+    form_type_type.type_update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Helper

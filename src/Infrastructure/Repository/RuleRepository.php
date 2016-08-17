@@ -115,6 +115,24 @@ class RuleRepository implements RuleRepositoryInterface
     }
 
     /**
+     * @param Type $seer
+     *
+     * @return Rule[]
+     */
+    public function getByType(Type $seer)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('rule')
+            ->from(Rule::class, 'rule')
+            ->where('rule.seerType = :seerType')
+            ->setParameter('seerType', $seer);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function add(Rule $rule)

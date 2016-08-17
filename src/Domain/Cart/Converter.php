@@ -154,7 +154,7 @@ class Converter
             );
             $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
         }
-        
+
         $this->orderRepository->add($order);
         $this->emptyCart($cart);
 
@@ -178,8 +178,8 @@ class Converter
 
         return new Order\Row(
             $order,
-            $cartRow->getProduct(),
             $cartRow->getQuantity(),
+            $cartRow->getProduct(),
             $groupId
         );
     }

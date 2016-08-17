@@ -46,7 +46,7 @@ Feature: Admin Transaction
     And I am on this page "/admin/fr/event/1/sheet"
     When I go to this page "/admin/fr/event/1/sheet/1"
     And I follow "admin.transaction.edit"
-    Then I should be on this page "/admin/fr/event/1/sheet/1/transaction/3/update"
+    Then I should be on this page "/admin/fr/event/1/sheet/1/transaction/4/update"
     And I fill in the following:
       | form.update_transaction.children.amount.label | 525 |
     Then I check the "form.transaction.children.state.paid" radio

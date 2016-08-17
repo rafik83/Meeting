@@ -147,4 +147,9 @@ interface TypeRepositoryInterface
      * @return bool
      */
     public function typeExists(Event $event, $locale, $title, $excludedType = null);
+
+    /**
+     * @param Type $type
+     */
+    public function remove(Type $type);
 }

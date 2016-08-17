@@ -50,14 +50,14 @@ class MergerTest extends \PHPUnit_Framework_TestCase
 
         // Setup
         $orderOne = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-5 day'));
-        $orderOne->addRow(new Order\Row($orderOne, $plan, 1));
-        $orderOne->addRow(new Order\Row($orderOne, $participant, 2));
-        $orderOne->addRow(new Order\Row($orderOne, $option, 1));
+        $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
+        $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
+        $orderOne->addRow(new Order\Row($orderOne, 1, $option));
         $sheet->addOrder($orderOne);
 
         $orderTwo = new Order($sheet, true, $orderBillingInfo, '[]', $datetime->modify('-2 day'));
-        $orderTwo->addRow(new Order\Row($orderTwo, $participant, -1));
-        $orderTwo->addRow(new Order\Row($orderTwo, $option, 3));
+        $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
+        $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
         $sheet->addOrder($orderTwo);
 
         $orderMerger = new Merger();

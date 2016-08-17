@@ -33,18 +33,18 @@
                             <div class="col-md-4 sum">
                                 <ul>
                                     <li>{{ 'summary.total'|trans }}
-                                        <span>{{ view.total|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.vatMode)|trans }}</span>
+                                        <span>{{ view.totalWithoutVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.vatMode)|trans }}</span>
                                     </li>
                                     <li>{{ 'package.summary.totalVat'|trans({'%vat%': view.vatRate }) }}
                                         <span>
                                                 {{ 'package.product.priceWithCurrency'|trans({
-                                                    '%price%': view.vat|localizednumber,
+                                                    '%price%': view.vatAmount|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
                                                 })|html }}
                                             </span>
                                     </li>
                                     <li class="total">{{ 'summary.totalToPay'|trans }}
-                                        <span>{{ view.totalPlusVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
+                                        <span>{{ view.totalWithVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
                                     </li>
 
                                 </ul>

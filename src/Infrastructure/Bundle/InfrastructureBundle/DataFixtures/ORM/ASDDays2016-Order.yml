@@ -56,7 +56,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         quantity: 1
         groupId: 4
         price: 199
-        data: '{"type":"option","translations":{"fr":{"title":"Option E","heading":"","description":"","addon":""},"en":{"title":"Option E","heading":"","description":"","addon":""}},"productsIncluded":[]}'
+        data: '{"id":1,"type":"option","translations":{"fr":{"title":"Option E","heading":"","description":"","addon":""},"en":{"title":"Option E","heading":"","description":"","addon":""}},"productsIncluded":[]}'
         product: '@product_option_7_asddays'
     order_1_row_3:
         __construct: false

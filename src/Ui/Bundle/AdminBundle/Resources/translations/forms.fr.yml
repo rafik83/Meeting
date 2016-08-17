@@ -519,7 +519,10 @@ form.type_template.registration.base: 'Template d''Inscription de base'
 form.type_template.registration.organizer: 'Mes templates d''Inscription'
 form.type_template.sheet.base: 'Template de Participation de base'
 form.type_template.sheet.organizer: 'Mes templates de Participation'
+form.type_update.children.package.label: Template de forfait de participation
 form.type_update.children.rank.label: Position
+form.type_update.children.registrationTemplate.label: Template d'inscription
+form.type_update.children.sheetTemplate.label: Template de présentation
 form.type_update.children.submit.label: Enregistrer
 form.type_update.children.translations.prototype.children.description.label: Description
 form.type_update.children.translations.prototype.children.title.label: Titre

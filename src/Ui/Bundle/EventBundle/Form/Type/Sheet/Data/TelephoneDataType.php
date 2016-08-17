@@ -25,11 +25,10 @@ class TelephoneDataType extends AbstractType
     {
         $telephone = $options['object'];
         $locale    = $options['locale'];
-        $label     = $options['label'];
 
         $builder
             ->add('telephone', TelephoneType::class, [
-                'label'              => $label ? $telephone->getOption('label')[$locale] : false,
+                'label'              => $telephone->getOption('label', $locale),
                 'required'           => $telephone->getOption('required'),
                 'placeholder'        => $telephone->getOption('placeholder')[$locale],
                 'country'            => $options['country'],
@@ -46,7 +45,6 @@ class TelephoneDataType extends AbstractType
         $resolver->setRequired(['object', 'locale', 'country']);
         $resolver->setAllowedTypes('object', TemplateObject\Telephone::class);
         $resolver->setDefaults([
-            'label'      => false,
             'data_class' => TemplateObject\Telephone::class
         ]);
     }

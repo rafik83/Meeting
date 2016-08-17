@@ -139,6 +139,24 @@ admin.operator_list.table.title.lastname: Nom
 admin.operator_list.title: 'Liste des collaborateurs'
 admin.operator.create.title: 'Créer un nouveau collaborateur'
 admin.operator.update.title: 'Editer un collaborateur'
+admin.order.edit: 'Modification commande:'
+admin.order_edit.add_line: Ajouter une ligne
+admin.order_edit.after: après
+admin.order_edit.columns.product: Produit
+admin.order_edit.columns.quantity: Quantité
+admin.order_edit.columns.total: Total
+admin.order_edit.columns.unitPrice: Prix unitaire
+admin.order_edit.command_name: N°%id% de %sheetName%
+admin.order_edit.edit_custom_row: ''
+admin.order_edit.includedProduct: Inclus
+admin.order_edit.link: Modifier
+admin.order_edit.list_command.label: Commandes
+admin.order_edit.promotionCodes: Codes Promo
+admin.order_edit.remove_custom_row: ''
+admin.order_edit.total.withoutVAT: Total HT
+admin.order_edit.total.withVAT: Total TTC
+admin.order_edit.update_line: Modifier une ligne
+admin.order_edit.VAT: TVA
 admin.order.createdAt: 'Créée le'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
@@ -326,6 +344,7 @@ admin.type.link: 'Types de participation'
 admin.type.position: Position
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.type.remove.link: Supprimer
 admin.type.update.title: 'Modifier le type de participation'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'

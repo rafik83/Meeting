@@ -314,6 +314,7 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->handle(
             new UpdateCompany(
                 $templateData,
+                $sheet,
                 $participant,
                 'fr',
                 [
