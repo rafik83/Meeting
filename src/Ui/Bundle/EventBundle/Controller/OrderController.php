@@ -124,6 +124,7 @@ class OrderController extends Controller
         return $this->render('EventBundle:Order/SummaryTotal:summaryTotal.html.twig', [
             'event' => $eventDomain->getEvent(),
             'sheet' => $sheet,
+            'order' => $order,
             'view'  => $view,
         ]);
     }

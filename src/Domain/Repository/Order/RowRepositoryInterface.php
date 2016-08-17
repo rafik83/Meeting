@@ -3,27 +3,24 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Order;
+namespace Proximum\Vimeet\Domain\Repository\Order;
 
 use Proximum\Vimeet\Domain\Model\Order\Row;
 
-class RemoveRow
+interface RowRepositoryInterface
 {
     /**
-     * @var Row
+     * @param Row $row
      */
-    public $row;
+    public function set(Row $row);
 
     /**
      * @param Row $row
      */
-    public function __construct(Row $row)
-    {
-        $this->row = $row;
-    }
+    public function remove(Row $row);
 }

@@ -67,7 +67,7 @@ class Merger
     private function mergeProduct(Order $order)
     {
         foreach ($order->getRows() as $row) {
-            if ($orderMergedRow = $this->orderMerged->getRowForProduct($row->getProduct())) {
+            if (null !== ($orderMergedRow = $this->orderMerged->getRowForProduct($row->getProduct()))) {
                 $orderMergedRow->setQuantity($orderMergedRow->getQuantity() + $row->getQuantity());
             } else {
                 $cloneRow = clone $row;
