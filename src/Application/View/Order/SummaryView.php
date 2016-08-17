@@ -33,11 +33,6 @@ class SummaryView
     /**
      * @var float
      */
-    public $vat;
-
-    /**
-     * @var float
-     */
     public $vatRate;
 
     /**
@@ -81,6 +76,11 @@ class SummaryView
     public $totalWithVat;
 
     /**
+     * @var float
+     */
+    public $totalPlusVat;
+
+    /**
      * @param GroupsView         $groups
      * @param PromotionCodesView $promotionCodes
      * @param bool               $vatApplicable
@@ -117,11 +117,5 @@ class SummaryView
         $this->totalWithVat    = $totalWithVat;
         $this->currency        = $currency;
         $this->sheet           = $sheet;
-
-        if ($vatApplicable) {
-            $this->vat          = ($this->total * $vatRate) / 100;
-            $this->totalPlusVat = $this->vat + $this->total;
-            $this->totalVatMode = Event::VAT_MODE_ATI;
-        }
     }
 }

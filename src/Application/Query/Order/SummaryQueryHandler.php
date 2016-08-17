@@ -69,7 +69,6 @@ class SummaryQueryHandler
             $summaryQuery->order->getTotalWithVat(),
             $summaryQuery->order->getCurrency(),
             $summaryQuery->sheet
-
         );
     }
 }
