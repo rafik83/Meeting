@@ -582,7 +582,8 @@ class Order
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet             $sheet
+     * @param DateTimeInterface $dateTime
      *
      * @return Order
      */
