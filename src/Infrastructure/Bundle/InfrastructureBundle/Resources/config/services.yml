@@ -602,9 +602,8 @@ services:
     command.sheet.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\RemoveImageHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.local_file_storage'
-            - '@buyable_object_resolver'
+            - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
     command.admin.create_handler:
@@ -786,8 +785,16 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@buyable_object_resolver'
+            - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
+    command.sheet.remove_data_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\RemoveDataHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@buyable_object_resolver'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveData }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:

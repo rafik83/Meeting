@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class RemoveImageHandler
@@ -22,30 +20,22 @@ class RemoveImageHandler
     private $localFileStorageAdapter;
 
     /**
-     * @var SheetRepositoryInterface
+     * @var RemoveDataHandler
      */
-    private $sheetRepository;
-
-    /**
-     * @var BuyableObjectResolver
-     */
-    private $buyableObjectResolver;
+    private $removeDataHandler;
 
     /**
      * RemoveImageHandler constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param LocalFileStorageAdapter  $localFileStorageAdapter
-     * @param BuyableObjectResolver    $buyableObjectResolver
+     * @param LocalFileStorageAdapter $localFileStorageAdapter
+     * @param RemoveDataHandler       $removeDataHandler
      */
     public function __construct(
-        SheetRepositoryInterface $sheetRepository,
         LocalFileStorageAdapter $localFileStorageAdapter,
-        BuyableObjectResolver $buyableObjectResolver
+        RemoveDataHandler $removeDataHandler
     ) {
         $this->localFileStorageAdapter = $localFileStorageAdapter;
-        $this->sheetRepository         = $sheetRepository;
-        $this->buyableObjectResolver   = $buyableObjectResolver;
+        $this->removeDataHandler       = $removeDataHandler;
     }
 
     /**
@@ -53,12 +43,16 @@ class RemoveImageHandler
      */
     public function handle(RemoveImage $removeImage)
     {
-        $this->buyableObjectResolver->removePayableProduct($removeImage->sheet, $removeImage->image);
-
         $imagePath = $removeImage->image->getImage();
-        $removeImage->image->setData([]);
 
-        $this->sheetRepository->set($removeImage->sheet->setData($removeImage->templateData->getData()));
+        // remove binary file
         $this->localFileStorageAdapter->remove($imagePath);
+
+        // remove data from sheet
+        $this->removeDataHandler->handle(new RemoveData(
+            $removeImage->templateData,
+            $removeImage->image,
+            $removeImage->sheet
+        ));
     }
 }
