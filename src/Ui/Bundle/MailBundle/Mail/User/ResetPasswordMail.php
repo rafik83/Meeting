@@ -11,13 +11,25 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ResetPasswordMail extends Mail
 {
     /**
      * @var string
      */
-    private $eventTitle;
+    protected $subject = 'mail.resetPassword.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:User/resetPassword.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::USER_PASSWORD_RESET;
 
     /**
      * @var string
@@ -25,27 +37,16 @@ class ResetPasswordMail extends Mail
     private $token;
 
     /**
+     * @param Event  $event
      * @param string $sender
      * @param string $receiver
-     * @param string $template
-     * @param string $messageId
      * @param string $locale
-     * @param string $eventTitle
      * @param string $token
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $eventTitle, $token)
+    public function __construct(Event $event, $sender, $receiver, $locale, $token)
     {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
-        $this->eventTitle = $eventTitle;
-        $this->token      = $token;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEventTitle()
-    {
-        return $this->eventTitle;
+        parent::__construct($sender, $receiver, $locale, null, null, $event);
+        $this->token = $token;
     }
 
     /**
@@ -54,5 +55,15 @@ class ResetPasswordMail extends Mail
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubjectParameters()
+    {
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
     }
 }

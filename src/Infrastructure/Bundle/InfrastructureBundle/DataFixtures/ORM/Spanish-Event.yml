@@ -17,16 +17,7 @@ Proximum\Vimeet\Domain\Model\Event:
         paymentAddress: '@payment_address_event_spanish'
         configuration: '@configuration_event_spanish'
         organiserEmail: accounts@proximumgroup.com
-        legalInformation: |+
-            IVA pagado en los recibos
-            No hay descuento por pronto pago
-        # vat mode :
-        # - 'ati' = All Taxes Include : prices include taxes, no additional taxes computed
-        # - 'et'  = Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-        elementToJoinWithInvoice: |+
-            - Número de la factura
-            - Nombre del evento
-            - Pasivos netos
+
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_spanish_es:
@@ -45,6 +36,8 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#59a4eb'
             - '#00398c'
             - '#00398C'
+        contactFirstName: "Maryse"
+        contactLastName: "DURAND"
 
 Proximum\Vimeet\Domain\Model\Address (local):
     payment_address_event_spanish:

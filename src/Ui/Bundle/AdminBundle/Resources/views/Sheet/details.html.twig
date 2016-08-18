@@ -4,17 +4,11 @@
 {% block title %}{{ event.title }}: {{ details.title }}{% endblock %}
 
 {% block content %}
-    <div class="panel panel-default pull-right">
-        <div class="panel-heading">
-            {{ 'admin.sheet.details.remainingToPay'|trans }}
-        </div>
-        <div class="panel-body text-center h1">
-            {{ details.remainingToPay|localizedcurrency(event.currency) }}
-        </div>
-    </div>
-
-    <h1>{{ details.title }} <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span>
-    </h1>
+            <h1>
+                {{ details.title }}
+                <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span>
+                <span class="label label-{{ details.remainingToPay == 0 ? 'success' : 'danger' }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.remainingToPay'|trans }}">{{ details.remainingToPay|localizedcurrency(event.currency) }}</span>
+            </h1>
 
     <h3>{{ 'admin.sheet.details.participants'|trans }}</h3>
 
@@ -54,102 +48,100 @@
         {% endfor %}
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h3>{{ 'admin.sheet.details.orders'|trans }}</h3>
+    <h3>{{ 'admin.sheet.details.orders'|trans }}</h3>
 
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>{{ 'admin.order.id'|trans }}</th>
-                    <th>{{ 'admin.order.createdAt'|trans }}</th>
-                    <th class="text-right">{{ 'admin.order.total'|trans }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for order in details.orders %}
-                    <tr>
-                        <td>
-                            {{ order.id }}
-                        </td>
-                        <td>
-                            {{ order.createdAt|localizeddate('medium', 'short') }}
-                        </td>
-                        <td class="text-right">
-                            {{ order.total|localizedcurrency(order.currency) }}
-                            {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-6">
-            <div class="col-md-10">
-                <h3>{{ 'admin.sheet.details.transactions'|trans }}</h3>
-            </div>
-            <div class="col-md-2">
-                <a href="{{ path('admin_sheet_transaction_create', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-primary pull-right">{{ 'admin.transaction.add'|trans }}</a>
-            </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.order.id'|trans }}</th>
+            <th>{{ 'admin.order.createdAt'|trans }}</th>
+            <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in details.orders %}
+            <tr>
+                <td>
+                    {{ order.id }}
+                </td>
+                <td>
+                    {{ order.createdAt|localizeddate('medium', 'short') }}
+                </td>
+                <td class="text-right">
+                    {{ order.total|localizedcurrency(order.currency) }}
+                    {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>{{ 'admin.transaction.column.date'|trans }}</th>
-                    <th>{{ 'admin.transaction.column.state'|trans }}</th>
-                    <th>{{ 'admin.transaction.column.mode'|trans }}</th>
-                    <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
-                    <th>{{ 'admin.transaction.column.reference'|trans }}</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for transaction in details.transactions %}
-                    <tr>
-                        <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
-                        <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
-                        <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
-                        <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
-                        <td>{{ transaction.reference }}</td>
-                        <td class="text-right">
-                            <div class="btn-group">
-                                <a href="{{ path('admin_sheet_transaction_update', {
+    <h3>
+        {{ 'admin.sheet.details.transactions'|trans }}
+        <a href="{{ path('admin_sheet_transaction_create', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.add'|trans }}</a>
+    </h3>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.transaction.column.date'|trans }}</th>
+            <th>{{ 'admin.transaction.column.state'|trans }}</th>
+            <th>{{ 'admin.transaction.column.mode'|trans }}</th>
+            <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
+            <th>{{ 'admin.transaction.column.reference'|trans }}</th>
+            <th>{{ 'admin.transaction.column.user'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in details.transactions %}
+            <tr>
+                <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
+                <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
+                <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
+                <td>{{ transaction.reference }}</td>
+                <td>
+                    {{ transaction.user.account.completeName }}
+                    <br><small><a href="mailto:{{ transaction.user.email }}">{{ transaction.user.email }}</a></small>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <a href="{{ path('admin_sheet_transaction_update', {
+                            'event': event.id,
+                            'sheet': sheet.id,
+                            'transaction': transaction.id
+                        }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.edit'|trans }}</a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                {{ macros.delete_button(
+                                path('admin_sheet_transaction_remove', {
                                     'event': event.id,
                                     'sheet': sheet.id,
                                     'transaction': transaction.id
-                                }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.edit'|trans }}</a>
-                                <button type="button" class="btn btn-default btn-sm dropdown-toggle"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                        {{ macros.delete_button(
-                                        path('admin_sheet_transaction_remove', {
-                                            'event': event.id,
-                                            'sheet': sheet.id,
-                                            'transaction': transaction.id
-                                        }),
-                                        'admin.transaction.remove'|trans,
-                                        {}) }}
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+                                }),
+                                'admin.transaction.remove'|trans,
+                                {}) }}
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
     <h3>{{ 'admin.sheet.details.meeting.request.title'|trans }}</h3>
 

@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -19,9 +19,19 @@ use Proximum\Vimeet\Domain\Model\User;
 class PreRegisteredMail extends Mail
 {
     /**
-     * @var Event
+     * @var string
      */
-    private $event;
+    protected $subject = 'mail.event.preregister.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:Event/preregister.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::EVENT_PRE_REGISTERED;
 
     /**
      * @var Participant
@@ -34,52 +44,30 @@ class PreRegisteredMail extends Mail
     private $sheet;
 
     /**
-     * Array of Tag => String for participant and sheet data from PreRegisterEvent
-     *
-     * @var array
-     */
-    private $participantData;
-
-    /**
-     * RegisterAccountMail constructor.
-     *
+     * @param Participant $participant
      * @param string      $sender
      * @param string      $receiver
-     * @param string      $template
-     * @param string      $messageId
      * @param string      $locale
-     * @param Event       $event
      * @param User        $receiverUser
-     * @param Participant $participant
-     * @param Sheet       $sheet
-     * @param array       $participantData
      */
     public function __construct(
+        Participant $participant,
         $sender,
         $receiver,
-        $template,
-        $messageId,
         $locale,
-        Event $event,
-        User $receiverUser,
-        Participant $participant,
-        Sheet $sheet,
-        $participantData
+        User $receiverUser
     ) {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale, null, $receiverUser);
+        parent::__construct(
+            $sender,
+            $receiver,
+            $locale,
+            null,
+            $participant->getUser(),
+            $participant->getSheet()->getEvent()
+        );
 
-        $this->event           = $event;
-        $this->sheet           = $sheet;
-        $this->participant     = $participant;
-        $this->participantData = $participantData;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
+        $this->sheet       = $participant->getSheet();
+        $this->participant = $participant;
     }
 
     /**
@@ -99,10 +87,12 @@ class PreRegisteredMail extends Mail
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getParticipantData()
+    public function getSubjectParameters()
     {
-        return $this->participantData;
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
     }
 }

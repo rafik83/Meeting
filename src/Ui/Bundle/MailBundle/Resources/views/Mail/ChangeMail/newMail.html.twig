@@ -1,17 +1,19 @@
-{% block subject %}
-    {{ 'mail.changeMailNew.subject'|trans({}, 'mail', mail.locale) }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
 
 {% block body %}
     {{ 'mail.changeMailNew.body'|trans({
-        '%firstname%': mail.user.account.firstname,
-        '%lastname%': mail.user.account.lastname,
-        '%newMail%': mail.user.email
+        '%currentEmail%': mail.user.email
     }, 'mail', mail.locale)|html|nl2br }}
 
-    <a href="{{ url('event_activate_new_mail', {'token': mail.token}) }}">
-        {{ url('event_activate_new_mail', {'token': mail.token}) }}
-    </a><br>
+    <br>
+    <br>
+    {{ macros.button(
+        'mail.changeMailNew.validate'|trans({}, 'mail', mail.locale),
+        url('event_activate_new_mail', {'token': mail.token})
+    ) }}
+    <br>
 
     {{ 'mail.changeMailNew.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

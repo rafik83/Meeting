@@ -324,6 +324,7 @@ admin.transaction.column.mode: 'Mode de paiement'
 admin.transaction.column.reference: Commentaire
 admin.transaction.column.state: Statut
 admin.transaction.column.total: Total
+admin.transaction.column.user: Utilisateur
 admin.transaction.create: 'Ajouter une transaction'
 admin.transaction.edit: Modifier
 admin.transaction.mode.bank_card: 'Carte bleue'

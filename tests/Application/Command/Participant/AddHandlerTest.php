@@ -31,8 +31,8 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AddHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -87,7 +87,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcher::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedUser,
@@ -106,7 +106,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetAddConfirmationEvent = new SheetAddParticipantEvent(
             $expectedSheet,
-            $expectedUser,
+            $expectedParticipant,
             $user
         );
 
@@ -193,7 +193,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
 
         $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcher::class);
 
         $cartManager = $this->prophesize(CartManager::class);
 

@@ -26,7 +26,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddHandler
 {
@@ -56,7 +56,7 @@ class AddHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
@@ -73,7 +73,7 @@ class AddHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param TemplateDataFactory            $templateDataFactory
      * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
-     * @param EventDispatcherInterface       $eventDispatcher
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param CartManager                    $cartManager
      */
     public function __construct(
@@ -82,7 +82,7 @@ class AddHandler
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        EventDispatcherInterface $eventDispatcher,
+        DelayedEventDispatcher $eventDispatcher,
         CartManager $cartManager
     ) {
         $this->userRepository                = $userRepository;
@@ -132,7 +132,7 @@ class AddHandler
                 $this->sendCompleteProfileEvent($add, $user, $participant);
             } else {
                 $this->sendActivationEvent($add, $user); // send to the guest
-                $this->sendActivationConfirmEvent($add, $user); // send to the owner
+                $this->sendActivationConfirmEvent($add, $participant); // send to the owner
             }
         }
 
@@ -155,10 +155,10 @@ class AddHandler
     /**
      * Send confirm invitation email send to the sheet owner
      *
-     * @param Add  $add
-     * @param User $guest
+     * @param Add         $add
+     * @param Participant $guest
      */
-    private function sendActivationConfirmEvent(Add $add, User $guest)
+    private function sendActivationConfirmEvent(Add $add, Participant $guest)
     {
         $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->adder);
         $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $event);

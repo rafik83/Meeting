@@ -28,22 +28,13 @@ class OrderConfirmEvent extends EventDispatcher\Event
     private $user;
 
     /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * OrderConfirmEvent constructor.
-     *
      * @param Order $order
      * @param User  $user
-     * @param Event $event
      */
-    public function __construct(Order $order, User $user, Event $event)
+    public function __construct(Order $order, User $user)
     {
         $this->order = $order;
         $this->user  = $user;
-        $this->event = $event;
     }
 
     /**
@@ -67,6 +58,6 @@ class OrderConfirmEvent extends EventDispatcher\Event
      */
     public function getEvent()
     {
-        return $this->event;
+        return $this->order->getSheet()->getEvent();
     }
 }

@@ -11,17 +11,26 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class ResetPasswordConfirmMail extends Mail
 {
     /**
-     * @var Event
+     * @var string
      */
-    private $event;
+    protected $subject = 'mail.confirmResetPassword.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:User/resetPasswordConfirm.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::USER_RESET_PASSWORD_CONFIRMED;
 
     /**
      * @var User
@@ -29,56 +38,17 @@ class ResetPasswordConfirmMail extends Mail
     private $user;
 
     /**
-     * @var null|Sheet
+     * @param Event  $event
+     * @param string $sender
+     * @param string $receiver
+     * @param string $locale
+     * @param User   $user
      */
-    private $sheet;
-
-    /**
-     * @var null|Participant
-     */
-    private $participant;
-
-    /**
-     * @param string     $sender
-     * @param string     $receiver
-     * @param string     $template
-     * @param string     $messageId
-     * @param string     $locale
-     * @param Event      $event
-     * @param User       $user
-     * @param null|Sheet $sheet
-     */
-    public function __construct(
-        $sender,
-        $receiver,
-        $template,
-        $messageId,
-        $locale,
-        Event $event,
-        User $user,
-        Sheet $sheet = null
-    ) {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
-
-        $this->event = $event;
-        $this->sheet = $sheet;
-        $this->user  = $user;
-
-        if ($sheet !== null) {
-            $participant = $sheet->getUserParticipant($user);
-
-            if ($participant instanceof Participant) {
-                $this->participant = $participant;
-            }
-        }
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function __construct(Event $event, $sender, $receiver, $locale, User $user)
     {
-        return $this->event;
+        parent::__construct($sender, $receiver, $locale, null, null, $event);
+
+        $this->user  = $user;
     }
 
     /**
@@ -90,18 +60,12 @@ class ResetPasswordConfirmMail extends Mail
     }
 
     /**
-     * @return Sheet
+     * {@inheritdoc}
      */
-    public function getSheet()
+    public function getSubjectParameters()
     {
-        return $this->sheet;
-    }
-
-    /**
-     * @return Participant|null
-     */
-    public function getParticipant()
-    {
-        return $this->participant;
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
     }
 }
