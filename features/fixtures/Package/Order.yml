@@ -18,6 +18,7 @@ Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
             - ELAO
             - '@order_address_1'
             - 123456789
+            - Monsieur
 
 Proximum\Vimeet\Domain\Model\Order:
     order_1:

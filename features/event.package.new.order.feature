@@ -67,6 +67,7 @@ Feature: Edit my package
     And I fill in "options[7]" with "2"
     Then I press "package.product.validate"
     And I should be on this page "/fr/sheet/1/billing-info"
+    And I check the "gender.man" radio
     And I fill in the following:
       | form.billing_info_update.children.lastname.label  | Jean         |
       | form.billing_info_update.children.firstname.label | Test         |

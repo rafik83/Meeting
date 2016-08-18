@@ -41,7 +41,8 @@ class MergerTest extends \PHPUnit_Framework_TestCase
             'company',
             'email@email.com',
             new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
+            'vatNumber',
+            'gender'
         );
 
         $plan        = Product::createPlan($event, 'plan', '', 200, 20, 100);

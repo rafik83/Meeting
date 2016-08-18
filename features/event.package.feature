@@ -83,6 +83,7 @@ Feature: Complete my package
     When I am on this page "/fr/sheet/1/package/step/3"
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
+    And I check the "gender.man" radio
     And I fill in the following:
       | form.billing_info_update.children.lastname.label  | Jean         |
       | form.billing_info_update.children.firstname.label | Test         |
