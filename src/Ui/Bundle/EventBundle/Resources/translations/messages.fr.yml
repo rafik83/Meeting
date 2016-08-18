@@ -18,6 +18,8 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+event.info.contact: 'Informations pratiques'
+event.info.close: 'Fermer'
 gender.man: Monsieur
 gender.woman: Madame
 login.connect: 'Se connecter'
@@ -59,6 +61,7 @@ navigation.links.sheet.locale: Version
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
+nomenclature.submit: 'Enregistrer'
 order.list.column.date: Date
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
@@ -79,6 +82,7 @@ order.transaction.no: 'Aucune'
 order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
+order.transaction.howtopay: 'Comment payer ?'
 order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
@@ -127,6 +131,8 @@ package.summary.columns.quantity: Quantité
 package.summary.columns.title: Intitulé
 package.summary.columns.total: Total
 package.summary.columns.unitPrice: 'Prix unitaire'
+package.summary.edit: Modifier ma participation
+package.summary.empty: Votre panier est vide
 package.summary.option: Option
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
 package.summary.pay: 'Régler le forfait de participation'
@@ -160,6 +166,8 @@ sheet.object.action.add: 'Ajouter:'
 sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Editer
 sheet.object.action.remove: 'Supprimer:'
+sheet.object.image.label: 'Votre image actuelle'
+sheet.object.image.remove: 'Supprimer cette image'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.title: 'Fiche de présentation'
@@ -174,3 +182,5 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande:'
 summary.totalToPay: 'Total à régler:'
 summary.vatRate: 'TVA applicable %vatRate%%:'
+package.payment.bankInfo: 'Coordonnées bancaires'
+package.payment.billingAddress: 'Adresse de facturation'

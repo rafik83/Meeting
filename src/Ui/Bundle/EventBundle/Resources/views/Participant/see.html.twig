@@ -24,7 +24,7 @@
                                     {{ include('EventBundle:Participant/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
                                 </li>
                             {% endfor %}
-                                <li>{{ participant.user.getEmail() }}</li>
+                                <li><i class="icon-Message_1"></i> {{ participant.user.getEmail() }}</li>
                             </ul>
                         </div>
                         <div class="validation">
@@ -62,7 +62,7 @@
                             {% endfor %}
                         </ul>
                         {% if companyTemplate %}
-                            <a href="{{ path('event_account_participant_company', {sheet: sheet.id, participant: participant.id}) }}" class="btn btn-primary">
+                            <a href="{{ path('event_account_participant_company', {sheet: sheet.id}) }}" class="btn btn-primary">
                                 <i class="icon-Societe"></i> {{ 'common.update'|trans }}
                             </a>
                         {% endif %}

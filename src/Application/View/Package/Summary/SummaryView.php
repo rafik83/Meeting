@@ -103,4 +103,14 @@ class SummaryView
 
         $this->promotionCodes = $promotionCodesView;
     }
+
+    /**
+     * Check if cart is empty
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return count($this->funnel->getCart()->getRows()) === 0;
+    }
 }

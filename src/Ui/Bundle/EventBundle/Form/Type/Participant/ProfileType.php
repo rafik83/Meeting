@@ -55,7 +55,7 @@ class ProfileType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'        => Template\TemplateData::class,
-            'validation_groups' => ['Default', 'profile']
+            'validation_groups' => ['Default', 'profile'],
         ]);
         $resolver->setRequired(['template', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
@@ -72,8 +72,9 @@ class ProfileType extends AbstractType
     private function addText($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, EditableTextInputDataType::class, [
-            'object' => $object,
+            'label'  => false,
             'locale' => $locale,
+            'object' => $object,
         ]);
     }
 
@@ -101,6 +102,7 @@ class ProfileType extends AbstractType
     private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
     {
         $builder->add($key, NomenclatureDataType::class, [
+            'label'       => false,
             'locale'      => $locale,
             'object'      => $object,
             'placeholder' => $object->getOption('label')[$locale],
@@ -116,8 +118,9 @@ class ProfileType extends AbstractType
     private function addUrl($key, FormBuilderInterface $builder, Template\TemplateObject\Url $object, $locale)
     {
         $builder->add($key, UrlDataType::class, [
-            'object' => $object,
+            'label'  => false,
             'locale' => $locale,
+            'object' => $object,
         ]);
     }
 
@@ -131,9 +134,10 @@ class ProfileType extends AbstractType
     private function addTelephone($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale, $country)
     {
         $builder->add($key, TelephoneDataType::class, [
-            'object'  => $object,
-            'locale'  => $locale,
             'country' => $country,
+            'label'   => false,
+            'locale'  => $locale,
+            'object'  => $object,
         ]);
     }
 
@@ -146,8 +150,9 @@ class ProfileType extends AbstractType
     private function addCountry($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, CountryDataType::class, [
-            'object' => $object,
+            'label'  => false,
             'locale' => $locale,
+            'object' => $object,
         ]);
     }
 }

@@ -1,5 +1,11 @@
 Proximum\Vimeet\Application\Command\Type\Update:
     properties:
+        sheetTemplate:
+            - NotBlank: ~
+        registrationTemplate:
+            - NotBlank: ~
+        package:
+            - NotBlank: ~
         translations:
             - All:
                 - Collection:

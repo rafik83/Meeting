@@ -42,13 +42,13 @@ abstract class AbstractUpdate
     public $user;
 
     /**
-     * @param TemplateData $templateData
-     * @param Participant  $participant
-     * @param string       $locale
-     * @param array        $data
-     * @param User         $user
+     * @param TemplateData     $templateData
+     * @param Participant|null $participant
+     * @param string           $locale
+     * @param array            $data
+     * @param User             $user
      */
-    public function __construct(TemplateData $templateData, Participant $participant, $locale, $data, User $user)
+    public function __construct(TemplateData $templateData, Participant $participant = null, $locale, $data, User $user)
     {
         $this->templateData = $templateData;
         $this->participant  = $participant;

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Package\Option;
 
 use Proximum\Vimeet\Application\View\Package\ProductView;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Order\Merger;
 
 class OptionViewQueryHandler
 {
@@ -25,13 +26,23 @@ class OptionViewQueryHandler
     private $now;
 
     /**
+     * @var Merger
+     */
+    private $merger;
+
+    /**
      * @param CartManager        $cartManager
+     * @param Merger             $merger
      * @param \DateTimeInterface $now
      */
-    public function __construct(CartManager $cartManager, \DateTimeInterface $now)
-    {
+    public function __construct(
+        CartManager $cartManager,
+        Merger $merger,
+        \DateTimeInterface $now
+    ) {
         $this->cartManager = $cartManager;
         $this->now         = $now;
+        $this->merger      = $merger;
     }
 
     /**
@@ -42,11 +53,21 @@ class OptionViewQueryHandler
     public function handle(OptionViewQuery $optionViewQuery)
     {
         $cart         = $this->cartManager->getCart($optionViewQuery->sheet);
-        $selectedPlan = $cart->getPlanRow();
+        $selectedPlan = null;
         $included     = 0;
 
+        if (null !== $cart->getPlanRow()) {
+            $selectedPlan = $cart->getPlanRow()->getProduct();
+        }
+
+        // handle new order
+        if ($optionViewQuery->sheet->hasOrders()) {
+            $orderMerged  = $this->merger->merge($optionViewQuery->sheet->getOrders());
+            $selectedPlan = $orderMerged->getPlan();
+        }
+
         if ($selectedPlan) {
-            $includedProduct = $selectedPlan->getProduct()->getIncludedProduct($optionViewQuery->product);
+            $includedProduct = $selectedPlan->getIncludedProduct($optionViewQuery->product);
 
             if ($includedProduct) {
                 $included = $includedProduct->getQuantity();

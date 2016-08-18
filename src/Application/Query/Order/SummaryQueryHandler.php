@@ -49,6 +49,7 @@ class SummaryQueryHandler
         return new SummaryView(
             $this->groupsViewQueryHandler->handle(
                 new GroupsViewQuery(
+                    $summaryQuery->sheet,
                     $summaryQuery->order,
                     $summaryQuery->locale
                 )
@@ -61,8 +62,13 @@ class SummaryQueryHandler
             ),
             $summaryQuery->order->isVatApplicable(),
             $summaryQuery->order->getVatRate(),
+            $summaryQuery->order->getVatAmount(),
             $summaryQuery->order->getVatMode(),
-            $summaryQuery->order->getCurrency()
+            $summaryQuery->order->getTotalVatMode(),
+            $summaryQuery->order->getTotalWithoutVat(),
+            $summaryQuery->order->getTotalWithVat(),
+            $summaryQuery->order->getCurrency(),
+            $summaryQuery->sheet
         );
     }
 }

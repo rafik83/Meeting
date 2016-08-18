@@ -7,10 +7,14 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             generator:
                 strategy: AUTO
     fields:
+        label:
+            type: text
+            nullable: true
         quantity:
             type: integer
         data:
             type: json_array
+            nullable: true
         groupId:
             type: integer
             nullable: true
@@ -22,5 +26,12 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             inversedBy: rows
             joinColumn:
                 onDelete: "cascade"
+        parentRow:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
+            joinColumn:
+                nullable: true
+                onDelete: "cascade"
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                nullable: true
