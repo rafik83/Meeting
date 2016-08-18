@@ -54,7 +54,7 @@ class ImageDataType extends AbstractType
             ],
             'constraints' => [
                 new Image(['mimeTypes' => TemplateObject\Image::supportedMimeType()]),
-            ]
+            ],
         ]);
 
         if (null !== $image->getBuyableProducts()) {
@@ -71,8 +71,9 @@ class ImageDataType extends AbstractType
                     'choice_name' => 'id',
                     'choices'     => $image->getBuyableProducts(),
                     'required'    => true,
-                    'data'        => $selectedRadio
-                ]);
+                    'data'        => $selectedRadio,
+                ])
+            ;
 
             $builder->get('selectedProduct')
                 ->addModelTransformer(new IdToProductTransformer($this->productRepository));
@@ -91,6 +92,9 @@ class ImageDataType extends AbstractType
             'data_class'  => TemplateObject\Image::class,
             'placeholder' => null,
             'help'        => null,
+            'attr'        => [
+                'data-product-selector' => (int) true,
+            ],
         ]);
     }
 

@@ -51,7 +51,7 @@ class MediaCollectionDataType extends AbstractType
                     'label'       => false,
                     'collection'  => $options['data'],
                     'required'    => false,
-                    'placeholder' => $options['placeholder']
+                    'placeholder' => $options['placeholder'],
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
@@ -74,8 +74,9 @@ class MediaCollectionDataType extends AbstractType
                     'choice_name' => 'id',
                     'choices'     => $media->getBuyableProducts(),
                     'required'    => true,
-                    'data'        => $selectedRadio
-                ]);
+                    'data'        => $selectedRadio,
+                ])
+            ;
 
             $builder->get('selectedProduct')
                 ->addModelTransformer(new IdToProductTransformer($this->productRepository));
@@ -92,6 +93,9 @@ class MediaCollectionDataType extends AbstractType
             'data_class'  => MediaCollection::class,
             'placeholder' => null,
             'help'        => null,
+            'attr'        => [
+                'data-product-selector' => (int) true,
+            ],
         ]);
     }
 
