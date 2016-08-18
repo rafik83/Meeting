@@ -18,4 +18,4 @@
     {{ form_row(form.quantity, {widget_columns: 6}) }}
 {% endblock form_content %}
 
-{% block goback_link path('admin_event_list') %}
+{% block goback_link path('admin_sheet_order_edit',{'event': event.id, 'order': order.id}) %}
