@@ -26,7 +26,7 @@ login.connect: 'Se connecter'
 login.connection: Connexion
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
-login.error.sheetDisabled: 'La fiche a été désactivée'
+login.error.sheetDisabled: 'Votre participation a été désactivée'
 navigation.category.billing: Facturation
 navigation.category.catalog: 'Catalogue des participants'
 navigation.category.happening: 'Gestion de rdv'
