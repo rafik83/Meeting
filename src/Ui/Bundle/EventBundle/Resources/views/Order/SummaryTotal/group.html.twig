@@ -2,7 +2,16 @@
     {% set stripped = true %}
     <tr class="title">
         <td class="col-md-6">
-            <h3>{{ group.label }}</h3>
+            <h3>
+                {% if group.stepIndex is not null %}
+                    <a href="{{ path('event_package_step', {
+                        'sheet': group.sheet.id,
+                        'step': group.stepIndex
+                    }) }}">{{ group.label }}</a>
+                {% else %}
+                    {{ group.label }}
+                {% endif %}
+            </h3>
         </td>
         <td class="col-md-2"></td>
         <td class="col-md-2"></td>
@@ -15,7 +24,7 @@
 
         {% if product.customRows is not empty %}
             {% for customRow in product.customRows %}
-                {{ include('EventBundle:Order/SummaryTotal:custom_row.html.twig', {customRow: customRow, vatMode: product.vatMode, currency: product.currency}) }}
+                {{ include('EventBundle:Order/SummaryTotal:custom_row.html.twig', {customRow: customRow}) }}
             {% endfor %}
         {% endif %}
 
@@ -23,7 +32,7 @@
 
     {% if group.customRows is not empty %}
         {% for customRow in group.customRows %}
-            {{ include('EventBundle:Order/SummaryTotal:custom_row.html.twig', {customRow: customRow, vatMode: order.vatMode, currency: order.currency}) }}
+            {{ include('EventBundle:Order/SummaryTotal:custom_row.html.twig', {customRow: customRow}) }}
         {% endfor %}
     {% endif %}
 {% endif %}

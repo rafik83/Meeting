@@ -25,12 +25,11 @@ class EditableTextInputDataType extends AbstractType
     {
         $text   = $options['object'];
         $locale = $options['locale'];
-        $label  = $options['label'];
         $attr   = $text->getOption('maxLength') ? ['maxlength' => $text->getOption('maxLength')] : [];
 
         $builder
             ->add('content', TextType::class, [
-                'label'              => $label ? $text->getOption('label')[$locale] : false,
+                'label'              => $text->getOption('label', $locale),
                 'required'           => $text->getOption('required'),
                 'placeholder'        => $text->getOption('placeholder')[$locale],
                 'attr'               => $attr,
@@ -47,7 +46,6 @@ class EditableTextInputDataType extends AbstractType
         $resolver->setRequired(['object', 'locale']);
         $resolver->setAllowedTypes('object', TemplateObject\EditableText::class);
         $resolver->setDefaults([
-            'label'      => false,
             'data_class' => TemplateObject\EditableText::class
         ]);
     }

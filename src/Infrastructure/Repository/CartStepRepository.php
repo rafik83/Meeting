@@ -57,8 +57,8 @@ class CartStepRepository implements CartStepRepositoryInterface
             ->createQueryBuilder()
             ->select('cartStep')
             ->from(CartStep::class, 'cartStep')
-            ->join('cartStep.sheet', 'sheet', 'WITH', 'sheet.id = :id')
-            ->setParameter('id', $sheet->getId())
+            ->where('cartStep.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
@@ -82,8 +82,8 @@ class CartStepRepository implements CartStepRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->delete(CartStep::class, 'cartStep')
-            ->where('cartStep.sheet = :sheetId')
-            ->setParameter('sheetId', $sheet->getId())
+            ->where('cartStep.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
             ->getQuery()
             ->execute()
         ;

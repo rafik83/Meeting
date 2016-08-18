@@ -40,13 +40,12 @@ class FilterSpotType extends AbstractType
                 'label' => 'form.filter_spot_type.children.size.label'
             ])
             ->add('active', ChoiceType::class, [
-                'label'             => 'form.filter_spot_type.children.active.label',
-                'choices_as_values' => true,
-                'choices'           => [
+                'label'       => 'form.filter_spot_type.children.active.label',
+                'choices'     => [
                     'admin.spot.active.yes' => 1,
                     'admin.spot.active.no'  => 0,
                 ],
-                'placeholder'       => '',
+                'placeholder' => '',
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'form.filter_spot_type.children.submit.label',

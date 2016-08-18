@@ -34,7 +34,8 @@ class PromotionCodeQueryHandler
             foreach($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
                 $cartRow = $cart->getCartRowForProduct($promotion->getProduct());
 
-                if (null !== $cartRow) {
+                // don't show row with negative quantity
+                if (null !== $cartRow && !$cartRow->isNegative()) {
                     $promotionProductRowViews[] = new PromotionProductRowView(
                         $promotion,
                         $promotion->getProduct()->getName(),

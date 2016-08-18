@@ -26,15 +26,14 @@ class FilterMeetingRequestType extends AbstractType
     {
         $builder
             ->add('state', ChoiceType::class, [
-                'label'             => 'form.meeting_request_filter.children.state.label',
-                'choices_as_values' => true,
-                'choices'           => [
+                'label'                     => 'form.meeting_request_filter.children.state.label',
+                'choices'                   => [
                     'admin.meeting_request.state.approved'  => Request::STATE_APPROVED,
                     'admin.meeting_request.state.cancelled' => Request::STATE_CANCEL,
                     'admin.meeting_request.state.refused'   => Request::STATE_REFUSED,
                     'admin.meeting_request.state.sent'      => Request::STATE_SENT,
                 ],
-                'placeholder' => '',
+                'placeholder'               => '',
                 'choice_translation_domain' => 'messages',
             ]);
     }

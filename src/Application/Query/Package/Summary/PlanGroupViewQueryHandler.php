@@ -30,7 +30,7 @@ class PlanGroupViewQueryHandler
     /**
      * @param PlanGroupViewQuery $planGroupViewQuery
      *
-     * @return PlanGroupView
+     * @return null|PlanGroupView
      * @throws \Exception
      */
     public function handle(PlanGroupViewQuery $planGroupViewQuery)
@@ -39,6 +39,10 @@ class PlanGroupViewQueryHandler
         $package = $planGroupViewQuery->sheet->getPackage();
 
         $plan = $cart->getPlanRow();
+
+        if($planGroupViewQuery->sheet->hasOrders()) {
+            return null;
+        }
 
         if ($package->isPlansEnabled() && null === $plan) {
             throw new \Exception('Plan is enabled and no plan is selected');

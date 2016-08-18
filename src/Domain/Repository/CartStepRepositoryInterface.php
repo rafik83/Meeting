@@ -28,7 +28,7 @@ interface CartStepRepositoryInterface
     /**
      * @param Sheet $sheet
      *
-     * @return CartStep
+     * @return null|CartStep
      */
     public function findBySheet(Sheet $sheet);
 

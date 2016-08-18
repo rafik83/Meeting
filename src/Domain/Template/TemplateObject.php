@@ -30,7 +30,7 @@ class TemplateObject extends AbstractChild
      *
      * @param array $data
      *
-     * @return Object
+     * @return TemplateObject
      */
     public function setData(array $data)
     {

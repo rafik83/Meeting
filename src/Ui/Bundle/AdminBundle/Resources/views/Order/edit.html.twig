@@ -7,7 +7,8 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
+
+    <h1 class="page-header"><a href="{{ path('admin_sheet_order_list', {event: event.id}) }}">{{ 'admin.order_edit.list_command.label'|trans }}</a> / {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}</h1>
 
     <table class="table table-condensed">
         <thead>

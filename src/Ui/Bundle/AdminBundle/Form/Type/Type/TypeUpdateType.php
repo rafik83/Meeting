@@ -10,9 +10,16 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
+use Proximum\Vimeet\Application\Command\Type\Update;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -22,16 +29,57 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TypeUpdateType extends AbstractType
 {
     /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
+     * TypeUpdateType constructor.
+     *
+     * @param SheetRepositoryInterface $sheetRepository
+     */
+    public function __construct(SheetRepositoryInterface $sheetRepository)
+    {
+        $this->sheetRepository = $sheetRepository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if (false === $this->sheetRepository->isThereAtLeastOneByType($options['type'])) {
+            $builder
+                ->add('sheetTemplate', SheetTemplateChoiceType::class, [
+                    'events'      => $options['events'],
+                    'required'    => true,
+                    'expanded'    => false,
+                    'multiple'    => false,
+                    'placeholder' => '',
+                ])
+                ->add('registrationTemplate', RegistrationTemplateChoiceType::class, [
+                    'events'      => $options['events'],
+                    'required'    => true,
+                    'expanded'    => false,
+                    'multiple'    => false,
+                    'placeholder' => '',
+                ])
+                ->add('package', PackageChoiceType::class, [
+                    'currentEvent' => $options['currentEvent'],
+                    'required'     => true,
+                    'expanded'     => false,
+                    'multiple'     => false,
+                    'placeholder'  => '',
+                ])
+            ;
+        }
+
         $builder
             ->add('translations', CollectionType::class, [
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
-            ->add('rank', NumberType::class)
+            ->add('rank', IntegerType::class)
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
@@ -44,9 +92,13 @@ class TypeUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Type\Update',
+            'data_class'    => Update::class,
             'csrf_token_id' => 'type_update',
         ]);
+
+        $resolver->setRequired(['events', 'currentEvent', 'type']);
+        $resolver->setAllowedTypes('currentEvent', Event::class);
+        $resolver->setAllowedTypes('type', Type::class);
     }
 
     /**
@@ -55,7 +107,9 @@ class TypeUpdateType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         foreach ($view->children['translations'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName($translation->vars['name']));
+            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName(
+                $translation->vars['name'])
+            );
         }
     }
 }

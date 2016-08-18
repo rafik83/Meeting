@@ -31,12 +31,13 @@ class OrderController extends Controller
 {
     /**
      * @param Request $request
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
     public function listAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
@@ -79,6 +80,7 @@ class OrderController extends Controller
      */
     public function editAction(Request $request, Event $event, Order $order)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfOrderNotInEvent($event, $order);
 
         $sheetInfo = $this
