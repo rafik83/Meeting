@@ -346,6 +346,7 @@ admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.remove.link: Supprimer
 admin.type.update.title: 'Modifier le type de participation'
+admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
