@@ -4,6 +4,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
+use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -42,24 +44,32 @@ class OptionsValidator extends ConstraintValidator
     private $productInfoGuesser;
 
     /**
+     * @var CartManager
+     */
+    private $cartManager;
+
+    /**
      * @param QuantityMaxGuesser $quantityMaxGuesser
      * @param QuantityMinGuesser $quantityMinGuesser
      * @param ProductInfoGuesser $productInfoGuesser
      * @param \DateTimeInterface $now
      * @param Merger             $merger
+     * @param CartManager        $cartManager
      */
     public function __construct(
         QuantityMaxGuesser $quantityMaxGuesser,
         QuantityMinGuesser $quantityMinGuesser,
         ProductInfoGuesser $productInfoGuesser,
         \DateTimeInterface $now,
-        Merger $merger
+        Merger $merger,
+        CartManager $cartManager
     ) {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
         $this->quantityMinGuesser = $quantityMinGuesser;
         $this->now                = $now;
         $this->merger             = $merger;
         $this->productInfoGuesser = $productInfoGuesser;
+        $this->cartManager        = $cartManager;
     }
 
     /**
@@ -69,6 +79,7 @@ class OptionsValidator extends ConstraintValidator
     public function validate($selectOptions, Constraint $constraint)
     {
         $order   = null;
+        $cart    = $this->cartManager->getCart($selectOptions->sheet);
         $options = $selectOptions->sheet->getPackage()->getAvailablesOptions($this->now);
         $options = array_combine(
             array_map(
@@ -94,8 +105,16 @@ class OptionsValidator extends ConstraintValidator
                 continue;
             }
 
-            $quantityMin = $this->getQuantityMin($selectOptions->sheet, $selectOptions->locale, $options, $id,
-                (int)$quantity, $order);
+            $quantityMin = $this->getQuantityMin(
+                $selectOptions->sheet,
+                $selectOptions->locale,
+                $options,
+                $id,
+                (int)$quantity,
+                $cart,
+                $order
+            );
+
             $quantityMax = $this->getQuantityMax($selectOptions->sheet, $options, $id);
 
             if (isset($order) && !$options[$id]->isDeletable($this->now)) {
@@ -120,11 +139,12 @@ class OptionsValidator extends ConstraintValidator
      * @param int    $options
      * @param int    $id
      * @param int    $quantity
+     * @param Cart   $cart
      * @param Order  $order
      *
      * @return false|int
      */
-    private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity, Order $order = null)
+    private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity, Cart $cart, Order $order = null)
     {
         $quantityMin = 0;
 
@@ -135,7 +155,7 @@ class OptionsValidator extends ConstraintValidator
         );
 
         if (null !== $linkedProduct) {
-            $quantity = $this->resolveQuantityMin($quantity, $linkedProduct, $order);
+            $quantity = $this->resolveQuantityMin($quantity, $linkedProduct, $cart, $order);
 
             if ($quantity < BuyableObjectResolver::PAYABLE_OPTION_QUANTITY) {
                 $this
@@ -205,13 +225,22 @@ class OptionsValidator extends ConstraintValidator
      *
      * @param int     $quantity
      * @param Product $linkedProduct
+     * @param Cart    $cart
      * @param Order   $order
      *
      * @return int
      */
-    private function resolveQuantityMin($quantity, Product $linkedProduct, Order $order = null)
+    private function resolveQuantityMin($quantity, Product $linkedProduct, Cart $cart, Order $order = null)
     {
-        if (null !== $order && $plan = $order->getPlan()) {
+        $plan = null;
+
+        if (null !== $order) {
+            $plan = $order->getPlan();
+        } elseif ($planRow = $cart->getPlanRow()) {
+            $plan = $planRow->getProduct();
+        }
+
+        if (null !== $plan) {
             $includedProduct = $plan->getIncludedProduct($linkedProduct);
             if (null !== $includedProduct) {
                 $quantity = $quantity + $includedProduct->getQuantity();
