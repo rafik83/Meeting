@@ -81,6 +81,7 @@ order.transaction.no: 'Aucune'
 order.transaction.state.cancelled: 'Annulé'
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
+order.transaction.howtopay: 'Comment payer ?'
 order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
@@ -164,6 +165,8 @@ sheet.object.action.add: 'Ajouter:'
 sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Editer
 sheet.object.action.remove: 'Supprimer:'
+sheet.object.image.label: 'Votre image actuelle'
+sheet.object.image.remove: 'Supprimer cette image'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.title: 'Fiche de présentation'
@@ -175,8 +178,8 @@ summary.group.option.title: Options
 summary.product.included: 'Inclus'
 summary.promotionCode.free: Offert
 summary.promotionCode.title: 'Offres de réductions'
-summary.total: 'Total de la commande:'
-summary.totalToPay: 'Total à régler:'
-summary.vatRate: 'TVA applicable %vatRate%%:'
+summary.total: 'Total de la commande'
+summary.totalToPay: 'Total à régler'
+summary.vatRate: 'TVA applicable %vatRate%%'
 package.payment.bankInfo: 'Coordonnées bancaires'
 package.payment.billingAddress: 'Adresse de facturation'
