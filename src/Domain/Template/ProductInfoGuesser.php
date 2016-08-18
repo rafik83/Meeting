@@ -51,12 +51,12 @@ class ProductInfoGuesser
     {
         $template = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
-        foreach ($template->getImageObjects() as $image) {
-            if (!$image->getSelectedProduct()) {
+        foreach ($template->getObjects() as $object) {
+            if (!$object->getSelectedProduct()) {
                 continue;
             }
 
-            $linkedProduct = $this->idToProductTransformer->transform($image->getSelectedProduct());
+            $linkedProduct = $this->idToProductTransformer->transform($object->getSelectedProduct());
 
             if (null !== $linkedProduct && $product === $linkedProduct) {
                 return $linkedProduct;

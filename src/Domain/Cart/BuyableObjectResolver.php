@@ -127,14 +127,10 @@ class BuyableObjectResolver
         $plan        = null;
         $orderMerged = null;
 
-        if ($cart->getSheet()->hasOrders()) {
-            $orderMerged = $this->orderMerger->merge($cart->getSheet()->getOrders());
-            $plan        = $orderMerged->getPlan();
-        }
-
         if ($product = $this->productTransformer->transform($object->getSelectedProduct())) {
+
             // handle product included
-            if (null !== $plan && $plan->getIncludedProduct($product)) {
+            if ($this->hasCartPlanIncludedProduct($cart, $product)) {
                 return;
             }
 
@@ -186,5 +182,29 @@ class BuyableObjectResolver
 
         $cartRow->setQuantity($updatedQuantity);
         $this->cartManager->save($cart);
+    }
+
+    /**
+     * @param Cart    $cart
+     * @param Product $product
+     *
+     * @return bool
+     */
+    private function hasCartPlanIncludedProduct(Cart $cart, Product $product)
+    {
+        $plan = null;
+
+        if ($cart->getSheet()->hasOrders()) {
+            $orderMerged = $this->orderMerger->merge($cart->getSheet()->getOrders());
+            $plan        = $orderMerged->getPlan();
+        } elseif ($planRow = $cart->getPlanRow()) {
+            $plan = $planRow->getProduct();
+        }
+
+        if (null !== $plan && $plan->getIncludedProduct($product)) {
+            return true;
+        }
+
+        return false;
     }
 }
