@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
 
-class AddRow
+abstract class AbstractAddRow
 {
     /**
      * @var Order
@@ -22,17 +22,7 @@ class AddRow
     /**
      * @var string
      */
-    public $group;
-
-    /**
-     * @var string
-     */
     public $label;
-
-    /**
-     * @var string
-     */
-    public $description;
 
     /**
      * @var float
@@ -43,16 +33,4 @@ class AddRow
      * @var int
      */
     public $quantity = 1;
-
-    /**
-     * AddRow constructor.
-     *
-     * @param Order  $order
-     * @param string $group
-     */
-    public function __construct(Order $order, $group)
-    {
-        $this->order = $order;
-        $this->group = $group;
-    }
 }

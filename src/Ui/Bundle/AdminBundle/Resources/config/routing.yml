@@ -381,30 +381,36 @@ admin_sheet_order_edit:
         order: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order:edit }
-admin_sheet_order_add_row:
-    path: /event/{event}/order/{order}/group/{group}/row/add
+admin_sheet_order_add_row_to_group:
+    path: /event/{event}/order/{order}/row/add/to-group/{group}
     requirements:
         event: \d+
         order: \d+
-        group: '[a-zA-Z0-9\-]+'
+        group: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Order:addRow }
-admin_sheet_order_remove_row:
-    path: /event/{event}/order/{order}/group/{group}/row/{row}/remove
+    defaults: { _controller: AdminBundle:Order:addRowToGroup }
+admin_sheet_order_add_row_to_product:
+    path: /event/{event}/order/{order}/row/add/to-product/{row}
     requirements:
         event: \d+
         order: \d+
-        group: '[a-zA-Z0-9\-]+'
-        row: '[a-zA-Z0-9\-]+'
-    methods: [DELETE]
+        row: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Order:addRowToProduct }
+admin_sheet_order_remove_row:
+    path: /event/{event}/order/{order}/row/{row}/remove
+    requirements:
+        event: \d+
+        order: \d+
+        row: \d+
+    methods: [GET]
     defaults: { _controller: AdminBundle:Order:removeRow }
 admin_sheet_order_update_row:
-    path: /event/{event}/order/{order}/group/{group}/row/{row}/update
+    path: /event/{event}/order/{order}/row/{row}/update
     requirements:
         event: \d+
         order: \d+
-        group: '[a-zA-Z0-9\-]+'
-        row: '[a-zA-Z0-9\-]+'
+        row: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Order:updateRow }
 

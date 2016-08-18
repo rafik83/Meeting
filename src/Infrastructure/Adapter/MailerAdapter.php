@@ -26,13 +26,20 @@ class MailerAdapter implements MailerInterface
     private $twig;
 
     /**
+     * @var TranslatorAdapter
+     */
+    private $translator;
+
+    /**
      * @param \Swift_Mailer     $mailer
      * @param \Twig_Environment $twig
+     * @param TranslatorAdapter $translator
      */
-    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig)
+    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig, TranslatorAdapter $translator)
     {
-        $this->mailer = $mailer;
-        $this->twig   = $twig;
+        $this->mailer     = $mailer;
+        $this->twig       = $twig;
+        $this->translator = $translator;
     }
 
     /**
@@ -44,16 +51,19 @@ class MailerAdapter implements MailerInterface
     {
         /** @var \Twig_Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
+        $body     = $template->render(['mail' => $mail]);
+        $subject  = $this->translator->trans(
+            $mail->getSubject(),
+            $mail->getSubjectParameters(),
+            'mail',
+            $mail->getLocale()
+        );
 
         $message = \Swift_Message::newInstance()
-            ->setSubject($template->renderBlock('subject', [
-                'mail' => $mail
-            ]))
+            ->setSubject($subject)
             ->setFrom($mail->getSender())
             ->setTo($mail->getReceiver())
-            ->setBody($template->renderBlock('body', [
-                'mail' => $mail
-            ]))
+            ->setBody($body)
             ->setContentType('text/html');
 
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());

@@ -1,14 +1,9 @@
-{% block subject %}
-    {{ 'mail.transaction.confirm.subject'|trans({
-        '%transactionNumber%': mail.transaction.id
-    }, 'mail', mail.locale) }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
     {{ 'mail.transaction.confirm.body'|trans({
-        '%transactionNumber%': mail.transaction.id,
-        '%firstname%': mail.user.account.firstname|humanize,
-        '%lastname%': mail.user.lastname|upper,
-        '%transactionTotal%': mail.transaction.amount
+        '%firstname%': mail.user.account.firstname|capitalize,
+        '%lastname%': mail.user.account.lastname|upper,
+        '%transactionTotal%': mail.transaction.amount ~ ' ' ~ mail.transaction.currency|currency_symbol
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

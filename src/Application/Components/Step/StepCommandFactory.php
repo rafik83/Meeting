@@ -64,16 +64,12 @@ class StepCommandFactory
         switch ($type) {
             case Step::TYPE_PLAN:
                 return $this->stepPlan->build($sheet, $stepIndex);
-                break;
             case Step::TYPE_PARTICIPANT_PLANNING:
                 return $this->stepParticipantAndPlanning->build($sheet, $stepIndex);
-                break;
             case Step::TYPE_OPTIONS:
                 return $this->stepOption->build($sheet, $stepIndex, $locale);
-                break;
             default:
                 throw new StepNotImplementedException(sprintf('Command Package Step type %s not implemented', $type));
-                break;
         }
     }
 }

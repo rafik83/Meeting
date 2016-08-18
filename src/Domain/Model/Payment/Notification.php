@@ -28,7 +28,7 @@ class Notification
     private $details;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
@@ -71,7 +71,7 @@ class Notification
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {

@@ -62,6 +62,11 @@ class Transaction
     private $currency;
 
     /**
+     * @var User|null
+     */
+    private $user;
+
+    /**
      * Transaction constructor.
      *
      * @param Sheet              $sheet
@@ -71,6 +76,7 @@ class Transaction
      * @param null|string        $reference
      * @param string             $state
      * @param string             $currency
+     * @param User|null          $user
      */
     public function __construct(
         Sheet $sheet,
@@ -79,7 +85,8 @@ class Transaction
         $mode,
         $reference,
         $state,
-        $currency
+        $currency,
+        User $user = null
     ) {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
@@ -88,6 +95,7 @@ class Transaction
         $this->reference = $reference;
         $this->state     = $state;
         $this->currency  = $currency;
+        $this->user      = $user;
     }
 
     /**
@@ -189,6 +197,14 @@ class Transaction
     }
 
     /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return !$this->user ? $this->sheet->getOwner() : $this->user;
+    }
+
+    /**
      * @return string
      */
     public function getCurrency()
@@ -202,6 +218,14 @@ class Transaction
     public function isPending()
     {
         return $this->state === self::STATE_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaid()
+    {
+        return $this->state === self::STATE_PAID;
     }
 
     /**
@@ -238,12 +262,13 @@ class Transaction
 
     /**
      * @param Sheet              $sheet
+     * @param User               $user
      * @param float              $amount
      * @param \DateTimeInterface $date
      *
      * @return Transaction
      */
-    public static function createForPaypal(Sheet $sheet, $amount, \DateTimeInterface $date)
+    public static function createForPaypal(Sheet $sheet, User $user, $amount, \DateTimeInterface $date)
     {
         return new self(
             $sheet,
@@ -252,7 +277,8 @@ class Transaction
             Mode::PAYMENT_PAYPAL,
             null,
             self::STATE_PENDING,
-            $sheet->getEvent()->getCurrency()
+            $sheet->getEvent()->getCurrency(),
+            $user
         );
     }
 }

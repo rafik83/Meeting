@@ -62,7 +62,11 @@ class SummaryQueryHandler
             ),
             $summaryQuery->order->isVatApplicable(),
             $summaryQuery->order->getVatRate(),
+            $summaryQuery->order->getVatAmount(),
             $summaryQuery->order->getVatMode(),
+            $summaryQuery->order->getTotalVatMode(),
+            $summaryQuery->order->getTotalWithoutVat(),
+            $summaryQuery->order->getTotalWithVat(),
             $summaryQuery->order->getCurrency(),
             $summaryQuery->sheet
         );

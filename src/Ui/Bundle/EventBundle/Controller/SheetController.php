@@ -281,19 +281,19 @@ class SheetController extends Controller
 
         return $this->render($twig, [
             'event'              => $eventDomain->getEvent(),
-            'sheet'              => $sheet,
-            'templateData'       => $templateData,
-            'locale'             => $locale,
-            'nomenclatures'      => $nomenclatures,
-            'taggedData'         => $taggedData,
             'form'               => $form->createView(),
             'label'              => $label,
-            'uid'                => $key,
-            'participants'       => $participants,
+            'levelsArchitecture' => $levelsArchitecture,
+            'locale'             => $locale,
+            'nomenclatures'      => $nomenclatures,
             'object'             => $object,
+            'participants'       => $participants,
+            'sheet'              => $sheet,
+            'taggedData'         => $taggedData,
+            'templateData'       => $templateData,
+            'uid'                => $key,
             'currency'           => $eventDomain->getEvent()->getCurrency(),
             'vatMode'            => $eventDomain->getEvent()->getMode(),
-            'levelsArchitecture' => $levelsArchitecture,
         ]);
     }
 
@@ -374,7 +374,10 @@ class SheetController extends Controller
 
         $addParticipant = new Add($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
-            'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
+            'action' => $this->generateUrl('event_sheet_handle_participant', [
+                'locale' => $locale,
+                'key'    => $key
+            ]),
         ]);
 
         // Handle the form, update the object and redirect to the sheet if valid

@@ -18,16 +18,6 @@ class GroupsView
     public $groups = [];
 
     /**
-     * @return float
-     */
-    public function getTotal()
-    {
-        return array_reduce($this->groups, function ($carry, GroupView $group) {
-            return $carry + $group->getTotal();
-        }, 0);
-    }
-
-    /**
      * @param GroupView $group
      *
      * @return GroupsView
