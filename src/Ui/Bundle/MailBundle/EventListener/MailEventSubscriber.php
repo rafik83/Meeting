@@ -17,8 +17,6 @@ use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationCloseToExpiration;
-use Proximum\Vimeet\Application\Event\Sheet\SheetInvitationExpire;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
@@ -27,16 +25,13 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeNewMailAddressMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ChangeOldMailAddressMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExpiredInvitationMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\InvitationCloseToExpirationMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
@@ -59,22 +54,15 @@ class MailEventSubscriber implements EventSubscriberInterface
     private $sender;
 
     /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
-    /**
      * MailEventSubscriber constructor.
      *
-     * @param MailerInterface          $mailer
-     * @param string                   $sender
-     * @param SheetRepositoryInterface $sheetRepository
+     * @param MailerInterface $mailer
+     * @param string          $sender
      */
-    public function __construct(MailerInterface $mailer, $sender, SheetRepositoryInterface $sheetRepository)
+    public function __construct(MailerInterface $mailer, $sender)
     {
-        $this->mailer          = $mailer;
-        $this->sender          = $sender;
-        $this->sheetRepository = $sheetRepository;
+        $this->mailer = $mailer;
+        $this->sender = $sender;
     }
 
     /**
@@ -90,8 +78,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getSheet(),
             $this->sender,
             $owner->getEmail(),
-            'MailBundle:Mail:Sheet/sheetValidated.html.twig',
-            Events::SHEET_VALIDATED,
             $owner->getLocale()
         );
 
@@ -104,13 +90,11 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onTransactionConfirmed(TransactionConfirmEvent $event)
     {
         $mail = new TransactionConfirmMail(
+            $event->getTransaction(),
+            $event->getUser(),
             $this->sender,
             $event->getUser()->getEmail(),
-            '',
-            'transaction_confirm',
-            $event->getUser()->getLocale(),
-            $event->getUser(),
-            $event->getTransaction()
+            $event->getUser()->getLocale()
         );
 
         $this->mailer->send($mail);
@@ -122,19 +106,17 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onChangeMailAddressEvent(ChangeMailAddressEvent $event)
     {
         $oldMail = new ChangeOldMailAddressMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:ChangeMail/oldMail.html.twig',
-            'change_mail_old',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getMail()
         );
 
         $newMail = new ChangeNewMailAddressMail(
+            $event->getEvent(),
             $this->sender,
             $event->getChangeMailToken()->getMail(),
-            'MailBundle:Mail:ChangeMail/newMail.html.twig',
-            'change_mail_new',
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken(),
             $event->getUser()
@@ -142,46 +124,6 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $this->mailer->send($oldMail);
         $this->mailer->send($newMail);
-    }
-
-    /**
-     * Send mail to the guest for notice him of an invitation close to expiration
-     *
-     * @param SheetInvitationCloseToExpiration $event
-     */
-    public function onInvitationCloseToExpiration(SheetInvitationCloseToExpiration $event)
-    {
-        $mail = new InvitationCloseToExpirationMail(
-            $this->sender,
-            $event->getGuest()->getEmail(),
-            'MailBundle:Mail:Sheet/Invitation/closeToExpiration.html.twig',
-            'sheet_invitation_close_to_expiration',
-            $event->getUser()->getLocale(),
-            $event->getSheet()->getEvent(),
-            $event->getGuest()
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
-     * Send mail to the host for notice him of a guest expired invitation
-     *
-     * @param SheetInvitationExpire $event
-     */
-    public function onInvitationExpire(SheetInvitationExpire $event)
-    {
-        $mail = new ExpiredInvitationMail(
-            $this->sender,
-            $event->getSheet()->getOwner()->getEmail(),
-            'MailBundle:Mail:Sheet/Invitation/expiredInvitation.html.twig',
-            'sheet_invitation_expired',
-            $event->getSheet()->getOwner()->getLocale(),
-            $event->getSheet()->getEvent(),
-            $event->getGuest()
-        );
-
-        $this->mailer->send($mail);
     }
 
     /**
@@ -194,12 +136,9 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new OrderConfirmMail(
             $this->sender,
             $event->getUser()->getEmail(),
-            '',
-            'order_confirm',
             $event->getUser()->getLocale(),
             $event->getOrder(),
-            $event->getUser(),
-            $event->getEvent()
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -211,13 +150,12 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onSheetAddParticipant(SheetAddParticipantEvent $event)
     {
         $mail = new AddParticipantMail(
+            $event->getSheet()->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig',
-            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
             $event->getUser()->getLocale(),
-            $event->getSheet()->getEvent(),
-            $event->getUser()
+            $event->getUser(),
+            $event->getGuest()
         );
 
         $this->mailer->send($mail);
@@ -231,8 +169,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new AdminActivateAccountMail(
             $this->sender,
             $event->getAdmin()->getEmail(),
-            'MailBundle:Mail:Admin/activateAccount.html.twig',
-            Events::ADMIN_ACCOUNT_ACTIVATED,
             $event->getLocale(),
             $event->getActivateAccountToken()->getToken()
         );
@@ -248,8 +184,6 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new AdminResetPasswordMail(
             $this->sender,
             $event->getAdmin()->getEmail(),
-            'MailBundle:Mail:Admin/resetPassword.html.twig',
-            'admin_forgot_password',
             $event->getLocale(),
             $event->getForgottenPasswordToken()->getToken()
         );
@@ -263,12 +197,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserActivateAccount(UserActivateAccountEvent $event)
     {
         $mail = new UserActivateAccountMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/activateAccount.html.twig',
-            Events::USER_ACCOUNT_ACTIVATED,
             $event->getUser()->getLocale(),
-            $event->getEvent(),
             $event->getActivateAccountToken()->getToken(),
             $event->getSender(),
             $event->getUser()
@@ -283,12 +215,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserResetPassword(UserResetPasswordEvent $event)
     {
         $mail = new UserResetPasswordMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/resetPassword.html.twig',
-            'user_forgot_password',
             $event->getLocale(),
-            $event->getEvent()->getTitle(),
             $event->getForgottenPasswordToken()->getToken()
         );
 
@@ -302,18 +232,12 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
     {
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($event->getUser(), $event->getEvent());
-        $sheet  = reset($sheets);
-
         $mail = new ResetPasswordConfirmMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/resetPasswordConfirm.html.twig',
-            'user_reset_password_confirm',
             $event->getLocale(),
-            $event->getEvent(),
-            $event->getUser(),
-            (!$sheet !== false) ? $sheet : null
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -325,13 +249,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserCompleteProfile(UserCompleteProfileEvent $event)
     {
         $mail = new UserCompleteProfileMail(
+            $event->getParticipant(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/completeProfile.html.twig',
-            Events::USER_PROFILE_COMPLETED,
-            $event->getLocale(),
-            $event->getEvent()->getTitle(),
-            $event->getParticipant()->getId()
+            $event->getLocale()
         );
 
         $this->mailer->send($mail);
@@ -345,16 +266,11 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserPreRegistered(PreRegisterEvent $event)
     {
         $mail = new PreRegisteredMail(
+            $event->getParticipant(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:Event/preregister.html.twig',
-            Events::EVENT_PRE_REGISTERED,
             $event->getLocale(),
-            $event->getEvent(),
-            $event->getUser(),
-            $event->getParticipant(),
-            $event->getSheet(),
-            $event->getParticipantData()
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -366,12 +282,10 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserRegistered(UserRegisteredEvent $event)
     {
         $mail = new RegisterAccountMail(
+            $event->getEvent(),
             $this->sender,
             $event->getUser()->getEmail(),
-            'MailBundle:Mail:User/register.html.twig',
-            Events::USER_REGISTERED,
             $event->getLocale(),
-            $event->getEvent(),
             $event->getUser()
         );
 
@@ -384,21 +298,19 @@ class MailEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_VALIDATED                      => 'onSheetValidated',
-            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION   => 'onSheetAddParticipant',
-            Events::SHEET_INVITATION_CLOSE_TO_EXPIRATION => 'onInvitationCloseToExpiration',
-            Events::SHEET_INVITATION_EXPIRE              => 'onInvitationExpire',
-            Events::USER_MAIL_CHANGED                    => 'onChangeMailAddressEvent',
-            Events::ADMIN_ACCOUNT_ACTIVATED              => 'onAdminActivateAccount',
-            Events::ADMIN_PASSWORD_RESET                 => 'onAdminResetPassword',
-            Events::USER_ACCOUNT_ACTIVATED               => 'onUserActivateAccount',
-            Events::USER_PASSWORD_RESET                  => 'onUserResetPassword',
-            Events::USER_PROFILE_COMPLETED               => 'onUserCompleteProfile',
-            Events::USER_REGISTERED                      => 'onUserRegistered',
-            Events::USER_RESET_PASSWORD_CONFIRMED        => 'onUserResetPasswordConfirm',
-            Events::EVENT_PRE_REGISTERED                 => 'onUserPreRegistered',
-            Events::ORDER_CONFIRMED                      => 'onOrderConfirmed',
-            Events::TRANSACTION_CONFIRMED                => 'onTransactionConfirmed',
+            Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
+            Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
+            Events::SHEET_VALIDATED                    => 'onSheetValidated',
+            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
+            Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
+            Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
+            Events::USER_PASSWORD_RESET                => 'onUserResetPassword',
+            Events::USER_PROFILE_COMPLETED             => 'onUserCompleteProfile',
+            Events::USER_REGISTERED                    => 'onUserRegistered',
+            Events::USER_RESET_PASSWORD_CONFIRMED      => 'onUserResetPasswordConfirm',
+            Events::EVENT_PRE_REGISTERED               => 'onUserPreRegistered',
+            Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
+            Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
         ];
     }
 }

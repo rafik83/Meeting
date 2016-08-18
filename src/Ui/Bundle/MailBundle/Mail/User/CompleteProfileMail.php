@@ -11,49 +11,59 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 class CompleteProfileMail extends Mail
 {
     /**
      * @var string
      */
-    private $eventTitle;
+    protected $subject = 'mail.completeProfile.subject';
 
     /**
-     * @var int
+     * @var string
      */
-    private $participantId;
+    protected $template = 'MailBundle:Mail:User/completeProfile.html.twig';
 
     /**
-     * @param string $sender
-     * @param string $receiver
-     * @param string $template
-     * @param string $messageId
-     * @param string $locale
-     * @param string $eventTitle
-     * @param int    $participantId
+     * @var string
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, $eventTitle, $participantId)
+    protected $messageId = Events::USER_PROFILE_COMPLETED;
+
+    /**
+     * @var Participant
+     */
+    private $participant;
+
+    /**
+     * @param Participant $participant
+     * @param string      $sender
+     * @param string      $receiver
+     * @param string      $locale
+     */
+    public function __construct(Participant $participant, $sender, $receiver, $locale)
     {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $participant->getSheet()->getEvent());
 
-        $this->eventTitle    = $eventTitle;
-        $this->participantId = $participantId;
+        $this->participant = $participant;
     }
 
     /**
-     * @return string
+     * @return Participant
      */
-    public function getEventTitle()
+    public function getParticipant()
     {
-        return $this->eventTitle;
+        return $this->participant;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getParticipantId()
+    public function getSubjectParameters()
     {
-        return $this->participantId;
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
     }
 }

@@ -111,6 +111,19 @@ class Order
     }
 
     /**
+     * @return string
+     */
+    public function getNumero()
+    {
+        return sprintf(
+            '%s-%s-%s',
+            str_pad($this->getSheet()->getEvent()->getId(), 2, "0", STR_PAD_LEFT),
+            str_pad($this->getSheet()->getId(), 2, "0", STR_PAD_LEFT),
+            str_pad($this->getId(), 2, "0", STR_PAD_LEFT)
+        );
+    }
+
+    /**
      * @return Sheet
      */
     public function getSheet()
@@ -566,5 +579,21 @@ class Order
         }
 
         return null;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Order
+     */
+    public static function createFromSheet(Sheet $sheet, \DateTimeInterface $dateTime)
+    {
+        return new self(
+            $sheet,
+            true,
+            new Order\BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
+            [],
+            $dateTime
+        );
     }
 }

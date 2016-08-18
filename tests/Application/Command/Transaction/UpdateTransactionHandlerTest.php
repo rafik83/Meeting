@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +36,8 @@ class UpdateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
             Mode::PAYMENT_BANK_CARD,
             'transaction_O1',
             Transaction::STATE_PENDING,
-            $sheet->getEvent()->getCurrency()
+            $sheet->getEvent()->getCurrency(),
+            $user
         );
 
         $update        = new Update($transaction);
@@ -48,13 +50,15 @@ class UpdateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
             Mode::PAYMENT_BANK_CARD,
             'transaction_O1',
             Transaction::STATE_PAID,
-            $sheet->getEvent()->getCurrency()
+            $sheet->getEvent()->getCurrency(),
+            $user
         );
 
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
         $transactionRepository->set($expectedTransaction)->shouldBeCalled();
 
-        $handler = new UpdateHandler($transactionRepository->reveal());
+        $handler = new UpdateHandler($transactionRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($update);
     }
 }

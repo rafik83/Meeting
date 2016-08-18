@@ -11,15 +11,27 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
 class AddParticipantMail extends Mail
 {
     /**
-     * @var Event
+     * @var string
      */
-    private $event;
+    protected $subject = 'mail.sheet.add_participant_confirmation.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::SHEET_ADD_PARTICIPANT_CONFIRMATION;
 
     /**
      * @var User
@@ -27,30 +39,24 @@ class AddParticipantMail extends Mail
     private $user;
 
     /**
-     * AddParticipantConfirmMail constructor.
-     *
-     * @param string $sender
-     * @param string $receiver
-     * @param string $template
-     * @param string $messageId
-     * @param string $locale
-     * @param Event  $event
-     * @param User   $user
+     * @var Participant
      */
-    public function __construct($sender, $receiver, $template, $messageId, $locale, Event $event, User $user)
-    {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
-
-        $this->event = $event;
-        $this->user  = $user;
-    }
+    private $guest;
 
     /**
-     * @return Event
+     * @param Event       $event
+     * @param string      $sender
+     * @param string      $receiver
+     * @param string      $locale
+     * @param User        $user
+     * @param Participant $guest
      */
-    public function getEvent()
+    public function __construct(Event $event, $sender, $receiver, $locale, User $user, Participant $guest)
     {
-        return $this->event;
+        parent::__construct($sender, $receiver, $locale, null, null, $event);
+
+        $this->user  = $user;
+        $this->guest = $guest;
     }
 
     /**
@@ -59,5 +65,13 @@ class AddParticipantMail extends Mail
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return Participant
+     */
+    public function getGuest()
+    {
+        return $this->guest;
     }
 }

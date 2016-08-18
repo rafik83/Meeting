@@ -180,7 +180,6 @@ services:
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
-            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.trace_event_subscriber:

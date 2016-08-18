@@ -59,7 +59,7 @@ class PaymentController extends Controller
 
         // If nothing to pay, create the order
         if ($total <= 0) {
-            $create = new Create($sheet);
+            $create = new Create($sheet, $this->getUser());
             $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('event_order_list', [
@@ -80,10 +80,10 @@ class PaymentController extends Controller
         }
 
         if ($depositAllowed) {
-            $paymentChoice = new ChoiceWithDeposit($sheet);
+            $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice);
         } else {
-            $paymentChoice = new Choice($sheet);
+            $paymentChoice = new Choice($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice);
         }
 
@@ -141,7 +141,7 @@ class PaymentController extends Controller
             return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
         }
 
-        $transaction = Transaction::createForPaypal($sheet, $remainingToPay, new \DateTime());
+        $transaction = Transaction::createForPaypal($sheet, $this->getUser(), $remainingToPay, new \DateTime());
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute('event_package_payment_prepare_paypal', [
@@ -160,7 +160,7 @@ class PaymentController extends Controller
     ) {
         $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
-        $transaction = Transaction::createForPaypal($sheet, rand(1, 200), new \DateTime());
+        $transaction = Transaction::createForPaypal($sheet, $this->getUser(), rand(1, 200), new \DateTime());
         $this->get('repository.transaction')->add($transaction);
 
         return $this->redirectToRoute(

@@ -1,8 +1,5 @@
-{% block subject %}
-    {{ 'mail.changeMailOld.subject'|trans({}, 'mail', mail.locale) }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
     {{ 'mail.changeMailOld.body'|trans({'%email%': mail.newMail}, 'mail', mail.locale)|html|nl2br }}
-    {{ 'mail.changeMailOld.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
