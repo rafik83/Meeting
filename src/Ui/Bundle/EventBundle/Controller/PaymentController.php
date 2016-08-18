@@ -72,7 +72,7 @@ class PaymentController extends Controller
 
         //Create order from cart and redirect if total payment is negative or zero
         if ($total <= 0) {
-            $this->get('tactician.commandbus')->handle(new Create($sheet));
+            $this->get('tactician.commandbus')->handle(new Create($sheet, $this->getUser()));
 
             return $this->redirectToRoute('event_order_list', [
                 'sheet' => $sheet->getId(),
