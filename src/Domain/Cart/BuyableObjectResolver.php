@@ -119,10 +119,10 @@ class BuyableObjectResolver
     }
 
     /**
-     * @param TemplateObject $image
+     * @param TemplateObject $object
      * @param Cart           $cart
      */
-    public function addPayableProduct(TemplateObject $image, Cart $cart)
+    public function addPayableProduct(TemplateObject $object, Cart $cart)
     {
         $plan        = null;
         $orderMerged = null;
@@ -132,7 +132,7 @@ class BuyableObjectResolver
             $plan        = $orderMerged->getPlan();
         }
 
-        if ($product = $this->productTransformer->transform($image->getSelectedProduct())) {
+        if ($product = $this->productTransformer->transform($object->getSelectedProduct())) {
             // handle product included
             if (null !== $plan && $plan->getIncludedProduct($product)) {
                 return;
@@ -155,17 +155,17 @@ class BuyableObjectResolver
     }
 
     /**
-     * @param Sheet                $sheet
-     * @param TemplateObject\Image $image
+     * @param Sheet          $sheet
+     * @param TemplateObject $object
      */
-    public function removeImage(Sheet $sheet, TemplateObject\Image $image)
+    public function removePayableProduct(Sheet $sheet, TemplateObject $object)
     {
-        if (!$image->getSelectedProduct()) {
+        if (!$object->getSelectedProduct()) {
             return;
         }
 
         $cart    = $this->cartManager->getCart($sheet);
-        $product = $this->productTransformer->transform($image->getSelectedProduct());
+        $product = $this->productTransformer->transform($object->getSelectedProduct());
         $cartRow = $cart->getCartRowForProduct($product);
 
         if (null === $cartRow) {

@@ -53,7 +53,7 @@ class RemoveImageHandler
      */
     public function handle(RemoveImage $removeImage)
     {
-        $this->buyableObjectResolver->removeImage($removeImage->sheet, $removeImage->image);
+        $this->buyableObjectResolver->removePayableProduct($removeImage->sheet, $removeImage->image);
 
         $imagePath = $removeImage->image->getImage();
         $removeImage->image->setData([]);
