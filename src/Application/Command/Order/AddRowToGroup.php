@@ -20,8 +20,8 @@ class AddRowToGroup extends AbstractAddRow
     public $groupId;
 
     /**
-     * @param Order  $order
-     * @param string $groupId
+     * @param Order $order
+     * @param int   $groupId
      */
     public function __construct(Order $order, $groupId)
     {
