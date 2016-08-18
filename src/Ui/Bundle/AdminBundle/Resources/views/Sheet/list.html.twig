@@ -89,7 +89,11 @@
                     <td>
                         <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
                             {{ sheet.title }}
-                        </a><br>
+                        </a>
+                        {% if not sheet.isEnabled %}
+                            <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
+                        {% endif %}
+                        <br>
                         <small>
                             {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }} <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
                         </small>
@@ -100,12 +104,6 @@
                                 data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
                             {% endif %}
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
-                        <br>
-                        {% if sheet.isEnabled %}
-                            <span class="label label-success">{{ 'admin.sheet.enable'|trans }}</span>
-                        {% else %}
-                            <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
-                        {% endif %}
                     </td>
                     <td>
                         <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
