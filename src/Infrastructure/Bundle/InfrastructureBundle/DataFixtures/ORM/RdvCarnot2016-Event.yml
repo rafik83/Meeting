@@ -39,6 +39,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - Nom de l'événement
             - Montant net à payer
 
+
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_translation_rdv_carnot_2016_fr:
         __construct: false
