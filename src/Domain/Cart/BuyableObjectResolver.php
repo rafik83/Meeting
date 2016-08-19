@@ -124,7 +124,6 @@ class BuyableObjectResolver
      */
     public function addPayableProduct(TemplateObject $object, Cart $cart)
     {
-        $plan        = null;
         $orderMerged = null;
 
         if ($product = $this->productTransformer->transform($object->getSelectedProduct())) {
