@@ -593,7 +593,7 @@ class Order
         return new self(
             $sheet,
             true,
-            new Order\BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
+            new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), ''),
             [],
             $dateTime
         );
