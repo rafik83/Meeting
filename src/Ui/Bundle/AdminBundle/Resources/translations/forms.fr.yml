@@ -439,6 +439,8 @@ form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.assign.label: Assigner
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.validate.label: Valider
+form.sheet_batch.children.enable.label: Activer
+form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'

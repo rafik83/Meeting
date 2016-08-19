@@ -21,6 +21,8 @@ class Trace
     const VALIDATE = 'validate';
     const CREATE   = 'create';
     const UPDATE   = 'update';
+    const ENABLE   = 'enable';
+    const DISABLE  = 'disable';
 
     /**
      * @var int
@@ -29,6 +31,7 @@ class Trace
 
     /**
      * Composed of TraceableName + ID
+     *
      * @var string
      */
     private $object;
@@ -63,9 +66,9 @@ class Trace
      * @param string             $action
      * @param DateTimeInterface  $date
      * @param string             $comment
-     * @param AbstractUser|null  $abstractUser
+     * @param null|AbstractUser  $abstractUser
      */
-    public function __construct (
+    public function __construct(
         TraceableInterface $traceable,
         $action,
         DateTimeInterface $date,
@@ -142,7 +145,7 @@ class Trace
      * @param Trace[]            $traces
      * @param TraceableInterface $traceable
      *
-     * @return Trace|null
+     * @return null|Trace
      */
     public static function find(array &$traces, TraceableInterface $traceable)
     {

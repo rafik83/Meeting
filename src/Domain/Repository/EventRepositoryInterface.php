@@ -55,7 +55,7 @@ interface EventRepositoryInterface
     /**
      * @param string $domain
      *
-     * @return Event
+     * @return null|Event
      */
     public function getEventByDomain($domain);
 
