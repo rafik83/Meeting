@@ -47,6 +47,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $type->setPackage($package);
         $billingInfo = new BillingInfo($sheet);
         $billingInfo->update(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -55,8 +56,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'company',
             'email@email.com',
             new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber',
-            'gender'
+            'vatNumber'
         );
 
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
@@ -77,6 +77,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $orderBillingInfo = new Order\BillingInfo(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -85,8 +86,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'company',
             'email@email.com',
             new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber',
-            'gender'
+            'vatNumber'
         );
 
         $expectedPromotionCode = new PromotionCode($event, 'title', 'code', 19, null);
@@ -134,3 +134,4 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $converter->toOrder($cart);
     }
 }
+

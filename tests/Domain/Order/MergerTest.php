@@ -33,6 +33,7 @@ class MergerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
         $orderBillingInfo = new Order\BillingInfo(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -41,8 +42,7 @@ class MergerTest extends \PHPUnit_Framework_TestCase
             'company',
             'email@email.com',
             new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber',
-            'gender'
+            'vatNumber'
         );
 
         $plan        = Product::createPlan($event, 'plan', '', 200, 20, 100);
