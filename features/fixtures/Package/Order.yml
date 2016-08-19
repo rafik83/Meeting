@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\Address (local):
 Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
     order_billing_info_1:
         __construct:
+            - 'man'
             - Jean
             - Test
             - DG
@@ -18,7 +19,6 @@ Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
             - ELAO
             - '@order_address_1'
             - 123456789
-            - Monsieur
 
 Proximum\Vimeet\Domain\Model\Order:
     order_1:
