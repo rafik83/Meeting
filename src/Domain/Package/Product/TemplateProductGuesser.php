@@ -45,8 +45,8 @@ class TemplateProductGuesser
         }
 
         foreach ($object->getProducts() as $productId) {
-            if ($option = $package->getOptionById((int) $productId)) {
-                if ($option->isBuyable($this->dateTime)) {
+            if ($option = $package->getOptionById((int)$productId)) {
+                if ($option->isBuyable($this->dateTime) && !$option->isOutOfStock()) {
                     $products[] = $option;
                 }
             }

@@ -146,12 +146,16 @@ class OptionsValidator extends ConstraintValidator
      */
     private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity, Cart $cart, Order $order = null)
     {
-        $quantityMin = 0;
-
         $linkedProduct = $this->productInfoGuesser->guessProduct(
             $sheet,
             $options[$id],
             $locale
+        );
+
+        $quantityMin = $this->quantityMinGuesser->getMinProduct(
+            $sheet,
+            $options[$id],
+            $quantity
         );
 
         if (null !== $linkedProduct) {
@@ -164,12 +168,6 @@ class OptionsValidator extends ConstraintValidator
                     ->atPath($id)
                     ->addViolation();
             }
-        } else {
-            $quantityMin = $this->quantityMinGuesser->getMinProduct(
-                $sheet,
-                $options[$id],
-                $quantity
-            );
         }
 
         if (false === $quantityMin) {
