@@ -45,6 +45,7 @@ security:
         main:
             anonymous: ~
             provider: user_provider
+            user_checker: security.app.user_checker
             form_login:
                 login_path: event_login_second_step
                 check_path: event_login_check

@@ -104,6 +104,8 @@ class SheetController extends Controller
                 $batch->validate = $batchForm->get('validate')->isClicked();
                 $batch->assign   = $batchForm->get('assign')->isClicked();
                 $batch->accept   = $batchForm->get('accept')->isClicked();
+                $batch->enable   = $batchForm->get('enable')->isClicked();
+                $batch->disable  = $batchForm->get('disable')->isClicked();
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
