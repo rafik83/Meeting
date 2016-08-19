@@ -222,7 +222,7 @@ class SheetController extends Controller
             $nomenclature = $object->getNomenclatureModel();
             $depth        = $nomenclature->getDepth();
 
-            if (3 === $depth) {
+            if (2 === $depth || 3 === $depth) {
                 $levelsArchitecture = $nomenclature->getLevelsArchitecture();
             }
         }
