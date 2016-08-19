@@ -147,7 +147,7 @@ package.title: 'Forfait de participation'
 package.vatMode.ati: TTC
 package.vatMode.et: HT
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
-pro_forma.date.title: 'Date'
+pro_forma.date.title: 'Date:'
 pro_forma.number.title: 'N° pro-forma:'
 pro_forma.title: 'Pro Forma - %date%'
 pro_forma.vatNumber.title: 'TVA Intracommunautaire'
