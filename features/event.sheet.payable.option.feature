@@ -80,7 +80,7 @@ Feature: Select payable option in sheet
     When I follow "object-image-edit"
     Then The radio "sheet_image_data_selectedProduct_5" should be checked
 
-  Scenario: I can change  my media payable option to "Option F" that are included on the plan
+  Scenario: I can change my media payable option to "Option F" that are included on the plan
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
@@ -101,3 +101,16 @@ Feature: Select payable option in sheet
     And I should see "package.options.included"
     And the "options[5]" field should contain "0"
     And the "options[12]" field should contain "0"
+
+  Scenario: I can remove my payable option in image object
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I go to this page "/fr"
+    Then I should be on this page "/fr/sheet"
+    When I follow "object-image-edit"
+    Then the response status code should be 200
+    And I press "sheet.object.image.remove"
+    Then I should be on this page "/fr/sheet"
+    When I follow "Ajouter un logo"
+    Then the radio "sheet_image_data_selectedProduct_5" should not be checked
+    And the radio "sheet_image_data_selectedProduct_6" should not be checked
+    And the radio "sheet_image_data_selectedProduct_7" should not be checked
