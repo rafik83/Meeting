@@ -118,6 +118,7 @@ class Converter
         }
 
         $orderBillingInfo = new Order\BillingInfo(
+            $billingInfo->getGender(),
             $billingInfo->getLastname(),
             $billingInfo->getFirstname(),
             $billingInfo->getFunction(),
@@ -131,8 +132,7 @@ class Converter
                 $billingInfo->getAddress()->getCity(),
                 $billingInfo->getAddress()->getCountry()
             ),
-            $billingInfo->getVatNumber(),
-            $billingInfo->getGender()
+            $billingInfo->getVatNumber()
         );
 
         $groupsData = $sheet->getPackage()->serializeData();

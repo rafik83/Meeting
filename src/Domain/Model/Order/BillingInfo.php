@@ -22,6 +22,11 @@ class BillingInfo
     /**
      * @var string
      */
+    private $gender;
+
+    /**
+     * @var string
+     */
     private $lastName;
 
     /**
@@ -65,13 +70,9 @@ class BillingInfo
     private $vatNumber;
 
     /**
-     * @var string
-     */
-    private $gender;
-
-    /**
      * BillingInfo constructor.
      *
+     * @param string  $gender
      * @param string  $lastName
      * @param string  $firstName
      * @param string  $position
@@ -83,6 +84,7 @@ class BillingInfo
      * @param string  $vatNumber
      */
     public function __construct(
+        $gender,
         $lastName,
         $firstName,
         $position,
@@ -91,9 +93,9 @@ class BillingInfo
         $email,
         $company,
         Address $address,
-        $vatNumber,
-        $gender
+        $vatNumber
     ) {
+        $this->gender    = $gender;
         $this->lastName  = $lastName;
         $this->firstName = $firstName;
         $this->phone     = $phone;
@@ -103,7 +105,6 @@ class BillingInfo
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
-        $this->gender    = $gender;
     }
 
     /**

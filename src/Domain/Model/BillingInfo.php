@@ -102,6 +102,7 @@ class BillingInfo
     }
 
     /**
+     * @param string  $gender
      * @param string  $lastname
      * @param string  $firstname
      * @param string  $function
@@ -111,9 +112,9 @@ class BillingInfo
      * @param string  $company
      * @param Address $address
      * @param string  $vatNumber
-     * @param string  $gender
      */
     public function update(
+        $gender,
         $lastname,
         $firstname,
         $function,
@@ -122,9 +123,9 @@ class BillingInfo
         $email,
         $company,
         Address $address,
-        $vatNumber,
-        $gender
+        $vatNumber
     ) {
+        $this->gender    = $gender;
         $this->lastname  = $lastname;
         $this->firstname = $firstname;
         $this->function  = $function;
@@ -134,7 +135,6 @@ class BillingInfo
         $this->company   = $company;
         $this->address   = $address;
         $this->vatNumber = $vatNumber;
-        $this->gender    = $gender;
     }
 
     /**
@@ -277,6 +277,7 @@ class BillingInfo
      * @return BillingInfo
      */
     public function prefill(
+        $gender,
         $firstname,
         $lastname,
         $function,
@@ -284,9 +285,9 @@ class BillingInfo
         $phone,
         $mobile,
         $email,
-        Address $address,
-        $gender
+        Address $address
     ) {
+        $this->gender    = $gender;
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->function  = $function;
@@ -295,7 +296,6 @@ class BillingInfo
         $this->mobile    = $mobile;
         $this->email     = $email;
         $this->address   = $address;
-        $this->gender    = $gender;
 
         return $this;
     }
@@ -305,14 +305,14 @@ class BillingInfo
      */
     public function isCompleted()
     {
-        return null !== $this->lastname
+        return null !== $this->gender
+            && null !== $this->lastname
             && null !== $this->firstname
             && null !== $this->email
             && null !== $this->company
             && null !== $this->address->getStreet()
             && null !== $this->address->getZipcode()
             && null !== $this->address->getCity()
-            && null !== $this->address->getCountry()
-            && null !== $this->gender;
+            && null !== $this->address->getCountry();
     }
 }

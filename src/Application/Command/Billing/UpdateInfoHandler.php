@@ -36,6 +36,7 @@ class UpdateInfoHandler
     public function handle(UpdateInfo $updateInfo)
     {
         $updateInfo->billingInfo->update(
+            $updateInfo->gender,
             $updateInfo->lastname,
             $updateInfo->firstname,
             $updateInfo->function,
@@ -44,8 +45,7 @@ class UpdateInfoHandler
             $updateInfo->email,
             $updateInfo->company,
             new Address($updateInfo->street, $updateInfo->zipcode, $updateInfo->city, $updateInfo->country),
-            $updateInfo->vatNumber,
-            $updateInfo->gender
+            $updateInfo->vatNumber
         );
 
         if ($updateInfo->billingInfo->getId()) {

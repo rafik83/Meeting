@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Order;
 
 use Proximum\Vimeet\Domain\Cart;
-use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Cart\Converter;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 
 class CreateHandler
