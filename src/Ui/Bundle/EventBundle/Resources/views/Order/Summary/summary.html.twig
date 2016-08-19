@@ -14,18 +14,18 @@
     {% if summary.vatApplicable %}
         <tr>
             <td colspan="2"></td>
-            <td><b>{{ 'summary.total'|trans }}</b></td>
+            <td><strong>{{ 'summary.total'|trans }}</strong></td>
             <td class="text-center">{{ summary.totalWithoutVat|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.vatMode)|trans }}</td>
         </tr>
         <tr>
             <td colspan="2"></td>
-            <td><b>{{ 'summary.vatRate'|trans({'%vatRate%': summary.vatRate }) }}</b></td>
+            <td><strong>{{ 'summary.vatRate'|trans({'%vatRate%': summary.vatRate }) }}</strong></td>
             <td class="text-center">{{ summary.vatAmount|localizedcurrency(summary.currency) }}</td>
         </tr>
     {% endif %}
     <tr>
         <td colspan="2"></td>
-        <td><b>{{ 'summary.totalToPay'|trans }}</b></td>
+        <td><strong>{{ 'summary.totalToPay'|trans }}</strong></td>
         <td class="text-center">{{ summary.totalWithVat|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.totalVatMode)|trans }}</td>
     </tr>
     </tbody>
