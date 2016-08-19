@@ -102,4 +102,24 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $this->entityManager->flush($product);
     }
+
+    /**
+     * @param Event $event
+     *
+     * @return Product[]
+     */
+    public function findOptionsByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.event = :event')
+            ->andWhere('product.type = :type')
+            ->setParameter('event', $event)
+            ->setParameter('type', Product::TYPE_OPTION);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

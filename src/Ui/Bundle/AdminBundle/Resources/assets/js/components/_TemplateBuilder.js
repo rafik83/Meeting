@@ -627,6 +627,7 @@ ImageObject.prototype.fill = function ()
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
+    this.form.set('products', this.config.products);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -638,6 +639,7 @@ ImageObject.prototype.save = function ()
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale]        = this.form.get('help');
     this.config.required                 = this.form.get('required');
+    this.config.products                 = this.form.get('products');
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -892,6 +894,7 @@ MediaObject.prototype.fill = function ()
     this.form.set('translatable', this.config.translatable);
     this.form.set('max', this.config.max);
     this.form.set('default', this.config.default);
+    this.form.set('products', this.config.products);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -904,6 +907,7 @@ MediaObject.prototype.save = function ()
     this.config.translatable                  = this.form.get('translatable');
     this.config.max                           = this.form.get('max');
     this.config.default                       = this.form.get('default');
+    this.config.products                      = this.form.get('products');
 
     this.form.bind('label', this.config.label[this.locale]);
 };

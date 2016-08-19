@@ -716,6 +716,7 @@ services:
         arguments:
             - '@repository.template.sheet_template_repository'
             - '@datetime'
+            - '@template.template_remove_field'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate }
     command.sheet.template.update_handler:
@@ -1362,6 +1363,11 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateDataFactory
         arguments:
             - '@repository.nomenclature_repository'
+    template.template_remove_field:
+        class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
+        arguments:
+            - '@template.template_data_factory'
+
     template.sheet.sheet_template_cloner:
         class: Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner
         arguments:
