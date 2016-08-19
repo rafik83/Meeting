@@ -1,28 +1,11 @@
-{% block subject %}
-    {{ 'mail.sheet.validated.subject'|trans({'%event%': mail.sheet.event.title}, 'mail', mail.locale) }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
     {{ 'mail.sheet.validated.body'|trans({
         '%event%': mail.sheet.event.title,
-        '%eventSite%': mail.sheet.event.configuration.organiserWebsite,
-        '%eventMail%': mail.sheet.event.organiserEmail,
-        '%eventPhone%': mail.sheet.event.configuration.organiserPhone,
-        '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate,
-        '%meetingLimitDate%': mail.sheet.event.configuration.happeningsOpenDate,
-        '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate,
-        '%eventOpenDate%': mail.sheet.event.configuration.happeningsOpenDate,
-        '%eventPlace%': '',
-        '%firstname%': mail.sheet.owner.account.firstname|humanize,
+        '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate|localizeddate('medium', 'none', mail.locale),
+        '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate|localizeddate('medium', 'none', mail.locale),
+        '%firstname%': mail.sheet.owner.account.firstname|capitalize,
         '%lastname%': mail.sheet.owner.account.lastname|upper
-    }, 'mail', mail.locale)|html|nl2br }}
-{% endblock %}
-
-{% block end %}
-    {{ 'mail.sheet.validated.body'|trans({
-        '%event%': mail.sheet.event,
-        '%eventSite%': mail.sheet.event.configuration.organiserWebsite,
-        '%eventMail%': mail.sheet.event.organiserEmail,
-        '%eventPhone%': mail.sheet.event.configuration.organiserPhone
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

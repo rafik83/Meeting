@@ -28,7 +28,7 @@ class ActivateAccountController extends Controller
      */
     public function passwordAction(Request $request, ActivateAccountToken $activateAccountToken)
     {
-        $admin  = $activateAccountToken->getAdmin();
+        $admin = $activateAccountToken->getAdmin();
 
         if ($activateAccountToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token is expired.');

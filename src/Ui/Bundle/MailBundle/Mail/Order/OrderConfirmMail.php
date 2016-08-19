@@ -11,12 +11,27 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\User;
 
 class OrderConfirmMail extends Mail
 {
+    /**
+     * @var string
+     */
+    protected $subject = 'mail.orderConfirm.subject';
+
+    /**
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:Order/orderConfirm.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::ORDER_CONFIRMED;
+
     /**
      * @var Order
      */
@@ -28,37 +43,23 @@ class OrderConfirmMail extends Mail
     private $user;
 
     /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * OrderConfirmMail constructor.
-     *
      * @param string $sender
      * @param string $receiver
-     * @param string $template
-     * @param string $messageId
      * @param string $locale
      * @param Order  $order
      * @param User   $user
-     * @param Event  $event
      */
     public function __construct(
         $sender,
         $receiver,
-        $template,
-        $messageId,
         $locale,
         Order $order,
-        User $user,
-        Event $event
+        User $user
     ) {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale);
+        parent::__construct($sender, $receiver, $locale, null, null, $order->getSheet()->getEvent());
 
         $this->order = $order;
         $this->user  = $user;
-        $this->event = $event;
     }
 
     /**
@@ -75,13 +76,5 @@ class OrderConfirmMail extends Mail
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
     }
 }

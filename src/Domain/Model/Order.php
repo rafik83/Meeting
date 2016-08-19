@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Order\Row;
 
 /**
@@ -289,7 +288,7 @@ class Order
             $total += $row->getQuantity() * $row->getPrice();
         }
 
-        /** @var PromotionCode $promotionCode */
+        /** @var Order\PromotionCode $promotionCode */
         foreach ($this->promotionCodes->toArray() as $promotionCode) {
             $total += $promotionCode->getPrice();
         }
@@ -551,13 +550,14 @@ class Order
     }
 
     /**
-     * @param $product
+     * @param Product $product
      *
      * @return bool
      */
-    public function hasPromotionCodeForProduct($product)
+    public function hasPromotionCodeForProduct(Product $product)
     {
-        foreach ($this->promotionCodes as $promotionCode) {
+        /** @var Order\PromotionCode $promotionCode */
+        foreach ($this->promotionCodes->toArray() as $promotionCode) {
             if ($promotionCode->getPromotionCode()->hasPromotion($product)) {
                 return true;
             }
@@ -580,5 +580,22 @@ class Order
         }
 
         return null;
+    }
+
+    /**
+     * @param Sheet             $sheet
+     * @param DateTimeInterface $dateTime
+     *
+     * @return Order
+     */
+    public static function createFromSheet(Sheet $sheet, \DateTimeInterface $dateTime)
+    {
+        return new self(
+            $sheet,
+            true,
+            new Order\BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
+            [],
+            $dateTime
+        );
     }
 }

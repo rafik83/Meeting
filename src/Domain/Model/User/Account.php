@@ -284,4 +284,12 @@ class Account
     {
         $this->gender = $gender;
     }
+
+    /**
+     * @return string
+     */
+    public function getCompleteName()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
 }

@@ -11,46 +11,51 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
 class RegisterAccountMail extends Mail
 {
     /**
-     * @var Event
+     * @var string
      */
-    private $event;
+    protected $subject = 'mail.register.subject';
 
     /**
-     * RegisterAccountMail constructor.
-     *
+     * @var string
+     */
+    protected $template = 'MailBundle:Mail:User/register.html.twig';
+
+    /**
+     * @var string
+     */
+    protected $messageId = Events::USER_REGISTERED;
+
+    /**
+     * @param Event  $event
      * @param string $sender
      * @param string $receiver
-     * @param string $template
-     * @param string $messageId
      * @param string $locale
-     * @param Event  $event
      * @param User   $receiverUser
      */
     public function __construct(
+        Event $event,
         $sender,
         $receiver,
-        $template,
-        $messageId,
         $locale,
-        Event $event,
         User $receiverUser
     ) {
-        parent::__construct($sender, $receiver, $template, $messageId, $locale, null, $receiverUser);
-
-        $this->event = $event;
+        parent::__construct($sender, $receiver, $locale, null, $receiverUser, $event);
     }
 
     /**
-     * @return Event
+     * {@inheritdoc}
      */
-    public function getEvent()
+    public function getSubjectParameters()
     {
-        return $this->event;
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
     }
 }

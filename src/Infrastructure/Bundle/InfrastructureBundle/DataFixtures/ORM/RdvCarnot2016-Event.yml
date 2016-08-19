@@ -12,6 +12,8 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#4697ff'
             - '#4b41d0'
             - '#00398C'
+        contactFirstName: "Maryse"
+        contactLastName: "DURAND"
 
 Proximum\Vimeet\Domain\Model\Event:
     event_rdv_carnot_2016:
@@ -27,17 +29,10 @@ Proximum\Vimeet\Domain\Model\Event:
             - rdv-carnot-2016.<domain()>    #domain
             - "PROXIMUM"                    #organiserName
         logo: 'integration/src/images/rdv-carnot-logo.png'
+        assetPath: ''
         configuration: '@event_rdv_carnot_2016_configuration'
         paymentAddress: '@event_rdv_carnot_2016_payment_address_event'
         organiserEmail: accounts@proximumgroup.com
-        legalInformation: |+
-            TVA acquittée sur les encaissements
-            Pas d'escompte pour paiement anticipé
-        assetPath: ''
-        elementToJoinWithInvoice: |+
-            - Numéro de la Facture
-            - Nom de l'événement
-            - Montant net à payer
 
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
