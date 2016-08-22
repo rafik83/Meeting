@@ -27,6 +27,6 @@ class SheetDisabledException extends AuthenticationException
      */
     public function getMessageData()
     {
-        return 'login.error.sheetDisabled';
+        return ['login.error.sheetDisabled'];
     }
 }
