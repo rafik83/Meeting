@@ -514,24 +514,6 @@ class Order
     }
 
     /**
-     * @param Product $product
-     *
-     * @return null|Order\Row
-     */
-    public function getOrderRowForProduct(Product $product)
-    {
-        foreach ($this->rows as $orderRow) {
-            if (null !== $orderRow->getProduct()
-                && $orderRow->getProduct() === $product
-            ) {
-                return $orderRow;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @return int
      */
     public function countParticipant()

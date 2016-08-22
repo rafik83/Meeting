@@ -1405,11 +1405,6 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.template_data_factory'
-    template.product_info_guesser:
-        class: Proximum\Vimeet\Domain\Template\ProductInfoGuesser
-        arguments:
-            - '@template.template_data_factory'
-            - '@transformer.product.id_to_product_transformer'
 
     #
     # Spot component
@@ -1425,6 +1420,18 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    validator.template_object.image_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageValidator
+        arguments:
+            -  '@package.product.template_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
+    validator.template_object.media_collection_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\MediaCollectionValidator
+        arguments:
+            -  '@package.product.template_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
 
     #
     # Account
@@ -1737,6 +1744,9 @@ services:
     package.product.template_product_guesser:
         class: Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser
         arguments:
+            - '@order.merger'
+            - '@template.template_data_factory'
+            - '@transformer.product.id_to_product_transformer'
             - '@datetime'
     package.planning.quantity_min_guesser:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
@@ -1763,7 +1773,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@transformer.product.id_to_product_transformer'
-            - '@template.product_info_guesser'
+            - '@package.product.template_product_guesser'
             - '@order.merger'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject;
 
+use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObjectValidator;
 use Symfony\Component\Validator\Constraint;
@@ -18,13 +19,28 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class MediaCollectionValidator extends TemplateObjectValidator
 {
     /**
+     * @var TemplateProductGuesser
+     */
+    private $templateProductGuesser;
+
+    /**
+     * ImageValidator constructor.
+     *
+     * @param TemplateProductGuesser $templateProductGuesser
+     */
+    public function __construct(TemplateProductGuesser $templateProductGuesser)
+    {
+        $this->templateProductGuesser = $templateProductGuesser;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function checkRequired(TemplateObject $object, Constraint $constraint)
     {
         if ($object instanceof TemplateObject\MediaCollection) {
 
-            if (count($object->getNotEmptyMedias()) > 0 && null !== $object->getProducts()) {
+            if (count($object->getNotEmptyMedias()) > 0 && $this->templateProductGuesser->hasPayableOption($object)) {
                 $this->context
                     ->getValidator()
                     ->inContext($this->context)

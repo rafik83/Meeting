@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
@@ -27,13 +28,22 @@ class MediaCollectionDataType extends AbstractType
     private $productRepository;
 
     /**
+     * @var TemplateProductGuesser
+     */
+    private $templateProductGuesser;
+
+    /**
      * ImageDataType constructor.
      *
      * @param ProductRepositoryInterface $productRepository
+     * @param TemplateProductGuesser     $templateProductGuesser
      */
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
+    public function __construct(
+        ProductRepositoryInterface $productRepository,
+        TemplateProductGuesser $templateProductGuesser
+    ) {
+        $this->productRepository      = $productRepository;
+        $this->templateProductGuesser = $templateProductGuesser;
     }
 
     /**
@@ -57,10 +67,9 @@ class MediaCollectionDataType extends AbstractType
                 'allow_delete'  => true,
                 'label'         => false,
                 'max'           => $options['data']->getMax(),
-            ])
-        ;
+            ]);
 
-        if (null !== $media->getBuyableProducts()) {
+        if ($this->templateProductGuesser->hasPayableOption($media)) {
 
             $selectedRadio = count($media->getBuyableProducts()) === 1 ?
                 $media->getBuyableProducts()[0]->getId() :
@@ -75,11 +84,10 @@ class MediaCollectionDataType extends AbstractType
                     'choices'     => $media->getBuyableProducts(),
                     'required'    => true,
                     'data'        => $selectedRadio,
-                ])
-            ;
+                ]);
 
             $builder->get('selectedProduct')
-                ->addModelTransformer(new IdToProductTransformer($this->productRepository));
+                    ->addModelTransformer(new IdToProductTransformer($this->productRepository));
         }
     }
 
@@ -94,7 +102,7 @@ class MediaCollectionDataType extends AbstractType
             'placeholder' => null,
             'help'        => null,
             'attr'        => [
-                'data-product-selector' => (int) true,
+                'data-product-selector' => (int)true,
             ],
         ]);
     }

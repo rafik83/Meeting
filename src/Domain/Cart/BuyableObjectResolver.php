@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
@@ -34,7 +35,7 @@ class BuyableObjectResolver
     /**
      * @var ProductInfoGuesser
      */
-    private $productInfoGuesser;
+    private $templateProductGuesser;
 
     /**
      * @var Merger
@@ -46,19 +47,19 @@ class BuyableObjectResolver
      *
      * @param CartManager            $cartManager
      * @param IdToProductTransformer $productTransformer
-     * @param ProductInfoGuesser     $productInfoGuesser
+     * @param TemplateProductGuesser $templateProductGuesser
      * @param Merger                 $orderMerger
      */
     public function __construct(
         CartManager $cartManager,
         IdToProductTransformer $productTransformer,
-        ProductInfoGuesser $productInfoGuesser,
+        TemplateProductGuesser $templateProductGuesser,
         Merger $orderMerger
     ) {
-        $this->cartManager        = $cartManager;
-        $this->productTransformer = $productTransformer;
-        $this->productInfoGuesser = $productInfoGuesser;
-        $this->orderMerger        = $orderMerger;
+        $this->cartManager            = $cartManager;
+        $this->productTransformer     = $productTransformer;
+        $this->templateProductGuesser = $templateProductGuesser;
+        $this->orderMerger            = $orderMerger;
     }
 
     /**
@@ -92,7 +93,7 @@ class BuyableObjectResolver
 
         foreach ($plan->getIncludedOptionProduct() as $optionIncluded) {
             // get product in template data
-            $linkedProduct = $this->productInfoGuesser->guessProduct(
+            $linkedProduct = $this->templateProductGuesser->guessProduct(
                 $sheet,
                 $optionIncluded->getIncluded(),
                 'fr'

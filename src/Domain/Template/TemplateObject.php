@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class TemplateObject extends AbstractChild
 {
@@ -22,7 +23,12 @@ class TemplateObject extends AbstractChild
     /**
      * @var Product[]
      */
-    private $buyableProducts;
+    protected $buyableProducts;
+
+    /**
+     * @var Sheet
+     */
+    protected $sheet;
 
     /**
      * {@inheritdoc}
@@ -45,7 +51,7 @@ class TemplateObject extends AbstractChild
 
         return $this;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -65,7 +71,7 @@ class TemplateObject extends AbstractChild
      */
     public function getData()
     {
-        return $this->data ? : [];
+        return $this->data ?: [];
     }
 
     /**
@@ -152,7 +158,7 @@ class TemplateObject extends AbstractChild
      */
     public function getProducts()
     {
-        if(null !== $this->getOption('products')) {
+        if (null !== $this->getOption('products')) {
             return array_values($this->getOption('products'));
         }
 
@@ -167,7 +173,7 @@ class TemplateObject extends AbstractChild
      */
     public function getHelp($locale = null, $fallback = null)
     {
-        return $this->getOption('help', $locale ? : $this->locale, $fallback ? : $this->fallback);
+        return $this->getOption('help', $locale ?: $this->locale, $fallback ?: $this->fallback);
     }
 
     /**
@@ -195,7 +201,7 @@ class TemplateObject extends AbstractChild
     }
 
     /**
-     * @param Product[]
+     * @param Product []
      */
     public function setBuyableProducts($products)
     {
@@ -216,5 +222,21 @@ class TemplateObject extends AbstractChild
     public function setSelectedProduct(Product $selectedProduct)
     {
         $this->data['product'] = $selectedProduct->getId();
+    }
+
+    /**
+     * @return null|Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setSheet($sheet)
+    {
+        $this->sheet = $sheet;
     }
 }

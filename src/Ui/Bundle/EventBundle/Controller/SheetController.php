@@ -155,7 +155,9 @@ class SheetController extends Controller
             $sheet->getPackage()
         );
 
+        // populate object needed variables
         $object->setBuyableProducts($products);
+        $object->setSheet($sheet);
 
         $form  = $this->createObjectForm($object, $locale, $key);
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
@@ -242,6 +244,8 @@ class SheetController extends Controller
         );
 
         $object->setBuyableProducts($products);
+        $object->setSheet($sheet);
+
         $form = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid

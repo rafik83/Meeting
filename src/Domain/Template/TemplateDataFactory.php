@@ -193,7 +193,6 @@ class TemplateDataFactory
      * @param string $fallback
      *
      * @return TemplateData
-     * @throws \Exception
      */
     public function create(array $template, array $data = [], $locale = null, $fallback = null)
     {

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
@@ -28,13 +29,22 @@ class ImageDataType extends AbstractType
     private $productRepository;
 
     /**
+     * @var TemplateProductGuesser
+     */
+    private $templateProductGuesser;
+
+    /**
      * ImageDataType constructor.
      *
      * @param ProductRepositoryInterface $productRepository
+     * @param TemplateProductGuesser     $templateProductGuesser
      */
-    public function __construct(ProductRepositoryInterface $productRepository)
-    {
-        $this->productRepository = $productRepository;
+    public function __construct(
+        ProductRepositoryInterface $productRepository,
+        TemplateProductGuesser $templateProductGuesser
+    ) {
+        $this->templateProductGuesser = $templateProductGuesser;
+        $this->productRepository      = $productRepository;
     }
 
     /**
@@ -57,7 +67,7 @@ class ImageDataType extends AbstractType
             ],
         ]);
 
-        if (null !== $image->getBuyableProducts()) {
+        if ($this->templateProductGuesser->hasPayableOption($image)) {
 
             $selectedRadio = count($image->getBuyableProducts()) === 1 ?
                 $image->getBuyableProducts()[0]->getId() :

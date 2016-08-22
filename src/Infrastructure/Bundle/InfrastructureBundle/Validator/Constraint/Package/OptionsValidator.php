@@ -12,7 +12,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
-use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
+use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -39,9 +39,9 @@ class OptionsValidator extends ConstraintValidator
     private $merger;
 
     /**
-     * @var ProductInfoGuesser
+     * @var TemplateProductGuesser
      */
-    private $productInfoGuesser;
+    private $templateProductGuesser;
 
     /**
      * @var CartManager
@@ -49,27 +49,27 @@ class OptionsValidator extends ConstraintValidator
     private $cartManager;
 
     /**
-     * @param QuantityMaxGuesser $quantityMaxGuesser
-     * @param QuantityMinGuesser $quantityMinGuesser
-     * @param ProductInfoGuesser $productInfoGuesser
-     * @param \DateTimeInterface $now
-     * @param Merger             $merger
-     * @param CartManager        $cartManager
+     * @param QuantityMaxGuesser     $quantityMaxGuesser
+     * @param QuantityMinGuesser     $quantityMinGuesser
+     * @param TemplateProductGuesser $templateProductGuesser
+     * @param \DateTimeInterface     $now
+     * @param Merger                 $merger
+     * @param CartManager            $cartManager
      */
     public function __construct(
         QuantityMaxGuesser $quantityMaxGuesser,
         QuantityMinGuesser $quantityMinGuesser,
-        ProductInfoGuesser $productInfoGuesser,
+        TemplateProductGuesser $templateProductGuesser,
         \DateTimeInterface $now,
         Merger $merger,
         CartManager $cartManager
     ) {
-        $this->quantityMaxGuesser = $quantityMaxGuesser;
-        $this->quantityMinGuesser = $quantityMinGuesser;
-        $this->now                = $now;
-        $this->merger             = $merger;
-        $this->productInfoGuesser = $productInfoGuesser;
-        $this->cartManager        = $cartManager;
+        $this->quantityMaxGuesser     = $quantityMaxGuesser;
+        $this->quantityMinGuesser     = $quantityMinGuesser;
+        $this->now                    = $now;
+        $this->merger                 = $merger;
+        $this->templateProductGuesser = $templateProductGuesser;
+        $this->cartManager            = $cartManager;
     }
 
     /**
@@ -146,7 +146,7 @@ class OptionsValidator extends ConstraintValidator
      */
     private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity, Cart $cart, Order $order = null)
     {
-        $linkedProduct = $this->productInfoGuesser->guessProduct(
+        $linkedProduct = $this->templateProductGuesser->guessProduct(
             $sheet,
             $options[$id],
             $locale
