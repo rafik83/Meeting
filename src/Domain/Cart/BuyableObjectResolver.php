@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
-use Proximum\Vimeet\Domain\Template\ProductInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 
@@ -33,7 +32,7 @@ class BuyableObjectResolver
     private $productTransformer;
 
     /**
-     * @var ProductInfoGuesser
+     * @var TemplateProductGuesser
      */
     private $templateProductGuesser;
 
