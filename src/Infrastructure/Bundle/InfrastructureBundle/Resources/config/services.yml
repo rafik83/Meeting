@@ -1748,6 +1748,7 @@ services:
             - '@template.template_data_factory'
             - '@transformer.product.id_to_product_transformer'
             - '@datetime'
+            - '%locale%'
     package.planning.quantity_min_guesser:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
         arguments:

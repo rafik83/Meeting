@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Cart;
 
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -67,7 +68,12 @@ class BuyableObjectResolver
      */
     public function updateCart(Sheet $sheet, TemplateObject $object)
     {
-        $cart = $this->cartManager->getCart($sheet);
+        $cart  = $this->cartManager->getCart($sheet);
+        $order = null;
+
+        if ($sheet->hasOrders()) {
+            $order = $this->orderMerger->merge($sheet->getOrders());
+        }
 
         if (!$object->getSelectedProduct()) {
             return;
@@ -76,7 +82,7 @@ class BuyableObjectResolver
         if ($object instanceof TemplateObject\Image ||
             $object instanceof TemplateObject\MediaCollection
         ) {
-            $this->addPayableProduct($object, $cart);
+            $this->addPayableProduct($object, $cart, $order);
         }
 
         $this->cartManager->save($cart);
@@ -92,11 +98,7 @@ class BuyableObjectResolver
 
         foreach ($plan->getIncludedOptionProduct() as $optionIncluded) {
             // get product in template data
-            $linkedProduct = $this->templateProductGuesser->guessProduct(
-                $sheet,
-                $optionIncluded->getIncluded(),
-                'fr'
-            );
+            $linkedProduct = $this->templateProductGuesser->guessProduct($sheet, $optionIncluded->getIncluded());
 
             if (null === $linkedProduct) {
                 continue;
@@ -121,29 +123,35 @@ class BuyableObjectResolver
     /**
      * @param TemplateObject $object
      * @param Cart           $cart
+     * @param null|Order     $orderMerged
      */
-    public function addPayableProduct(TemplateObject $object, Cart $cart)
-    {
-        $orderMerged = null;
-
+    public function addPayableProduct(
+        TemplateObject $object,
+        Cart $cart,
+        Order $orderMerged = null
+    ) {
         if ($product = $this->productTransformer->transform($object->getSelectedProduct())) {
 
             // handle product included
-            if ($this->hasCartPlanIncludedProduct($cart, $product)) {
+            if ($this->hasCartPlanIncludedProduct($cart, $product, $orderMerged)) {
                 return;
             }
 
             $cartRow = $cart->getCartRowForProduct($product);
 
-            // handle new order
-            if ($orderMerged) {
-                $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
+            if (isset($cartRow)) {
+                $quantity = $cartRow->getQuantity();
 
+                // handle new order
+                if (isset($orderMerged)) {
+                    $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
+                }
+
+                // add payable option
                 if ($quantity < 1) {
                     $cartRow->setQuantity($cartRow->getQuantity() + self::PAYABLE_OPTION_QUANTITY);
                 }
-            } elseif (null === $cartRow) {
-                // first order
+            } else {
                 $cart->setProduct($product, self::PAYABLE_OPTION_QUANTITY);
             }
         }
@@ -159,17 +167,24 @@ class BuyableObjectResolver
             return;
         }
 
-        $cart    = $this->cartManager->getCart($sheet);
-        $product = $this->productTransformer->transform($object->getSelectedProduct());
-        $cartRow = $cart->getCartRowForProduct($product);
+        $cart              = $this->cartManager->getCart($sheet);
+        $product           = $this->productTransformer->transform($object->getSelectedProduct());
+        $cartRow           = $cart->getCartRowForProduct($product);
+        $productSeveralUse = $this->templateProductGuesser->hasSeveralUse($sheet, $product);
 
+        // option is not in the cart
         if (null === $cartRow) {
+            return;
+        }
+
+        // option is in cart and is not use multiple time
+        if ($productSeveralUse) {
             return;
         }
 
         $updatedQuantity = 0;
 
-        if ($cartRow->getQuantity() > 0) {
+        if ($cartRow->getQuantity()) {
             $updatedQuantity = $cartRow->getQuantity() - self::PAYABLE_OPTION_QUANTITY;
         } elseif ($cartRow->getQuantity() < 0) {
             $updatedQuantity = $cartRow->getQuantity() + self::PAYABLE_OPTION_QUANTITY;
@@ -186,16 +201,16 @@ class BuyableObjectResolver
     /**
      * @param Cart    $cart
      * @param Product $product
+     * @param Order   $orderMerged
      *
      * @return bool
      */
-    private function hasCartPlanIncludedProduct(Cart $cart, Product $product)
+    private function hasCartPlanIncludedProduct(Cart $cart, Product $product, Order $orderMerged = null)
     {
         $plan = null;
 
-        if ($cart->getSheet()->hasOrders()) {
-            $orderMerged = $this->orderMerger->merge($cart->getSheet()->getOrders());
-            $plan        = $orderMerged->getPlan();
+        if (isset($orderMerged)) {
+            $plan = $orderMerged->getPlan();
         } elseif ($planRow = $cart->getPlanRow()) {
             $plan = $planRow->getProduct();
         }

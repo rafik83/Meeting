@@ -42,23 +42,31 @@ class TemplateProductGuesser
     private $productTransformer;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * TemplateProductGuesser constructor.
      *
      * @param Merger                 $orderMerger
      * @param TemplateDataFactory    $templateDataFactory
      * @param IdToProductTransformer $productTransformer
      * @param DateTimeInterface      $dateTime
+     * @param string                 $locale
      */
     public function __construct(
         Merger $orderMerger,
         TemplateDataFactory $templateDataFactory,
         IdToProductTransformer $productTransformer,
-        DateTimeInterface $dateTime
+        DateTimeInterface $dateTime,
+        $locale
     ) {
         $this->orderMerger         = $orderMerger;
         $this->dateTime            = $dateTime;
         $this->templateDataFactory = $templateDataFactory;
         $this->productTransformer  = $productTransformer;
+        $this->locale              = $locale;
     }
 
     /**
@@ -89,13 +97,12 @@ class TemplateProductGuesser
     /**
      * @param Sheet   $sheet
      * @param Product $product
-     * @param string  $locale
      *
      * @return null|Product
      */
-    public function guessProduct(Sheet $sheet, Product $product, $locale)
+    public function guessProduct(Sheet $sheet, Product $product)
     {
-        $template = $this->templateDataFactory->createFromSheet($sheet, $locale);
+        $template = $this->templateDataFactory->createFromSheet($sheet, $this->locale);
 
         foreach ($template->getObjects() as $object) {
             if (!$object->getSelectedProduct()) {
@@ -110,6 +117,33 @@ class TemplateProductGuesser
         }
 
         return null;
+    }
+
+    /**
+     * Check if product option are used in multiple object on the template
+     *
+     * @param Sheet   $sheet
+     * @param Product $product
+     *
+     * @return bool
+     */
+    public function hasSeveralUse(Sheet $sheet, Product $product)
+    {
+        $objects = [];
+
+        $template = $this->templateDataFactory->createFromSheet($sheet, $this->locale);
+
+        foreach ($template->getObjects() as $object) {
+            if ($object->getSelectedProduct()) {
+                $productInObject = $this->productTransformer->transform($object->getSelectedProduct());
+
+                if ($productInObject === $product) {
+                    $objects[] = $object;
+                }
+            }
+        }
+
+        return count($objects) > 1;
     }
 
     /**
