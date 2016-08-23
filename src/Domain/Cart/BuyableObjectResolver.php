@@ -125,11 +125,8 @@ class BuyableObjectResolver
      * @param Cart           $cart
      * @param null|Order     $orderMerged
      */
-    public function addPayableProduct(
-        TemplateObject $object,
-        Cart $cart,
-        Order $orderMerged = null
-    ) {
+    public function addPayableProduct(TemplateObject $object, Cart $cart, Order $orderMerged = null)
+    {
         if ($product = $this->productTransformer->transform($object->getSelectedProduct())) {
 
             // handle product included
@@ -199,6 +196,37 @@ class BuyableObjectResolver
     }
 
     /**
+     * @param TemplateObject $object
+     *
+     * @return int|null
+     */
+    public function getSelectedProduct(TemplateObject $object)
+    {
+        if ($object->getSelectedProduct()) {
+            return $object->getSelectedProduct();
+        }
+
+        $selectedProduct = null;
+        $cart            = $this->cartManager->getCart($object->getSheet());
+
+        foreach ($object->getBuyableProducts() as $buyableProduct) {
+            if ($cartRow = $cart->getCartRowForProduct($buyableProduct)) {
+                $product = $cartRow->getProduct();
+
+                if (null !== $selectedProduct && $this->isMoreExpensive($selectedProduct, $product)) {
+                    $selectedProduct = $product;
+                }
+
+                if (null === $selectedProduct) {
+                    $selectedProduct = $buyableProduct;
+                }
+            }
+        }
+
+        return (null !== $selectedProduct) ? $selectedProduct->getId() : null;
+    }
+
+    /**
      * @param Cart    $cart
      * @param Product $product
      * @param Order   $orderMerged
@@ -220,5 +248,16 @@ class BuyableObjectResolver
         }
 
         return false;
+    }
+
+    /**
+     * @param Product $product
+     * @param Product $otherProduct
+     *
+     * @return bool
+     */
+    private function isMoreExpensive(Product $product, Product $otherProduct)
+    {
+        return $product->getUnitPrice() <= $otherProduct->getUnitPrice();
     }
 }

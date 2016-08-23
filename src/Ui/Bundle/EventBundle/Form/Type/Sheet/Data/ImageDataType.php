@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -24,9 +25,9 @@ use Symfony\Component\Validator\Constraints\Image;
 class ImageDataType extends AbstractType
 {
     /**
-     * @var ProductRepositoryInterface
+     * @var IdToProductTransformer
      */
-    private $productRepository;
+    private $idToProductTransformer;
 
     /**
      * @var TemplateProductGuesser
@@ -34,17 +35,25 @@ class ImageDataType extends AbstractType
     private $templateProductGuesser;
 
     /**
+     * @var BuyableObjectResolver
+     */
+    private $buyableObjectResolver;
+
+    /**
      * ImageDataType constructor.
      *
-     * @param ProductRepositoryInterface $productRepository
-     * @param TemplateProductGuesser     $templateProductGuesser
+     * @param IdToProductTransformer $idToProductTransformer
+     * @param TemplateProductGuesser $templateProductGuesser
+     * @param BuyableObjectResolver  $buyableObjectResolver
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        TemplateProductGuesser $templateProductGuesser
+        IdToProductTransformer $idToProductTransformer,
+        TemplateProductGuesser $templateProductGuesser,
+        BuyableObjectResolver $buyableObjectResolver
     ) {
+        $this->idToProductTransformer = $idToProductTransformer;
         $this->templateProductGuesser = $templateProductGuesser;
-        $this->productRepository      = $productRepository;
+        $this->buyableObjectResolver  = $buyableObjectResolver;
     }
 
     /**
@@ -69,9 +78,7 @@ class ImageDataType extends AbstractType
 
         if ($this->templateProductGuesser->hasPayableOption($image)) {
 
-            $selectedRadio = count($image->getBuyableProducts()) === 1 ?
-                $image->getBuyableProducts()[0]->getId() :
-                $image->getSelectedProduct();
+            $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($image);
 
             $builder
                 ->add('selectedProduct', ChoiceType::class, [
@@ -82,11 +89,10 @@ class ImageDataType extends AbstractType
                     'choices'     => $image->getBuyableProducts(),
                     'required'    => true,
                     'data'        => $selectedRadio,
-                ])
-            ;
+                ]);
 
             $builder->get('selectedProduct')
-                ->addModelTransformer(new IdToProductTransformer($this->productRepository));
+                ->addModelTransformer($this->idToProductTransformer);
         }
     }
 

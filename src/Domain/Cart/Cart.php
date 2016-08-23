@@ -236,7 +236,7 @@ class Cart
     /**
      * @param Product $product
      *
-     * @return null|CartRow
+     * @return CartRow|null
      */
     public function getCartRowForProduct(Product $product)
     {

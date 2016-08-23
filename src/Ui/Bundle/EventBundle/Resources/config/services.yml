@@ -129,15 +129,17 @@ services:
     form_type_sheet_data.image_data_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType
         arguments:
-            - '@vimeet_infrastructure.repository.product_repository'
+            - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
         tags:
             - { name: 'form.type' }
     form_type_sheet_data.media_collection_data_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\MediaCollectionDataType
         arguments:
-            - '@vimeet_infrastructure.repository.product_repository'
+            - '@transformer.product.id_to_product_transformer'
             - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
         tags:
             - { name: 'form.type' }
     form_type_library.telephone_type:
