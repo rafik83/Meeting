@@ -26,7 +26,7 @@
         </div>
     {% endif %}
 
-    {{ form_start(form, { 'attr': {'id': 'sheet_image_data' }}) }}
+    {{ form_start(form, { 'attr': {'id': 'sheet_template_form', 'data-prevent-multiple-submit': true }}) }}
     {{ form_errors(form) }}
 
     <div class="{{ (object.type == 'image') ? 'object--form--field' : '' }}">
@@ -46,7 +46,7 @@
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
     </button>
-    {{ form_widget(form.submit, { 'attr' : { 'form': 'sheet_image_data' }}) }}
+    {{ form_widget(form.submit, { 'attr' : { 'form': 'sheet_template_form' }}) }}
     {{ form_end(form) }}
 </div>
 
