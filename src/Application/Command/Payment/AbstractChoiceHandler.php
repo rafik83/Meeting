@@ -92,7 +92,12 @@ abstract class AbstractChoiceHandler
         $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
 
         if (Mode::PAYMENT_PAYPAL === $choice->mode) {
-            $transaction = Transaction::createForPaypal($choice->sheet, $choice->user, $total, $this->datetime);
+            $transaction = Transaction::createForPaypal(
+                $choice->sheet,
+                $choice->user,
+                $total,
+                $this->datetime
+            );
         } else {
             $transaction = new Transaction(
                 $choice->sheet,

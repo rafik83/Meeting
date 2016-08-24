@@ -270,6 +270,7 @@ class Order
         foreach ($this->rows as $key => $row) {
             if ($row->getId() === $customRow->getId()) {
                 $this->rows->remove($key);
+                return $this;
             }
         }
         return $this;
@@ -574,7 +575,7 @@ class Order
         return new self(
             $sheet,
             true,
-            new Order\BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
+            new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), ''),
             [],
             $dateTime
         );

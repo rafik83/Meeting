@@ -118,6 +118,7 @@ class Converter
         }
 
         $orderBillingInfo = new Order\BillingInfo(
+            $billingInfo->getGender(),
             $billingInfo->getLastname(),
             $billingInfo->getFirstname(),
             $billingInfo->getFunction(),

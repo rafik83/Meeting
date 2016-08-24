@@ -14,7 +14,7 @@
 
                     {% if mail.event is not null %}
                     <tr>
-                        <td style="padding: 20px; background: #0091E9">
+                        <td style="padding: 20px; background: {{ mail.event.configuration.leftColor }}; background: linear-gradient(to right, {{ mail.event.configuration.leftColor }}, {{ mail.event.configuration.rightColor }})">
                             <table width="100%">
                                 <tr>
                                     <td style="color: #ffffff; font-family: Helvetica, sans-serif; font-size: 15px;" valign="top">

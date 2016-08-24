@@ -85,6 +85,8 @@ class OrderController extends Controller
         return $this->render('EventBundle:Order:pro_forma.html.twig', [
             'event'     => $eventDomain->getEvent(),
             'pro_forma' => $view,
+            'sheet'     => $sheet,
+            'order'     => $order
         ]);
     }
 

@@ -21,6 +21,9 @@ Proximum\Vimeet\Domain\Model\Order\BillingInfo:
         vatNumber:
             type: string
             nullable: true
+        gender:
+            type: string
+            nullable: true
     embedded:
         address:
             class: Proximum\Vimeet\Domain\Model\Address
