@@ -36,16 +36,43 @@ class MediaCollectionValidator extends TemplateObjectValidator
     /**
      * {@inheritdoc}
      */
+    public function validate($value, Constraint $constraint)
+    {
+        if ($value instanceof TemplateObject\MediaCollection) {
+            $this->checkRequired($value, $constraint);
+            $this->checkHasPayableOption($value, $constraint);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function checkRequired(TemplateObject $object, Constraint $constraint)
     {
-        if ($object instanceof TemplateObject\MediaCollection) {
+        if ($object instanceof TemplateObject\MediaCollection
+            && true === $object->getOption('required')
+            && $object instanceof TemplateObject\ContentObjectInterface
+        ) {
+            $this->context
+                ->getValidator()
+                ->inContext($this->context)
+                ->atPath($constraint->key)
+                ->validate($object->getMedias(), new NotBlank());
+        }
+    }
 
-            if (count($object->getNotEmptyMedias()) > 0 && $this->templateProductGuesser->hasPayableOption($object)) {
-                $this->context
-                    ->getValidator()
-                    ->inContext($this->context)
-                    ->validate($object->getSelectedProduct(), new NotBlank());
-            }
+    /**
+     * @param TemplateObject\MediaCollection $object
+     * @param Constraint                     $constraint
+     */
+    protected function checkHasPayableOption(TemplateObject\MediaCollection $object, Constraint $constraint)
+    {
+        if (count($object->getNotEmptyMedias()) > 0 && $this->templateProductGuesser->hasPayableOption($object)) {
+            $this->context
+                ->getValidator()
+                ->inContext($this->context)
+                ->atPath('selectedProduct')
+                ->validate($object->getSelectedProduct(), new NotBlank());
         }
     }
 }

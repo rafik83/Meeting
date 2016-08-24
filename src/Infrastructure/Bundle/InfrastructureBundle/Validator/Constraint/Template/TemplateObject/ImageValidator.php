@@ -36,13 +36,42 @@ class ImageValidator extends TemplateObjectValidator
     /**
      * {@inheritdoc}
      */
+    public function validate($value, Constraint $constraint)
+    {
+        if ($value instanceof TemplateObject\Image) {
+            $this->checkRequired($value, $constraint);
+            $this->checkHasPayableOption($value, $constraint);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function checkRequired(TemplateObject $object, Constraint $constraint)
     {
-        if ($object instanceof TemplateObject\Image && $this->templateProductGuesser->hasPayableOption($object)) {
+        if ($object instanceof TemplateObject\Image
+            && true === $object->getOption('required')
+            && $object instanceof TemplateObject\ContentObjectInterface
+        ) {
             $this->context
                 ->getValidator()
                 ->inContext($this->context)
                 ->atPath($constraint->key)
+                ->validate($object->getImage(), new NotBlank());
+        }
+    }
+
+    /**
+     * @param TemplateObject $object
+     * @param Constraint     $constraint
+     */
+    protected function checkHasPayableOption(TemplateObject $object, Constraint $constraint)
+    {
+         if ($this->templateProductGuesser->hasPayableOption($object)) {
+            $this->context
+                ->getValidator()
+                ->inContext($this->context)
+                ->atPath('selectedProduct')
                 ->validate($object->getSelectedProduct(), new NotBlank());
         }
     }
