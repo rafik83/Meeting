@@ -227,9 +227,9 @@ class BuyableObjectResolver
     }
 
     /**
-     * @param Cart    $cart
-     * @param Product $product
-     * @param null|Order   $orderMerged
+     * @param Cart       $cart
+     * @param Product    $product
+     * @param null|Order $orderMerged
      *
      * @return bool
      */
@@ -237,7 +237,7 @@ class BuyableObjectResolver
     {
         $plan = null;
 
-        if (isset($orderMerged)) {
+        if (null !== $orderMerged) {
             $plan = $orderMerged->getPlan();
         } elseif ($planRow = $cart->getPlanRow()) {
             $plan = $planRow->getProduct();
