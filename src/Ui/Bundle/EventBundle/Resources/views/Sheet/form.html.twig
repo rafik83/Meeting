@@ -9,7 +9,7 @@
     </h4>
 </div>
 <div class="modal-body">
-    {% if object.type == 'image' and object.getImage() is not null %}
+    {% if object.type == 'image' and object.image is not null %}
         <div class="object--image--preview">
             <div class="object--image--header">{{ 'sheet.object.image.label'|trans }}</div>
             <img src="{{ object.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
