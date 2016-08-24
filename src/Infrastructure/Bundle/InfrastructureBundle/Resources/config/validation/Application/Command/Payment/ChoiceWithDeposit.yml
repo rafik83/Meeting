@@ -3,4 +3,4 @@ Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit:
         mode:
             - NotBlank: ~
         deposit:
-            - NotBlank: ~
+            - NotNull: ~
