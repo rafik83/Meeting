@@ -164,6 +164,7 @@ class TemplateProductGuesser
 
         $order = $this->orderMerger->merge($templateObject->getSheet()->getOrders());
 
+        // check if option is already bought a least 1
         foreach ($templateObject->getBuyableProducts() as $product) {
             if ($orderRow = $order->getRowForProduct($product)) {
                 return $orderRow->getQuantity() <= 0;
@@ -174,7 +175,7 @@ class TemplateProductGuesser
             return true;
         }
 
-        return false;
+        return true;
     }
 
     /**

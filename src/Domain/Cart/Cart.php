@@ -498,21 +498,20 @@ class Cart
     public function getOrderCartQuantity(Product $product, Order $order = null)
     {
         $mergedQuantity = 0;
-        $cartQuantity   = 0;
         $cartRow        = $this->getCartRowForProduct($product);
 
         // handle first order
         if (null !== $cartRow) {
-            $cartQuantity = $cartRow->getQuantity();
+            $mergedQuantity = $cartRow->getQuantity();
         }
 
         // handle new order
-        if (isset($order) && $product = $order->getRowForProduct($product)) {
+        if (null !== $order && $product = $order->getRowForProduct($product)) {
             $orderQuantity  = $product->getQuantity();
             $mergedQuantity = $orderQuantity;
 
             if (null !== $cartRow) {
-                $mergedQuantity = $orderQuantity + $cartQuantity;
+                $mergedQuantity = $orderQuantity + $cartRow->getQuantity();
             }
         }
 
