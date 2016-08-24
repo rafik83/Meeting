@@ -80,6 +80,11 @@ class UpdateInfo
     public $vatNumber;
 
     /**
+     * @var string
+     */
+    public $gender;
+
+    /**
      * UpdateInfo constructor.
      *
      * @param BillingInfo $billingInfo
@@ -99,5 +104,6 @@ class UpdateInfo
         $this->city        = $billingInfo->getAddress()->getCity();
         $this->country     = $billingInfo->getAddress()->getCountry();
         $this->vatNumber   = $billingInfo->getVatNumber();
+        $this->gender      = $billingInfo->getGender();
     }
 }

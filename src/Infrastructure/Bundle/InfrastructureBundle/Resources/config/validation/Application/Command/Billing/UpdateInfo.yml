@@ -35,3 +35,6 @@ Proximum\Vimeet\Application\Command\Billing\UpdateInfo:
             - Type: { type: string }
         vatNumber:
             - Type: { type: string }
+        gender:
+            - NotBlank: ~
+            - Type: { type: string }

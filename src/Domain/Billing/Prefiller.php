@@ -46,6 +46,7 @@ class Prefiller
             $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
             $billingInfo->prefill(
+                $templateData->getTaggedContentLabel(Tag::PARTICIPANT_GENDER),
                 $templateData->getTaggedContentLabel(Tag::PARTICIPANT_FIRSTNAME),
                 $templateData->getTaggedContentLabel(Tag::PARTICIPANT_LASTNAME),
                 $templateData->getTaggedContentLabel(Tag::PARTICIPANT_POSITION),
@@ -71,6 +72,7 @@ class Prefiller
         $user = $billingInfo->getSheet()->getOwner();
 
         $billingInfo->prefill(
+            $user->getAccount()->getGender(),
             $user->getAccount()->getFirstName(),
             $user->getAccount()->getLastName(),
             $user->getAccount()->getPosition(),

@@ -47,6 +47,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $type->setPackage($package);
         $billingInfo = new BillingInfo($sheet);
         $billingInfo->update(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -76,6 +77,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $orderBillingInfo = new Order\BillingInfo(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -132,3 +134,4 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $converter->toOrder($cart);
     }
 }
+
