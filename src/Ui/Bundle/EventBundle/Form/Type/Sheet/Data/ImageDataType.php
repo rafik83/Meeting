@@ -76,7 +76,6 @@ class ImageDataType extends AbstractType
         ]);
 
         if ($this->templateProductGuesser->hasPayableOption($image)) {
-
             $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($image);
 
             $builder

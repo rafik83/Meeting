@@ -295,7 +295,6 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
     /**
      * @Then /^the radio "([^"]*)" should not be checked$/
-     * @And /^the radio "([^"]*)" should not be checked$/
      */
     public function theRadioShouldNotBeChecked($radio)
     {

@@ -136,11 +136,11 @@ class BuyableObjectResolver
 
             $cartRow = $cart->getCartRowForProduct($product);
 
-            if (isset($cartRow)) {
+            if (null !== $cartRow) {
                 $quantity = $cartRow->getQuantity();
 
                 // handle new order
-                if (isset($orderMerged)) {
+                if (null !== $orderMerged) {
                     $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
                 }
 
@@ -229,7 +229,7 @@ class BuyableObjectResolver
     /**
      * @param Cart    $cart
      * @param Product $product
-     * @param Order   $orderMerged
+     * @param null|Order   $orderMerged
      *
      * @return bool
      */

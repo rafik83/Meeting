@@ -1,4 +1,4 @@
-@event @sheet
+@event @sheet @package
 Feature: Select payable option in sheet
 
   Scenario: I can pay my package with payable option "Option Chaise"

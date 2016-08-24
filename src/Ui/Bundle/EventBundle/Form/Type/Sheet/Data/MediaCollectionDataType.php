@@ -78,7 +78,6 @@ class MediaCollectionDataType extends AbstractType
             ]);
 
         if ($this->templateProductGuesser->hasPayableOption($media)) {
-
             $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($media);
 
             $builder

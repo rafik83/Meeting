@@ -107,10 +107,9 @@ class OptionsValidator extends ConstraintValidator
 
             $quantityMin = $this->getQuantityMin(
                 $selectOptions->sheet,
-                $selectOptions->locale,
                 $options,
                 $id,
-                (int)$quantity,
+                (int) $quantity,
                 $cart,
                 $order
             );
@@ -135,8 +134,7 @@ class OptionsValidator extends ConstraintValidator
 
     /**
      * @param Sheet  $sheet
-     * @param string $locale
-     * @param int    $options
+     * @param array  $options
      * @param int    $id
      * @param int    $quantity
      * @param Cart   $cart
@@ -144,12 +142,11 @@ class OptionsValidator extends ConstraintValidator
      *
      * @return false|int
      */
-    private function getQuantityMin(Sheet $sheet, $locale, $options, $id, $quantity, Cart $cart, Order $order = null)
+    private function getQuantityMin(Sheet $sheet, array $options, $id, $quantity, Cart $cart, Order $order = null)
     {
         $linkedProduct = $this->templateProductGuesser->guessProduct(
             $sheet,
-            $options[$id],
-            $locale
+            $options[$id]
         );
 
         $quantityMin = $this->quantityMinGuesser->getMinProduct(
@@ -183,12 +180,12 @@ class OptionsValidator extends ConstraintValidator
 
     /**
      * @param Sheet $sheet
-     * @param int   $options
+     * @param array $options
      * @param int   $id
      *
      * @return int
      */
-    private function getQuantityMax(Sheet $sheet, $options, $id)
+    private function getQuantityMax(Sheet $sheet, array $options, $id)
     {
         $quantityMax = $this->quantityMaxGuesser->getMaxByProduct(
             $sheet,

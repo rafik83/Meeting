@@ -15,7 +15,6 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class IdToProductTransformer implements DataTransformerInterface
 {
-
     /**
      * @var ProductRepositoryInterface
      */

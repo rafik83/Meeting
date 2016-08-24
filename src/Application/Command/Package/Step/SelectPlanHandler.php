@@ -56,7 +56,6 @@ class SelectPlanHandler
             $this->cartManager->deleteCartStep($cart);
             $cart->setProduct($selectPlan->plan, 1);
             $this->cartManager->save($cart);
-
         }
 
         $this->buyableObjectResolver->resolvePlan($selectPlan->sheet, $selectPlan->plan);

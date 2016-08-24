@@ -45,14 +45,14 @@ class RemoveImageHandler
     {
         $imagePath = $removeImage->image->getImage();
 
-        // remove binary file
-        $this->localFileStorageAdapter->remove($imagePath);
-
         // remove data from sheet
         $this->removeDataHandler->handle(new RemoveData(
             $removeImage->templateData,
             $removeImage->image,
             $removeImage->sheet
         ));
+
+        // remove binary file
+        $this->localFileStorageAdapter->remove($imagePath);
     }
 }
