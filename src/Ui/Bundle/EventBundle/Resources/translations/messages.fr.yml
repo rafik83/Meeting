@@ -18,15 +18,15 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
-event.info.close: 'Fermer'
 gender.man: Monsieur
 gender.woman: Madame
 login.connect: 'Se connecter'
 login.connection: Connexion
+login.error.sheetDisabled: 'Votre participation a été désactivée'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
-login.error.sheetDisabled: 'Votre participation a été désactivée'
 navigation.category.billing: Facturation
 navigation.category.catalog: 'Catalogue des participants'
 navigation.category.happening: 'Gestion de rdv'
@@ -61,7 +61,7 @@ navigation.links.sheet.locale: Version
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
-nomenclature.submit: 'Enregistrer'
+nomenclature.submit: Enregistrer
 order.list.column.date: Date
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
@@ -69,6 +69,7 @@ order.list.pay_remaining: 'Solder la totalité de ma participation'
 order.list.pro_forma.link: 'Voir la Pro Forma'
 order.list.remainingToPay: 'Reste à payer'
 order.list.title: 'Liste de vos commandes'
+order.transaction.howtopay: 'Comment payer ?'
 order.transaction.list.column.date: Date
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: État
@@ -77,13 +78,12 @@ order.transaction.list.title: 'Liste de vos transactions'
 order.transaction.mode.bank_card: 'Carte bleue'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
-order.transaction.mode.paypal: 'Paypal'
-order.transaction.no: 'Aucune'
-order.transaction.state.cancelled: 'Annulé'
+order.transaction.mode.paypal: Paypal
+order.transaction.no: Aucune
+order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
+order.transaction.state.cancelled: Annulé
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
-order.transaction.howtopay: 'Comment payer ?'
-order.transaction.paypal.description: 'Participation de %sheetName% (Fiche N°%sheetId%) à l''évènement "%eventName%"'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
 package.options.included: inclus
@@ -91,6 +91,8 @@ package.participant_planning.validate: Valider
 package.participants.add: 'Ajouter des participants'
 package.participants.delete: 'Supprimer des participants'
 package.participants.included: inclus
+package.payment.bankInfo: 'Coordonnées bancaires'
+package.payment.billingAddress: 'Adresse de facturation'
 package.payment.deposit.title: 'Accompte:'
 package.payment.deposit.toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
 package.payment.pay.label: Payer
@@ -131,8 +133,8 @@ package.summary.columns.quantity: Quantité
 package.summary.columns.title: Intitulé
 package.summary.columns.total: Total
 package.summary.columns.unitPrice: 'Prix unitaire'
-package.summary.edit: Modifier ma participation
-package.summary.empty: Votre panier est vide
+package.summary.edit: 'Modifier ma participation'
+package.summary.empty: 'Votre panier est vide'
 package.summary.option: Option
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
 package.summary.pay: 'Régler le forfait de participation'
@@ -182,5 +184,3 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande:'
 summary.totalToPay: 'Total à régler:'
 summary.vatRate: 'TVA applicable %vatRate%%:'
-package.payment.bankInfo: 'Coordonnées bancaires'
-package.payment.billingAddress: 'Adresse de facturation'
