@@ -43,21 +43,26 @@ class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
     }
 
     /**
-     * @param mixed $request
+     * {@inheritdoc}
      */
     public function execute($request)
     {
         $getHttpRequest = new GetHttpRequest();
         $this->gateway->execute($getHttpRequest);
 
-        $notification = new Notification($request->getToken()->getGatewayName(), $getHttpRequest->query, $this->now);
+        $notification = new Notification($request->getToken()->getGatewayName(), $getHttpRequest->request, $this->now);
         $this->notificationRepository->add($notification);
+
+        /*
+        if ($wasNotPaid && Transaction::STATE_PAID === $update->state) {
+            $event = new TransactionConfirmEvent($update->transaction->getUser(), $update->transaction);
+            $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $event);
+        }
+        */
     }
 
     /**
-     * @param mixed $request
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function supports($request)
     {
