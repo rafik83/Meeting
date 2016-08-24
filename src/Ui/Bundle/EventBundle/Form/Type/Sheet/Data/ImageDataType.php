@@ -82,7 +82,6 @@ class ImageDataType extends AbstractType
                 ->add('selectedProduct', ChoiceType::class, [
                     'expanded'    => true,
                     'multiple'    => false,
-                    'label'       => false,
                     'choice_name' => 'id',
                     'choices'     => $image->getBuyableProducts(),
                     'required'    => true,

@@ -84,7 +84,6 @@ class MediaCollectionDataType extends AbstractType
                 ->add('selectedProduct', ChoiceType::class, [
                     'expanded'    => true,
                     'multiple'    => false,
-                    'label'       => false,
                     'choice_name' => 'id',
                     'choices'     => $media->getBuyableProducts(),
                     'required'    => true,

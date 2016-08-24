@@ -40,11 +40,11 @@
             {{ form_row(child) }}
         {% endfor %}
 
-        {% if form.selectedProduct is defined %}
-            <p class="info-block buyable-product- text-center">
-                <i class="glyphicon glyphicon-info-sign"></i>{{ 'sheet.object.option.buyable.label'|trans }}
+        {% if form.selectedProduct is defined and object.buyableProducts is defined %}
+            <p class="info-block buyable-product text-center">
+                <i class="icon-Info_1"></i> {{ 'sheet.object.option.buyable.label'|trans }}
             </p>
-            <p class="help-block">{{ 'sheet.object.image.product.label'|trans }}</p>
+            {{ form_label(form.selectedProduct) }}
             {{ form_errors(form.selectedProduct) }}
             <table class="table">
                 {% for product in object.buyableProducts %}
