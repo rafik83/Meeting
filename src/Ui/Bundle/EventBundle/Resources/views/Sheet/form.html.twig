@@ -8,45 +8,72 @@
         {{ 'sheet.object.action.edit'|trans }}: "{{ label }}"
     </h4>
 </div>
-<div class="modal-body">
-    {% if object.type == 'image' and object.getImage() is not null %}
-        <div class="object--image--preview">
-            <div class="object--image--header">{{ 'sheet.object.image.label'|trans }}</div>
-            <img src="{{ object.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
-            <div class="object--image--footer">
-                {{ macros.delete_button(
-                path('event_sheet_remove_image', {
-                    'key': uid,
-                    'locale': locale
-                }),
-                '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.image.remove'|trans,
-                {'class': 'btn btn-danger' }
-                ) }}
-            </div>
+
+{% if object.type == 'image' and object.image is not null %}
+    <div class="object--image--preview">
+        <div class="object--image--header">{{ 'sheet.object.image.label'|trans }}</div>
+        <img src="{{ object.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
+        <div class="object--image--footer">
+            {{ macros.delete_button(
+            path('event_sheet_remove_image', {
+                'key': uid,
+                'locale': locale
+            }),
+            '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.image.remove'|trans,
+            { 'class': 'btn btn-danger' }
+            ) }}
         </div>
-    {% endif %}
+    </div>
+{% endif %}
 
-    {{ form_start(form, { 'attr': {'id': 'sheet_template_form', 'data-prevent-multiple-submit': true }}) }}
-    {{ form_errors(form) }}
+{{ form_start(form, { 'attr': { 'data-prevent-multiple-submit': true }}) }}
+{{ form_errors(form) }}
 
-    <div class="{{ (object.type == 'image') ? 'object--form--field' : '' }}">
-        {% if form.vars.help|default(false) %}
-            {% if form.children.content is not defined or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined) %}
-                <p class="help-block">{{ form.vars.help }}</p>
+    <div class="modal-body">
+        <div class="{{ (object.type == 'image') ? 'object--form--field' : '' }}">
+            {% if form.vars.help|default(false) %}
+                {% if form.children.content is not defined or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined) %}
+                    <p class="help-block">{{ form.vars.help }}</p>
+                {% endif %}
             {% endif %}
-        {% endif %}
 
-        {% for key, child in form if key != 'submit' %}
-            {{ form_row(child) }}
-        {% endfor %}
+            {% for key, child in form if key != 'submit' and key != 'selectedProduct' %}
+                {{ form_row(child) }}
+            {% endfor %}
+
+            {% if form.selectedProduct is defined and object.buyableProducts is defined %}
+                <p class="info-block buyable-product text-center">
+                    <i class="icon-Info_1"></i> {{ 'sheet.object.option.buyable.label'|trans }}
+                </p>
+                {{ form_label(form.selectedProduct) }}
+                {{ form_errors(form.selectedProduct) }}
+                <table class="table">
+                    {% for product in object.buyableProducts %}
+                        <tr class="buyable-product-line">
+                            <td class="col-xs-1">
+                                <div class="buyable-product-row">{{ form_widget(form.selectedProduct[product.id]) }}</div>
+                            </td>
+                            <td class="col-xs-8">
+                                <div class="buyable-product-row">{{ product.name }}</div>
+                            </td>
+                            <td class="col-xs-4">
+                                <div class="buyable-product-row product-price">{{ product.unitPrice }}
+                                    <sup>{{ currency|currency_symbol(app.request.locale) }} {{ ('package.vatMode.' ~ vatMode)|trans }}</sup>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+            <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
+        </button>
+        {{ form_widget(form.submit) }}
     </div>
 
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
-        <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
-    </button>
-    {{ form_widget(form.submit, { 'attr' : { 'form': 'sheet_template_form' }}) }}
-    {{ form_end(form) }}
-</div>
+{{ form_end(form) }}
 

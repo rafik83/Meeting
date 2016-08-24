@@ -78,7 +78,7 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('[data-uncheck-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false) });
     [].forEach.call(target.querySelectorAll('[data-product-selector]'), function (element) { new ProductSelector(element) });
     [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) { new QuantitySelector(element) });
-    [].forEach.call(target.querySelectorAll('[data-prevent-multiple-submit]'), function (element) { new DisableSubmit(element); });
+    [].forEach.call(target.querySelectorAll('form'), function (element) { new DisableSubmit(element); });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
