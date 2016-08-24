@@ -1,3 +1,4 @@
+var $ = require('jquery');
 
 function DisableSubmit(element)
 {
@@ -7,10 +8,18 @@ function DisableSubmit(element)
 
 DisableSubmit.prototype.onSubmit = function ()
 {
-    var submitSelector = '[form=' + this.element.id + ']';
-    var submitButton   = document.querySelector(submitSelector);
+    var submitButton = null;
 
-    submitButton.disabled = true;
+    if (this.element.id !== '') {
+        var submitSelector = '[form=' + this.element.id + ']';
+        submitButton       = document.querySelector(submitSelector);
+        submitButton.disabled = true;
+    }
+
+    if (null === submitButton) {
+        submitButton = $(this.element).find('[type=submit]');
+        submitButton.attr('disabled', 'disabled');
+    }
 };
 
 module.exports = DisableSubmit;
