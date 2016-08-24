@@ -131,6 +131,7 @@ form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le pa
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
 form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
+form.event_payment_conditions_update.children.submit.label: Enregistrer
 form.event_practical_info_update.children.contactFirstName.label: 'Prénom du contact'
 form.event_practical_info_update.children.contactLastName.label: 'Nom du contact'
 form.event_practical_info_update.children.organiserEmail.label: 'E-mail de contact'
@@ -438,6 +439,8 @@ form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.assign.label: Assigner
+form.sheet_batch.children.disable.label: Desactiver
+form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
@@ -486,7 +489,7 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
-form.transaction.children.state.cancelled: 'Annulé'
+form.transaction.children.state.cancelled: Annulé
 form.transaction.children.state.paid: Réglé
 form.transaction.children.state.pending: 'En attente'
 form.transaction.children.transaction_mode.bank_card: 'Carte bancaire'
@@ -520,10 +523,10 @@ form.type_template.registration.base: 'Template d''Inscription de base'
 form.type_template.registration.organizer: 'Mes templates d''Inscription'
 form.type_template.sheet.base: 'Template de Participation de base'
 form.type_template.sheet.organizer: 'Mes templates de Participation'
-form.type_update.children.package.label: Template de forfait de participation
+form.type_update.children.package.label: 'Template de forfait de participation'
 form.type_update.children.rank.label: Position
-form.type_update.children.registrationTemplate.label: Template d'inscription
-form.type_update.children.sheetTemplate.label: Template de présentation
+form.type_update.children.registrationTemplate.label: 'Template d''inscription'
+form.type_update.children.sheetTemplate.label: 'Template de présentation'
 form.type_update.children.submit.label: Enregistrer
 form.type_update.children.translations.prototype.children.description.label: Description
 form.type_update.children.translations.prototype.children.title.label: Titre

@@ -122,6 +122,7 @@ class PaginatedSheetListViewQueryHandler
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getState(),
             $sheet->isCompleted(),
+            $sheet->isEnabled(),
             $sheet->getType()->getCategoriesTitles($locale),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(

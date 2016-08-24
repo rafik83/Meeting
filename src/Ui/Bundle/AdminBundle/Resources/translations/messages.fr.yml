@@ -139,25 +139,25 @@ admin.operator_list.table.title.lastname: Nom
 admin.operator_list.title: 'Liste des collaborateurs'
 admin.operator.create.title: 'Créer un nouveau collaborateur'
 admin.operator.update.title: 'Editer un collaborateur'
-admin.order.edit: 'Modification commande:'
-admin.order_edit.add_line: Ajouter une ligne
+admin.order_edit.add_line: 'Ajouter une ligne'
 admin.order_edit.after: après
 admin.order_edit.columns.product: Produit
 admin.order_edit.columns.quantity: Quantité
 admin.order_edit.columns.total: Total
-admin.order_edit.columns.unitPrice: Prix unitaire
-admin.order_edit.command_name: N°%id% de %sheetName%
+admin.order_edit.columns.unitPrice: 'Prix unitaire'
+admin.order_edit.command_name: 'N°%id% de %sheetName%'
 admin.order_edit.edit_custom_row: ''
 admin.order_edit.includedProduct: Inclus
 admin.order_edit.link: Modifier
 admin.order_edit.list_command.label: Commandes
-admin.order_edit.promotionCodes: Codes Promo
+admin.order_edit.promotionCodes: 'Codes Promo'
 admin.order_edit.remove_custom_row: ''
-admin.order_edit.total.withoutVAT: Total HT
-admin.order_edit.total.withVAT: Total TTC
-admin.order_edit.update_line: Modifier une ligne
+admin.order_edit.total.withoutVAT: 'Total HT'
+admin.order_edit.total.withVAT: 'Total TTC'
+admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
 admin.order.createdAt: 'Créée le'
+admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
 admin.order.link: Commandes
@@ -261,6 +261,8 @@ admin.sheet.details.participant.title: Participant
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
+admin.sheet.disable: 'Non active'
+admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.impersonate: Impersonnation
@@ -273,6 +275,8 @@ admin.sheet.trace.accept: 'Acceptée le %at%'
 admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement
 admin.sheet.trace.comment: 'avec le commentaire: %comment%'
+admin.sheet.trace.disable: 'Désactivée le %at%'
+admin.sheet.trace.enable: 'Activée le %at%'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
@@ -337,16 +341,16 @@ admin.transaction.state.cancelled: Annulé
 admin.transaction.state.paid: Réglé
 admin.transaction.state.pending: 'En attente'
 admin.transaction.update: 'Modifier une transaction'
+admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.type.already_exists: 'Un type de participation au titre identique existe déjà'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
 admin.type.link: 'Types de participation'
 admin.type.position: Position
+admin.type.remove.link: Supprimer
 admin.type.title: Titre
 admin.type.update.link: Modifier
-admin.type.remove.link: Supprimer
 admin.type.update.title: 'Modifier le type de participation'
-admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'

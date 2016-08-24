@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
+use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
 use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
@@ -73,7 +74,7 @@ abstract class AbstractCommandHandler
                 $promotion['product'],
                 $promotion['type'],
                 $promotion['value'],
-                $promotion['quantityMax']
+                ($promotion['type'] === Promotion::TYPE_VALUE_OFF) ? 1 : $promotion['quantityMax']
             );
         }
 

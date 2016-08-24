@@ -56,6 +56,17 @@ function init(target) {
         });
     });
 
+    [].forEach.call(target.querySelectorAll('.template-builder-body .select2-builder'), function (element) {
+        $(element).select2({
+            language: {
+                noResults: function () {
+                    return $(element).data('no-results-label');
+                }
+            },
+            allowClear: element.getAttribute('data-placeholder') !== null
+        });
+    });
+
     $('[data-datatimepicker]').datetimepicker({
         locale: 'fr',
         sideBySide: true,

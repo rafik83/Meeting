@@ -5,7 +5,8 @@
     placeholder: { (locale): '' },
     help: { (locale): '' },
     required: false,
-    style: ''
+    style: '',
+    products: []
 }|merge(config|default({})) %}
 
 <div class="object" data-object="image" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
@@ -66,6 +67,18 @@
                                     <label class="form-label">{{ 'template.required.title'|trans }}</label>
                                     <input type="checkbox" name="required" />
                                 </div>
+                                {% if products is defined and products is not empty %}
+                                    <div class="form-group">
+                                        <label class="form-label">{{ 'template.products.title'|trans }}</label>
+                                        <select class="form-control select2-builder" name="products" multiple="multiple">
+                                            {% for product in products %}
+                                                <option value="{{ product.id }}" {% if product.id in config.products %}selected="selected"{% endif %}>
+                                                    {{ product.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>

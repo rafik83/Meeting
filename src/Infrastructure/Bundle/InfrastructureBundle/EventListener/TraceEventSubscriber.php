@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Trace;
@@ -50,6 +51,20 @@ class TraceEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetEnableDisableEvent $event
+     */
+    public function onSheetEnableDisable(SheetEnableDisableEvent $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            ($event->getState()) ? Trace::ENABLE : Trace::DISABLE,
+            $event->getDate(),
+            '',
+            $event->getAuthor()
+        );
+    }
+
+    /**
      * @param SheetValidatedEvent $event
      */
     public function onSheetValidated(SheetValidatedEvent $event)
@@ -70,8 +85,13 @@ class TraceEventSubscriber implements EventSubscriberInterface
      * @param string             $comment
      * @param AbstractUser|null  $user
      */
-    private function addTrace(TraceableInterface $traceable, $action, DateTimeInterface $date, $comment, AbstractUser $user = null)
-    {
+    private function addTrace(
+        TraceableInterface $traceable,
+        $action,
+        DateTimeInterface $date,
+        $comment,
+        AbstractUser $user = null
+    ) {
         $trace = new Trace(
             $traceable,
             $action,
@@ -89,8 +109,9 @@ class TraceEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_ACCEPTED  => 'onSheetAccepted',
-            Events::SHEET_VALIDATED => 'onSheetValidated',
+            Events::SHEET_ACCEPTED       => 'onSheetAccepted',
+            Events::SHEET_VALIDATED      => 'onSheetValidated',
+            Events::SHEET_ENABLE_DISABLE => 'onSheetEnableDisable',
         ];
     }
 }
