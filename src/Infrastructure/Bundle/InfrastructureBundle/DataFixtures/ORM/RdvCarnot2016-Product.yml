@@ -474,3 +474,18 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         rank: 1
         group: '@package_group_3_rdv_carnot'
         option: '@product_option_5_rdv_carnot'
+    package_group_3_option_6_rdv_carnot:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_rdv_carnot'
+        option: '@product_option_6_rdv_carnot'
+    package_group_3_option_7_rdv_carnot:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_rdv_carnot'
+        option: '@product_option_7_rdv_carnot'
+    package_group_3_option_8_rdv_carnot:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_rdv_carnot'
+        option: '@product_option_8_rdv_carnot'

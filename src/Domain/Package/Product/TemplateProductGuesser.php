@@ -176,4 +176,23 @@ class TemplateProductGuesser
 
         return false;
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return TemplateObject[]
+     */
+    public function getBuyableObjects(Sheet $sheet)
+    {
+        $template = $this->templateDataFactory->createFromSheet($sheet, $this->locale);
+        $objects  = [];
+
+        foreach ($template->getObjects() as $object) {
+            if ($object->isBuyable()) {
+                $objects[] = $object;
+            }
+        }
+
+        return $objects;
+    }
 }

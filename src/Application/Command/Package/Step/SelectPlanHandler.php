@@ -48,6 +48,7 @@ class SelectPlanHandler
 
         $previousPlan = $cart->getPlanRow();
 
+        // previous plan different from new selected plan
         if (null !== $previousPlan && $previousPlan->getProduct() !== $selectPlan->plan) {
             $cart->clear();
         }
@@ -58,6 +59,7 @@ class SelectPlanHandler
             $this->cartManager->save($cart);
         }
 
+        $this->buyableObjectResolver->resolveTemplate($selectPlan->sheet);
         $this->buyableObjectResolver->resolvePlan($selectPlan->sheet, $selectPlan->plan);
     }
 }

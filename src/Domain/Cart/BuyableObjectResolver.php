@@ -75,7 +75,7 @@ class BuyableObjectResolver
             $order = $this->orderMerger->merge($sheet->getOrders());
         }
 
-        if (!$object->getSelectedProduct()) {
+        if (null === $object->getSelectedProduct()) {
             return;
         }
 
@@ -89,6 +89,8 @@ class BuyableObjectResolver
     }
 
     /**
+     * Check if plan has included option and update cart if needed
+     *
      * @param Sheet   $sheet
      * @param Product $plan
      */
@@ -106,7 +108,7 @@ class BuyableObjectResolver
 
             $cartRow = $cart->getCartRowForProduct($linkedProduct);
 
-            if (null !== $linkedProduct && null !== $cartRow) {
+            if (null !== $cartRow) {
                 $quantity = $cartRow->getQuantity() - $optionIncluded->getQuantity();
 
                 if ($quantity <= 0) {
@@ -118,6 +120,20 @@ class BuyableObjectResolver
         }
 
         $this->cartManager->save($cart);
+    }
+
+    /**
+     * Look in all template objects and update product in cart if needed
+     *
+     * @param Sheet $sheet
+     */
+    public function resolveTemplate(Sheet $sheet)
+    {
+        $objects = $this->templateProductGuesser->getBuyableObjects($sheet);
+
+        foreach($objects as $object) {
+            $this->updateCart($sheet, $object);
+        }
     }
 
     /**
