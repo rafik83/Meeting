@@ -23,8 +23,7 @@ Feature: Forgot Password
     When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password"
     And I fill in "form.forgotten_password.children.email.label" with "test@test.com"
     And I press "form.forgotten_password.children.submit.label"
-    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/"
-    And I should see "flash.reset_password_token.success"
+    And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password/confirm"
     And the "user.password_reset" mail should be sent to "test@test.com"
     And the "user.password_reset" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/"
     And I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/" link in the "user.password_reset" mail
