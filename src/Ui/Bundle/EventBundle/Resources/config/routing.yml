@@ -49,6 +49,11 @@ event_forgotten_password:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ForgottenPassword:forgottenPassword }
 
+event_forgotten_password_confirm:
+    path: /forgotten_password/confirm
+    methods:  [GET]
+    defaults: { _controller: EventBundle:ForgottenPassword:forgottenPasswordConfirm }
+
 event_create_new_password:
     path: /reset_password/{token}
     methods:  [GET, POST]
