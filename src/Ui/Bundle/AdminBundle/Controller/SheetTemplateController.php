@@ -371,6 +371,8 @@ class SheetTemplateController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
+
+            return $this->redirectToRoute('admin_template_sheet_list');
         }
 
         return $this->render('AdminBundle:SheetTemplate:preview.html.twig', [

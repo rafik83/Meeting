@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class Block extends AbstractChild
 {
