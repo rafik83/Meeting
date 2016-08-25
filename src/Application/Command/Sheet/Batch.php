@@ -66,6 +66,16 @@ class Batch
     public $validateComment;
 
     /**
+     * @var bool
+     */
+    public $addCatalog;
+
+    /**
+     * @var bool
+     */
+    public $removeCatalog;
+
+    /**
      * @param Admin             $admin
      * @param DateTimeInterface $date
      */

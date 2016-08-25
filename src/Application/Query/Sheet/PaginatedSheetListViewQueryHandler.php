@@ -123,6 +123,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getState(),
             $sheet->isCompleted(),
             $sheet->isEnabled(),
+            $sheet->isInCatalog(),
             $sheet->getType()->getCategoriesTitles($locale),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(

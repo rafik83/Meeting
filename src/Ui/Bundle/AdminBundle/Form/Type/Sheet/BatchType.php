@@ -47,6 +47,8 @@ class BatchType extends AbstractType
             ->add('accept', SubmitType::class)
             ->add('enable', SubmitType::class)
             ->add('disable', SubmitType::class)
+            ->add('addCatalog', SubmitType::class)
+            ->add('removeCatalog', SubmitType::class)
         ;
     }
 
@@ -60,6 +62,9 @@ class BatchType extends AbstractType
         $resolver->setDefaults(['data_class' => Batch::class]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getBlockPrefix()
     {
         return 'sheet_batch';

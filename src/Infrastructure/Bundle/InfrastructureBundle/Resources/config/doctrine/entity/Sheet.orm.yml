@@ -24,6 +24,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: boolean
         enable:
             type: boolean
+        inCatalog:
+            type: integer
+        inCatalogAt:
+            type: datetime
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
