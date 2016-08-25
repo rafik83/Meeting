@@ -46,7 +46,6 @@ class ForgottenPasswordController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($forgottenPassword);
-                $this->addFlash('success', 'flash.reset_password_token.success');
 
                 return $this->redirectToRoute('event_forgotten_password_confirm');
             } catch (EmailDoesNotExistException $exception) {
