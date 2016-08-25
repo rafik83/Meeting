@@ -88,7 +88,7 @@ class BatchHandler
             $state = (true === $batch->enable) ? true : false;
 
             return $this->batchEnableDisableHandler->handle(
-                new BatchEnableDisable($batch->ids, $state, $batch->admin)
+                new BatchEnableDisable($batch->ids, $state, $batch->admin, $batch->date)
             );
         }
         if ($batch->addCatalog || $batch->removeCatalog) {

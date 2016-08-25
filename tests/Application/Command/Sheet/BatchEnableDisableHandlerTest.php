@@ -26,6 +26,7 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
         $type  = new Type($event);
+        $date  = new \DateTime();
 
         $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
 
@@ -36,8 +37,9 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
         $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
+        $batchCatalogHandler = $this->prophesize(BatchCatalogHandler::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
@@ -48,8 +50,12 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
             )->shouldBeCalled();
         }
 
-        $command = new BatchEnableDisable([1, 2, 3], false, $admin);
-        $handler = new BatchEnableDisableHandler($sheetRepository->reveal(), $eventDispatcher->reveal());
+        $command = new BatchEnableDisable([1, 2, 3], false, $admin, $date);
+        $handler = new BatchEnableDisableHandler(
+            $sheetRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $batchCatalogHandler->reveal()
+        );
 
         $result = $handler->handle($command);
         $this->assertEquals(3, $result->count);

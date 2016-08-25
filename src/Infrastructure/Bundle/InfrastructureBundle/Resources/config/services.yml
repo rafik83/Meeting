@@ -609,6 +609,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@command.sheet.batch_catalog_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
     command.sheet.batch_catalog_handler:

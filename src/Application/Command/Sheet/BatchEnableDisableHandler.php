@@ -28,17 +28,25 @@ class BatchEnableDisableHandler
     private $eventDispatcher;
 
     /**
+     * @var BatchCatalogHandler
+     */
+    private $batchCatalogHandler;
+
+    /**
      * BatchEnableDisableHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param DelayedEventDispatcher $eventDispatcher
+     * @param DelayedEventDispatcher   $eventDispatcher
+     * @param BatchCatalogHandler      $batchCatalogHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        BatchCatalogHandler $batchCatalogHandler
     ) {
-        $this->sheetRepository = $sheetRepository;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->sheetRepository     = $sheetRepository;
+        $this->eventDispatcher     = $eventDispatcher;
+        $this->batchCatalogHandler = $batchCatalogHandler;
     }
 
     /**
@@ -51,8 +59,15 @@ class BatchEnableDisableHandler
         // Get sheets
         $sheets = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
 
-        foreach($sheets as $sheet) {
+        foreach ($sheets as $sheet) {
             $this->sheetRepository->set($sheet->setEnable($batchEnableDisable->state));
+
+            // remove sheet from catalog if sheet is disable
+            if ($batchEnableDisable->state === false) {
+                $this->batchCatalogHandler->handle(new BatchCatalog(
+                    $batchEnableDisable->ids, $batchEnableDisable->date, $batchEnableDisable->state
+                ));
+            }
 
             $this->eventDispatcher->dispatch(
                 Events::SHEET_ENABLE_DISABLE,
