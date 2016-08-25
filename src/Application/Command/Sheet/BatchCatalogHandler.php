@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
