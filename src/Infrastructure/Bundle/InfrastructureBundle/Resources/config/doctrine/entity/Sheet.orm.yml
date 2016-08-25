@@ -25,7 +25,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         enable:
             type: boolean
         inCatalog:
-            type: integer
+            type: boolean
         inCatalogAt:
             type: datetime
             nullable: true

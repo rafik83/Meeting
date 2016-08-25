@@ -65,7 +65,10 @@ class BatchEnableDisableHandler
             // remove sheet from catalog if sheet is disable
             if ($batchEnableDisable->state === false) {
                 $this->batchCatalogHandler->handle(new BatchCatalog(
-                    $batchEnableDisable->ids, $batchEnableDisable->date, $batchEnableDisable->state
+                    $batchEnableDisable->ids,
+                    $batchEnableDisable->date,
+                    $batchEnableDisable->state,
+                    $batchEnableDisable->admin
                 ));
             }
 

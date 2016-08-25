@@ -616,6 +616,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
     command.sheet.remove_image_handler:

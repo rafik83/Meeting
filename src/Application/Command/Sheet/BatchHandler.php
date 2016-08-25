@@ -95,7 +95,7 @@ class BatchHandler
             $state = (true === $batch->addCatalog) ? true : false;
 
             return $this->batchCatalogHandler->handle(
-                new BatchCatalog($batch->ids, $batch->date, $state)
+                new BatchCatalog($batch->ids, $batch->date, $state, $batch->admin)
             );
         }
 

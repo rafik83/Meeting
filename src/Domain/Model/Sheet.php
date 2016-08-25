@@ -617,7 +617,7 @@ class Sheet implements TraceableInterface
      */
     public function isInCatalog()
     {
-        return $this->inCatalog;
+        return true === $this->inCatalog;
     }
 
     /**
