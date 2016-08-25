@@ -1,11 +1,11 @@
 
-function DisableSubmit(element)
+function PreventMultipleSubmit(element)
 {
     this.element = element;
     this.element.addEventListener('submit', this.onSubmit.bind(this));
 }
 
-DisableSubmit.prototype.onSubmit = function ()
+PreventMultipleSubmit.prototype.onSubmit = function ()
 {
     var submitButton = this.element.querySelector('[type=submit]');
 
@@ -16,4 +16,4 @@ DisableSubmit.prototype.onSubmit = function ()
     submitButton.disabled = true;
 };
 
-module.exports = DisableSubmit;
+module.exports = PreventMultipleSubmit;
