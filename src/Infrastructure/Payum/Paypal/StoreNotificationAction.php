@@ -68,20 +68,20 @@ class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
      */
     public function execute($notify)
     {
+        $token = $notify->getToken();
+
         $getHttpRequest = new GetHttpRequest();
         $this->gateway->execute($getHttpRequest);
         $request = $getHttpRequest->request;
 
-        $notification = new Notification($notify->getToken()->getGatewayName(), $request, $this->now);
+        $notification = new Notification($token->getGatewayName(), $request, $this->now);
         $this->notificationRepository->add($notification);
 
-        $token       = $notify->getToken();
-        $details     = $token->getDetails();
-        $paymentId   = $details->getId();
-        $payment     = $this->paymentRepository->findById($paymentId);
-        $transaction = $payment->getTransaction();
-
         if (Api::PAYMENTSTATUS_COMPLETED === $request['payment_status']) {
+            $details     = $token->getDetails();
+            $paymentId   = $details->getId();
+            $payment     = $this->paymentRepository->findById($paymentId);
+            $transaction = $payment->getTransaction();
             $this->transactionManager->setPaid($transaction);
         }
     }
