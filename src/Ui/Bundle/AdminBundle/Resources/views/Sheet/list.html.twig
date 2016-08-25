@@ -85,7 +85,7 @@
             </thead>
             <tbody>
             {% for sheet in sheets.results %}
-                <tr>
+                <tr id="sheet-{{ sheet.id }}">
                     <td>
                         {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
                     </td>
@@ -113,7 +113,7 @@
                             {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
                         </span>
                     </td>
-                    <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
+                    <td>{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
                     <td>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
