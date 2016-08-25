@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class Block extends AbstractChild
 {
@@ -190,6 +191,16 @@ class Block extends AbstractChild
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && $object->hasTag(Tag::PARTICIPANT_AVATAR) && $object instanceof TemplateObject\Image;
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getPreviewAvailableObjects()
+    {
+        return array_filter($this->getObjects(), function(TemplateObject $object) {
+            return $object instanceof TemplateObject\Image || $object instanceof TemplateObject\EditableText;
         });
     }
 

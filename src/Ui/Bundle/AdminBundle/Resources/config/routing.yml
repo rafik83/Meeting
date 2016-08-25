@@ -584,6 +584,12 @@ admin_template_sheet_add_locale:
     methods: [POST]
     requirements:
         template: \d+
+admin_template_sheet_preview_update:
+    path: /template/sheet/{template}/preview
+    defaults: { _controller: AdminBundle:SheetTemplate:updatePreview }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
 admin_template_sheet_builder:
     path: /template/sheet/{template}/{locale}
     defaults: { _controller: AdminBundle:SheetTemplate:builder }
@@ -605,7 +611,6 @@ admin_template_sheet_update:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
-
 #
 # Product
 #

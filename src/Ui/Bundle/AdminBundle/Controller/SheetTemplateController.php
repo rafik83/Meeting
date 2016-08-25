@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
+use Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreview;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\PreviewType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
@@ -349,6 +351,30 @@ class SheetTemplateController extends Controller
         return $this->redirectToRoute('admin_template_sheet_builder', [
             'template' => $template->getId(),
             'locale'   => $locale,
+        ]);
+    }
+
+    /**
+     * @param Request       $request
+     * @param SheetTemplate $template
+     *
+     * @return Response
+     */
+    public function updatePreviewAction(Request $request, SheetTemplate $template)
+    {
+        $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
+        $templateObjects = $templateData->getPreviewAvailableObjects();
+
+        $command = new UpdatePreview($templateObjects);
+
+        $form = $this->createForm(PreviewType::class, $command);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($command);
+        }
+
+        return $this->render('AdminBundle:SheetTemplate:preview.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }
