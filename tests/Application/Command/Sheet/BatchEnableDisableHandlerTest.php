@@ -30,6 +30,7 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
 
         $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
 
+        // Actual sheet
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
@@ -37,19 +38,31 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
         $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
 
+        // Expected
+        $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
+        $expectedSheet1->setEnable(false);
+
+        $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
+        $expectedSheet2->setEnable(false);
+
+        $expectedSheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
+        $expectedSheet3->setEnable(false);
+
+        // Mock
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
         $batchCatalogHandler = $this->prophesize(BatchCatalogHandler::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
-        foreach ([$sheet1, $sheet2, $sheet3] as $sheet) {
+        foreach ([$expectedSheet1, $expectedSheet2, $expectedSheet3] as $sheet) {
             $sheetRepository->set($sheet)->shouldBeCalled();
             $eventDispatcher->dispatch(Events::SHEET_ENABLE_DISABLE,
                 new SheetEnableDisableEvent($sheet, $admin, new \DateTime(), false)
             )->shouldBeCalled();
         }
 
+        // Command
         $command = new BatchEnableDisable([1, 2, 3], false, $admin, $date);
         $handler = new BatchEnableDisableHandler(
             $sheetRepository->reveal(),
