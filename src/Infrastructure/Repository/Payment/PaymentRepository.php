@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Payment;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Payment\Notification;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 
