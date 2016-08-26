@@ -36,6 +36,9 @@ class CapturePayment
      */
     private $transactionRepository;
 
+    /**
+     * @var TransactionManager
+     */
     private $transactionManager;
 
     /**
