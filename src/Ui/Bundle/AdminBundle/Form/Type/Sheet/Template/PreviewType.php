@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreview;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,8 +25,11 @@ class PreviewType extends AbstractType
     {
         $builder
             ->add('previewObjects', CollectionType::class, [
-                'entry_type'    => ChoiceType::class,
-                'entry_options' => [],
+                'entry_type'    => ObjectChoiceType::class,
+                'entry_options' => [
+                    'templateObjects' => $options['templateObjects'],
+                    'locale'          => $options['locale'],
+                ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
             ]);
@@ -38,6 +40,7 @@ class PreviewType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['templateObjects', 'locale']);
         $resolver->setDefaults([
             'data_class' => UpdatePreview::class,
         ]);

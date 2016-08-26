@@ -62,11 +62,13 @@ class SheetTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $baseTemplates   = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
-        $events          = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
-        $eventsTemplates = $this->get('repository.template.sheet_template_repository')->getTemplateForGivenEvents($events);
+        $events          = $this->get('vimeet_infrastructure.repository.event_repository')
+                                ->getListByAdmin($this->getUser());
+        $eventsTemplates = $this->get('repository.template.sheet_template_repository')
+                                ->getTemplateForGivenEvents($events);
 
         $create = new Create($request->getLocale());
-        $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($create);
@@ -94,7 +96,8 @@ class SheetTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $filters    = [];
-        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $this->getUser()]);
+        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters,
+            ['admin' => $this->getUser()]);
         $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
@@ -104,9 +107,11 @@ class SheetTemplateController extends Controller
         $filterFormView = $filterForm->createView();
         $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
-        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
+        $events             = $this->get('vimeet_infrastructure.repository.event_repository')
+                                   ->getListByAdmin($this->getUser());
         $baseTemplates      = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
-        $organizerTemplates = $this->get('repository.template.sheet_template_repository')->getOrganizerTemplates($events, $filters);
+        $organizerTemplates = $this->get('repository.template.sheet_template_repository')
+                                   ->getOrganizerTemplates($events, $filters);
 
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
@@ -175,8 +180,9 @@ class SheetTemplateController extends Controller
 
         $duplicate = new Duplicate($template, new \DateTime());
 
-        $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
-            'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate', ['template' => $template->getId()]),
+        $form = $this->createForm(DuplicateForEventType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate',
+                ['template' => $template->getId()]),
             'submit' => true,
             'admin'  => $this->getUser(),
         ]);
@@ -216,7 +222,8 @@ class SheetTemplateController extends Controller
 
         // Update form
         $updateForm = $this->createForm(UpdateType::class, new Update($template), [
-            'action'   => $this->generateUrl('admin_template_sheet_update', ['template' => $template->getId(), 'locale' => $locale]),
+            'action'   => $this->generateUrl('admin_template_sheet_update',
+                ['template' => $template->getId(), 'locale' => $locale]),
             'submit'   => true,
             'template' => $template,
         ]);
@@ -293,7 +300,7 @@ class SheetTemplateController extends Controller
                     'locale'   => $addLocale->locale,
                 ]);
             } else {
-                $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
+                $this->addFlash('error', (string)$addLocaleForm->getErrors(true));
             }
         }
 
@@ -338,8 +345,9 @@ class SheetTemplateController extends Controller
     public function updateAction(Request $request, SheetTemplate $template, $locale)
     {
         $command = new Update($template);
-        $form = $this->createForm(UpdateType::class, $command, [
-            'action'   => $this->generateUrl('admin_template_sheet_update', ['template' => $template->getId(), 'locale' => $locale]),
+        $form    = $this->createForm(UpdateType::class, $command, [
+            'action'   => $this->generateUrl('admin_template_sheet_update',
+                ['template' => $template->getId(), 'locale' => $locale]),
             'submit'   => true,
             'template' => $template,
         ]);
@@ -360,14 +368,18 @@ class SheetTemplateController extends Controller
      *
      * @return Response
      */
-    public function updatePreviewAction(Request $request, SheetTemplate $template)
+    public function updatePreviewAction(Request $request, SheetTemplate $template, $locale)
     {
         $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
         $templateObjects = $templateData->getPreviewAvailableObjects();
 
         $command = new UpdatePreview($templateObjects);
 
-        $form = $this->createForm(PreviewType::class, $command);
+        $form = $this->createForm(PreviewType::class, $command, [
+            'templateObjects' => $templateObjects,
+            'locale'          => $locale,
+            'submit'          => true,
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
@@ -376,7 +388,7 @@ class SheetTemplateController extends Controller
         }
 
         return $this->render('AdminBundle:SheetTemplate:preview.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }
