@@ -12,30 +12,13 @@
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
+    <body {% block body_attributes '' %}>
         {% block body %}
             <div class="wrapper">
                 {{ include('EventBundle:Common:header.html.twig') }}
 
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    {% set funnel = view is defined and view.funnel is defined %}
-                    <div class="sub-header">
-                        {{ render(controller('EventBundle:Navigation:menu')) }}
-                        <ul>
-                            <li>
-                                <a href="{{ path('event_sheet') }}" class="btn btn-primary btn-lg {{ funnel ? 'btn-inactive' : '' }}">
-                                    <i class="icon-Document_1"></i>
-                                    <span class="name">{{ 'sheet.title'|trans }}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('event_package') }}" class="btn btn-primary btn-lg {{ funnel ? '' : 'btn-inactive' }}">
-                                    <i class="icon-Panier_2"></i>
-                                    <span class="name">{{ 'package.title'|trans }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    {{ render(controller('EventBundle:Navigation:menu')) }}
                 {% endif %}
             </div>
 

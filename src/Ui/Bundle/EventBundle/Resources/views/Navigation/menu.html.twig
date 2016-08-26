@@ -1,44 +1,70 @@
-<div class="navigation dropdown">
-    <button id="navigation" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-Menu_12"></i> Menu
-    </button>
-    <div class="navigation__content dropdown-menu row" aria-labelledby="navigation">
-        <button type="button" class="navigation__close"><i class="icon-Fermer_3"></i> Fermer</button>
-        {% for key, category in menuView.categoriesView %}
-            {% if key % 2 == 0 %}
-                <div class="column col-md-3">
-            {% endif %}
-            <div class="navigation__item">
-                <h3><i class="{{ category.icon }}"></i> {{ category.title|trans }}</h3>
-                {% if category.linksView|length > 0 %}
-                    <ul>
-                        {% for link in category.linksView %}
-                            <li>
-                                {% if link.link and link.state == true %}
-                                    <a href="{{ link.link }}">
-                                        {{ link.label|trans }}
-                                        {% if link.locale is not empty %}"{{ link.locale|upper }}"{% endif %}
-                                    </a>
-                                    {% if link.button is not empty %}
-                                        <span class="state">{{ link.button.label|trans }}</span>
-                                    {% endif %}
-                                {% else %}
-                                    <span class="inactive">{{ link.label|trans }}</span>
-                                    {% if link.button is not empty %}
-                                        <span class="state">{{ link.button.label|trans }}</span>
-                                    {% endif %}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
+<div class="sub-header">
+    <ul class="sub-header__item">
+        <li>
+            <div class="navigation dropdown">
+                <button id="navigation" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="icon-Menu_12"></i> Menu
+                </button>
+                <div class="navigation__content dropdown-menu row" aria-labelledby="navigation">
+                    <button type="button" class="navigation__close"><i class="icon-Fermer_3"></i> Fermer</button>
+                    {% for key, category in menuView.categoriesView %}
+                        {% if key % 2 == 0 %}
+                            <div class="column col-md-3">
+                        {% endif %}
+                        <div class="navigation__item">
+                            <h3><i class="{{ category.icon }}"></i> {{ category.title|trans }}</h3>
+                            {% if category.linksView|length > 0 %}
+                                <ul>
+                                    {% for link in category.linksView %}
+                                        <li>
+                                            {% if link.link and link.state == true %}
+                                                <a href="{{ link.link }}">
+                                                    {{ link.label|trans }}
+                                                    {% if link.locale is not empty %}"{{ link.locale|upper }}"{% endif %}
+                                                </a>
+                                                {% if link.button is not empty %}
+                                                    <span class="state">{{ link.button.label|trans }}</span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="inactive">{{ link.label|trans }}</span>
+                                                {% if link.button is not empty %}
+                                                    <span class="state">{{ link.button.label|trans }}</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        {% if key % 2 == 1 %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if menuView.categoriesView|length % 2 == 1 %}
+                </div>
                 {% endif %}
             </div>
-            {% if key % 2 == 1 %}
-                </div>
-            {% endif %}
-        {% endfor %}
-        {% if menuView.categoriesView|length % 2 == 1 %}
-    </div>
-    {% endif %}
-    </div>
+        </li>
+        {#
+        <li>
+            <button class="btn btn-primary btn-lg btn-inactive display-catalog-research"><i class="icon-Rechercher"></i> Recherche avancée</button>
+        </li>
+        #}
+    </ul>
+
+    {% set funnel = view is defined and view.funnel is defined %}
+    <ul class="sub-header__item">
+        <li>
+            <a href="{{ path('event_sheet') }}" class="btn btn-primary btn-lg {{ funnel ? 'btn-inactive' : '' }}">
+                <i class="icon-Document_1"></i>
+                <span class="name">{{ 'sheet.title'|trans }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('event_package') }}" class="btn btn-primary btn-lg {{ funnel ? '' : 'btn-inactive' }}">
+                <i class="icon-Panier_2"></i>
+                <span class="name">{{ 'package.title'|trans }}</span>
+            </a>
+        </li>
+    </ul>
 </div>

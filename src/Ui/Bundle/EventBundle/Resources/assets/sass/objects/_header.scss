@@ -210,16 +210,16 @@
     }
 
     .navigation__item { margin: 30px 0 10px; }
+}
 
-  > ul {
-    li {
+  .sub-header__item {
+    > li {
       display: inline-block;
       margin-right: 10px;
 
       &:last-child { margin-right: 0; }
     }
   }
-}
 
 .content-header {
   margin-top: 10px;

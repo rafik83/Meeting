@@ -280,6 +280,11 @@ event_catalog_sheet_meeting_request:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
+event_inte_catalog:
+    path: /catalog/inte
+    methods: [GET]
+    defaults: { _controller: EventBundle:Catalog:catalog }
+
 #
 # Schedule
 #

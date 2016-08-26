@@ -41,6 +41,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-EtoilePleine:before { content: "\b0"; }
+.icon-LienTag:before { content: "\2a"; }
+.icon-Mosaique:before { content: "\5b"; }
+.icon-Liste:before { content: "\5d"; }
 .icon-DemandeRDV:before { content: "\e0"; }
 .icon-Rechercher:before { content: "\35"; }
 .icon-Disconnect:before { content: "\21"; }
