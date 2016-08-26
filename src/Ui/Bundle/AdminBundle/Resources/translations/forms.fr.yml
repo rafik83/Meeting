@@ -208,6 +208,7 @@ form.happening_update.children.talkings.prototype.children.speaker.label: Interv
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
 form.login.children.password.label: 'Mot de passe'
+form.login.children.rememberMe.label: 'Rester connecté pendant 30 jours'
 form.login.children.submit.label: 'Se connecter'
 form.login.children.username.label: Email
 form.meeting_cancel.children.message.label: Message
