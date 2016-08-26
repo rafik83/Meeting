@@ -82,7 +82,10 @@ class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
             $paymentId   = $details->getId();
             $payment     = $this->paymentRepository->findById($paymentId);
             $transaction = $payment->getTransaction();
-            $this->transactionManager->setPaid($transaction);
+
+            if (null !== $transaction) {
+                $this->transactionManager->setPaid($transaction);
+            }
         }
     }
 
