@@ -28,8 +28,17 @@ class CatalogController extends Controller
      */
     public function indexAction(EventDomain $eventDomain)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $event = $eventDomain->getEvent();
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('EventBundle:Catalog:index.html.twig', [
-            'event' => $eventDomain->getEvent(),
+            'event'     => $event,
+            'isCatalog' => true,
         ]);
     }
 

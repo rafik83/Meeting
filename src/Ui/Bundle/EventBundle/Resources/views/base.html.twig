@@ -18,7 +18,7 @@
                 {{ include('EventBundle:Common:header.html.twig') }}
 
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    {{ render(controller('EventBundle:Navigation:menu')) }}
+                    {{ include('EventBundle:Navigation:menu.html.twig') }}
                 {% endif %}
             </div>
 
