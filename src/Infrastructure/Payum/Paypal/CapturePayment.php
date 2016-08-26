@@ -15,7 +15,6 @@ use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
-use Proximum\Vimeet\Domain\Transaction\TransactionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -37,23 +36,15 @@ class CapturePayment
     private $transactionRepository;
 
     /**
-     * @var TransactionManager
-     */
-    private $transactionManager;
-
-    /**
      * @param Payum                          $payum
      * @param TransactionRepositoryInterface $transactionRepository
-     * @param TransactionManager             $transactionManager
      */
     public function __construct(
         Payum $payum,
-        TransactionRepositoryInterface $transactionRepository,
-        TransactionManager $transactionManager
+        TransactionRepositoryInterface $transactionRepository
     ) {
         $this->payum                 = $payum;
         $this->transactionRepository = $transactionRepository;
-        $this->transactionManager    = $transactionManager;
     }
 
     /**

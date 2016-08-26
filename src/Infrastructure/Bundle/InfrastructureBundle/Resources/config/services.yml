@@ -1852,7 +1852,6 @@ services:
         arguments:
             - '@payum'
             - '@repository.transaction'
-            - '@domain.transaction.transaction_manager'
     vimeet.payum.paypal.action.store_notification:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
         arguments:
