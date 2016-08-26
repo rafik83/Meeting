@@ -33,6 +33,9 @@ class PreviewType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
             ]);
+
+        $builder->get('previewObjects')
+            ->addModelTransformer(new ObjectDataTransformer($options['templateData']));
     }
 
     /**
@@ -40,7 +43,7 @@ class PreviewType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['templateObjects', 'locale']);
+        $resolver->setRequired(['templateObjects', 'templateData', 'locale']);
         $resolver->setDefaults([
             'data_class' => UpdatePreview::class,
         ]);

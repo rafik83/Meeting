@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class UpdatePreview
 {
     /**
-     * @var TemplateObject[]
+     * @var array
      */
     public $previewObjects;
 
@@ -25,13 +26,20 @@ class UpdatePreview
     public $templateObjects;
 
     /**
+     * @var SheetTemplate
+     */
+    public $sheetTemplate;
+
+    /**
      * UpdatePreview constructor.
      *
+     * @param SheetTemplate    $sheetTemplate
      * @param TemplateObject[] $templateObjects
      */
-    public function __construct(array $templateObjects)
+    public function __construct(SheetTemplate $sheetTemplate, array $templateObjects)
     {
+        $this->sheetTemplate   = $sheetTemplate;
         $this->templateObjects = $templateObjects;
+        $this->previewObjects  = $sheetTemplate->getPreview();
     }
-
 }

@@ -33,12 +33,10 @@ class ObjectChoiceType extends AbstractType
                     return $object->getLabel($options['locale']);
                 };
             },
-            'choice_name'  => function (TemplateObject $object = null) {
-                return $object ? $object->getKey() : null;
-            },
             'choice_value' => function (TemplateObject $object = null) {
-                return $object ? $object->getKey() : null;
+                return null !== $object ? $object->getKey() : null;
             },
+            'choice_translation_domain' => false,
         ]);
     }
 

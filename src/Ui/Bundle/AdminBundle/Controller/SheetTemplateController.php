@@ -366,9 +366,10 @@ class SheetTemplateController extends Controller
         $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
         $templateObjects = $templateData->getPreviewAvailableObjects();
 
-        $command = new UpdatePreview($templateObjects);
+        $command = new UpdatePreview($template, $templateObjects);
 
         $form = $this->createForm(PreviewType::class, $command, [
+            'templateData'    => $templateData,
             'templateObjects' => $templateObjects,
             'locale'          => $locale,
             'submit'          => true,

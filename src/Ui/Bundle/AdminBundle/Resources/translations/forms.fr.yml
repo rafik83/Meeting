@@ -464,6 +464,11 @@ form.sheet_template_update.children.close.label: Annuler
 form.sheet_template_update.children.fallback.label: 'Langue par defaut'
 form.sheet_template_update.children.submit.label: Enregistrer
 form.sheet_template_update.children.title.label: Titre
+form.sheet_template_preview.children.previewObjects.label: Objets dans l'aperçu
+form.sheet_template_preview.children.previewObjects.prototype.label: Objet
+form.sheet_template_preview.children.previewObjects.label_add: Ajouter un objet
+form.sheet_template_preview.children.previewObjects.label_delete: Supprimer l'objet
+form.sheet_template_preview.children.submit.label: Mettre à jour l'aperçu
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.recipes.label: 'Identifiants du lot'
