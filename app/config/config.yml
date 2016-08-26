@@ -147,6 +147,10 @@ fos_elastica:
                             type: integer
                         createdAt:
                             type: date
+                        inCatalog:
+                            type: boolean
+                        inCatalogAt:
+                            type: date
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer

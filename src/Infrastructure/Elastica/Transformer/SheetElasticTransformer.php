@@ -100,6 +100,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'event'             => $sheet->getEvent()->getId(),
             'owner'             => $owner,
             'createdAt'         => $sheet->getCreatedAt()->format('c'),
+            'inCatalog'         => $sheet->isInCatalog(),
+            'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
         ]);
     }
 }
