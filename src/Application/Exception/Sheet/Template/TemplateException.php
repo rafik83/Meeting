@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\Sheet;
+namespace Proximum\Vimeet\Application\Exception\Sheet\Template;
 
 class TemplateException extends \Exception
 {
