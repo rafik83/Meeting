@@ -114,16 +114,6 @@ class SheetController extends Controller
                 $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
                     '%count%' => $result->count,
                 ]));
-
-//                if ($batch->validate) {
-//                    $this->addFlash('success',
-//                        new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count,
-//                            ['%count%' => $result->count]));
-//                } elseif ($batch->assign && $batch->follower) {
-//                    $this->addFlash('success',
-//                        new TranschoiceMessage('flash.admin.sheet_batch.assign.success', $result->count,
-//                            ['%count%' => $result->count, '%name%' => $batch->follower->getDisplayName()]));
-//                }
             } else {
                 $this->addFlash('error', (string) $batchForm->getErrors(true));
             }
