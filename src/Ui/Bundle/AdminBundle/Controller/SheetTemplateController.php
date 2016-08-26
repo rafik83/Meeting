@@ -62,10 +62,8 @@ class SheetTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $baseTemplates   = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
-        $events          = $this->get('vimeet_infrastructure.repository.event_repository')
-                                ->getListByAdmin($this->getUser());
-        $eventsTemplates = $this->get('repository.template.sheet_template_repository')
-                                ->getTemplateForGivenEvents($events);
+        $events          = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
+        $eventsTemplates = $this->get('repository.template.sheet_template_repository')->getTemplateForGivenEvents($events);
 
         $create = new Create($request->getLocale());
         $form   = $this->createForm(CreateType::class, $create, ['submit' => true]);
@@ -96,8 +94,7 @@ class SheetTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $filters    = [];
-        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters,
-            ['admin' => $this->getUser()]);
+        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $this->getUser()]);
         $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
@@ -107,11 +104,9 @@ class SheetTemplateController extends Controller
         $filterFormView = $filterForm->createView();
         $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
 
-        $events             = $this->get('vimeet_infrastructure.repository.event_repository')
-                                   ->getListByAdmin($this->getUser());
+        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
         $baseTemplates      = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
-        $organizerTemplates = $this->get('repository.template.sheet_template_repository')
-                                   ->getOrganizerTemplates($events, $filters);
+        $organizerTemplates = $this->get('repository.template.sheet_template_repository')->getOrganizerTemplates($events, $filters);
 
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
@@ -180,9 +175,8 @@ class SheetTemplateController extends Controller
 
         $duplicate = new Duplicate($template, new \DateTime());
 
-        $form = $this->createForm(DuplicateForEventType::class, $duplicate, [
-            'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate',
-                ['template' => $template->getId()]),
+        $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate', ['template' => $template->getId()]),
             'submit' => true,
             'admin'  => $this->getUser(),
         ]);
@@ -300,7 +294,7 @@ class SheetTemplateController extends Controller
                     'locale'   => $addLocale->locale,
                 ]);
             } else {
-                $this->addFlash('error', (string)$addLocaleForm->getErrors(true));
+                $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
             }
         }
 
@@ -345,9 +339,8 @@ class SheetTemplateController extends Controller
     public function updateAction(Request $request, SheetTemplate $template, $locale)
     {
         $command = new Update($template);
-        $form    = $this->createForm(UpdateType::class, $command, [
-            'action'   => $this->generateUrl('admin_template_sheet_update',
-                ['template' => $template->getId(), 'locale' => $locale]),
+        $form = $this->createForm(UpdateType::class, $command, [
+            'action'   => $this->generateUrl('admin_template_sheet_update', ['template' => $template->getId(), 'locale' => $locale]),
             'submit'   => true,
             'template' => $template,
         ]);
