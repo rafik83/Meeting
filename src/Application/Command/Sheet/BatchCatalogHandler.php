@@ -49,7 +49,6 @@ class BatchCatalogHandler
         $sheets = $this->sheetRepository->getSheetsById($command->ids);
 
         foreach ($sheets as $sheet) {
-
             // trace state in catalog change only
             if ($sheet->isInCatalog() !== $command->state) {
                 $this->eventDispatcher->dispatch(
@@ -72,6 +71,8 @@ class BatchCatalogHandler
             $this->sheetRepository->set($sheet);
         }
 
-        return new BatchResult(count($sheets));
+        $message = ($command->state) ? 'catalog.add.success' : 'catalog.remove.success';
+
+        return new BatchResult(count($sheets), $command->getMessage() . $message);
     }
 }

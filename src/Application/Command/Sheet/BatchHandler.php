@@ -99,6 +99,6 @@ class BatchHandler
             );
         }
 
-        return new BatchResult(0);
+        return new BatchResult(0, $batch->getMessage());
     }
 }

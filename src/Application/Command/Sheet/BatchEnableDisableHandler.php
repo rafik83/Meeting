@@ -83,6 +83,8 @@ class BatchEnableDisableHandler
             );
         }
 
-        return new BatchResult(count($sheets));
+        $message = ($batchEnableDisable->state === true) ? 'enable.success' : 'disable.success';
+
+        return new BatchResult(count($sheets), $batchEnableDisable->getMessage() . $message);
     }
 }

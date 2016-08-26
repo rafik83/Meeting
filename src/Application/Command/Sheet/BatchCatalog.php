@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class BatchCatalog
+class BatchCatalog extends AbstractBatch
 {
     /**
      * @var array
