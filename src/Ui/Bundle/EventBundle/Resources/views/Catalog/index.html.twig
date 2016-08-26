@@ -1,0 +1,161 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body_attributes 'class="grey"' %}
+
+{% block content %}
+    <div class="catalog">
+        {#
+        <div class="catalog__research">
+            <form>
+                <div class="filter">
+                    <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-1"
+                        aria-expanded="false" aria-controls="collapse-1">Participants</h3>
+
+                    <div class="collapse" id="collapse-1">
+                        <ul>
+                            <li class="filter__item">
+                                <label class="checkbox-inline">
+                                    <span class="filter-label"><input type="checkbox" checked="checked">Donneur d'ordre</span>
+                                    <span class="details">5 sur 100</span>
+                                </label>
+                            </li>
+                            <li class="filter__item">
+                                <label class="checkbox-inline">
+                                    <span class="filter-label"><input type="checkbox" checked="checked">Exposant</span>
+                                    <span class="details">15 sur 200</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="filter">
+                    <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-2"
+                        aria-expanded="false" aria-controls="collapse-2">Objectifs</h3>
+
+                    <div class="collapse" id="collapse-2">
+                        <ul>
+                            <li>
+                                <label class="checkbox-inline">
+                                    <span class="filter-label"><input type="checkbox" checked="checked">Répondre à mes besoins</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="checkbox-inline">
+                                    <span class="filter-label"><input type="checkbox">Rechercher mes offres</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="checkbox-inline">
+                                    <span class="filter-label"><input type="checkbox">Autres</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="filter">
+                    <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-3"
+                        aria-expanded="false" aria-controls="collapse-3">Structures</h3>
+
+                    <div class="collapse" id="collapse-3">
+                    </div>
+                </div>
+                <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>
+            </form>
+            <div class="actions">
+                <ul>
+                    <li><a href=""><i class="icon-Rechercher"></i> <span>Enregistrer la recherche</span></a></li>
+                    <li><a href=""><i class="icon-Retard"></i> <span>Créer une alerte</span></a></li>
+                    <li><a href=""><i class="icon-Inserer_2"></i> <span>Format de données .csv</span></a></li>
+                    <li><a href=""><i class="icon-Document_1"></i> <span>Fiches complètes .pdf</span></a></li>
+                </ul>
+            </div>
+        </div>
+        #}
+
+        {#
+        <div class="catalog__filters">
+            <div class="select-all">
+                <label class="checkbox-inline" for="select-all-catalog">
+                    <input type="checkbox" id="select-all-catalog">
+                    Tout sélectionner (40)
+                </label>
+            </div>
+
+            <div class="sort">
+                <strong>Trier</strong>
+
+                <div class="sort-inputs">
+                    <label class="radio-inline">
+                        <input name="sortBy" type="radio">
+                        Ordre alphabétique
+                    </label>
+
+                    <label class="radio-inline">
+                        <input name="sortBy" type="radio">
+                        Inscriptions récentes
+                    </label>
+
+                    <label class="radio-inline">
+                        <input name="sortBy" type="radio">
+                        Pertinence
+                    </label>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default active"><i class="icon-Mosaique"></i></button>
+                    <button type="button" class="btn btn-default"><i class="icon-Liste"></i></button>
+                </div>
+            </div>
+        </div>
+        #}
+
+        <div class="catalog__list catalog__list--block">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="catalog__item catalog__item--checked">
+                        <header>
+                            <input type="checkbox" checked="checked">
+                            <img src={{ asset('assets/images/dummy/airbus-logo.png') }}>
+                        </header>
+                        <div class="content">
+                            <p>
+                                <strong>
+                                    quo mollius primos decere nec ut perferens statuas protectoribus
+                                    adimenda.
+                                </strong>
+                            </p>
+
+                            <p>
+                                Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum
+                                ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut
+                                pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque
+                                ductores concitat cum habitus cum in ordinibus consurgentem haut certamen.
+                            </p>
+                        </div>
+                        <footer>
+                            <p class="tags">
+                                <i class="icon-LienTag"></i> Exposant
+                            </p>
+
+                            {#
+                            <div class="actions">
+                                <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
+                                <a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>
+                            </div>
+                            #}
+
+                            {#
+                            <div class="button">
+                                <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander
+                                    un RDV
+                                </button>
+                            </div>
+                            #}
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -251,25 +251,10 @@ event_change_password:
 # Catalog
 #
 
-event_catalog:
+event_catalog_index:
     path: /catalog
     methods:  [GET]
-    defaults: { _controller: EventBundle:Catalog:categories }
-
-event_catalog_category:
-    path: /catalog/{categoryView}
-    requirements:
-        categoryView: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Catalog:category }
-
-event_catalog_sheet:
-    path: /catalog/{categoryView}/sheet/{sheet}
-    requirements:
-        categoryView: \d+
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:Catalog:sheet }
+    defaults: { _controller: EventBundle:Catalog:index }
 
 event_catalog_sheet_meeting_request:
     path: /catalog/{categoryView}/sheet/{to}/meeting/request/from/{from}
@@ -279,11 +264,6 @@ event_catalog_sheet_meeting_request:
         from: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
-
-event_inte_catalog:
-    path: /catalog/inte
-    methods: [GET]
-    defaults: { _controller: EventBundle:Catalog:catalog }
 
 #
 # Schedule

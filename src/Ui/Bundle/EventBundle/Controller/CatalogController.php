@@ -22,6 +22,18 @@ use Symfony\Component\HttpFoundation\Response;
 class CatalogController extends Controller
 {
     /**
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function indexAction(EventDomain $eventDomain)
+    {
+        return $this->render('EventBundle:Catalog:index.html.twig', [
+            'event' => $eventDomain->getEvent(),
+        ]);
+    }
+
+    /**
      * Display catalog categories of an event.
      *
      * @param Request     $request
@@ -119,17 +131,5 @@ class CatalogController extends Controller
         } catch (NoRuleFoundException $exception) {
             throw $this->createNotFoundException($exception->getMessage(), $exception);
         }
-    }
-
-    /**
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
-    public function catalogAction(EventDomain $eventDomain)
-    {
-        return $this->render('EventBundle:Catalog:catalog.html.twig', [
-            'event' => $eventDomain->getEvent(),
-        ]);
     }
 }

@@ -20,11 +20,12 @@
 
 @font-face {
   font-family: 'PictoOutline';
-  src: url($font-path + '/PictoOutline.eot?4nyk96');
-  src: url($font-path + '/PictoOutline.eot?4nyk96#iefix') format('embedded-opentype'),
-  url($font-path + '/PictoOutline.ttf?4nyk96') format('truetype'),
-  url($font-path + '/PictoOutline.woff?4nyk96') format('woff'),
-  url($font-path + '/PictoOutline.svg?4nyk96#PictoOutline') format('svg');
+  src: url($font-path + '/PictoOutline.eot');
+  src: url($font-path + '/PictoOutline.eot?#iefix') format('embedded-opentype'),
+       url($font-path + '/PictoOutline.woff2') format('woff2'),
+       url($font-path + '/PictoOutline.woff') format('woff'),
+       url($font-path + '/PictoOutline.ttf') format('truetype'),
+       url($font-path + '/PictoOutline.svg#PictoOutline') format('svg');
   font-weight: normal;
   font-style: normal;
 }
