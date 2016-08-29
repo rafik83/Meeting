@@ -35,6 +35,7 @@ navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: 'Agenda provisoire'
 navigation.category.sheet: 'Fiche de présentation'
+navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
 navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
@@ -59,6 +60,7 @@ navigation.links.planning.flash_presentation: 'Présentations flash'
 navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
 navigation.links.sheet.locale: Version
+navigation.menu: Menu
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
