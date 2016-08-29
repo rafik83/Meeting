@@ -126,12 +126,14 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData  = new Template\TemplateData('root', [], 'fr', 'fr');
         $block         = new Template\Block('12', [], 'fr', 'fr');
         $editableText1 = new Template\TemplateObject\EditableText(
+            '69b3cde1',
             'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr'
         );
         $editableText1->setContentValue('truc');
         $editableText2 = new Template\TemplateObject\EditableText(
+            '69b3cde2',
             'editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr'
@@ -200,12 +202,14 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData  = new Template\TemplateData('root', [], 'fr', 'fr');
         $block         = new Template\Block('12', [], 'fr', 'fr');
         $editableText1 = new Template\TemplateObject\EditableText(
+            '69b3cde1',
             'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr'
         );
         $editableText1->setContentValue('truc');
         $editableText2 = new Template\TemplateObject\EditableText(
+            '69b3cde2',
             'editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr'
