@@ -13,13 +13,18 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\CatalogSheetPreviewView;
-use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
 {
+    /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
     /**
      * @var SheetSearchAdapterInterface
      */
@@ -31,13 +36,16 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private $sheetInfoGuesser;
 
     /**
+     * @param SheetRepositoryInterface    $sheetRepository
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
      * @param SheetInfoGuesser            $sheetInfoGuesser
      */
     public function __construct(
+        SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetInfoGuesser $sheetInfoGuesser
     ) {
+        $this->sheetRepository    = $sheetRepository;
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->sheetInfoGuesser   = $sheetInfoGuesser;
     }
@@ -58,28 +66,19 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->locale
         );
 
+        $sheets->results = $this->sheetRepository->findSheets($sheets->results);
+
         $sheets->results = array_map(
             function (Sheet $sheet) use ($query) {
-                return $this->createSheetListView($sheet, $query->locale);
+                return new CatalogSheetPreviewView(
+                    $sheet->getId(),
+                    $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
+                    $sheet->getType()->getTitle($query->locale)
+                );
             },
             $sheets->results
         );
 
         return $sheets;
-    }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return SheetListView
-     */
-    private function createSheetListView(Sheet $sheet, $locale)
-    {
-        return new CatalogSheetPreviewView(
-            $sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
-            $sheet->getType()->getTitle($locale)
-        );
     }
 }

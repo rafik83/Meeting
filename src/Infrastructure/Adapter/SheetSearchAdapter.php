@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -27,20 +26,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     private $finder;
 
     /**
-     * @var SheetRepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * SheetSearchAdapter constructor.
-     *
      * @param PaginatedFinderInterface $finder
-     * @param SheetRepositoryInterface $repository
      */
-    public function __construct(PaginatedFinderInterface $finder, SheetRepositoryInterface $repository)
+    public function __construct(PaginatedFinderInterface $finder)
     {
-        $this->finder     = $finder;
-        $this->repository = $repository;
+        $this->finder = $finder;
     }
 
     /**
@@ -61,8 +51,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             throw new UnavailableCurrentPageException(sprintf('Current page %s not available', $page));
         }
 
-        $sheets = $this->repository->findFullSheets($result->getCurrentPageResults());
-
-        return new PaginatedResult($sheets, $page, $limit, $result->getNbResults());
+        return new PaginatedResult($result->getCurrentPageResults(), $page, $limit, $result->getNbResults());
     }
 }

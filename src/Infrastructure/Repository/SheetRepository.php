@@ -239,6 +239,24 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, type, typeTranslation')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->leftJoin('sheet.type', 'type')
+            ->leftJoin('type.translations', 'typeTranslation')
+            ->where('sheet.id IN (:sheets)')
+            ->setParameter('sheets', $sheets);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findFullSheets(array $sheets)
     {
         $queryBuilder = $this
