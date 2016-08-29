@@ -310,8 +310,13 @@ class TemplateDataFactory
     private function getNomenclature($id)
     {
         if (!isset($this->nomenclatures[$id])) {
-            throw new \RuntimeException(sprintf('Nomenclature "%s" not found. Available nomenclatures are "%s"', $id,
-                implode('", "', array_keys($this->nomenclatures))));
+            throw new \RuntimeException(
+                sprintf(
+                    'Nomenclature "%s" not found. Available nomenclatures are "%s"',
+                    $id,
+                    implode('", "', array_keys($this->nomenclatures))
+                )
+            );
         }
 
         return $this->nomenclatures[$id];

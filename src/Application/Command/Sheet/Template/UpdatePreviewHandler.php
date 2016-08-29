@@ -58,7 +58,7 @@ class UpdatePreviewHandler
         }
 
         // check exist in template
-        foreach($updatePreview->previewObjects as $key) {
+        foreach ($updatePreview->previewObjects as $key) {
             if (false === $templateData->hasObject($key)) {
                 throw new ObjectNotFoundException($key);
             }
