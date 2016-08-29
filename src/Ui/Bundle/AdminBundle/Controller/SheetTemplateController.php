@@ -388,6 +388,10 @@ class SheetTemplateController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($command);
                 $this->addFlash('success', 'flash.template.preview.update.success');
+
+                $this->redirectToRoute('admin_template_sheet_preview_update', [
+                    'template' => $template
+                ]);
             } catch (TemplateException $exception) {
                 $this->addFlash('error', $exception->getMessage());
             }
