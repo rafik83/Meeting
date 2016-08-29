@@ -369,10 +369,11 @@ class SheetTemplateController extends Controller
      *
      * @return Response
      */
-    public function updatePreviewAction(Request $request, SheetTemplate $template, $locale)
+    public function updatePreviewAction(Request $request, SheetTemplate $template)
     {
         $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
         $templateObjects = $templateData->getPreviewAvailableObjects();
+        $locale          = $template->getEvent()->getAvailableLocale($request->getLocale());
 
         $command = new UpdatePreview($template, $templateObjects);
 
@@ -394,7 +395,9 @@ class SheetTemplateController extends Controller
         }
 
         return $this->render('AdminBundle:SheetTemplate:preview.html.twig', [
-            'form' => $form->createView(),
+            'form'   => $form->createView(),
+            'event'  => $template->getEvent(),
+            'locale' => $locale,
         ]);
     }
 }

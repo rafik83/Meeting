@@ -94,6 +94,9 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
+                        'template': eventsTemplate.id
+                    }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                     <div class="btn-group">
                         <a href="{{ path('admin_template_sheet_builder', {
                             'template': eventsTemplate.id, 'locale': eventsTemplate.fallback
@@ -109,12 +112,6 @@
                                    data-toggle="modal" data-target="#duplicate-modal">
                                     {{ 'admin.template.action.duplicate'|trans }}
                                 </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('admin_template_sheet_preview_update', {
-                                    'template': eventsTemplate.id,
-                                    'locale': app.request.locale
-                                }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                             </li>
                         </ul>
                     </div>
