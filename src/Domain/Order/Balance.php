@@ -79,16 +79,40 @@ class Balance
      *
      * @return float
      */
+    public function getBalance(Sheet $sheet)
+    {
+        $total        = $this->getTotal($sheet);
+        $transactions = $this->getTransactions($sheet);
+
+        return array_reduce($transactions, function ($carry, Transaction $transaction) {
+            if (!$transaction->isPaid()) {
+                return $carry;
+            }
+
+            return $carry - $transaction->getAmount();
+        }, $total);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return float
+     */
     public function getRemainingToPay(Sheet $sheet)
     {
         $total        = $this->getTotal($sheet);
         $transactions = $this->getTransactions($sheet);
 
         return array_reduce($transactions, function ($carry, Transaction $transaction) {
-            if ($transaction->isPending()) {
+            if ($carry < 0) {
+                return 0;
+            }
+
+            if (!$transaction->isPaid()) {
                 return $carry;
             }
-            if ($carry < 0) {
+
+            if (($carry - $transaction->getAmount()) < 0) {
                 return 0;
             }
 

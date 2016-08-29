@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -20,35 +19,13 @@ class ConfigureDatesHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = new Event(
-            'barfoo',
-            'en',
-            ['fr', 'en'],
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'USD',
-            'Europe/Paris',
-            'hello.vimeet.proximum.dev',
-            'proximum'
-        );
+        $event = EventFactory::createEvent();
 
         $catalogOnlineDate   = new \DateTime('2016-06-23 12:00:00');
         $happeningsOpenDate  = new \DateTime('2016-06-21 12:00:00');
         $schedulePublishDate = new \DateTime('2016-06-30 12:00:00');
-
-        $expectedEvent = new Event(
-            'barfoo',
-            'en',
-            ['fr', 'en'],
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'USD',
-            'Europe/Paris',
-            'hello.vimeet.proximum.dev',
-            'proximum'
-        );
+            
+        $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setDates($catalogOnlineDate, $happeningsOpenDate, $schedulePublishDate);
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);

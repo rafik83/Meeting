@@ -28,13 +28,13 @@ class ActivateAccountController extends Controller
      */
     public function passwordAction(Request $request, ActivateAccountToken $activateAccountToken)
     {
-        $admin  = $activateAccountToken->getAdmin();
+        $admin = $activateAccountToken->getAdmin();
 
         if ($activateAccountToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token is expired.');
         }
 
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $this->get('adapter.authentication_manager')->disconnect();
         }
 

@@ -167,8 +167,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->select('participant')
             ->from('Entity:Participant', 'participant')
             ->join('participant.user', 'user', 'WITH', 'user.id = :userId')
-            ->setParameter('userId', $userId)
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :eventId')
+            ->setParameter('userId', $userId)
             ->setParameter('eventId', $event->getId());
 
         return $queryBuilder->getQuery()->getResult();
@@ -206,7 +206,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-                // Participant have not already a meeting at this slot (except this one)
+            // Participant have not already a meeting at this slot (except this one)
                 'NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id = participant OR tp.id = participant) AND m.slot = :slot AND m != :meeting)',
                 // Participant have not unavailability during this slot
                 'NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant = participant AND (u.begin BETWEEN :slot_begin AND :slot_end OR u.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN u.begin AND u.end OR :slot_end BETWEEN u.begin AND u.end))',
@@ -221,5 +221,23 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         $queryBuilder->setParameter('slot_end', $meeting->getSlot()->getEnd());
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isParticipantForAnotherEvent(Event $currentEvent, User $user)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant.id')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event != :event AND participant.user = :user')
+            ->setParameter('event', $currentEvent)
+            ->setParameter('user', $user)
+            ->setMaxResults(1);
+
+        return !empty($queryBuilder->getQuery()->getOneOrNullResult());
     }
 }

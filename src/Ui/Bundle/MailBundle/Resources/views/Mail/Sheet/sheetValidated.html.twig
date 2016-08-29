@@ -1,7 +1,11 @@
-{% block subject %}
-    {{ 'mail.sheet.sheetValidated.subject'|trans({}, 'mail', mail.locale)|html }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
-    {{ 'mail.sheet.sheetValidated.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.sheet.validated.body'|trans({
+        '%event%': mail.sheet.event.title,
+        '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate|localizeddate('medium', 'none', mail.locale),
+        '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate|localizeddate('medium', 'none', mail.locale),
+        '%firstname%': mail.sheet.owner.account.firstname|capitalize,
+        '%lastname%': mail.sheet.owner.account.lastname|upper
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

@@ -1,11 +1,17 @@
-{% block subject %}
-    {{ 'admin.mail.activateAccount.subject'|trans({}, 'mail', mail.locale)|html }}
-{% endblock %}
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
 
 {% block body %}
     {{ 'admin.mail.activateAccount.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
-    <a href="{{ url('admin_operator_activate_account', {'token': mail.token}) }}">
-        {{ url('admin_operator_activate_account', {'token': mail.token}) }}
-    </a><br>
+
+    <br>
+    <br>
+    {{ macros.button(
+        'admin.mail.activateAccount.activate'|trans({}, 'mail', mail.locale),
+        url('admin_operator_activate_account', {'token': mail.token})
+    ) }}
+    <br>
+
     {{ 'admin.mail.activateAccount.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

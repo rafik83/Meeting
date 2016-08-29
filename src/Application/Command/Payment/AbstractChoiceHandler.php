@@ -10,10 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Payment;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 abstract class AbstractChoiceHandler
 {
@@ -43,10 +48,16 @@ abstract class AbstractChoiceHandler
     protected $transactionRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * @param TransactionRepositoryInterface $transactionRepository
      * @param Cart\Converter                 $converter
      * @param Cart\CartManager               $cartManager
      * @param TotalToPay                     $totalToPay
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $datetime
      */
     public function __construct(
@@ -54,12 +65,14 @@ abstract class AbstractChoiceHandler
         Cart\Converter $converter,
         Cart\CartManager $cartManager,
         TotalToPay $totalToPay,
+        DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $datetime
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->converter             = $converter;
         $this->cartManager           = $cartManager;
         $this->totalToPay            = $totalToPay;
+        $this->eventDispatcher       = $eventDispatcher;
         $this->datetime              = $datetime;
     }
 
@@ -67,24 +80,39 @@ abstract class AbstractChoiceHandler
      * @param AbstractChoice $choice
      * @param float          $total
      *
-     * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
+     * @return Transaction
+     * @throws MissingBillingInfoException
      */
     protected function handleChoice(AbstractChoice $choice, $total)
     {
         // Convert cart to order
-        $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
+        $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
 
-        // Create Transaction
-        $transaction = new Transaction(
-            $choice->sheet,
-            $total,
-            $this->datetime,
-            $choice->mode,
-            null,
-            Transaction::STATE_PENDING,
-            $choice->sheet->getEvent()->getCurrency()
-        );
+        $event = new OrderConfirmEvent($order, $choice->user);
+        $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
+
+        if (Mode::PAYMENT_PAYPAL === $choice->mode) {
+            $transaction = Transaction::createForPaypal(
+                $choice->sheet,
+                $choice->user,
+                $total,
+                $this->datetime
+            );
+        } else {
+            $transaction = new Transaction(
+                $choice->sheet,
+                $total,
+                $this->datetime,
+                $choice->mode,
+                null,
+                Transaction::STATE_PENDING,
+                $choice->sheet->getEvent()->getCurrency(),
+                $choice->user
+            );
+        }
 
         $this->transactionRepository->add($transaction);
+
+        return $transaction;
     }
 }

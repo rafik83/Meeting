@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,11 +25,10 @@ class UrlDataType extends AbstractType
     {
         $url    = $options['object'];
         $locale = $options['locale'];
-        $label  = $options['label'];
 
         $builder
             ->add('url', UrlType::class, [
-                'label'              => $label ? $url->getOption('label')[$locale] : false,
+                'label'              => $url->getOption('label', $locale),
                 'required'           => $url->getOption('required'),
                 'placeholder'        => $url->getOption('placeholder')[$locale],
                 'translation_domain' => false,
@@ -43,10 +42,9 @@ class UrlDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', Object\Url::class);
+        $resolver->setAllowedTypes('object', TemplateObject\Url::class);
         $resolver->setDefaults([
-            'label'      => false,
-            'data_class' => Object\Url::class
+            'data_class' => TemplateObject\Url::class
         ]);
     }
 

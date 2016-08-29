@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Command\MeetingSlot\GenerateHandler;
 use Proximum\Vimeet\Application\Command\MeetingSlot\GenerateResult;
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

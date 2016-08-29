@@ -28,7 +28,7 @@ class ChangePasswordController extends Controller
      */
     public function changePasswordAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $changePassword = new ChangePassword($this->getUser());
 

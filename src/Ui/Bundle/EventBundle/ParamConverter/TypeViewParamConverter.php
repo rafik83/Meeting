@@ -37,13 +37,12 @@ class TypeViewParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-
         $id     = $request->attributes->get('typeView');
         $locale = $request->getLocale();
 
         /** @var EventDomain $eventDomain */
         $eventDomain = $request->attributes->get('eventDomain');
-        $typeView   = $this->typeRepository->getTypeViewByIdAndEvent($id, $eventDomain->getEvent(), $locale);
+        $typeView    = $this->typeRepository->getTypeViewByIdAndEvent($id, $eventDomain->getEvent(), $locale);
 
         if (null === $typeView) {
             throw new NotFoundHttpException('Type not found');

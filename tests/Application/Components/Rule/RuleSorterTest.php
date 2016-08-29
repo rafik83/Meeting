@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Components\Rule;
 
 use Proximum\Vimeet\Application\Components\Rule\RuleSorter;
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

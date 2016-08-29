@@ -29,7 +29,6 @@ class CategoryPictoType extends AbstractType
                 'picto3' => 'picto3',
                 'picto4' => 'picto4',
             ],
-            'choices_as_values'  => true,
         ]);
     }
 

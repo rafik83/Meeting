@@ -80,6 +80,11 @@ class Sheet implements TraceableInterface
     private $completed = false;
 
     /**
+     * @var bool
+     */
+    private $enable = true;
+
+    /**
      * "Suivi commercial"
      *
      * @var Admin
@@ -420,7 +425,6 @@ class Sheet implements TraceableInterface
         return $this->participants->contains($participant);
     }
 
-
     /**
      * @param User $user
      *
@@ -508,6 +512,18 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @param bool $state
+     *
+     * @return Sheet
+     */
+    public function setEnable($state)
+    {
+        $this->enable = $state;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isAccepted()
@@ -521,6 +537,14 @@ class Sheet implements TraceableInterface
     public function isCompleted()
     {
         return true === $this->completed;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return true === $this->enable;
     }
 
     /**
@@ -568,5 +592,13 @@ class Sheet implements TraceableInterface
         }
 
         return $users->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOrders()
+    {
+        return (count($this->getOrders()) > 0);
     }
 }

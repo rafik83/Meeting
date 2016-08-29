@@ -16,11 +16,11 @@ use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -39,7 +39,7 @@ class ValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $comment = 'truc muche';
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $command = new Validate($sheet, $admin, $date, $comment);
 

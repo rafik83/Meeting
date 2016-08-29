@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Command\User\ChangeMailHandler;
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;

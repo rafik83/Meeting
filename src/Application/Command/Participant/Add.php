@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Add
 {
@@ -44,22 +44,21 @@ class Add
      * @var bool
      */
     public $owner;
-
     /**
-     * @var Event
+     * @var User
      */
-    public $event;
+    public $adder;
 
     /**
+     * @param User   $adder
      * @param Sheet  $sheet
-     * @param Event  $event
      * @param string $locale
      */
-    public function __construct(Sheet $sheet, Event $event, $locale)
+    public function __construct(Sheet $sheet, $locale, User $adder)
     {
         $this->sheet  = $sheet;
-        $this->event  = $event;
         $this->locale = $locale;
         $this->owner  = false;
+        $this->adder  = $adder;
     }
 }

@@ -1,0 +1,45 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Sheet;
+
+use Proximum\Vimeet\Domain\Model\Admin;
+
+class BatchEnableDisable
+{
+    /**
+     * @var array
+     */
+    public $ids;
+
+    /**
+     * @var bool
+     */
+    public $state;
+
+    /**
+     * @var Admin
+     */
+    public $admin;
+
+    /**
+     * BatchValidate constructor.
+     *
+     * @param array $ids
+     * @param bool  $state
+     * @param Admin $admin
+     */
+    public function __construct(array $ids, $state, Admin $admin)
+    {
+        $this->ids   = $ids;
+        $this->state = $state;
+        $this->admin = $admin;
+    }
+}

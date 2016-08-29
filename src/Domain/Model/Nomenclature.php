@@ -420,4 +420,100 @@ class Nomenclature
     {
         return $this->original;
     }
+
+    /**
+     * Count the number of items per column
+     *
+     * @return array
+     */
+    public function getLevelsArchitecture()
+    {
+        $levelsArchitecture = [];
+
+        if ($this->depth >= 2) {
+            if (2 === $this->depth) {
+                $levelsArchitecture = $this->buildArchitectureLevel($this, $levelsArchitecture, null);
+            } else {
+                foreach ($this->getFirstLevel() as $firstLevelKey => $firstLevel) {
+                    $levelsArchitecture = $this->buildArchitectureLevel($firstLevel, $levelsArchitecture, $firstLevelKey);
+                }
+            }
+        }
+
+        return $levelsArchitecture;
+    }
+
+    /**
+     * @param Nomenclature|NomenclatureItem $currentLevel
+     * @param array                         $levelsArchitecture
+     * @param int|null                      $firstLevelKey
+     *
+     * @return array
+     */
+    private function buildArchitectureLevel($currentLevel, $levelsArchitecture, $firstLevelKey = null)
+    {
+        $itemsByColumn  = [
+            1 => [
+                'items'        => 0,
+                'secondLevels' => 0,
+            ],
+            2 => [
+                'items'        => 0,
+                'secondLevels' => 0,
+            ],
+            3 => [
+                'items'        => 0,
+                'secondLevels' => 0,
+            ],
+        ];
+
+        if (null !== $firstLevelKey) {
+            $levelsArchitecture[$firstLevelKey] = [];
+            $elementToAssign                    = $levelsArchitecture[$firstLevelKey];
+        } else {
+            $elementToAssign = $levelsArchitecture;
+        }
+
+        $currentColumn = 1;
+
+        if ($currentLevel instanceof NomenclatureItem) {
+            $totalItems = count($currentLevel->getGrandChildren());
+        } else {
+            $totalItems = count($this->getLastLevel());
+        }
+
+        $numberByColumn = $totalItems / 3;
+
+        $elementToAssign['elements']        = $itemsByColumn;
+        $elementToAssign['numberOfColumns'] = 3;
+
+        foreach ($currentLevel->getChildren() as $secondLevel) {
+            $numberOfChildren = count($secondLevel->getChildren());
+
+            if ($elementToAssign['elements'][$currentColumn]['items'] > $numberByColumn) {
+                $currentColumn++;
+            }
+
+            $elementToAssign['elements'][$currentColumn]['items'] += $numberOfChildren;
+            $elementToAssign['elements'][$currentColumn]['secondLevels']++;
+        }
+
+        $elementToAssign['elements'][2]['secondLevels'] += $elementToAssign['elements'][1]['secondLevels'];
+        $elementToAssign['elements'][3]['secondLevels'] += $elementToAssign['elements'][2]['secondLevels'];
+
+        if ($elementToAssign['elements'][3]['items'] === 0) {
+            $elementToAssign['numberOfColumns'] = 2;
+        }
+        if ($elementToAssign['elements'][2]['items'] === 0) {
+            $elementToAssign['numberOfColumns'] = 1;
+        }
+
+        if (null !== $firstLevelKey) {
+            $levelsArchitecture[$firstLevelKey] = $elementToAssign;
+        } else {
+            $levelsArchitecture = $elementToAssign;
+        }
+
+        return $levelsArchitecture;
+    }
 }

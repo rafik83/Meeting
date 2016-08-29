@@ -1,4 +1,3 @@
-
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
         __construct: false
@@ -7,7 +6,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         owner: '@user_asddays_1'
         data:
             # Titre de la fiche
-            dcc42d3d: { text: { fr: "L'ONERA est le centre française de la recherche aéronautique, spaciale et de défense." } }
+            dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
             # Image
             1b9a00b3: { file: "onera.jpg" }
             # Lien
@@ -111,3 +110,33 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+
+Proximum\Vimeet\Domain\Model\Transaction:
+    transaction_1:
+        __construct: false
+        sheet: '@sheet_asddays_1'
+        amount: 250
+        date: <dateTimeBetween('-10days', 'now')>
+        mode: bank_card
+        reference: TRANSCATION_01
+        state: paid
+        currency: EUR
+    transaction_2:
+        __construct: false
+        sheet: '@sheet_asddays_1'
+        amount: 500
+        date: <dateTimeBetween('-2days', 'now')>
+        mode: bank_card
+        reference: TRANSCATION_02
+        state: pending
+        currency: EUR
+    transaction_3:
+        __construct: false
+        sheet: '@sheet_asddays_1'
+        amount: 125
+        date: <dateTimeBetween('-1days', 'now')>
+        mode: bank_check
+        reference: TRANSCATION_03
+        state: pending
+        currency: EUR
+

@@ -40,6 +40,8 @@
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
+                        <li>{{ form_widget(batch_form.enable) }}</li>
+                        <li>{{ form_widget(batch_form.disable) }}</li>
                     {% endblock actions %}
                 {% endembed %}
             </div>
@@ -87,7 +89,11 @@
                     <td>
                         <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
                             {{ sheet.title }}
-                        </a><br>
+                        </a>
+                        {% if not sheet.isEnabled %}
+                            <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
+                        {% endif %}
+                        <br>
                         <small>
                             {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }} <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
                         </small>

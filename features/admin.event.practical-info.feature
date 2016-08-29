@@ -32,6 +32,6 @@ Feature: See and update practical information
     And the "event_practical_info_update_organiserName" field should contain "proximum"
     And the "event_practical_info_update_organiserEmail" field should contain "ceo@proximum.com"
     And the "event_practical_info_update_organiserPhone" field should contain "0102030405"
-    And the "event_practical_info_update_organiserWebsite" field should contain "proximum-group.com"
+    And the "event_practical_info_update_organiserWebsite" field should contain "http://proximum-group.com"
     And the "event_practical_info_update_contactFirstName" field should contain "jean"
     And the "event_practical_info_update_contactLastName" field should contain "dupont"

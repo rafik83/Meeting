@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,11 +25,10 @@ class CountryDataType extends AbstractType
     {
         $country = $options['object'];
         $locale  = $options['locale'];
-        $label   = $options['label'];
 
         $builder
             ->add('country', CountryType::class, [
-                'label'              => $label ? $country->getOption('label')[$locale] : false,
+                'label'              => $country->getOption('label', $locale),
                 'required'           => $country->getOption('required'),
                 'placeholder'        => $country->getOption('placeholder')[$locale],
                 'attr'               => [
@@ -46,10 +45,9 @@ class CountryDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', Object\Country::class);
+        $resolver->setAllowedTypes('object', TemplateObject\Country::class);
         $resolver->setDefaults([
-            'label'      => false,
-            'data_class' => Object\Country::class
+            'data_class' => TemplateObject\Country::class
         ]);
     }
 

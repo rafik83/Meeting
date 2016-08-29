@@ -18,12 +18,15 @@ use Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $command           = new RegisterNewUser('test@test.com', 'fr');
+        $event             = EventFactory::createEvent();
+        $command           = new RegisterNewUser('test@test.com', 'fr', $event);
         $command->password = 'password';
 
         $user         = new User('test@test.com', '__salt__', null, 'fr');
@@ -37,11 +40,14 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
             return $user->getEmail() === $user->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository  = $this->prophesize(UserRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $userRepository->add($expectedUser)->shouldBeCalled();
 
-        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(),
+            $saltGenerator->reveal(), $eventDispatcher->reveal());
         $handler->handle($command);
     }
 
@@ -49,7 +55,8 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(EmailAlreadyExistsException::class);
 
-        $command           = new RegisterNewUser('test@test.com', 'fr');
+        $event             = EventFactory::createEvent();
+        $command           = new RegisterNewUser('test@test.com', 'fr', $event);
         $command->password = 'password';
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
@@ -58,11 +65,13 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
         $passwordEncoder->encode()->shouldNotBeCalled();
 
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository  = $this->prophesize(UserRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
         $userRepository->add()->shouldNotBeCalled();
 
-        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(),
+            $saltGenerator->reveal(), $eventDispatcher->reveal());
         $handler->handle($command);
     }
 }

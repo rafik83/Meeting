@@ -35,9 +35,9 @@ class DelayedEventDispatcher implements EventDispatcherInterface
      * DelayedEventDispatcher constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param bool|false               $ready
+     * @param bool                     $ready
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, $ready = true)
+    public function __construct(EventDispatcherInterface $eventDispatcher, $ready = false)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->ready           = $ready;

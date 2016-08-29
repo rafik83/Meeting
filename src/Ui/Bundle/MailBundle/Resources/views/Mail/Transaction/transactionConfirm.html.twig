@@ -1,0 +1,9 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    {{ 'mail.transaction.confirm.body'|trans({
+        '%firstname%': mail.user.account.firstname|capitalize,
+        '%lastname%': mail.user.account.lastname|upper,
+        '%transactionTotal%': mail.transaction.amount ~ ' ' ~ mail.transaction.currency|currency_symbol
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

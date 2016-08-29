@@ -30,6 +30,7 @@ framework:
         save_path:      '%kernel.root_dir%/sessions'
         name:           vimeet
         gc_probability: ~
+        cookie_lifetime: 86400
     fragments:       ~
     http_method_override: true
     assets: ~
@@ -209,6 +210,10 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail: { size: [250, 100], mode: inset }
+        event_sheet_image:
+            quality: 100
+            filters:
+                thumbnail: { size: [800, 320], mode: inset }
 
 # Doctrine migrations configuration
 doctrine_migrations:
@@ -216,3 +221,20 @@ doctrine_migrations:
     namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
     table_name: migration_versions
     name: Application Migrations
+
+payum:
+    security:
+        token_storage:
+            Proximum\Vimeet\Domain\Model\Payment\PaymentToken: { doctrine: orm }
+    storages:
+        Proximum\Vimeet\Domain\Model\Payment\Payment: { doctrine: orm }
+    gateways:
+        paypal_express_checkout:
+            factory: paypal_express_checkout
+            username:  "%paypal_username%"
+            password:  "%paypal_password%"
+            signature: "%paypal_signature%"
+            sandbox:   "%paypal_sandbox%"
+            payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
+        offline:
+            factory: offline

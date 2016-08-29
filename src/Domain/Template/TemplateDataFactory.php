@@ -22,25 +22,25 @@ use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 class TemplateDataFactory
 {
     private $objects = [
-        'button-link'           => Object\ButtonLink::class,
-        'choice'                => Object::class,
-        'collection'            => Object\ItemCollection::class,
-        'editable-text'         => Object\EditableText::class,
-        'image'                 => Object\Image::class,
-        'media'                 => Object\MediaCollection::class,
-        'nomenclature'          => Object\Nomenclature::class,
-        'participant'           => Object::class,
-        'tag'                   => Object::class,
-        'text'                  => Object\Text::class,
-        'carousel'              => Object::class,
-        'telephone'             => Object\Telephone::class,
-        'country'               => Object\Country::class,
-        'url'                   => Object\Url::class,
-        'package'               => Object::class,
-        'participants_planings' => Object::class,
-        'options'               => Object::class,
-        'tags'                  => Object\TagsCollection::class,
-        'gender'                => Object\Gender::class,
+        'button-link'           => TemplateObject\ButtonLink::class,
+        'choice'                => TemplateObject::class,
+        'collection'            => TemplateObject\ItemCollection::class,
+        'editable-text'         => TemplateObject\EditableText::class,
+        'image'                 => TemplateObject\Image::class,
+        'media'                 => TemplateObject\MediaCollection::class,
+        'nomenclature'          => TemplateObject\Nomenclature::class,
+        'participant'           => TemplateObject::class,
+        'tag'                   => TemplateObject::class,
+        'text'                  => TemplateObject\Text::class,
+        'carousel'              => TemplateObject::class,
+        'telephone'             => TemplateObject\Telephone::class,
+        'country'               => TemplateObject\Country::class,
+        'url'                   => TemplateObject\Url::class,
+        'package'               => TemplateObject::class,
+        'participants_planings' => TemplateObject::class,
+        'options'               => TemplateObject::class,
+        'tags'                  => TemplateObject\TagsCollection::class,
+        'gender'                => TemplateObject\Gender::class,
     ];
 
     /**
@@ -150,6 +150,24 @@ class TemplateDataFactory
                 $participant->getData(),
                 $locale,
                 $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+            );
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function createCompanyTemplate(Sheet $sheet, $locale)
+    {
+        return $this
+            ->loadNomenclatures($sheet->getEvent())
+            ->create(
+                $sheet->getType()->getRegistrationTemplate()->getValue(),
+                $sheet->getRegistrationData(),
+                $locale,
+                $sheet->getType()->getRegistrationTemplate()->getFallback()
             );
     }
 
@@ -272,7 +290,7 @@ class TemplateDataFactory
         $class  = $this->objects[$config['type']];
         $object = new $class($config['type'], $config['config'], $locale, $fallback);
 
-        if ($object instanceof Object\Nomenclature) {
+        if ($object instanceof TemplateObject\Nomenclature) {
             if ($object->getNomenclatureId()) {
                 $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
             }

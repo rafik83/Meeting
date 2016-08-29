@@ -112,11 +112,10 @@ event_account_participant_profile:
     defaults: { _controller: EventBundle:Participant:updateProfile }
 
 event_account_participant_company:
-    path: /account/sheet/{sheet}/participant/{participant}/company
+    path: /account/sheet/{sheet}/company
     methods: [GET, POST]
     requirements:
         sheet: \d+
-        participant: \d+
     defaults: { _controller: EventBundle:Participant:updateCompany }
 
 event_account_participant_avatar:
@@ -183,6 +182,14 @@ event_sheet_remove_participant:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:removeParticipant }
 
+event_sheet_remove_image:
+    path: /sheet/{locale}/{key}/image/remove
+    requirements:
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [DELETE]
+    defaults: { _controller: EventBundle:Sheet:removeImage }
+
 event_sheet_handle_remove_participant:
     path:   /sheet/{locale}/{key}/participant/remove
     requirements:
@@ -190,7 +197,6 @@ event_sheet_handle_remove_participant:
         key: \w+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
-
 
 #
 # Sheet Billing
@@ -203,6 +209,12 @@ event_billing_info:
         sheet: \d+
     defaults: { _controller: EventBundle:Billing:info }
 
+event_billing_info_clear_flash:
+    path:     /sheet/{sheet}/billing-info-from-menu
+    methods:  [GET, POST]
+    requirements:
+        sheet: \d+
+    defaults: { _controller: EventBundle:Billing:infoClearFlash }
 #
 # Authentication
 #
@@ -489,6 +501,41 @@ event_package_payment:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Payment:paymentChoice }
 
+event_package_payment_prepare_paypal:
+    path: /sheet/{sheet}/package/payment/paypal/{transaction}
+    requirements:
+        sheet: \d+
+        transaction: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:preparePaypal }
+
+event_package_payment_done:
+    path: /sheet/{sheet}/package/payment/done
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:donePayment }
+
+event_package_payment_pay_remaining:
+    path: /sheet/{sheet}/package/payment/pay-remaining
+    requirements:
+        sheet: \d+
+        transaction: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:payRemaining }
+
+create_transaction:
+    path: /sheet/{sheet}/create-transaction
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:createTempTransaction }
+
+event_payment_info:
+    path: /sheet/payment
+    methods: [GET]
+    defaults: { _controller: EventBundle:Payment:paymentInfo }
+
 #
 # Order
 #
@@ -506,3 +553,10 @@ event_pro_forma:
         order: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Order:proForma }
+
+event_order_summary_total:
+    path: /sheet/{sheet}/order/summary
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Order:summaryTotal }

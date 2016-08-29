@@ -1,0 +1,25 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'mail.event.preregister.body'|trans({
+        '%event%': mail.event.title,
+        '%firstname%': mail.receiverUser.account.firstname|capitalize,
+        '%lastname%': mail.receiverUser.account.lastname|upper
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+    {{ macros.button(
+        'mail.event.preregister.link'|trans({}, 'mail', mail.locale),
+        url('event_account_participant', {'sheet': mail.sheet.id, 'participant': mail.participant.id})
+    ) }}
+    <br>
+
+    {{ 'mail.event.preregister.end'|trans({
+        '%event%': mail.event.title,
+        '%eventPhone%': mail.event.configuration.organiserPhone,
+        '%eventMail%': mail.event.organiserEmail
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

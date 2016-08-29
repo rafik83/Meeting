@@ -53,7 +53,7 @@ class Configuration
      * @var string
      */
     private $organiserPhone;
-    
+
     /**
      * @var string
      */
@@ -133,15 +133,7 @@ class Configuration
     {
         return $this->allowDeposit;
     }
-
-    /**
-     * @return bool
-     */
-    public function isDepositAllowed()
-    {
-        return $this->allowDeposit;
-    }
-
+    
     /**
      * @return \DateTimeInterface
      */
@@ -183,7 +175,7 @@ class Configuration
         $this->minimumForDeposit = $minimumForDeposit;
         $this->deposit           = $deposit;
     }
-    
+
     /**
      * @param string $leftColor
      * @param string $rightColor
@@ -287,7 +279,7 @@ class Configuration
     {
         return $this->organiserPhone;
     }
-    
+
     /**
      * @return string
      */

@@ -1,0 +1,59 @@
+<html>
+<body bgcolor="#e8e8e9" style="background: #e8e8e9; margin: 0; padding: 0">
+<div style="width: 100%; max-width: 610px">
+    <table width="100%" bgcolor="#e8e8e9" style="background: #e8e8e9">
+        <tr>
+            <td style="padding: 20px; background: #e8e8e9">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="background: #ffffff">
+                    <tr>
+                        <td style="padding: 20px; background: #ffffff; font-family: Helvetica, sans-serif; font-size: 15px;">
+                            {% block body %}
+                            {% endblock %}
+                        </td>
+                    </tr>
+
+                    {% if mail.event is not null %}
+                    <tr>
+                        <td style="padding: 20px; background: {{ mail.event.configuration.leftColor }}; background: linear-gradient(to right, {{ mail.event.configuration.leftColor }}, {{ mail.event.configuration.rightColor }})">
+                            <table width="100%">
+                                <tr>
+                                    <td style="color: #ffffff; font-family: Helvetica, sans-serif; font-size: 15px;" valign="top">
+                                        <span style="font-size: 19px">{{ mail.event.title }}</span><br>
+                                        <span style="line-height: 21px">
+                                            {{ mail.event.description(mail.locale)|nl2br }}
+
+                                            {% set website = mail.event.configuration.organiserWebsite ? mail.event.configuration.organiserWebsite : 'https://' ~ mail.event.domain %}
+
+                                            <br>
+                                            <a href="{{ website }}" style="color: #ffffff">
+                                                {{ website }}
+                                            </a>
+                                        </span>
+                                    </td>
+                                    <td width="10%"></td>
+                                    <td style="color: #ffffff; font-family: Helvetica, sans-serif; font-size: 15px;" valign="top">
+                                        <span style="font-size: 17px">{{ 'mail.footer.contact'|trans({}, 'mail', mail.locale) }}</span><br>
+                                        <span style="line-height: 21px">
+                                            {{ mail.event.configuration.contactFirstName|default('')|capitalize }} {{ mail.event.configuration.contactLastName|default('')|upper }}
+
+                                            {% if mail.event.configuration.organiserPhone %}
+                                                <br><a href="tel:{{ mail.event.configuration.organiserPhone }}" style="color: #ffffff">{{ mail.event.configuration.organiserPhone }}</a>
+                                            {% endif %}
+
+                                            {% if mail.event.organiserEmail %}
+                                                <br><a href="mailto:{{ mail.event.organiserEmail }}" style="color: #ffffff">{{ mail.event.organiserEmail }}</a>
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

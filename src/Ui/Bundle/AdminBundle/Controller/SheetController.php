@@ -11,17 +11,17 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
-use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
-use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
+use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -64,7 +64,9 @@ class SheetController extends Controller
         // Batch
         $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
-            'ids'    => $sheets->map(function (SheetListView $listView) { return $listView->id; }),
+            'ids'    => $sheets->map(function (SheetListView $listView) {
+                return $listView->id;
+            }),
             'event'  => $event,
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
         ]);
@@ -102,16 +104,22 @@ class SheetController extends Controller
                 $batch->validate = $batchForm->get('validate')->isClicked();
                 $batch->assign   = $batchForm->get('assign')->isClicked();
                 $batch->accept   = $batchForm->get('accept')->isClicked();
+                $batch->enable   = $batchForm->get('enable')->isClicked();
+                $batch->disable  = $batchForm->get('disable')->isClicked();
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
                 if ($batch->validate) {
-                    $this->addFlash('success', new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count, ['%count%' => $result->count]));
+                    $this->addFlash('success',
+                        new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count,
+                            ['%count%' => $result->count]));
                 } elseif ($batch->assign && $batch->follower) {
-                    $this->addFlash('success', new TranschoiceMessage('flash.admin.sheet_batch.assign.success', $result->count, ['%count%' => $result->count, '%name%' => $batch->follower->getDisplayName()]));
+                    $this->addFlash('success',
+                        new TranschoiceMessage('flash.admin.sheet_batch.assign.success', $result->count,
+                            ['%count%' => $result->count, '%name%' => $batch->follower->getDisplayName()]));
                 }
             } else {
-                $this->addFlash('error', (string) $batchForm->getErrors(true));
+                $this->addFlash('error', (string)$batchForm->getErrors(true));
             }
         }
 

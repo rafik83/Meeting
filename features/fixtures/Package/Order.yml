@@ -1,0 +1,86 @@
+Proximum\Vimeet\Domain\Model\Address (local):
+    order_address_1:
+        __construct: false
+        street: 10 rue Saint Marc
+        zipcode: 75002
+        city: Paris
+        country: FR
+
+Proximum\Vimeet\Domain\Model\Order\BillingInfo (local):
+    order_billing_info_1:
+        __construct:
+            - 'man'
+            - Jean
+            - Test
+            - DG
+            - 0101010101
+            - 0101010101
+            - test@elao.com
+            - ELAO
+            - '@order_address_1'
+            - 123456789
+
+Proximum\Vimeet\Domain\Model\Order:
+    order_1:
+        __construct:
+            - '@sheet_asddays_1'
+            - true
+            - '@order_billing_info_1'
+            - '{"4":{"translations":{"fr":{"label":"Options d\\u2019exposition"},"en":{"label":"Exhibiting options"}},"rank":1},"5":{"translations":{"fr":{"label":"Options d\\u2019exposition et de communication"},"en":{"label":"Exhibiting and communication options"}},"rank":2},"6":{"translations":{"fr":{"label":"Options de communication"},"en":{"label":"Communication options"}},"rank":3}}'
+            - <dateTimeBetween('-10days', 'now')>
+
+Proximum\Vimeet\Domain\Model\Order\Row:
+    order_1_row_1:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 1690
+        data: '{"id":10,"type":"plan","translations":{"fr":{"title":"Formule B2B Meeting","heading":"Pas de stand","description":"Vous changez de lieu \\u00e0 chaque rendez-vous.","addon":null},"en":{"title":"B2B Meeting Formula","heading":"No booth","description":"You have to move at each appointment.","addon":null}},"productsIncluded":[{"quantity":2,"included":{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\\u00eame agenda incluant une entr\\u00e9e \\u00e0 la convention d\\u2019affaire, acc\\u00e8s illimit\\u00e9 \\u00e0 la pause caf\\u00e9 et aux conf\\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}},{"quantity":1,"included":{"id":13,"type":"planning","translations":{"fr":{"title":"Packs de rendez-vous","heading":"","description":"Description du pack de rendez-vous","addon":""},"en":{"title":"Extra planning","heading":"","description":"Description extra planning","addon":""}},"productsIncluded":[]}},{"quantity":2,"included":{"id":15,"type":"option","translations":{"fr":{"title":"Chaise","heading":"","description":"","addon":""},"en":{"title":"Chair","heading":"","description":"","addon":""}},"productsIncluded":[]}}]}'
+        product: '@product_plan_1_asddays'
+    order_1_row_2:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 195
+        data: '{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\\u00eame agenda incluant une entr\\u00e9e \\u00e0 la convention d\\u2019affaire, acc\\u00e8s illimit\\u00e9 \\u00e0 la pause caf\\u00e9 et aux conf\\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded\":[]}'
+        product: '@product_participant_1_asddays'
+    order_1_row_3:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 495
+        data: '{"id":13,"type":"planning","translations":{"fr":{"title":"Packs de rendez-vous","heading":"","description":"Description du pack de rendez-vous","addon":""},"en":{"title":"Extra planning","heading":"","description":"Description extra planning","addon":""}},"productsIncluded":[]}'
+        product: '@product_planning_1_asddays'
+    order_1_row_4:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 990
+        data: '{"id":14,"type":"option","translations":{"fr":{"title":"Option 4m\\u00b2 suppl\\u00e9mentaires","heading":"","description":"Option valable uniquement en compl\\u00e9ment des formules Exposant et Parrain.","addon":""},"en":{"title":"Add booth option (4 sqm)","heading":"","description":"Option available in addition with exhibitor and sponsor formula only.","addon":""}},"productsIncluded":[]}'
+        product: '@product_option_1_asddays'
+        groupId: 4
+    order_1_row_5:
+        __construct: false
+        order: '@order_1'
+        quantity: 2
+        price: 9
+        data: '{"id":15,"type":"option","translations":{"fr":{"title":"Chaise","heading":"","description":"","addon":""},"en":{"title":"Chair","heading":"","description":"","addon":""}},"productsIncluded":[]}'
+        product: '@product_option_2_asddays'
+        groupId: 4
+    order_1_row_6:
+        __construct: false
+        order: '@order_1'
+        quantity: 4
+        price: 199
+        data: '{"id":20,"type":"option","translations":{"fr":{"title":"Option E","heading":"","description":"Description option E","addon":""},"en":{"title":"Option E","heading":"","description":"Description Option E","addon":""}},"productsIncluded":[]}'
+        product: '@product_option_7_asddays'
+        groupId: 6
+    order_1_row_7:
+        __construct: false
+        order: '@order_1'
+        quantity: 1
+        price: 29
+        data: '{"id":16,"type":"option","translations":{"fr":{"title":"Option A","heading":"","description":"Description option A","addon":"Au lieu de 999\\u20ac"},"en":{"title":"Option A","heading":"","description":"","addon":""}},"productsIncluded":[]}'
+        product: '@product_option_3_asddays'
+        groupId: 5
+

@@ -63,26 +63,27 @@ Feature: Complete my package
     Then the "options_10" field should contain "1"
     Then the "options_11" field should contain "3"
 
-    Scenario: I can add a participant at step 2
-      Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
-      When I am on this page "/fr/sheet/1/package/step/2"
-      Then I should see "sheet.object.action.add"
-      And I follow "sheet.object.action.add"
-      And I should see "sheet.participant.sendInvite"
-      And I fill in the following:
-        | add_participant_firstName | Truc         |
-        | add_participant_lastName  | Test         |
-        | add_participant_email     | truc@test.fr |
-      Then I press "sheet.participant.sendInvite"
-      And I should be on this page "/fr/sheet/1/package/step/2"
-      And I should see "Truc TEST"
-      And I should see "TT"
+  Scenario: I can add a participant at step 2
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet/1/package/step/2"
+    Then I should see "sheet.object.action.add"
+    And I follow "sheet.object.action.add"
+    And I should see "sheet.participant.sendInvite"
+    And I fill in the following:
+      | add_participant_firstName | Truc         |
+      | add_participant_lastName  | Test         |
+      | add_participant_email     | truc@test.fr |
+    Then I press "sheet.participant.sendInvite"
+    And I should be on this page "/fr/sheet/1/package/step/2"
+    And I should see "Truc TEST"
+    And I should see "TT"
 
   Scenario: I can fill my billing-info
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr/sheet/1/package/step/3"
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
+    And I check the "gender.man" radio
     And I fill in the following:
       | form.billing_info_update.children.lastname.label  | Jean         |
       | form.billing_info_update.children.firstname.label | Test         |
@@ -128,14 +129,48 @@ Feature: Complete my package
     And I should see "Assdays Promotion Code"
     And I should see "Assdays Promotion Code 2"
 
-  Scenario: I can my payment method
+  Scenario: I can choose my payment method
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I am on this page "/fr/sheet/1/package/summary"
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/package/payment"
     And I should see "package.payment.total.toPay"
-    And I check the "form.payment_choice.children.paymentMode.bank_card" radio
-    Then I press "package.payment.pay.label"
+    And I check the "form.payment_choice.children.paymentMode.bank_check" radio
+    When I press "package.payment.pay.label"
     Then I should be on this page "/fr/sheet/1/orders"
     And I should see "order.transaction.state.pending"
+    And the "order.confirm" mail should be sent to "user_asddays_1@proximum.com"
+
+  Scenario: I can see my package total summary:
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_summary_total"
+    Then I should be on this page "/fr/sheet/1/order/summary"
+    And I should see "package.summary.title"
+    And I should see "package.summary.promotion.label"
+    And I should see "summary.total"
+    And I should see "package.summary.totalVat"
+    And I should see "summary.totalToPay"
+
+  Scenario: I can see how to pay in my transaction list
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am on this page "/fr/sheet"
+    And I follow "navigation.links.package.order_list"
+    Then I should be on this page "/fr/sheet/1/orders"
+    And I should see "order.list.title"
+    And I should see "order.transaction.list.title"
+    And I should see "order.transaction.howtopay"
+    When I follow "order.transaction.howtopay"
+    Then I should be on this page "/fr/sheet/payment"
+    And I should see "package.payment.billingAddress"
+    And I should see "package.payment.bankInfo"
+
+  Scenario: I can see the remaining amount to pay
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am on this page "/fr/sheet"
+    When I follow "navigation.links.package.order_list"
+    Then I should be on this page "/fr/sheet/1/orders"
+    And I should see "order.list.remainingToPay"
+    And I should see "2 811,20 €"
+    And I should see "order.list.pay_remaining"

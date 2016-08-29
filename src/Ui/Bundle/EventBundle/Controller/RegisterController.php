@@ -46,7 +46,7 @@ class RegisterController extends Controller
      */
     public function registerAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
 
@@ -92,7 +92,7 @@ class RegisterController extends Controller
      */
     public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
-        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale());
+        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale(), $eventDomain->getEvent());
 
         if ($command->email === null || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
@@ -134,7 +134,7 @@ class RegisterController extends Controller
      */
     public function participateAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->hasUserAlreadyCreatedParticipant($eventDomain->getEvent(), $this->getUser());
 
         $locale               = $request->getLocale();
@@ -182,7 +182,7 @@ class RegisterController extends Controller
      */
     public function participantStepAction(Request $request, EventDomain $eventDomain, Participant $participant, $step)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessIfWrongParticipant($eventDomain, $participant);
 
         $locale               = $request->getLocale();
@@ -363,7 +363,7 @@ class RegisterController extends Controller
     {
         $sheets = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetByUserAndEvent($user, $event);
+            ->getSheetsByUserAndEvent($user, $event);
 
         return !empty($sheets);
     }

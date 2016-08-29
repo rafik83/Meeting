@@ -95,4 +95,12 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
+
+    /**
+     * @param Event $currentEvent
+     * @param User  $user
+     *
+     * @return bool
+     */
+    public function isParticipantForAnotherEvent(Event $currentEvent, User $user);
 }

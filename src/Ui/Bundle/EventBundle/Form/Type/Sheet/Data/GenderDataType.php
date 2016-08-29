@@ -10,7 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,20 +24,20 @@ class GenderDataType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Gender $gender */
         $gender = $options['object'];
         $locale = $options['locale'];
-        $label  = $options['label'];
 
         $builder
             ->add('gender', ChoiceType::class, [
-                'choices'  => $gender->getGenders(),
+                'choices'      => $gender->getGenders(),
                 'choice_label' => function ($value) {
                     return sprintf('gender.%s', $value);
                 },
-                'expanded' => true,
-                'multiple' => false,
-                'label'    => $label ? $gender->getOption('label')[$locale] : false,
-                'required' => true,
+                'expanded'     => true,
+                'multiple'     => false,
+                'label'        => $gender->getOption('label', $locale),
+                'required'     => true,
             ]);
     }
 
@@ -46,10 +47,10 @@ class GenderDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', Object\Gender::class);
+        $resolver->setAllowedTypes('object', TemplateObject\Gender::class);
         $resolver->setDefaults([
             'label'      => true,
-            'data_class' => Object\Gender::class,
+            'data_class' => TemplateObject\Gender::class,
         ]);
     }
 

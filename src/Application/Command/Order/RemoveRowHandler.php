@@ -10,32 +10,35 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Application\Exception\Order\RemoveProductNotAllowedException;
+use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 
 class RemoveRowHandler
 {
     /**
-     * @var OrderRepositoryInterface
+     * @var RowRepositoryInterface
      */
-    private $orderRepository;
+    private $rowRepository;
 
     /**
-     * AddRowHandler constructor.
-     *
-     * @param OrderRepositoryInterface $orderRepository
+     * @param RowRepositoryInterface $rowRepository
      */
-    public function __construct(OrderRepositoryInterface $orderRepository)
+    public function __construct(RowRepositoryInterface $rowRepository)
     {
-        $this->orderRepository = $orderRepository;
+        $this->rowRepository = $rowRepository;
     }
 
     /**
      * @param RemoveRow $removeRow
      *
-     * @deprecated must be rewrited in order to remove a row from db
+     * @throws RemoveProductNotAllowedException
      */
     public function handle(RemoveRow $removeRow)
     {
-        $this->orderRepository->set($removeRow->order);
+        if ($removeRow->row->isProduct()) {
+            throw new RemoveProductNotAllowedException('Delete a product row is not allowed');
+        }
+
+        $this->rowRepository->remove($removeRow->row);
     }
 }

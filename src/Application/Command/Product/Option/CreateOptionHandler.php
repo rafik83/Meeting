@@ -29,7 +29,7 @@ class CreateOptionHandler extends AbstractHandler
             $createOption->availabilityCurrent,
             $createOption->availabilityMax,
             $createOption->updatable,
-            $createOption->updatableUntil,
+            $createOption->deletableUntil,
             $createOption->subjectedToValidation
         );
 

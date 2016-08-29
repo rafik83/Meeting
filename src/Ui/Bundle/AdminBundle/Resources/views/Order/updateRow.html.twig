@@ -1,13 +1,15 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+{% block form_title %}
+    {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
+{% endblock form_title %}
 
-    <h2>{{ sheet_info }}</h2>
+{% block form_content %}
+    <h4>{{ 'admin.order_edit.update_line'|trans }}</h4>
 
-    <h3>Commande {{ order.id }}</h3>
+    {{ form_row(form.label, {widget_columns: 6}) }}
+    {{ form_row(form.price, {widget_columns: 6}) }}
+    {{ form_row(form.quantity, {widget_columns: 6}) }}
+{% endblock form_content %}
 
-    <h4>Modifier une ligne</h4>
-
-    {{ form(form) }}
-{% endblock %}
+{% block goback_link path('admin_sheet_order_edit', {'event': event.id, 'order': order.id}) %}

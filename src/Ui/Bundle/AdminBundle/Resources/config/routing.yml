@@ -202,7 +202,6 @@ admin_type_create:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Type:create }
-
 admin_type_update:
     path: /event/{event}/type/{type}/update
     requirements:
@@ -210,7 +209,13 @@ admin_type_update:
         type: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Type:update }
-
+admin_type_remove:
+    path:  /event/{event}/type/{type}/update
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Type:remove }
 #
 # Category
 #
@@ -376,30 +381,36 @@ admin_sheet_order_edit:
         order: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order:edit }
-admin_sheet_order_add_row:
-    path: /event/{event}/order/{order}/group/{group}/row/add
+admin_sheet_order_add_row_to_group:
+    path: /event/{event}/order/{order}/row/add/to-group/{group}
     requirements:
         event: \d+
         order: \d+
-        group: '[a-zA-Z0-9\-]+'
+        group: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Order:addRow }
-admin_sheet_order_remove_row:
-    path: /event/{event}/order/{order}/group/{group}/row/{row}/remove
+    defaults: { _controller: AdminBundle:Order:addRowToGroup }
+admin_sheet_order_add_row_to_product:
+    path: /event/{event}/order/{order}/row/add/to-product/{row}
     requirements:
         event: \d+
         order: \d+
-        group: '[a-zA-Z0-9\-]+'
-        row: '[a-zA-Z0-9\-]+'
-    methods: [DELETE]
+        row: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Order:addRowToProduct }
+admin_sheet_order_remove_row:
+    path: /event/{event}/order/{order}/row/{row}/remove
+    requirements:
+        event: \d+
+        order: \d+
+        row: \d+
+    methods: [GET]
     defaults: { _controller: AdminBundle:Order:removeRow }
 admin_sheet_order_update_row:
-    path: /event/{event}/order/{order}/group/{group}/row/{row}/update
+    path: /event/{event}/order/{order}/row/{row}/update
     requirements:
         event: \d+
         order: \d+
-        group: '[a-zA-Z0-9\-]+'
-        row: '[a-zA-Z0-9\-]+'
+        row: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Order:updateRow }
 
@@ -528,7 +539,7 @@ admin_template_registration_builder:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_registration_add_locale:
-    path: /template/regitration/{template}/locale
+    path: /template/registration/{template}/locale
     defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
     methods: [POST]
     requirements:
@@ -759,3 +770,22 @@ admin_nomenclature_event_read:
         event: \d+
         nomenclature: \d+
 
+# Event Template
+admin_event_template_registration:
+    path: /event/{event}/template/registration
+    defaults: { _controller: AdminBundle:EventTemplate:registrationTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+
+admin_event_template_sheet:
+    path: /event/{event}/template/sheet
+    defaults: { _controller: AdminBundle:EventTemplate:sheetTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+
+admin_event_template_package:
+    path: /event/{event}/template/package
+    defaults: { _controller: AdminBundle:EventTemplate:packageTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+

@@ -1,0 +1,45 @@
+admin.mail.activateAccount.activate: 'Activer votre compte'
+admin.mail.activateAccount.body: "Bonjour,\nVous avez été invité en tant que collaborateur sur Vimeet\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:"
+admin.mail.activateAccount.end: 'Cordialement,'
+admin.mail.activateAccount.subject: 'Activer votre compte'
+admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
+admin.mail.resetPassword.end: 'Bien cordialement,'
+admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
+admin.mail.resetPassword.subject: 'Mot de passe oublié'
+mail.activateAccount.activate: 'Activer votre compte'
+mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation de %firstname% %lastname% pour l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous %linkInvitation%. Ce lien expirera dans 48h.\n"
+mail.activateAccount.end: "Bien cordialement\nL’équipe %event%\n%eventPhone%\n%eventMail%"
+mail.activateAccount.subject: '[%event%] Activer votre compte'
+mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace membre."
+mail.changeMailNew.end: Cordialement
+mail.changeMailNew.subject: 'Votre nouvel identifiant'
+mail.changeMailNew.validate: 'Valider votre nouvel email'
+mail.changeMailOld.body: "Bonjour,\n\nVous venez d'effectuer une demande de changement d'email pour l'email %email%.\n\nConsultez la boite email de cette nouvelle adresse pour valider le changement.\n\nSi vous n'avez pas demandé ce changement, veuillez contacter un administrateur.\n\nCordialement,"
+mail.changeMailOld.subject: 'Demande de changement d''email'
+mail.completeProfile.body: "Vous avez été invité en tant que participant pour l'événement %event%.\nPour y accéder, cliquer sur le lien suivant et entrer votre mot de passe pour compléter votre profil participant."
+mail.completeProfile.end: 'Cordialement,'
+mail.completeProfile.link: 'Compléter votre profil participant'
+mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
+mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
+mail.confirmResetPassword.subject: 'Votre mot de pase a bien été changé'
+mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription à %event% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
+mail.event.preregister.end: 'Bien cordialement,'
+mail.event.preregister.link: 'Votre profil participant'
+mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
+mail.footer.contact: Contact
+mail.orderConfirm.body: "Bonjour,\n\nVotre commande numéro %orderNumero% en date du %orderDate% a bien été enregistrée. Vous trouverez ci-dessous un lien vers la facture Pro forma. Une facture finale vous sera adressée à l'issu de l’événement."
+mail.orderConfirm.end: 'Cordialement,'
+mail.orderConfirm.linkToProForma: 'Voir la facture Pro forma'
+mail.orderConfirm.subject: 'Votre commande a été enregistrée'
+mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté Vimeet.\n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.\n\nBien cordialement,"
+mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
+mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez vous sur ce lien pour pouvoir créer un nouveau mot de passe:"
+mail.resetPassword.end: 'Cordialement,'
+mail.resetPassword.link: 'Réinitialiser le mot de passe'
+mail.resetPassword.subject: '[%event%] Mot de passe oublié'
+mail.sheet.add_participant_confirmation.body: "Bonjour %firstname% %lastname%,\n\nVotre invitation à %guestEmail% pour l’événement %event% a bien été envoyée.\n\nCordialement,"
+mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
+mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.\n\nNous vous rappelons ci-dessous les prochaines étapes de votre participation :<ul>\n<li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>\n<li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %scheduleDate%. Ensuite l’ensemble des participants auront jusqu’au %scheduleDate% pour valider les différentes propositions reçues.</li>\n<li>Le %scheduleDate% votre planning sera disponible en ligne.</li></ul>\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
+mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'
+mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
+mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'

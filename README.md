@@ -57,3 +57,35 @@ Mot de passe: `vimeet360`
 ### Fixtures
 
 User exhibitor: test@elao.com / p@ssw0rd
+
+### Localization
+
+Create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
+
+Pushing localization files:
+
+    ⇒ openl10n push --locale=all
+
+Pulling localization files:
+
+    ⇒ openl10n pull --locale=all
+
+Best practices:
+* Update translations files on branch master.
+* Always push before pulling; new keys will be added and not used keys will be deleted on openl10n.
+
+## Deployment
+
+### Prepare migrations for preprod/prod
+
+1. Go to preprod branch `$ git checkout preprod`
+2. Drop db schema `$ bin/console doctrine:schema:drop --force`
+3. Empty the `migration_versions` table
+4. Run all migrations `$ bin/console doctrine:migrations:migrate`
+5. Merge the master branch into preprod `$ git merge origin/master`
+6. Generate the new migration : `$ bin/console doctrine:migrations:diff`
+7. Edit docblocks in generated file `/src/Infrastructure/Bundle/InfrastructureBundle/Migrations/VersionYYYYMMDDHHMMSS.php`
+8. Add a new branch, commit and push `git checkout -b migrations/VersionYYYYMMDDHHMMSS && git add && git commit -m "Add migrations" && git push origin migrations/VersionYYYYMMDDHHMMSS`
+9. Add a merge request
+10. Merge migration branch into preprod : `git checkout preprod && git merge origin/migrations/VersionYYYYMMDDHHMMSS`
+11. Finally, push the preprod branch and deploy it!

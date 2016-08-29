@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class RegisterNewUser
 {
     /**
@@ -28,12 +30,19 @@ class RegisterNewUser
     public $locale;
 
     /**
+     * @var Event
+     */
+    public $event;
+
+    /**
      * @param string $email
      * @param string $locale
+     * @param Event  $event
      */
-    public function __construct($email, $locale)
+    public function __construct($email, $locale, Event $event)
     {
         $this->email  = $email;
         $this->locale = $locale;
+        $this->event  = $event;
     }
 }

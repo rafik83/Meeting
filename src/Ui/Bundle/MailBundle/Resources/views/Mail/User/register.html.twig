@@ -1,0 +1,9 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    {{ 'mail.register.body'|trans({
+        '%event%': mail.event.title,
+        '%firstname%': mail.receiverUser.account.firstname|humanize,
+        '%lastname%': mail.receiverUser.account.lastname|upper,
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

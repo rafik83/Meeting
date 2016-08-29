@@ -10,8 +10,20 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class GroupView
 {
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var int
+     */
+    public $groupId;
+
     /**
      * @var string
      */
@@ -23,37 +35,60 @@ class GroupView
     public $type;
 
     /**
-     * @var array
+     * @var RowView[]
      */
     public $products = [];
 
     /**
-     * @param string $label
-     * @param string $type
-     * @param array  $products
+     * @var array
      */
-    public function __construct($label, $type, array $products = [])
-    {
-        $this->label    = $label;
-        $this->type     = $type;
-        $this->products = $products;
+    public $customRows = [];
+
+    /**
+     * @var null|int
+     */
+    public $stepIndex;
+
+    /**
+     * @param Sheet    $sheet
+     * @param string   $label
+     * @param string   $type
+     * @param int      $groupId
+     * @param array    $products
+     * @param array    $customRows
+     * @param null|int $stepIndex
+     */
+    public function __construct(
+        Sheet $sheet,
+        $label,
+        $type,
+        $groupId,
+        array $products = [],
+        array  $customRows = [],
+        $stepIndex = null
+    ) {
+        $this->sheet      = $sheet;
+        $this->label      = $label;
+        $this->type       = $type;
+        $this->groupId    = $groupId;
+        $this->products   = $products;
+        $this->customRows = $customRows;
+        $this->stepIndex  = $stepIndex;
     }
 
     /**
-     * @return float
+     * @param RowView $product
      */
-    public function getTotal()
-    {
-        return array_reduce($this->products, function ($carry, ProductView $product) {
-            return $carry + $product->total;
-        }, 0);
-    }
-
-    /**
-     * @param ProductView $product
-     */
-    public function addProduct(ProductView $product)
+    public function addProduct(RowView $product)
     {
         $this->products[] = $product;
+    }
+
+    /**
+     * @param CustomRowView $customRow
+     */
+    public function addCustomRow(CustomRowView $customRow)
+    {
+        $this->customRows[] = $customRow;
     }
 }

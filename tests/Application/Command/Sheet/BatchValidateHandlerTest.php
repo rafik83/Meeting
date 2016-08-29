@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Validate;
 use Proximum\Vimeet\Application\Command\Sheet\ValidateHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -33,9 +32,9 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
         $date    = new \DateTime();
         $comment = 'truc muche';
 
-        $user1 = new User('test@test.com', 'salt', 'password', 'fr');
-        $user2 = new User('test@test.com', 'salt', 'password', 'fr');
-        $user3 = new User('test@test.com', 'salt', 'password', 'fr');
+        $user1  = new User('test@test.com', 'salt', 'password', 'fr');
+        $user2  = new User('test@test.com', 'salt', 'password', 'fr');
+        $user3  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
         $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());

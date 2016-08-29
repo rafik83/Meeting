@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,11 +25,10 @@ class TelephoneDataType extends AbstractType
     {
         $telephone = $options['object'];
         $locale    = $options['locale'];
-        $label     = $options['label'];
 
         $builder
             ->add('telephone', TelephoneType::class, [
-                'label'              => $label ? $telephone->getOption('label')[$locale] : false,
+                'label'              => $telephone->getOption('label', $locale),
                 'required'           => $telephone->getOption('required'),
                 'placeholder'        => $telephone->getOption('placeholder')[$locale],
                 'country'            => $options['country'],
@@ -44,10 +43,9 @@ class TelephoneDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale', 'country']);
-        $resolver->setAllowedTypes('object', Object\Telephone::class);
+        $resolver->setAllowedTypes('object', TemplateObject\Telephone::class);
         $resolver->setDefaults([
-            'label'      => false,
-            'data_class' => Object\Telephone::class
+            'data_class' => TemplateObject\Telephone::class
         ]);
     }
 

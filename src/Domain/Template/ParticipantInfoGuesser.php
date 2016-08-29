@@ -48,8 +48,8 @@ class ParticipantInfoGuesser
         $infos = $this->guessParticipantInfos($participant, $locale);
 
         return (isset($infos[Tag::PARTICIPANT_FIRSTNAME]) ? $infos[Tag::PARTICIPANT_FIRSTNAME] : '')
-            . ' '
-            . (isset($infos[Tag::PARTICIPANT_LASTNAME]) ? $infos[Tag::PARTICIPANT_LASTNAME] : '');
+        .' '
+        .(isset($infos[Tag::PARTICIPANT_LASTNAME]) ? $infos[Tag::PARTICIPANT_LASTNAME] : '');
     }
 
     /**
@@ -146,5 +146,23 @@ class ParticipantInfoGuesser
             Tag::PARTICIPANT_PHONE,
             $locale
         );
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return array
+     */
+    public function guessParticipantInfoForMail(Participant $participant, $locale)
+    {
+        $templateData    = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+        $mailBuildedInfo = [];
+
+        foreach ($templateData->getAllTaggedDatas() as $tag => $values) {
+            $mailBuildedInfo[$tag] = (!empty($values)) ? reset($values) : '';
+        }
+
+        return $mailBuildedInfo;
     }
 }

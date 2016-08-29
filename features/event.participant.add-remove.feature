@@ -22,14 +22,16 @@ Feature: Manage participant
     Then I follow "sheet.object.action.add"
     And I should see "sheet.participant.sendInvite"
     And I fill in the following:
-      | add_participant_firstName | Truc         |
-      | add_participant_lastName  | Test         |
-      | add_participant_email     | truc@test.fr |
+      | add_participant_firstName | Pascal                      |
+      | add_participant_lastName  | MICHELIN                    |
+      | add_participant_email     | pascal.michelin@example.net |
     Then I press "sheet.participant.sendInvite"
+    And the "sheet.participant.add.confirmation" mail should be sent to "user_asddays_1@proximum.com"
+    And the "user.account_activated" mail should be sent to "pascal.michelin@example.net"
     And I should be on this page "/fr/sheet/fr"
-    And I should see "Truc TEST"
-    And I should see "TT"
-    And the "user_activate_account" mail should be sent to "truc@test.fr"
+    And I should see "Pascal MICHELIN"
+    # initials of Pascal MICHELIN
+    And I should see "PM"
 
   Scenario: I can remove a participant of my sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"

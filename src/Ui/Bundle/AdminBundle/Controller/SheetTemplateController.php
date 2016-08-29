@@ -89,7 +89,7 @@ class SheetTemplateController extends Controller
      */
     public function listOrganizerTemplateAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $filters    = [];
         $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $this->getUser()]);
@@ -138,7 +138,7 @@ class SheetTemplateController extends Controller
      */
     public function duplicateAction(Request $request, SheetTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateType::class, $duplicate, [
@@ -169,7 +169,7 @@ class SheetTemplateController extends Controller
      */
     public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $duplicate = new Duplicate($template, new \DateTime());
 
@@ -231,10 +231,21 @@ class SheetTemplateController extends Controller
         }
 
         // Queries
-        $respository   = $this->get('repository.nomenclature_repository');
-        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
-        $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
-        $nomenclatures = $template->getEvent() ? $respository->findByEvent($template->getEvent()) : $respository->findGlobals();
+        $nomenclatureRepository = $this->get('repository.nomenclature_repository');
+        $productRepository      = $this->get('vimeet_infrastructure.repository.product_repository');
+        $completeness           = $this->get('sheet.template.completeness_calculator')->compute($template);
+
+        $incompletes = array_keys(array_filter($completeness, function ($percent) {
+            return $percent < 100;
+        }));
+
+        $nomenclatures = $template->getEvent() ?
+            $nomenclatureRepository->findByEvent($template->getEvent()) :
+            $nomenclatureRepository->findGlobals();
+
+        $products = $template->getEvent() ?
+            $productRepository->findOptionsByEvent($template->getEvent()) :
+            null;
 
         // Add warning if some locales translations are incompletes
         if (!empty($incompletes)) {
@@ -248,7 +259,9 @@ class SheetTemplateController extends Controller
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures,
+            'products'        => $products,
             'sheet_tags'      => Tag::getSheetTags(),
+            'event'           => $template->getEvent(),
         ]);
     }
 

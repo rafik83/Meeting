@@ -47,6 +47,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $type->setPackage($package);
         $billingInfo = new BillingInfo($sheet);
         $billingInfo->update(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -76,6 +77,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $orderBillingInfo = new Order\BillingInfo(
+            'gender',
             'lastname',
             'firstname',
             'function',
@@ -92,8 +94,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $groupsData    = '';
         $order         = new Order($sheet, true, $orderBillingInfo, $groupsData, $datetime);
-        $planOrderRow  = new Order\Row($order, $plan, 1, null);
-        $chairOrderRow = new Order\Row($order, $chair, 2, null);
+        $planOrderRow  = new Order\Row($order, 1, $plan);
+        $chairOrderRow = new Order\Row($order, 2, $chair);
         $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100);
         $order->addRow($planOrderRow);
         $order->addRow($chairOrderRow);
@@ -132,3 +134,4 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $converter->toOrder($cart);
     }
 }
+

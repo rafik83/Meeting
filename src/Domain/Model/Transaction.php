@@ -10,13 +10,16 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Payment\Mode;
+
 /**
  * "Transaction".
  */
 class Transaction
 {
-    const STATE_PENDING = 'pending';
-    const STATE_PAID    = 'paid';
+    const STATE_PENDING   = 'pending';
+    const STATE_PAID      = 'paid';
+    const STATE_CANCELLED = 'cancelled';
 
     /**
      * @var int
@@ -59,15 +62,21 @@ class Transaction
     private $currency;
 
     /**
+     * @var User|null
+     */
+    private $user;
+
+    /**
      * Transaction constructor.
      *
      * @param Sheet              $sheet
      * @param float              $amount
      * @param \DateTimeInterface $date
      * @param string             $mode
-     * @param string             $reference
+     * @param null|string        $reference
      * @param string             $state
      * @param string             $currency
+     * @param User|null          $user
      */
     public function __construct(
         Sheet $sheet,
@@ -76,7 +85,8 @@ class Transaction
         $mode,
         $reference,
         $state,
-        $currency
+        $currency,
+        User $user = null
     ) {
         $this->sheet     = $sheet;
         $this->amount    = $amount;
@@ -85,6 +95,7 @@ class Transaction
         $this->reference = $reference;
         $this->state     = $state;
         $this->currency  = $currency;
+        $this->user      = $user;
     }
 
     /**
@@ -94,15 +105,17 @@ class Transaction
      * @param \DateTimeInterface $date
      * @param string             $mode
      * @param string             $reference
+     * @param string             $state
      *
      * @return Transaction
      */
-    public function update($amount, \DateTimeInterface $date, $mode, $reference)
+    public function update($amount, \DateTimeInterface $date, $mode, $reference, $state)
     {
         $this->amount    = $amount;
         $this->date      = $date;
         $this->mode      = $mode;
         $this->reference = $reference;
+        $this->state     = $state;
 
         return $this;
     }
@@ -135,6 +148,14 @@ class Transaction
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountInCents()
+    {
+        return (int) ($this->amount * 100);
     }
 
     /**
@@ -176,6 +197,14 @@ class Transaction
     }
 
     /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return !$this->user ? $this->sheet->getOwner() : $this->user;
+    }
+
+    /**
      * @return string
      */
     public function getCurrency()
@@ -189,5 +218,67 @@ class Transaction
     public function isPending()
     {
         return $this->state === self::STATE_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaid()
+    {
+        return $this->state === self::STATE_PAID;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaypal()
+    {
+        return Mode::PAYMENT_PAYPAL === $this->getMode();
+    }
+
+    /**
+     * Set state to Paid
+     */
+    public function setPaid()
+    {
+        $this->state = self::STATE_PAID;
+    }
+
+    /**
+     * Set state to cancelled
+     */
+    public function setCancelled()
+    {
+        $this->state = self::STATE_CANCELLED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequiredPaymentInfo()
+    {
+        return in_array($this->mode, Mode::getModeThatRequiredPaymentInfo());
+    }
+
+    /**
+     * @param Sheet              $sheet
+     * @param User               $user
+     * @param float              $amount
+     * @param \DateTimeInterface $date
+     *
+     * @return Transaction
+     */
+    public static function createForPaypal(Sheet $sheet, User $user, $amount, \DateTimeInterface $date)
+    {
+        return new self(
+            $sheet,
+            $amount,
+            $date,
+            Mode::PAYMENT_PAYPAL,
+            null,
+            self::STATE_PENDING,
+            $sheet->getEvent()->getCurrency(),
+            $user
+        );
     }
 }

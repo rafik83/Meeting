@@ -1,0 +1,13 @@
+{% if null != promotionCodes and promotionCodes is not empty %}
+    <tr class="title">
+        <td class="col-md-6">
+            <h3>{{ 'package.summary.promotion.label'|trans }}</h3>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% for promoRow in promotionCodes %}
+        {{ include('EventBundle:Order/SummaryTotal:promo-code-row.html.twig', { promotionCodeView: promoRow }) }}
+    {% endfor %}
+{% endif %}

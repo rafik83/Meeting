@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
 
@@ -35,6 +36,13 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByEvent(Event $event);
+
+    /**
+     * @param Type $type
+     *
+     * @return bool
+     */
+    public function isThereAtLeastOneByType(Type $type);
 
     /**
      * @param Event  $event
@@ -59,7 +67,7 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getSheetByUserAndEvent(User $user, Event $event);
+    public function getSheetsByUserAndEvent(User $user, Event $event);
 
     /**
      * @param User           $user
@@ -67,12 +75,12 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getSheetByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event);
+    public function getSheetsByUserAndEventWhereUserIsParticipant(User $user, EventInterface $event);
 
     /**
      * @param int $sheetId
      *
-     * @return Sheet
+     * @return null|Sheet
      */
     public function getSheetById($sheetId);
 

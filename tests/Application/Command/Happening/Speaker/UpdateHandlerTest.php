@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening\Speaker;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\UpdateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
 use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;

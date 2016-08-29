@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Operator;
 
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -85,6 +86,6 @@ class UpdateHandler
     {
         $token = $this->activateAccountTokenGenerator->generate($operator);
         $event = new ActivateAccountEvent($operator, $token, $operator->getLocale());
-        $this->eventDispatcher->dispatch('admin_activate_account', $event);
+        $this->eventDispatcher->dispatch(Events::ADMIN_ACCOUNT_ACTIVATED, $event);
     }
 }

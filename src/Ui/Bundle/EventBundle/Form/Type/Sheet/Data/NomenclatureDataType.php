@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
-use Proximum\Vimeet\Domain\Template\Object;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\CheckboxesType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\SinglesType;
 use Symfony\Component\Form\AbstractType;
@@ -43,7 +43,7 @@ class NomenclatureDataType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (!$options['object'] instanceof Object\Nomenclature) {
+        if (!$options['object'] instanceof TemplateObject\Nomenclature) {
             throw new \Exception('Nomenclature object expected.');
         }
 
@@ -66,12 +66,13 @@ class NomenclatureDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['locale', 'object', 'placeholder']);
-        $resolver->setDefaults([
-            'label'       => false,
-            'data_class'  => Object\Nomenclature::class,
-            'placeholder' => null,
-            'help'        => null,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class'  => TemplateObject\Nomenclature::class,
+                'placeholder' => null,
+                'help'        => null,
+            ]
+        );
     }
 
     /**
@@ -83,54 +84,80 @@ class NomenclatureDataType extends AbstractType
     }
 
     /**
-     * @param Nomenclature         $nomenclature
-     * @param FormBuilderInterface $form
-     * @param array                $options
-     * @param Object\Nomenclature  $object
+     * @param Nomenclature                $nomenclature
+     * @param FormBuilderInterface        $form
+     * @param array                       $options
+     * @param TemplateObject\Nomenclature $object
      */
-    private function addRadios(Nomenclature $nomenclature, FormBuilderInterface $form, array $options, Object\Nomenclature $object)
-    {
-        $form->add('item', ChoiceType::class, [
-            'choices'                   => $nomenclature->getLastLevel(),
-            'expanded'                  => true,
-            'multiple'                  => false,
-            'required'                  => $object->getOption('required'),
-            'choice_translation_domain' => false,
-            'choice_label'              => function (NomenclatureItem $item) use ($options) {
-                return $item->getLabel($options['locale']);
-            },
-        ]);
+    private function addRadios(
+        Nomenclature $nomenclature,
+        FormBuilderInterface $form,
+        array $options,
+        TemplateObject\Nomenclature $object
+    ) {
+        $form->add(
+            'item',
+            ChoiceType::class,
+            [
+                'choices'                   => $nomenclature->getLastLevel(),
+                'label'                     => $object->getOption('label', $options['locale']),
+                'expanded'                  => true,
+                'multiple'                  => false,
+                'required'                  => $object->getOption('required'),
+                'choice_translation_domain' => false,
+                'choice_label'              => function (NomenclatureItem $item) use ($options) {
+                    return $item->getLabel($options['locale']);
+                },
+            ]
+        );
     }
 
     /**
-     * @param Nomenclature         $nomenclature
-     * @param FormBuilderInterface $form
-     * @param array                $options
-     * @param Object\Nomenclature  $object
+     * @param Nomenclature                $nomenclature
+     * @param FormBuilderInterface        $form
+     * @param array                       $options
+     * @param TemplateObject\Nomenclature $object
      */
-    private function addCheckboxes(Nomenclature $nomenclature, FormBuilderInterface $form, array $options, Object\Nomenclature $object)
-    {
-        $form->add('items', CheckboxesType::class, [
-            'nomenclature' => $nomenclature,
-            'locale'       => $options['locale'],
-            'required'     => $object->getOption('required'),
-        ]);
+    private function addCheckboxes(
+        Nomenclature $nomenclature,
+        FormBuilderInterface $form,
+        array $options,
+        TemplateObject\Nomenclature $object
+    ) {
+        $form->add(
+            'items',
+            CheckboxesType::class,
+            [
+                'nomenclature' => $nomenclature,
+                'locale'       => $options['locale'],
+                'label'        => $object->getOption('label', $options['locale']),
+                'required'     => $object->getOption('required'),
+            ]
+        );
     }
 
     /**
-     * @param Nomenclature         $nomenclature
-     * @param FormBuilderInterface $form
-     * @param array                $options
-     * @param Object\Nomenclature  $object
+     * @param Nomenclature                $nomenclature
+     * @param FormBuilderInterface        $form
+     * @param array                       $options
+     * @param TemplateObject\Nomenclature $object
      */
-    private function addSingles(Nomenclature $nomenclature, FormBuilderInterface $form, array $options, Object\Nomenclature $object)
-    {
-        $form->add('item', SinglesType::class, [
-            'nomenclature' => $nomenclature,
-            'locale'       => $options['locale'],
-            'placeholder'  => $options['placeholder'],
-            'label'        => false,
-            'required'     => $object->getOption('required'),
-        ]);
+    private function addSingles(
+        Nomenclature $nomenclature,
+        FormBuilderInterface $form,
+        array $options,
+        TemplateObject\Nomenclature $object
+    ) {
+        $form->add(
+            'item',
+            SinglesType::class,
+            [
+                'nomenclature' => $nomenclature,
+                'locale'       => $options['locale'],
+                'placeholder'  => $options['placeholder'],
+                'label'        => $object->getOption('label', $options['locale']),
+                'required'     => $object->getOption('required'),
+            ]
+        );
     }
 }

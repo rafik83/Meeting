@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Domain\Template\Object as TemplateObject;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class Block extends AbstractChild
 {
@@ -144,7 +144,7 @@ class Block extends AbstractChild
 
                 if ($child instanceof Block) {
                     $carry = array_merge($carry, $child->getObjects());
-                } elseif ($child instanceof Object) {
+                } elseif ($child instanceof TemplateObject) {
                     $carry = array_merge($carry, [$childKey => $child]);
                 }
             }
@@ -158,7 +158,7 @@ class Block extends AbstractChild
      */
     public function getEditableObjects()
     {
-        return array_filter($this->getObjects(), function (Object $object) {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object->isEditable();
         });
     }
@@ -168,8 +168,8 @@ class Block extends AbstractChild
      */
     public function getProfileObjects()
     {
-        return array_filter($this->getObjects(), function (Object $object) {
-            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && !$object instanceof Object\Image;
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && !$object instanceof TemplateObject\Image;
         });
     }
 
@@ -178,8 +178,8 @@ class Block extends AbstractChild
      */
     public function getCompanyObjects()
     {
-        return array_filter($this->getObjects(), function (Object $object) {
-            return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof Object\Image;
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof TemplateObject\Image;
         });
     }
 
@@ -188,8 +188,8 @@ class Block extends AbstractChild
      */
     public function getAvatarObjects()
     {
-        return array_filter($this->getObjects(), function (Object $object) {
-            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && $object->hasTag(Tag::PARTICIPANT_AVATAR) && $object instanceof Object\Image;
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && $object->hasTag(Tag::PARTICIPANT_AVATAR) && $object instanceof TemplateObject\Image;
         });
     }
 
@@ -283,9 +283,9 @@ class Block extends AbstractChild
                     $tagged = array_merge($tagged, $block->getTaggedDatas($tag));
                 }
 
-                if ($block instanceof Object) {
-                    if ($block->hasTag($tag) && $block instanceof Object\ContentObjectInterface) {
-                        if ($block instanceof Object\Nomenclature) {
+                if ($block instanceof TemplateObject) {
+                    if ($block->hasTag($tag) && $block instanceof TemplateObject\ContentObjectInterface) {
+                        if ($block instanceof TemplateObject\Nomenclature) {
                             $tagged[] = $block->getNomenclatureLabel();
                         } else {
                             $tagged[] = $block->getContentValue();
@@ -307,11 +307,11 @@ class Block extends AbstractChild
 
         foreach ($this->getEditableObjects() as $object) {
             foreach ($object->getTags() as $tag) {
-                if (!$object instanceof Object\ContentObjectInterface) {
+                if (!$object instanceof TemplateObject\ContentObjectInterface) {
                     continue;
                 }
 
-                if ($object instanceof Object\Nomenclature) {
+                if ($object instanceof TemplateObject\Nomenclature) {
                     $tagged[$tag][] = $object->getNomenclatureLabel();
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
@@ -331,9 +331,9 @@ class Block extends AbstractChild
     {
         $objects = new ArrayCollection($this->getObjects());
 
-        return $objects->filter(function (Object $object) use ($tag) {
-            return $object instanceof Object\ContentObjectInterface && $object->hasTag($tag);
-        })->map(function (Object\ContentObjectInterface $object) {
+        return $objects->filter(function (TemplateObject $object) use ($tag) {
+            return $object instanceof TemplateObject\ContentObjectInterface && $object->hasTag($tag);
+        })->map(function (TemplateObject\ContentObjectInterface $object) {
             return $object->getContentLabel();
         })->first();
     }
@@ -347,9 +347,9 @@ class Block extends AbstractChild
     {
         $objects = new ArrayCollection($this->getObjects());
 
-        return $objects->filter(function (Object $object) use ($tag) {
-            return $object instanceof Object\ContentObjectInterface && $object->hasTag($tag);
-        })->map(function (Object\ContentObjectInterface $object) {
+        return $objects->filter(function (TemplateObject $object) use ($tag) {
+            return $object instanceof TemplateObject\ContentObjectInterface && $object->hasTag($tag);
+        })->map(function (TemplateObject\ContentObjectInterface $object) {
             return $object->getContentValue();
         })->first();
     }
@@ -435,5 +435,18 @@ class Block extends AbstractChild
         }
 
         return $this;
+    }
+
+    /**
+     * @param string            $fieldName
+     * @param array|string|null $emptyValue
+     */
+    public function removeField($fieldName, $emptyValue)
+    {
+        foreach ($this->getObjects() as $object) {
+            if ($object->getOption($fieldName)) {
+                $object->setOption($fieldName, $emptyValue);
+            }
+        }
     }
 }

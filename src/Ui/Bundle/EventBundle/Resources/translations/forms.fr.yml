@@ -1,121 +1,46 @@
-gender:
-    man: Monsieur
-    woman: Madame
-
-form:
-    change_password_user:
-        children:
-            plainPassword:
-                children:
-                    first:
-                        label: Nouveau mot de passe
-                    second:
-                        label: Ressaisir le nouveau mot de passe
-            currentPassword:
-                label: Mot de passe actuel
-            submit:
-                label: Envoyer
-    email:
-        placeholder: Saisissez votre adresse e-mail
-    register:
-        newUser:
-            password:
-                placeholder: Choisissez votre mot de passe
-            repeatedPassword:
-                placeholder: Confirmer votre mot de passe
-    login:
-        children:
-            password:
-                placeholder: Mot de passe
-            rememberMe:
-                label: Rester connecté
-    sheet_editable_text_data:
-        children:
-            content:
-                label: Texte
-            submit:
-                label: Enregistrer
-        data:
-            maxLength:
-                translations:
-                    plural: caractères restants
-                    singular: caractère restant
-                    reached: Nombre de caractères maximum atteint
-    sheet_button_link_data:
-        children:
-            url:
-                label: URL
-            submit:
-                label: Enregistrer
-    sheet_image_data:
-        children:
-            submit:
-                label: Enregister
-    sheet_media_collection_data:
-        children:
-            medias:
-                label_add: Ajouter
-                label_delete: "&times;"
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-                        type:
-                            label: Type
-                        url:
-                            label: Lien
-            submit:
-                label: Enregistrer
-    sheet_item_collection_data:
-        children:
-            items:
-                label_add: Ajouter
-                label_delete: "&times;"
-                prototype:
-                    children:
-                        title:
-                            label: Titre
-            submit:
-                label: Enregistrer
-    nomenclature_data:
-        children:
-            items:
-                label: Sélectionnez :
-            submit:
-                label: Enregistrer
-    add_participant:
-        children:
-            firstName:
-                placeholder: Prénom
-            lastName:
-                placeholder: NOM
-            email:
-                placeholder: E-mail
-    payment_choice:
-        children:
-            mode:
-                label: 'Choisissez votre mode de paiement:'
-            paymentMode:
-                bank_card: Carte bleu
-                bank_transfer: Transfert
-                bank_check: Chèque
-    payment_choice_with_deposit:
-        children:
-            mode:
-                label: 'Choisissez votre mode de paiement:'
-            deposit:
-                label: "Choisissez si vous souhaitez payer le total ou l'accompte"
-            depositMode:
-                deposit: Accompte
-                total: Total
-    package_summary_terms_of_sale:
-        children:
-            termsOfSale:
-                label: >
-                    Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.
-    package_summary_promotion_code:
-        placeholder: Saisir votre code promotionnel
-        children:
-            submit:
-                label: Valider
-
+form.add_participant.children.email.placeholder: E-mail
+form.add_participant.children.firstName.placeholder: Prénom
+form.add_participant.children.lastName.placeholder: NOM
+form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
+form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
+form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.change_password_user.children.submit.label: Envoyer
+form.email.placeholder: 'Saisissez votre adresse e-mail'
+form.login.children.password.placeholder: 'Mot de passe'
+form.login.children.rememberMe.label: 'Rester connecté'
+form.nomenclature_data.children.items.label: 'Sélectionnez :'
+form.nomenclature_data.children.submit.label: Enregistrer
+form.package_summary_promotion_code.children.submit.label: Valider
+form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
+form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''accompte'
+form.payment_choice_with_deposit.children.depositMode.deposit: Accompte
+form.payment_choice_with_deposit.children.depositMode.total: Total
+form.payment_choice_with_deposit.children.mode.label: 'Choisissez votre mode de paiement:'
+form.payment_choice.children.mode.label: 'Choisissez votre mode de paiement:'
+form.payment_choice.children.paymentMode.bank_card: 'Carte bleue'
+form.payment_choice.children.paymentMode.bank_check: Chèque
+form.payment_choice.children.paymentMode.bank_transfer: Transfert
+form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bleue'
+form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
+form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
+form.sheet_button_link_data.children.submit.label: Enregistrer
+form.sheet_button_link_data.children.url.label: URL
+form.sheet_editable_text_data.children.content.label: Texte
+form.sheet_editable_text_data.children.submit.label: Enregistrer
+form.sheet_editable_text_data.data.maxLength.translations.plural: 'caractères restants'
+form.sheet_editable_text_data.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
+form.sheet_editable_text_data.data.maxLength.translations.singular: 'caractère restant'
+form.sheet_image_data.children.submit.label: Enregister
+form.sheet_item_collection_data.children.items.label_add: Ajouter
+form.sheet_item_collection_data.children.items.label_delete: '&times;'
+form.sheet_item_collection_data.children.items.prototype.children.title.label: Titre
+form.sheet_item_collection_data.children.submit.label: Enregistrer
+form.sheet_media_collection_data.children.medias.label_add: Ajouter
+form.sheet_media_collection_data.children.medias.label_delete: '&times;'
+form.sheet_media_collection_data.children.medias.prototype.children.title.label: Titre
+form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
+form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
+form.sheet_media_collection_data.children.submit.label: Enregistrer
+gender.man: Monsieur
+gender.woman: Madame

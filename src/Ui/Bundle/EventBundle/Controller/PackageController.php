@@ -12,20 +12,16 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
-use Proximum\Vimeet\Application\Command\Package\Step;
-use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
 use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
-use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
@@ -34,14 +30,15 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\PromotionCodeType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -55,17 +52,19 @@ class PackageController extends Controller
      */
     public function redirectAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         try {
             $sheet = $this->get('sheet.sheet_guesser')
-                          ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
+                ->getUserSheet($this->getUser(), $eventDomain->getEvent(), $request->getLocale());
         } catch (\Exception $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
 
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         if (!empty($sheet->getOrders())) {
-            return $this->redirectToRoute('event_order_list', [
+            return $this->redirectToRoute('event_order_summary_total', [
                 'sheet' => $sheet->getId(),
             ]);
         }
@@ -86,11 +85,9 @@ class PackageController extends Controller
      */
     public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
-
-        if (!empty($sheet->getOrders())) {
-            throw $this->createNotFoundException('This sheet has already an order');
-        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
@@ -101,24 +98,18 @@ class PackageController extends Controller
 
         $currentStep = $funnel->getStep($step);
 
-        $uncompletedStep = $funnel->getCurrentUncompletedStep();
-
-        if ($currentStep !== $uncompletedStep
-            && false !== $uncompletedStep
-            && $currentStep->index > $uncompletedStep->index
-        ) {
+        if (!$funnel->isStepAvailable($currentStep)) {
             return $this->redirectToRoute(
                 'event_package_step',
                 [
                     'sheet' => $sheet->getId(),
-                    'step'  => $uncompletedStep->index,
+                    'step'  => $funnel->getCurrentUncompletedStep()->index,
                 ]
             );
         }
-
-        $commandClass = $this->stepTypeAssociatedCommand($currentStep->type);
-        $command      = new $commandClass($sheet, $currentStep->index);
-        $this->assignProductsToCommand($command);
+        
+        $command = $this->get('components.step.step_command_factory')
+            ->create($currentStep->type, $sheet, $currentStep->index);
 
         $form = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
             'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
@@ -130,7 +121,7 @@ class PackageController extends Controller
 
             $nextStep = $funnel->getNextStep($step);
 
-            if ($nextStep) {
+            if (null !== $nextStep) {
                 return $this->redirectToRoute(
                     'event_package_step',
                     ['sheet' => $sheet->getId(), 'step' => $nextStep->index]
@@ -156,7 +147,7 @@ class PackageController extends Controller
                 $form_remove,
                 $participants,
                 $redirect
-            ) = $this->handleStepParticipant($request, $eventDomain, $sheet, $step);
+            ) = $this->handleStepParticipant($request, $sheet, $step);
 
             if ($redirect) {
                 return $this->redirectToRoute('event_package_step', [
@@ -189,20 +180,19 @@ class PackageController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param int         $step
      *
      * @return array|RedirectResponse
      */
-    private function handleStepParticipant(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
+    private function handleStepParticipant(Request $request, Sheet $sheet, $step)
     {
         $locale = $request->getLocale();
         $displayAddParticipantForm    = false;
         $displayRemoveParticipantForm = false;
         $redirect                     = false;
 
-        $addParticipant = new AddParticipant($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
@@ -268,7 +258,9 @@ class PackageController extends Controller
      */
     public function addParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         if (!$sheet->hasUser($this->getUser())) {
             throw $this->createNotFoundException(
                 sprintf(
@@ -287,7 +279,7 @@ class PackageController extends Controller
 
         $locale         = $request->getLocale();
         $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
-        $addParticipant = new AddParticipant($sheet, $eventDomain->getEvent(), $locale);
+        $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'action' => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
@@ -311,16 +303,8 @@ class PackageController extends Controller
      */
     public function removeParticipantAction(Request $request, Sheet $sheet, $step)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'The current user %s is not associated with this sheet %s',
-                    $this->getUser()->getId(),
-                    $sheet->getId()
-                )
-            );
-        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -350,27 +334,6 @@ class PackageController extends Controller
     /**
      * @param $type
      *
-     * @return Step\AbstractStep
-     * @throws \Exception
-     */
-    private static function stepTypeAssociatedCommand($type)
-    {
-        $commands = [
-            FunnelStep::TYPE_PLAN                 => Step\SelectPlan::class,
-            FunnelStep::TYPE_PARTICIPANT_PLANNING => Step\SelectParticipantAndPlanning::class,
-            FunnelStep::TYPE_OPTIONS              => Step\SelectOptions::class,
-        ];
-
-        if (isset($commands[$type])) {
-            return $commands[$type];
-        } else {
-            throw new \Exception(sprintf('Command Package Step type %s not implemented', $type));
-        }
-    }
-
-    /**
-     * @param $type
-     *
      * @return AbstractType
      *
      * @throws \Exception
@@ -391,63 +354,6 @@ class PackageController extends Controller
     }
 
     /**
-     * @param Step\AbstractStep $command
-     */
-    private function assignProductsToCommand(Step\AbstractStep $command)
-    {
-        $cartManager = $this->get('cart_manager');
-        $cart        = $cartManager->getCart($command->sheet, $command->currentStep);
-
-        if ($command instanceof Step\SelectPlan) {
-            $selectedPlan = $cart->getPlanRow();
-
-            if (null !== $selectedPlan) {
-                $command->plan = $selectedPlan->getProduct();
-            }
-
-            return;
-        }
-
-        if ($command instanceof Step\SelectParticipantAndPlanning) {
-            $planningRow = $cart->getPlanningRow();
-
-            if (null !== $planningRow) {
-                $command->planningQuantity = $planningRow->getQuantity();
-            }
-
-            return;
-        }
-
-        if ($command instanceof Step\SelectOptions) {
-            /** @var CartRow[] $optionRows */
-            $optionRows = array_combine(
-                array_map(
-                    function (CartRow $cartRow) {
-                        return $cartRow->getProduct()->getId();
-                    },
-                    $cart->getOptionsRow()->toArray()
-                ),
-                $cart->getOptionsRow()->toArray()
-            );
-
-            $availableOptionsId = array_map(
-                function (Product $product) {
-                    return $product->getId();
-                },
-                $command->sheet->getPackage()->getAvailablesOptions(new \DateTime())
-            );
-
-            $options = [];
-
-            foreach ($availableOptionsId as $optionId) {
-                $options[$optionId] = isset($optionRows[$optionId]) ? $optionRows[$optionId]->getQuantity() : 0;
-            }
-
-            $command->options = $options;
-        }
-    }
-
-    /**
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
@@ -456,18 +362,16 @@ class PackageController extends Controller
      */
     public function summaryAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
-
-        if (!empty($sheet->getOrders())) {
-            throw $this->createNotFoundException('This sheet has already an order');
-        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if (!$funnel->isCompleted()) {
             return $this->redirectToRoute('event_package_step', [
                 'sheet' => $sheet->getId(),
-                'step'  => 1,
+                'step'  => (null !== $funnel->getCartStep()) ? $funnel->getCartStep()->getCurrentStep() : 1,
             ]);
         }
 
@@ -476,6 +380,7 @@ class PackageController extends Controller
         // Redirect to the billing info action if the billing info are not completed
         if (null === $billingInfo || !$billingInfo->isCompleted()) {
             $this->addFlash('package_complete_billing_info', $sheet->getId());
+            $this->addFlash('package_funnel_billing_info', true);
 
             return $this->redirectToRoute('event_billing_info', [
                 'sheet' => $sheet->getId(),
@@ -532,7 +437,9 @@ class PackageController extends Controller
         Sheet $sheet,
         PromotionCodeRow $promotionCodeRow
     ) {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         $remove = new Remove($sheet, $promotionCodeRow);
         $this->get('tactician.commandbus')->handle($remove);
@@ -564,9 +471,12 @@ class PackageController extends Controller
      */
     public function fillBillingInfoAction(EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->authorizeAccess($eventDomain, $sheet, $this->getUser());
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->authorizeAccess($eventDomain, $sheet);
 
         $this->addFlash('package_complete_billing_info', $sheet->getId());
+        $this->addFlash('package_funnel_billing_info', $sheet->getId());
 
         return $this->redirectToRoute('event_billing_info', [
             'sheet' => $sheet->getId(),
@@ -576,12 +486,9 @@ class PackageController extends Controller
     /**
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
-     * @param User        $user
      */
-    private function authorizeAccess(EventDomain $eventDomain, Sheet $sheet, User $user = null)
+    private function authorizeAccess(EventDomain $eventDomain, Sheet $sheet)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         if ($sheet->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createNotFoundException(
                 sprintf('Sheet %s not present on Event %s')
@@ -591,16 +498,6 @@ class PackageController extends Controller
         if (!$sheet->getPackage()->isPassable()) {
             throw $this->createNotFoundException(
                 sprintf('Package for sheet %s is not passable', $sheet->getId())
-            );
-        }
-
-        if (null === $user) {
-            throw $this->createNotFoundException('Unknown user');
-        }
-
-        if (!$sheet->hasUser($user)) {
-            throw $this->createNotFoundException(
-                sprintf('The user %s is not participant on the sheet %s', $user->getId(), $sheet->getId())
             );
         }
     }

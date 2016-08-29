@@ -1,62 +1,41 @@
-template:
-    object:
-        editable-text: Texte modifiable
-        text: Texte non modifiable
-        collection: Collection
-        button-link: Lien
-        image: Image
-        media: Media
-        nomenclature: Nomenclature
-        tag: Contenu affiché par défaut
-        participant: Participant
-        tags: Multi tag
-    tag:
-        sheet_title: Titre de fiche
-        sheet_organization: Nom de l'organisation
-        sheet_organization_category: Catégorie d'organisation
-        sheet_organization_turnover: Chiffre d'affaires
-        sheet_organization_staff: Effectifs
-    media:
-        placeholder:
-            title: Placeholder du titre
-            link: Placeholder du lien
-        max: Nombre maximum de média
-        default: Nombre de média par default
-    nomenclature:
-        title: Nomenclature
-        choice:
-            checkboxes: Cases à cocher (choix multiple)
-            singles: Listes déroulantes (choix unique)
-    participant:
-        title: Les participants
-        display: Nombre de participants affichés sur la fiche
-    action:
-        close: Fermer
-        save: Enregistrer
-    style:
-        title: Style
-        default: Par défaut
-    placeholder:
-        title: Placeholder
-    content:
-        title: Contenu
-    label:
-        title: Label
-    help:
-        title: Aide
-    required:
-        title: Requis
-    collection:
-        title: Champs collection activés
-    translatable:
-        title: Traduisible
-    maxLength:
-        title: Longueur max
-    hideLabel:
-        title: Cacher le label
-    type:
-        title: Type
-    defaultElement:
-        title: Élément par défaut
-    tags:
-        title: Tags
+template.action.close: Fermer
+template.action.save: Enregistrer
+template.collection.title: 'Champs collection activés'
+template.content.title: Contenu
+template.defaultElement.title: 'Élément par défaut'
+template.help.title: Aide
+template.hideLabel.title: 'Cacher le label'
+template.label.title: Label
+template.maxLength.title: 'Longueur max'
+template.media.default: 'Nombre de média par default'
+template.media.max: 'Nombre maximum de média'
+template.media.placeholder.link: 'Placeholder du lien'
+template.media.placeholder.title: 'Placeholder du titre'
+template.nomenclature.choice.checkboxes: 'Cases à cocher (choix multiple)'
+template.nomenclature.choice.singles: 'Listes déroulantes (choix unique)'
+template.nomenclature.title: Nomenclature
+template.object.button-link: Lien
+template.object.collection: Collection
+template.object.editable-text: 'Texte modifiable'
+template.object.image: Image
+template.object.media: Media
+template.object.nomenclature: Nomenclature
+template.object.participant: Participant
+template.object.tag: 'Contenu affiché par défaut'
+template.object.tags: 'Multi tag'
+template.object.text: 'Texte non modifiable'
+template.participant.display: 'Nombre de participants affichés sur la fiche'
+template.participant.title: 'Les participants'
+template.placeholder.title: Placeholder
+template.products.title: 'Produits liés'
+template.required.title: Requis
+template.style.default: 'Par défaut'
+template.style.title: Style
+template.tag.sheet_organization: 'Nom de l''organisation'
+template.tag.sheet_organization_category: 'Catégorie d''organisation'
+template.tag.sheet_organization_staff: Effectifs
+template.tag.sheet_organization_turnover: 'Chiffre d''affaires'
+template.tag.sheet_title: 'Titre de fiche'
+template.tags.title: Tags
+template.translatable.title: Traduisible
+template.type.title: Type

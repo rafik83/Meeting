@@ -46,7 +46,7 @@ class BillingViewQueryHandler
         $linksView   = [];
         $linksView[] = new LinkView(
             'navigation.links.billing.billing_info',
-            $this->navigationBuilder->getRoute('event_billing_info', [
+            $this->navigationBuilder->getRoute('event_billing_info_clear_flash', [
                 'sheet' => $billingQuery->sheet->getId()
             ])
         );

@@ -1,0 +1,15 @@
+{% if promotionProduct.promotion.isPercentOff %}
+    {% set promotionTag = '%' %}
+{% elseif promotionProduct.promotion.isValueOff %}
+    {% set promotionTag = currency|currency_symbol %}
+{% endif %}
+
+{{ promotionProduct.product }}
+
+{% if promotionProduct.promotion.isFree %}
+    {{ '(' ~ 'summary.promotionCode.free'|trans ~ ')' }}
+{% elseif promotionProduct.quantity > 1 %}
+    {{ '(' ~ promotionProduct.quantity ~ ' x ' ~ promotionProduct.discountValue ~ promotionTag ~ ')' }}
+{% else %}
+    {{ '(' ~ promotionProduct.discountValue ~ promotionTag ~ ')' }}
+{% endif %}

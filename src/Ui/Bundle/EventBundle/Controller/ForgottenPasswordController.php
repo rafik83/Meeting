@@ -32,7 +32,7 @@ class ForgottenPasswordController extends Controller
      */
     public function forgottenPasswordAction(Request $request, EventDomain $eventDomain)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
 
@@ -72,8 +72,8 @@ class ForgottenPasswordController extends Controller
         if ($forgottenPasswordToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
         }
-
-        $newPassword = new NewPassword($forgottenPasswordToken->getUser());
+        
+        $newPassword = new NewPassword($forgottenPasswordToken->getUser(), $eventDomain->getEvent());
         $form        = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
                 'token' => $forgottenPasswordToken->getToken(),

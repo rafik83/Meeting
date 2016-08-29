@@ -44,32 +44,30 @@ class PositionMeetingType extends AbstractType
     {
         $builder
             ->add('fromParticipants', ChoiceType::class, [
-                'choices_as_values' => true,
-                'multiple'          => true,
-                'expanded'          => true,
-                'choices'           => $options['meeting_request']->getFromSheet()->getParticipants()->toArray(),
-                'choice_label'      => function (Participant $participant) {
+                'multiple'     => true,
+                'expanded'     => true,
+                'choices'      => $options['meeting_request']->getFromSheet()->getParticipants()->toArray(),
+                'choice_label' => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantCompleteName(
                         $participant,
                         $participant->getSheet()->getEvent()->getFallback()
                     );
                 },
-                'choice_value'      => function (Participant $participant) {
+                'choice_value' => function (Participant $participant) {
                     return $participant->getId();
                 },
             ])
             ->add('toParticipants', ChoiceType::class, [
-                'choices_as_values' => true,
-                'multiple'          => true,
-                'expanded'          => true,
-                'choices'           => $options['meeting_request']->getToSheet()->getParticipants()->toArray(),
-                'choice_label'      => function (Participant $participant) {
+                'multiple'     => true,
+                'expanded'     => true,
+                'choices'      => $options['meeting_request']->getToSheet()->getParticipants()->toArray(),
+                'choice_label' => function (Participant $participant) {
                     return $this->participantInfoGuesser->guessParticipantCompleteName(
                         $participant,
                         $participant->getSheet()->getEvent()->getFallback()
                     );
                 },
-                'choice_value'      => function (Participant $participant) {
+                'choice_value' => function (Participant $participant) {
                     return $participant->getId();
                 },
             ])

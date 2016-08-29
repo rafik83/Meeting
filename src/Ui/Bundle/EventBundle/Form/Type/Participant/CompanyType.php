@@ -31,15 +31,15 @@ class CompanyType extends AbstractType
         $template = $options['template'];
 
         foreach ($template->getCompanyObjects() as $key => $object) {
-            if ($object instanceof Template\Object\EditableText) {
+            if ($object instanceof Template\TemplateObject\EditableText) {
                 $this->addText($key, $builder, $object, $options['locale']);
-            } elseif ($object instanceof Template\Object\Nomenclature) {
+            } elseif ($object instanceof Template\TemplateObject\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
-            } elseif ($object instanceof Template\Object\Telephone) {
+            } elseif ($object instanceof Template\TemplateObject\Telephone) {
                 $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
-            } elseif ($object instanceof Template\Object\Url) {
+            } elseif ($object instanceof Template\TemplateObject\Url) {
                 $this->addUrl($key, $builder, $object, $options['locale']);
-            } elseif ($object instanceof Template\Object\Country) {
+            } elseif ($object instanceof Template\TemplateObject\Country) {
                 $this->addCountry($key, $builder, $object, $options['locale']);
             }
         }
@@ -61,58 +61,46 @@ class CompanyType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
      */
-    private function addText($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addText($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, EditableTextInputDataType::class, [
+            'label'  => false,
             'locale' => $locale,
             'object' => $object,
         ]);
     }
 
     /**
-     * @param string                       $key
-     * @param FormBuilderInterface         $builder
-     * @param Template\Object\Nomenclature $object
-     * @param string                       $locale
+     * @param string                      $key
+     * @param FormBuilderInterface        $builder
+     * @param Template\TemplateObject\Url $object
+     * @param string                      $locale
      */
-    private function addNomenclature($key, FormBuilderInterface $builder, Template\Object\Nomenclature $object, $locale)
-    {
-        $builder->add($key, NomenclatureDataType::class, [
-            'locale'      => $locale,
-            'object'      => $object,
-            'placeholder' => $object->getOption('label')[$locale],
-        ]);
-    }
-
-    /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object\Url  $object
-     * @param string               $locale
-     */
-    private function addUrl($key, FormBuilderInterface $builder, Template\Object\Url $object, $locale)
+    private function addUrl($key, FormBuilderInterface $builder, Template\TemplateObject\Url $object, $locale)
     {
         $builder->add($key, UrlDataType::class, [
+            'label'  => false,
             'locale' => $locale,
             'object' => $object,
         ]);
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
-     * @param string               $country
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     * @param string                  $country
      */
-    private function addTelephone($key, FormBuilderInterface $builder, Template\Object $object, $locale, $country)
+    private function addTelephone($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale, $country)
     {
         $builder->add($key, TelephoneDataType::class, [
+            'label'   => false,
             'locale'  => $locale,
             'object'  => $object,
             'country' => $country,
@@ -120,16 +108,33 @@ class CompanyType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\Object      $object
-     * @param string               $locale
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
      */
-    private function addCountry($key, FormBuilderInterface $builder, Template\Object $object, $locale)
+    private function addCountry($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, CountryDataType::class, [
+            'label'  => false,
             'locale' => $locale,
             'object' => $object,
+        ]);
+    }
+
+    /**
+     * @param string                               $key
+     * @param FormBuilderInterface                 $builder
+     * @param Template\TemplateObject\Nomenclature $object
+     * @param string                               $locale
+     */
+    private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
+    {
+        $builder->add($key, NomenclatureDataType::class, [
+            'label'       => false,
+            'locale'      => $locale,
+            'object'      => $object,
+            'placeholder' => $object->getOption('label')[$locale],
         ]);
     }
 }
