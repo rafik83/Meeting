@@ -138,11 +138,11 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $editableText1 = new TemplateObject\EditableText('editable-text', [
+        $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $editableText1->setContentValue('foo');
-        $image = new TemplateObject\Image('image', [
+        $image = new TemplateObject\Image('69b3cde1', 'image', [
             'tags' => ['participant_avatar', 'participant_data'],
         ], 'fr', 'fr');
         $image->setContentValue('path/to/file');
@@ -277,11 +277,11 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $editableText1 = new TemplateObject\EditableText('editable-text', [
+        $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $editableText1->setContentValue('foo');
-        $image = new TemplateObject\Image('image', [
+        $image = new TemplateObject\Image('69b3cde1', 'image', [
             'tags' => ['participant_avatar', 'participant_data'],
         ], 'fr', 'fr');
         $image->setContentValue('path/to/file');

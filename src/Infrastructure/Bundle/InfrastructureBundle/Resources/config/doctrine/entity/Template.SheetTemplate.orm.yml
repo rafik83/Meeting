@@ -16,6 +16,9 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
             length: 5
         value:
             type: json_array
+        preview:
+            type: json_array
+            nullable: true
         createdAt:
             type: datetime
     manyToOne:

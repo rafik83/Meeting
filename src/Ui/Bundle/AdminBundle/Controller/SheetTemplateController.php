@@ -16,14 +16,17 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
+use Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreview;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\PreviewType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
@@ -64,7 +67,7 @@ class SheetTemplateController extends Controller
         $eventsTemplates = $this->get('repository.template.sheet_template_repository')->getTemplateForGivenEvents($events);
 
         $create = new Create($request->getLocale());
-        $form = $this->createForm(CreateType::class, $create, ['submit' => true]);
+        $form   = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($create);
@@ -92,7 +95,9 @@ class SheetTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $filters    = [];
-        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, ['admin' => $this->getUser()]);
+        $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, [
+            'admin' => $this->getUser()
+        ]);
         $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
@@ -173,8 +178,10 @@ class SheetTemplateController extends Controller
 
         $duplicate = new Duplicate($template, new \DateTime());
 
-        $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
-            'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate', ['template' => $template->getId()]),
+        $form = $this->createForm(DuplicateForEventType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate', [
+                'template' => $template->getId()
+            ]),
             'submit' => true,
             'admin'  => $this->getUser(),
         ]);
@@ -214,7 +221,9 @@ class SheetTemplateController extends Controller
 
         // Update form
         $updateForm = $this->createForm(UpdateType::class, new Update($template), [
-            'action'   => $this->generateUrl('admin_template_sheet_update', ['template' => $template->getId(), 'locale' => $locale]),
+            'action'   => $this->generateUrl('admin_template_sheet_update', [
+                'template' => $template->getId(), 'locale' => $locale
+            ]),
             'submit'   => true,
             'template' => $template,
         ]);
@@ -291,7 +300,7 @@ class SheetTemplateController extends Controller
                     'locale'   => $addLocale->locale,
                 ]);
             } else {
-                $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
+                $this->addFlash('error', (string)$addLocaleForm->getErrors(true));
             }
         }
 
@@ -336,8 +345,10 @@ class SheetTemplateController extends Controller
     public function updateAction(Request $request, SheetTemplate $template, $locale)
     {
         $command = new Update($template);
-        $form = $this->createForm(UpdateType::class, $command, [
-            'action'   => $this->generateUrl('admin_template_sheet_update', ['template' => $template->getId(), 'locale' => $locale]),
+        $form    = $this->createForm(UpdateType::class, $command, [
+            'action'   => $this->generateUrl('admin_template_sheet_update', [
+                'template' => $template->getId(), 'locale' => $locale
+            ]),
             'submit'   => true,
             'template' => $template,
         ]);
@@ -349,6 +360,43 @@ class SheetTemplateController extends Controller
         return $this->redirectToRoute('admin_template_sheet_builder', [
             'template' => $template->getId(),
             'locale'   => $locale,
+        ]);
+    }
+
+    /**
+     * @param Request       $request
+     * @param SheetTemplate $template
+     *
+     * @return Response
+     */
+    public function updatePreviewAction(Request $request, SheetTemplate $template)
+    {
+        $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
+        $templateObjects = $templateData->getPreviewAvailableObjects();
+        $locale          = $template->getEvent()->getAvailableLocale($request->getLocale());
+
+        $command = new UpdatePreview($template, $templateObjects);
+
+        $form = $this->createForm(PreviewType::class, $command, [
+            'templateData'    => $templateData,
+            'templateObjects' => $templateObjects,
+            'locale'          => $locale,
+            'submit'          => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($command);
+                $this->addFlash('success', 'flash.template.preview.update.success');
+            } catch (TemplateException $exception) {
+                $this->addFlash('error', $exception->getMessage());
+            }
+        }
+
+        return $this->render('AdminBundle:SheetTemplate:preview.html.twig', [
+            'form'   => $form->createView(),
+            'event'  => $template->getEvent(),
+            'locale' => $locale,
         ]);
     }
 }

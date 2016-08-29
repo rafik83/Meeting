@@ -15,9 +15,9 @@ class TagsCollection extends ItemCollection
     /**
      * {@inheritdoc}
      */
-    public function __construct($type, array $config, $locale, $fallback)
+    public function __construct($key, $type, array $config, $locale, $fallback)
     {
-        parent::__construct($type, $config, $locale, $fallback);
+        parent::__construct($key, $type, $config, $locale, $fallback);
     }
 
     /**

@@ -28,7 +28,7 @@ class RemoveImageHandlerTest extends \PHPUnit_Framework_TestCase
         $type     = new Type($event);
         $user     = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $dateTime);
-        $image    = new Image('image', [], 'fr', 'fr');
+        $image    = new Image('69b3cde1', 'image', [], 'fr', 'fr');
 
         $templateData = new TemplateData('image', [], 'fr', 'fr');
         $removeImage  = new RemoveImage($image, $sheet, $templateData);

@@ -218,17 +218,17 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $text  = new TemplateObject\Text('text', [], 'fr', 'fr');
-        $editableText1 = new TemplateObject\EditableText('editable-text', [
+        $text  = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
+        $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
-        $editableText2 = new TemplateObject\EditableText('editable-text', [
+        $editableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
-        $telephone1    = new TemplateObject\Telephone('telephone', [
+        $telephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
-        $telephone2    = new TemplateObject\Telephone('telephone', [
+        $telephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
 
@@ -242,20 +242,20 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $expectedBlock = new Block('12', [], 'fr', 'fr');
-        $expectedText  = new TemplateObject\Text('text', [], 'fr', 'fr');
-        $exEditableText1 = new TemplateObject\EditableText('editable-text', [
+        $expectedText  = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
+        $exEditableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText1->setContentValue('foo');
-        $exEditableText2 = new TemplateObject\EditableText('editable-text', [
+        $exEditableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText2->setContentValue('bar');
-        $exTelephone1    = new TemplateObject\Telephone('telephone', [
+        $exTelephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone1->setContentValue('phone');
-        $exTelephone2    = new TemplateObject\Telephone('telephone', [
+        $exTelephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone2->setContentValue('mobile');

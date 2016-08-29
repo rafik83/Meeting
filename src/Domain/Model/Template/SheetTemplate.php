@@ -15,6 +15,11 @@ use DateTimeInterface;
 class SheetTemplate extends AbstractTemplate
 {
     /**
+     * @var array
+     */
+    protected $preview;
+
+    /**
      * @return string
      */
     public function getFallback()
@@ -47,6 +52,26 @@ class SheetTemplate extends AbstractTemplate
 
         $this->title    = $title;
         $this->fallback = $fallback;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreview()
+    {
+        return $this->preview;
+    }
+
+    /**
+     * @param array $preview
+     *
+     * @return SheetTemplate
+     */
+    public function setPreview($preview)
+    {
+        $this->preview = $preview;
 
         return $this;
     }
