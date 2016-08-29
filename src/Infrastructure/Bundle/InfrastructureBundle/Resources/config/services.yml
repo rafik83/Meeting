@@ -1618,6 +1618,13 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
+    query.sheet.catalog_sheet_preview_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
     ##
     # Navigation builder

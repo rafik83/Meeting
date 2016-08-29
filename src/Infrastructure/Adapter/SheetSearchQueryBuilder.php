@@ -102,6 +102,7 @@ class SheetSearchQueryBuilder
         $this->filterByCategory($filters);
         $this->filterByFollower($filters);
         $this->filterByPredefined($filters);
+        $this->filterByInCatalog($filters);
     }
 
     /**
@@ -252,6 +253,19 @@ class SheetSearchQueryBuilder
             $matchCompleted->setField('completed', $filters['completed']);
 
             $this->query->addMust($matchCompleted);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByInCatalog(array &$filters)
+    {
+        if (isset($filters['inCatalog'])) {
+            $matchInCatalog = new Match();
+            $matchInCatalog->setField('inCatalog', $filters['inCatalog']);
+
+            $this->query->addMust($matchInCatalog);
         }
     }
 

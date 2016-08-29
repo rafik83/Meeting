@@ -46,10 +46,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, $page, $limit, $locale)
+    public function find(Event $event, array $filters, array $orderBy, $page, $limit, $locale)
     {
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
+
+        if (count($orderBy)) {
+            $query->addSort($orderBy);
+        }
 
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);

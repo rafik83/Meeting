@@ -79,7 +79,14 @@ class PaginatedSheetListViewQueryHandler
      */
     public function handle(PaginatedSheetListViewQuery $query)
     {
-        $sheets        = $this->sheetSearchAdapter->find($query->event, $query->filters, $query->page, $query->limit, $query->locale);
+        $sheets = $this->sheetSearchAdapter->find(
+            $query->event,
+            $query->filters,
+            [],
+            $query->page,
+            $query->limit,
+            $query->locale
+        );
         $lastAccepts   = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::ACCEPT);
         $lastValidates = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::VALIDATE);
 
@@ -115,8 +122,8 @@ class PaginatedSheetListViewQueryHandler
         } else {
             $firstName = $this->participantInfoGuesser->guessParticipantFirstName($sheet->getParticipantOwner(), $locale);
             $lastName  = $this->participantInfoGuesser->guessParticipantLastName($sheet->getParticipantOwner(), $locale);
-
         }
+        
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
