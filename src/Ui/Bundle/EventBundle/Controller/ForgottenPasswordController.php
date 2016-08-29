@@ -94,7 +94,6 @@ class ForgottenPasswordController extends Controller
                 'token' => $forgottenPasswordToken->getToken(),
             ]),
             'method' => 'POST',
-            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
