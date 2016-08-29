@@ -92,6 +92,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'id'                => $sheet->getId(),
             'sheetName'         => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             'state'             => $sheet->getState(),
+            'completed'         => $sheet->isCompleted(),
             'type'              => $sheet->getType()->getId(),
             'categories'        => $categories,
             'followUp'          => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,

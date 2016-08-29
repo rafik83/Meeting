@@ -124,6 +124,8 @@ fos_elastica:
                             analyzer: "sheetAnalyzer"
                         state:
                             type: string
+                        completed:
+                            type: boolean
                         categories:
                             type: nested
                         type:
