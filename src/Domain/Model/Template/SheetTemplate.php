@@ -29,13 +29,14 @@ class SheetTemplate extends AbstractTemplate
 
     /**
      * @param string            $title
+     * @param array             $value
      * @param DateTimeInterface $createdAt
      *
      * @return SheetTemplate
      */
-    public function duplicate($title, DateTimeInterface $createdAt)
+    public function duplicate($title, array $value, DateTimeInterface $createdAt)
     {
-        return new $this($title, $this->value, $createdAt, $this->locales);
+        return new $this($title, $value, $this->locales, $this->fallback, $createdAt);
     }
 
     /**
