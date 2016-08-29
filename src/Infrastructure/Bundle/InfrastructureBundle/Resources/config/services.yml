@@ -763,7 +763,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\SaveHandler
         arguments:
             - '@repository.template.sheet_template_repository'
-            - '@datetime'
+            - '@template.template_preview_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
     command.register.register_new_user_handler:
@@ -1385,7 +1385,11 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
-
+    template.template_preview_resolver:
+        class: Proximum\Vimeet\Domain\Template\TemplatePreviewResolver
+        arguments:
+            - '@template.template_data_factory'
+            - '@repository.template.sheet_template_repository'
     template.sheet.sheet_template_cloner:
         class: Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner
         arguments:
