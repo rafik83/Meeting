@@ -32,7 +32,7 @@ Feature: Forgot Password
     And I fill in the following:
       |form.new_password.children.password.children.first.label  | newpassword |
       |form.new_password.children.password.children.second.label | newpassword |
-    And I press "form.new_password.children.submit.label"
+    And I press "common.validate"
     Then I should be on "/fr/sheet"
     And the response status code should be 200
     And I should see "flash.new_password.success"
