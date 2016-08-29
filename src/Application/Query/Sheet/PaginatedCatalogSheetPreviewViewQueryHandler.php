@@ -36,18 +36,26 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private $sheetInfoGuesser;
 
     /**
+     * @var Preview
+     */
+    private $preview;
+
+    /**
      * @param SheetRepositoryInterface    $sheetRepository
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
      * @param SheetInfoGuesser            $sheetInfoGuesser
+     * @param Preview                     $preview
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        SheetInfoGuesser $sheetInfoGuesser
+        SheetInfoGuesser $sheetInfoGuesser,
+        Preview $preview
     ) {
         $this->sheetRepository    = $sheetRepository;
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->sheetInfoGuesser   = $sheetInfoGuesser;
+        $this->preview            = $preview;
     }
 
     /**
@@ -73,7 +81,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                 return new CatalogSheetPreviewView(
                     $sheet->getId(),
                     $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
-                    $sheet->getType()->getTitle($query->locale)
+                    $sheet->getType()->getTitle($query->locale),
+                    $this->preview->getPreview($sheet, $query->locale)
                 );
             },
             $sheets->results

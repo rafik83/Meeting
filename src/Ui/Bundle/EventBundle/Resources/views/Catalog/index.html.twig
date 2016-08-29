@@ -117,23 +117,23 @@
                         <div class="catalog__item {#catalog__item--checked#}">
                             <header>
                                 {#<input type="checkbox" checked="checked">#}
-                                {#<img src={{ asset('assets/images/dummy/airbus-logo.png') }}>#}
+
+                                {% for object in catalogSheetPreviewView.preview %}
+                                    {% if object.type == 'image' %}
+                                        <img src="{{ object.image }}"/>
+                                    {% endif %}
+                                {% endfor %}
                             </header>
                             <div class="content">
-                                <p>
-                                    <strong>
-                                        {{ catalogSheetPreviewView.title }}
-                                    </strong>
-                                </p>
-
-                                {#
-                                <p>
-                                    Eum cunctorum revocavere hastisque parans eum feriens bene distarent gestu feriens eum
-                                    ductores tutela hastisque et hastisque bene pertinax eum muri habitus haut haut
-                                    pugnantium iram certamen quorum eum pugnantium iam intempestivum gestu hastisque
-                                    ductores concitat cum habitus cum in ordinibus consurgentem haut certamen.
-                                </p>
-                                #}
+                                {% for object in catalogSheetPreviewView.preview %}
+                                    {% if object.type == 'editable-text' %}
+                                        {% if object.option('type') == 'title' %}
+                                            <p><strong>{{ object.content|default(catalogSheetPreviewView.title) }}</strong></p>
+                                        {% else %}
+                                            <p>{{ object.content }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                             <footer>
                                 <p class="tags">

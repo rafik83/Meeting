@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+
 class CatalogSheetPreviewView
 {
     /**
@@ -32,14 +34,21 @@ class CatalogSheetPreviewView
     public $type;
 
     /**
+     * @var TemplateObject[]
+     */
+    public $preview;
+
+    /**
      * @param int    $id
      * @param string $title
      * @param string $type
+     * @param array  $preview
      */
-    public function __construct($id, $title, $type)
+    public function __construct($id, $title, $type, array $preview)
     {
-        $this->id    = $id;
-        $this->title = $title;
-        $this->type  = $type;
+        $this->id      = $id;
+        $this->title   = $title;
+        $this->type    = $type;
+        $this->preview = $preview;
     }
 }
