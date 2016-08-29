@@ -23,7 +23,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#59a4eb'
             - '#00398c'
             - '#00398C'
-        catalogOnlineDate: "<dateTimeBetween('now', '2032-07-08')>"
+        catalogOnlineDate: "<dateTimeBetween('2016-08-25', 'now')>"
         happeningsOpenDate: "<dateTimeBetween('now', '2032-07-08')>"
         schedulePublishDate: "<dateTimeBetween('now', '2032-07-08')>"
         contactFirstName: "Maryse"
