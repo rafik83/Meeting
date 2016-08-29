@@ -30,7 +30,7 @@ class Gender extends EditableObject implements ContentObjectInterface
     /**
      * @return array
      */
-    public function getGenders()
+    public static function getGenders()
     {
         return [
             self::MAN   => self::MAN,
