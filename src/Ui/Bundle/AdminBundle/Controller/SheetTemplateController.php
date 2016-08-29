@@ -373,7 +373,12 @@ class SheetTemplateController extends Controller
     {
         $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
         $templateObjects = $templateData->getPreviewAvailableObjects();
-        $locale          = $template->getEvent()->getAvailableLocale($request->getLocale());
+
+        if (null === $template->getEvent()) {
+            $locale = $template->getAvailableLocale($request->getLocale());
+        } else {
+            $locale = $template->getEvent()->getAvailableLocale($request->getLocale());
+        }
 
         $command = new UpdatePreview($template, $templateObjects);
 
@@ -390,7 +395,7 @@ class SheetTemplateController extends Controller
                 $this->addFlash('success', 'flash.template.preview.update.success');
 
                 return $this->redirectToRoute('admin_template_sheet_preview_update', [
-                    'template' => $template
+                    'template' => $template->getId(),
                 ]);
             } catch (TemplateException $exception) {
                 $this->addFlash('error', $exception->getMessage());

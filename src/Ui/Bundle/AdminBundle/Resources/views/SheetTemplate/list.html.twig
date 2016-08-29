@@ -45,6 +45,9 @@
                 <tr>
                     <td>{{ baseTemplate.title }}</td>
                     <td class="text-right">
+                        <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
+                            'template': baseTemplate.id
+                        }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                         <div class="btn-group">
                             <a href="{{ path('admin_template_sheet_builder', {
                                 'template': baseTemplate.id, 'locale': baseTemplate.fallback
