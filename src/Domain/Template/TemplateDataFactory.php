@@ -248,13 +248,13 @@ class TemplateDataFactory
      */
     private function buildComponents(array $config, $locale, $fallback)
     {
-        return array_map(
+        return array_combine(array_keys($config), array_map(
             function (array $child, $key) use ($locale, $fallback) {
                 $child['key'] = $key;
 
                 return $this->doCreate($child, $locale, $fallback);
             }, $config, array_keys($config)
-        );
+        ));
     }
 
     /**

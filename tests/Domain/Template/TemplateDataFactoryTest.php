@@ -68,6 +68,7 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
 
         // Assert objects are created
         $objects = $templateData->getObjects();
+
         $this->assertCount(2, $objects);
         $this->assertArrayHasKey('ec74be5e', $objects);
         $this->assertArrayHasKey('0aea62b2', $objects);
