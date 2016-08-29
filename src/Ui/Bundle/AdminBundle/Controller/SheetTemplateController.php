@@ -387,8 +387,7 @@ class SheetTemplateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($command);
-
-                return $this->redirectToRoute('admin_template_sheet_list');
+                $this->addFlash('success', 'flash.template.preview.update.success');
             } catch (TemplateException $exception) {
                 $this->addFlash('error', $exception->getMessage());
             }
