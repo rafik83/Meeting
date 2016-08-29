@@ -80,6 +80,20 @@
     </div>
 {% endblock %}
 
+{% block _sheet_template_preview_previewObjects_entry_row %}
+    <div {{ block('row_container_attributes') }}>
+        <div class="form-inline preview-object-choice">
+            <div class="form-group">
+                {{ form_widget(form) }}
+            </div>
+            <div class="form-group">
+                {{ block('collection_delete_button') }}
+            </div>
+        </div>
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
+
 {%- block url_widget -%}
     {%- set type = type|default('text') -%}
     {{ block('form_widget_simple') }}
