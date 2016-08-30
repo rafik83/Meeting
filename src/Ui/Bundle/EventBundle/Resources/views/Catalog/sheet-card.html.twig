@@ -5,7 +5,7 @@
 
             {% for object in catalogSheetPreviewView.preview %}
                 {% if object.type == 'image' and object.image %}
-                    <img src="{{ object.image }}"/>
+                    <img src="{{ object.image|imagine_filter('event_sheet_image') }}"/>
                 {% endif %}
             {% endfor %}
         </header>
