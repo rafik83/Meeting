@@ -40,13 +40,24 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
-        $orderByForm = $this->createForm(OrderByType::class, ['orderBy' => OrderByType::ORDER_BY_ALPHABETICAL]);
+        $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+
+        $orderByForm = $this->createForm(
+            OrderByType::class,
+            $orderBy,
+            ['action' => $this->generateUrl('event_catalog_index')]
+        );
+        $ordered     = $orderByForm->handleRequest($request) && $orderByForm->isValid();
+
+        if ($ordered) {
+            $orderBy = $orderByForm->getData();
+        }
 
         try {
             $query = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
                 [],
-                ['inCatalogAt' => 'desc'],
+                [$orderBy['orderBy']],
                 $request->query->getInt('page', 1),
                 100,
                 $request->getLocale()
@@ -54,6 +65,12 @@ class CatalogController extends Controller
             $paginatedResult = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('EventBundle:Catalog:list.html.twig', [
+                'paginatedResult' => $paginatedResult,
+            ]);
         }
 
         return $this->render('EventBundle:Catalog:index.html.twig', [

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,9 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OrderByType extends AbstractType
 {
-    const ORDER_BY_ALPHABETICAL          = 'alphabetical';
-    const ORDER_BY_DATE_ADDED_TO_CATALOG = 'dateAddedToCatalog';
-
     /**
      * {@inheridoc}
      */
@@ -29,8 +27,8 @@ class OrderByType extends AbstractType
             ->add('orderBy', ChoiceType::class, [
                 'expanded' => true,
                 'choices'  => [
-                    'form.catalog_order_by.order.alphabetical'       => self::ORDER_BY_ALPHABETICAL,
-                    'form.catalog_order_by.order.dateAddedToCatalog' => self::ORDER_BY_DATE_ADDED_TO_CATALOG,
+                    'form.catalog_order_by.order.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
+                    'form.catalog_order_by.order.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
             ]);
     }
