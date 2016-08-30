@@ -46,3 +46,15 @@ Feature: Manage templates
     And I should see "template.object.text"
     And I should see "template.object.media"
     And I should see "template.participant.title"
+
+  Scenario: I can edit the template preview
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/template/sheet"
+    And I should see "Template de présentation de base"
+    And I should see "admin.template.action.preview"
+    When I follow "admin.template.action.preview"
+    Then I should be on this page "/admin/fr/template/sheet/1/preview"
+    And I should see "admin.template.preview.title"
+    When I press "form.sheet_template_preview.children.submit.label"
+    Then I should be on this page "/admin/fr/template/sheet/1/preview"
+    And I should see "flash.template.preview.update.success"
