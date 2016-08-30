@@ -4,7 +4,7 @@
 
 {% block body_attributes 'class="grey"' %}
 
-{% form_theme orderByForm _self %}
+{% form_theme orderByForm '@Ui/default.html.twig' %}
 
 {% block content %}
     <div class="catalog">
@@ -100,35 +100,7 @@
         </div>
 
         <div class="catalog__list catalog__list--block">
-            <div class="row">
-                {% for catalogSheetPreviewView in paginatedResult.results %}
-                    {{ include('EventBundle:Catalog:sheet-card.html.twig', { catalogSheetPreviewView: catalogSheetPreviewView }) }}
-                    {% if loop.index % 3 == 0 %}</div><div class="row">{% endif %}
-                {% else %}
-                    <div class="col-md-12 important fail text-center">
-                        {{ 'catalog.noResult'|trans }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block form_start %}
-    {{ parent() }}
-{% endblock %}
-
-{% block _catalog_order_by_orderBy_row %}
-    <div class="orderBy">
-        <strong>{{ form.vars.label|trans({}, form.vars.translation_domain) }}</strong>
-
-        <div class="sort-inputs">
-            {% for child in form.children %}
-                <label class="radio-inline">
-                    {{ form_widget(child) }}
-                    {{ child.vars.label|trans({}, child.vars.translation_domain) }}
-                </label>
-            {% endfor %}
+            {{ include('EventBundle:Catalog:list.html.twig', { paginatedResult: paginatedResult }) }}
         </div>
     </div>
 {% endblock %}
