@@ -454,7 +454,7 @@ class Block extends AbstractChild
     public function removeField($fieldName, $emptyValue)
     {
         foreach ($this->getObjects() as $object) {
-            if ($object->getOption($fieldName)) {
+            if (null !== $object->getOption($fieldName)) {
                 $object->setOption($fieldName, $emptyValue);
             }
         }

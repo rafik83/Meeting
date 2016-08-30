@@ -54,18 +54,17 @@ class DuplicateHandler
      */
     public function handle(Duplicate $duplicate)
     {
-        $value = $duplicate->template->getValue();
-
         if (null !== $duplicate->template->getEvent()
             && $duplicate->template->getEvent() !== $duplicate->event
         ) {
-            $value = $this->templateRemoveField->remove($duplicate->template, 'products', []);
+            $duplicate->template->setValue($this->templateRemoveField->remove($duplicate->template, 'products', []));
+            $duplicate->template->setValue($this->templateRemoveField->remove($duplicate->template, 'nomenclature', []));
         }
 
         // Duplicate SheetTemplate
         $template = $duplicate->template->duplicate(
             $duplicate->title,
-            $value,
+            $duplicate->template->getValue(),
             $this->dateTime,
             $duplicate->template->getPreview()
         );

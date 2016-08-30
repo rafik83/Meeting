@@ -142,6 +142,23 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
                 ],
         ]);
 
+        $templateRemoveField->remove($template, 'nomenclature', [])->shouldBeCalled()->willReturn([
+            "ee4f2281" =>
+                [
+                    "component" => "object",
+                    "type"      => "image",
+                    "config"    =>
+                        [
+                            "label"       => ["en" => null, "fr" => "Image"],
+                            "placeholder" => ["en" => null, "fr" => ""],
+                            "help"        => ["en" => null, "fr" => ""],
+                            "required"    => false,
+                            "style"       => "",
+                            "products"    => [],
+                        ],
+                ],
+        ]);
+
         $templateRepository->add($expectedTemplate)->shouldBeCalled();
 
         //Handler
