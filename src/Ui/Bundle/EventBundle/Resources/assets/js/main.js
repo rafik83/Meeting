@@ -115,11 +115,11 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) {
-        new QuantitySelector(element);
+        new QuantitySelector(element, document.querySelector('object--nomenclature'));
     });
 
-    [].forEach.call(target.querySelectorAll('.object--nomenclature .section__content'), function (element) {
-        new ShowMore(element);
+    [].forEach.call(target.querySelectorAll('.object--nomenclature'), function (element) {
+        new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
     });
 
 }

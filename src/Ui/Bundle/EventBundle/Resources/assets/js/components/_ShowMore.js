@@ -1,6 +1,5 @@
-var $ = require('jquery');
 
-function ShowMore(element)
+function ShowMore(element, buttonContainer)
 {
     this.element   = element;
     this.maxHeight = 65;
@@ -10,15 +9,13 @@ function ShowMore(element)
     this.link = document.createElement('a');
     this.link.setAttribute('href', '#');
 
-    var footer = this.element.parentNode.querySelector('footer');
-
-    if (footer.querySelector('.edit-link') != null) {
+    if (buttonContainer.querySelector('.edit-link') != null) {
         this.link.style.float = 'right';
     }
 
     if (this.element.clientHeight > this.maxHeight) {
         this.hide();
-        footer.appendChild(this.link);
+        buttonContainer.appendChild(this.link);
     }
 
     this.link.addEventListener('click', this.toggle.bind(this), false);
