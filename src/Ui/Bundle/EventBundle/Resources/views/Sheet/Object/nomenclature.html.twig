@@ -7,7 +7,7 @@
 
     {% if nomenclature.depth == 1 %}
 
-        <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+        <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
             <header>
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
@@ -29,7 +29,7 @@
 
     {% elseif nomenclature.depth == 2 %}
 
-        <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+        <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
             <header>
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
@@ -52,7 +52,7 @@
 
         {% if nomenclature.any(item.items) %}
             {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
-                <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+                <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                     <header>
                         <h2>{{ item.label(locale, fallback) }} <span class="badge badge-skill">{{ child.label(locale, fallback) }}</span></h2>
                     </header>
@@ -72,7 +72,7 @@
                 </section>
             {% endfor %}
         {% else %}
-            <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+            <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 <header>
                     <h2>{{ item.label(locale, fallback) }}</h2>
                 </header>

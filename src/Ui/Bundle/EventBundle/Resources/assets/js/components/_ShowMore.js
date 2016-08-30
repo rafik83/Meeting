@@ -22,7 +22,7 @@ ShowMore.prototype.hide = function()
 {
     this.element.style.maxHeight = '' + this.maxHeight + 'px';
     this.element.style.overflow  = "hidden";
-    this.link.innerHTML          = 'Voir plus';
+    this.link.innerHTML          = this.element.parentNode.getAttribute('data-show-less');
     this.showState               = false;
 };
 
@@ -30,7 +30,7 @@ ShowMore.prototype.show = function()
 {
     this.element.style.MaxHeight = 'auto';
     this.element.style.overflow  = "visible";
-    this.link.innerHTML          = 'Voir moins';
+    this.link.innerHTML          = this.element.parentNode.getAttribute('data-show-more');
     this.showState               = true;
 };
 
