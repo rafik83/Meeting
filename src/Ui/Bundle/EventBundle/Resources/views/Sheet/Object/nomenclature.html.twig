@@ -7,11 +7,11 @@
 
     {% if nomenclature.depth == 1 %}
 
-        <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
+        <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
             <header>
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
-            <div class="section__content">
+            <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 {% if nomenclature.any(item.items) %}
                     <ul>
                         {% for child in nomenclature.childrenSorted(locale) if child.key in item.items %}
@@ -29,11 +29,11 @@
 
     {% elseif nomenclature.depth == 2 %}
 
-        <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
+        <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
             <header>
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
-            <div class="section__content">
+            <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 <ul>
                     {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
                         <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
@@ -52,11 +52,11 @@
 
         {% if nomenclature.any(item.items) %}
             {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
-                <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
+                <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                     <header>
                         <h2>{{ item.label(locale, fallback) }} <span class="badge badge-skill">{{ child.label(locale, fallback) }}</span></h2>
                     </header>
-                    <div class="section__content">
+                    <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                         <ul>
                             {% for grandchild in child.childrenSorted(locale) if grandchild.any(item.items) %}
                                 <li class="highlight">{{ grandchild.label(locale, fallback) }}</li>
@@ -72,11 +72,11 @@
                 </section>
             {% endfor %}
         {% else %}
-            <section class="object--nomenclature {{ 'style--' ~ item.style }} section" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
+            <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                 <header>
                     <h2>{{ item.label(locale, fallback) }}</h2>
                 </header>
-                <div class="section__content">
+                <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                     <p class="help">{{ item.help|localize(locale, fallback) }}</p>
                 </div>
                 <footer>

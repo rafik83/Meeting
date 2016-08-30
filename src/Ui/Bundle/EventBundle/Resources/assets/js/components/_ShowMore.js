@@ -1,3 +1,4 @@
+var $ = require('jquery');
 
 function ShowMore(element)
 {
@@ -11,7 +12,7 @@ function ShowMore(element)
 
     var footer = this.element.parentNode.querySelector('footer');
 
-    if (footer.querySelector('edit-link') != null) {
+    if (footer.querySelector('.edit-link') != null) {
         this.link.style.float = 'right';
     }
 
@@ -27,7 +28,7 @@ ShowMore.prototype.hide = function()
 {
     this.element.style.maxHeight = '' + this.maxHeight + 'px';
     this.element.style.overflow  = "hidden";
-    this.link.innerHTML          = this.element.parentNode.getAttribute('data-show-less');
+    this.link.innerHTML          = this.element.getAttribute('data-show-less');
     this.showState               = false;
 };
 
@@ -35,7 +36,7 @@ ShowMore.prototype.show = function()
 {
     this.element.style.maxHeight = 'none';
     this.element.style.overflow  = "visible";
-    this.link.innerHTML          = this.element.parentNode.getAttribute('data-show-more');
+    this.link.innerHTML          = this.element.getAttribute('data-show-more');
     this.showState               = true;
 };
 
