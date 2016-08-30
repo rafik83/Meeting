@@ -8,11 +8,16 @@ function ShowMore(element)
     // create show/hide link
     this.link = document.createElement('a');
     this.link.setAttribute('href', '#');
-    this.link.style.float = 'right';
+
+    var footer = this.element.parentNode.querySelector('footer');
+
+    if (footer.querySelector('edit-link') != null) {
+        this.link.style.float = 'right';
+    }
 
     if (this.element.clientHeight > this.maxHeight) {
         this.hide();
-        this.element.parentNode.querySelector('footer').appendChild(this.link);
+        footer.appendChild(this.link);
     }
 
     this.link.addEventListener('click', this.toggle.bind(this), false);
@@ -28,7 +33,7 @@ ShowMore.prototype.hide = function()
 
 ShowMore.prototype.show = function()
 {
-    this.element.style.MaxHeight = 'auto';
+    this.element.style.maxHeight = 'none';
     this.element.style.overflow  = "visible";
     this.link.innerHTML          = this.element.parentNode.getAttribute('data-show-more');
     this.showState               = true;
