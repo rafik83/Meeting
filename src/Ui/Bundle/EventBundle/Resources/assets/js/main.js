@@ -2,14 +2,15 @@ var $                     = require('jquery'),
     PubSub                = require('pubsub-js'),
     Confirm               = require('./components/_Confirm'),
     ChoiceDescription     = require('./components/_ChoiceDescription'),
-    ShowPaymentInfo     = require('./components/_ShowPaymentInfo'),
+    ShowPaymentInfo       = require('./components/_ShowPaymentInfo'),
     AjaxForm              = require('./components/_AjaxForm'),
     CheckAllButton        = require('./components/_CheckAllButton'),
     SelectParent          = require('./components/_SelectParent'),
     UploadPreview         = require('./components/_UploadPreview'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
     ProductSelector       = require('./components/_ProductSelector'),
-    QuantitySelector      = require('./components/_QuantitySelector');
+    QuantitySelector      = require('./components/_QuantitySelector'),
+    CatalogOrderBy        = require('./components/_CatalogOrderBy');
 
 require('bootstrap');
 require('elao-form.js');
@@ -43,6 +44,10 @@ function init (target) {
 
     $('.display-catalog-research').on('click', function (e) {
         $('.catalog').toggleClass('catalog--advanced');
+    });
+
+    $('.catalog .sort form', target).each(function (key, form) {
+        new CatalogOrderBy(form, target.querySelector('.catalog__list'));
     });
 
     $('.dropdown-menu').on('click', function (e) {
