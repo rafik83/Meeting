@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,8 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $orderByForm = $this->createForm(OrderByType::class, ['orderBy' => OrderByType::ORDER_BY_ALPHABETICAL]);
+
         try {
             $query = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
@@ -57,6 +60,7 @@ class CatalogController extends Controller
             'event'           => $event,
             'isCatalog'       => true,
             'paginatedResult' => $paginatedResult,
+            'orderByForm'     => $orderByForm->createView(),
         ]);
     }
 

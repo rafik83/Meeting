@@ -4,6 +4,8 @@
 
 {% block body_attributes 'class="grey"' %}
 
+{% form_theme orderByForm _self %}
+
 {% block content %}
     <div class="catalog">
         {#
@@ -74,41 +76,28 @@
         </div>
         #}
 
-        {#
         <div class="catalog__filters">
+
             <div class="select-all">
+                {#
                 <label class="checkbox-inline" for="select-all-catalog">
                     <input type="checkbox" id="select-all-catalog">
                     Tout sélectionner (40)
                 </label>
+                #}
             </div>
 
             <div class="sort">
-                <strong>Trier</strong>
+                {{ form(orderByForm) }}
 
-                <div class="sort-inputs">
-                    <label class="radio-inline">
-                        <input name="sortBy" type="radio">
-                        Ordre alphabétique
-                    </label>
-
-                    <label class="radio-inline">
-                        <input name="sortBy" type="radio">
-                        Inscriptions récentes
-                    </label>
-
-                    <label class="radio-inline">
-                        <input name="sortBy" type="radio">
-                        Pertinence
-                    </label>
-                </div>
+                {#
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default active"><i class="icon-Mosaique"></i></button>
                     <button type="button" class="btn btn-default"><i class="icon-Liste"></i></button>
                 </div>
+                #}
             </div>
         </div>
-        #}
 
         <div class="catalog__list catalog__list--block">
             <div class="row">
@@ -121,6 +110,25 @@
                     </div>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block form_start %}
+    {{ parent() }}
+{% endblock %}
+
+{% block _catalog_order_by_orderBy_row %}
+    <div class="orderBy">
+        <strong>{{ form.vars.label|trans({}, form.vars.translation_domain) }}</strong>
+
+        <div class="sort-inputs">
+            {% for child in form.children %}
+                <label class="radio-inline">
+                    {{ form_widget(child) }}
+                    {{ child.vars.label|trans({}, child.vars.translation_domain) }}
+                </label>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
