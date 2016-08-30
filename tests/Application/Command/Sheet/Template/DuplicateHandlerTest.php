@@ -95,7 +95,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
                             "products"    => ["1", "2"],
                         ],
                 ],
-        ], ['fr'], 'fr', $dateTime, $event);
+        ], ['fr'], 'fr', $dateTime, [], $event);
 
         //expected
         $expectedTemplate = new SheetTemplate('DuplicateWithoutProduct', [
@@ -113,7 +113,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
                             "products"    => [],
                         ],
                 ],
-        ], ['fr'], 'fr', $dateTime, $eventTo);
+        ], ['fr'], 'fr', $dateTime, [], $eventTo);
         $expectedResult = new DuplicateResult($expectedTemplate);
 
         // Command

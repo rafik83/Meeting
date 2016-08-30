@@ -66,11 +66,10 @@ class DuplicateHandler
         $template = $duplicate->template->duplicate(
             $duplicate->title,
             $value,
-            $this->dateTime
+            $this->dateTime,
+            $duplicate->template->getPreview()
         );
-
-        $template->setPreview($duplicate->template->getPreview());
-
+        
         if ($duplicate->event) {
             $template->setEvent($duplicate->event);
         }
