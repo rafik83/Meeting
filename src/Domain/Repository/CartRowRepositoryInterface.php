@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface CartRowRepositoryInterface
@@ -47,4 +48,11 @@ interface CartRowRepositoryInterface
      * @return CartRow[]
      */
     public function findBySheet(Sheet $sheet);
+
+    /**
+     * @param Product $product
+     *
+     * @return CartRow[]
+     */
+    public function findByProduct($product);
 }

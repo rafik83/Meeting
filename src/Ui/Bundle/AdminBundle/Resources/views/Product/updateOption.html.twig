@@ -8,6 +8,11 @@
     {{ form_row(form.name) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.file) }}
+
+    {% if form.unitPrice is defined %}
+        {{ form_row(form.unitPrice) }}
+    {% endif %}
+
     {{ form_row(form.quantityMax) }}
     {{ form_row(form.availabilityCurrent) }}
     {{ form_row(form.availabilityMax) }}

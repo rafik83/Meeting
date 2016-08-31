@@ -1099,6 +1099,11 @@ services:
             - '@vimeet_infrastructure.repository.order_row_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
+
+    command.product.update_price_resolver:
+        class: Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver
+        arguments:
+            - '@repository.cart_row_repository'
     #
     # Security
     #
