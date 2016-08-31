@@ -20,6 +20,11 @@ abstract class AbstractUpdate extends AbstractProduct
     public $product;
 
     /**
+     * @var float
+     */
+    public $unitPrice;
+
+    /**
      * @param Product $product
      */
     public function __construct(Product $product)
@@ -28,6 +33,7 @@ abstract class AbstractUpdate extends AbstractProduct
 
         $this->name        = $product->getName();
         $this->quantityMax = $product->getQuantityMax();
+        $this->unitPrice   = $product->getUnitPrice();
 
         foreach ($product->getEvent()->getLocales() as $locale) {
             $this->translations[$locale] = [

@@ -10,12 +10,41 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product;
 
-
+use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AbstractUpdateType extends AbstractProductType
 {
+    /**
+     * @var UpdatePriceResolver
+     */
+    private $updatePriceResolver;
+
+    /**
+     * AbstractUpdateType constructor.
+     *
+     * @param UpdatePriceResolver $updatePriceResolver
+     */
+    public function __construct(UpdatePriceResolver $updatePriceResolver)
+    {
+        $this->updatePriceResolver = $updatePriceResolver;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        parent::buildForm($builder, $options);
+
+        if (true === $this->updatePriceResolver->resolve($options['product'])) {
+            $builder->add('unitPrice', NumberType::class);
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
