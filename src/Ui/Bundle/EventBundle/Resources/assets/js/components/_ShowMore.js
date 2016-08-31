@@ -2,7 +2,7 @@
 function ShowMore(element, buttonContainer)
 {
     this.element   = element;
-    this.maxHeight = 65;
+    this.maxHeight = 86;
     this.showState = false;
 
     // create show/hide link
