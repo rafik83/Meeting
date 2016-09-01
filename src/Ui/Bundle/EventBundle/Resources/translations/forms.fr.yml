@@ -21,7 +21,7 @@ form.payment_choice.children.mode.label: 'Choisissez votre mode de paiement:'
 form.payment_choice.children.paymentMode.bank_card: 'Carte bleue'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Transfert
-form.payment_choice.children.paymentMode.paypal: Paypal ou Carte bleue
+form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bleue'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.sheet_button_link_data.children.submit.label: Enregistrer
@@ -42,5 +42,7 @@ form.sheet_media_collection_data.children.medias.prototype.children.title.label:
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
 form.sheet_media_collection_data.children.submit.label: Enregistrer
+form.sheet_image_data.children.selectedProduct.label: Produits liées
+form.sheet_media_collection_data.children.selectedProduct.label: Produits liées
 gender.man: Monsieur
 gender.woman: Madame

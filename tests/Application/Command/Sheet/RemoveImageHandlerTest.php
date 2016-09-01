@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
@@ -33,13 +32,16 @@ class RemoveImageHandlerTest extends \PHPUnit_Framework_TestCase
         $templateData = new TemplateData('image', [], 'fr', 'fr');
         $removeImage  = new RemoveImage($image, $sheet, $templateData);
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->set($sheet)->shouldBeCalled();
+        $removeDataHandler = $this->prophesize(RemoveDataHandler::class);
 
         $localFileStorage = $this->prophesize(LocalFileStorageAdapter::class);
         $localFileStorage->remove($image->getImage())->shouldBeCalled();
 
-        $handler = new RemoveImageHandler($sheetRepository->reveal(), $localFileStorage->reveal());
+        $handler = new RemoveImageHandler(
+            $localFileStorage->reveal(),
+            $removeDataHandler->reveal()
+        );
+
         $handler->handle($removeImage);
     }
 }

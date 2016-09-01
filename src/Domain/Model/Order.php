@@ -270,6 +270,7 @@ class Order
         foreach ($this->rows as $key => $row) {
             if ($row->getId() === $customRow->getId()) {
                 $this->rows->remove($key);
+                return $this;
             }
         }
         return $this;
@@ -514,24 +515,6 @@ class Order
     }
 
     /**
-     * @param Product $product
-     *
-     * @return null|Order\Row
-     */
-    public function getOrderRowForProduct(Product $product)
-    {
-        foreach ($this->rows as $orderRow) {
-            if (null !== $orderRow->getProduct()
-                && $orderRow->getProduct() === $product
-            ) {
-                return $orderRow;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @return int
      */
     public function countParticipant()
@@ -592,7 +575,7 @@ class Order
         return new self(
             $sheet,
             true,
-            new Order\BillingInfo('', '', '', '', '', '', '', new Address('', '', '', ''), ''),
+            new Order\BillingInfo('', '', '', '', '', '', '', '', new Address('', '', '', ''), ''),
             [],
             $dateTime
         );

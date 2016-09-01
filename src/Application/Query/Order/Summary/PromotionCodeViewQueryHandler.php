@@ -27,7 +27,7 @@ class PromotionCodeViewQueryHandler
         $promotions               = $promotionCodeViewQuery->promotionCode->getPromotionCode()->getPromotions();
 
         foreach ($promotions as $promotion) {
-            $orderRow = $promotionCodeViewQuery->order->getOrderRowForProduct($promotion->getProduct());
+            $orderRow = $promotionCodeViewQuery->order->getRowForProduct($promotion->getProduct());
 
             if (null !== $orderRow) {
                 $promotionProductRowViews[] = new PromotionProductRowView(

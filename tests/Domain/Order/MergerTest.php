@@ -33,6 +33,7 @@ class MergerTest extends \PHPUnit_Framework_TestCase
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
         $orderBillingInfo = new Order\BillingInfo(
+            'gender',
             'lastname',
             'firstname',
             'function',

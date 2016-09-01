@@ -126,6 +126,22 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType
         tags:
             - { name: 'form.type' }
+    form_type_sheet_data.image_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType
+        arguments:
+            - '@transformer.product.id_to_product_transformer'
+            - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
+        tags:
+            - { name: 'form.type' }
+    form_type_sheet_data.media_collection_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\MediaCollectionDataType
+        arguments:
+            - '@transformer.product.id_to_product_transformer'
+            - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
+        tags:
+            - { name: 'form.type' }
     form_type_library.telephone_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType
         tags:
@@ -273,13 +289,15 @@ services:
             - '@package.planning.quantity_max_guesser'
             - '@package.planning.quantity_min_guesser'
         tags:
-            - { name: validator.constraint_validator, alias: alias_name }
+            - { name: validator.constraint_validator }
     validator.package.options_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
             - '@package.planning.quantity_min_guesser'
+            - '@package.product.template_product_guesser'
             - '@datetime'
             - '@order.merger'
+            - '@cart_manager'
         tags:
-            - { name: validator.constraint_validator, alias: alias_name }
+            - { name: validator.constraint_validator }

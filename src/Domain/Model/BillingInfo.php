@@ -86,6 +86,11 @@ class BillingInfo
     private $vatNumber;
 
     /**
+     * @var string
+     */
+    private $gender;
+
+    /**
      * BillingInfo constructor.
      *
      * @param Sheet $sheet
@@ -97,6 +102,7 @@ class BillingInfo
     }
 
     /**
+     * @param string  $gender
      * @param string  $lastname
      * @param string  $firstname
      * @param string  $function
@@ -107,8 +113,19 @@ class BillingInfo
      * @param Address $address
      * @param string  $vatNumber
      */
-    public function update($lastname, $firstname, $function, $phone, $mobile, $email, $company, Address $address, $vatNumber)
-    {
+    public function update(
+        $gender,
+        $lastname,
+        $firstname,
+        $function,
+        $phone,
+        $mobile,
+        $email,
+        $company,
+        Address $address,
+        $vatNumber
+    ) {
+        $this->gender    = $gender;
         $this->lastname  = $lastname;
         $this->firstname = $firstname;
         $this->function  = $function;
@@ -239,6 +256,14 @@ class BillingInfo
     }
 
     /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
      * @param string  $firstname
      * @param string  $lastname
      * @param string  $function
@@ -247,11 +272,22 @@ class BillingInfo
      * @param string  $mobile
      * @param string  $email
      * @param Address $address
+     * @param string  $gender
      *
      * @return BillingInfo
      */
-    public function prefill($firstname, $lastname, $function, $company, $phone, $mobile, $email, Address $address)
-    {
+    public function prefill(
+        $gender,
+        $firstname,
+        $lastname,
+        $function,
+        $company,
+        $phone,
+        $mobile,
+        $email,
+        Address $address
+    ) {
+        $this->gender    = $gender;
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->function  = $function;
@@ -269,7 +305,8 @@ class BillingInfo
      */
     public function isCompleted()
     {
-        return null !== $this->lastname
+        return null !== $this->gender
+            && null !== $this->lastname
             && null !== $this->firstname
             && null !== $this->email
             && null !== $this->company

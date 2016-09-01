@@ -62,13 +62,17 @@ User exhibitor: test@elao.com / p@ssw0rd
 
 Create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
 
+Pushing localization files:
+
+    ⇒ openl10n push --locale=all
+
 Pulling localization files:
 
     ⇒ openl10n pull --locale=all
 
-Pushing localization files:
-
-    ⇒ openl10n push --locale=all
+Best practices:
+* Update translations files on branch master.
+* Always push before pulling; new keys will be added and not used keys will be deleted on openl10n.
 
 ## Deployment
 

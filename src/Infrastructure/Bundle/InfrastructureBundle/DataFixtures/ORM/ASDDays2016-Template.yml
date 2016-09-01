@@ -59,6 +59,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             length: null
                                             type: null
                                             required: false
+                                            products: ["5", "6", "7"]
                                     6fe62a03:
                                         component: "block"
                                         type: "6-6"
@@ -277,6 +278,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 default: 3
                                 max: 3
                                 translatable: true
+                                products: ["12", "11", "10", "9"]
             69962d34:
                 component: "block"
                 type: "12"

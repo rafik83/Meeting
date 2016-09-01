@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Components\Step;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 
@@ -41,22 +43,24 @@ class StepOption
     }
 
     /**
-     * @param Sheet $sheet
-     * @param int   $stepIndex
+     * @param Sheet  $sheet
+     * @param int    $stepIndex
+     * @param string $locale
      *
      * @return SelectOptions
      */
-    public function build(Sheet $sheet, $stepIndex)
+    public function build(Sheet $sheet, $stepIndex, $locale)
     {
-        $command = new SelectOptions($sheet, $stepIndex);
-        $cart    = $this->cartManager->getCart($command->sheet, $command->currentStep);
+        $command     = new SelectOptions($sheet, $stepIndex, $locale);
+        $cart        = $this->cartManager->getCart($command->sheet, $command->currentStep);
+        $orderMerged = null;
 
         if ($sheet->hasOrders()) {
             $orderMerged = $this->orderMerger->merge($sheet->getOrders());
         }
 
         /** @var CartRow[] $optionRows */
-        $optionRows = array_combine(
+        $cartRows = array_combine(
             array_map(
                 function (CartRow $cartRow) {
                     return $cartRow->getProduct()->getId();
@@ -70,20 +74,55 @@ class StepOption
         $availableOptions = $command->sheet->getPackage()->getAvailablesOptions(new \DateTime());
 
         foreach ($availableOptions as $option) {
-            $orderQuantity = 0;
-            $cartQuantity  = 0;
-
-            if (isset($orderMerged) && $product = $orderMerged->getRowForProduct($option)) {
-                $orderQuantity = $product->getQuantity();
-            } elseif (isset($optionRows[$option->getId()])) {
-                $cartQuantity = $optionRows[$option->getId()]->getQuantity();
-            }
-
-            $options[$option->getId()] = $orderQuantity + $cartQuantity;
+            $options[$option->getId()] = $this->getOptionQuantity($option, $cartRows, $orderMerged);
         }
 
         $command->options = $options;
 
         return $command;
+    }
+
+    /**
+     * @param Product    $option
+     * @param array      $cartRows
+     * @param null|Order $order
+     *
+     * @return int
+     */
+    private function getOptionQuantity(Product $option, array $cartRows = [], Order $order = null)
+    {
+        $cartQuantity = 0;
+        $cartRow      = $this->getCartRowFromOption($option, $cartRows);
+
+        if (null !== $cartRow) {
+            $cartQuantity = $cartRow->getQuantity();
+        }
+        $optionQuantity = $cartQuantity;
+
+        if (isset($order) && $product = $order->getRowForProduct($option)) {
+            $orderQuantity  = $product->getQuantity();
+            $optionQuantity = $orderQuantity;
+
+            if (null !== $cartRow) {
+                $optionQuantity = $orderQuantity + $cartQuantity;
+            }
+        }
+
+        return $optionQuantity;
+    }
+
+    /**
+     * @param Product $option
+     * @param array   $cartRows
+     *
+     * @return CartRow|null
+     */
+    private function getCartRowFromOption(Product $option, array $cartRows)
+    {
+        if (isset($cartRows[$option->getId()])) {
+            return $cartRows[$option->getId()];
+        }
+
+        return null;
     }
 }

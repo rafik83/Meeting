@@ -149,15 +149,27 @@ class SheetController extends Controller
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $templateData->getObject($key);
-        $form         = $this->createObjectForm($object, $locale, $key);
-        $label        = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
+
+        $products = $this->get('package.product.template_product_guesser')->getProducts(
+            $object,
+            $sheet->getPackage()
+        );
+
+        // populate object needed variables
+        $object->setBuyableProducts($products);
+        $object->setSheet($sheet);
+
+        $form  = $this->createObjectForm($object, $locale, $key);
+        $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
-            'uid'    => $key,
-            'label'  => $label,
-            'form'   => $form->createView(),
-            'object' => $object,
-            'locale' => $locale,
+            'uid'      => $key,
+            'label'    => $label,
+            'form'     => $form->createView(),
+            'object'   => $object,
+            'locale'   => $locale,
+            'currency' => $eventDomain->getEvent()->getCurrency(),
+            'vatMode'  => $eventDomain->getEvent()->getMode(),
         ]);
     }
 
@@ -215,7 +227,6 @@ class SheetController extends Controller
 
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object             = $templateData->getObject($key);
-        $form               = $this->createObjectForm($object, $locale, $key);
         $levelsArchitecture = [];
 
         if ($object instanceof Template\TemplateObject\Nomenclature) {
@@ -227,31 +238,37 @@ class SheetController extends Controller
             }
         }
 
+        $products = $this->get('package.product.template_product_guesser')->getProducts(
+            $object,
+            $sheet->getPackage()
+        );
+
+        $object->setBuyableProducts($products);
+        $object->setSheet($sheet);
+
+        $form = $this->createObjectForm($object, $locale, $key);
+
         // Handle the form, update the object and redirect to the sheet if valid
-        if ($form->handleRequest($request)->isSubmitted()) {
-            if ($form->isValid()) {
-                if ($object instanceof Template\TemplateObject\Image) {
-                    $file = $form->get('file')->getData();
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            if ($object instanceof Template\TemplateObject\Image) {
+                $file = $form->get('file')->getData();
 
-                    if ($file instanceof UploadedFile) {
-                        $image       = $object->getImage();
-                        $fileStorage = $this->get('adapter.local_file_storage');
+                if ($file instanceof UploadedFile) {
+                    $image       = $object->getImage();
+                    $fileStorage = $this->get('adapter.local_file_storage');
 
-                        if (null !== $image) {
-                            $fileStorage->remove($image);
-                        }
-
-                        $newImage = $fileStorage->upload($file);
-                        $object->setImage($newImage);
+                    if (null !== $image) {
+                        $fileStorage->remove($image);
                     }
+
+                    $newImage = $fileStorage->upload($file);
+                    $object->setImage($newImage);
                 }
-
-                $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData->getData()));
-
-                return $this->redirectToRoute('event_sheet');
-            } else {
-                $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
             }
+
+            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
+
+            return $this->redirectToRoute('event_sheet');
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
@@ -279,6 +296,8 @@ class SheetController extends Controller
             'taggedData'         => $taggedData,
             'templateData'       => $templateData,
             'uid'                => $key,
+            'currency'           => $eventDomain->getEvent()->getCurrency(),
+            'vatMode'            => $eventDomain->getEvent()->getMode(),
         ]);
     }
 
@@ -424,7 +443,8 @@ class SheetController extends Controller
 
         $remove = new Remove($sheet);
         $form   = $this->createForm(RemoveType::class, $remove, [
-            'action'       => $this->generateUrl('event_sheet_handle_remove_participant', ['locale' => $locale, 'key'    => $key,]),
+            'action'       => $this->generateUrl('event_sheet_handle_remove_participant',
+                ['locale' => $locale, 'key' => $key,]),
             'participants' => $sheet->getParticipants(),
         ]);
 

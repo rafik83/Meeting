@@ -134,7 +134,7 @@ class MediaCollection extends TemplateObject
      *
      * @return array
      */
-    private function getNotEmptyMedias()
+    public function getNotEmptyMedias()
     {
         return array_filter(array_values($this->medias), function (Media $media) {
             return !$media->isEmpty();
