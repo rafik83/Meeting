@@ -32,6 +32,8 @@ class UpdatePriceResolver
     }
 
     /**
+     * Check if product price can be updated
+     *
      * @param Product $product
      *
      * @return bool
@@ -40,7 +42,7 @@ class UpdatePriceResolver
     {
         $cartRows = $this->cartRowRepository->findByProduct($product);
 
-        if (count($cartRows) == 0 && $product->getAvailabilityStatus()) {
+        if (count($cartRows) === 0 && $product->getAvailabilityStatus()) {
             return true;
         }
 
