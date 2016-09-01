@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
@@ -140,10 +148,16 @@ class OptionsValidator extends ConstraintValidator
      * @param Cart   $cart
      * @param Order  $order
      *
-     * @return false|int
+     * @return int|false
      */
-    private function getQuantityMin(Sheet $sheet, array $options, $id, $quantity, Cart $cart, Order $order = null)
-    {
+    private function getQuantityMin(
+        Sheet $sheet,
+        array $options,
+        $id,
+        $quantity,
+        Cart $cart,
+        Order $order = null
+    ) {
         $linkedProduct = $this->templateProductGuesser->guessProduct(
             $sheet,
             $options[$id]

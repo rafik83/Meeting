@@ -176,7 +176,7 @@ class BuyableObjectResolver
      */
     public function removePayableProduct(Sheet $sheet, TemplateObject $object)
     {
-        if (!$object->getSelectedProduct()) {
+        if (null === $object->getSelectedProduct()) {
             return;
         }
 
@@ -218,7 +218,7 @@ class BuyableObjectResolver
      */
     public function getSelectedProduct(TemplateObject $object)
     {
-        if ($object->getSelectedProduct()) {
+        if (null !== $object->getSelectedProduct()) {
             return $object->getSelectedProduct();
         }
 
