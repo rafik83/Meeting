@@ -1134,6 +1134,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver
         arguments:
             - '@repository.cart_row_repository'
+            - '@vimeet_infrastructure.repository.order_row_repository'
     #
     # Security
     #
