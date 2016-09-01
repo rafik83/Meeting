@@ -33,7 +33,7 @@ admin.spot.listSpot.yes: 'Yes'
 admin.type.link: 'Participation types'
 admin.zero-result: admin.zero-result
 and: and
-and_more: and_more
+and_more: 'and %count% other|and %count% others'
 change_password.link: 'Change password'
 change_password.title: 'Change password'
 event.link.see_my_sheet: 'See my %type% sheet'

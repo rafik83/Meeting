@@ -61,6 +61,11 @@ navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
 navigation.links.sheet.locale: Version
 navigation.menu: Menu
+new_password.confirm.title: 'Réinitialiser le mot de passe'
+new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
+new_password.help.reset: 'A l''aide de ce message, vous pouvez réinitialiser votre mot de passe'
+new_password.mail.title: 'Un e-mail vous a été envoyé !'
+new_password.needHelp: 'Besoin d''aide'
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
@@ -175,25 +180,19 @@ sheet.object.action.remove: 'Supprimer:'
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
-sheet.participant.remove: 'Supprimer de la fiche'
-sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
+sheet.participant.remove: 'Supprimer de la fiche'
+sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.title: 'Fiche de présentation'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total
 summary.column.unitPrice: 'Prix unitaire'
 summary.group.option.title: Options
-summary.product.included: 'Inclus'
+summary.product.included: Inclus
 summary.promotionCode.free: Offert
 summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
-new_password.confirm.title: 'Réinitialiser le mot de passe'
-new_password.mail.title: 'Un e-mail vous a été envoyé !'
-new_password.help.reset: 'A l''aide de ce message, vous pouvez réinitialiser votre mot de passe'
-new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
-new_password.needHelp: 'Besoin d''aide'
-
