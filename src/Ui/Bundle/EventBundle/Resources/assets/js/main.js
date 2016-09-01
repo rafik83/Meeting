@@ -76,7 +76,6 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
-<<<<<<< HEAD
     [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) {
         new SelectParent(element)
     });
