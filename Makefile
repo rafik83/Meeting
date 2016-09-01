@@ -72,15 +72,16 @@ install-app@test:
 	SYMFONY_ENV=test composer --no-progress --no-interaction install
 
 install-db:
+	bin/console doctrine:database:drop --force --if-exists
 	bin/console doctrine:database:create --if-not-exists
 	bin/console doctrine:schema:update --force
-	install-sessions
+	bin/console doctrine:migrations:execute 20160829173500 --up --no-interaction
 
 install-db@test:
 	bin/console doctrine:database:drop --force --if-exists --env=test
 	bin/console doctrine:database:create --if-not-exists --env=test
 	bin/console doctrine:schema:update --force --env=test
-	install-sessions@test
+	bin/console doctrine:migrations:execute 20160829173500 --up --no-interaction --env=test
 
 install-sessions:
 	bin/console doctrine:migrations:execute 20160829173500 --up --no-interaction
