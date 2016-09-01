@@ -10,6 +10,7 @@ var $                     = require('jquery'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
+    ShowMore              = require('./components/_ShowMore'),
     CatalogOrderBy        = require('./components/_CatalogOrderBy'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
@@ -75,19 +76,61 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
-    [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) { new SelectParent(element) });
-    [].forEach.call(target.querySelectorAll('[data-image-preview]'), function (element) { new UploadPreview(element, element.getAttribute('data-image-preview')) });
-    [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) { new AjaxForm(element) });
-    [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
-    [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) { new AjaxForm(element); });
-    [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) { new ChoiceDescription(element); });
-    [].forEach.call(target.querySelectorAll('[data-payment-info]'), function (element) { new ShowPaymentInfo(element); });
-    [].forEach.call(target.querySelectorAll('[data-text-max-length-indicator]'), function (element) { new EditableTextIndicator(element, element.getAttribute('data-text-max-length-indicator'), element.getAttribute('data-text-max-length-translations')); });
-    [].forEach.call(target.querySelectorAll('[data-check-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-check-all-button'), true) });
-    [].forEach.call(target.querySelectorAll('[data-uncheck-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false) });
-    [].forEach.call(target.querySelectorAll('[data-product-selector]'), function (element) { new ProductSelector(element) });
-    [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) { new QuantitySelector(element) });
-    [].forEach.call(target.querySelectorAll('form'), function (element) { new PreventMultipleSubmit(element); });
+    [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) {
+        new SelectParent(element)
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-image-preview]'), function (element) {
+        new UploadPreview(element, element.getAttribute('data-image-preview'))
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-sheet-object-form]'), function (element) {
+        new AjaxForm(element)
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) {
+        new Confirm(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) {
+        new AjaxForm(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) {
+        new ChoiceDescription(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-payment-info]'), function (element) {
+        new ShowPaymentInfo(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-text-max-length-indicator]'), function (element) {
+        new EditableTextIndicator(element, element.getAttribute('data-text-max-length-indicator'), element.getAttribute('data-text-max-length-translations'));
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-check-all-button]'), function (element) {
+        new CheckAllButton(element, element.getAttribute('data-check-all-button'), true)
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-uncheck-all-button]'), function (element) {
+        new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false)
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-product-selector]'), function (element) {
+        new ProductSelector(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) {
+        new QuantitySelector(element, document.querySelector('object--nomenclature'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.object--nomenclature'), function (element) {
+        new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
+    });
+
+    [].forEach.call(target.querySelectorAll('form'), function (element) {
+        new PreventMultipleSubmit(element);
+    });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

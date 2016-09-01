@@ -11,7 +11,7 @@
             <header>
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
-            <div class="section__content">
+            <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 {% if nomenclature.any(item.items) %}
                     <ul>
                         {% for child in nomenclature.childrenSorted(locale) if child.key in item.items %}
@@ -23,7 +23,7 @@
                 {% endif %}
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
             </footer>
         </section>
 
@@ -33,7 +33,7 @@
             <header>
                 <h2>{{ item.label(locale, fallback) }}</h2>
             </header>
-            <div class="section__content">
+            <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 <ul>
                     {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
                         <li class="highlight">{{ child.label(locale, fallback) }}</li>
@@ -44,7 +44,7 @@
                 </ul>
             </div>
             <footer>
-                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
             </footer>
         </section>
 
@@ -56,7 +56,7 @@
                     <header>
                         <h2>{{ item.label(locale, fallback) }} <span class="badge badge-skill">{{ child.label(locale, fallback) }}</span></h2>
                     </header>
-                    <div class="section__content">
+                    <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                         <ul>
                             {% for grandchild in child.childrenSorted(locale) if grandchild.any(item.items) %}
                                 <li class="highlight">{{ grandchild.label(locale, fallback) }}</li>
@@ -67,7 +67,7 @@
                         </ul>
                     </div>
                     <footer>
-                        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                        <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                     </footer>
                 </section>
             {% endfor %}
@@ -76,11 +76,11 @@
                 <header>
                     <h2>{{ item.label(locale, fallback) }}</h2>
                 </header>
-                <div class="section__content">
+                <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                     <p class="help">{{ item.help|localize(locale, fallback) }}</p>
                 </div>
                 <footer>
-                    <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                    <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                 </footer>
             </section>
         {% endif %}
