@@ -62,7 +62,8 @@
         "theofidry/alice-bundle-extension": "~1.1",
         "hautelook/alice-bundle": "~1.2.2",
         "friendsofphp/php-cs-fixer": "^1.10",
-        "phpmd/phpmd": "^2.4"
+        "phpmd/phpmd": "^2.4",
+        "easycorp/easy-log-handler": "^1.0"
     },
     "scripts": {
         "post-create-project-cmd": [

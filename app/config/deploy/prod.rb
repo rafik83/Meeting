@@ -3,6 +3,8 @@ set :front2,    "proximum-web-apache-02"
 set :deploy_to, "/var/www/proximum-vimeet.project.local/htdocs"
 set :user,      "www-data"
 
+set :deploy_via, :copy
+
 # Options to pass to composer when installing/updating
 set :composer_options, "--verbose --prefer-dist --optimize-autoloader --no-progress"
 
@@ -10,7 +12,7 @@ set :composer_options, "--verbose --prefer-dist --optimize-autoloader --no-progr
 set :clear_controllers, true
 
 role :app, front1, :primary => true
-#role :app, front2, :primary => false
+role :app, front2, :primary => false
 
 namespace :app_tasks do
   task :php do

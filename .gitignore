@@ -40,3 +40,6 @@ ansible.cfg
 /web/uploads/*
 /web/css/*
 /web/media/*
+
+# Sessions
+/app/sessions

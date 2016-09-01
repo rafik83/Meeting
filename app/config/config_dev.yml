@@ -40,6 +40,20 @@ monolog:
         #chromephp:
         #    type:   chromephp
         #    level:  info
+        buffered:
+            type: buffer
+            handler: easylog
+            channels: ["!event"]
+            level: debug
+        easylog:
+            type: service
+            id: easycorp.easylog.handler
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+services:
+    easycorp.easylog.handler:
+        class: EasyCorp\EasyLog\EasyLogHandler
+        arguments:
+            - '%kernel.logs_dir%/%kernel.environment%.log'
