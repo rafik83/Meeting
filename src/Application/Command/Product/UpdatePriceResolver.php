@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class UpdatePriceResolver
 {
-
     /**
      * @var CartRowRepositoryInterface
      */
