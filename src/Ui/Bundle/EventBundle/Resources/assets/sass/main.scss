@@ -39,6 +39,11 @@
     font-weight: bold;
 }
 
+.info-block {
+  color: $color-highlighted;
+  text-decoration: underline;
+}
+
 .intl-tel-input {
     width: 100%;
 }
@@ -117,4 +122,12 @@
 
   &.success { background: $bg-success-color; }
   &.fail { background: $bg-fail-color; }
+}
+
+.white {
+  color: #ffffff;
+}
+
+.underline {
+  text-decoration: underline;
 }

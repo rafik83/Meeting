@@ -1,0 +1,56 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Transaction;
+
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Domain\Transaction\TransactionManager;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class TransactionManagerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSetPaid()
+    {
+        $datetime    = new \DateTime();
+        $event       = EventFactory::createEvent();
+        $type        = new Type($event);
+        $owner       = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
+        $sheet       = new Sheet($event, $type, [], $owner, $datetime);
+        $transaction = new Transaction(
+            $sheet,
+            20,
+            $datetime,
+            Mode::PAYMENT_PAYPAL,
+            '',
+            Transaction::STATE_PENDING,
+            'EUR',
+            $owner
+        );
+
+        $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
+
+        $transactionRepository->set($transaction)->shouldBeCalled();
+
+        $transactionConfirmEvent = new TransactionConfirmEvent($transaction->getUser(), $transaction);
+        $eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $transactionConfirmEvent)->shouldBeCalled();
+
+        $transactionManager = new TransactionManager($transactionRepository->reveal(), $eventDispatcher->reveal());
+        $transactionManager->setPaid($transaction);
+    }
+}

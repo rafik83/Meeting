@@ -80,12 +80,12 @@
                 <th>
                     {{ macro.choice_as_dropdown(filter_form.follower) }}
                 </th>
-                <th></th>
+                <th class="col-md-1"></th>
             </tr>
             </thead>
             <tbody>
             {% for sheet in sheets.results %}
-                <tr>
+                <tr id="sheet-{{ sheet.id }}">
                     <td>
                         {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
                     </td>

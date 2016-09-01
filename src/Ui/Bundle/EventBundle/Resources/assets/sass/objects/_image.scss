@@ -43,3 +43,18 @@
 .object--form--field {
     margin-top: 30px;
 }
+
+.buyable-product-row {
+    margin: 5px;
+}
+
+.product-price {
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    color: $color-highlighted;
+    sup {
+        font-size: 10px;
+        top: -0.8em;
+    }
+}

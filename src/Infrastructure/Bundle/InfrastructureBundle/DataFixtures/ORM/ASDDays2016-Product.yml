@@ -51,6 +51,16 @@ Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
         quantity: 2
         product: '@product_plan_1_asddays'
         included: '@product_participant_1_asddays'
+    product_included_plan_2_asddays_fr:
+        __construct: false
+        quantity: 1
+        product: '@product_plan_2_asddays'
+        included: '@product_option_1_asddays'
+    product_included_plan_3_asddays_fr:
+        __construct: false
+        quantity: 1
+        product: '@product_plan_2_asddays'
+        included: '@product_option_8_asddays'
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_asddays_fr:

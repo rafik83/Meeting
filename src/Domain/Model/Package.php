@@ -195,6 +195,22 @@ class Package
     }
 
     /**
+     * @param $id
+     *
+     * @return null|Product
+     */
+    public function getOptionById($id)
+    {
+        foreach ($this->getOptions() as $option) {
+            if ($option->getId() === $id) {
+                return $option;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get options not out of stock
      *
      * @param \DateTimeInterface $now

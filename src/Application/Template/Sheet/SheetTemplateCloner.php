@@ -65,6 +65,7 @@ class SheetTemplateCloner extends TemplateCloner
             $template->getLocales(),
             $template->getFallback(),
             $this->dateTime,
+            $template->getPreview(),
             $template->getEvent()
         );
 

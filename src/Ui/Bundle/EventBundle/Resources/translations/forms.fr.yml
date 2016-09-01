@@ -42,5 +42,7 @@ form.sheet_media_collection_data.children.medias.prototype.children.title.label:
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
 form.sheet_media_collection_data.children.submit.label: Enregistrer
+form.sheet_image_data.children.selectedProduct.label: Produits liées
+form.sheet_media_collection_data.children.selectedProduct.label: Produits liées
 gender.man: Monsieur
 gender.woman: Madame

@@ -39,8 +39,10 @@ class CapturePayment
      * @param Payum                          $payum
      * @param TransactionRepositoryInterface $transactionRepository
      */
-    public function __construct(Payum $payum, TransactionRepositoryInterface $transactionRepository)
-    {
+    public function __construct(
+        Payum $payum,
+        TransactionRepositoryInterface $transactionRepository
+    ) {
         $this->payum                 = $payum;
         $this->transactionRepository = $transactionRepository;
     }
