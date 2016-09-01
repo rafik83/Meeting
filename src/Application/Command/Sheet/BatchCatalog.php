@@ -10,14 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class BatchEnableDisable extends AbstractBatch
+class BatchCatalog extends AbstractBatch
 {
     /**
      * @var array
      */
     public $ids;
+
+    /**
+     * @var DateTimeInterface
+     */
+    public $date;
 
     /**
      * @var bool
@@ -30,23 +36,18 @@ class BatchEnableDisable extends AbstractBatch
     public $admin;
 
     /**
-     * @var \DateTimeInterface
-     */
-    public $date;
-
-    /**
-     * BatchValidate constructor.
+     * BatchCatalog constructor.
      *
-     * @param array              $ids
-     * @param bool               $state
-     * @param Admin              $admin
-     * @param \DateTimeInterface $date
+     * @param array             $ids
+     * @param DateTimeInterface $date
+     * @param bool              $state
+     * @param Admin             $admin
      */
-    public function __construct(array $ids, $state, Admin $admin, \DateTimeInterface $date)
+    public function __construct(array $ids, DateTimeInterface $date, $state, Admin $admin)
     {
         $this->ids   = $ids;
+        $this->date  = $date;
         $this->state = $state;
         $this->admin = $admin;
-        $this->date  = $date;
     }
 }

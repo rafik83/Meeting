@@ -58,6 +58,6 @@ class BatchValidateHandler
             $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $batchValidate->date, $batchValidate->comment));
         }
 
-        return new BatchResult(count($sheets));
+        return new BatchResult(count($sheets), $batchValidate->getMessage() . 'validate.success');
     }
 }

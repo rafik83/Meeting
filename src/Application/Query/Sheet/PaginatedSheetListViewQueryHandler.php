@@ -117,12 +117,14 @@ class PaginatedSheetListViewQueryHandler
             $lastName  = $this->participantInfoGuesser->guessParticipantLastName($sheet->getParticipantOwner(), $locale);
 
         }
+
         return new SheetListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getState(),
             $sheet->isCompleted(),
             $sheet->isEnabled(),
+            $sheet->isInCatalog(),
             $sheet->getType()->getCategoriesTitles($locale),
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(

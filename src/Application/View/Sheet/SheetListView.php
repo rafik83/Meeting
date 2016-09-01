@@ -106,13 +106,19 @@ class SheetListView
     public $enabled;
 
     /**
+     * @var bool
+     */
+    public $inCatalog;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
      * @param string               $title
      * @param string               $state
      * @param bool                 $completed
-     * @param                      $enabled
+     * @param bool                 $enabled
+     * @param bool                 $inCatalog
      * @param array                $categories
      * @param string               $type
      * @param SheetParticipantView $owner
@@ -128,6 +134,7 @@ class SheetListView
         $state,
         $completed,
         $enabled,
+        $inCatalog,
         array $categories,
         $type,
         SheetParticipantView $owner,
@@ -142,6 +149,7 @@ class SheetListView
         $this->state              = $state;
         $this->completed          = $completed;
         $this->enabled            = $enabled;
+        $this->inCatalog          = $inCatalog;
         $this->categories         = $categories;
         $this->type               = $type;
         $this->owner              = $owner;
@@ -171,5 +179,13 @@ class SheetListView
     public function isEnabled()
     {
         return true === $this->enabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInCatalog()
+    {
+        return true === $this->inCatalog;
     }
 }

@@ -97,6 +97,16 @@ class Sheet implements TraceableInterface
     private $owner;
 
     /**
+     * @var bool
+     */
+    private $inCatalog = false;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $inCatalogAt;
+
+    /**
      * Sheet constructor.
      *
      * @param Event              $event
@@ -600,5 +610,37 @@ class Sheet implements TraceableInterface
     public function hasOrders()
     {
         return (count($this->getOrders()) > 0);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInCatalog()
+    {
+        return true === $this->inCatalog;
+    }
+
+    /**
+     * @param boolean $inCatalog
+     */
+    public function setInCatalog($inCatalog)
+    {
+        $this->inCatalog = $inCatalog;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getInCatalogAt()
+    {
+        return $this->inCatalogAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $inCatalogAt
+     */
+    public function setInCatalogAt($inCatalogAt)
+    {
+        $this->inCatalogAt = $inCatalogAt;
     }
 }

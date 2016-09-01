@@ -20,7 +20,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -28,9 +28,10 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type($event);
         $date  = new \DateTime();
 
-        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
+        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN',
+            new \DateTime());
 
-        // Actual sheet
+        // actual sheet
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
@@ -38,37 +39,36 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
         $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
 
-        // Expected
+        // expected sheet
         $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $expectedSheet1->setEnable(false);
+        $expectedSheet1->setInCatalog(true);
+        $expectedSheet1->setInCatalogAt($date);
 
         $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $expectedSheet2->setEnable(false);
+        $expectedSheet2->setInCatalog(true);
+        $expectedSheet2->setInCatalogAt($date);
 
         $expectedSheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
-        $expectedSheet3->setEnable(false);
+        $expectedSheet3->setInCatalog(true);
+        $expectedSheet3->setInCatalogAt($date);
 
         // Mock
-        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
-        $batchCatalogHandler = $this->prophesize(BatchCatalogHandler::class);
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
+
         foreach ([$expectedSheet1, $expectedSheet2, $expectedSheet3] as $sheet) {
             $sheetRepository->set($sheet)->shouldBeCalled();
-            $eventDispatcher->dispatch(Events::SHEET_ENABLE_DISABLE,
-                new SheetEnableDisableEvent($sheet, $admin, new \DateTime(), false)
-            )->shouldBeCalled();
+//            $eventDispatcher->dispatch(Events::SHEET_ENABLE_DISABLE,
+//                new SheetEnableDisableEvent($sheet, $admin, $date, true)
+//            )->shouldBeCalled();
         }
 
         // Command
-        $command = new BatchEnableDisable([1, 2, 3], false, $admin, $date);
-        $handler = new BatchEnableDisableHandler(
-            $sheetRepository->reveal(),
-            $eventDispatcher->reveal(),
-            $batchCatalogHandler->reveal()
-        );
+        $command = new BatchCatalog([1, 2, 3], $date, true, $admin);
+        $handler = new BatchCatalogHandler($sheetRepository->reveal(), $eventDispatcher->reveal());
 
         $result = $handler->handle($command);
         $this->assertEquals(3, $result->count);

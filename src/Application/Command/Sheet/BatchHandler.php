@@ -33,23 +33,31 @@ class BatchHandler
     private $batchEnableDisableHandler;
 
     /**
+     * @var BatchCatalogHandler
+     */
+    private $batchCatalogHandler;
+
+    /**
      * BatchHandler constructor.
      *
      * @param BatchValidateHandler      $batchValidateHandler
      * @param BatchAssignHandler        $batchAssignHandler
      * @param BatchAcceptHandler        $batchAcceptHandler
      * @param BatchEnableDisableHandler $batchEnableDisableHandler
+     * @param BatchCatalogHandler       $batchCatalogHandler
      */
     public function __construct(
         BatchValidateHandler $batchValidateHandler,
         BatchAssignHandler $batchAssignHandler,
         BatchAcceptHandler $batchAcceptHandler,
-        BatchEnableDisableHandler $batchEnableDisableHandler
+        BatchEnableDisableHandler $batchEnableDisableHandler,
+        BatchCatalogHandler $batchCatalogHandler
     ) {
         $this->batchValidateHandler      = $batchValidateHandler;
         $this->batchAssignHandler        = $batchAssignHandler;
         $this->batchAcceptHandler        = $batchAcceptHandler;
         $this->batchEnableDisableHandler = $batchEnableDisableHandler;
+        $this->batchCatalogHandler       = $batchCatalogHandler;
     }
 
     /**
@@ -80,10 +88,17 @@ class BatchHandler
             $state = (true === $batch->enable) ? true : false;
 
             return $this->batchEnableDisableHandler->handle(
-                new BatchEnableDisable($batch->ids, $state, $batch->admin)
+                new BatchEnableDisable($batch->ids, $state, $batch->admin, $batch->date)
+            );
+        }
+        if ($batch->addCatalog || $batch->removeCatalog) {
+            $state = (true === $batch->addCatalog) ? true : false;
+
+            return $this->batchCatalogHandler->handle(
+                new BatchCatalog($batch->ids, $batch->date, $state, $batch->admin)
             );
         }
 
-        return new BatchResult(0);
+        return new BatchResult(0, $batch->getMessage());
     }
 }
