@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Template;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetTemplate extends AbstractTemplate
 {
@@ -18,6 +19,31 @@ class SheetTemplate extends AbstractTemplate
      * @var array
      */
     protected $preview;
+
+    /**
+     * SheetTemplate constructor.
+     *
+     * @param string            $title
+     * @param array             $value
+     * @param array             $locales
+     * @param string            $fallback
+     * @param DateTimeInterface $createdAt
+     * @param array             $preview
+     * @param Event|null        $event
+     */
+    public function __construct(
+        $title,
+        array $value,
+        array $locales,
+        $fallback,
+        \DateTimeInterface $createdAt,
+        array $preview = [],
+        Event $event = null
+    ) {
+        parent::__construct($title, $value, $locales, $fallback, $createdAt, $event);
+
+        $this->preview = $preview;
+    }
 
     /**
      * @return string
@@ -31,12 +57,13 @@ class SheetTemplate extends AbstractTemplate
      * @param string            $title
      * @param array             $value
      * @param DateTimeInterface $createdAt
+     * @param array             $preview
      *
      * @return SheetTemplate
      */
-    public function duplicate($title, array $value, DateTimeInterface $createdAt)
+    public function duplicate($title, array $value, DateTimeInterface $createdAt, array $preview = [])
     {
-        return new $this($title, $value, $this->locales, $this->fallback, $createdAt);
+        return new $this($title, $value, $this->locales, $this->fallback, $createdAt, $preview);
     }
 
     /**

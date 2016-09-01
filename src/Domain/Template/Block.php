@@ -375,6 +375,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject\MediaCollection[]
+     */
+    public function getMediaCollectionObjects()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\MediaCollection;
+        });
+    }
+
+    /**
      * @return TemplateObject\Nomenclature[]
      */
     public function getNomenclatureObjects()
@@ -454,7 +464,7 @@ class Block extends AbstractChild
     public function removeField($fieldName, $emptyValue)
     {
         foreach ($this->getObjects() as $object) {
-            if ($object->getOption($fieldName)) {
+            if (null !== $object->getOption($fieldName)) {
                 $object->setOption($fieldName, $emptyValue);
             }
         }

@@ -280,6 +280,8 @@ admin.sheet.trace.enable: 'Activée le %at%'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
+admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
+admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'

@@ -111,17 +111,11 @@ class SheetController extends Controller
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
-                if ($batch->validate) {
-                    $this->addFlash('success',
-                        new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count,
-                            ['%count%' => $result->count]));
-                } elseif ($batch->assign && $batch->follower) {
-                    $this->addFlash('success',
-                        new TranschoiceMessage('flash.admin.sheet_batch.assign.success', $result->count,
-                            ['%count%' => $result->count, '%name%' => $batch->follower->getDisplayName()]));
-                }
+                $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
+                    '%count%' => $result->count,
+                ]));
             } else {
-                $this->addFlash('error', (string)$batchForm->getErrors(true));
+                $this->addFlash('error', (string) $batchForm->getErrors(true));
             }
         }
 

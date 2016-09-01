@@ -1,0 +1,3 @@
+Proximum\Vimeet\Domain\Template\TemplateObject\Image:
+    constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageConstraint: ~

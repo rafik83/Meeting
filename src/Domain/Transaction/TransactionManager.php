@@ -1,0 +1,54 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Transaction;
+
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+
+class TransactionManager
+{
+    /**
+     * @var TransactionRepositoryInterface
+     */
+    private $transactionRepository;
+
+    /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
+     * @param TransactionRepositoryInterface  $transactionRepository
+     * @param DelayedEventDispatcher          $eventDispatcher
+     */
+    public function __construct(
+        TransactionRepositoryInterface $transactionRepository,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
+        $this->transactionRepository  = $transactionRepository;
+        $this->eventDispatcher        = $eventDispatcher;
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    public function setPaid(Transaction $transaction)
+    {
+        $transaction->setPaid();
+        $this->transactionRepository->set($transaction);
+
+        $transactionConfirmEvent = new TransactionConfirmEvent($transaction->getUser(), $transaction);
+        $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $transactionConfirmEvent);
+    }
+}

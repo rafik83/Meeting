@@ -38,6 +38,12 @@ security:
                 password_parameter: "login[password]"
                 default_target_path: admin_event_list
                 use_referer: true
+            remember_me:
+                name: user_remembered
+                remember_me_parameter: login[rememberMe]
+                secret:   '%secret%'
+                lifetime: 2592000
+                path:     /
             logout:
                 path: admin_logout
                 target: admin_login

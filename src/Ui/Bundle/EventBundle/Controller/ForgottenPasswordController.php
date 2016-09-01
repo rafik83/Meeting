@@ -46,9 +46,8 @@ class ForgottenPasswordController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($forgottenPassword);
-                $this->addFlash('success', 'flash.reset_password_token.success');
 
-                return $this->redirectToRoute('event');
+                return $this->redirectToRoute('event_forgotten_password_confirm');
             } catch (EmailDoesNotExistException $exception) {
                 $form->get('email')->addError($this->get('error_factory')->create('validators.emailDoesNotExist', $request->getLocale()));
             }
@@ -57,6 +56,22 @@ class ForgottenPasswordController extends Controller
         return $this->render('EventBundle:ResetPassword:request_token.html.twig', [
             'event' => $eventDomain->getEvent(),
             'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     *
+     * @return RedirectResponse|Response
+     */
+    public function forgottenPasswordConfirmAction(EventDomain $eventDomain)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('event');
+        }
+
+        return $this->render('EventBundle:ResetPassword:confirm.html.twig', [
+            'event' => $eventDomain->getEvent(),
         ]);
     }
 
@@ -79,7 +94,6 @@ class ForgottenPasswordController extends Controller
                 'token' => $forgottenPasswordToken->getToken(),
             ]),
             'method' => 'POST',
-            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

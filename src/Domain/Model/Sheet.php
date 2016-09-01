@@ -614,7 +614,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isInCatalog()
     {
@@ -622,7 +622,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @param boolean $inCatalog
+     * @param bool $inCatalog
      */
     public function setInCatalog($inCatalog)
     {

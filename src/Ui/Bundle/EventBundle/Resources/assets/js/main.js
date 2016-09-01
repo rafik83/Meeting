@@ -10,7 +10,9 @@ var $                     = require('jquery'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
-    ShowMore              = require('./components/_ShowMore');
+    ShowMore              = require('./components/_ShowMore'),
+    CatalogOrderBy        = require('./components/_CatalogOrderBy'),
+    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
 require('elao-form.js');
@@ -46,6 +48,10 @@ function init (target) {
         $('.catalog').toggleClass('catalog--advanced');
     });
 
+    $('.catalog .sort form', target).each(function (key, form) {
+        new CatalogOrderBy(form, target.querySelector('.catalog__list'));
+    });
+
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
@@ -70,6 +76,7 @@ function init (target) {
 
     $('.show-modal').modal('show');
 
+<<<<<<< HEAD
     [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) {
         new SelectParent(element)
     });
@@ -122,6 +129,9 @@ function init (target) {
         new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
     });
 
+    [].forEach.call(target.querySelectorAll('form'), function (element) {
+        new PreventMultipleSubmit(element);
+    });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

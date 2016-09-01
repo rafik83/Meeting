@@ -36,7 +36,7 @@
             <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 <ul>
                     {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
-                        <li class="highlight">{{ grandchild.label|localize(locale, fallback) }}</li>
+                        <li class="highlight">{{ child.label(locale, fallback) }}</li>
                         {% for grandchild in child.childrenSorted(locale) if grandchild.key in item.items %}
                             <li>{{ grandchild.label(locale, fallback) }}</li>
                         {% endfor %}

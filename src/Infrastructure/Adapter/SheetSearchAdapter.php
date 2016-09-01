@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -42,12 +43,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query   = new Query($builder->getQuery());
 
         if (count($orderBy)) {
-            $query->addSort($orderBy);
+            foreach ($orderBy as $value) {
+                if (Constant::ORDER_BY_ALPHABETICAL === $value) {
+                    $query->addSort(['sheetName.raw' => 'asc']);
+                } else if(Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $value) {
+                    $query->addSort(['inCatalogAt' => 'desc']);
+                }
+            }
         }
 
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);
-        } catch (NotValidCurrentPageException $ex) {
+        } catch (NotValidCurrentPageException $exception) {
             throw new UnavailableCurrentPageException(sprintf('Current page %s not available', $page));
         }
 

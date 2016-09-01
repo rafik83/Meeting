@@ -1,6 +1,9 @@
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.catalog_order_by.children.orderBy.label: TRIER
+form.catalog_order_by.order.alphabetical: Ordre alphabétique
+form.catalog_order_by.order.dateAddedToCatalog: Inscriptions récentes
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
@@ -42,5 +45,7 @@ form.sheet_media_collection_data.children.medias.prototype.children.title.label:
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Lien
 form.sheet_media_collection_data.children.submit.label: Enregistrer
+form.sheet_image_data.children.selectedProduct.label: Produits liées
+form.sheet_media_collection_data.children.selectedProduct.label: Produits liées
 gender.man: Monsieur
 gender.woman: Madame

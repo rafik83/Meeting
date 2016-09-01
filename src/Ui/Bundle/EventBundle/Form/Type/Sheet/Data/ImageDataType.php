@@ -10,8 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
+use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,11 +24,43 @@ use Symfony\Component\Validator\Constraints\Image;
 class ImageDataType extends AbstractType
 {
     /**
+     * @var IdToProductTransformer
+     */
+    private $idToProductTransformer;
+
+    /**
+     * @var TemplateProductGuesser
+     */
+    private $templateProductGuesser;
+
+    /**
+     * @var BuyableObjectResolver
+     */
+    private $buyableObjectResolver;
+
+    /**
+     * ImageDataType constructor.
+     *
+     * @param IdToProductTransformer $idToProductTransformer
+     * @param TemplateProductGuesser $templateProductGuesser
+     * @param BuyableObjectResolver  $buyableObjectResolver
+     */
+    public function __construct(
+        IdToProductTransformer $idToProductTransformer,
+        TemplateProductGuesser $templateProductGuesser,
+        BuyableObjectResolver $buyableObjectResolver
+    ) {
+        $this->idToProductTransformer = $idToProductTransformer;
+        $this->templateProductGuesser = $templateProductGuesser;
+        $this->buyableObjectResolver  = $buyableObjectResolver;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Object\Image $image */
+        /** @var TemplateObject\Image $image */
         $image = $options['object'];
 
         $builder->add('file', FileType::class, [
@@ -36,8 +72,25 @@ class ImageDataType extends AbstractType
             ],
             'constraints' => [
                 new Image(['mimeTypes' => TemplateObject\Image::supportedMimeType()]),
-            ]
+            ],
         ]);
+
+        if ($this->templateProductGuesser->hasPayableOption($image)) {
+            $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($image);
+
+            $builder
+                ->add('selectedProduct', ChoiceType::class, [
+                    'expanded'    => true,
+                    'multiple'    => false,
+                    'choice_name' => 'id',
+                    'choices'     => $image->getBuyableProducts(),
+                    'required'    => true,
+                    'data'        => $selectedRadio,
+                ]);
+
+            $builder->get('selectedProduct')
+                ->addModelTransformer($this->idToProductTransformer);
+        }
     }
 
     /**
@@ -52,6 +105,9 @@ class ImageDataType extends AbstractType
             'data_class'  => TemplateObject\Image::class,
             'placeholder' => null,
             'help'        => null,
+            'attr'        => [
+                'data-product-selector' => (int) true,
+            ],
         ]);
     }
 

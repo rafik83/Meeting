@@ -18,12 +18,21 @@ class BatchResult
     public $count;
 
     /**
+     * Translation message key
+     *
+     * @var string
+     */
+    public $message;
+
+    /**
      * BatchResult constructor.
      *
-     * @param int $count
+     * @param int    $count
+     * @param string $message
      */
-    public function __construct($count)
+    public function __construct($count, $message)
     {
-        $this->count = $count;
+        $this->count   = $count;
+        $this->message = $message;
     }
 }
