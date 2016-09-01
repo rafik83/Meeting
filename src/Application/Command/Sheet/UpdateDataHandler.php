@@ -53,17 +53,17 @@ class UpdateDataHandler
      */
     public function handle(UpdateData $command)
     {
-        if ($command->object instanceof MediaCollection &&
-            count($command->object->getMedias()) === 0
+        if ($command->templateObject instanceof MediaCollection &&
+            count($command->templateObject->getMedias()) === 0
         ) {
             $this->removeDataHandler->handle(new RemoveData(
                 $command->templateData,
-                $command->object,
+                $command->templateObject,
                 $command->sheet
             ));
         }
 
-        $this->buyableObjectResolver->updateCart($command->sheet, $command->object);
+        $this->buyableObjectResolver->updateCart($command->sheet, $command->templateObject);
         $this->sheetRepository->set($command->sheet->setData($command->templateData->getData()));
     }
 }

@@ -301,6 +301,8 @@ admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
 admin.spot.listSpot.size: 'Taille (en m²)'
 admin.spot.listSpot.yes: Oui
 admin.spot.title: Lieux
+admin.template.action.preview: 'Gérer l''aperçu catalogue'
+admin.template.preview.title: 'Aperçu du catalogue'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'

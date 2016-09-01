@@ -194,6 +194,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getPreviewAvailableObjects()
+    {
+        return array_filter($this->getObjects(), function(TemplateObject $object) {
+            return $object instanceof TemplateObject\Image || $object instanceof TemplateObject\EditableText;
+        });
+    }
+
+    /**
      * @param string $key
      *
      * @return TemplateObject
@@ -454,7 +464,7 @@ class Block extends AbstractChild
     public function removeField($fieldName, $emptyValue)
     {
         foreach ($this->getObjects() as $object) {
-            if ($object->getOption($fieldName)) {
+            if (null !== $object->getOption($fieldName)) {
                 $object->setOption($fieldName, $emptyValue);
             }
         }

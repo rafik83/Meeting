@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplatePreviewResolver;
 
 class SaveHandler
 {
@@ -20,13 +21,22 @@ class SaveHandler
     private $templateRepository;
 
     /**
+     * @var TemplatePreviewResolver
+     */
+    private $templatePreviewResolver;
+
+    /**
      * SaveHandler constructor.
      *
      * @param SheetTemplateRepositoryInterface $templateRepository
+     * @param TemplatePreviewResolver          $templatePreviewResolver
      */
-    public function __construct(SheetTemplateRepositoryInterface $templateRepository)
-    {
-        $this->templateRepository = $templateRepository;
+    public function __construct(
+        SheetTemplateRepositoryInterface $templateRepository,
+        TemplatePreviewResolver $templatePreviewResolver
+    ) {
+        $this->templateRepository      = $templateRepository;
+        $this->templatePreviewResolver = $templatePreviewResolver;
     }
 
     /**
@@ -37,5 +47,8 @@ class SaveHandler
         $save->template->setValue($save->value);
 
         $this->templateRepository->set($save->template);
+
+        // resolve preview objects
+        $this->templatePreviewResolver->resolve($save->template);
     }
 }

@@ -204,7 +204,7 @@ class TemplateDataFactory
 
         foreach ($data as $key => $value) {
             try {
-                $templateData->getObject($key)->setData($value ? : []);
+                $templateData->getObject($key)->setData($value ?: []);
             } catch (ObjectNotFoundException $exception) {
                 // Don't try to set data if object not found
             }
@@ -247,11 +247,13 @@ class TemplateDataFactory
      */
     private function buildComponents(array $config, $locale, $fallback)
     {
-        return array_map(
-            function (array $child) use ($locale, $fallback) {
+        return array_combine(array_keys($config), array_map(
+            function (array $child, $key) use ($locale, $fallback) {
+                $child['key'] = $key;
+
                 return $this->doCreate($child, $locale, $fallback);
-            }, $config
-        );
+            }, $config, array_keys($config)
+        ));
     }
 
     /**
@@ -269,7 +271,8 @@ class TemplateDataFactory
         foreach ($config['children'] as $column => $children) {
             $block->addColumn($column);
             foreach ($children as $key => $child) {
-                $child = $this->doCreate($child, $locale, $fallback);
+                $child['key'] = $key;
+                $child        = $this->doCreate($child, $locale, $fallback);
                 $block->addChild($column, $key, $child);
             }
         }
@@ -287,7 +290,7 @@ class TemplateDataFactory
     private function buildObject(array $config, $locale, $fallback)
     {
         $class  = $this->objects[$config['type']];
-        $object = new $class($config['type'], $config['config'], $locale, $fallback);
+        $object = new $class($config['key'], $config['type'], $config['config'], $locale, $fallback);
 
         if ($object instanceof TemplateObject\Nomenclature) {
             if ($object->getNomenclatureId()) {
@@ -306,7 +309,13 @@ class TemplateDataFactory
     private function getNomenclature($id)
     {
         if (!isset($this->nomenclatures[$id])) {
-            throw new \RuntimeException(sprintf('Nomenclature "%s" not found. Available nomenclatures are "%s"', $id, implode('", "', array_keys($this->nomenclatures))));
+            throw new \RuntimeException(
+                sprintf(
+                    'Nomenclature "%s" not found. Available nomenclatures are "%s"',
+                    $id,
+                    implode('", "', array_keys($this->nomenclatures))
+                )
+            );
         }
 
         return $this->nomenclatures[$id];

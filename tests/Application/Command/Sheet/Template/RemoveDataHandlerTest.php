@@ -31,7 +31,7 @@ class RemoveDataHandlerTest extends \PHPUnit_Framework_TestCase
         $user         = new User('test@test.com', 'salt', 'password', 'fr');
         $templateData = new TemplateData('image', ['image' => 'image.jpg', 'product' => 6], 'fr', 'fr');
         $sheet        = new Sheet($event, $type, $templateData->normalize(), $user, $dateTime);
-        $image        = new Image('image', ['image' => 'image.jpg', 'product' => 6], 'fr', 'fr');
+        $image        = new Image('key', 'image', ['image' => 'image.jpg', 'product' => 6], 'fr', 'fr');
 
         $removeData = new RemoveData($templateData, $image, $sheet);
 

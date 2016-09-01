@@ -38,10 +38,13 @@ class UpdateData
      * @param TemplateData   $templateData
      * @param TemplateObject $templateObject
      */
-    public function __construct(Sheet $sheet, TemplateData $templateData, TemplateObject $templateObject)
-    {
-        $this->sheet        = $sheet;
-        $this->templateData = $templateData;
-        $this->object       = $templateObject;
+    public function __construct(
+        Sheet $sheet,
+        TemplateData $templateData,
+        TemplateObject $templateObject
+    ) {
+        $this->sheet          = $sheet;
+        $this->templateData   = $templateData;
+        $this->templateObject = $templateObject;
     }
 }

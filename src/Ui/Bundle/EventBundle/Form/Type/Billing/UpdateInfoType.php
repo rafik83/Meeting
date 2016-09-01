@@ -27,11 +27,9 @@ class UpdateInfoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $gender  = new Gender('gender', [], '', '');
-
         $builder
             ->add('gender', ChoiceType::class, [
-                'choices'  => $gender->getGenders(),
+                'choices'  => Gender::getGenders(),
                 'choice_label' => function ($value) {
                     return sprintf('gender.%s', $value);
                 },

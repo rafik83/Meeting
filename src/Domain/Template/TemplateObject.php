@@ -31,6 +31,33 @@ class TemplateObject extends AbstractChild
     protected $sheet;
 
     /**
+     * @var string
+     */
+    protected $key;
+
+    /**
+     * @param string $key
+     * @param string $type
+     * @param array  $config
+     * @param string $locale
+     * @param string $fallback
+     */
+    public function __construct($key, $type, array $config, $locale, $fallback)
+    {
+        parent::__construct($type, $config, $locale, $fallback);
+
+        $this->key = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getComponent()
@@ -93,12 +120,12 @@ class TemplateObject extends AbstractChild
     }
 
     /**
-     * @param string $locale
-     * @param string $fallback
+     * @param string      $locale
+     * @param null|string $fallback
      *
      * @return string
      */
-    public function getLabel($locale, $fallback)
+    public function getLabel($locale, $fallback = null)
     {
         return $this->getOption('label', $locale, $fallback);
     }

@@ -78,7 +78,7 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block        = new Block('12', [], 'fr', 'fr');
-        $block->addChild(0, 'azerty', new EditableText('editable-text', [], 'fr', 'fr'));
+        $block->addChild(0, 'azerty', new EditableText('69b3cde1', 'editable-text', [], 'fr', 'fr'));
         $templateData->addChild(0, 'poiuyt', $block);
 
         $templateDataFactory->createFromTemplate(Argument::that(function (SheetTemplate $sheetTemplate) use ($clone) {
@@ -158,7 +158,7 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block        = new Block('12', [], 'fr', 'fr');
-        $object       = new NomenclatureObject('nomenclature', [], 'fr', 'fr');
+        $object       = new NomenclatureObject('69b3cde1', 'nomenclature', [], 'fr', 'fr');
         $object->setNomenclature($nomenclature);
         $block->addChild(0, 'azerty', $object);
         $templateData->addChild(0, 'poiuyt', $block);

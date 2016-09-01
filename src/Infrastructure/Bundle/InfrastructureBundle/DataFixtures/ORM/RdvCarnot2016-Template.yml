@@ -6,6 +6,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
         locales: ['fr']
         fallback: 'fr'
         createdAt: "<dateTimeBetween('-10days', 'now')>"
+        preview: ['1b9a00b3', 'dcc42d3d', 'd691d21c']
         value:
             69b3cde3:
                 component: "block"

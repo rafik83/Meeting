@@ -67,8 +67,27 @@
                 </td>
                 <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
-                    <a href="{{ path('admin_template_sheet_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
+                        'template': template.id
+                    }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+                    <div class="btn-group">
+                        <a href="{{ path('admin_template_sheet_builder', {
+                            'template': template.id, 'locale': template.fallback
+                        }) }}" class="btn btn-sm btn-default">
+                            {{ 'admin.template.action.edit'|trans }}
+                        </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}"
+                                   data-toggle="modal" data-target="#duplicate-modal">
+                                    {{ 'admin.template.action.duplicate'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
@@ -91,7 +110,7 @@
                 <td>{{ template.title }}</td>
                 <td>{{ macro.more(template.locales|locales, 3) }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#duplicate-modal">Dupliquer</a>
+                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#duplicate-modal">{{ 'admin.template.action.duplicate'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}

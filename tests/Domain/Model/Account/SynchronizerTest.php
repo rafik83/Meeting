@@ -32,17 +32,17 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $text  = new TemplateObject\Text('text', [], $locale, $locale);
-        $editableText1 = new TemplateObject\EditableText('editable-text', [
+        $text  = new TemplateObject\Text('69b3cde1', 'text', [], $locale, $locale);
+        $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
-        $editableText2 = new TemplateObject\EditableText('editable-text', [
+        $editableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
-        $telephone1    = new TemplateObject\Telephone('telephone', [
+        $telephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);
-        $telephone2    = new TemplateObject\Telephone('telephone', [
+        $telephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile'],
         ], $locale, $locale);
 
@@ -59,20 +59,20 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $expectedBlock = new Block('12', [], 'fr', 'fr');
-        $expectedText  = new TemplateObject\Text('text', [], $locale, $locale);
-        $expectedEditableText1 = new TemplateObject\EditableText('editable-text', [
+        $expectedText  = new TemplateObject\Text('69b3cde1', 'text', [], $locale, $locale);
+        $expectedEditableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
         $expectedEditableText1->setContentValue('Test');
-        $expectedEditableText2 = new TemplateObject\EditableText('editable-text', [
+        $expectedEditableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
         $expectedEditableText2->setContentValue('Truc');
-        $expectedTelephone1    = new TemplateObject\Telephone('telephone', [
+        $expectedTelephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);
         $expectedTelephone1->setContentValue('Foo');
-        $expectedTelephone2    = new TemplateObject\Telephone('telephone', [
+        $expectedTelephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile'],
         ], $locale, $locale);
         $expectedTelephone2->setContentValue('Bar');
@@ -101,20 +101,20 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
-        $text  = new TemplateObject\Text('text', [], $locale, $locale);
-        $editableText1 = new TemplateObject\EditableText('editable-text', [
+        $text  = new TemplateObject\Text('69b3cde1', 'text', [], $locale, $locale);
+        $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
         $editableText1->setContentValue('Test');
-        $editableText2 = new TemplateObject\EditableText('editable-text', [
+        $editableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
         $editableText2->setContentValue('Truc');
-        $telephone1    = new TemplateObject\Telephone('telephone', [
+        $telephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);
         $telephone1->setContentValue('Foo');
-        $telephone2    = new TemplateObject\Telephone('telephone', [
+        $telephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile'],
         ], $locale, $locale);
         $telephone2->setContentValue('Bar');

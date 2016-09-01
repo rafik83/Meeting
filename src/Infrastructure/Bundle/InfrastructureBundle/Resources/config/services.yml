@@ -738,6 +738,13 @@ services:
             - '@repository.template.sheet_template_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Update }
+    command.sheet.template.update_preview_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreviewHandler
+        arguments:
+            - '@repository.template.sheet_template_repository'
+            - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreview }
     command.admin.update_last_login_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
@@ -762,7 +769,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\SaveHandler
         arguments:
             - '@repository.template.sheet_template_repository'
-            - '@datetime'
+            - '@template.template_preview_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
     command.register.register_new_user_handler:
@@ -1390,7 +1397,11 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
-
+    template.template_preview_resolver:
+        class: Proximum\Vimeet\Domain\Template\TemplatePreviewResolver
+        arguments:
+            - '@template.template_data_factory'
+            - '@repository.template.sheet_template_repository'
     template.sheet.sheet_template_cloner:
         class: Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner
         arguments:

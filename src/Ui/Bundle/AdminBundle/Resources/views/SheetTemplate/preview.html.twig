@@ -1,0 +1,13 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.template.preview.title'|trans %}
+
+{% block form_content %}
+
+    {% for name, child in form.children if name != 'submit' %}
+        {{ form_row(child) }}
+    {% endfor %}
+
+{% endblock %}
+
+{% block goback_link path('admin_template_sheet_list') %}

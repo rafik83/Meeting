@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 
@@ -55,22 +54,21 @@ class DuplicateHandler
      */
     public function handle(Duplicate $duplicate)
     {
-        $value = $duplicate->template->getValue();
-
         if (null !== $duplicate->template->getEvent()
             && $duplicate->template->getEvent() !== $duplicate->event
         ) {
-            $value = $this->templateRemoveField->remove($duplicate->template, 'products', []);
+            $duplicate->template->setValue($this->templateRemoveField->remove($duplicate->template, 'products', []));
+            $duplicate->template->setValue($this->templateRemoveField->remove($duplicate->template, 'nomenclature', []));
         }
 
-        $template = new SheetTemplate(
+        // Duplicate SheetTemplate
+        $template = $duplicate->template->duplicate(
             $duplicate->title,
-            $value,
-            $duplicate->template->getLocales(),
-            $duplicate->template->getFallback(),
-            $this->dateTime
+            $duplicate->template->getValue(),
+            $this->dateTime,
+            $duplicate->template->getPreview()
         );
-
+        
         if ($duplicate->event) {
             $template->setEvent($duplicate->event);
         }
