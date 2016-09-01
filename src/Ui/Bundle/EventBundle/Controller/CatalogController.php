@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,11 +40,24 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+
+        $orderByForm = $this->createForm(
+            OrderByType::class,
+            $orderBy,
+            ['action' => $this->generateUrl('event_catalog_index')]
+        );
+        $ordered     = $orderByForm->handleRequest($request) && $orderByForm->isValid();
+
+        if ($ordered) {
+            $orderBy = $orderByForm->getData();
+        }
+
         try {
             $query = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
                 [],
-                ['inCatalogAt' => 'desc'],
+                [$orderBy['orderBy']],
                 $request->query->getInt('page', 1),
                 100,
                 $request->getLocale()
@@ -53,10 +67,17 @@ class CatalogController extends Controller
             throw $this->createNotFoundException($exception->getMessage());
         }
 
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('EventBundle:Catalog:list.html.twig', [
+                'paginatedResult' => $paginatedResult,
+            ]);
+        }
+
         return $this->render('EventBundle:Catalog:index.html.twig', [
             'event'           => $event,
             'isCatalog'       => true,
             'paginatedResult' => $paginatedResult,
+            'orderByForm'     => $orderByForm->createView(),
         ]);
     }
 

@@ -251,7 +251,16 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet.id IN (:sheets)')
             ->setParameter('sheets', $sheets);
 
-        return $queryBuilder->getQuery()->getResult();
+        $results = $queryBuilder->getQuery()->getResult();
+
+        // Reorder results
+        $resultsOrdered = [];
+
+        foreach ($sheets as $sheet) {
+            $resultsOrdered[] = $results[$sheet->getId()];
+        }
+
+        return $resultsOrdered;
     }
 
     /**

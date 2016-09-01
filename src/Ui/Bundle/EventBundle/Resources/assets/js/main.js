@@ -10,6 +10,7 @@ var $                     = require('jquery'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
+    CatalogOrderBy        = require('./components/_CatalogOrderBy'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
@@ -44,6 +45,10 @@ function init (target) {
 
     $('.display-catalog-research').on('click', function (e) {
         $('.catalog').toggleClass('catalog--advanced');
+    });
+
+    $('.catalog .sort form', target).each(function (key, form) {
+        new CatalogOrderBy(form, target.querySelector('.catalog__list'));
     });
 
     $('.dropdown-menu').on('click', function (e) {
