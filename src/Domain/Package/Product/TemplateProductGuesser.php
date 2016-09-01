@@ -134,7 +134,7 @@ class TemplateProductGuesser
         $template = $this->templateDataFactory->createFromSheet($sheet, $this->locale);
 
         foreach ($template->getObjects() as $object) {
-            if ($object->getSelectedProduct()) {
+            if (null !== $object->getSelectedProduct()) {
                 $productInObject = $this->productTransformer->transform($object->getSelectedProduct());
 
                 if ($productInObject === $product) {
