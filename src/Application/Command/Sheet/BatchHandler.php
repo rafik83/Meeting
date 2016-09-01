@@ -98,6 +98,13 @@ class BatchHandler
                 new BatchCatalog($batch->ids, $batch->date, $state, $batch->admin)
             );
         }
+        if ($batch->addCatalog || $batch->removeCatalog) {
+            $state = (true === $batch->addCatalog) ? true : false;
+
+            return $this->batchCatalogHandler->handle(
+                new BatchCatalog($batch->ids, $batch->date, $state)
+            );
+        }
 
         return new BatchResult(0, $batch->getMessage());
     }

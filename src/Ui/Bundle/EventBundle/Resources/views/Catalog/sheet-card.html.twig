@@ -1,0 +1,44 @@
+<div class="col-md-4">
+    <div class="catalog__item {#catalog__item--checked#}">
+        <header>
+            {#<input type="checkbox" checked="checked">#}
+
+            {% for object in catalogSheetPreviewView.preview %}
+                {% if object.type == 'image' and object.image %}
+                    <img src="{{ object.image|imagine_filter('event_sheet_image') }}"/>
+                {% endif %}
+            {% endfor %}
+        </header>
+        <div class="content">
+            {% for object in catalogSheetPreviewView.preview %}
+                {% if object.type == 'editable-text' %}
+                    {% if object.option('type') == 'title' %}
+                        <p><strong>{{ object.content|default(catalogSheetPreviewView.title) }}</strong></p>
+                    {% else %}
+                        <p>{{ object.content }}</p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <footer>
+            <p class="tags">
+                <i class="icon-LienTag"></i> {{ catalogSheetPreviewView.type }}
+            </p>
+
+            {#
+            <div class="actions">
+                <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
+                <a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>
+            </div>
+            #}
+
+            {#
+            <div class="button">
+                <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander
+                    un RDV
+                </button>
+            </div>
+            #}
+        </footer>
+    </div>
+</div>

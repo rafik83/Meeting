@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchCatalogHandler
@@ -33,8 +33,10 @@ class BatchCatalogHandler
      * @param SheetRepositoryInterface $sheetRepository
      * @param DelayedEventDispatcher   $eventDispatcher
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, DelayedEventDispatcher $eventDispatcher)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->eventDispatcher = $eventDispatcher;
     }

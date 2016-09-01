@@ -119,6 +119,13 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
+    public function findSheets(array $sheets);
+
+    /**
+     * @param array $sheets
+     *
+     * @return Sheet[]
+     */
     public function findFullSheets(array $sheets);
 
     /**

@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
+use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -21,6 +23,43 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CatalogController extends Controller
 {
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function indexAction(Request $request, EventDomain $eventDomain)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $event = $eventDomain->getEvent();
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
+            throw $this->createNotFoundException();
+        }
+
+        try {
+            $query = new PaginatedCatalogSheetPreviewViewQuery(
+                $event,
+                [],
+                ['inCatalogAt' => 'desc'],
+                $request->query->getInt('page', 1),
+                100,
+                $request->getLocale()
+            );
+            $paginatedResult = $this->get('tactician.commandbus.query')->handle($query);
+        } catch (UnavailableCurrentPageException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
+        }
+
+        return $this->render('EventBundle:Catalog:index.html.twig', [
+            'event'           => $event,
+            'isCatalog'       => true,
+            'paginatedResult' => $paginatedResult,
+        ]);
+    }
+
     /**
      * Display catalog categories of an event.
      *

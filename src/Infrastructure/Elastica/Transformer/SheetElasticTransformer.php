@@ -92,6 +92,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'id'                => $sheet->getId(),
             'sheetName'         => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             'state'             => $sheet->getState(),
+            'completed'         => $sheet->isCompleted(),
             'type'              => $sheet->getType()->getId(),
             'categories'        => $categories,
             'followUp'          => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
@@ -100,6 +101,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'event'             => $sheet->getEvent()->getId(),
             'owner'             => $owner,
             'createdAt'         => $sheet->getCreatedAt()->format('c'),
+            'inCatalog'         => $sheet->isInCatalog(),
+            'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
         ]);
     }
 }

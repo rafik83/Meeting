@@ -70,7 +70,7 @@ class CatalogViewQueryHandler
 
             $linksView[] = new LinkView(
                 'navigation.links.catalog.available_date',
-                $this->dateTime < $catalogOnlineDate ? null : $this->navigationBuilder->getRoute('event_catalog'),
+                $this->dateTime < $catalogOnlineDate ? null : $this->navigationBuilder->getRoute('event_catalog_index'),
                 null,
                 new StateButtonView(true, $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '')
             );

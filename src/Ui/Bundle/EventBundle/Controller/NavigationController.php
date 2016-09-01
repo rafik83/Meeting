@@ -31,7 +31,7 @@ class NavigationController extends Controller
         $menuView = new MenuViewQuery($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
         $menuView = $this->get('tactician.commandbus.query')->handle($menuView);
 
-        return $this->render('EventBundle::Navigation/menu.html.twig', [
+        return $this->render('EventBundle::Navigation/dropdownMenu.html.twig', [
             'menuView' => $menuView,
         ]);
     }

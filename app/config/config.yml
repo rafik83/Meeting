@@ -124,6 +124,8 @@ fos_elastica:
                             analyzer: "sheetAnalyzer"
                         state:
                             type: string
+                        completed:
+                            type: boolean
                         categories:
                             type: nested
                         type:
@@ -146,6 +148,10 @@ fos_elastica:
                         owner:
                             type: integer
                         createdAt:
+                            type: date
+                        inCatalog:
+                            type: boolean
+                        inCatalogAt:
                             type: date
                     persistence:
                         model_to_elastica_transformer:

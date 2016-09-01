@@ -18,11 +18,12 @@ interface SheetSearchAdapterInterface
     /**
      * @param Event  $event
      * @param array  $filters
+     * @param array  $orderBy
      * @param int    $page
      * @param int    $limit
      * @param string $locale
      *
      * @return PaginatedResult
      */
-    public function find(Event $event, array $filters, $page, $limit, $locale);
+    public function find(Event $event, array $filters, array $orderBy, $page, $limit, $locale);
 }

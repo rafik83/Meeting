@@ -113,7 +113,7 @@
                             {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
                         </span>
                     </td>
-                    <td>{{ sheet.isInCatalog ? '✓' : '' }}</td>
+                    <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
                     <td>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>

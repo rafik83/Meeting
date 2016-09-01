@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
  * "Fiche de participation".
@@ -350,7 +351,7 @@ class Sheet implements TraceableInterface
     /**
      * Get type sheetTemplate.
      *
-     * @return array
+     * @return SheetTemplate
      */
     public function getTypeSheetTemplate()
     {
@@ -613,15 +614,15 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isInCatalog()
     {
-        return true === $this->inCatalog;
+        return $this->inCatalog;
     }
 
     /**
-     * @param boolean $inCatalog
+     * @param bool $inCatalog
      */
     public function setInCatalog($inCatalog)
     {

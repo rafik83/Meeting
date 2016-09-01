@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Trace;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
@@ -45,6 +46,11 @@ class PaginatedSheetListViewQueryHandler
     private $impersonate;
 
     /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
      * @var TraceRepositoryInterface
      */
     private $traceRepository;
@@ -56,6 +62,7 @@ class PaginatedSheetListViewQueryHandler
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
      * @param Impersonate                 $impersonate
+     * @param SheetRepositoryInterface    $sheetRepository
      * @param TraceRepositoryInterface    $traceRepository
      */
     public function __construct(
@@ -63,12 +70,14 @@ class PaginatedSheetListViewQueryHandler
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         Impersonate $impersonate,
+        SheetRepositoryInterface $sheetRepository,
         TraceRepositoryInterface $traceRepository
     ) {
         $this->sheetSearchAdapter     = $sheetSearchAdapter;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->impersonate            = $impersonate;
+        $this->sheetRepository        = $sheetRepository;
         $this->traceRepository        = $traceRepository;
     }
 
@@ -79,12 +88,20 @@ class PaginatedSheetListViewQueryHandler
      */
     public function handle(PaginatedSheetListViewQuery $query)
     {
-        $sheets        = $this->sheetSearchAdapter->find($query->event, $query->filters, $query->page, $query->limit, $query->locale);
-        $lastAccepts   = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::ACCEPT);
-        $lastValidates = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::VALIDATE);
+        $sheets = $this->sheetSearchAdapter->find(
+            $query->event,
+            $query->filters,
+            [],
+            $query->page,
+            $query->limit,
+            $query->locale
+        );
+
+        $lastAccepts     = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::ACCEPT);
+        $lastValidates   = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::VALIDATE);
+        $sheets->results = $this->sheetRepository->findFullSheets($sheets->results);
 
         $sheets->results = array_map(function (Sheet $sheet) use ($query, $lastAccepts, $lastValidates) {
-
             if ($sheet->isAccepted()) {
                 $trace = Trace::find($lastAccepts, $sheet);
             } elseif ($sheet->isValidated()) {
@@ -115,7 +132,6 @@ class PaginatedSheetListViewQueryHandler
         } else {
             $firstName = $this->participantInfoGuesser->guessParticipantFirstName($sheet->getParticipantOwner(), $locale);
             $lastName  = $this->participantInfoGuesser->guessParticipantLastName($sheet->getParticipantOwner(), $locale);
-
         }
 
         return new SheetListView(

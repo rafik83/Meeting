@@ -97,10 +97,12 @@ class SheetSearchQueryBuilder
 
         $this->filterByText($filters);
         $this->filterByState($filters);
+        $this->filterByCompleted($filters);
         $this->filterByType($filters);
         $this->filterByCategory($filters);
         $this->filterByFollower($filters);
         $this->filterByPredefined($filters);
+        $this->filterByInCatalog($filters);
     }
 
     /**
@@ -238,6 +240,32 @@ class SheetSearchQueryBuilder
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
             }
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByCompleted(array &$filters)
+    {
+        if (isset($filters['completed'])) {
+            $matchCompleted = new Match();
+            $matchCompleted->setField('completed', $filters['completed']);
+
+            $this->query->addMust($matchCompleted);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByInCatalog(array &$filters)
+    {
+        if (isset($filters['inCatalog'])) {
+            $matchInCatalog = new Match();
+            $matchInCatalog->setField('inCatalog', $filters['inCatalog']);
+
+            $this->query->addMust($matchInCatalog);
         }
     }
 

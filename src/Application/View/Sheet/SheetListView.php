@@ -186,6 +186,6 @@ class SheetListView
      */
     public function isInCatalog()
     {
-        return true === $this->inCatalog;
+        return $this->inCatalog;
     }
 }

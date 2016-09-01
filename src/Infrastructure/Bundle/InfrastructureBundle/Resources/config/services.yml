@@ -1211,6 +1211,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetGuesser
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+    sheet.preview:
+        class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
+        arguments:
+            - '@template.template_data_factory'
 
     #
     # Rule Component
@@ -1483,6 +1487,7 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
             - '@security.impersonate'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.trace_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
@@ -1657,6 +1662,15 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
+    query.sheet.catalog_sheet_preview_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_search_adapter'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@sheet.preview'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
     ##
     # Navigation builder
