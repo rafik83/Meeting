@@ -220,6 +220,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Payment\NotificationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.payment.payment_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Payment\PaymentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1879,6 +1883,15 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
+    # Transaction
+    #
+    domain.transaction.transaction_manager:
+        class: Proximum\Vimeet\Domain\Transaction\TransactionManager
+        arguments:
+            - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
+    #
     # Payum
     #
     vimeet.payum.paypal.prepare_payment:
@@ -1897,4 +1910,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
         arguments:
             - '@repository.payment.notification_repository'
+            - '@repository.payment.payment_repository'
+            - '@domain.transaction.transaction_manager'
             - '@datetime'

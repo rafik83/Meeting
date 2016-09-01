@@ -15,8 +15,11 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
+use Payum\Paypal\ExpressCheckout\Nvp\Api;
 use Proximum\Vimeet\Domain\Model\Payment\Notification;
 use Proximum\Vimeet\Domain\Repository\Payment\NotificationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
+use Proximum\Vimeet\Domain\Transaction\TransactionManager;
 
 class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
 {
@@ -28,36 +31,66 @@ class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
     private $notificationRepository;
 
     /**
+     * @var PaymentRepositoryInterface
+     */
+    private $paymentRepository;
+
+    /**
+     * @var TransactionManager
+     */
+    private $transactionManager;
+
+    /**
      * @var \DateTimeInterface
      */
     private $now;
 
     /**
      * @param NotificationRepositoryInterface $notificationRepository
+     * @param PaymentRepositoryInterface      $paymentRepository
+     * @param TransactionManager              $transactionManager
      * @param \DateTimeInterface              $now
      */
-    public function __construct(NotificationRepositoryInterface $notificationRepository, \DateTimeInterface $now)
-    {
+    public function __construct(
+        NotificationRepositoryInterface $notificationRepository,
+        PaymentRepositoryInterface $paymentRepository,
+        TransactionManager $transactionManager,
+        \DateTimeInterface $now
+    ) {
         $this->notificationRepository = $notificationRepository;
+        $this->paymentRepository      = $paymentRepository;
+        $this->transactionManager     = $transactionManager;
         $this->now                    = $now;
     }
 
     /**
-     * @param mixed $request
+     * @param Notify $notify
      */
-    public function execute($request)
+    public function execute($notify)
     {
+        $token = $notify->getToken();
+
         $getHttpRequest = new GetHttpRequest();
         $this->gateway->execute($getHttpRequest);
+        $request = $getHttpRequest->request;
 
-        $notification = new Notification($request->getToken()->getGatewayName(), $getHttpRequest->query, $this->now);
+        $notification = new Notification($token->getGatewayName(), $request, $this->now);
         $this->notificationRepository->add($notification);
+
+        if (Api::PAYMENTSTATUS_COMPLETED === $request['payment_status']) {
+            $details     = $token->getDetails();
+            $paymentId   = $details->getId();
+            $payment     = $this->paymentRepository->findById($paymentId);
+            $transaction = $payment->getTransaction();
+
+            if (null !== $transaction) {
+                $this->transactionManager->setPaid($transaction);
+            }
+        }
     }
 
     /**
-     * @param mixed $request
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function supports($request)
     {
