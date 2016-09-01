@@ -888,22 +888,6 @@ class Product
     /**
      * @param Product $product
      *
-     * @return bool
-     */
-    public function hasIncludedProduct(Product $product)
-    {
-        $find = $this->productIncluded->exists(
-            function (ProductIncluded $productIncluded) use ($product) {
-                return $productIncluded->getIncluded() === $product;
-            }
-        );
-
-        return $find;
-    }
-
-    /**
-     * @param Product $product
-     *
      * @return ProductIncluded|null
      */
     public function getIncludedProduct(Product $product)

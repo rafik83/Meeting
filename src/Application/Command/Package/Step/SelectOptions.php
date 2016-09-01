@@ -18,6 +18,11 @@ class SelectOptions extends AbstractStep
     public $options;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * @param int $id
      *
      * @return int

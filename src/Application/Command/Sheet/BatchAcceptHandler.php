@@ -57,6 +57,6 @@ class BatchAcceptHandler
             $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $batchAccept->date));
         }
 
-        return new BatchResult(count($sheets));
+        return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');
     }
 }

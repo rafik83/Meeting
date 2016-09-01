@@ -42,6 +42,8 @@
                         </li>
                         <li>{{ form_widget(batch_form.enable) }}</li>
                         <li>{{ form_widget(batch_form.disable) }}</li>
+                        <li>{{ form_widget(batch_form.addCatalog) }}</li>
+                        <li>{{ form_widget(batch_form.removeCatalog) }}</li>
                     {% endblock actions %}
                 {% endembed %}
             </div>
@@ -66,6 +68,7 @@
                 <th>
                     {{ macro.choice_as_dropdown(filter_form.completed) }}
                 </th>
+                <th>{{ 'admin.sheet.inCatalog'|trans }}</th>
                 <th>
                     {{ macro.choice_as_dropdown(filter_form.category) }}
                 </th>
@@ -77,12 +80,12 @@
                 <th>
                     {{ macro.choice_as_dropdown(filter_form.follower) }}
                 </th>
-                <th></th>
+                <th class="col-md-1"></th>
             </tr>
             </thead>
             <tbody>
             {% for sheet in sheets.results %}
-                <tr>
+                <tr id="sheet-{{ sheet.id }}">
                     <td>
                         {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
                     </td>
@@ -110,6 +113,7 @@
                             {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
                         </span>
                     </td>
+                    <td>{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
                     <td>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>

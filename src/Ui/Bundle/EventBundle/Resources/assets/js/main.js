@@ -2,14 +2,15 @@ var $                     = require('jquery'),
     PubSub                = require('pubsub-js'),
     Confirm               = require('./components/_Confirm'),
     ChoiceDescription     = require('./components/_ChoiceDescription'),
-    ShowPaymentInfo     = require('./components/_ShowPaymentInfo'),
+    ShowPaymentInfo       = require('./components/_ShowPaymentInfo'),
     AjaxForm              = require('./components/_AjaxForm'),
     CheckAllButton        = require('./components/_CheckAllButton'),
     SelectParent          = require('./components/_SelectParent'),
     UploadPreview         = require('./components/_UploadPreview'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
     ProductSelector       = require('./components/_ProductSelector'),
-    QuantitySelector      = require('./components/_QuantitySelector');
+    QuantitySelector      = require('./components/_QuantitySelector'),
+    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
 require('elao-form.js');
@@ -77,6 +78,7 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('[data-uncheck-all-button]'), function (element) { new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false) });
     [].forEach.call(target.querySelectorAll('[data-product-selector]'), function (element) { new ProductSelector(element) });
     [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) { new QuantitySelector(element) });
+    [].forEach.call(target.querySelectorAll('form'), function (element) { new PreventMultipleSubmit(element); });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

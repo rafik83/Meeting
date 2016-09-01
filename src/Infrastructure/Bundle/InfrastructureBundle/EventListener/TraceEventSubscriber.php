@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
@@ -44,6 +45,20 @@ class TraceEventSubscriber implements EventSubscriberInterface
         $this->addTrace(
             $event->getSheet(),
             Trace::ACCEPT,
+            $event->getDate(),
+            '',
+            $event->getAuthor()
+        );
+    }
+
+    /**
+     * @param SheetCatalogEvent $event
+     */
+    public function onSheetCatalog(SheetCatalogEvent $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            ($event->getState()) ? Trace::ENABLE_CATALOG : Trace::DISABLE_CATALOG,
             $event->getDate(),
             '',
             $event->getAuthor()
@@ -112,6 +127,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_ACCEPTED       => 'onSheetAccepted',
             Events::SHEET_VALIDATED      => 'onSheetValidated',
             Events::SHEET_ENABLE_DISABLE => 'onSheetEnableDisable',
+            Events::SHEET_CATALOG        => 'onSheetCatalog',
         ];
     }
 }

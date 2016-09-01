@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class RemoveImageHandler
@@ -21,22 +20,22 @@ class RemoveImageHandler
     private $localFileStorageAdapter;
 
     /**
-     * @var SheetRepositoryInterface
+     * @var RemoveDataHandler
      */
-    private $sheetRepository;
+    private $removeDataHandler;
 
     /**
      * RemoveImageHandler constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param LocalFileStorageAdapter  $localFileStorageAdapter
+     * @param LocalFileStorageAdapter $localFileStorageAdapter
+     * @param RemoveDataHandler       $removeDataHandler
      */
     public function __construct(
-        SheetRepositoryInterface $sheetRepository,
-        LocalFileStorageAdapter $localFileStorageAdapter
+        LocalFileStorageAdapter $localFileStorageAdapter,
+        RemoveDataHandler $removeDataHandler
     ) {
         $this->localFileStorageAdapter = $localFileStorageAdapter;
-        $this->sheetRepository         = $sheetRepository;
+        $this->removeDataHandler       = $removeDataHandler;
     }
 
     /**
@@ -45,9 +44,15 @@ class RemoveImageHandler
     public function handle(RemoveImage $removeImage)
     {
         $imagePath = $removeImage->image->getImage();
-        $removeImage->image->setData([]);
 
-        $this->sheetRepository->set($removeImage->sheet->setData($removeImage->templateData->getData()));
+        // remove data from sheet
+        $this->removeDataHandler->handle(new RemoveData(
+            $removeImage->templateData,
+            $removeImage->image,
+            $removeImage->sheet
+        ));
+
+        // remove binary file
         $this->localFileStorageAdapter->remove($imagePath);
     }
 }

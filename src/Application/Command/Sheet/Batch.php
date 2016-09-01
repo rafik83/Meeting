@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class Batch
+class Batch extends AbstractBatch
 {
     /**
      * @var array
@@ -64,6 +64,16 @@ class Batch
      * @var string
      */
     public $validateComment;
+
+    /**
+     * @var bool
+     */
+    public $addCatalog;
+
+    /**
+     * @var bool
+     */
+    public $removeCatalog;
 
     /**
      * @param Admin             $admin

@@ -122,4 +122,41 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     *
+     * @param array $productIds
+     *
+     * @return Product[]
+     */
+    public function findProductByIds(array $productIds)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.id IN (:productIds)')
+            ->setParameter('productIds', $productIds);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param int $productId
+     *
+     * @return null|Product
+     */
+    public function findById($productId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.id = :productId')
+            ->setParameter('productId', $productId);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

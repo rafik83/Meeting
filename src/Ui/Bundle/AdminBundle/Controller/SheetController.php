@@ -101,25 +101,21 @@ class SheetController extends Controller
 
         if ($batchForm->handleRequest($request)->isSubmitted()) {
             if ($batchForm->isValid()) {
-                $batch->validate = $batchForm->get('validate')->isClicked();
-                $batch->assign   = $batchForm->get('assign')->isClicked();
-                $batch->accept   = $batchForm->get('accept')->isClicked();
-                $batch->enable   = $batchForm->get('enable')->isClicked();
-                $batch->disable  = $batchForm->get('disable')->isClicked();
+                $batch->validate      = $batchForm->get('validate')->isClicked();
+                $batch->assign        = $batchForm->get('assign')->isClicked();
+                $batch->accept        = $batchForm->get('accept')->isClicked();
+                $batch->enable        = $batchForm->get('enable')->isClicked();
+                $batch->disable       = $batchForm->get('disable')->isClicked();
+                $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
+                $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
-                if ($batch->validate) {
-                    $this->addFlash('success',
-                        new TranschoiceMessage('flash.admin.sheet_batch.validate.success', $result->count,
-                            ['%count%' => $result->count]));
-                } elseif ($batch->assign && $batch->follower) {
-                    $this->addFlash('success',
-                        new TranschoiceMessage('flash.admin.sheet_batch.assign.success', $result->count,
-                            ['%count%' => $result->count, '%name%' => $batch->follower->getDisplayName()]));
-                }
+                $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
+                    '%count%' => $result->count,
+                ]));
             } else {
-                $this->addFlash('error', (string)$batchForm->getErrors(true));
+                $this->addFlash('error', (string) $batchForm->getErrors(true));
             }
         }
 
