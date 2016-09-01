@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,13 +14,8 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class UpdateData
+class RemoveData
 {
-    /**
-     * @var Sheet
-     */
-    public $sheet;
-
     /**
      * @var TemplateData
      */
@@ -32,16 +27,21 @@ class UpdateData
     public $templateObject;
 
     /**
-     * UpdateData constructor.
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * RemoveData constructor.
      *
-     * @param Sheet          $sheet
      * @param TemplateData   $templateData
      * @param TemplateObject $templateObject
+     * @param Sheet          $sheet
      */
-    public function __construct(Sheet $sheet, TemplateData $templateData, TemplateObject $templateObject)
+    public function __construct(TemplateData $templateData, TemplateObject $templateObject, Sheet $sheet)
     {
-        $this->sheet        = $sheet;
-        $this->templateData = $templateData;
-        $this->object       = $templateObject;
+        $this->templateData   = $templateData;
+        $this->templateObject = $templateObject;
+        $this->sheet          = $sheet;
     }
 }

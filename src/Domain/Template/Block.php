@@ -365,6 +365,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject\MediaCollection[]
+     */
+    public function getMediaCollectionObjects()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object instanceof TemplateObject\MediaCollection;
+        });
+    }
+
+    /**
      * @return TemplateObject\Nomenclature[]
      */
     public function getNomenclatureObjects()
