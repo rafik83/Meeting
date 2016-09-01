@@ -1,3 +1,3 @@
-mail.activateAccount.body: "Hello, You have just been added as a participant for the event %event% To join, click on the link below and enter a password to activate your account\n"
+mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
 mail.activateAccount.subject: '[%event%] Activate your account'

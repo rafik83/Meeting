@@ -17,9 +17,5 @@
     ) }}
     <br>
 
-    {{ 'mail.event.preregister.end'|trans({
-        '%event%': mail.event.title,
-        '%eventPhone%': mail.event.configuration.organiserPhone,
-        '%eventMail%': mail.event.organiserEmail
-    }, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.event.preregister.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

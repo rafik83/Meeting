@@ -439,14 +439,14 @@ form.register.children.submit.label: Envoyer
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
 form.sheet_batch.children.accept.label: Accepter
+form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
 form.sheet_batch.children.disable.label: Desactiver
 form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.follower.label: Collaborateur
+form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
-form.sheet_batch.children.addCatalog.label: Ajouter au catalogue
-form.sheet_batch.children.removeCatalog.label: Enlever du catalogue
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie
@@ -463,15 +463,15 @@ form.sheet_template_create.children.submit.label: Enregistrer
 form.sheet_template_create.children.title.label: Titre
 form.sheet_template_duplicate.children.submit.label: Enregistrer
 form.sheet_template_duplicate.children.title.label: Titre
+form.sheet_template_preview.children.previewObjects.label: 'Objets dans l''aperçu'
+form.sheet_template_preview.children.previewObjects.label_add: 'Ajouter un objet'
+form.sheet_template_preview.children.previewObjects.label_delete: 'Supprimer l''objet'
+form.sheet_template_preview.children.previewObjects.prototype.label: Objet
+form.sheet_template_preview.children.submit.label: 'Mettre à jour l''aperçu'
 form.sheet_template_update.children.close.label: Annuler
 form.sheet_template_update.children.fallback.label: 'Langue par defaut'
 form.sheet_template_update.children.submit.label: Enregistrer
 form.sheet_template_update.children.title.label: Titre
-form.sheet_template_preview.children.previewObjects.label: Objets dans l'aperçu
-form.sheet_template_preview.children.previewObjects.prototype.label: Objet
-form.sheet_template_preview.children.previewObjects.label_add: Ajouter un objet
-form.sheet_template_preview.children.previewObjects.label_delete: Supprimer l'objet
-form.sheet_template_preview.children.submit.label: Mettre à jour l'aperçu
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.recipes.label: 'Identifiants du lot'
