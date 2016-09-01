@@ -10,12 +10,25 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class TemplateObject extends AbstractChild
 {
     /**
      * @var array
      */
     protected $data;
+
+    /**
+     * @var Product[]
+     */
+    protected $buyableProducts;
+
+    /**
+     * @var Sheet
+     */
+    protected $sheet;
 
     /**
      * @var string
@@ -150,11 +163,33 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function isBuyable()
+    {
+        return null !== $this->getOption('products');
+    }
+
+    /**
      * @return string|null
      */
     public function getPlaceholder()
     {
         return $this->getOption('placeholder', $this->locale);
+    }
+
+    /**
+     * Array of product ids
+     *
+     * @return null|array
+     */
+    public function getProducts()
+    {
+        if (null !== $this->getOption('products')) {
+            return array_values($this->getOption('products'));
+        }
+
+        return null;
     }
 
     /**
@@ -182,5 +217,53 @@ class TemplateObject extends AbstractChild
     public function getTag()
     {
         return $this->getOption('tag');
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function getBuyableProducts()
+    {
+        return $this->buyableProducts;
+    }
+
+    /**
+     * @param Product []
+     */
+    public function setBuyableProducts($products)
+    {
+        $this->buyableProducts = $products;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getSelectedProduct()
+    {
+        return isset($this->data['product']) ? $this->data['product'] : null;
+    }
+
+    /**
+     * @param Product $selectedProduct
+     */
+    public function setSelectedProduct(Product $selectedProduct)
+    {
+        $this->data['product'] = $selectedProduct->getId();
+    }
+
+    /**
+     * @return null|Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setSheet($sheet)
+    {
+        $this->sheet = $sheet;
     }
 }

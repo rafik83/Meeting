@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlan;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler;
+use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -41,11 +42,12 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($emptyCart);
         $cartManager->deleteCartStep($emptyCart)->shouldBeCalled();
         $cartManager->save($expectedCart)->shouldBeCalled();
+        $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
 
-        $plans        = new SelectPlan($sheet, 1);
-        $plans->plan  = $product;
+        $plans       = new SelectPlan($sheet, 1);
+        $plans->plan = $product;
 
-        $plansHandler = new SelectPlanHandler($cartManager->reveal());
+        $plansHandler = new SelectPlanHandler($cartManager->reveal(), $buyableObjectResolver->reveal());
         $plansHandler->handle($plans);
     }
 
@@ -63,7 +65,8 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedCart = new Cart($sheet, [new CartRow($sheet, $product2, 1)], [], 1);
 
         // Mock
-        $cartManager = $this->prophesize(CartManager::class);
+        $cartManager           = $this->prophesize(CartManager::class);
+        $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->deleteCartStep($actualCart)->shouldBeCalled();
         $cartManager->save(Argument::that(function (Cart $cart) use ($expectedCart) {
@@ -73,10 +76,10 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
             return true;
         }))->shouldBeCalled();
 
-        $plans        = new SelectPlan($sheet, 1);
-        $plans->plan  = $product2;
+        $plans       = new SelectPlan($sheet, 1);
+        $plans->plan = $product2;
 
-        $plansHandler = new SelectPlanHandler($cartManager->reveal());
+        $plansHandler = new SelectPlanHandler($cartManager->reveal(), $buyableObjectResolver->reveal());
         $plansHandler->handle($plans);
     }
 }

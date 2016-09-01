@@ -37,6 +37,12 @@ Proximum\Vimeet\Domain\Model\Product:
         __construct: { createOption: ['@event_rdv_carnot_2016', 'Option B', '', 9, 10, '', '', true, null] }
     product_option_5_rdv_carnot:
         __construct: { createOption: ['@event_rdv_carnot_2016', 'Option C', '', 9, 10, '', '', true, null] }
+    product_option_6_rdv_carnot:
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Logo', '', 20, 10, '', '', true, null] }
+    product_option_7_rdv_carnot:
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Pack pub', '', 75, 10, '', '', true, null] }
+    product_option_8_rdv_carnot:
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Pack visibilité', '', 35, 10, '', '', true, null] }
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_rdv_carnot_fr:
@@ -131,6 +137,102 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         __construct: false
         product: '@product_option_2_rdv_carnot'
         title: 'Chair'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_3_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_3_rdv_carnot'
+        title: 'Option A'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_3_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_3_rdv_carnot'
+        title: 'Option A'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_4_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_4_rdv_carnot'
+        title: 'Option B'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_4_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_4_rdv_carnot'
+        title: 'Option B'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_5_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_5_rdv_carnot'
+        title: 'Option C'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_5_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_5_rdv_carnot'
+        title: 'Option C'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_6_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_6_rdv_carnot'
+        title: 'Logo'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_6_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_6_rdv_carnot'
+        title: 'Logo'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_7_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_7_rdv_carnot'
+        title: 'Pack pub'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_7_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_7_rdv_carnot'
+        title: 'Pack pub'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'en'
+    product_option_8_rdv_carnot_fr:
+        __construct: false
+        product: '@product_option_8_rdv_carnot'
+        title: 'Pack visibilité'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_option_8_rdv_carnot_en:
+        __construct: false
+        product: '@product_option_8_rdv_carnot'
+        title: 'Pack visibilité'
         heading: ''
         description: ''
         addon: ''
@@ -372,3 +474,18 @@ Proximum\Vimeet\Domain\Model\PackageOptionRank:
         rank: 1
         group: '@package_group_3_rdv_carnot'
         option: '@product_option_5_rdv_carnot'
+    package_group_3_option_6_rdv_carnot:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_rdv_carnot'
+        option: '@product_option_6_rdv_carnot'
+    package_group_3_option_7_rdv_carnot:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_rdv_carnot'
+        option: '@product_option_7_rdv_carnot'
+    package_group_3_option_8_rdv_carnot:
+        __construct: false
+        rank: 1
+        group: '@package_group_3_rdv_carnot'
+        option: '@product_option_8_rdv_carnot'

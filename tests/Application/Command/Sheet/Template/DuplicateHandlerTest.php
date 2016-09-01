@@ -95,7 +95,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
                             "products"    => ["1", "2"],
                         ],
                 ],
-        ], ['fr'], 'fr', $dateTime, $event);
+        ], ['fr'], 'fr', $dateTime, [], $event);
 
         //expected
         $expectedTemplate = new SheetTemplate('DuplicateWithoutProduct', [
@@ -113,7 +113,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
                             "products"    => [],
                         ],
                 ],
-        ], ['fr'], 'fr', $dateTime, $eventTo);
+        ], ['fr'], 'fr', $dateTime, [], $eventTo);
         $expectedResult = new DuplicateResult($expectedTemplate);
 
         // Command
@@ -126,6 +126,23 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $templateRemoveField = $this->prophesize(TemplateRemoveField::class);
 
         $templateRemoveField->remove($template, 'products', [])->shouldBeCalled()->willReturn([
+            "ee4f2281" =>
+                [
+                    "component" => "object",
+                    "type"      => "image",
+                    "config"    =>
+                        [
+                            "label"       => ["en" => null, "fr" => "Image"],
+                            "placeholder" => ["en" => null, "fr" => ""],
+                            "help"        => ["en" => null, "fr" => ""],
+                            "required"    => false,
+                            "style"       => "",
+                            "products"    => [],
+                        ],
+                ],
+        ]);
+
+        $templateRemoveField->remove($template, 'nomenclature', [])->shouldBeCalled()->willReturn([
             "ee4f2281" =>
                 [
                     "component" => "object",

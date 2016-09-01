@@ -88,7 +88,14 @@ class BatchHandler
             $state = (true === $batch->enable) ? true : false;
 
             return $this->batchEnableDisableHandler->handle(
-                new BatchEnableDisable($batch->ids, $state, $batch->admin)
+                new BatchEnableDisable($batch->ids, $state, $batch->admin, $batch->date)
+            );
+        }
+        if ($batch->addCatalog || $batch->removeCatalog) {
+            $state = (true === $batch->addCatalog) ? true : false;
+
+            return $this->batchCatalogHandler->handle(
+                new BatchCatalog($batch->ids, $batch->date, $state, $batch->admin)
             );
         }
         if ($batch->addCatalog || $batch->removeCatalog) {
@@ -99,6 +106,6 @@ class BatchHandler
             );
         }
 
-        return new BatchResult(0);
+        return new BatchResult(0, $batch->getMessage());
     }
 }

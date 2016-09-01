@@ -220,6 +220,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Payment\NotificationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.payment.payment_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Payment\PaymentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -609,19 +613,21 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@command.sheet.batch_catalog_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
     command.sheet.batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
     command.sheet.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\RemoveImageHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.local_file_storage'
+            - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
     command.admin.create_handler:
@@ -811,8 +817,17 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\UpdateDataHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@buyable_object_resolver'
+            - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
+    command.sheet.remove_data_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\RemoveDataHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@buyable_object_resolver'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveData }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
@@ -893,6 +908,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler
         arguments:
             - '@cart_manager'
+            - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
@@ -1432,6 +1448,18 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    validator.template_object.image_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageValidator
+        arguments:
+            -  '@package.product.template_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
+    validator.template_object.media_collection_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\MediaCollectionValidator
+        arguments:
+            -  '@package.product.template_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
 
     #
     # Account
@@ -1710,6 +1738,14 @@ services:
             - '@template.participant_info_guesser'
 
     #
+    # Product Transformer
+    #
+    transformer.product.id_to_product_transformer:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+
+    #
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
@@ -1743,10 +1779,18 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+    package.product.template_product_guesser:
+        class: Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser
+        arguments:
+            - '@order.merger'
+            - '@template.template_data_factory'
+            - '@transformer.product.id_to_product_transformer'
+            - '@datetime'
+            - '%locale%'
     package.planning.quantity_min_guesser:
-            class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
-            arguments:
-                - '@order.merger'
+        class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
+        arguments:
+            - '@order.merger'
     package.specification.vat_applicable:
         class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
         arguments:
@@ -1762,6 +1806,13 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
+            - '@order.merger'
+    buyable_object_resolver:
+        class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
+        arguments:
+            - '@cart_manager'
+            - '@transformer.product.id_to_product_transformer'
+            - '@package.product.template_product_guesser'
             - '@order.merger'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
@@ -1857,6 +1908,15 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
+    # Transaction
+    #
+    domain.transaction.transaction_manager:
+        class: Proximum\Vimeet\Domain\Transaction\TransactionManager
+        arguments:
+            - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
+    #
     # Payum
     #
     vimeet.payum.paypal.prepare_payment:
@@ -1875,4 +1935,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
         arguments:
             - '@repository.payment.notification_repository'
+            - '@repository.payment.payment_repository'
+            - '@domain.transaction.transaction_manager'
             - '@datetime'

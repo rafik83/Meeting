@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class BatchAssign
+class BatchAssign extends AbstractBatch
 {
     /**
      * @var array

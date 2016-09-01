@@ -10,7 +10,8 @@ var $                       = require('jquery'),
     Slots                   = require('./components/_Slots'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
     SortableCollection      = require('./components/_SortableCollection'),
-    Update                  = require('./components/_Update');
+    Update                  = require('./components/_Update'),
+    PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit');
 
 require('elao-form.js');
 require('select2');
@@ -142,6 +143,9 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-shared-choices-collection]'), function (element) {
         $(element).data('shared-choices-collection-object', new SharedChoicesCollection(element, element.getAttribute('data-shared-choices-collection')));
     });
+
+    // Prevent multiple submit on input type submit
+    [].forEach.call(target.querySelectorAll('form'), function (element) { new PreventMultipleSubmit(element); });
 }
 
 // Call init function when element is added to DOM

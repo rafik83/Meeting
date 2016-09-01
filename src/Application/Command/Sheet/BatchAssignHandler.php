@@ -44,6 +44,6 @@ class BatchAssignHandler
             $this->sheetRepository->set($sheet->assign($batchAssign->admin));
         }
 
-        return new BatchResult(count($sheets));
+        return new BatchResult(count($sheets), $batchAssign->getMessage() . 'assign.success');
     }
 }
