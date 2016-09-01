@@ -45,6 +45,13 @@
         margin: 0 auto;
         width: 48px;
       }
+
+      > i {
+        font-size: 2em;
+        text-align: center;
+        line-height: 70px;
+        display: block;
+      }
     }
 
     .sub-form { overflow: hidden; }

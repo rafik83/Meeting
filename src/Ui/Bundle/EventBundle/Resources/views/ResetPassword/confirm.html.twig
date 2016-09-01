@@ -1,0 +1,34 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'new_password.confirm.title'|trans %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1><i class="icon-Clef"></i> {{ 'new_password.confirm.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content styled-form">
+                <div class="avatar white">
+                    <i class="icon-Message_1"></i>
+                </div>
+                <p class="text-center">{{ 'new_password.mail.title'|trans }}</p>
+            </div>
+        </section>
+
+        <p class="highlight">
+            <a href="#event-contact-modal" data-toggle="modal" data-target="#event-contact-modal">
+                <i class="icon-Appeler"></i> <span class="underline">{{ 'new_password.needHelp'|trans }}</span>
+            </a>
+        </p>
+
+        <section id="type-description" class="important">
+            <ul>
+                <li>{{ 'new_password.help.reset'|trans }}</li>
+                <li>{{ 'new_password.help.noaction'|trans }}</li>
+            </ul>
+        </section>
+
+    </div>
+{% endblock %}
