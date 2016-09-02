@@ -68,9 +68,11 @@ class CatalogViewQueryHandler
             $formatter->setPattern('d MMMM Y');
             $catalogOnlineDateFormatted = $formatter->format($catalogOnlineDate);
 
+            $isCatalogAvailable = $catalogViewQuery->sheet->isInCatalog() && $this->dateTime > $catalogOnlineDate;
+
             $linksView[] = new LinkView(
                 'navigation.links.catalog.available_date',
-                $this->dateTime < $catalogOnlineDate ? null : $this->navigationBuilder->getRoute('event_catalog_index'),
+                $isCatalogAvailable ? $this->navigationBuilder->getRoute('event_catalog_index') : null,
                 null,
                 new StateButtonView(true, $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '')
             );
