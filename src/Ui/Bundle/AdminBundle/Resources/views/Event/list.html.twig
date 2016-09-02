@@ -12,6 +12,7 @@
                 <th>{{ 'admin.event.title'|trans }}</th>
                 <th>{{ 'admin.event.languages'|trans }}</th>
                 <th>{{ 'admin.event.fallback'|trans }}</th>
+                <th>{{ 'admin.event.see_on_front.link'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,11 @@
                         {% endfor %}
                     </td>
                     <td>{{ event.fallback|language }}</td>
+                    <td>
+                        <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
+                            {{ 'admin.event.see_on_front.link'|trans }}
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
