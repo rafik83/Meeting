@@ -727,9 +727,7 @@ services:
     command.sheet.template.duplicate_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler
         arguments:
-            - '@repository.template.sheet_template_repository'
-            - '@datetime'
-            - '@template.template_remove_field'
+           - '@template.sheet.sheet_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate }
     command.sheet.template.update_handler:
@@ -1413,6 +1411,7 @@ services:
             - '@template.template_data_factory'
             - '@application.nomenclature.nomenclature_cloner'
             - '@datetime'
+            - '@template.template_remove_field'
     template.registration.registration_template_cloner:
         class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
         arguments:

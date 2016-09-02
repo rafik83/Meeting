@@ -133,7 +133,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
             ->duplicate($template, $event, $duplicate->title)
             ->ShouldBeCalled()
             ->willReturn($expectedTemplate);
-        
+
         //Handler
         $handler = new DuplicateHandler($sheetTemplateCloner->reveal());
         $result  = $handler->handle($duplicate);
