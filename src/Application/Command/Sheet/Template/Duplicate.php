@@ -46,5 +46,6 @@ class Duplicate
     {
         $this->createdAt = $createdAt;
         $this->template  = $template;
+        $this->event     = $template->getEvent(); // set default event
     }
 }
