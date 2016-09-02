@@ -187,7 +187,7 @@ class Package
     {
         $this->groups->clear();
 
-        foreach ($groups as $rank => $group) {
+        foreach ($groups as $group) {
             $this->groups->add($group);
         }
 

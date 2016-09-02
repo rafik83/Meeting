@@ -52,7 +52,6 @@ class ImportHandler
         FileStorageInterface $fileStorage,
         \DateTimeInterface $dateTime
     ) {
-
         $this->productRepository = $productRepository;
         $this->packageRepository = $packageRepository;
         $this->fileStorage       = $fileStorage;
@@ -65,171 +64,161 @@ class ImportHandler
     public function handle(Import $import)
     {
         // Retrieve products and package of the target event
-        $products = $this->productRepository->findByEvent($import->event);
-        $packages = $this->packageRepository->findByEvent($import->event);
+        $fromProducts = $this->productRepository->findByEvent($import->event);
+        $fromPackages = $this->packageRepository->findByEvent($import->event);
 
-        $newProducts = [];
-        foreach ($products as $product) {
-            if (!$product->isPlan()) {
-                $newProducts[$product->getId()] = $this->getNewProduct($product, $import->currentEvent);
+        $toProducts = [];
+        foreach ($fromProducts as $fromProduct) {
+            if (!$fromProduct->isPlan()) {
+                $toProducts[$fromProduct->getId()] = $this->getToProduct($fromProduct, $import->toEvent);
             }
         }
 
-        foreach ($products as $product) {
-            if ($product->isPlan()) {
-                $plan = $this->getNewProduct($product, $import->currentEvent);
+        foreach ($fromProducts as $fromPlan) {
+            if ($fromPlan->isPlan()) {
+                $toPlan = $this->getToProduct($fromPlan, $import->toEvent);
 
-                $this->handlePlan($newProducts, $product, $plan, $import->currentEvent->getLocales());
-                $newProducts[$product->getId()] = $plan;
+                $this->handlePlan($toProducts, $fromPlan, $toPlan);
+                $toProducts[$fromPlan->getId()] = $toPlan;
             }
         }
 
-        foreach ($newProducts as $product) {
-            $this->productRepository->add($product);
+        foreach ($toProducts as $toProduct) {
+            $this->productRepository->add($toProduct);
         }
 
-        foreach ($packages as $package) {
-            $newPackage = $this->getNewPackage($newProducts, $package, $import->currentEvent);
-            $this->packageRepository->add($newPackage);
+        foreach ($fromPackages as $fromPackage) {
+            $toPackage = $this->getNewPackage($toProducts, $fromPackage, $import->toEvent);
+            $this->packageRepository->add($toPackage);
         }
     }
 
     /**
-     * @param Product $oldProduct
+     * @param Product $fromProduct
      * @param Event   $event
      *
      * @return Product
      */
-    private function getNewProduct(Product $oldProduct, Event $event)
+    private function getToProduct(Product $fromProduct, Event $event)
     {
-        $image = $this->fileStorage->copyAndRename($oldProduct->getImage());
+        $image = $this->fileStorage->copyAndRename($fromProduct->getImage());
 
-        $product = new Product(
+        $toProduct = new Product(
             $event,
-            $oldProduct->getType(),
-            $oldProduct->getName(),
+            $fromProduct->getType(),
+            $fromProduct->getName(),
             $image,
-            $oldProduct->getUnitPrice(),
-            $oldProduct->getQuantityMax(),
-            $oldProduct->getAvailabilityCurrent(),
-            $oldProduct->getAvailabilityMax(),
-            $oldProduct->isUpdatable(),
-            $oldProduct->getDeletableUntil(),
-            $oldProduct->isSubjectedToValidation(),
-            $oldProduct->getBuyableUntil()
+            $fromProduct->getUnitPrice(),
+            $fromProduct->getQuantityMax(),
+            $fromProduct->getAvailabilityCurrent(),
+            $fromProduct->getAvailabilityMax(),
+            $fromProduct->isUpdatable(),
+            $fromProduct->getDeletableUntil(),
+            $fromProduct->isSubjectedToValidation(),
+            $fromProduct->getBuyableUntil()
         );
 
         $locales = $event->getLocales();
         foreach ($locales as $locale) {
-            $product->translate(
+            $toProduct->translate(
                 $locale,
-                $oldProduct->getTitle($locale),
-                $oldProduct->getHeading($locale),
-                $oldProduct->getDescription($locale),
-                $oldProduct->getAddon($locale),
-                $oldProduct->getSubjectedToValidationHelp($locale)
+                $fromProduct->getTitle($locale),
+                $fromProduct->getHeading($locale),
+                $fromProduct->getDescription($locale),
+                $fromProduct->getAddon($locale),
+                $fromProduct->getSubjectedToValidationHelp($locale)
             );
         }
 
-        $oldFeatures = $oldProduct->getFeatures();
-        foreach ($oldFeatures as $oldFeature) {
-            $newFeature = new Product\Feature($product);
+        $fromFeatures = $fromProduct->getFeatures();
+        foreach ($fromFeatures as $fromFeature) {
+            $toFeature = new Product\Feature($toProduct);
 
             foreach ($locales as $locale) {
-                $newFeature->translate($locale, $oldFeature->getTitle($locale), $oldFeature->getDescription($locale));
+                $toFeature->translate($locale, $fromFeature->getTitle($locale), $fromFeature->getDescription($locale));
             }
+            $toProduct->addFeature($toFeature);
         }
 
-        return $product;
+        return $toProduct;
     }
 
     /**
      * @param array   $newProducts
-     * @param Product $oldPlan
-     * @param Product $plan
-     * @param array   $locales
+     * @param Product $fromPlan
+     * @param Product $toPlan
      */
-    private function handlePlan(array $newProducts, Product $oldPlan, Product $plan, array $locales)
+    private function handlePlan(array &$newProducts, Product $fromPlan, Product $toPlan)
     {
-        foreach ($oldPlan->getIncludedProducts() as $includedProduct) {
-            $plan->includeProduct(
+        foreach ($fromPlan->getIncludedProducts() as $includedProduct) {
+            $toPlan->includeProduct(
                 $newProducts[$includedProduct->getIncluded()->getId()],
                 $includedProduct->getQuantity()
             );
         }
-
-        foreach ($oldPlan->getFeatures() as $feature) {
-            $newFeature = new Product\Feature($plan);
-
-            foreach ($locales as $locale) {
-                $newFeature->translate($locale, $feature->getTitle($locale), $feature->getDescription($locale));
-            }
-
-            $plan->addFeature($newFeature);
-        }
     }
 
     /**
      * @param array   $newProducts
-     * @param Package $oldPackage
-     * @param Event   $currentEvent
+     * @param Package $fromPackage
+     * @param Event   $toEvent
      *
      * @return Package
      */
-    private function getNewPackage(array $newProducts, Package $oldPackage, Event $currentEvent)
+    private function getNewPackage(array &$newProducts, Package $fromPackage, Event $toEvent)
     {
-        $package = new Package($currentEvent, $oldPackage->getTitle(), $this->dateTime);
+        $toPackage = new Package($toEvent, $fromPackage->getTitle(), $this->dateTime);
 
-        $locales = $currentEvent->getLocales();
+        $locales = $toEvent->getLocales();
 
         foreach ($locales as $locale) {
-            $package->translate(
+            $toPackage->translate(
                 $locale,
-                $oldPackage->getPlansLabel($locale),
-                $oldPackage->getParticipantAndPlanningLabel($locale),
-                $oldPackage->getOptionsLabel($locale)
+                $fromPackage->getPlansLabel($locale),
+                $fromPackage->getParticipantAndPlanningLabel($locale),
+                $fromPackage->getOptionsLabel($locale)
             );
         }
 
         $plans = [];
-        foreach ($oldPackage->getPlans() as $plan) {
+        foreach ($fromPackage->getPlans() as $plan) {
             $plans[] = $newProducts[$plan->getId()];
         }
-        $package->setPlans($plans);
+        $toPackage->setPlans($plans);
 
-        if (null !== $oldPackage->getParticipant()) {
-            $package->setParticipant($newProducts[$oldPackage->getParticipant()->getId()]);
+        if (null !== $fromPackage->getParticipant()) {
+            $toPackage->setParticipant($newProducts[$fromPackage->getParticipant()->getId()]);
         }
 
-        if (null !== $oldPackage->getPlanning()) {
-            $package->setPlanning($newProducts[$oldPackage->getPlanning()->getId()]);
+        if (null !== $fromPackage->getPlanning()) {
+            $toPackage->setPlanning($newProducts[$fromPackage->getPlanning()->getId()]);
         }
 
         $groups = [];
-        foreach ($oldPackage->getGroups() as $group) {
-            $newGroup = new PackageGroup($package, $group->getRank());
+        foreach ($fromPackage->getGroups() as $fromGroup) {
+            $toGroup = new PackageGroup($toPackage, $fromGroup->getRank());
 
             foreach ($locales as $locale) {
-                $newGroup->translate($locale, $group->getLabel($locale));
+                $toGroup->translate($locale, $fromGroup->getLabel($locale));
             }
 
             $options = [];
-            foreach ($group->getOptions() as $option) {
+            foreach ($fromGroup->getOptions() as $option) {
                 $options[] = $newProducts[$option->getId()];
             }
-            $newGroup->setOptions($options);
+            $toGroup->setOptions($options);
 
-            $groups[] = $newGroup;
+            $groups[] = $toGroup;
         }
 
-        $package->setGroupsModel($groups);
+        $toPackage->setGroupsModel($groups);
 
-        $package->enable(
-            $oldPackage->isPlansEnabled(),
-            $oldPackage->isParticipantAndPlanningEnabled(),
-            $oldPackage->isOptionsEnabled()
+        $toPackage->enable(
+            $fromPackage->isPlansEnabled(),
+            $fromPackage->isParticipantAndPlanningEnabled(),
+            $fromPackage->isOptionsEnabled()
         );
 
-        return $package;
+        return $toPackage;
     }
 }
