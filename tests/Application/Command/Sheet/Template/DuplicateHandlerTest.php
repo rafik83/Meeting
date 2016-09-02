@@ -38,7 +38,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
         $sheetTemplateCloner
             ->duplicate($template, $event, $duplicate->title)
-            ->ShouldBeCalled()
+            ->shouldBeCalled()
             ->willReturn($expectedTemplate);
 
         //Handler
@@ -68,7 +68,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
         $sheetTemplateCloner
             ->duplicate($template, $event, $duplicate->title)
-            ->ShouldBeCalled()
+            ->shouldBeCalled()
             ->willReturn($expectedTemplate);
 
         //Handler
@@ -131,7 +131,7 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
         $sheetTemplateCloner
             ->duplicate($template, $event, $duplicate->title)
-            ->ShouldBeCalled()
+            ->shouldBeCalled()
             ->willReturn($expectedTemplate);
 
         //Handler
