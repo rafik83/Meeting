@@ -7,6 +7,11 @@
 {% block form_content %}
     {{ form_row(form.name) }}
     {{ form_row(form.translations) }}
+    {% if plan.image is defined and plan.image is not null and plan.image is not empty %}
+        <div class="col-md-offset-4 cold-md-3">
+            <img src="{{ plan.image }}" width="250" class="img-responsive img-thumbnail" />
+        </div>
+    {% endif %}
     {{ form_row(form.file) }}
     {{ form_row(form.availabilityCurrent) }}
     {{ form_row(form.availabilityMax) }}

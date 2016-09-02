@@ -7,6 +7,11 @@
 {% block form_content %}
     {{ form_row(form.name) }}
     {{ form_row(form.translations) }}
+    {% if product.image is defined and product.image is not null and product.image is not empty %}
+        <div class="col-md-offset-4 cold-md-3">
+            <img src="{{ product.image }}" width="250" class="img-responsive img-thumbnail" />
+        </div>
+    {% endif %}
     {{ form_row(form.file) }}
     {{ form_row(form.quantityMax) }}
     {{ form_row(form.availabilityCurrent) }}
