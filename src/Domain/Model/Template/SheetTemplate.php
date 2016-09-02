@@ -54,19 +54,6 @@ class SheetTemplate extends AbstractTemplate
     }
 
     /**
-     * @param string            $title
-     * @param array             $value
-     * @param DateTimeInterface $createdAt
-     * @param array             $preview
-     *
-     * @return SheetTemplate
-     */
-    public function duplicate($title, array $value, DateTimeInterface $createdAt, array $preview = [])
-    {
-        return new $this($title, $value, $this->locales, $this->fallback, $createdAt, $preview);
-    }
-
-    /**
      * @param string $title
      * @param string $fallback
      *
