@@ -24,7 +24,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\PreviewType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
@@ -146,8 +145,11 @@ class SheetTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $duplicate = new Duplicate($template, new \DateTime());
-        $form      = $this->createForm(DuplicateType::class, $duplicate, [
-            'action' => $this->generateUrl('admin_template_sheet_duplicate', ['template' => $template->getId()]),
+        $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_template_sheet_duplicate', [
+                'template' => $template->getId()
+            ]),
+            'admin'  => $this->getUser(),
             'submit' => true,
         ]);
 
