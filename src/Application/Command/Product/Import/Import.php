@@ -19,7 +19,7 @@ class Import
      *
      * @var Event
      */
-    public $currentEvent;
+    public $toEvent;
 
     /**
      * Event with the products to import
@@ -28,10 +28,10 @@ class Import
     public $event;
 
     /**
-     * @param Event $currentEvent
+     * @param Event $toEvent
      */
-    public function __construct(Event $currentEvent)
+    public function __construct(Event $toEvent)
     {
-        $this->currentEvent = $currentEvent;
+        $this->toEvent = $toEvent;
     }
 }
