@@ -179,6 +179,22 @@ class Package
     }
 
     /**
+     * @param PackageGroup[] $groups
+     *
+     * @return Package
+     */
+    public function setGroupsModel($groups)
+    {
+        $this->groups->clear();
+
+        foreach ($groups as $rank => $group) {
+            $this->groups->add($group);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get options
      *
      * @return Product[]
@@ -408,7 +424,7 @@ class Package
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getPlansLabel()
-            : null;
+            : '';
     }
 
     /**
@@ -420,7 +436,7 @@ class Package
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getParticipantAndPlanningLabel()
-            : null;
+            : '';
     }
 
     /**
@@ -432,7 +448,7 @@ class Package
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getOptionsLabel()
-            : null;
+            : '';
     }
 
     /**
@@ -488,7 +504,7 @@ class Package
      *
      * @return Package
      */
-    protected function setGroupsOptions(array $groupOptions)
+    public function setGroupsOptions(array $groupOptions)
     {
         foreach ($groupOptions as $rank => $options) {
             if (!$this->groups->containsKey($rank)) {

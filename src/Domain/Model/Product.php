@@ -166,7 +166,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
      */
-    private function __construct(
+    public function __construct(
         Event $event,
         $type,
         $name,
