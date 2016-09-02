@@ -40,6 +40,20 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetsByUserAndEvent($this->getUser(), $event);
+
+        if (empty($sheets)) {
+            throw $this->createNotFoundException('Sheet not found.');
+        }
+
+        $sheet = reset($sheets);
+
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
         $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         $orderByForm = $this->createForm(
