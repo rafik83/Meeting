@@ -100,6 +100,7 @@ class CreateHandler
             }
         }
 
+        $event->setAssetPath('');
         $this->eventRepository->add($event);
 
         try {
