@@ -77,4 +77,44 @@ class LocalFileStorageAdapter implements FileStorageInterface
 
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function copyAndRename($identifier, $name = null)
+    {
+        $filename = null;
+
+        if (!empty($identifier)) {
+            $filepath = $this->publicDir . $identifier;
+
+            if (file_exists($filepath) && is_file($filepath) && is_writable($filepath)) {
+                $pathInfo = pathinfo($identifier);
+
+                if (null !== $name) {
+                    $filename = $name;
+
+                    copy($filepath, $this->publicDir . $filename);
+                } else {
+                    $filename = sprintf(
+                        '%s/%s_%s.%s',
+                        $pathInfo['dirname'],
+                        $pathInfo['filename'],
+                        uniqid(),
+                        $pathInfo['extension']
+                    );
+
+                    $file = sprintf(
+                        '%s%s',
+                        $this->publicDir,
+                        $filename
+                    );
+
+                    copy($filepath, $file);
+                }
+            }
+        }
+
+        return $filename;
+    }
 }
