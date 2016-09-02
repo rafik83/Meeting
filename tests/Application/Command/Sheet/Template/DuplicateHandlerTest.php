@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateResult;
+use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
@@ -22,22 +24,25 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
+        $event            = EventFactory::createEvent();
         $dateTime         = new \DateTime();
-        $template         = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime);
+        $template         = new SheetTemplate('Toto', [], ['fr'], 'fr', $dateTime, [], $event);
         $duplicate        = new Duplicate($template, $dateTime);
         $duplicate->title = 'Machin';
 
         //expected
-        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime);
+        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime, [], $event);
         $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
-        $templateRepository  = $this->prophesize(SheetTemplateRepositoryInterface::class);
-        $templateRemoveField = $this->prophesize(TemplateRemoveField::class);
-        $templateRepository->add($expectedTemplate)->shouldBeCalled();
+        $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
+        $sheetTemplateCloner
+            ->duplicate($template, $event, $duplicate->title)
+            ->ShouldBeCalled()
+            ->willReturn($expectedTemplate);
 
         //Handler
-        $handler = new DuplicateHandler($templateRepository->reveal(), $dateTime, $templateRemoveField->reveal());
+        $handler = new DuplicateHandler($sheetTemplateCloner->reveal());
         $result  = $handler->handle($duplicate);
 
         $this->assertEquals($expectedResult, $result);
@@ -56,17 +61,18 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $duplicate->event = $event;
 
         //expected
-        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime);
-        $expectedTemplate->setEvent($event);
-        $expectedResult = new DuplicateResult($expectedTemplate);
+        $expectedTemplate = new SheetTemplate('Machin', [], ['fr'], 'fr', $dateTime, [], $event);
+        $expectedResult   = new DuplicateResult($expectedTemplate);
 
         // Mock
-        $templateRepository  = $this->prophesize(SheetTemplateRepositoryInterface::class);
-        $templateRemoveField = $this->prophesize(TemplateRemoveField::class);
-        $templateRepository->add($expectedTemplate)->shouldBeCalled();
+        $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
+        $sheetTemplateCloner
+            ->duplicate($template, $event, $duplicate->title)
+            ->ShouldBeCalled()
+            ->willReturn($expectedTemplate);
 
         //Handler
-        $handler = new DuplicateHandler($templateRepository->reveal(), $dateTime, $templateRemoveField->reveal());
+        $handler = new DuplicateHandler($sheetTemplateCloner->reveal());
         $result  = $handler->handle($duplicate);
 
         $this->assertEquals($expectedResult, $result);
@@ -122,47 +128,14 @@ class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
         $duplicate->event = $eventTo;
 
         // Mock
-        $templateRepository  = $this->prophesize(SheetTemplateRepositoryInterface::class);
-        $templateRemoveField = $this->prophesize(TemplateRemoveField::class);
-
-        $templateRemoveField->remove($template, 'products', [])->shouldBeCalled()->willReturn([
-            "ee4f2281" =>
-                [
-                    "component" => "object",
-                    "type"      => "image",
-                    "config"    =>
-                        [
-                            "label"       => ["en" => null, "fr" => "Image"],
-                            "placeholder" => ["en" => null, "fr" => ""],
-                            "help"        => ["en" => null, "fr" => ""],
-                            "required"    => false,
-                            "style"       => "",
-                            "products"    => [],
-                        ],
-                ],
-        ]);
-
-        $templateRemoveField->remove($template, 'nomenclature', [])->shouldBeCalled()->willReturn([
-            "ee4f2281" =>
-                [
-                    "component" => "object",
-                    "type"      => "image",
-                    "config"    =>
-                        [
-                            "label"       => ["en" => null, "fr" => "Image"],
-                            "placeholder" => ["en" => null, "fr" => ""],
-                            "help"        => ["en" => null, "fr" => ""],
-                            "required"    => false,
-                            "style"       => "",
-                            "products"    => [],
-                        ],
-                ],
-        ]);
-
-        $templateRepository->add($expectedTemplate)->shouldBeCalled();
-
+        $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
+        $sheetTemplateCloner
+            ->duplicate($template, $event, $duplicate->title)
+            ->ShouldBeCalled()
+            ->willReturn($expectedTemplate);
+        
         //Handler
-        $handler = new DuplicateHandler($templateRepository->reveal(), $dateTime, $templateRemoveField->reveal());
+        $handler = new DuplicateHandler($sheetTemplateCloner->reveal());
         $result  = $handler->handle($duplicate);
 
         $this->assertEquals($expectedResult, $result);
