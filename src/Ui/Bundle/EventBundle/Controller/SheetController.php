@@ -93,43 +93,6 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return Sheet
-     */
-    private function getUserSheet(Event $event, $locale)
-    {
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetsByUserAndEvent($this->getUser(), $event);
-
-        if (empty($sheets)) {
-            throw $this->createNotFoundException('Sheet not found.');
-        }
-
-        $sheet = $sheets[array_keys($sheets)[0]];
-
-        if (!$sheet instanceof Sheet) {
-            throw $this->createNotFoundException('Sheet not found.');
-        }
-
-        if ($sheet->getEvent() !== $event) {
-            throw $this->createNotFoundException('Sheet not found');
-        }
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createNotFoundException('No participant for this user is attached on this sheet');
-        }
-
-        if (!$event->hasLocale($locale)) {
-            throw $this->createNotFoundException('Locale not available for this event.');
-        }
-
-        return $sheet;
-    }
-
-    /**
      * Render the form of an object. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
@@ -567,6 +530,31 @@ class SheetController extends Controller
             'uid'           => $key,
             'participants'  => $participants,
         ]);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Sheet
+     */
+    private function getUserSheet(Event $event, $locale)
+    {
+        if (!$event->hasLocale($locale)) {
+            throw $this->createNotFoundException('Locale not available for this event.');
+        }
+
+        $sheets = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetsByUserAndEvent($this->getUser(), $event);
+
+        if (empty($sheets)) {
+            throw $this->createNotFoundException('Sheet not found.');
+        }
+
+        $sheet = reset($sheets);
+
+        return $sheet;
     }
 
     /**
