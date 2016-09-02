@@ -673,24 +673,21 @@ class Product
     }
 
     /**
-     * @param string     $name
-     * @param string     $image
-     * @param int        $availabilityCurrent
-     * @param int        $availabilityMax
-     * @param null|float $unitPrice
+     * @param string $name
+     * @param string $image
+     * @param int    $availabilityCurrent
+     * @param int    $availabilityMax
+     * @param float  $unitPrice
      *
      * @return Product
      */
-    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax, $unitPrice = null)
+    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax, $unitPrice)
     {
         $this->name                = $name;
         $this->image               = $image;
         $this->availabilityCurrent = $availabilityCurrent;
         $this->availabilityMax     = $availabilityMax;
-
-        if (null !== $unitPrice) {
-            $this->unitPrice = $unitPrice;
-        }
+        $this->unitPrice           = $unitPrice;
 
         return $this;
     }
@@ -720,20 +717,17 @@ class Product
     }
 
     /**
-     * @param string     $name
-     * @param int        $quantityMax
-     * @param null|float $unitPrice
+     * @param string $name
+     * @param int    $quantityMax
+     * @param float  $unitPrice
      *
      * @return Product
      */
-    public function updateParticipant($name, $quantityMax, $unitPrice = null)
+    public function updateParticipant($name, $quantityMax, $unitPrice)
     {
         $this->name        = $name;
         $this->quantityMax = $quantityMax;
-
-        if (null !== $unitPrice) {
-            $this->unitPrice = $unitPrice;
-        }
+        $this->unitPrice   = $unitPrice;
 
         return $this;
     }
@@ -763,20 +757,17 @@ class Product
     }
 
     /**
-     * @param string     $name
-     * @param int        $quantityMax
-     * @param null|float $unitPrice
+     * @param string $name
+     * @param int    $quantityMax
+     * @param float  $unitPrice
      *
      * @return Product
      */
-    public function updatePlanning($name, $quantityMax, $unitPrice = null)
+    public function updatePlanning($name, $quantityMax, $unitPrice)
     {
         $this->name        = $name;
         $this->quantityMax = $quantityMax;
-
-        if (null !== $unitPrice) {
-            $this->unitPrice = $unitPrice;
-        }
+        $this->unitPrice   = $unitPrice;
 
         return $this;
     }
@@ -835,7 +826,7 @@ class Product
      * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
-     * @param null|float                   $unitPrice
+     * @param null|float              $unitPrice
      *
      * @return Product
      */
@@ -846,10 +837,10 @@ class Product
         $availabilityCurrent,
         $availabilityMax,
         $updatable,
+        $unitPrice,
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null,
-        $unitPrice = null
+        \DateTimeInterface $buyableUntil = null
     ) {
         $this->name                  = $name;
         $this->image                 = $image;
@@ -860,10 +851,7 @@ class Product
         $this->deletableUntil        = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
-
-        if (null !== $unitPrice) {
-            $this->unitPrice = $unitPrice;
-        }
+        $this->unitPrice             = $unitPrice;
 
         return $this;
     }

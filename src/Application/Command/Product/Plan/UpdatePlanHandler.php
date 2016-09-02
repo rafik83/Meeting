@@ -24,7 +24,9 @@ class UpdatePlanHandler extends AbstractHandler
             $this->fileStorageInterface->upload($updatePlan->file),
             $updatePlan->availabilityCurrent,
             $updatePlan->availabilityMax,
-            $this->updatePriceResolver->resolve($updatePlan->product) ? $updatePlan->unitPrice : null
+            $this->updatePriceResolver->resolve($updatePlan->product) ?
+                $updatePlan->unitPrice :
+                $updatePlan->product->getUnitPrice()
         );
 
         foreach ($updatePlan->translations as $locale => $translation) {
