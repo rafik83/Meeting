@@ -197,8 +197,13 @@ class ImportHandler
         }
         $package->setPlans($plans);
 
-        $package->setParticipant($newProducts[$oldPackage->getParticipant()->getId()]);
-        $package->setPlanning($newProducts[$oldPackage->getPlanning()->getId()]);
+        if (null !== $oldPackage->getParticipant()) {
+            $package->setParticipant($newProducts[$oldPackage->getParticipant()->getId()]);
+        }
+
+        if (null !== $oldPackage->getPlanning()) {
+            $package->setPlanning($newProducts[$oldPackage->getPlanning()->getId()]);
+        }
 
         $groups = [];
         foreach ($oldPackage->getGroups() as $group) {
