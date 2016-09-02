@@ -144,28 +144,28 @@ class ImportHandler
     }
 
     /**
-     * @param array   $newProducts
+     * @param array   $toProducts
      * @param Product $fromPlan
      * @param Product $toPlan
      */
-    private function handlePlan(array &$newProducts, Product $fromPlan, Product $toPlan)
+    private function handlePlan(array &$toProducts, Product $fromPlan, Product $toPlan)
     {
         foreach ($fromPlan->getIncludedProducts() as $includedProduct) {
             $toPlan->includeProduct(
-                $newProducts[$includedProduct->getIncluded()->getId()],
+                $toProducts[$includedProduct->getIncluded()->getId()],
                 $includedProduct->getQuantity()
             );
         }
     }
 
     /**
-     * @param array   $newProducts
+     * @param array   $toProducts
      * @param Package $fromPackage
      * @param Event   $toEvent
      *
      * @return Package
      */
-    private function getNewPackage(array &$newProducts, Package $fromPackage, Event $toEvent)
+    private function getNewPackage(array &$toProducts, Package $fromPackage, Event $toEvent)
     {
         $toPackage = new Package($toEvent, $fromPackage->getTitle(), $this->dateTime);
 
@@ -182,16 +182,16 @@ class ImportHandler
 
         $plans = [];
         foreach ($fromPackage->getPlans() as $plan) {
-            $plans[] = $newProducts[$plan->getId()];
+            $plans[] = $toProducts[$plan->getId()];
         }
         $toPackage->setPlans($plans);
 
         if (null !== $fromPackage->getParticipant()) {
-            $toPackage->setParticipant($newProducts[$fromPackage->getParticipant()->getId()]);
+            $toPackage->setParticipant($toProducts[$fromPackage->getParticipant()->getId()]);
         }
 
         if (null !== $fromPackage->getPlanning()) {
-            $toPackage->setPlanning($newProducts[$fromPackage->getPlanning()->getId()]);
+            $toPackage->setPlanning($toProducts[$fromPackage->getPlanning()->getId()]);
         }
 
         $groups = [];
@@ -204,7 +204,7 @@ class ImportHandler
 
             $options = [];
             foreach ($fromGroup->getOptions() as $option) {
-                $options[] = $newProducts[$option->getId()];
+                $options[] = $toProducts[$option->getId()];
             }
             $toGroup->setOptions($options);
 
