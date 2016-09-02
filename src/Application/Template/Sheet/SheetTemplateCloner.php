@@ -8,7 +8,6 @@
  * @author Elao <contact@elao.com>
  */
 
-
 namespace Proximum\Vimeet\Application\Template\Sheet;
 
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
@@ -17,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 
 class SheetTemplateCloner extends TemplateCloner
 {
@@ -31,23 +31,31 @@ class SheetTemplateCloner extends TemplateCloner
     private $dateTime;
 
     /**
+     * @var TemplateRemoveField
+     */
+    private $templateRemoveField;
+
+    /**
      * SheetTemplateCloner constructor.
      *
      * @param SheetTemplateRepositoryInterface $sheetTemplateRepository
      * @param TemplateDataFactory              $templateDataFactory
      * @param NomenclatureCloner               $nomenclatureCloner
      * @param \DateTimeInterface               $dateTime
+     * @param TemplateRemoveField              $templateRemoveField
      */
     public function __construct(
         SheetTemplateRepositoryInterface $sheetTemplateRepository,
         TemplateDataFactory $templateDataFactory,
         NomenclatureCloner $nomenclatureCloner,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        TemplateRemoveField $templateRemoveField
     ) {
         parent::__construct($templateDataFactory, $nomenclatureCloner);
 
         $this->sheetTemplateRepository = $sheetTemplateRepository;
         $this->dateTime                = $dateTime;
+        $this->templateRemoveField     = $templateRemoveField;
     }
 
     /**
@@ -69,7 +77,10 @@ class SheetTemplateCloner extends TemplateCloner
             $template->getEvent()
         );
 
-        $this->switchEvent($event, $clone);
+        if ($event !== $template->getEvent()) {
+            $this->switchEvent($event, $clone);
+            $clone->setValue($this->templateRemoveField->remove($clone, 'products', []));
+        }
 
         $this->sheetTemplateRepository->add($clone);
 
