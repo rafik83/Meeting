@@ -1147,6 +1147,17 @@ services:
         arguments:
             - '@repository.cart_row_repository'
             - '@vimeet_infrastructure.repository.order_row_repository'
+
+    command.product.import.import_handler:
+        class: Proximum\Vimeet\Application\Command\Product\Import\ImportHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@repository.package_repository'
+            - '@adapter.local_file_storage'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Import\Import }
+
     #
     # Security
     #
