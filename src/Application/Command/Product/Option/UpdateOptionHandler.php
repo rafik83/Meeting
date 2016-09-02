@@ -29,7 +29,8 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->updatable,
             $updateOption->deletableUntil,
             $updateOption->subjectedToValidation,
-            $updateOption->buyableUntil
+            $updateOption->buyableUntil,
+            $this->updatePriceResolver->resolve($updateOption->product) ? $updateOption->unitPrice : null
         );
 
         foreach ($updateOption->translations as $locale => $translation) {

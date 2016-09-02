@@ -14,6 +14,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlanHandler;
+use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -82,8 +83,14 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
 
+        $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
+
         // Handler
-        $handler = new CreatePlanHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
+        $handler = new CreatePlanHandler(
+            $pacakgeRepository->reveal(),
+            $fileStorage->reveal(),
+            $updatePriceResolver->reveal()
+        );
         $handler->handle($create);
     }
 
@@ -164,8 +171,14 @@ class CreatePlanHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
 
+        $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
+
         // Handler
-        $handler = new CreatePlanHandler($pacakgeRepository->reveal(), $fileStorage->reveal());
+        $handler = new CreatePlanHandler(
+            $pacakgeRepository->reveal(),
+            $fileStorage->reveal(),
+            $updatePriceResolver->reveal()
+        );
         $handler->handle($create);
     }
 }

@@ -673,19 +673,24 @@ class Product
     }
 
     /**
-     * @param string $name
-     * @param string $image
-     * @param int    $availabilityCurrent
-     * @param int    $availabilityMax
+     * @param string     $name
+     * @param string     $image
+     * @param int        $availabilityCurrent
+     * @param int        $availabilityMax
+     * @param null|float $unitPrice
      *
      * @return Product
      */
-    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax)
+    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax, $unitPrice = null)
     {
         $this->name                = $name;
         $this->image               = $image;
         $this->availabilityCurrent = $availabilityCurrent;
         $this->availabilityMax     = $availabilityMax;
+
+        if (null !== $unitPrice) {
+            $this->unitPrice = $unitPrice;
+        }
 
         return $this;
     }
@@ -715,15 +720,20 @@ class Product
     }
 
     /**
-     * @param string $name
-     * @param int    $quantityMax
+     * @param string     $name
+     * @param int        $quantityMax
+     * @param null|float $unitPrice
      *
      * @return Product
      */
-    public function updateParticipant($name, $quantityMax)
+    public function updateParticipant($name, $quantityMax, $unitPrice = null)
     {
         $this->name        = $name;
         $this->quantityMax = $quantityMax;
+
+        if (null !== $unitPrice) {
+            $this->unitPrice = $unitPrice;
+        }
 
         return $this;
     }
@@ -753,15 +763,20 @@ class Product
     }
 
     /**
-     * @param string $name
-     * @param int    $quantityMax
+     * @param string     $name
+     * @param int        $quantityMax
+     * @param null|float $unitPrice
      *
      * @return Product
      */
-    public function updatePlanning($name, $quantityMax)
+    public function updatePlanning($name, $quantityMax, $unitPrice = null)
     {
         $this->name        = $name;
         $this->quantityMax = $quantityMax;
+
+        if (null !== $unitPrice) {
+            $this->unitPrice = $unitPrice;
+        }
 
         return $this;
     }
@@ -820,6 +835,7 @@ class Product
      * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
+     * @param null|float                   $unitPrice
      *
      * @return Product
      */
@@ -832,7 +848,8 @@ class Product
         $updatable,
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null
+        \DateTimeInterface $buyableUntil = null,
+        $unitPrice = null
     ) {
         $this->name                  = $name;
         $this->image                 = $image;
@@ -843,6 +860,10 @@ class Product
         $this->deletableUntil        = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
+
+        if (null !== $unitPrice) {
+            $this->unitPrice = $unitPrice;
+        }
 
         return $this;
     }
