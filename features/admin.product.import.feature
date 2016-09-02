@@ -1,4 +1,4 @@
-@admin
+@admin @product @package
 Feature: Import products and package from an event
   As an Admin, I need to be able to import the products and the packages of an event to an other
 
