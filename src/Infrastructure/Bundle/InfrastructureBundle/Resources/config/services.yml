@@ -833,6 +833,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Option\CreateOption }
     command.product.update_option_handler:
@@ -840,6 +841,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Option\UpdateOption }
     command.product.create_plan_handler:
@@ -847,6 +849,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan }
     command.product.update_plan_handler:
@@ -854,30 +857,39 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan }
     command.product.create_participant_handler:
         class: Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipantHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant }
     command.product.update_participant_handler:
         class: Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant }
     command.product.create_planning_handler:
         class: Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanningHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning }
     command.product.update_planning_handler:
         class: Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanningHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
+            - '@adapter.local_file_storage'
+            - '@command.product.update_price_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning }
     command.participant.update_profile_handler:

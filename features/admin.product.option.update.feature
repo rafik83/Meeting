@@ -34,3 +34,5 @@ Feature: Handle Update Product
     When I press "product_update_option_submit"
     Then I should be on this page "/admin/fr/event/1/product"
     And I should see "admin.product.update.success"
+    When I go to this page "/admin/fr/event/1/product/6/update/option"
+    Then the "form.product_update_option.children.unitPrice.label" field should contain "15"

@@ -26,14 +26,22 @@ abstract class AbstractHandler
     protected $fileStorageInterface;
 
     /**
+     * @var UpdatePriceResolver
+     */
+    protected $updatePriceResolver;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param FileStorageInterface       $fileStorageInterface
+     * @param UpdatePriceResolver        $updatePriceResolver
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        FileStorageInterface $fileStorageInterface = null
+        FileStorageInterface $fileStorageInterface = null,
+        UpdatePriceResolver $updatePriceResolver
     ) {
         $this->productRepository    = $productRepository;
         $this->fileStorageInterface = $fileStorageInterface;
+        $this->updatePriceResolver  = $updatePriceResolver;
     }
 }
