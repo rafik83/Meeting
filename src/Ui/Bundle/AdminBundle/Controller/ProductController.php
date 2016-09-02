@@ -323,6 +323,7 @@ class ProductController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($duplicate);
+            $this->addFlash('success', 'flash.admin.product.import.success');
 
             return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
         }
