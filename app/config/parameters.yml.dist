@@ -16,12 +16,14 @@ parameters:
     mailer_password:   ~
     mailer_port:       ~
     mailer_sender:     ~
+    mailer_encryption: ~
     mailer_error_transport: smtp
     mailer_error_host:      127.0.0.1
     mailer_error_user:      ~
     mailer_error_password:  ~
+    mailer_error_port:      ~
     mailer_error_from:      "vimeet@proximum.com"
-
+    mailer_error_encryption: ~
 
     # A secret key that's used to generate certain security-related tokens
     secret:            LcTdBOetSYwmhWirRZHleWO8FJknzXLu
