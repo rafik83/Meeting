@@ -40,13 +40,13 @@ class LinkView
     /**
      * LinkView constructor.
      *
-     * @param string          $label
-     * @param string          $link
-     * @param null            $locale
-     * @param StateButtonView $button
-     * @param bool            $state
+     * @param string               $label
+     * @param null|string          $link
+     * @param null|string          $locale
+     * @param null|StateButtonView $button
+     * @param bool                 $state
      */
-    public function __construct($label, $link, $locale = null, StateButtonView $button = null, $state = true)
+    public function __construct($label, $link = null, $locale = null, StateButtonView $button = null, $state = true)
     {
         $this->label  = $label;
         $this->link   = $link;

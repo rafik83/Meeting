@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class CatalogViewQueryHandler
@@ -33,7 +34,7 @@ class CatalogViewQueryHandler
     /**
      * CatalogViewQueryHandler constructor.
      *
-     * @param DateTimeInterface   $dateTime
+     * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
      */
     public function __construct(DateTimeInterface $dateTime, NavigationBuilderInterface $navigationBuilder)
@@ -55,29 +56,70 @@ class CatalogViewQueryHandler
             ->getConfiguration()
             ->getCatalogOnlineDate();
 
-        $linksView = [];
+        return new CategoryView(
+            Category::CATALOG,
+            Category::CATALOG_ICON,
+            [
+                $this->getLinkView(
+                    $catalogViewQuery->sheet,
+                    $catalogOnlineDate,
+                    $catalogViewQuery->locale
+                ),
+            ]
+        );
+    }
 
-        if (empty($catalogOnlineDate)) {
-            $linksView[] = new LinkView('navigation.links.incoming', null);
-        } else {
-            $formatter = new IntlDateFormatter(
-                $catalogViewQuery->locale,
-                IntlDateFormatter::LONG,
-                IntlDateFormatter::LONG
-            );
-            $formatter->setPattern('d MMMM Y');
-            $catalogOnlineDateFormatted = $formatter->format($catalogOnlineDate);
+    /**
+     * @param Sheet              $sheet
+     * @param \DateTimeInterface $catalogOnlineDate
+     * @param string             $locale
+     *
+     * @return LinkView
+     */
+    private function getLinkView(Sheet $sheet, \DateTimeInterface $catalogOnlineDate, $locale)
+    {
+        $formattedDate = $this->getFormattedDate($catalogOnlineDate, $locale);
 
-            $isCatalogAvailable = $catalogViewQuery->sheet->isInCatalog() && $this->dateTime > $catalogOnlineDate;
+        if ($this->dateTime > $catalogOnlineDate) {
+            if (!$sheet->isInCatalog()) {
+                // catalog opened but sheet not in catalog
+                return new LinkView('navigation.links.catalog.sheet_not_in_catalog');
+            }
 
-            $linksView[] = new LinkView(
+            // catalog opened and sheet is in catalog
+            return new LinkView(
                 'navigation.links.catalog.available_date',
-                $isCatalogAvailable ? $this->navigationBuilder->getRoute('event_catalog_index') : null,
+                $this->navigationBuilder->getRoute('event_catalog_index'),
                 null,
-                new StateButtonView(true, $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '')
+                new StateButtonView(true, $formattedDate)
             );
         }
 
-        return new CategoryView(Category::CATALOG, Category::CATALOG_ICON, $linksView);
+        // catalog not opened
+        return new LinkView(
+            'navigation.links.catalog.available_date',
+            null,
+            null,
+            new StateButtonView(true, $formattedDate)
+        );
+    }
+
+    /**
+     * @param DateTimeInterface $date
+     * @param string            $locale
+     *
+     * @return bool|string
+     */
+    private function getFormattedDate(\DateTimeInterface $date, $locale)
+    {
+        $formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::LONG
+        );
+        $formatter->setPattern('d MMMM Y');
+        $catalogOnlineDateFormatted = $formatter->format($date);
+
+        return $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '';
     }
 }
