@@ -540,21 +540,7 @@ class SheetController extends Controller
      */
     private function getUserSheet(Event $event, $locale)
     {
-        if (!$event->hasLocale($locale)) {
-            throw $this->createNotFoundException('Locale not available for this event.');
-        }
-
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetsByUserAndEvent($this->getUser(), $event);
-
-        if (empty($sheets)) {
-            throw $this->createNotFoundException('Sheet not found.');
-        }
-
-        $sheet = reset($sheets);
-
-        return $sheet;
+        return $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
     }
 
     /**
