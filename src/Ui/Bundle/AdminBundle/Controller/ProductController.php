@@ -96,7 +96,7 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $update = new UpdateOption($product);
-        $form = $this->createForm(UpdateOptionType::class, $update, [
+        $form   = $this->createForm(UpdateOptionType::class, $update, [
             'submit'  => true,
             'product' => $product,
             'locale'  => $request->getLocale(),
@@ -127,7 +127,7 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreatePlan($event);
-        $form = $this->createForm(CreatePlanType::class, $create, [
+        $form   = $this->createForm(CreatePlanType::class, $create, [
             'submit' => true,
             'event'  => $event,
             'locale' => $request->getLocale(),

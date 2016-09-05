@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Order;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Order\Row;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 
 class RowRepository implements RowRepositoryInterface
@@ -44,5 +45,21 @@ class RowRepository implements RowRepositoryInterface
     public function set(Row $row)
     {
         $this->entityManager->flush($row);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByProduct(Product $product)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('orderRow')
+            ->from(Row::class, 'orderRow')
+            ->where('orderRow.product = :product')
+            ->setParameter('product', $product);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

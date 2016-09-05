@@ -105,6 +105,7 @@ class CreateHandler
 
         try {
             $event->setAssetPath($this->guidelinesGenerator->generate($event));
+            $this->eventRepository->set($event);
         } catch (GuidelineAssetBuildFailedException $exception) {
             throw new GuidelineAssetBuildFailedException($exception->getMessage());
         }
@@ -115,8 +116,6 @@ class CreateHandler
         }
 
         $this->generateContent($event);
-
-        $this->eventRepository->set($event);
     }
 
     /**

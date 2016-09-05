@@ -91,6 +91,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
+        $eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
+            return $event->getTitle() === $expectedEvent->getTitle();
+        }))->shouldBeCalled();
         $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
@@ -181,6 +184,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
+            return $event->getTitle() === $expectedEvent->getTitle();
+        }))->shouldBeCalled();
+        $eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
         $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
