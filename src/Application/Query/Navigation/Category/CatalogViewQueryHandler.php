@@ -62,8 +62,8 @@ class CatalogViewQueryHandler
             [
                 $this->getLinkView(
                     $catalogViewQuery->sheet,
-                    $catalogOnlineDate,
-                    $catalogViewQuery->locale
+                    $catalogViewQuery->locale,
+                    $catalogOnlineDate
                 ),
             ]
         );
@@ -71,16 +71,21 @@ class CatalogViewQueryHandler
 
     /**
      * @param Sheet              $sheet
-     * @param \DateTimeInterface $catalogOnlineDate
      * @param string             $locale
+     * @param \DateTimeInterface $catalogOnlineDate
      *
      * @return LinkView
      */
-    private function getLinkView(Sheet $sheet, \DateTimeInterface $catalogOnlineDate, $locale)
+    private function getLinkView(Sheet $sheet, $locale, \DateTimeInterface $catalogOnlineDate = null)
     {
+        if (null === $catalogOnlineDate) {
+            // No date for catalog opening
+            return new LinkView('navigation.links.catalog.incoming');
+        }
+
         $formattedDate = $this->getFormattedDate($catalogOnlineDate, $locale);
 
-        if ($this->dateTime > $catalogOnlineDate) {
+        if (null !== $catalogOnlineDate && $this->dateTime > $catalogOnlineDate) {
             if (!$sheet->isInCatalog()) {
                 // catalog opened but sheet not in catalog
                 return new LinkView('navigation.links.catalog.sheet_not_in_catalog');
