@@ -45,6 +45,8 @@ function init (target) {
     });
 
     $('.display-catalog-research').on('click', function (e) {
+        $(this).toggleClass('btn-active');
+        $(this).toggleClass('btn-inactive');
         $('.catalog').toggleClass('catalog--advanced');
     });
 
