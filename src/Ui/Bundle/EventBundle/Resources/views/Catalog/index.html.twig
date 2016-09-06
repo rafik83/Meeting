@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="catalog">
-        {{ include('EventBundle:Catalog:facets.html.twig', { typeViews: typeViews }) }}
+        {{ include('EventBundle:Catalog:facets.html.twig', { facetsForm: facetsForm, typeViews: typeViews }) }}
 
         <div class="catalog__filters">
 

@@ -1,23 +1,29 @@
 <div class="catalog__research">
-    <form>
-        <div class="filter">
-            <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-1"
-                aria-expanded="false" aria-controls="collapse-1">Participants</h3>
+    {{ form_start(facetsForm) }}
 
-            <div class="collapse in" id="collapse-1">
-                <ul>
-                    {% for typeView in typeViews %}
-                        <li class="filter__item">
-                            <label class="checkbox-inline {{ typeView.count == 0 ? 'count_zero' : '' }}">
-                                <span class="filter-label"><input type="checkbox" checked="checked">{{ typeView.title }}</span>
-                                <span class="details">{{ typeView.count }}</span>
-                            </label>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+    <div class="filter">
+        <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-1"
+            aria-expanded="false" aria-controls="collapse-1">{{ facetsForm.type.vars.label|trans({}, facetsForm.type.vars.translation_domain) }}</h3>
+
+        <div class="collapse in" id="collapse-1">
+            <ul>
+                {% for child in facetsForm.type.children %}
+                    {% set disabled = typeViews[child.vars.value].count == 0 %}
+                    <li class="filter__item">
+                        <label class="checkbox-inline {{ disabled ? 'count_zero' : '' }}">
+                            <span class="filter-label">{{ form_widget(child, {disabled: disabled}) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                            <span class="details">{{ typeViews[child.vars.value].count }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        {#
+    </div>
+
+    {{ form_end(facetsForm) }}
+
+    {#
+    <form>
         <div class="filter">
             <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-2"
                 aria-expanded="false" aria-controls="collapse-2">Objectifs</h3>
@@ -50,8 +56,9 @@
             </div>
         </div>
         <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>
-        #}
     </form>
+    #}
+
     {#
     <div class="actions">
         <ul>

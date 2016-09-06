@@ -60,7 +60,7 @@ class CatalogTypeViewQueryHandler
                 }
             }
 
-            $typeViews[] = new TypeView($id, $title, $count);
+            $typeViews[$id] = new TypeView($id, $title, $count);
         }
 
         return $typeViews;

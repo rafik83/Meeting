@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuer
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\FacetsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,6 +60,15 @@ class CatalogController extends Controller
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, $filters, $request->getLocale());
         $typeViews = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
+        $facetsForm = $this->createForm(
+            FacetsType::class,
+            null,
+            [
+                'action' => $this->generateUrl('event_catalog_index'),
+                'typeViews' => $typeViews,
+            ]
+        );
+
         try {
             $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
@@ -82,8 +92,9 @@ class CatalogController extends Controller
         return $this->render('EventBundle:Catalog:index.html.twig', [
             'event'           => $event,
             'isCatalog'       => true,
-            'typeViews'           => $typeViews,
+            'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
+            'facetsForm'      => $facetsForm->createView(),
             'orderByForm'     => $orderByForm->createView(),
         ]);
     }

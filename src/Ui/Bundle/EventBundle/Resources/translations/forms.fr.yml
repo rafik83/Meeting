@@ -1,6 +1,7 @@
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.catalog_facets.children.type.label: Participants
 form.catalog_order_by.children.orderBy.label: TRIER
 form.catalog_order_by.order.alphabetical: 'Ordre alphabétique'
 form.catalog_order_by.order.dateAddedToCatalog: 'Inscriptions récentes'
