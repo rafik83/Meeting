@@ -185,6 +185,14 @@ admin_rule_delete:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Rule:delete }
 
+admin_rule_see_what:
+    path: /event/{event}/who-see-who/see-what/{rule}
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Rule:seeWhat }
+    requirements:
+        event: \d+
+        rule: \d+
+
 #
 # Type
 #
