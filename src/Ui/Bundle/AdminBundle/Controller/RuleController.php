@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Rule\SeeWhat;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\DontSeeWhatType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule\SeeWhatType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Form;
@@ -50,7 +52,7 @@ class RuleController extends Controller
             return $this->redirect($this->generateWhatUrl($rule));
         }
 
-        $rules = $this->get('vimeet_infrastructure.repository.rule_repository')->getByEvent($event);
+        $rules = $this->get('repository.rule_repository')->getByEvent($event);
 
         return $this->render('AdminBundle:Rule:list.html.twig', [
             'form'   => $form->createView(),
@@ -58,6 +60,50 @@ class RuleController extends Controller
             'rules'  => $rules,
             'locale' => $locale,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Rule    $rule
+     *
+     * @return RedirectResponse|Response
+     */
+    public function seeWhatAction(Request $request, Event $event, Rule $rule)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $what = new SeeWhat($rule);
+        $form = $this->createSeeWhatForm($rule, $request->getLocale());
+
+
+        return $this->render('AdminBundle:Rule:seeWhat.html.twig', [
+            'form'    => $form->createView(),
+            'event'   => $event,
+            'seer'    => $rule->getSeer(),
+            'seeable' => $rule->getSeeable(),
+            'locale'  => $request->getLocale(),
+        ]);
+    }
+
+    /**
+     * @param Rule   $rule
+     *
+     * @return Form
+     */
+    private function createSeeWhatForm(Rule $rule, $locale)
+    {
+        $seeWhat = new SeeWhat($rule);
+
+        $form = $this->createForm(SeeWhatType::class, $seeWhat, [
+            'action' => $this->generateWhatUrl($rule),
+            'method' => 'POST',
+            'rule'   => $rule,
+            'locale' => $locale,
+        ]);
+        $form->add('submit', SubmitType::class);
+
+        return $form;
     }
 
     /**
@@ -89,7 +135,7 @@ class RuleController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $rule->setWhat($form->getData());
-            $this->get('vimeet_infrastructure.repository.rule_repository')->set($rule);
+            $this->get('repository.rule_repository')->set($rule);
             $this->addFlash('success', 'flash.admin.event.who_see_what.success');
 
             return $this->redirectToRoute('admin_rule_list', ['event' => $event->getId()]);
@@ -118,7 +164,7 @@ class RuleController extends Controller
             throw $this->createNotFoundException('Rule not found');
         }
 
-        $this->get('vimeet_infrastructure.repository.rule_repository')->remove($rule);
+        $this->get('repository.rule_repository')->remove($rule);
 
         return $this->redirectToRoute('admin_rule_list', ['event' => $event->getId()]);
     }
@@ -133,7 +179,7 @@ class RuleController extends Controller
     private function findRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
         return $this
-            ->get('vimeet_infrastructure.repository.rule_repository')
+            ->get('repository.rule_repository')
             ->getByEventSeerAndSeeable($event, $seer, $seeable);
     }
 
@@ -147,7 +193,7 @@ class RuleController extends Controller
     private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
     {
         return $this->findRule($event, $seer, $seeable) ?:
-            $this->get('vimeet_infrastructure.repository.rule_repository')->add(new Rule($event, $seer, $seeable, []));
+            $this->get('repository.rule_repository')->add(new Rule($event, $seer, $seeable, []));
     }
 
     /**
