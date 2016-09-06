@@ -68,7 +68,7 @@ class Rule
         } elseif ($seer instanceof Category) {
             $this->seerCategory = $seer;
         } else {
-            throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seer)));
+            throw new \InvalidArgumentException(sprintf('Do not know how to handle %s', get_class($seer)));
         }
 
         if ($seeable instanceof Type) {
@@ -76,7 +76,7 @@ class Rule
         } elseif ($seeable instanceof Category) {
             $this->seeableCategory = $seeable;
         } else {
-            throw new \InvalidArgumentException(sprintf('Unknow to handle %s', get_class($seeable)));
+            throw new \InvalidArgumentException(sprintf('Do not know how to handle %s', get_class($seeable)));
         }
     }
 
