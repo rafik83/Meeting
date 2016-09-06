@@ -42,23 +42,8 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
-        $filters = [];
-
-        $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
-
-        $orderByForm = $this->createForm(
-            OrderByType::class,
-            $orderBy,
-            ['action' => $this->generateUrl('event_catalog_index')]
-        );
-        $ordered     = $orderByForm->handleRequest($request) && $orderByForm->isValid();
-
-        if ($ordered) {
-            $orderBy = $orderByForm->getData();
-        }
-
-        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, $filters, $request->getLocale());
-        $typeViews = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
+        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
+        $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
         $facets = [];
         foreach ($typeViews as $typeView) {
@@ -69,10 +54,32 @@ class CatalogController extends Controller
             FacetsType::class,
             $facets,
             [
-                'action' => $this->generateUrl('event_catalog_index'),
+                'action'    => $this->generateUrl('event_catalog_index'),
                 'typeViews' => $typeViews,
             ]
         );
+
+        $filtered = $facetsForm->handleRequest($request) && $facetsForm->isValid();
+
+        $filters = [];
+
+        if ($filtered) {
+            $filters = $facetsForm->getData();
+        }
+
+        $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+
+        $orderByForm = $this->createForm(
+            OrderByType::class,
+            $orderBy,
+            ['action' => $this->generateUrl('event_catalog_index')]
+        );
+
+        $ordered = $orderByForm->handleRequest($request) && $orderByForm->isValid();
+
+        if ($ordered) {
+            $orderBy = $orderByForm->getData();
+        }
 
         try {
             $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(

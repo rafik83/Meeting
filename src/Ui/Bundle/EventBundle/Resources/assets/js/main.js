@@ -12,6 +12,7 @@ var $                     = require('jquery'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogOrderBy        = require('./components/_CatalogOrderBy'),
+    CatalogFilters        = require('./components/_CatalogFilters'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
@@ -52,6 +53,10 @@ function init (target) {
 
     $('.catalog .sort form', target).each(function (key, form) {
         new CatalogOrderBy(form, target.querySelector('.catalog__list'));
+    });
+
+    $('.catalog__research form', target).each(function (key, form) {
+        new CatalogFilters(form, target.querySelector('.catalog__list'));
     });
 
     $('.dropdown-menu').on('click', function (e) {
