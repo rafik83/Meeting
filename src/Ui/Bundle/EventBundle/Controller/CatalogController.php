@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
@@ -81,6 +83,7 @@ class CatalogController extends Controller
 
         return $this->render('EventBundle:Catalog:index.html.twig', [
             'event'           => $event,
+            'sheet'           => $sheet,
             'isCatalog'       => true,
             'paginatedResult' => $paginatedResult,
             'orderByForm'     => $orderByForm->createView(),
@@ -153,37 +156,66 @@ class CatalogController extends Controller
     /**
      * Display a sheet.
      *
-     * @param EventDomain  $eventDomain
-     * @param CategoryView $categoryView
-     * @param Sheet        $sheet
+     * @param EventDomain $eventDomain
+     * @param Request     $request
+     * @param Sheet       $sheet
      *
      * @return Response
      */
-    public function sheetAction(EventDomain $eventDomain, CategoryView $categoryView, Sheet $sheet)
+    public function sheetAction(EventDomain $eventDomain, Request $request, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+        $event = $eventDomain->getEvent();
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
             throw $this->createNotFoundException();
         }
 
-        try {
-            $sheetView = $this
-                ->get('vimeet_infrastructure.application.components.sheet.manager')
-                ->getSheetDataViewByUser($this->getUser(), $sheet);
-
-            $sheetAllowedForMeetingRequest = $this
-                ->get('vimeet_infrastructure.application.components.sheet.manager')
-                ->getUserSheetsThatCanSeeTheGivenSheet($this->getUser(), $sheet);
-
-            return $this->render('EventBundle:Catalog:sheet.html.twig', [
-                'event'                         => $eventDomain->getEvent(),
-                'categoryView'                  => $categoryView,
-                'sheet'                         => $sheetView,
-                'sheetAllowedForMeetingRequest' => $sheetAllowedForMeetingRequest,
-            ]);
-        } catch (NoRuleFoundException $exception) {
-            throw $this->createNotFoundException($exception->getMessage(), $exception);
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
         }
+
+        $locale = $request->getLocale();
+
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'event'         => $eventDomain->getEvent(),
+            'sheet'         => $sheet,
+            'taggedData'    => $taggedData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
+            'templateData'  => $templateData,
+        ]);
     }
+
+    /**
+     * @param Event  $event
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function sheetInfos(Event $event, Sheet $sheet, $locale)
+    {
+        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
+        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale);
+        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
+
+        $registrationTemplateData = $this
+            ->get('template.template_data_factory')
+            ->createRegistrationFromSheet($sheet, $locale);
+
+        $taggedData = $registrationTemplateData->getAllTaggedDatas();
+
+        return [$nomenclatures, $participants, $taggedData];
+    }
+
 }
