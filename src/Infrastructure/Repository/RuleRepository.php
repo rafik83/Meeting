@@ -156,6 +156,16 @@ class RuleRepository implements RuleRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function update(Rule $rule)
+    {
+        $this->entityManager->flush($rule);
+
+        return $rule;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(Rule $rule)
     {
         $this->entityManager->remove($rule);
