@@ -60,9 +60,14 @@ class CatalogController extends Controller
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, $filters, $request->getLocale());
         $typeViews = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
+        $facets = [];
+        foreach ($typeViews as $typeView) {
+            $facets['type'][] = $typeView;
+        }
+
         $facetsForm = $this->createForm(
             FacetsType::class,
-            null,
+            $facets,
             [
                 'action' => $this->generateUrl('event_catalog_index'),
                 'typeViews' => $typeViews,
