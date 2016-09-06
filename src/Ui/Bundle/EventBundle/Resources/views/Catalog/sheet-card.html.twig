@@ -25,12 +25,10 @@
                 <i class="icon-LienTag"></i> {{ catalogSheetPreviewView.type }}
             </p>
 
-            {#
             <div class="actions">
-                <a href=""><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
-                <a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>
+                <a href="{{ path('event_catalog_complete_sheet', {'sheet': catalogSheetPreviewView.id }) }}" target="_blank"><i class="icon-Document_1"></i> <span>Voir la fiche complète</span></a>
+                {#<a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>#}
             </div>
-            #}
 
             {#
             <div class="button">
