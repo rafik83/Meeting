@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Rule\Exception\NoRuleFoundException;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
@@ -40,6 +41,8 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $filters = [];
+
         $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         $orderByForm = $this->createForm(
@@ -53,16 +56,19 @@ class CatalogController extends Controller
             $orderBy = $orderByForm->getData();
         }
 
+        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, $filters, $request->getLocale());
+        $typeViews = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
+
         try {
-            $query = new PaginatedCatalogSheetPreviewViewQuery(
+            $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
-                [],
+                $filters,
                 [$orderBy['orderBy']],
                 $request->query->getInt('page', 1),
                 100,
                 $request->getLocale()
             );
-            $paginatedResult = $this->get('tactician.commandbus.query')->handle($query);
+            $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
@@ -76,6 +82,7 @@ class CatalogController extends Controller
         return $this->render('EventBundle:Catalog:index.html.twig', [
             'event'           => $event,
             'isCatalog'       => true,
+            'typeViews'           => $typeViews,
             'paginatedResult' => $paginatedResult,
             'orderByForm'     => $orderByForm->createView(),
         ]);

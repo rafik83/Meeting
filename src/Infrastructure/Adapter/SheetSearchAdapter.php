@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Elastica\Aggregation\Terms;
 use Elastica\Query;
+use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
@@ -27,11 +29,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     private $finder;
 
     /**
-     * @param PaginatedFinderInterface $finder
+     * @var SearchableInterface
      */
-    public function __construct(PaginatedFinderInterface $finder)
+    private $searchable;
+
+    /**
+     * @param PaginatedFinderInterface $finder
+     * @param SearchableInterface      $searchable
+     */
+    public function __construct(PaginatedFinderInterface $finder, SearchableInterface $searchable)
     {
         $this->finder = $finder;
+        $this->searchable = $searchable;
     }
 
     /**
@@ -59,5 +68,24 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         }
 
         return new PaginatedResult($result->getCurrentPageResults(), $page, $limit, $result->getNbResults());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeStats(Event $event, array $filters)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters);
+        $query   = new Query($builder->getQuery());
+
+        $tagsAggregation = new Terms('type');
+        $tagsAggregation->setField('type');
+
+        $query->addAggregation($tagsAggregation);
+        $query->setSize(0);
+
+        $result = $this->searchable->search($query);
+
+        return $result->getAggregations()['type']['buckets'];
     }
 }
