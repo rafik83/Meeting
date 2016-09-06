@@ -45,7 +45,7 @@ class SheetGuesser
             throw new \Exception('Sheet not found.');
         }
 
-        $sheet = $sheets[array_keys($sheets)[0]];
+        $sheet = reset($sheets);
 
         if (!$sheet instanceof Sheet) {
             throw new \Exception('Sheet not found.');

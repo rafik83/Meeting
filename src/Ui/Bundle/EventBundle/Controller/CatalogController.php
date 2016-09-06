@@ -40,6 +40,12 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
         $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         $orderByForm = $this->createForm(
