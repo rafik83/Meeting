@@ -40,6 +40,12 @@ final class Tag
     const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
     const SHEET_ORGANIZATION_TURNOVER = 'sheet_organization_turnover';
     const SHEET_ORGANIZATION_STAFF    = 'sheet_organization_staff';
+    const SHEET_ADDRESS               = 'sheet_address';
+    const SHEET_ZIPCODE               = 'sheet_zipcode';
+    const SHEET_CITY                  = 'sheet_city';
+    const SHEET_COUNTRY               = 'sheet_country';
+    const SHEET_WEBSITE               = 'sheet_website';
+    const SHEET_PHONE                 = 'sheet_phone';
 
     // Setter
     const PARTICIPANT_DATA = 'participant_data';
@@ -108,6 +114,33 @@ final class Tag
             self::SHEET_ORGANIZATION_CATEGORY,
             self::SHEET_ORGANIZATION_TURNOVER,
             self::SHEET_ORGANIZATION_STAFF,
+            self::SHEET_ADDRESS,
+            self::SHEET_ZIPCODE,
+            self::SHEET_CITY,
+            self::SHEET_COUNTRY,
+            self::SHEET_WEBSITE,
+            self::SHEET_PHONE,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSeeableTags()
+    {
+        return [
+            self::SHEET_ORGANIZATION,
+            self::SHEET_TITLE,
+            self::SHEET_ORGANIZATION_CATEGORY,
+            self::SHEET_ORGANIZATION_TURNOVER,
+            self::SHEET_ORGANIZATION_STAFF,
+            self::SHEET_ADDRESS,
+            self::SHEET_ZIPCODE,
+            self::SHEET_CITY,
+            self::SHEET_WEBSITE,
+            self::SHEET_COUNTRY,
+            self::SHEET_PHONE,
+            self::PARTICIPANT_POSITION,
         ];
     }
 }
