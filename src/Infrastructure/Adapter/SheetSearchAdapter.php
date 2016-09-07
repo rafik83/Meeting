@@ -39,7 +39,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function __construct(PaginatedFinderInterface $finder, SearchableInterface $searchable)
     {
-        $this->finder = $finder;
+        $this->finder     = $finder;
         $this->searchable = $searchable;
     }
 
@@ -84,6 +84,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $result = $this->searchable->search($query);
 
-        return $result->getAggregations()['type']['buckets'];
+        $typeStats = [];
+        $typesCount = $result->getAggregations()['type']['buckets'];
+
+        foreach ($typesCount as $typeCount) {
+            $typeStats[$typeCount['key']] = $typeCount['doc_count'];
+        }
+
+        return $typeStats;
     }
 }

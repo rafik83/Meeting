@@ -54,16 +54,7 @@ class CatalogTypeViewQueryHandler
         $typeViews = [];
 
         foreach ($types as $id => $title) {
-            $count = 0;
-
-            foreach ($typesCount as $typeCount) {
-                if ($typeCount['key'] === $id) {
-                    $count = $typeCount['doc_count'];
-                    break;
-                }
-            }
-
-            $typeViews[$id] = new TypeView($id, $title, $count);
+            $typeViews[$id] = new TypeView($id, $title, isset($typesCount[$id]) ? $typesCount[$id] : 0);
         }
 
         return $typeViews;
