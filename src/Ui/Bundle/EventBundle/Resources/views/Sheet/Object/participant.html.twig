@@ -36,10 +36,8 @@
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
             </a>
         {% endif %}
-        {% if isCatalog is defined and isCatalog == true %}
-            <div class="button">
-                <a type="button" class="btn btn-primary" {#href="{{ path('event_catalog_sheet_meeting_request', {'from': sheet.id, 'to': participant.id}) }}"#}><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
-            </div>
+        {% if isCatalog is defined and isCatalog == true and userSheet == sheet %}
+            <a type="button" class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'from': userSheet.id, 'to': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
         {% endif %}
     </footer>
 </section>
