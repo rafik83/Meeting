@@ -29,6 +29,7 @@ class SeeWhat
      */
     public function __construct(Rule $rule)
     {
-        $this->rule = $rule;
+        $this->rule    = $rule;
+        $this->seeWhat = $rule->getWhat();
     }
 }
