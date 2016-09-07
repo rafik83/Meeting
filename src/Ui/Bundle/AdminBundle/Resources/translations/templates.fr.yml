@@ -54,7 +54,6 @@ template.tag.sheet_title: 'Titre de fiche'
 template.tag.sheet_zipcode: Code postal de fiche
 template.tag.sheet_website: Site internet de la fiche
 template.tag.sheet_phone: Téléphone de la fiche
-template.tags.title: Tags
 template.tag.sheet_generic_tag_1: 'Tag générique 1'
 template.tag.sheet_generic_tag_2: 'Tag générique 2'
 template.tag.sheet_generic_tag_3: 'Tag générique 3'
@@ -105,5 +104,6 @@ template.tag.sheet_generic_tag_47: 'Tag générique 47'
 template.tag.sheet_generic_tag_48: 'Tag générique 48'
 template.tag.sheet_generic_tag_49: 'Tag générique 49'
 template.tag.sheet_generic_tag_50: 'Tag générique 50'
+template.tags.title: Tags
 template.translatable.title: Traduisible
 template.type.title: Type
