@@ -185,6 +185,8 @@ class CatalogController extends Controller
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'         => $eventDomain->getEvent(),
             'sheet'         => $sheet,
@@ -193,6 +195,8 @@ class CatalogController extends Controller
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,
             'templateData'  => $templateData,
+            'isCatalog'     => true,
+            'userSheet'     => $userSheet,
         ]);
     }
 
