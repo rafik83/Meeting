@@ -1,4 +1,4 @@
-@admin
+@admin @rule
 
 Feature: add rule who see who
   I need to be able to add a rule for categories and types
@@ -23,11 +23,11 @@ Feature: add rule who see who
       | who_see_who_seer    | category:2 |
       | who_see_who_seeable | type:1     |
     And I press "form.who_see_who.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/category/2/see/type/1/dont-see"
-  #
-  # Need to rewrite the dont see what
-  #
-#    When I check "dont_see_what_participant_563caf2f0ddbd"
-#    And I press "form.dont_see_what.children.submit.label"
-#    Then I should be on this page "/admin/fr/event/1/who-see-who"
-#    And I should see "flash.admin.event.who_see_what.success"
+    Then I should be on this page "/admin/fr/event/1/who-see-who/see-what/6"
+    And I should see "Who.see_who_but_dont_see"
+    And I should see "form.rule_see_what.not_see_what_column"
+    And I should see "form.rule_see_what.see_what_column"
+    Then I select "participant_position" from "form.rule_see_what.children.seeWhat.label"
+    And I additionally select "participant_firstname" from "form.rule_see_what.children.seeWhat.label"
+    And I press "form.rule_see_what.children.submit.label"
+    Then I should see "flash.admin.event.who_see_what.success"
