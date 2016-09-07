@@ -41,7 +41,7 @@ class EventController extends Controller
         $events = $this
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($this->getUser());
-        
+
         return $this->render('AdminBundle:Event:list.html.twig', [
             'events' => $events,
         ]);
