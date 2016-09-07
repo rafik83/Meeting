@@ -17,8 +17,6 @@ use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuer
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\FacetsType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
