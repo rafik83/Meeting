@@ -45,21 +45,18 @@ class TagIdentifier
     {
         if ($who instanceof Category) {
             $templates = [];
+            $tags = [];
 
             /**
              * @var Type $type
              */
             foreach ($who->getTypes() as $type) {
-                $templates[$type->getRegistrationTemplate()->getId()] = $type->getRegistrationTemplate();
-            }
+                $template = $type->getRegistrationTemplate();
 
-            $tags = [];
-
-            /**
-             * @var RegistrationTemplate $template
-             */
-            foreach ($templates as $template) {
-                $tags = array_merge($tags, $this->extractTags($template));
+                if (!isset($templates[$template->getId()])) {
+                    $templates[$template->getId()] = true;
+                    $tags = array_unique(array_merge($tags, $this->extractTags($template)));
+                }
             }
 
             return $tags;
@@ -85,7 +82,7 @@ class TagIdentifier
          * @var TemplateObject $object
          */
         foreach ($template->getObjects() as $object) {
-            $tags = array_merge($tags, $object->getTags());
+            $tags = array_unique(array_merge($tags, $object->getTags()));
         }
 
         return array_filter($tags, function ($tag) {
