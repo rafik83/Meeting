@@ -16,16 +16,16 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 interface SheetSearchAdapterInterface
 {
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param array  $orderBy
-     * @param int    $page
-     * @param int    $limit
-     * @param string $locale
+     * @param Event       $event
+     * @param array       $filters
+     * @param null|string $orderBy
+     * @param int         $page
+     * @param int         $limit
+     * @param string      $locale
      *
      * @return PaginatedResult
      */
-    public function find(Event $event, array $filters, array $orderBy, $page, $limit, $locale);
+    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale);
 
     /**
      * @param Event $event

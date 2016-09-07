@@ -11,7 +11,6 @@ var $                     = require('jquery'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     ShowMore              = require('./components/_ShowMore'),
-    CatalogOrderBy        = require('./components/_CatalogOrderBy'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
@@ -51,12 +50,8 @@ function init (target) {
         $('.catalog').toggleClass('catalog--advanced');
     });
 
-    $('.catalog .sort form', target).each(function (key, form) {
-        new CatalogOrderBy(form, target.querySelector('.catalog__list'));
-    });
-
-    $('.catalog__research form', target).each(function (key, form) {
-        new CatalogFilters(form, target.querySelector('.catalog__list'));
+    $('.catalog form input', target).on('change', function () {
+        new CatalogFilters($('.catalog form', target), target.querySelector('.catalog'), target.querySelector('.catalog').parentNode);
     });
 
     $('.dropdown-menu').on('click', function (e) {
@@ -128,7 +123,7 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) {
-        new QuantitySelector(element, document.querySelector('object--nomenclature'));
+        new QuantitySelector(element);
     });
 
     [].forEach.call(target.querySelectorAll('.object--nomenclature'), function (element) {

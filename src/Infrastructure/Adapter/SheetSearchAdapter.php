@@ -46,18 +46,16 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, array $orderBy, $page, $limit, $locale)
+    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale)
     {
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
 
-        if (count($orderBy)) {
-            foreach ($orderBy as $value) {
-                if (Constant::ORDER_BY_ALPHABETICAL === $value) {
-                    $query->addSort(['sheetName.raw' => 'asc']);
-                } else if(Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $value) {
-                    $query->addSort(['inCatalogAt' => 'desc']);
-                }
+        if (null !== $orderBy) {
+            if (Constant::ORDER_BY_ALPHABETICAL === $orderBy) {
+                $query->addSort(['sheetName.raw' => 'asc']);
+            } else if(Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
+                $query->addSort(['inCatalogAt' => 'desc']);
             }
         }
 

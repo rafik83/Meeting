@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\FacetsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,47 +46,31 @@ class CatalogController extends Controller
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
-        $facets = [];
+        $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
         foreach ($typeViews as $typeView) {
-            $facets['type'][] = $typeView;
+            $filters['type'][] = $typeView;
         }
 
-        $facetsForm = $this->createForm(
-            FacetsType::class,
-            $facets,
+        $searchForm = $this->get('form.factory')->createNamed(
+            '',
+            SearchType::class,
+            $filters,
             [
                 'action'    => $this->generateUrl('event_catalog_index'),
                 'typeViews' => $typeViews,
             ]
         );
 
-        $filtered = $facetsForm->handleRequest($request) && $facetsForm->isValid();
-
-        $filters = [];
+        $filtered = $searchForm->handleRequest($request) && $searchForm->isValid();
 
         if ($filtered) {
-            $filters = $facetsForm->getData();
-        }
-
-        $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
-
-        $orderByForm = $this->createForm(
-            OrderByType::class,
-            $orderBy,
-            ['action' => $this->generateUrl('event_catalog_index')]
-        );
-
-        $ordered = $orderByForm->handleRequest($request) && $orderByForm->isValid();
-
-        if ($ordered) {
-            $orderBy = $orderByForm->getData();
+            $filters = $searchForm->getData();
         }
 
         try {
             $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
                 $filters,
-                [$orderBy['orderBy']],
                 $request->query->getInt('page', 1),
                 100,
                 $request->getLocale()
@@ -95,19 +80,18 @@ class CatalogController extends Controller
             throw $this->createNotFoundException($exception->getMessage());
         }
 
+        $template = 'EventBundle:Catalog:index.html.twig';
+
         if ($request->isXmlHttpRequest()) {
-            return $this->render('EventBundle:Catalog:list.html.twig', [
-                'paginatedResult' => $paginatedResult,
-            ]);
+            $template = 'EventBundle:Catalog:catalog.html.twig';
         }
 
-        return $this->render('EventBundle:Catalog:index.html.twig', [
+        return $this->render($template, [
             'event'           => $event,
             'isCatalog'       => true,
             'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
-            'facetsForm'      => $facetsForm->createView(),
-            'orderByForm'     => $orderByForm->createView(),
+            'searchForm'      => $searchForm->createView(),
         ]);
     }
 

@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Elastica\Filter\BoolOr;
-use Elastica\Filter\Term;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;

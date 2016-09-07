@@ -1,40 +1,15 @@
+{% set resultsCount = paginatedResult.results|length %}
+
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block title %}{% endblock %}
 
 {% block body_attributes 'class="grey"' %}
 
-{% form_theme orderByForm '@Ui/default.html.twig' %}
+{% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
     <div class="catalog">
-        {{ include('EventBundle:Catalog:facets.html.twig', { facetsForm: facetsForm, typeViews: typeViews }) }}
-
-        <div class="catalog__filters">
-
-            <div class="select-all">
-                {#
-                <label class="checkbox-inline" for="select-all-catalog">
-                    <input type="checkbox" id="select-all-catalog">
-                    Tout sélectionner (40)
-                </label>
-                #}
-            </div>
-
-            <div class="sort">
-                {{ form(orderByForm) }}
-
-                {#
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default active"><i class="icon-Mosaique"></i></button>
-                    <button type="button" class="btn btn-default"><i class="icon-Liste"></i></button>
-                </div>
-                #}
-            </div>
-        </div>
-
-        <div class="catalog__list catalog__list--block">
-            {{ include('EventBundle:Catalog:list.html.twig', { paginatedResult: paginatedResult }) }}
-        </div>
+        {{ include('EventBundle:Catalog:catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult }, false) }}
     </div>
 {% endblock %}

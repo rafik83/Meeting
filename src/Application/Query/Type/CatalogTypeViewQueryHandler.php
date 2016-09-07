@@ -46,7 +46,10 @@ class CatalogTypeViewQueryHandler
     public function handle(CatalogTypeViewQuery $query)
     {
         $types      = $this->typeRepository->getTypesTitleByEventAndLocale($query->event, $query->locale);
-        $typesCount = $this->sheetSearchAdapter->getTypeStats($query->event, $query->filters);
+        $typesCount = $this->sheetSearchAdapter->getTypeStats(
+            $query->event,
+            array_merge(['inCatalog' => true], $query->filters)
+        );
 
         $typeViews = [];
 
