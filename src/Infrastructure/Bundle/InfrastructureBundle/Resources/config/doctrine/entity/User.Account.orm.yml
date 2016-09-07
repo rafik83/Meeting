@@ -40,3 +40,18 @@ Proximum\Vimeet\Domain\Model\User\Account:
         gender:
             type: string
             nullable: true
+        companyAddress:
+            type: string
+            nullable: true
+        companyZipCode:
+            type: string
+            nullable: true
+        companyCity:
+            type: string
+            nullable: true
+        companyCountry:
+            type: string
+            nullable: true
+        companyWebsite:
+            type: string
+            nullable: true

@@ -52,6 +52,8 @@ template.tag.sheet_organization_staff: Effectifs
 template.tag.sheet_organization_turnover: 'Chiffre d''affaires'
 template.tag.sheet_title: 'Titre de fiche'
 template.tag.sheet_zipcode: Code postal de fiche
+template.tag.sheet_website: Site internet de la fiche
+template.tag.sheet_phone: Téléphone de la fiche
 template.tags.title: Tags
 template.tag.sheet_generic_tag_1: 'Tag générique 1'
 template.tag.sheet_generic_tag_2: 'Tag générique 2'

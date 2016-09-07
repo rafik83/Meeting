@@ -23,6 +23,7 @@ class Synchronizer
      * @var array
      */
     private $tagMapping = [
+        Tag::PARTICIPANT_GENDER    => 'Gender',
         Tag::PARTICIPANT_FIRSTNAME => 'FirstName',
         Tag::PARTICIPANT_LASTNAME  => 'LastName',
         Tag::PARTICIPANT_AVATAR    => 'Avatar',
@@ -35,7 +36,12 @@ class Synchronizer
         Tag::PARTICIPANT_COUNTRY   => 'Country',
         Tag::PARTICIPANT_WEBSITE   => 'Website',
         Tag::SHEET_ORGANIZATION    => 'Company',
-        Tag::PARTICIPANT_GENDER    => 'Gender',
+        Tag::SHEET_ADDRESS         => 'CompanyAddress',
+        Tag::SHEET_ZIPCODE         => 'CompanyZipCode',
+        Tag::SHEET_CITY            => 'CompanyCity',
+        Tag::SHEET_COUNTRY         => 'CompanyCountry',
+        Tag::SHEET_WEBSITE         => 'CompanyWebsite',
+        Tag::SHEET_PHONE           => 'CompanyPhone',
     ];
 
     /**
