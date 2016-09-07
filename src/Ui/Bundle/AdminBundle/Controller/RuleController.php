@@ -18,8 +18,6 @@ use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule\SeeWhatType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -141,16 +139,5 @@ class RuleController extends Controller
     {
         return $this->findRule($event, $seer, $seeable) ?:
             $this->get('repository.rule_repository')->add(new Rule($event, $seer, $seeable, Tag::getSeeableTags()));
-    }
-
-    /**
-     * @param mixed  $condition
-     * @param string $message
-     */
-    private function notFoundUnless($condition, $message = 'Not found.')
-    {
-        if (!$condition) {
-            throw $this->createNotFoundException($message);
-        }
     }
 }
