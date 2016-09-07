@@ -25,6 +25,7 @@ admin.category.add: Ajouter
 admin.category.link: 'Catégories de participation'
 admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
+admin.common.close: 'Fermer'
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
@@ -171,6 +172,9 @@ admin.organizer_template_list.table.column.locales: Langues
 admin.organizer_template_list.table.column.title: Titre
 admin.package.create: 'Créer un template'
 admin.package.duplicate: Dupliquer
+admin.package.duplicate.title: 'Dupliquer le forfait %title%'
+admin.package.import.link: 'Importer les forfaits et le catalogue produit'
+admin.package.import.title: "Importer les forfaits et le catalogue produit d'un événement"
 admin.package.link: 'Template de forfait de participation'
 admin.package.steps.step1.label: Formules
 admin.package.steps.step2.label: 'Participants & Plannings'
