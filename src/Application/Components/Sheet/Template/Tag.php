@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
 final class Tag
 {
+    const GENERIC_TAGS_NUMBER = 50;
+
     // Getter
     const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
     const PARTICIPANT_LASTNAME        = 'participant_lastname';
@@ -142,5 +144,27 @@ final class Tag
             self::SHEET_PHONE,
             self::PARTICIPANT_POSITION,
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGenericSheetTags()
+    {
+        $genericTags = [];
+
+        for ($i = 1; $i <= self::GENERIC_TAGS_NUMBER; $i++) {
+            $genericTags[] = 'sheet_generic_tag_' . $i;
+        }
+
+        return $genericTags;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTemplateChoiceTags()
+    {
+        return array_merge(self::getSheetTags(), self::getGenericSheetTags());
     }
 }
