@@ -48,7 +48,9 @@ class CatalogController extends Controller
 
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
         foreach ($typeViews as $typeView) {
-            $filters['type'][] = $typeView;
+            if ($typeView->count > 0) {
+                $filters['type'][] = $typeView;
+            }
         }
 
         $searchForm = $this->get('form.factory')->createNamed(
