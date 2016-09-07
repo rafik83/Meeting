@@ -20,6 +20,8 @@
     {% endif %}
 
     <footer>
+        {% if isCatalog is not defined or isCatalog == false %}
         <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
+        {% endif %}
     </footer>
 </section>
