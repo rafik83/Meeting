@@ -29,7 +29,7 @@ class TemplateDataFactory
         'image'                 => TemplateObject\Image::class,
         'media'                 => TemplateObject\MediaCollection::class,
         'nomenclature'          => TemplateObject\Nomenclature::class,
-        'participant'           => TemplateObject::class,
+        'participant'           => TemplateObject\Participant::class,
         'tag'                   => TemplateObject::class,
         'text'                  => TemplateObject\Text::class,
         'carousel'              => TemplateObject::class,
