@@ -221,7 +221,14 @@ admin.promotion_code.title: 'Codes promos'
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_SUPER_ADMIN: Admin
+admin.rule.see-what.title: Règle de %seer% sur %seeable%
 admin.rule.link: 'Qui voit qui'
+admin.rule.list.action.delete: Supprimer
+admin.rule.list.action.seeWhat: Voit quoi ?
+admin.rule.list.column.who: Qui
+admin.rule.list.column.see: Voit
+admin.rule.list.column.actions: Actions
+admin.rule.list.title: 'Liste des règles'
 admin.schedule.link: Agenda
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
