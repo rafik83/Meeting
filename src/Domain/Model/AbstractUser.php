@@ -125,7 +125,6 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
      */
     public function eraseCredentials()
     {
-        $this->password = null;
     }
 
     /**
