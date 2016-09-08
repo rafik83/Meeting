@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Rule;
 
-
 use Proximum\Vimeet\Application\Command\Rule\SeeWhat;
 use Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler;
 use Proximum\Vimeet\Domain\Model\Rule;

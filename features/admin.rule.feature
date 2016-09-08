@@ -29,4 +29,4 @@ Feature: add rule who see who
     Then I select "participant_position" from "form.rule_see_what.children.seeWhat.label"
     And I additionally select "participant_firstname" from "form.rule_see_what.children.seeWhat.label"
     And I press "form.rule_see_what.children.submit.label"
-    Then I should see "flash.admin.event.who_see_what.success"
+    When I should see "flash.admin.event.who_see_what.success"

@@ -12,11 +12,11 @@ namespace Proximum\Vimeet\Domain\Rule;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Domain\Rule\Exception\NotImplementedException;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class TagIdentifier
@@ -24,14 +24,14 @@ class TagIdentifier
     /**
      * @var TemplateDataFactory
      */
-    private $templateFactory;
+    private $templateDataFactory;
 
     /**
-     * @param TemplateDataFactory $templateFactory
+     * @param TemplateDataFactory $templateDataFactory
      */
-    public function __construct(TemplateDataFactory $templateFactory)
+    public function __construct(TemplateDataFactory $templateDataFactory)
     {
-        $this->templateFactory = $templateFactory;
+        $this->templateDataFactory = $templateDataFactory;
     }
 
     /**
@@ -62,9 +62,9 @@ class TagIdentifier
             return $tags;
         } elseif ($who instanceof Type) {
             return $this->extractTags($who->getRegistrationTemplate());
-        } else {
-            throw new NotImplementedException(sprintf('No method for %', get_class($who)));
         }
+
+        throw new NotImplementedException(sprintf('No method for %', get_class($who)));
     }
 
     /**
@@ -76,11 +76,9 @@ class TagIdentifier
     {
         $tags = [];
 
-        $template = $this->templateFactory->createFromTemplate($registrationTemplate, []);
+        $template = $this->templateDataFactory->createFromTemplate($registrationTemplate, []);
 
-        /**
-         * @var TemplateObject $object
-         */
+        /** @var TemplateObject $object */
         foreach ($template->getObjects() as $object) {
             $tags = array_unique(array_merge($tags, $object->getTags()));
         }

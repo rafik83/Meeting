@@ -12,11 +12,11 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule;
 
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Rule\TagIdentifier;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\Translator;
 
 class SeeWhatType extends AbstractType
 {
@@ -26,15 +26,15 @@ class SeeWhatType extends AbstractType
     private $tagIdentifier;
 
     /**
-     * @var Translator
+     * @var TranslatorAdapter
      */
     private $translator;
 
     /**
-     * @param TagIdentifier $tagIdentifier
-     * @param Translator    $translator
+     * @param TagIdentifier     $tagIdentifier
+     * @param TranslatorAdapter $translator
      */
-    public function __construct(TagIdentifier $tagIdentifier, Translator $translator)
+    public function __construct(TagIdentifier $tagIdentifier, TranslatorAdapter $translator)
     {
         $this->tagIdentifier = $tagIdentifier;
         $this->translator    = $translator;
