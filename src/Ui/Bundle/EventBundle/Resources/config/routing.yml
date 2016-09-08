@@ -265,7 +265,7 @@ event_catalog_complete_sheet:
     path: /catalog/sheet/{sheet}
     requirements:
         sheet: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: EventBundle:Catalog:sheet}
 
 event_catalog_sheet_meeting_request:
