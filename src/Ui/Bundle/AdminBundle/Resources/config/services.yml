@@ -124,7 +124,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule\SeeWhatType
         arguments:
             - '@domain.rule.tag_identifier'
-            - '@translator.default'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
 
