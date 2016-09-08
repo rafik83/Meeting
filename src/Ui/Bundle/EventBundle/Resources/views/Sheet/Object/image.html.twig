@@ -1,11 +1,17 @@
 <div id="object-{{ uid }}" class="object object--image {{ 'style--' ~ item.style }}">
-    <a id="object-image-edit" href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
-        <div class="placeholder">
-            {% if item.data is defined and item.data['image'] is defined and null != item.data['image'] %}
-                <img src="{{ item.data['image']|imagine_filter('event_sheet_image') }}">
-            {% else %}
-                <div><i class="icon-Ouvrir_1"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}</div>
-            {% endif %}
+    {% if isCatalog is not defined or isCatalog == false %}
+        <a id="object-image-edit" class="image-background" href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
+            <div class="placeholder">
+                {% if item.data is defined and item.data['image'] is defined and null != item.data['image'] %}
+                    <img src="{{ item.data['image']|imagine_filter('event_sheet_image') }}">
+                {% else %}
+                        <div><i class="icon-Ouvrir_1"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}</div>
+                {% endif %}
+            </div>
+        </a>
+    {% else %}
+        <div class="image-background">
+            <div class="placeholder"></div>
         </div>
-    </a>
+    {% endif %}
 </div>

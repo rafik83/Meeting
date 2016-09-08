@@ -261,10 +261,16 @@ event_catalog_index:
     methods:  [GET]
     defaults: { _controller: EventBundle:Catalog:index }
 
-event_catalog_sheet_meeting_request:
-    path: /catalog/{categoryView}/sheet/{to}/meeting/request/from/{from}
+event_catalog_complete_sheet:
+    path: /catalog/sheet/{sheet}
     requirements:
-        categoryView: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Catalog:sheet}
+
+event_catalog_sheet_meeting_request:
+    path: /catalog/sheet/{to}/meeting/request/from/{from}
+    requirements:
         to: \d+
         from: \d+
     methods:  [GET, POST]

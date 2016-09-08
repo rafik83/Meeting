@@ -39,6 +39,8 @@ navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
 navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
+navigation.links.catalog.incoming: 'A venir'
+navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
 navigation.links.happening.accept: Acceptées
 navigation.links.happening.decline: Refusées
 navigation.links.happening.open_date: 'Disponible le'
@@ -182,6 +184,7 @@ sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
+sheet.participant.appointment: 'Demander en RDV'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.title: 'Fiche de présentation'
