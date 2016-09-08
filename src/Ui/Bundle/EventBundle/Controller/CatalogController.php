@@ -155,13 +155,13 @@ class CatalogController extends Controller
     /**
      * Display a sheet.
      *
-     * @param EventDomain $eventDomain
      * @param Request     $request
+     * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
      * @return Response
      */
-    public function sheetAction(EventDomain $eventDomain, Request $request, Sheet $sheet)
+    public function sheetAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
