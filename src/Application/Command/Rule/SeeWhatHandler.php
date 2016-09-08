@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Rule;
 
-
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class SeeWhatHandler
