@@ -207,6 +207,8 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.import_products_and_template.children.event.label: 'Evénement à importer'
+form.import_products_and_template.children.submit.label: 'Importer'
 form.login.children.password.label: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté pendant 30 jours'
 form.login.children.submit.label: 'Se connecter'

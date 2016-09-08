@@ -21,7 +21,10 @@ class UpdateParticipantHandler extends AbstractHandler
     {
         $product = $updateParticipant->product->updateParticipant(
             $updateParticipant->name,
-            $updateParticipant->quantityMax
+            $updateParticipant->quantityMax,
+            $this->updatePriceResolver->resolve($updateParticipant->product) ?
+                $updateParticipant->unitPrice :
+                $updateParticipant->product->getUnitPrice()
         );
 
         foreach ($updateParticipant->translations as $locale => $translation) {

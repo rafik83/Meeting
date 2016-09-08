@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Product\Import\Import:
+    properties:
+        event:
+            - NotBlank: ~
