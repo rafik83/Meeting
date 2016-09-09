@@ -1833,6 +1833,14 @@ services:
             - '@datetime'
 
     #
+    # Catalog
+    #
+    catalog.visible_participation_types:
+        class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes
+        arguments:
+            - '@vimeet_infrastructure.repository.rule_repository'
+
+    #
     # Promotion
     #
     promotion.faker_code_generator:
