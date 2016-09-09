@@ -210,6 +210,10 @@ services:
              - '@components.sheet.sheet_validator'
         tags:
             - { name: kernel.event_subscriber }
+    event_listener.xhr_authentication_expired_exception_listener:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\XHRAuthenticationExpiredExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 250 }
 
     #
     # Twig extension
