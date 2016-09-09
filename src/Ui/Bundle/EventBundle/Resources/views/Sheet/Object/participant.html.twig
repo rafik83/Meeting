@@ -5,21 +5,22 @@
     </header>
     <div class="section__content">
         <div class="list list--users">
-            {% if isCatalog is not defined or isCatalog == false %}
+            {% if not isCatalog %}
                 {% for participant in participants.cardViews %}
                     {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
                 {% endfor %}
             {% else %}
-                {% set participantDisplayed = 0 %}
-                {% for participant in participants.cardViews if participantDisplayed < item.numberOfParticipantShown %}
-                    {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
-                    {% set participantDisplayed = participantDisplayed + 1 %}
+                {% for participant in participants.cardViews %}
+                    {% if loop.index0 < item.numberOfParticipantShown %}
+                        {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 
         </div>
     </div>
-    {% if isCatalog is not defined or isCatalog == false %}
+
+    {% if not isCatalog %}
         {% if sheet.canBuyParticipant %}
             <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal">
             <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
@@ -31,12 +32,12 @@
         {% endif %}
     {% endif %}
     <footer>
-        {% if participants.cardViews|length > 1 and isCatalog is not defined or isCatalog == false %}
+        {% if participants.cardViews|length > 1 and not isCatalog %}
             <a href="{{ path('event_sheet_remove_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
             </a>
         {% endif %}
-        {% if isCatalog is defined and isCatalog == true and userSheet == sheet %}
+        {% if isCatalog == true and userSheet == sheet %}
             <a type="button" class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'from': userSheet.id, 'to': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
         {% endif %}
     </footer>

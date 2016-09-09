@@ -16,11 +16,9 @@
             {% endif %}
         </ul>
     </div>
-    {% if item.collectionEnabled %}
+    {% if item.collectionEnabled and not isCatalog %}
         <footer>
-            {% if isCatalog is not defined or isCatalog == false %}
-                <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
-            {% endif %}
+            <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
         </footer>
     {% endif %}
 </section>
