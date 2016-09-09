@@ -16,28 +16,42 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class VisibleParticipationTypes
 {
+    /**
+     * @var RuleRepositoryInterface
+     */
     private $ruleRepository;
 
     /**
-     * AllowedTypes constructor.
+     * @param RuleRepositoryInterface $ruleRepository
      */
     public function __construct(RuleRepositoryInterface $ruleRepository)
     {
         $this->ruleRepository = $ruleRepository;
     }
 
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
     public function getAllowedTypesList(Sheet $sheet)
     {
+        $visibleTypes = [];
         $type = $sheet->getType();
 
         $rules = $this->ruleRepository->getByEvent($sheet->getEvent());
 
-        $visibleTypes = array_filter($rules, function ($rule) use ($type) {
+        $filteredTypes = array_filter($rules, function ($rule) use ($type) {
             if ($rule->getSeerType() == $type) {
                 return $rule->getSeeableType();
             }
+            return false;
         });
 
-        dump($rules);die;
+        foreach ($filteredTypes as $type) {
+            $visibleTypes[$type->getSeeableType()->getId()] = $type;
+        }
+
+        return $visibleTypes;
     }
 }
