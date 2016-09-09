@@ -11,7 +11,7 @@
             <h1>
                 <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
 
-                {% if isCatalog is defined and isCatalog == true and userSheet == sheet %}
+                {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
                     <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'from': userSheet.id, 'to': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
                 {% endif %}
             </h1>

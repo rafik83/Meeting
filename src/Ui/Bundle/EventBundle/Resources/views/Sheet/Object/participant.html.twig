@@ -1,4 +1,3 @@
-
 <section id="object-{{ uid }}" class="object object--participant {{ 'style--' ~ item.style }} section section--list">
     <header>
         <h2>{{ item.label(locale, fallback) }}</h2>
@@ -7,12 +6,12 @@
         <div class="list list--users">
             {% if not isCatalog %}
                 {% for participant in participants.cardViews %}
-                    {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+                    {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog }) }}
                 {% endfor %}
             {% else %}
                 {% for participant in participants.cardViews %}
                     {% if loop.index0 < item.numberOfParticipantShown %}
-                        {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+                        {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog}) }}
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -32,12 +31,12 @@
         {% endif %}
     {% endif %}
     <footer>
-        {% if participants.cardViews|length > 1 and not isCatalog %}
+        {% if not isCatalog and participants.cardViews|length > 1 %}
             <a href="{{ path('event_sheet_remove_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
             </a>
         {% endif %}
-        {% if isCatalog == true and userSheet == sheet %}
+        {% if isCatalog and userSheet != sheet %}
             <a type="button" class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'from': userSheet.id, 'to': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
         {% endif %}
     </footer>
