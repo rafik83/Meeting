@@ -15,7 +15,9 @@ use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
+use Proximum\Vimeet\Domain\Catalog\AllowedTypes;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -44,10 +46,17 @@ class CatalogController extends Controller
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
-        foreach ($typeViews as $typeView) {
-            if ($typeView->count > 0) {
+
+        foreach ($typeViews as $typeId => $typeView) {
+            if (array_key_exists($typeId, $visibleTypes)) {
                 $filters['type'][] = $typeView;
+            } else {
+                if (count($visibleTypes) > 0) {
+                    unset($typeViews[$typeId]);
+                }
             }
         }
 
