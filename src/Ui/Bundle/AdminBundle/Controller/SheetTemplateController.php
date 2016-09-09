@@ -271,7 +271,7 @@ class SheetTemplateController extends Controller
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures,
             'products'        => $products,
-            'sheet_tags'      => Tag::getSheetTags(),
+            'sheet_tags'      => Tag::getTemplateChoiceTags(),
             'event'           => $template->getEvent(),
         ]);
     }
