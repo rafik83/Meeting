@@ -6,15 +6,15 @@
 
 {% block content %}
     <section class="main">
-
         <header>
             <h1>
                 <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
-
-                {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
-                    <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'from': userSheet.id, 'to': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
-                {% endif %}
             </h1>
+
+            {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
+                <a class="btn btn-primary request-meeting" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
+            {% endif %}
+
             {% if isCatalog is not defined or isCatalog == false %}
                 <ul class="tabs">
                     {% for event_locale in event.locales %}

@@ -30,14 +30,16 @@
             </div>
         {% endif %}
     {% endif %}
-    <footer>
-        {% if not isCatalog and participants.cardViews|length > 1 %}
+
+    {% if not isCatalog and participants.cardViews|length > 1 %}
+        <footer>
             <a href="{{ path('event_sheet_remove_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
             </a>
-        {% endif %}
-        {% if isCatalog and userSheet != sheet %}
-            <a type="button" class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'from': userSheet.id, 'to': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
-        {% endif %}
-    </footer>
+        </footer>
+    {% endif %}
+
+    {% if isCatalog and userSheet != sheet %}
+        <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
+    {% endif %}
 </section>

@@ -269,10 +269,9 @@ event_catalog_complete_sheet:
     defaults: { _controller: EventBundle:Catalog:sheet}
 
 event_catalog_sheet_meeting_request:
-    path: /catalog/sheet/{to}/meeting/request/from/{from}
+    path: /catalog/sheet/{sheet}/request-meeting
     requirements:
-        to: \d+
-        from: \d+
+        sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
