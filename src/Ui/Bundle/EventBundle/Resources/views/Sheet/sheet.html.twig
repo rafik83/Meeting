@@ -12,7 +12,7 @@
             </h1>
 
             {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
-                <a class="btn btn-primary request-meeting" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
+                <a class="btn btn-primary request-meeting" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
             {% endif %}
 
             {% if isCatalog is not defined or isCatalog == false %}

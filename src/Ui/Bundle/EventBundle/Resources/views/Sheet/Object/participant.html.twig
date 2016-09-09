@@ -40,6 +40,6 @@
     {% endif %}
 
     {% if isCatalog and userSheet != sheet %}
-        <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.participant.appointment'|trans }}</a>
+        <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
     {% endif %}
 </section>
