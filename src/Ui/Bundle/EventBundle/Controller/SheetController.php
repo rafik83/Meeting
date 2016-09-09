@@ -234,7 +234,7 @@ class SheetController extends Controller
             $depth        = $nomenclature->getDepth();
 
             if (2 === $depth || 3 === $depth) {
-                $levelsArchitecture = $nomenclature->getLevelsArchitecture();
+                $levelsArchitecture = $nomenclature->getLevelsArchitecture($locale);
             }
         }
 
