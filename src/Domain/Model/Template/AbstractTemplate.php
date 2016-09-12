@@ -271,7 +271,7 @@ abstract class AbstractTemplate
      */
     protected static function createLocale($config, $locale)
     {
-        $keys = ['label', 'help', 'placeholder'];
+        $keys = ['label', 'help', 'placeholder', 'titlePlaceholder', 'linkPlaceholder'];
 
         if (!isset($config['component'])) {
             return self::createComponents($config, $locale);
