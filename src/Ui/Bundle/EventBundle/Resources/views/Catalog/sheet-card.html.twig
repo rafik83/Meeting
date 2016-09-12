@@ -1,19 +1,14 @@
 <div class="col-md-4">
     <div class="catalog__item {#catalog__item--checked#}">
         <header>
-            {#<input type="checkbox" checked="checked">#}
-
-            {% for object in catalogSheetPreviewView.preview %}
-                {% if object.type == 'image' and object.image %}
-                    <img src="{{ object.image|imagine_filter('event_sheet_image') }}"/>
-                {% endif %}
-            {% endfor %}
         </header>
         <div class="content">
             {% for object in catalogSheetPreviewView.preview %}
-                {% if object.type == 'editable-text' %}
-                    {% if object.option('type') == 'title' %}
-                        <p><strong>{{ object.content|default(catalogSheetPreviewView.title) }}</strong></p>
+                {% if object.isImage and object.content is not empty %}
+                    <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+                {% else %}
+                    {% if object.isStrong %}
+                        <p><strong>{{ object.content }}</strong></p>
                     {% else %}
                         <p>{{ object.content }}</p>
                     {% endif %}
