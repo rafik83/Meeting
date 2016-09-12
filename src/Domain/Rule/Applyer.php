@@ -18,6 +18,16 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 class Applyer
 {
     /**
+     * @var array
+     */
+    private $tagMapping = [
+        Tag::PARTICIPANT_FIRSTNAME => 'firstname',
+        Tag::PARTICIPANT_LASTNAME  => 'lastname',
+        Tag::PARTICIPANT_AVATAR    => 'avatar',
+        Tag::PARTICIPANT_POSITION  => 'position',
+    ];
+
+    /**
      * @var Composer
      */
     private $composer;
@@ -64,16 +74,6 @@ class Applyer
             }
         }
     }
-
-    /**
-     * @var array
-     */
-    private $tagMapping = [
-        Tag::PARTICIPANT_FIRSTNAME => 'firstname',
-        Tag::PARTICIPANT_LASTNAME  => 'lastname',
-        Tag::PARTICIPANT_AVATAR    => 'avatar',
-        Tag::PARTICIPANT_POSITION  => 'position',
-    ];
 
     /**
      * @param CardListView $cardListView
