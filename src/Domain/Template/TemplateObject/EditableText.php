@@ -13,15 +13,26 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 class EditableText extends EditableObject implements ContentObjectInterface
 {
     /**
+     * @param string|null locale
      * @return null|string
      */
-    public function getContent()
+    public function getContent($locale = null)
     {
+        $thisLocale = $locale === null ? $this->locale : $locale;
+
         if ($this->isTranslatable()) {
-            return isset($this->data['text'][$this->locale]) ? $this->data['text'][$this->locale] : null;
+            return isset($this->data['text'][$thisLocale]) ? $this->data['text'][$thisLocale] : null;
         }
 
-        return isset($this->data['text']) ? $this->data['text'] : null;
+        if (isset($this->data['text'])) {
+            if (is_array($this->data['text'])) {
+                return null;
+            } else {
+                return $this->data['text'];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -32,7 +43,12 @@ class EditableText extends EditableObject implements ContentObjectInterface
     public function setContent($content)
     {
         if ($this->isTranslatable()) {
-            $this->data['text'][$this->locale] = $content;
+            if (is_array($this->data['text'])) {
+                $this->data['text'][$this->locale] = $content;
+            } else {
+                $this->data['text'] = [];
+                $this->data['text'][$this->locale] = $content;
+            }
         } else {
             $this->data['text'] = $content;
         }
