@@ -10,13 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -87,69 +85,6 @@ class CatalogController extends Controller
             'isCatalog'       => true,
             'paginatedResult' => $paginatedResult,
             'orderByForm'     => $orderByForm->createView(),
-        ]);
-    }
-
-    /**
-     * Display catalog categories of an event.
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
-    public function categoriesAction(Request $request, EventDomain $eventDomain)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
-        $categories = $this
-            ->get('vimeet_infrastructure.repository.category_repository')
-            ->getCategoryViewsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
-
-        return $this->render('EventBundle:Catalog:categories.html.twig', [
-            'event'      => $eventDomain->getEvent(),
-            'categories' => $categories,
-        ]);
-    }
-
-    /**
-     * Display sheets matching category.
-     *
-     * @param EventDomain  $eventDomain
-     * @param CategoryView $categoryView
-     *
-     * @return Response
-     */
-    public function categoryAction(EventDomain $eventDomain, CategoryView $categoryView)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->search($categoryView->id, $this->getUser());
-
-        array_walk($sheets, function (Sheet &$sheet) {
-            $rule = $this
-                ->get('vimeet_infrastructure.application.components.rule.manager')
-                ->getRule($sheet, $this->getUser());
-
-            $this
-                ->get('vimeet_infrastructure.application.components.rule.manager')
-                ->apply($rule, $sheet, new SetNullStrategy());
-        });
-
-        return $this->render('EventBundle:Catalog:category.html.twig', [
-            'event'        => $eventDomain->getEvent(),
-            'categoryView' => $categoryView,
-            'sheets'       => $sheets,
         ]);
     }
 

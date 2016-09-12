@@ -1192,7 +1192,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.rule.manager'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
@@ -1236,12 +1235,6 @@ services:
     #
     # Rule Component
     #
-    vimeet_infrastructure.application.components.rule.manager:
-        class: Proximum\Vimeet\Application\Components\Rule\RuleManager
-        arguments:
-            - '@repository.rule_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@domain.rule.rule_sorter'
     domain.rule.tag_identifier:
         class: Proximum\Vimeet\Domain\Rule\TagIdentifier
         arguments:
