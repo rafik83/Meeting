@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
@@ -44,8 +45,7 @@ class CatalogController extends Controller
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+        $visibleTypes = $this->getVisiblesTypes($event, $request->getLocale());
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         foreach ($typeViews as $typeId => $typeView) {
@@ -200,5 +200,18 @@ class CatalogController extends Controller
         } catch (NoRuleFoundException $exception) {
             throw $this->createNotFoundException($exception->getMessage(), $exception);
         }
+    }
+
+    /**
+     * @param Event $event
+     * @param string $locale
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function getVisiblesTypes(Event $event, $locale)
+    {
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        return $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
     }
 }
