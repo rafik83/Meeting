@@ -47,10 +47,8 @@ class Preview
         $previewObjects = [];
 
         foreach ($previewObjectKeys as $key) {
-            $object = $templateData->getObject($key);
-
+            $object      = $templateData->getObject($key);
             $previewView = new PreviewView($object->getKey(), '', $object->getType());
-
 
             if ($object instanceof TemplateObject\ContentObjectInterface) {
                 if ($object instanceof TemplateObject\EditableText && $object->isTitle()) {
