@@ -22,7 +22,10 @@ class UpdatePlanningHandler extends AbstractHandler
     {
         $product = $updatePlanning->product->updatePlanning(
             $updatePlanning->name,
-            $updatePlanning->quantityMax
+            $updatePlanning->quantityMax,
+            $this->updatePriceResolver->resolve($updatePlanning->product) ?
+                $updatePlanning->unitPrice :
+                $updatePlanning->product->getUnitPrice()
         );
 
         foreach ($updatePlanning->translations as $locale => $translation) {

@@ -13,11 +13,11 @@ Feature: Handle Update Product
       | Admins.yml                                                               |
     Given I am logged with "test2@test.com" on admin
     And I go to this page "/admin/fr/event"
-    Then I go to this page "/admin/fr/event/1/product/6/update/option"
-    And I should see "form.product_update_option.children.name.label"
-    Then I fill in the following:
-      | product_update_option_name                          | ProductTitleModify |
-    And I press "product_update_option_submit"
+    When I go to this page "/admin/fr/event/1/product/6/update/option"
+    Then I should see "form.product_update_option.children.name.label"
+    And I fill in the following:
+      | product_update_option_name | ProductTitleModify |
+    When I press "product_update_option_submit"
     Then I should be on this page "/admin/fr/event/1/product"
     And I should see "admin.product.update.success"
 
@@ -25,3 +25,14 @@ Feature: Handle Update Product
     Given I am logged with "test2@test.com" on admin
     And I go to this page "/admin/fr/event/1/product/6/update/option"
     Then the "form.product_update_option.children.name.label" field should contain "ProductTitleModify"
+
+  Scenario: I can update product price of a not purchased product
+    Given I am logged with "test2@test.com" on admin
+    And I go to this page "/admin/fr/event/1/product/6/update/option"
+    Then I should see "form.product_update_option.children.unitPrice.label"
+    And I fill in "form.product_update_option.children.unitPrice.label" with "15"
+    When I press "product_update_option_submit"
+    Then I should be on this page "/admin/fr/event/1/product"
+    And I should see "admin.product.update.success"
+    When I go to this page "/admin/fr/event/1/product/6/update/option"
+    Then the "form.product_update_option.children.unitPrice.label" field should contain "15"

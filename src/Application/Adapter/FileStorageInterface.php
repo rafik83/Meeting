@@ -27,4 +27,12 @@ interface FileStorageInterface
      * @return FileStorageInterface
      */
     public function remove($identifier);
+
+    /**
+     * @param string      $identifier
+     * @param string|null $name
+     *
+     * @return string|null
+     */
+    public function copyAndRename($identifier, $name = null);
 }

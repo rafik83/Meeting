@@ -672,6 +672,14 @@ admin_product_update_planning:
         product: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Product:updatePlanning }
+
+admin_product_template_import:
+    path: /event/{event}/product/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Product:import }
+
 #
 # Organizer
 #

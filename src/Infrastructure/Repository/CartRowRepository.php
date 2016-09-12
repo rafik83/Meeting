@@ -31,7 +31,7 @@ class CartRowRepository implements CartRowRepositoryInterface
     }
 
     /**
-     * @param CartRow $cartRow
+     * {@inheritdoc}
      */
     public function add(CartRow $cartRow)
     {
@@ -40,7 +40,7 @@ class CartRowRepository implements CartRowRepositoryInterface
     }
 
     /**
-     * @param CartRow $cartRow
+     * {@inheritdoc}
      */
     public function set(CartRow $cartRow)
     {
@@ -48,8 +48,7 @@ class CartRowRepository implements CartRowRepositoryInterface
     }
 
     /**
-     * @param Sheet $sheet
-     * @param array $cartRows
+     * {@inheritdoc}
      */
     public function deleteWhereNotIn(Sheet $sheet, array $cartRows)
     {
@@ -109,5 +108,21 @@ class CartRowRepository implements CartRowRepositoryInterface
             ->setParameter('sheet', $sheet);
 
         $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByProduct($product)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('cartRow')
+            ->from(CartRow::class, 'cartRow')
+            ->where('cartRow.product = :product')
+            ->setParameter('product', $product);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
