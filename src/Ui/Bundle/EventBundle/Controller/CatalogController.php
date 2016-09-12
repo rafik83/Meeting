@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
+use Proximum\Vimeet\Domain\Exception\Catalog\SheetAccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
@@ -49,7 +50,7 @@ class CatalogController extends Controller
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
-        
+
         $visibleTypes = $this->getVisiblesTypes($event, $request->getLocale());
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
@@ -240,6 +241,18 @@ class CatalogController extends Controller
      */
     private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
+        try {
+            $this->get('catalog.sheet_access_checker')->checkAccess(
+                $this->get('sheet.sheet_guesser')->getUserSheet(
+                    $this->getUser(),
+                    $event,
+                    $locale
+                )
+            );
+        } catch (SheetAccessDeniedException $exception) {
+            throw $this->createAccessDeniedException();
+        }
+
         $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale);
         $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
