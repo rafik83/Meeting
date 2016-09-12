@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler;
-use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -87,8 +87,8 @@ class CreateOptionHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new CreateOptionHandler(
             $productRepository->reveal(),
-            $fileStorage->reveal(),
-            $updatePriceResolver->reveal()
+            $updatePriceResolver->reveal(),
+            $fileStorage->reveal()
         );
         $handler->handle($create);
     }

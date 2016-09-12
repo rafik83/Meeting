@@ -8,7 +8,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipantHandler;
-use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -83,7 +83,6 @@ class CreateParticipantHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new CreateParticipantHandler(
             $productRepository->reveal(),
-            $fileStorage->reveal(),
             $updatePriceResolver->reveal()
         );
         $handler->handle($create);

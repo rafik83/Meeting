@@ -7,7 +7,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Plan;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlanHandler;
-use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -63,8 +63,8 @@ class UpdatePlanHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new UpdatePlanHandler(
             $pacakgeRepository->reveal(),
-            $fileStorage->reveal(),
-            $updatePriceResolver->reveal()
+            $updatePriceResolver->reveal(),
+            $fileStorage->reveal()
         );
         $handler->handle($updateCommand);
     }

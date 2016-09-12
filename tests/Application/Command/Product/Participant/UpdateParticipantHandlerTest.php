@@ -7,7 +7,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Participant;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler;
-use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -58,7 +58,6 @@ class UpdateParticipantHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new UpdateParticipantHandler(
             $productRepository->reveal(),
-            $fileStorage->reveal(),
             $updatePriceResolver->reveal()
         );
         $handler->handle($updateParticipantCommand);

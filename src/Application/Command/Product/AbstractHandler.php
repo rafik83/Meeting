@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Product;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 abstract class AbstractHandler
@@ -32,13 +33,13 @@ abstract class AbstractHandler
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param FileStorageInterface       $fileStorageInterface
      * @param UpdatePriceResolver        $updatePriceResolver
+     * @param FileStorageInterface       $fileStorageInterface
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        FileStorageInterface $fileStorageInterface = null,
-        UpdatePriceResolver $updatePriceResolver
+        UpdatePriceResolver $updatePriceResolver,
+        FileStorageInterface $fileStorageInterface = null
     ) {
         $this->productRepository    = $productRepository;
         $this->fileStorageInterface = $fileStorageInterface;

@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Planning;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanningHandler;
-use Proximum\Vimeet\Application\Command\Product\UpdatePriceResolver;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -60,7 +60,6 @@ class CreatePlanningHandlerTest extends \PHPUnit_Framework_TestCase
         // Handler
         $handler = new CreatePlanningHandler(
             $productRepository->reveal(),
-            $fileStorage->reveal(),
             $updatePriceResolver->reveal()
         );
         $handler->handle($create);
