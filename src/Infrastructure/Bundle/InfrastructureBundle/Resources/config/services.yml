@@ -1246,18 +1246,30 @@ services:
     #
     # Rule Component
     #
-    vimeet_infrastructure.vimeet.application.components.rule.rule_sorter:
-        class: Proximum\Vimeet\Application\Components\Rule\RuleSorter
     vimeet_infrastructure.application.components.rule.manager:
         class: Proximum\Vimeet\Application\Components\Rule\RuleManager
         arguments:
             - '@repository.rule_repository'
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@vimeet_infrastructure.vimeet.application.components.rule.rule_sorter'
+            - '@domain.rule.rule_sorter'
     domain.rule.tag_identifier:
         class: Proximum\Vimeet\Domain\Rule\TagIdentifier
         arguments:
             - '@template.template_data_factory'
+
+    #
+    # Rule
+    #
+    domain.rule.rule_sorter:
+        class: Proximum\Vimeet\Domain\Rule\RuleSorter
+    domain.rule.composer:
+        class: Proximum\Vimeet\Domain\Rule\Composer
+        arguments:
+            - '@domain.rule.rule_sorter'
+    domain.rule.applyer:
+        class: Proximum\Vimeet\Domain\Rule\Applyer
+        arguments:
+            - '@domain.rule.composer'
 
     #
     # Token component
@@ -1695,12 +1707,18 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
     query.sheet.catalog_sheet_preview_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\CatalogSheetPreviewViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@domain.rule.composer'
+            - '@sheet.preview'
+            - '@repository.rule_repository'
+    query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_search_adapter'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@sheet.preview'
+            - '@query.sheet.catalog_sheet_preview_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
