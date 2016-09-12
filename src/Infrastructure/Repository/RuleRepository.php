@@ -97,7 +97,7 @@ class RuleRepository implements RuleRepositoryInterface
 
         $queryBuilder
             ->select('rule')
-            ->from('Entity:Rule', 'rule')
+            ->from(Rule::class, 'rule')
             ->where($queryBuilder->expr()->orX(
                 'rule.seerType = :seerType',
                 'rule.seerCategory IN (:seerCategories)'
