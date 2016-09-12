@@ -69,8 +69,14 @@ abstract class AbstractTemplate
      * @param \DateTimeInterface $createdAt
      * @param Event              $event
      */
-    public function __construct($title, array $value, array $locales, $fallback, \DateTimeInterface $createdAt, Event $event = null)
-    {
+    public function __construct(
+        $title,
+        array $value,
+        array $locales,
+        $fallback,
+        \DateTimeInterface $createdAt,
+        Event $event = null
+    ) {
         $this->title     = $title;
         $this->value     = $value;
         $this->fallback  = $fallback;
@@ -165,6 +171,25 @@ abstract class AbstractTemplate
         if (!$this->hasLocale($locale) && $locale !== null) {
             $this->locales[] = $locale;
             $this->fixValue([$locale]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array  $locales
+     * @param string $fallback
+     *
+     * @return AbstractTemplate
+     */
+    public function updateLocales(array $locales, $fallback)
+    {
+        $this->fallback = $fallback;
+
+        foreach ($locales as $locale) {
+            if (!$this->hasLocale($locale)) {
+                $this->addLocale($locale);
+            }
         }
 
         return $this;

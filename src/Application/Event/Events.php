@@ -31,6 +31,7 @@ final class Events
     const MEETING_UPDATE_MESSAGE               = 'meeting.update.message';
     const USER_REGISTERED                      = 'user.registered';
     const EVENT_PRE_REGISTERED                 = 'event.preregistered';
+    const EVENT_LOCALE_CHANGED                 = 'event.locale_changed';
     const USER_RESET_PASSWORD_CONFIRMED        = 'user.reset_password.confirm';
     const ORDER_CONFIRMED                      = 'order.confirm';
     const ADMIN_ACCOUNT_ACTIVATED              = 'admin.account_activated';
