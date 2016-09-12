@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\Components\Rule;
 
 use Proximum\Vimeet\Application\Components\Rule\RuleManager;
-use Proximum\Vimeet\Application\Components\Rule\RuleSorter;
 use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Rule;
@@ -20,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\RuleSorter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RuleManagerTest extends \PHPUnit_Framework_TestCase
