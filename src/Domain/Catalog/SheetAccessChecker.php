@@ -17,22 +17,15 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 class SheetAccessChecker
 {
     /**
-    * @var RuleRepositoryInterface
-    */
-    private $ruleRepository;
-
-    /**
      * @var VisibleParticipationTypes
      */
     private $visibleParticipationTypes;
 
     /**
      * @param VisibleParticipationTypes $visibleParticipationTypes
-     * @param RuleRepositoryInterface   $ruleRepository
      */
-    public function __construct(VisibleParticipationTypes $visibleParticipationTypes, RuleRepositoryInterface $ruleRepository)
+    public function __construct(VisibleParticipationTypes $visibleParticipationTypes)
     {
-        $this->ruleRepository = $ruleRepository;
         $this->visibleParticipationTypes = $visibleParticipationTypes;
     }
 
@@ -49,7 +42,7 @@ class SheetAccessChecker
             return true;
         }
 
-        $isSheetVisible = array_key_exists($sheet->getType(), $visibleTypes);
+        $isSheetVisible = array_key_exists($sheet->getType()->getId(), $visibleTypes);
 
         if (!$isSheetVisible) {
             throw new SheetAccessDeniedException();

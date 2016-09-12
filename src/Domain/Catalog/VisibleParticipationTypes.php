@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Catalog;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
@@ -41,7 +41,7 @@ class VisibleParticipationTypes
 
         $rules = $this->ruleRepository->getByEvent($sheet->getEvent());
 
-        $filteredTypes = array_filter($rules, function ($rule) use ($type) {
+        $filteredTypes = array_filter($rules, function (Rule $rule) use ($type) {
             if ($rule->getSeerType() == $type) {
                 return $rule->getSeeableType();
             }
