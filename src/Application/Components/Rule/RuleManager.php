@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\RuleSorter;
 
 class RuleManager
 {
@@ -66,6 +67,8 @@ class RuleManager
      * @throws NoRuleFoundException
      *
      * @return Rule
+     *
+     * @deprecated
      */
     public function getRule(Sheet $sheet, User $user)
     {
@@ -100,6 +103,8 @@ class RuleManager
      * @param Rule              $rule
      * @param Sheet             $sheet
      * @param StrategyInterface $strategy
+     *
+     * @deprecated
      */
     public function apply(Rule $rule, Sheet $sheet, StrategyInterface $strategy)
     {
