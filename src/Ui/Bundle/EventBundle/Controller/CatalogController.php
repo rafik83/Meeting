@@ -247,7 +247,8 @@ class CatalogController extends Controller
                     $this->getUser(),
                     $event,
                     $locale
-                )
+                ),
+                $sheet
             );
         } catch (SheetAccessDeniedException $exception) {
             throw $this->createAccessDeniedException();

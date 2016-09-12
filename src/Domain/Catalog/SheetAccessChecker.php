@@ -29,19 +29,20 @@ class SheetAccessChecker
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet $userSheet
+     * @param Sheet $requestedSheet
      *
      * @return bool
      */
-    public function checkAccess(Sheet $sheet)
+    public function checkAccess(Sheet $userSheet, Sheet $requestedSheet)
     {
-        $visibleTypes = $this->visibleParticipationTypes->getAllowedTypesList($sheet);
+        $visibleTypes = $this->visibleParticipationTypes->getAllowedTypesList($userSheet);
 
         if (empty($visibleTypes)) {
             return true;
         }
 
-        $isSheetVisible = array_key_exists($sheet->getType()->getId(), $visibleTypes);
+        $isSheetVisible = array_key_exists($requestedSheet->getType()->getId(), $visibleTypes);
 
         if (!$isSheetVisible) {
             throw new SheetAccessDeniedException();
