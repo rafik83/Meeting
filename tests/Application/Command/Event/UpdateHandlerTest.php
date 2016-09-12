@@ -97,7 +97,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage->remove('here.jpg')->shouldBeCalled();
         $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        //$eventDispatcher->dispatch()->shouldBeCalled();
 
         // Handle
         $handler = new UpdateHandler(
