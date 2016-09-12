@@ -267,7 +267,7 @@ class SheetTemplateController extends Controller
             'template'        => $template,
             'locale'          => $locale,
             'update_form'     => $updateForm->createView(),
-            'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
+            'add_locale_form' => null === $template->getEvent() && $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures,
             'products'        => $products,
