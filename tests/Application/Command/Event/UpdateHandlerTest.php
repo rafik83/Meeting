@@ -14,11 +14,14 @@ use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
+use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,9 +96,16 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->remove('here.jpg')->shouldBeCalled();
         $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        //$eventDispatcher->dispatch()->shouldBeCalled();
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
+        $handler = new UpdateHandler(
+            $eventRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 
@@ -167,8 +177,17 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $guidelineGenerator->generate($event)->shouldBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
 
+        $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
+
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
+        $handler = new UpdateHandler(
+            $eventRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 
@@ -239,8 +258,17 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $guidelineGenerator->generate($event)->shouldNotBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
 
+        $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
+
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
+        $handler = new UpdateHandler(
+            $eventRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 
@@ -316,9 +344,16 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->remove('here.jpg')->shouldNotBeCalled();
         $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled();
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+
 
         // Handle
-        $handler = new UpdateHandler($eventRepository->reveal(), $guidelineGenerator->reveal(), $fileStorage->reveal());
+        $handler = new UpdateHandler(
+            $eventRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 }
