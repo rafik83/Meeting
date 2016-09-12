@@ -1856,7 +1856,6 @@ services:
         class: Proximum\Vimeet\Domain\Catalog\SheetAccessChecker
         arguments:
             - '@catalog.visible_participation_types'
-            - '@vimeet_infrastructure.repository.rule_repository'
 
     #
     # Promotion
