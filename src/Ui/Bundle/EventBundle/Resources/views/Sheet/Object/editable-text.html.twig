@@ -1,4 +1,3 @@
-
 <section id="object-{{ uid }}" class="object object--editable-text {{ 'style--' ~ item.style }}">
     {% if true != item.hideLabel|default %}
         {% if item.option('type') == 'title' %}
@@ -19,7 +18,10 @@
         <p>{{ item.data['text'][locale]|default|nl2br }}</p>
     {% endif %}
 
-    <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
-    </footer>
+    {% if not isCatalog %}
+        <footer>
+            <i class="icon-Note_2"></i>
+            <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
+        </footer>
+    {% endif %}
 </section>

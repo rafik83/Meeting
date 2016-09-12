@@ -6,18 +6,26 @@
 
 {% block content %}
     <section class="main">
-
         <header>
-            <h1><i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}</h1>
-            <ul class="tabs">
-                {% for event_locale in event.locales %}
-                    <li{% if event_locale == locale %} class="active"{% endif %}>
-                        <a href="{{ path('event_sheet_locale', { 'locale': event_locale }) }}">
-                            <span class="name">{{ event_locale|locale }}*</span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+            <h1>
+                <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
+            </h1>
+
+            {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
+                <a class="btn btn-primary request-meeting" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
+            {% endif %}
+
+            {% if isCatalog is not defined or isCatalog == false %}
+                <ul class="tabs">
+                    {% for event_locale in event.locales %}
+                        <li{% if event_locale == locale %} class="active"{% endif %}>
+                            <a href="{{ path('event_sheet_locale', { 'locale': event_locale }) }}">
+                                <span class="name">{{ event_locale|locale }}*</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </header>
 
         <div class="main__container">
@@ -31,6 +39,8 @@
                     'taggedData': taggedData,
                     'nomenclatures': nomenclatures,
                     'participants': participants,
+                    'isCatalog': isCatalog|default(false),
+                    'userSheet': userSheet|default(false),
                 }, false) }}
             {% endfor %}
         </div>
