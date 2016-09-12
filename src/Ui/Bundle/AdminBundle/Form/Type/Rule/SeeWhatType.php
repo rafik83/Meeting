@@ -64,6 +64,7 @@ class SeeWhatType extends AbstractType
                 },
                 'choice_translation_domain' => 'templates',
                 'multiple'                  => true,
+                'required'                  => false,
             ])
         ;
     }
