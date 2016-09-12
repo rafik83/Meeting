@@ -67,7 +67,8 @@ class CatalogController extends Controller
                 [$orderBy['orderBy']],
                 $request->query->getInt('page', 1),
                 100,
-                $request->getLocale()
+                $request->getLocale(),
+                $sheet
             );
             $paginatedResult = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $exception) {
@@ -185,6 +186,14 @@ class CatalogController extends Controller
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
+        $rules = $this
+            ->get('repository.rule_repository')
+            ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType())
+        ;
+        $ruleApplyer = $this->get('domain.rule.applyer');
+        $ruleApplyer->applyRuleForTemplate($templateData, $rules);
+        $ruleApplyer->applyRuleForCardList($participants, $rules);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'         => $eventDomain->getEvent(),
