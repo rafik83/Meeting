@@ -280,6 +280,7 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@guideline.generator'
             - '@adapter.local_file_storage'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
