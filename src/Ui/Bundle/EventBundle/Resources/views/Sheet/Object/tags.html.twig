@@ -6,7 +6,17 @@
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}
-                <li><a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >{{ tag['label']|localize(locale, fallback) }} : {{ taggedData[tag.tag]|default([])|join(', ') }}</a></li>
+                <li>
+                    {% if not isCatalog %}
+                        <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >
+                    {% endif %}
+
+                    {{ tag['label']|localize(locale, fallback) }} : {{ taggedData[tag.tag]|default([])|join(', ') }}
+
+                    {% if not isCatalog %}
+                        </a>
+                    {% endif %}
+                </li>
             {% endfor %}
 
             {% if item.collectionEnabled %}
