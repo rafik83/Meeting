@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet;
+namespace Proximum\Vimeet\Application\Query\Type;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PaginatedCatalogSheetPreviewViewQuery
+class CatalogTypeViewQuery
 {
     /**
      * @var Event
@@ -25,16 +25,6 @@ class PaginatedCatalogSheetPreviewViewQuery
     public $filters;
 
     /**
-     * @var int
-     */
-    public $page;
-
-    /**
-     * @var int
-     */
-    public $limit;
-
-    /**
      * @var string
      */
     public $locale;
@@ -42,16 +32,12 @@ class PaginatedCatalogSheetPreviewViewQuery
     /**
      * @param Event  $event
      * @param array  $filters
-     * @param int    $page
-     * @param int    $limit
      * @param string $locale
      */
-    public function __construct(Event $event, array $filters, $page, $limit, $locale)
+    public function __construct(Event $event, array $filters, $locale)
     {
         $this->event   = $event;
         $this->filters = $filters;
-        $this->page    = $page;
-        $this->limit   = $limit;
         $this->locale  = $locale;
     }
 }

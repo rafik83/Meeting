@@ -282,18 +282,3 @@
         </div>
     </div>
 {% endblock %}
-
-{% block _catalog_order_by_orderBy_row %}
-    <div class="orderBy">
-        <strong>{{ form.vars.label|trans({}, form.vars.translation_domain) }}</strong>
-
-        <div class="sort-inputs">
-            {% for child in form.children %}
-                <label class="radio-inline">
-                    {{ form_widget(child) }}
-                    {{ child.vars.label|trans({}, child.vars.translation_domain) }}
-                </label>
-            {% endfor %}
-        </div>
-    </div>
-{% endblock %}
