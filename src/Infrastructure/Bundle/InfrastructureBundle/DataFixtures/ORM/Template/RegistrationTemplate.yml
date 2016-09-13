@@ -77,6 +77,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Service (Juridique, Informatique, ...)"
                                 help:
                                     fr: ""
+                                mode: "singles"
                                 nomenclature: "@nomenclature_service->id"
                                 tags: ["participant_data"]
                         6c4a3a4f:
@@ -88,6 +89,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Fonction"
                                 help:
                                     fr: ""
+                                mode: "singles"
                                 nomenclature: "@nomenclature_position->id"
                                 tags: ["participant_position", "participant_data"]
                         1efb9cbb:
@@ -192,8 +194,9 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Catégorie (Pme / Eti / Startup / ... )"
                                 help:
                                     fr: ""
+                                mode: "singles"
                                 nomenclature: "@nomenclature_company_category->id"
-                                tags: ["sheet_data"]
+                                tags: ["sheet_organization_category", "sheet_data"]
                         9ef18c06:
                             component: "object"
                             type: "editable-text"
@@ -209,7 +212,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: false
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["sheet_website", "sheet_data"]
                         93de093f:
                             component: "object"
                             type: "editable-text"
@@ -225,7 +228,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["sheet_address", "sheet_data"]
                         de66af5d:
                             component: "object"
                             type: "editable-text"
@@ -241,7 +244,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["sheet_zipcode", "sheet_data"]
                         d224f0e7:
                             component: "object"
                             type: "editable-text"
@@ -257,7 +260,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["sheet_city", "sheet_data"]
                         e801edd4:
                             component: "object"
                             type: "country"
@@ -273,4 +276,4 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["sheet_data"]
+                                tags: ["sheet_country", "sheet_data"]
