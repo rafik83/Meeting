@@ -45,7 +45,7 @@ class SheetAccessChecker
         $isSheetVisible = array_key_exists($requestedSheet->getType()->getId(), $visibleTypes);
 
         if (!$isSheetVisible) {
-            throw new SheetAccessDeniedException();
+            return false;
         }
 
         return $isSheetVisible;

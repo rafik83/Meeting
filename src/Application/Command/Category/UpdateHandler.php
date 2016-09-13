@@ -57,15 +57,20 @@ class UpdateHandler
                 throw new \Exception('Type id not found for this event');
             }
 
-            if (!$category->getTypes()->contains($eventTypes[$typeId])) {
-                $category->getTypes()->add($eventTypes[$typeId]);
+            if (!in_array($eventTypes[$typeId], $category->getTypes(), true)) {
+                $category->getTypes()[] = $eventTypes[$typeId];
             }
         }
 
         // Remove Type
         foreach ($category->getTypes() as $type) {
             if (!in_array($type->getId(), $update->types)) {
-                $category->getTypes()->removeElement($type);
+
+                $key = array_search($type, $category->getTypes(), true);
+
+                if ($key === true) {
+                    unset($category->getTypes()[$key]);
+                }
             }
         }
 

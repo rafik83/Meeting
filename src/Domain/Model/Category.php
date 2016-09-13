@@ -71,7 +71,7 @@ class Category implements WhoInterface
      */
     public function getTypes()
     {
-        return $this->types;
+        return $this->types->toArray();
     }
 
     /**

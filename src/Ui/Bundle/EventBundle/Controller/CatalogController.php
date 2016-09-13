@@ -241,16 +241,9 @@ class CatalogController extends Controller
      */
     private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
-        try {
-            $this->get('catalog.sheet_access_checker')->checkAccess(
-                $this->get('sheet.sheet_guesser')->getUserSheet(
-                    $this->getUser(),
-                    $event,
-                    $locale
-                ),
-                $sheet
-            );
-        } catch (SheetAccessDeniedException $exception) {
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+
+        if (!$this->get('catalog.sheet_access_checker')->checkAccess($userSheet, $sheet)) {
             throw $this->createAccessDeniedException();
         }
 

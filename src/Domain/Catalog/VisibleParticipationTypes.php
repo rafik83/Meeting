@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class VisibleParticipationTypes
@@ -22,11 +23,20 @@ class VisibleParticipationTypes
     private $ruleRepository;
 
     /**
-     * @param RuleRepositoryInterface $ruleRepository
+     * @var CategoryRepositoryInterface
      */
-    public function __construct(RuleRepositoryInterface $ruleRepository)
-    {
+    private $categoryRepository;
+
+    /**
+     * @param RuleRepositoryInterface     $ruleRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(
+        RuleRepositoryInterface $ruleRepository,
+        CategoryRepositoryInterface $categoryRepository
+    ) {
         $this->ruleRepository = $ruleRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -43,13 +53,30 @@ class VisibleParticipationTypes
 
         $filteredTypes = array_filter($rules, function (Rule $rule) use ($type) {
             if ($rule->getSeerType() == $type) {
-                return $rule->getSeeableType();
+                return true;
             }
             return false;
         });
 
-        foreach ($filteredTypes as $type) {
-            $visibleTypes[$type->getSeeableType()->getId()] = $type;
+        foreach ($rules as $rule) {
+            if (!empty($rule->getSeerCategory())) {
+                foreach ($rule->getSeerCategory()->getTypes() as $categoryType) {
+                    if ($categoryType == $type) {
+                        $filteredTypes[] = $rule;
+                    }
+                }
+            }
+        }
+
+        foreach ($filteredTypes as $rule) {
+
+            if (!empty($rule->getSeeableCategory())) {
+                foreach ($rule->getSeeableCategory()->getTypes() as $categoryType) {
+                    $visibleTypes[$categoryType->getId()] = $categoryType;
+                }
+            }
+
+            $visibleTypes[$rule->getSeeableType()->getId()] = $rule;
         }
 
         return $visibleTypes;
