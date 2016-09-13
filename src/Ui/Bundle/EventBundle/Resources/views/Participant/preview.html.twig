@@ -1,3 +1,4 @@
+{% set isCatalog = isCatalog|default(false) %}
 <div class="user clearfix">
     <div class="user__avatar">
         <span class="bullet"></span>
@@ -7,7 +8,7 @@
                     {% if participant.avatar != null %}
                         <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
                     {% else %}
-                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
+                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
                     {% endif %}
                 </div>
             </a>
@@ -16,7 +17,7 @@
                 {% if participant.avatar != null %}
                     <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
                 {% else %}
-                    <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
+                    <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
                 {% endif %}
             </div>
         {% endif %}

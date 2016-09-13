@@ -67,6 +67,14 @@ class EditableText extends EditableObject implements ContentObjectInterface
     /**
      * @return bool
      */
+    public function isTitle()
+    {
+        return $this->getOption('type') === 'title';
+    }
+
+    /**
+     * @return bool
+     */
     public function isRequired()
     {
         return (bool) $this->getOption('required');
