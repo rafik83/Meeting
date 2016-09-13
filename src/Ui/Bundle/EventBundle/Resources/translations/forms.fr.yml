@@ -1,9 +1,6 @@
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
-form.catalog_order_by.children.orderBy.label: TRIER
-form.catalog_order_by.order.alphabetical: 'Ordre alphabétique'
-form.catalog_order_by.order.dateAddedToCatalog: 'Inscriptions récentes'
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
@@ -27,6 +24,11 @@ form.payment_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bleue'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
+form.search.orderBy.alphabetical: 'Ordre alphabétique'
+form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
+form.search.orderBy.label: TRIER
+form.search.type.at_least_one_checked: Au moins un type de participant doit être sélectionné
+form.search.type.label: Participants
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Texte

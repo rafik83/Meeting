@@ -1,106 +1,15 @@
+{% set resultsCount = paginatedResult.results|length %}
+
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block title 'navigation.category.catalog'|trans %}
 
 {% block body_attributes 'class="grey"' %}
 
-{% form_theme orderByForm '@Ui/default.html.twig' %}
+{% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
     <div class="catalog">
-        {#
-        <div class="catalog__research">
-            <form>
-                <div class="filter">
-                    <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-1"
-                        aria-expanded="false" aria-controls="collapse-1">Participants</h3>
-
-                    <div class="collapse" id="collapse-1">
-                        <ul>
-                            <li class="filter__item">
-                                <label class="checkbox-inline">
-                                    <span class="filter-label"><input type="checkbox" checked="checked">Donneur d'ordre</span>
-                                    <span class="details">5 sur 100</span>
-                                </label>
-                            </li>
-                            <li class="filter__item">
-                                <label class="checkbox-inline">
-                                    <span class="filter-label"><input type="checkbox" checked="checked">Exposant</span>
-                                    <span class="details">15 sur 200</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="filter">
-                    <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-2"
-                        aria-expanded="false" aria-controls="collapse-2">Objectifs</h3>
-
-                    <div class="collapse" id="collapse-2">
-                        <ul>
-                            <li>
-                                <label class="checkbox-inline">
-                                    <span class="filter-label"><input type="checkbox" checked="checked">Répondre à mes besoins</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox-inline">
-                                    <span class="filter-label"><input type="checkbox">Rechercher mes offres</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="checkbox-inline">
-                                    <span class="filter-label"><input type="checkbox">Autres</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="filter">
-                    <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-3"
-                        aria-expanded="false" aria-controls="collapse-3">Structures</h3>
-
-                    <div class="collapse" id="collapse-3">
-                    </div>
-                </div>
-                <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>
-            </form>
-            <div class="actions">
-                <ul>
-                    <li><a href=""><i class="icon-Rechercher"></i> <span>Enregistrer la recherche</span></a></li>
-                    <li><a href=""><i class="icon-Retard"></i> <span>Créer une alerte</span></a></li>
-                    <li><a href=""><i class="icon-Inserer_2"></i> <span>Format de données .csv</span></a></li>
-                    <li><a href=""><i class="icon-Document_1"></i> <span>Fiches complètes .pdf</span></a></li>
-                </ul>
-            </div>
-        </div>
-        #}
-
-        <div class="catalog__filters">
-
-            <div class="select-all">
-                {#
-                <label class="checkbox-inline" for="select-all-catalog">
-                    <input type="checkbox" id="select-all-catalog">
-                    Tout sélectionner (40)
-                </label>
-                #}
-            </div>
-
-            <div class="sort">
-                {{ form(orderByForm) }}
-
-                {#
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default active"><i class="icon-Mosaique"></i></button>
-                    <button type="button" class="btn btn-default"><i class="icon-Liste"></i></button>
-                </div>
-                #}
-            </div>
-        </div>
-
-        <div class="catalog__list catalog__list--block">
-            {{ include('EventBundle:Catalog:list.html.twig', { paginatedResult: paginatedResult }) }}
-        </div>
+        {{ include('EventBundle:Catalog:catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult }, false) }}
     </div>
 {% endblock %}

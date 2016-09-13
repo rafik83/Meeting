@@ -37,6 +37,8 @@ class EventChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefined('event');
+        $resolver->setDefined('removeCurrentEvent');
         $resolver->setDefaults([
             'class'            => Event::class,
             'choice_label'     => 'title',
@@ -44,7 +46,21 @@ class EventChoiceType extends AbstractType
                 return $eventRepository->getAll();
             },
             'choices'          => function (Options $options) {
-                return $options['repositoryMethod']($this->eventRepository);
+                $events = $options['repositoryMethod']($this->eventRepository);
+
+                if (isset($options['removeCurrentEvent'])
+                    && true === $options['removeCurrentEvent']
+                    && isset($options['event'])
+                ) {
+                    foreach ($events as $key => $event) {
+                        if ($event === $options['event']) {
+                            unset($events[$key]);
+                            break;
+                        }
+                    }
+                }
+
+                return $events;
             },
         ]);
     }

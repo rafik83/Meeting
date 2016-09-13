@@ -94,19 +94,21 @@ class CreateHandler
             $event->setLogo($this->fileStorage->upload($create->logo));
         }
 
-        try {
-            $event->setAssetPath($this->guidelinesGenerator->generate($event));
-        } catch (GuidelineAssetBuildFailedException $exception) {
-            throw new GuidelineAssetBuildFailedException($exception->getMessage());
-        }
-
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
                 $event->getTranslations()->set($locale, new EventTranslation($event, $locale, ''));
             }
         }
 
+        $event->setAssetPath('');
         $this->eventRepository->add($event);
+
+        try {
+            $event->setAssetPath($this->guidelinesGenerator->generate($event));
+            $this->eventRepository->set($event);
+        } catch (GuidelineAssetBuildFailedException $exception) {
+            throw new GuidelineAssetBuildFailedException($exception->getMessage());
+        }
 
         if ($create->admin->isOrganizer()) {
             $create->admin->addEvent($event);

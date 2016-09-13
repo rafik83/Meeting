@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Product\Import\Import;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Import\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType;
@@ -94,7 +96,7 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $update = new UpdateOption($product);
-        $form = $this->createForm(UpdateOptionType::class, $update, [
+        $form   = $this->createForm(UpdateOptionType::class, $update, [
             'submit'  => true,
             'product' => $product,
             'locale'  => $request->getLocale(),
@@ -108,8 +110,9 @@ class ProductController extends Controller
         }
 
         return $this->render('AdminBundle:Product:updateOption.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
+            'event'   => $event,
+            'form'    => $form->createView(),
+            'product' => $product,
         ]);
     }
 
@@ -124,7 +127,7 @@ class ProductController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $create = new CreatePlan($event);
-        $form = $this->createForm(CreatePlanType::class, $create, [
+        $form   = $this->createForm(CreatePlanType::class, $create, [
             'submit' => true,
             'event'  => $event,
             'locale' => $request->getLocale(),
@@ -172,6 +175,7 @@ class ProductController extends Controller
         return $this->render('AdminBundle:Product:updatePlan.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
+            'plan'  => $product,
         ]);
     }
 
@@ -292,6 +296,39 @@ class ProductController extends Controller
         }
 
         return $this->render('AdminBundle:Product:updatePlanning.html.twig', [
+            'event' => $event,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Import all products and package templates from an Event x to the current Event
+     *
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function importAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $duplicate = new Import($event);
+        $form      = $this->createForm(ImportType::class, $duplicate, [
+            'action' => $this->generateUrl('admin_product_template_import', ['event' => $event->getId()]),
+            'admin'  => $this->getUser(),
+            'event'  => $event,
+            'submit' => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($duplicate);
+            $this->addFlash('success', 'flash.admin.product.import.success');
+
+            return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
+        }
+
+        return $this->render('AdminBundle:Product:import.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
         ]);

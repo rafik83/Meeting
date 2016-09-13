@@ -14,10 +14,11 @@ use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\OrderByType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,45 +48,58 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $orderBy = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
+        $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
-        $orderByForm = $this->createForm(
-            OrderByType::class,
-            $orderBy,
-            ['action' => $this->generateUrl('event_catalog_index')]
+        $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+        foreach ($typeViews as $typeView) {
+            if ($typeView->count > 0) {
+                $filters['type'][] = $typeView;
+            }
+        }
+
+        $searchForm = $this->get('form.factory')->createNamed(
+            '',
+            SearchType::class,
+            $filters,
+            [
+                'action'    => $this->generateUrl('event_catalog_index'),
+                'typeViews' => $typeViews,
+            ]
         );
-        $ordered     = $orderByForm->handleRequest($request) && $orderByForm->isValid();
 
-        if ($ordered) {
-            $orderBy = $orderByForm->getData();
+        $filtered = $searchForm->handleRequest($request) && $searchForm->isValid();
+
+        if ($filtered) {
+            $filters = $searchForm->getData();
         }
 
         try {
-            $query = new PaginatedCatalogSheetPreviewViewQuery(
+            $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
                 $event,
-                [],
-                [$orderBy['orderBy']],
+                $filters,
                 $request->query->getInt('page', 1),
                 100,
                 $request->getLocale()
             );
-            $paginatedResult = $this->get('tactician.commandbus.query')->handle($query);
+            $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
 
+        $template = 'EventBundle:Catalog:index.html.twig';
+
         if ($request->isXmlHttpRequest()) {
-            return $this->render('EventBundle:Catalog:list.html.twig', [
-                'paginatedResult' => $paginatedResult,
-            ]);
+            $template = 'EventBundle:Catalog:catalog.html.twig';
         }
 
-        return $this->render('EventBundle:Catalog:index.html.twig', [
+        return $this->render($template, [
             'event'           => $event,
             'sheet'           => $sheet,
             'isCatalog'       => true,
+            'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
-            'orderByForm'     => $orderByForm->createView(),
+            'searchForm'      => $searchForm->createView(),
         ]);
     }
 

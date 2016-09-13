@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOptionHandler;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -70,9 +71,16 @@ class UpdateOptionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
+
+        $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
+        $updatePriceResolver->resolve($option)->shouldBeCalled();
         
         // Handler
-        $handler = new UpdateOptionHandler($productRepository->reveal(), $fileStorage->reveal());
+        $handler = new UpdateOptionHandler(
+            $productRepository->reveal(),
+            $updatePriceResolver->reveal(),
+            $fileStorage->reveal()
+        );
         $handler->handle($updateOptionCommand);
     }
 }

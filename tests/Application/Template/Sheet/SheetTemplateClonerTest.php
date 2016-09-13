@@ -18,10 +18,11 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
+use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
@@ -45,17 +46,19 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             ]
-        ], ['fr'], 'fr', $dateTime);
+        ], ['fr'], 'fr', $dateTime, [], $event);
 
         $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateDataFactory     = $this->prophesize(TemplateDataFactory::class);
         $nomenclatureCloner      = $this->prophesize(NomenclatureCloner::class);
+        $templateRemoveField     = $this->prophesize(TemplateRemoveField::class);
 
         $cloner = new SheetTemplateCloner(
             $sheetTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $nomenclatureCloner->reveal(),
-            $dateTime
+            $dateTime,
+            $templateRemoveField->reveal()
         );
 
         $clone = new SheetTemplate('clone', [
@@ -73,20 +76,9 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             ]
-        ], ['fr'], 'fr', $dateTime);
-        $clone->setEvent($event);
+        ], ['fr'], 'fr', $dateTime, [], $event);
 
-        $templateData = new TemplateData('root', [], 'fr', 'fr');
-        $block        = new Block('12', [], 'fr', 'fr');
-        $block->addChild(0, 'azerty', new EditableText('69b3cde1', 'editable-text', [], 'fr', 'fr'));
-        $templateData->addChild(0, 'poiuyt', $block);
-
-        $templateDataFactory->createFromTemplate(Argument::that(function (SheetTemplate $sheetTemplate) use ($clone) {
-            $this->assertEquals($clone->getTitle(), $sheetTemplate->getTitle());
-            $this->assertEquals($clone->getValue(), $sheetTemplate->getValue());
-
-            return true;
-        }))->shouldBeCalled()->willReturn($templateData);
+        $templateRemoveField->remove()->shouldNotBeCalled();
 
         $nomenclatureCloner->duplicate()->shouldNotBeCalled();
         $nomenclatureCloner->duplicateIfNotExists()->shouldNotBeCalled();
@@ -128,12 +120,14 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
         $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
         $templateDataFactory     = $this->prophesize(TemplateDataFactory::class);
         $nomenclatureCloner      = $this->prophesize(NomenclatureCloner::class);
+        $templateRemoveField     = $this->prophesize(TemplateRemoveField::class);
 
         $cloner = new SheetTemplateCloner(
             $sheetTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $nomenclatureCloner->reveal(),
-            $dateTime
+            $dateTime,
+            $templateRemoveField->reveal()
         );
 
         $clone = new SheetTemplate('clone', [
@@ -168,6 +162,25 @@ class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
 
             return true;
         }))->shouldBeCalled()->willReturn($templateData);
+
+        $templateRemoveField->remove($clone, 'products', [])->shouldBeCalled()->willReturn([
+            'poiuyt' => [
+                'component' => 'block',
+                'type'      => '12',
+                'config'    => [],
+                'children'  => [
+                    [
+                        'azerty' => [
+                            'component' => 'object',
+                            'type'      => 'nomenclature',
+                            'config'    => [
+                                'nomenclature' => null
+                            ],
+                        ]
+                    ],
+                ]
+            ]
+        ]);
 
         $nomenclatureCloner->duplicate()->shouldNotBeCalled();
         $nomenclatureCloner->duplicateIfNotExists($nomenclature, $event)->shouldBeCalled()->willReturn($nomenclatureClone);
