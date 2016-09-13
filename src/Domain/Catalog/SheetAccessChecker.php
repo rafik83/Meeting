@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Catalog;
 
-use Proximum\Vimeet\Domain\Exception\Catalog\SheetAccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetAccessChecker

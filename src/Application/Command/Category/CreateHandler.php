@@ -61,7 +61,7 @@ class CreateHandler
                 throw new \Exception('Type id not found for this event');
             }
 
-            $category->getTypes()[$typeId] = $eventTypes[$typeId];
+            $category->setType($eventTypes[$typeId], $typeId);
         }
 
         $this->categoryRepository->add($category);

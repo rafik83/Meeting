@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
-use Proximum\Vimeet\Domain\Exception\Catalog\SheetAccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\CategoryView;
@@ -229,6 +228,7 @@ class CatalogController extends Controller
     private function getVisiblesTypes(Event $event, $locale)
     {
         $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+
         return $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
     }
 

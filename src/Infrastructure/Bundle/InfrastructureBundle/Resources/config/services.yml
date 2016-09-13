@@ -1851,7 +1851,6 @@ services:
         class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes
         arguments:
             - '@vimeet_infrastructure.repository.rule_repository'
-            - '@vimeet_infrastructure.repository.category_repository'
 
     catalog.sheet_access_checker:
         class: Proximum\Vimeet\Domain\Catalog\SheetAccessChecker

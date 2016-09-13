@@ -23,20 +23,11 @@ class VisibleParticipationTypes
     private $ruleRepository;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @param RuleRepositoryInterface $ruleRepository
      */
-    private $categoryRepository;
-
-    /**
-     * @param RuleRepositoryInterface     $ruleRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
-    public function __construct(
-        RuleRepositoryInterface $ruleRepository,
-        CategoryRepositoryInterface $categoryRepository
-    ) {
+    public function __construct(RuleRepositoryInterface $ruleRepository)
+    {
         $this->ruleRepository = $ruleRepository;
-        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -51,7 +42,7 @@ class VisibleParticipationTypes
 
         $rules = $this->ruleRepository->getByEvent($sheet->getEvent());
 
-        $filteredTypes = array_filter($rules, function (Rule $rule) use ($type) {
+        $filteredRules = array_filter($rules, function (Rule $rule) use ($type) {
             if ($rule->getSeerType() == $type) {
                 return true;
             }
@@ -59,16 +50,13 @@ class VisibleParticipationTypes
         });
 
         foreach ($rules as $rule) {
-            if (!empty($rule->getSeerCategory())) {
-                foreach ($rule->getSeerCategory()->getTypes() as $categoryType) {
-                    if ($categoryType == $type) {
-                        $filteredTypes[] = $rule;
-                    }
-                }
+
+            if (!empty($rule->getSeerCategory()) && in_array($type, $rule->getSeerCategory()->getTypes())) {
+                $filteredTypes[] = $rule;
             }
         }
 
-        foreach ($filteredTypes as $rule) {
+        foreach ($filteredRules as $rule) {
 
             if (!empty($rule->getSeeableCategory())) {
                 foreach ($rule->getSeeableCategory()->getTypes() as $categoryType) {
