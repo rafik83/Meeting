@@ -1,0 +1,79 @@
+{{ form_start(searchForm) }}
+
+<div class="catalog__research">
+    {{ include('EventBundle:Catalog:checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+
+    {#
+    <form>
+        <div class="filter">
+            <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-2"
+                aria-expanded="false" aria-controls="collapse-2">Objectifs</h3>
+
+            <div class="collapse" id="collapse-2">
+                <ul>
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label"><input type="checkbox" checked="checked">Répondre à mes besoins</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label"><input type="checkbox">Rechercher mes offres</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label"><input type="checkbox">Autres</span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="filter">
+            <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-3"
+                aria-expanded="false" aria-controls="collapse-3">Structures</h3>
+
+            <div class="collapse" id="collapse-3">
+            </div>
+        </div>
+        <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>
+    </form>
+    #}
+
+    {#
+    <div class="actions">
+        <ul>
+            <li><a href=""><i class="icon-Rechercher"></i> <span>Enregistrer la recherche</span></a></li>
+            <li><a href=""><i class="icon-Retard"></i> <span>Créer une alerte</span></a></li>
+            <li><a href=""><i class="icon-Inserer_2"></i> <span>Format de données .csv</span></a></li>
+            <li><a href=""><i class="icon-Document_1"></i> <span>Fiches complètes .pdf</span></a></li>
+        </ul>
+    </div>
+    #}
+</div>
+
+<div class="catalog__filters">
+
+    <div class="select-all">
+        ({{ total }})
+        {#
+        <label class="checkbox-inline" for="select-all-catalog">
+            <input type="checkbox" id="select-all-catalog">
+            Tout sélectionner (40)
+        </label>
+        #}
+    </div>
+
+    <div class="sort">
+        {{ include('EventBundle:Catalog:order-by-form.html.twig', { form: searchForm.orderBy }, false) }}
+
+        {#
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default active"><i class="icon-Mosaique"></i></button>
+            <button type="button" class="btn btn-default"><i class="icon-Liste"></i></button>
+        </div>
+        #}
+    </div>
+</div>
+
+{{ form_end(searchForm) }}

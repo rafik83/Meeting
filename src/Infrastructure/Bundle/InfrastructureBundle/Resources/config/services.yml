@@ -1694,6 +1694,13 @@ services:
             - '@sheet.preview'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+    query.type.catalog_type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery }
 
     ##
     # Navigation builder
@@ -1775,7 +1782,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
              - '@fos_elastica.finder.app.sheet'
-             - '@vimeet_infrastructure.repository.sheet_repository'
+             - '@fos_elastica.index.app.sheet'
 
     #
     # Command

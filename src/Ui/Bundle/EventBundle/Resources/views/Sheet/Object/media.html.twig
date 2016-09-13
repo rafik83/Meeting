@@ -1,4 +1,3 @@
-
 <section id="object-{{ uid }}" class="object object--media section">
     <header>
         <h2>{{ item.label(locale, fallback) }}</h2>
@@ -17,9 +16,9 @@
             {% endfor %}
         </ul>
     </div>
-    <footer>
-        {% if isCatalog is not defined or isCatalog == false %}
+    {% if not isCatalog %}
+        <footer>
             <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
-        {% endif %}
-    </footer>
+         </footer>
+    {% endif %}
 </section>
