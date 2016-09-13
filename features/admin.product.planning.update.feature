@@ -13,9 +13,9 @@ Feature: Handle Update Product
       | Admins.yml                                                               |
     Given I am logged with "test2@test.com" on admin
     And I go to this page "/admin/fr/event"
-    Then I go to this page "/admin/fr/event/1/product/4/update/planning"
-    And I should see "form.product_update_planning.children.name.label"
-    Then I fill in the following:
+    When I go to this page "/admin/fr/event/1/product/4/update/planning"
+    Then I should see "form.product_update_planning.children.name.label"
+    And I fill in the following:
       | form.product_update_planning.children.name.label    | PlanningTitleModify |
     And I press "product_update_planning_submit"
     Then I should be on this page "/admin/fr/event/1/product"
@@ -23,5 +23,5 @@ Feature: Handle Update Product
 
   Scenario: I see my updated product
     Given I am logged with "test2@test.com" on admin
-    And I go to this page "/admin/fr/event/1/product/4/update/planning"
+    When I go to this page "/admin/fr/event/1/product/4/update/planning"
     Then the "form.product_update_planning.children.name.label" field should contain "PlanningTitleModify"

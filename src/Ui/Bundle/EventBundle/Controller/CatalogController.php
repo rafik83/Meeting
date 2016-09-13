@@ -41,6 +41,12 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
