@@ -78,6 +78,36 @@ class Account
     private $gender;
 
     /**
+     * @var string
+     */
+    private $companyAddress;
+
+    /**
+     * @var string
+     */
+    private $companyPhone;
+
+    /**
+     * @var string
+     */
+    private $companyZipCode;
+
+    /**
+     * @var string
+     */
+    private $companyCity;
+
+    /**
+     * @var string
+     */
+    private $companyCountry;
+
+    /**
+     * @var string
+     */
+    private $companyWebsite;
+
+    /**
      * @return string
      */
     public function getFirstName()
@@ -283,6 +313,102 @@ class Account
     public function setGender($gender)
     {
         $this->gender = $gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyAddress()
+    {
+        return $this->companyAddress;
+    }
+
+    /**
+     * @param string $companyAddress
+     */
+    public function setCompanyAddress($companyAddress)
+    {
+        $this->companyAddress = $companyAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyPhone()
+    {
+        return $this->companyPhone;
+    }
+
+    /**
+     * @param string $companyPhone
+     */
+    public function setCompanyPhone($companyPhone)
+    {
+        $this->companyPhone = $companyPhone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyZipCode()
+    {
+        return $this->companyZipCode;
+    }
+
+    /**
+     * @param string $companyZipCode
+     */
+    public function setCompanyZipCode($companyZipCode)
+    {
+        $this->companyZipCode = $companyZipCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyCity()
+    {
+        return $this->companyCity;
+    }
+
+    /**
+     * @param string $companyCity
+     */
+    public function setCompanyCity($companyCity)
+    {
+        $this->companyCity = $companyCity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyCountry()
+    {
+        return $this->companyCountry;
+    }
+
+    /**
+     * @param string $companyCountry
+     */
+    public function setCompanyCountry($companyCountry)
+    {
+        $this->companyCountry = $companyCountry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyWebsite()
+    {
+        return $this->companyWebsite;
+    }
+
+    /**
+     * @param string $companyWebsite
+     */
+    public function setCompanyWebsite($companyWebsite)
+    {
+        $this->companyWebsite = $companyWebsite;
     }
 
     /**
