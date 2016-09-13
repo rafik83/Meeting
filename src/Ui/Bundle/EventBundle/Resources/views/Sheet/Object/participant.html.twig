@@ -1,29 +1,45 @@
-
 <section id="object-{{ uid }}" class="object object--participant {{ 'style--' ~ item.style }} section section--list">
     <header>
         <h2>{{ item.label(locale, fallback) }}</h2>
     </header>
     <div class="section__content">
         <div class="list list--users">
-            {% for participant in participants.cardViews %}
-                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
-            {% endfor %}
+            {% if not isCatalog %}
+                {% for participant in participants.cardViews %}
+                    {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog }) }}
+                {% endfor %}
+            {% else %}
+                {% for participant in participants.cardViews %}
+                    {% if loop.index0 < item.numberOfParticipantShown %}
+                        {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog}) }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
         </div>
     </div>
-    {% if sheet.canBuyParticipant %}
-    <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal">
-        <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
-    </a>
-    {% else %}
-        <div class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="{{ 'sheet.maxParticipantReached'|trans }}">
+
+    {% if not isCatalog %}
+        {% if sheet.canBuyParticipant %}
+            <a href="{{ path('event_sheet_add_participant', { 'locale': locale, 'key': uid }) }}" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal">
             <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
-        </div>
+        </a>
+        {% else %}
+            <div class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="{{ 'sheet.maxParticipantReached'|trans }}">
+                <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
+            </div>
+        {% endif %}
     {% endif %}
-    <footer>
-        {% if participants.cardViews|length > 1 %}
+
+    {% if not isCatalog and participants.cardViews|length > 1 %}
+        <footer>
             <a href="{{ path('event_sheet_remove_participant', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
             </a>
-        {% endif %}
-    </footer>
+        </footer>
+    {% endif %}
+
+    {% if isCatalog and userSheet != sheet %}
+        <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
+    {% endif %}
 </section>

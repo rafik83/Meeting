@@ -25,7 +25,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingReque
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -98,25 +97,39 @@ class MeetingRequestController extends Controller
     /**
      * Create a meeting request between two sheet
      *
-     * @param Request      $request
-     * @param EventDomain    $eventDomain
-     * @param CategoryView $categoryView
-     * @param Sheet        $to
-     * @param Sheet        $from
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
      * @return RedirectResponse|Response
      */
-    public function createRequestAction(Request $request, EventDomain $eventDomain, CategoryView $categoryView, Sheet $to, Sheet $from)
+    public function createRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate($this->getUser(), $from, $to)) {
+        $event = $eventDomain->getEvent();
+
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
+            throw $this->createNotFoundException();
+        }
+
+        $from = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
+        if (!$from->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate($this->getUser(), $from, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to create this meeting request.');
         }
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
-        $createRequest = new CreateRequest($from, $to, new \DateTime(), $this->getUser());
+        $createRequest = new CreateRequest($from, $sheet, new \DateTime(), $this->getUser());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'sheet'  => $from,
             'locale' => $request->getLocale(),
@@ -126,13 +139,13 @@ class MeetingRequestController extends Controller
             $this->get('tactician.commandbus')->handle($createRequest);
             $this->addFlash('success', 'flash.meeting_request.create.success');
 
-            return $this->redirectToRoute('event_catalog_category', ['categoryView' => $categoryView->id]);
+            return $this->redirectToRoute('event_catalog_complete_sheet', ['sheet' => $sheet->getId()]);
         }
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
             'event'    => $eventDomain->getEvent(),
             'fromName' => $sheetInfoGuesser->guessSheetName($from, $request->getLocale()),
-            'toName'   => $sheetInfoGuesser->guessSheetName($to, $request->getLocale()),
+            'toName'   => $sheetInfoGuesser->guessSheetName($sheet, $request->getLocale()),
             'form'     => $form->createView(),
         ]);
     }

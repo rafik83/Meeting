@@ -8,7 +8,7 @@
             {% for tag in item.tags %}
                 <li><a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >{{ tag['label']|localize(locale, fallback) }} : {{ taggedData[tag.tag]|default([])|join(', ') }}</a></li>
             {% endfor %}
-            
+
             {% if item.collectionEnabled %}
                 {% for list_item in item.data['items']|default([]) %}
                     <li>{{ list_item['title']|localize(locale, fallback) }}</li>
@@ -16,7 +16,7 @@
             {% endif %}
         </ul>
     </div>
-    {% if item.collectionEnabled %}
+    {% if item.collectionEnabled and not isCatalog %}
         <footer>
             <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
         </footer>
