@@ -242,7 +242,8 @@ class TypeRepository implements TypeRepositoryInterface
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->where('type.event = :event')
             ->setParameter('event', $event)
-            ->setParameter('locale', $locale);
+            ->setParameter('locale', $locale)
+            ->orderBy('type.position');
 
         return array_map(
             function ($type) {

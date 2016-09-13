@@ -1129,6 +1129,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
 
+    command.rule.see_what_handler:
+        class: Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler
+        arguments:
+            - '@repository.rule_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rule\SeeWhat }
+
     command.product.import.import_handler:
         class: Proximum\Vimeet\Application\Command\Product\Import\ImportHandler
         arguments:
@@ -1138,13 +1145,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Import\Import }
-
-    command.rule.see_what_handler:
-        class: Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler
-        arguments:
-            - '@repository.rule_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rule\SeeWhat }
 
     #
     # Security
@@ -1233,16 +1233,12 @@ services:
             - '@template.template_data_factory'
 
     #
-    # Rule Component
+    # Rule
     #
     domain.rule.tag_identifier:
         class: Proximum\Vimeet\Domain\Rule\TagIdentifier
         arguments:
             - '@template.template_data_factory'
-
-    #
-    # Rule
-    #
     domain.rule.rule_sorter:
         class: Proximum\Vimeet\Domain\Rule\RuleSorter
     domain.rule.composer:
@@ -1704,6 +1700,13 @@ services:
             - '@query.sheet.catalog_sheet_preview_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+    query.type.catalog_type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery }
 
     ##
     # Navigation builder
@@ -1785,7 +1788,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
              - '@fos_elastica.finder.app.sheet'
-             - '@vimeet_infrastructure.repository.sheet_repository'
+             - '@fos_elastica.index.app.sheet'
 
     #
     # Command

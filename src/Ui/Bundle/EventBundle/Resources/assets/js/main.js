@@ -11,7 +11,7 @@ var $                     = require('jquery'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     ShowMore              = require('./components/_ShowMore'),
-    CatalogOrderBy        = require('./components/_CatalogOrderBy'),
+    CatalogFilters        = require('./components/_CatalogFilters'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
@@ -44,19 +44,21 @@ function init (target) {
         });
     });
 
-    $('.display-catalog-research').on('click', function (e) {
+    $('.display-catalog-research', target).on('click', function (e) {
+        $(this).toggleClass('btn-active');
+        $(this).toggleClass('btn-inactive');
         $('.catalog').toggleClass('catalog--advanced');
     });
 
-    $('.catalog .sort form', target).each(function (key, form) {
-        new CatalogOrderBy(form, target.querySelector('.catalog__list'));
+    $('.catalog form input', target).on('change', function (event) {
+        this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
     });
 
-    $('.dropdown-menu').on('click', function (e) {
+    $('.dropdown-menu', target).on('click', function (e) {
         e.stopPropagation();
     });
 
-    $('.navigation__close').on('click', function (e) {
+    $('.navigation__close', target).on('click', function (e) {
         $('.navigation').toggleClass('open');
     });
 
@@ -74,7 +76,7 @@ function init (target) {
         }.bind(this))
     ;
 
-    $('.show-modal').modal('show');
+    $('.show-modal', target).modal('show');
 
     [].forEach.call(target.querySelectorAll('select[data-parent]'), function (element) {
         new SelectParent(element)
@@ -121,7 +123,7 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.row-quantity'), function (element) {
-        new QuantitySelector(element, document.querySelector('object--nomenclature'));
+        new QuantitySelector(element);
     });
 
     [].forEach.call(target.querySelectorAll('.object--nomenclature'), function (element) {

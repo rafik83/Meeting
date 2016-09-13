@@ -57,7 +57,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $sheets = $this->sheetSearchAdapter->find(
             $query->event,
             array_merge(['inCatalog' => true], $query->filters),
-            $query->orderBy,
+            $query->filters['orderBy'],
             $query->page,
             $query->limit,
             $query->locale

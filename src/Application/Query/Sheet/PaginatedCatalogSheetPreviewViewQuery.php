@@ -26,11 +26,6 @@ class PaginatedCatalogSheetPreviewViewQuery
     public $filters;
 
     /**
-     * @var array
-     */
-    public $orderBy;
-
-    /**
      * @var int
      */
     public $page;
@@ -53,17 +48,15 @@ class PaginatedCatalogSheetPreviewViewQuery
     /**
      * @param Event  $event
      * @param array  $filters
-     * @param array  $orderBy
      * @param int    $page
      * @param int    $limit
      * @param string $locale
      * @param Sheet  $viewer
      */
-    public function __construct(Event $event, array $filters, array $orderBy, $page, $limit, $locale, Sheet $viewer)
+    public function __construct(Event $event, array $filters, $page, $limit, $locale, Sheet $viewer)
     {
         $this->event   = $event;
         $this->filters = $filters;
-        $this->orderBy = $orderBy;
         $this->page    = $page;
         $this->limit   = $limit;
         $this->locale  = $locale;

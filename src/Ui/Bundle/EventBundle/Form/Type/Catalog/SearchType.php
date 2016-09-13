@@ -11,12 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OrderByType extends AbstractType
+class SearchType extends AbstractType
 {
     /**
      * {@inheridoc}
@@ -25,11 +26,24 @@ class OrderByType extends AbstractType
     {
         $builder
             ->add('orderBy', ChoiceType::class, [
+                'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
-                    'form.catalog_order_by.order.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
-                    'form.catalog_order_by.order.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
+                    'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
+                    'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
+            ])
+            ->add('type', ChoiceType::class, [
+                'label'        => 'form.search.type.label',
+                'expanded'     => true,
+                'multiple'     => true,
+                'choices'      => $options['typeViews'],
+                'choice_value' => function (TypeView $typeView) {
+                    return $typeView->id;
+                },
+                'choice_label' => function (TypeView $typeView) {
+                    return $typeView->title;
+                },
             ]);
     }
 
@@ -38,6 +52,7 @@ class OrderByType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['typeViews']);
         $resolver->setDefaults([
             'required'        => false,
             'method'          => 'GET',
@@ -50,6 +65,6 @@ class OrderByType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'catalog_order_by';
+        return 'catalog_search';
     }
 }

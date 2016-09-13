@@ -219,6 +219,7 @@
   background: #FFFFFF;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, .3);
   transition: left 0.5s ease-in-out;
+  margin-left: -20px;
 
   > form {
     margin-bottom: 20px;
@@ -239,17 +240,19 @@
       font-size: 18px;
       padding-left: 22px;
 
-      &.collapsed {
-        &:before {
-          content: "\78";
-        }
-      }
-
       &:before {
         position: absolute;
         left: 0;
         font-family: 'PictoOutline' !important;
-        content: "\6c";
+        content: "\78";
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
     }
   }
@@ -260,6 +263,11 @@
 
     .checkbox-inline {
       width: 100%;
+      padding-top: 0;
+    }
+
+    .checkbox-inline.count_zero {
+      color: #9B9B9B;
     }
 
     .filter-label {
