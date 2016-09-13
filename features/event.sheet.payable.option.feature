@@ -22,7 +22,7 @@ Feature: Select payable option in sheet
     When I attach the file "dummy-image-test.jpg" to "sheet_image_data_file"
     And I check radio "sheet_image_data_selectedProduct_6"
     And I press "sheet_image_data_submit"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
     And I should not see "Ajouter un logo"
     When I follow "object-image-edit"
     And I should see "sheet.object.image.remove"
@@ -37,7 +37,7 @@ Feature: Select payable option in sheet
     And I should see "sheet.object.option.buyable.label"
     And I check radio "sheet_media_collection_data_selectedProduct_9"
     When I press "form.sheet_media_collection_data.children.submit.label"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
     When I follow "sheet.object.action.edit \"Médias\""
     Then The radio "sheet_media_collection_data_selectedProduct_9" should be checked
 
@@ -75,7 +75,7 @@ Feature: Select payable option in sheet
     And I should see "sheet.object.option.buyable.label"
     And I check radio "sheet_image_data_selectedProduct_5"
     And I press "form.sheet_image_data.children.submit.label"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
     When I follow "object-image-edit"
     Then The radio "sheet_image_data_selectedProduct_5" should be checked
 
@@ -87,7 +87,7 @@ Feature: Select payable option in sheet
     Then the response status code should be 200
     And I check radio "sheet_media_collection_data_selectedProduct_12"
     When I press "form.sheet_media_collection_data.children.submit.label"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
     When I follow "sheet.object.action.edit \"Médias\""
     Then The radio "sheet_media_collection_data_selectedProduct_12" should be checked
 

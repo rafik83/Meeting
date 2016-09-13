@@ -3,9 +3,9 @@
         {% if item.option('type') == 'title' %}
             <header>
                 {% if item.tag %}
-                    <h2>{{ item.data['text'][locale]|default(taggedData[item.tag]|join(', ')) }}</h2>
+                    <h2>{{ item.content(locale)|default(taggedData[item.tag]|join(', ')) }}</h2>
                 {% else %}
-                    <h2>{{ item.data['text'][locale]|default(item.label(locale, fallback)) }}</h2>
+                    <h2>{{ item.content|default(item.label(locale, fallback)) }}</h2>
                 {% endif %}
             </header>
         {% elseif item.option('type') == 'text' %}
@@ -15,7 +15,11 @@
         {% endif %}
     {% endif %}
     {% if item.option('type') == 'text' %}
-        <p>{{ item.data['text'][locale]|default|nl2br }}</p>
+        {% if item.isTranslatable %}
+            <p>{{ item.content(locale)|default|nl2br }}</p>
+        {% else %}
+            <p>{{ item.content|default|nl2br }}</p>
+        {% endif %}
     {% endif %}
 
     {% if not isCatalog %}
