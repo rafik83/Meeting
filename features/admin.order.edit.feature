@@ -1,5 +1,7 @@
 @admin
-
+@order
+@product
+@package
 Feature: Edit an order
   As an Admin, I need to be able to edit an order, add custom rows, edit them and remove them
 
