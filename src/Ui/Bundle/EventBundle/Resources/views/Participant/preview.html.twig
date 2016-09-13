@@ -1,13 +1,14 @@
+{% set isCatalog = isCatalog|default(false) %}
 <div class="user clearfix">
     <div class="user__avatar">
         <span class="bullet"></span>
-        {% if participant.editable and null != participant.sheetId %}
+        {% if not isCatalog and participant.editable and null != participant.sheetId %}
             <a href="{{ path('event_account_participant', {sheet: participant.sheetId, participant: participant.id}) }}">
                 <div class="avatar">
                     {% if participant.avatar != null %}
                         <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
                     {% else %}
-                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
+                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
                     {% endif %}
                 </div>
             </a>
@@ -16,7 +17,7 @@
                 {% if participant.avatar != null %}
                     <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
                 {% else %}
-                    <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.firstname|first|upper }}{{ participant.lastname|first|upper }}</p>
+                    <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
                 {% endif %}
             </div>
         {% endif %}
@@ -24,7 +25,7 @@
     <div class="user__infos">
         <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
         <p class="job">{{ participant.position }}</p>
-        {% if editAvatar is defined and editAvatar == true %}
+        {% if not isCatalog and editAvatar is defined and editAvatar == true %}
             {% for key, avatar in avatarTemplate %}
                 <a class="edit" href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">
                     <i class="icon-Image"></i> {{ 'account.profile.updateAvatar'|trans }}

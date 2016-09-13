@@ -11,9 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\View\Sheet\CatalogSheetPreviewView;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -31,31 +28,23 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private $sheetSearchAdapter;
 
     /**
-     * @var SheetInfoGuesser
+     * @var CatalogSheetPreviewViewQueryHandler
      */
-    private $sheetInfoGuesser;
+    private $catalogSheetPreviewViewQueryHandler;
 
     /**
-     * @var Preview
-     */
-    private $preview;
-
-    /**
-     * @param SheetRepositoryInterface    $sheetRepository
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     * @param SheetInfoGuesser            $sheetInfoGuesser
-     * @param Preview                     $preview
+     * @param SheetRepositoryInterface            $sheetRepository
+     * @param SheetSearchAdapterInterface         $sheetSearchAdapter
+     * @param CatalogSheetPreviewViewQueryHandler $catalogSheetPreviewViewQueryHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        SheetInfoGuesser $sheetInfoGuesser,
-        Preview $preview
+        CatalogSheetPreviewViewQueryHandler $catalogSheetPreviewViewQueryHandler
     ) {
-        $this->sheetRepository    = $sheetRepository;
-        $this->sheetSearchAdapter = $sheetSearchAdapter;
-        $this->sheetInfoGuesser   = $sheetInfoGuesser;
-        $this->preview            = $preview;
+        $this->sheetRepository                     = $sheetRepository;
+        $this->sheetSearchAdapter                  = $sheetSearchAdapter;
+        $this->catalogSheetPreviewViewQueryHandler = $catalogSheetPreviewViewQueryHandler;
     }
 
     /**
@@ -68,7 +57,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $sheets = $this->sheetSearchAdapter->find(
             $query->event,
             array_merge(['inCatalog' => true], $query->filters),
-            $query->orderBy,
+            $query->filters['orderBy'],
             $query->page,
             $query->limit,
             $query->locale
@@ -78,12 +67,10 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
 
         $sheets->results = array_map(
             function (Sheet $sheet) use ($query) {
-                return new CatalogSheetPreviewView(
-                    $sheet->getId(),
-                    $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
-                    $sheet->getType()->getTitle($query->locale),
-                    $this->preview->getPreview($sheet, $query->locale)
-                );
+                return $this
+                    ->catalogSheetPreviewViewQueryHandler
+                    ->handle(new CatalogSheetPreviewViewQuery($sheet, $query->locale, $query->viewer))
+                    ;
             },
             $sheets->results
         );

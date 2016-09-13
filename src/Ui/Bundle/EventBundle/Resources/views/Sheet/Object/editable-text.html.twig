@@ -1,12 +1,11 @@
-
 <section id="object-{{ uid }}" class="object object--editable-text {{ 'style--' ~ item.style }}">
     {% if true != item.hideLabel|default %}
         {% if item.option('type') == 'title' %}
             <header>
                 {% if item.tag %}
-                    <h2>{{ item.data['text'][locale]|default(taggedData[item.tag]|join(', ')) }}</h2>
+                    <h2>{{ item.content(locale)|default(taggedData[item.tag]|join(', ')) }}</h2>
                 {% else %}
-                    <h2>{{ item.data['text'][locale]|default(item.label(locale, fallback)) }}</h2>
+                    <h2>{{ item.content|default(item.label(locale, fallback)) }}</h2>
                 {% endif %}
             </header>
         {% elseif item.option('type') == 'text' %}
@@ -16,10 +15,17 @@
         {% endif %}
     {% endif %}
     {% if item.option('type') == 'text' %}
-        <p>{{ item.data['text'][locale]|default|nl2br }}</p>
+        {% if item.isTranslatable %}
+            <p>{{ item.content(locale)|default|nl2br }}</p>
+        {% else %}
+            <p>{{ item.content|default|nl2br }}</p>
+        {% endif %}
     {% endif %}
 
-    <footer>
-        <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
-    </footer>
+    {% if not isCatalog %}
+        <footer>
+            <i class="icon-Note_2"></i>
+            <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
+        </footer>
+    {% endif %}
 </section>

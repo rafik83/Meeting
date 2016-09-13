@@ -53,6 +53,11 @@ class CardView
     public $sheetId;
 
     /**
+     * @var string
+     */
+    public $initials;
+
+    /**
      * @param int    $id
      * @param bool    $editable
      * @param string $firstname
@@ -72,5 +77,6 @@ class CardView
         $this->avatar    = $avatar;
         $this->owner     = $owner;
         $this->sheetId   = $sheetId;
+        $this->initials  = sprintf('%s%s', strtoupper(substr($firstname, 0, 1)), strtoupper(substr($lastname, 0, 1)));
     }
 }

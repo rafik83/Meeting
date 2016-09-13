@@ -1,0 +1,15 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}[{{ event.title }}] {{ 'admin.rule.see-what.title'|trans({'%seer%': seer.title(locale), '%seeable%': seeable.title(locale)}) }}{% endblock %}
+
+{% block form_title  'who.see_who_but_dont_see'|trans({
+'%seer%': ('who.the.' ~ seer.identifier)|trans ~ ' "' ~ seer.getTitle(locale) ~ '"',
+'%seeable%': ('who.the.' ~ seeable.identifier)|trans ~ ' "' ~ seeable.getTitle(locale) ~ '"'
+})|capitalize %}
+
+{% block form_content %}
+    {{ form_row(form.seeWhat) }}
+{% endblock %}
+
+
+{% block goback_link path('admin_rule_list', {'event': event.id}) %}

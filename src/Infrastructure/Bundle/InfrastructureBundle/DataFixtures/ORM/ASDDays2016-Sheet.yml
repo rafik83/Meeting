@@ -39,6 +39,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             3ad4b72f: { text: "Elao" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        inCatalog: true
+        inCatalogAt: <dateTime()>
     sheet_asddays_empty:
         __construct: false
         type: '@event_asddays_2016_type_fournisseur'
@@ -50,6 +52,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             3ad4b72f: { text: "Hello World Company" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        inCatalog: true
+        inCatalogAt: <dateTime()>
     sheet_asddays_empty_with_tag:
         __construct: false
         type: '@event_asddays_2016_type_investisseur'
@@ -61,6 +65,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             3ad4b72f: { text: "World Company Inc" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        inCatalog: true
+        inCatalogAt: <dateTime()>
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_asddays_1:

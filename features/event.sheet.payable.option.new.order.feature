@@ -22,7 +22,7 @@ Feature: Select payable option in sheet
     When I attach the file "dummy-image-test.jpg" to "sheet_image_data_file"
     And I check radio "sheet_image_data_selectedProduct_6"
     And I press "sheet_image_data_submit"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
     When I go to this page "/fr/sheet/1/package/step/1"
     Then I check radio "plans_plan_1"
     When I press "package.plans.validate"
@@ -75,7 +75,7 @@ Feature: Select payable option in sheet
     And I should see "sheet.object.option.buyable.label"
     And I check radio "sheet_media_collection_data_selectedProduct_9"
     When I press "form.sheet_media_collection_data.children.submit.label"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
 
   Scenario: I can see my new payable option "Option E" in my package
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"

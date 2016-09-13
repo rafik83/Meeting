@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 
 class SheetSearchQueryBuilder
 {
@@ -190,12 +191,25 @@ class SheetSearchQueryBuilder
      */
     protected function filterByType(array &$filters)
     {
-        if (isset($filters['type']) && $filters['type'] instanceof Type) {
-            $matchType = new Match();
-            $matchType
-                ->setField('type', $filters['type']->getId());
+        if (isset($filters['type'])) {
+            if ($filters['type'] instanceof Type) {
+                $matchType = new Match();
+                $matchType->setField('type', $filters['type']->getId());
+                $this->query->addMust($matchType);
 
-            $this->query->addMust($matchType);
+            } elseif (is_array($filters['type'])) {
+                $filterByTypes = new BoolQuery();
+
+                foreach ($filters['type'] as $type) {
+                    if ($type instanceof TypeView) {
+                        $filterByTypes->addShould(new Match('type', $type->id));
+                    }
+                }
+
+                $this->query->addMust($filterByTypes);
+            }
+
+
         }
     }
 

@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Rule;
+
+class ComposedRule
+{
+    /**
+     * @var array
+     */
+    public $tags;
+
+    /**
+     * @param string $tag
+     */
+    public function addTag($tag)
+    {
+        $this->tags[] = $tag;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return ComposedRule
+     */
+    public function removeFromTags($key)
+    {
+        if (isset($this->tags[$key])) {
+            unset($this->tags[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $tagToCheck
+     *
+     * @return bool
+     */
+    public function isPresent($tagToCheck)
+    {
+        foreach ($this->tags as $tag) {
+            if ($tagToCheck === $tag) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

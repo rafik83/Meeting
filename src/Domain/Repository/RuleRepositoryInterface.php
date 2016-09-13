@@ -59,4 +59,11 @@ interface RuleRepositoryInterface
      * @param Rule $rule
      */
     public function remove(Rule $rule);
+
+    /**
+     * @param Rule $rule
+     *
+     * @return Rule
+     */
+    public function update(Rule $rule);
 }

@@ -230,7 +230,9 @@ class Nomenclature
     {
         $items = $this->getItems();
 
-        self::sort($items, $locale);
+        if ($this->sort) {
+            self::sort($items, $locale);
+        }
 
         return $items;
     }
@@ -424,18 +426,20 @@ class Nomenclature
     /**
      * Count the number of items per column
      *
+     * @param string $locale
+     *
      * @return array
      */
-    public function getLevelsArchitecture()
+    public function getLevelsArchitecture($locale)
     {
         $levelsArchitecture = [];
 
         if ($this->depth >= 2) {
             if (2 === $this->depth) {
-                $levelsArchitecture = $this->buildArchitectureLevel($this, $levelsArchitecture, null);
+                $levelsArchitecture = $this->buildArchitectureLevel($this, $levelsArchitecture, $locale, null);
             } else {
-                foreach ($this->getFirstLevel() as $firstLevelKey => $firstLevel) {
-                    $levelsArchitecture = $this->buildArchitectureLevel($firstLevel, $levelsArchitecture, $firstLevelKey);
+                foreach ($this->getFirstLevelSorted($locale) as $firstLevelKey => $firstLevel) {
+                    $levelsArchitecture = $this->buildArchitectureLevel($firstLevel, $levelsArchitecture, $locale, $firstLevelKey);
                 }
             }
         }
@@ -450,7 +454,7 @@ class Nomenclature
      *
      * @return array
      */
-    private function buildArchitectureLevel($currentLevel, $levelsArchitecture, $firstLevelKey = null)
+    private function buildArchitectureLevel($currentLevel, $levelsArchitecture, $locale, $firstLevelKey = null)
     {
         $itemsByColumn  = [
             1 => [
@@ -487,8 +491,8 @@ class Nomenclature
         $elementToAssign['elements']        = $itemsByColumn;
         $elementToAssign['numberOfColumns'] = 3;
 
-        foreach ($currentLevel->getChildren() as $secondLevel) {
-            $numberOfChildren = count($secondLevel->getChildren());
+        foreach ($currentLevel->getChildrenSorted($locale) as $secondLevel) {
+            $numberOfChildren = count($secondLevel->getChildrenSorted($locale));
 
             if ($elementToAssign['elements'][$currentColumn]['items'] > $numberByColumn) {
                 $currentColumn++;

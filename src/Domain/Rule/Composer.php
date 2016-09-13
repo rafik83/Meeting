@@ -1,0 +1,51 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Rule;
+
+use Proximum\Vimeet\Domain\Rule\Exception\NoRuleException;
+
+class Composer
+{
+    /**
+     * @var RuleSorter
+     */
+    private $ruleSorter;
+
+    /**
+     * @param RuleSorter $ruleSorter
+     */
+    public function __construct(RuleSorter $ruleSorter)
+    {
+        $this->ruleSorter = $ruleSorter;
+    }
+
+    /**
+     * @param array $rules
+     *
+     * @return ComposedRule
+     * @throws NoRuleException
+     */
+    public function compose(array $rules)
+    {
+        $composedRule = new ComposedRule();
+
+        $this->ruleSorter->sort($rules);
+
+        if (empty($rules)) {
+            throw new NoRuleException('No rule found.');
+        }
+
+        $rule = reset($rules);
+        $composedRule->tags = $rule->getWhat();
+
+        return $composedRule;
+    }
+}

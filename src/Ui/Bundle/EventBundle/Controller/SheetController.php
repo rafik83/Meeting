@@ -93,43 +93,6 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return Sheet
-     */
-    private function getUserSheet(Event $event, $locale)
-    {
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetsByUserAndEvent($this->getUser(), $event);
-
-        if (empty($sheets)) {
-            throw $this->createNotFoundException('Sheet not found.');
-        }
-
-        $sheet = $sheets[array_keys($sheets)[0]];
-
-        if (!$sheet instanceof Sheet) {
-            throw $this->createNotFoundException('Sheet not found.');
-        }
-
-        if ($sheet->getEvent() !== $event) {
-            throw $this->createNotFoundException('Sheet not found');
-        }
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createNotFoundException('No participant for this user is attached on this sheet');
-        }
-
-        if (!$event->hasLocale($locale)) {
-            throw $this->createNotFoundException('Locale not available for this event.');
-        }
-
-        return $sheet;
-    }
-
-    /**
      * Render the form of an object. Loaded by ajax from the sheet.
      *
      * @param EventDomain $eventDomain
@@ -234,7 +197,7 @@ class SheetController extends Controller
             $depth        = $nomenclature->getDepth();
 
             if (2 === $depth || 3 === $depth) {
-                $levelsArchitecture = $nomenclature->getLevelsArchitecture();
+                $levelsArchitecture = $nomenclature->getLevelsArchitecture($locale);
             }
         }
 
@@ -249,26 +212,31 @@ class SheetController extends Controller
         $form = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($object instanceof Template\TemplateObject\Image) {
-                $file = $form->get('file')->getData();
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                if ($object instanceof Template\TemplateObject\Image) {
+                    $file = $form->get('file')->getData();
 
-                if ($file instanceof UploadedFile) {
-                    $image       = $object->getImage();
-                    $fileStorage = $this->get('adapter.local_file_storage');
+                    if ($file instanceof UploadedFile) {
+                        $image       = $object->getImage();
+                        $fileStorage = $this->get('adapter.local_file_storage');
 
-                    if (null !== $image) {
-                        $fileStorage->remove($image);
+                        if (null !== $image) {
+                            $fileStorage->remove($image);
+                        }
+
+                        $newImage = $fileStorage->upload($file);
+                        $object->setImage($newImage);
                     }
-
-                    $newImage = $fileStorage->upload($file);
-                    $object->setImage($newImage);
                 }
+
+                $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
+
+                return $this->redirectToRoute('event_sheet_locale', ['locale' => $locale]);
+            } else {
+                // If the form is not valid, re-render the templateData
+                $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
             }
-
-            $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
-
-            return $this->redirectToRoute('event_sheet');
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
@@ -567,6 +535,17 @@ class SheetController extends Controller
             'uid'           => $key,
             'participants'  => $participants,
         ]);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Sheet
+     */
+    private function getUserSheet(Event $event, $locale)
+    {
+        return $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
     }
 
     /**

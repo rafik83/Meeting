@@ -120,6 +120,13 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: form.type }
+    form_type_rule.see_what_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule\SeeWhatType
+        arguments:
+            - '@domain.rule.tag_identifier'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
 
     form_type_product.abstract_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
