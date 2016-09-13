@@ -30,6 +30,7 @@ framework:
         name:            vimeet
         gc_probability:  ~
         cookie_lifetime: 86400
+        gc_maxlifetime: 86400
     fragments:       ~
     http_method_override: true
     assets: ~
