@@ -58,20 +58,13 @@ class UpdateHandler
             }
 
             if (!in_array($eventTypes[$typeId], $category->getTypes(), true)) {
-                $category->getTypes()[] = $eventTypes[$typeId];
+                $category->addType($eventTypes[$typeId]);
             }
         }
 
         // Remove Type
         foreach ($category->getTypes() as $type) {
-            if (!in_array($type->getId(), $update->types)) {
-
-                $key = array_search($type, $category->getTypes(), true);
-
-                if ($key === true) {
-                    unset($category->getTypes()[$key]);
-                }
-            }
+            $category->removeType($type);
         }
 
         $this->categoryRepository->set($category);
