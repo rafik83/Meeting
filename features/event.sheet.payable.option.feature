@@ -1,4 +1,4 @@
-@event @sheet @package
+@event @sheet @package @product @order
 Feature: Select payable option in sheet
 
   Scenario: I can select "Option chaise" payable option for my image object

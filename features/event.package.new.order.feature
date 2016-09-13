@@ -1,5 +1,7 @@
 @event
 @package
+@order
+@product
 Feature: Edit my package
   I need to be able to edit my package after a first order
 
