@@ -50,7 +50,7 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
-                                <label class="form-label">{{ 'template.media.placeholder.title'|trans }}</label>
+                                <label class="form-label">{{ 'template.media.placeholder.link'|trans }}</label>
                                 <input class="form-control" type="text" name="linkPlaceholder" />
                                 {% if fallback|default(false) and locale != fallback %}
                                     <div class="help-block">{{ fallback|locale }} : {{ config.linkPlaceholder[fallback] }}</div>

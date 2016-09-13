@@ -12,11 +12,14 @@ namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
+use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandler
 {
@@ -36,18 +39,26 @@ class UpdateHandler
     private $fileStorage;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param EventRepositoryInterface $eventRepository
      * @param Generator                $guidelinesGenerator
      * @param FileStorageInterface     $fileStorage
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         Generator $guidelinesGenerator,
-        FileStorageInterface $fileStorage
+        FileStorageInterface $fileStorage,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->eventRepository     = $eventRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
         $this->fileStorage         = $fileStorage;
+        $this->eventDispatcher     = $eventDispatcher;
     }
 
     /**
@@ -58,7 +69,8 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $colorUpdated = $update->isColorsUpdated();
+        $colorUpdated     = $update->isColorsUpdated();
+        $isLocalesUpdated = $update->isLocalesUpdated();
 
         if ($update->domain !== $update->event->getDomain()
             && null !== $this->eventRepository->getEventByDomain($update->domain)
@@ -87,6 +99,7 @@ class UpdateHandler
             $this->fileStorage->remove($toRemove);
         }
 
+
         $this->updateTranslatons($update);
 
         if ($colorUpdated) {
@@ -94,6 +107,11 @@ class UpdateHandler
         }
 
         $this->eventRepository->set($event);
+
+        if ($isLocalesUpdated) {
+            $localeChangedEvent = new LocaleChangedEvent($event);
+            $this->eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $localeChangedEvent);
+        }
     }
 
     /**

@@ -163,3 +163,14 @@ services:
         class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
         arguments:
             - '@twig.extension.intl'
+
+    #
+    # Subscriber
+    #
+    event_listener.locale_changed_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LocaleChangedEventSubscriber
+        arguments:
+            - '@repository.template.sheet_template_repository'
+            - '@repository.template.registration_template_repository'
+        tags:
+            - { name: kernel.event_subscriber }

@@ -231,7 +231,7 @@ class SheetTemplateController extends Controller
         ]);
 
         // Add locale form
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+        if (null === $template->getEvent() && $this->isGranted('ROLE_SUPER_ADMIN')) {
             $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($template), [
                 'action'   => $this->generateUrl('admin_template_sheet_add_locale', ['template' => $template->getId()]),
                 'submit'   => true,
