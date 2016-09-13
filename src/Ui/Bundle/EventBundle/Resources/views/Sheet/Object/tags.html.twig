@@ -1,4 +1,3 @@
-
 <section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
     <header>
         <h2>{{ item.label(locale, fallback) }}{% if item.required|default(false) %}*{% endif %}</h2>
@@ -6,7 +5,24 @@
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}
-                <li><a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >{{ tag['label']|localize(locale, fallback) }} : {{ taggedData[tag.tag]|default([])|join(', ') }}</a></li>
+                <li>
+                    {% if not isCatalog %}
+                        <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >
+                    {% endif %}
+
+                    {{ tag['label']|localize(locale, fallback) }} :
+                    {% if tag.tag in ["sheet_country", "participant_country"] %}
+                        {% for taggedInfo in taggedData[tag.tag]|default([]) %}
+                            {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ taggedData[tag.tag]|default([])|join(', ') }}
+                    {% endif %}
+
+                    {% if not isCatalog %}
+                        </a>
+                    {% endif %}
+                </li>
             {% endfor %}
 
             {% if item.collectionEnabled %}

@@ -20,7 +20,11 @@
                 <h2>{{ label }}</h2>
             </header>
             <div class="section__content">
-                <p>{{ value }}</p>
+                {% if item.tag in ["sheet_country", "participant_country"] %}
+                    <p>{{ value|country }}</p>
+                {% else %}
+                    <p>{{ value }}</p>
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
