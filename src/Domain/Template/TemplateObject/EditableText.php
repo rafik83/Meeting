@@ -43,7 +43,7 @@ class EditableText extends EditableObject implements ContentObjectInterface
     public function setContent($content)
     {
         if ($this->isTranslatable()) {
-            if (is_array($this->data['text'])) {
+            if (isset($this->data['text']) && is_array($this->data['text'])) {
                 $this->data['text'][$this->locale] = $content;
             } else {
                 $this->data['text'] = [];
