@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class VisibleParticipationTypes
@@ -52,7 +51,7 @@ class VisibleParticipationTypes
         foreach ($rules as $rule) {
 
             if (!empty($rule->getSeerCategory()) && in_array($type, $rule->getSeerCategory()->getTypes())) {
-                $filteredTypes[] = $rule;
+                $filteredRules[] = $rule;
             }
         }
 
