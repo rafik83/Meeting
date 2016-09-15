@@ -982,6 +982,18 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 tags: ["sheet_country", "sheet_data"]
+                        57da9df7ced30:
+                            component: "object"
+                            type: "boolean"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Êtes vous candidat?"
+                                    en: "Are you candidate?"
+                                filter:
+                                    label: "Est candidat"
+                                required: true
+                                tags: ["sheet_data"]
     registration_template_asd_days_in_one_step:
         __construct: false
         event: '@event_asddays_2016'
