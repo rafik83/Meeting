@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
@@ -41,6 +42,8 @@ class CompanyType extends AbstractType
                 $this->addUrl($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Country) {
                 $this->addCountry($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\TemplateObject\BooleanObject) {
+                $this->addBoolean($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -87,6 +90,25 @@ class CompanyType extends AbstractType
             'label'  => false,
             'locale' => $locale,
             'object' => $object,
+        ]);
+    }
+
+    /**
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     */
+    private function addBoolean(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject $object,
+        $locale
+    ) {
+        $builder->add($key, BooleanDataType::class, [
+            'object'  => $object,
+            'locale'  => $locale,
+            'label'   => false,
         ]);
     }
 
