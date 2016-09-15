@@ -64,7 +64,9 @@ class UpdateHandler
 
         // Remove Type
         foreach ($category->getTypes() as $type) {
-            $category->removeType($type);
+            if (!in_array($type->getId(), $update->types)) {
+                $category->removeType($type);
+            }
         }
 
         $this->categoryRepository->set($category);
