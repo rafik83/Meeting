@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class PaginatedCatalogSheetPreviewViewQuery
 {
@@ -40,18 +41,25 @@ class PaginatedCatalogSheetPreviewViewQuery
     public $locale;
 
     /**
+     * @var Sheet
+     */
+    public $viewer;
+
+    /**
      * @param Event  $event
      * @param array  $filters
      * @param int    $page
      * @param int    $limit
      * @param string $locale
+     * @param Sheet  $viewer
      */
-    public function __construct(Event $event, array $filters, $page, $limit, $locale)
+    public function __construct(Event $event, array $filters, $page, $limit, $locale, Sheet $viewer)
     {
         $this->event   = $event;
         $this->filters = $filters;
         $this->page    = $page;
         $this->limit   = $limit;
         $this->locale  = $locale;
+        $this->viewer  = $viewer;
     }
 }

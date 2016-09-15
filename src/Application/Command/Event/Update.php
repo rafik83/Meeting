@@ -62,4 +62,14 @@ class Update extends AbstractEvent
             $this->rightColor !== $this->event->getConfiguration()->getRightColor() ||
             $this->textColor  !== $this->event->getConfiguration()->getTextColor();
     }
+
+    /**
+     * @return bool
+     */
+    public function isLocalesUpdated()
+    {
+        return
+            $this->locales !== $this->event->getLocales() ||
+            $this->fallback !== $this->event->getFallback();
+    }
 }

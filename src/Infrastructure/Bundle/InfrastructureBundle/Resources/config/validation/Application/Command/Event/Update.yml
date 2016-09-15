@@ -17,6 +17,9 @@ Proximum\Vimeet\Application\Command\Event\Update:
             - NotBlank: ~
         fallback:
             - NotBlank: ~
+            - Expression:
+                expression: "this.fallback in this.locales"
+                message: "validators.fallbackInLocales"
         country:
             - NotBlank: ~
         vat:

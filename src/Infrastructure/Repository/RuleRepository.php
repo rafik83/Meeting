@@ -97,7 +97,7 @@ class RuleRepository implements RuleRepositoryInterface
 
         $queryBuilder
             ->select('rule')
-            ->from('Entity:Rule', 'rule')
+            ->from(Rule::class, 'rule')
             ->where($queryBuilder->expr()->orX(
                 'rule.seerType = :seerType',
                 'rule.seerCategory IN (:seerCategories)'
@@ -147,6 +147,16 @@ class RuleRepository implements RuleRepositoryInterface
      * {@inheritdoc}
      */
     public function set(Rule $rule)
+    {
+        $this->entityManager->flush($rule);
+
+        return $rule;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Rule $rule)
     {
         $this->entityManager->flush($rule);
 

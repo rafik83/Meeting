@@ -169,21 +169,18 @@ admin_rule_list:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Rule:list }
 
-admin_who_see_who_dont_see_what:
-    path: /event/{event}/{seerIdentifier}/{seerId}/see/{seeableIdentifier}/{seeableId}/dont-see
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Rule:what }
-    requirements:
-        event: \d+
-        seerIdentifier: category|type
-        seerId: \d+
-        seeableIdentifier: category|type
-        seeableId: \d+
-
 admin_rule_delete:
     path: /event/{event}/who-see-who/{rule}/delete
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Rule:delete }
+
+admin_rule_see_what:
+    path: /event/{event}/who-see-who/see-what/{rule}
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Rule:seeWhat }
+    requirements:
+        event: \d+
+        rule: \d+
 
 #
 # Type

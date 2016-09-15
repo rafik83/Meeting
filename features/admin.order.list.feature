@@ -1,5 +1,7 @@
 @admin
-
+@product
+@package
+@order
 Feature: List and filter orders
   As an Admin, I need to be able to list and filter orders
 

@@ -18,6 +18,7 @@ require('select2');
 require('eonasdan-bootstrap-datetimepicker');
 require('moment/locale/fr');
 require('moment/locale/en-gb');
+require('./vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox');
 
 // Init function
 
@@ -146,6 +147,19 @@ function init(target) {
 
     // Prevent multiple submit on input type submit
     [].forEach.call(target.querySelectorAll('form'), function (element) { new PreventMultipleSubmit(element); });
+
+
+    [].forEach.call(target.querySelectorAll('[data-dual-list-box]'), function (element) {
+        var selectedListLabel = element.getAttribute('data-dual-list-box-selectedListLabel');
+        var nonSelectedListLabel = element.getAttribute('data-dual-list-box-nonSelectedListLabel');
+
+        $(element).bootstrapDualListbox({
+            infoText: false,
+            selectorMinimalHeight: 300,
+            selectedListLabel: selectedListLabel,
+            nonSelectedListLabel: nonSelectedListLabel
+        });
+    });
 }
 
 // Call init function when element is added to DOM

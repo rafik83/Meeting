@@ -17,7 +17,12 @@
 
             {% if isCatalog is not defined or isCatalog == false %}
                 <ul class="tabs">
-                    {% for event_locale in event.locales %}
+                    <li{% if locale == event.fallback %} class="active"{% endif %}>
+                        <a href="{{ path('event_sheet_locale', { 'locale': event.fallback }) }}">
+                            <span class="name">{{ event.fallback|locale }}*</span>
+                        </a>
+                    </li>
+                    {% for event_locale in event.locales if event_locale != event.fallback %}
                         <li{% if event_locale == locale %} class="active"{% endif %}>
                             <a href="{{ path('event_sheet_locale', { 'locale': event_locale }) }}">
                                 <span class="name">{{ event_locale|locale }}*</span>
@@ -40,7 +45,7 @@
                     'nomenclatures': nomenclatures,
                     'participants': participants,
                     'isCatalog': isCatalog|default(false),
-                    'userSheet': userSheet|default(false),
+                    'userSheet': userSheet|default(false)
                 }, false) }}
             {% endfor %}
         </div>

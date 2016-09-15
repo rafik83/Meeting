@@ -1,4 +1,5 @@
 @admin
+@product
 @package
 Feature: Handle Product
   I need to be able to create and list products of an event

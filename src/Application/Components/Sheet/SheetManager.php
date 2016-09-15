@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
-use Proximum\Vimeet\Application\Components\Rule\RuleManager;
-use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -19,7 +17,6 @@ use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\View\SheetCatalogView;
 use Proximum\Vimeet\Domain\View\SheetDataView;
 
 class SheetManager
@@ -28,11 +25,6 @@ class SheetManager
      * @var ParticipantRepositoryInterface
      */
     private $participantRepository;
-
-    /**
-     * @var RuleManager
-     */
-    private $ruleManager;
 
     /**
      * @var TypeRepositoryInterface
@@ -53,20 +45,17 @@ class SheetManager
      * SheetManager constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param RuleManager                    $ruleManager
      * @param TypeRepositoryInterface        $typeRepository
      * @param SheetRepositoryInterface       $sheetRepository
      * @param RequestRepositoryInterface     $requestRepository
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
-        RuleManager $ruleManager,
         TypeRepositoryInterface $typeRepository,
         SheetRepositoryInterface $sheetRepository,
         RequestRepositoryInterface $requestRepository
     ) {
         $this->participantRepository = $participantRepository;
-        $this->ruleManager           = $ruleManager;
         $this->typeRepository        = $typeRepository;
         $this->sheetRepository       = $sheetRepository;
         $this->requestRepository     = $requestRepository;
@@ -92,29 +81,6 @@ class SheetManager
             $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
             $this->participantRepository->getParticipantForUserAndSheet($user, $sheet),
             $sheet->getOrders()
-        );
-    }
-
-    /**
-     * @param User  $user
-     * @param Sheet $sheet
-     *
-     * @return SheetCatalogView
-     */
-    public function getSheetDataViewByUser(User $user, Sheet $sheet)
-    {
-        // Get rule
-        $rule = $this->ruleManager->getRule($sheet, $user);
-
-        // Apply rule
-        $this->ruleManager->apply($rule, $sheet, new SetNullStrategy());
-
-        return new SheetCatalogView(
-            $sheet->getId(),
-            $sheet->getData(),
-            [],
-            $sheet->getType()->getParticipantTemplate(),
-            $sheet->getParticipants()->toArray()
         );
     }
 

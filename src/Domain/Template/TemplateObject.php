@@ -120,6 +120,19 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @param string $keyTag
+     */
+    public function removeTag($keyTag)
+    {
+        if (isset($this->config['tags'])
+            && is_array($this->config['tags'])
+            && isset($this->config['tags'][$keyTag])
+        ) {
+            unset($this->config['tags'][$keyTag]);
+        }
+    }
+
+    /**
      * @param string      $locale
      * @param null|string $fallback
      *

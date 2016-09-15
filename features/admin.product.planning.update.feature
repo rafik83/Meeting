@@ -1,4 +1,6 @@
 @admin
+@package
+@product
 Feature: Handle Update Product
   I need to be able to update a planning of an event
 

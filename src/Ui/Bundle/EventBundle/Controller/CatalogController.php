@@ -10,14 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Components\Rule\Strategy\SetNullStrategy;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -42,8 +40,6 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
-        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
-        $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
         $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
 
         if (!$sheet->isInCatalog()) {
@@ -51,6 +47,9 @@ class CatalogController extends Controller
         }
 
         $visibleTypes = $this->getVisiblesTypes($event, $request->getLocale());
+        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
+        $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
+
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         foreach ($typeViews as $typeId => $typeView) {
@@ -85,7 +84,8 @@ class CatalogController extends Controller
                 $filters,
                 $request->query->getInt('page', 1),
                 100,
-                $request->getLocale()
+                $request->getLocale(),
+                $sheet
             );
             $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
         } catch (UnavailableCurrentPageException $exception) {
@@ -105,69 +105,6 @@ class CatalogController extends Controller
             'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
             'searchForm'      => $searchForm->createView(),
-        ]);
-    }
-
-    /**
-     * Display catalog categories of an event.
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
-    public function categoriesAction(Request $request, EventDomain $eventDomain)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
-        $categories = $this
-            ->get('vimeet_infrastructure.repository.category_repository')
-            ->getCategoryViewsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
-
-        return $this->render('EventBundle:Catalog:categories.html.twig', [
-            'event'      => $eventDomain->getEvent(),
-            'categories' => $categories,
-        ]);
-    }
-
-    /**
-     * Display sheets matching category.
-     *
-     * @param EventDomain  $eventDomain
-     * @param CategoryView $categoryView
-     *
-     * @return Response
-     */
-    public function categoryAction(EventDomain $eventDomain, CategoryView $categoryView)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
-        }
-
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->search($categoryView->id, $this->getUser());
-
-        array_walk($sheets, function (Sheet &$sheet) {
-            $rule = $this
-                ->get('vimeet_infrastructure.application.components.rule.manager')
-                ->getRule($sheet, $this->getUser());
-
-            $this
-                ->get('vimeet_infrastructure.application.components.rule.manager')
-                ->apply($rule, $sheet, new SetNullStrategy());
-        });
-
-        return $this->render('EventBundle:Catalog:category.html.twig', [
-            'event'        => $eventDomain->getEvent(),
-            'categoryView' => $categoryView,
-            'sheets'       => $sheets,
         ]);
     }
 
@@ -204,6 +141,14 @@ class CatalogController extends Controller
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
+        $rules = $this
+            ->get('repository.rule_repository')
+            ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType())
+        ;
+        $ruleApplyer = $this->get('domain.rule.applyer');
+        $ruleApplyer->applyRuleForTemplate($templateData, $rules);
+        $ruleApplyer->applyRuleForCardList($participants, $rules);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'         => $eventDomain->getEvent(),

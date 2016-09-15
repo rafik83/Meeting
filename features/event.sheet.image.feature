@@ -23,7 +23,7 @@ Feature: Upload and remove image
     When I attach the file "dummy-image-test.jpg" to "sheet_image_data_file"
     And I check radio "sheet_image_data_selectedProduct_6"
     And I press "sheet_image_data_submit"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/sheet/fr"
     And I should not see "Ajouter un logo"
 
   Scenario: I can remove my uploaded image on the sheet
