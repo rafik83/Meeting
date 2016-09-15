@@ -11,6 +11,14 @@
 
 @import "intl-tel-input/build/css/intlTelInput";
 
+.radio .required:after {
+  content: '';
+}
+
+.radio-inline.required:after {
+  content: '';
+}
+
 .required:after {
     content: '*';
 }
