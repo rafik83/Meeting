@@ -33,8 +33,8 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
     public static function getBooleanValues()
     {
         return [
-            true  => self::YES,
-            false => self::NO,
+            self::YES => true,
+            self::NO  => false,
         ];
     }
 
