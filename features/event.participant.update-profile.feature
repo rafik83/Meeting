@@ -52,13 +52,14 @@ Feature: Update participant profile
     When I go to this page "/fr/account/sheet/1/company"
     Then I should see "account.update.company.title"
     And I fill in the following:
-      | Nom (Société / Organisme) | Elao                  |
-      | Site internet             | https://www.elao.com  |
-      | Adresse                   | 10 rue Saint Marc     |
-      | Code postal               | 75002                 |
-      | Ville                     | Paris                 |
-    And I select "category1" from "company_97ed778d_item_first"
-    And I select "FR" from "company_e801edd4_country"
+      | Nom (Société / Organisme)       | Elao                 |
+      | Site internet                   | https://www.elao.com |
+      | Adresse                         | 10 rue Saint Marc    |
+      | Code postal                     | 75002                |
+      | Ville                           | Paris                |
+      | company[57da9df7ced30][boolean] | 1                    |
+      | company[e801edd4][country]      | FR                   |
+      | company[97ed778d][item][first]  | category1            |
     And I press "common.validate"
     Then I should be on this page "/fr/sheet"
     And I go to this page "/fr/account/sheet/1/participant/1"

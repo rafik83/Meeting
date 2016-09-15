@@ -21,12 +21,13 @@ Feature: Register with participant step
     Then I should see "Organisme"
     And I should see "register.step 3/3"
     And I fill in the following:
-      | Nom (Société / Organisme)    | Elao              |
-      | block[97ed778d][item][first] | category1         |
-      | Adresse                      | 10 rue Saint Marc |
-      | Code postal                  | 75002             |
-      | Ville                        | Paris             |
-      | block[e801edd4][country]     | FR                |
+      | Nom (Société / Organisme)     | Elao              |
+      | block[97ed778d][item][first]  | category1         |
+      | Adresse                       | 10 rue Saint Marc |
+      | Code postal                   | 75002             |
+      | Ville                         | Paris             |
+      | block[e801edd4][country]      | FR                |
+      | block[57da9df7ced30][boolean] | 1                 |
     When I press "register.finalize"
     Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com"
     Then I should be on this page "/fr/sheet"
