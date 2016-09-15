@@ -156,25 +156,29 @@ class SheetController extends Controller
 
         $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $locale);
 
-        $changeType = new ChangeType($sheet, $sheet->getType());
+        $changeTypeForm = null;
 
-        $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
-            'event'  => $event,
-            'type'   => $sheet->getType(),
-            'locale' => $locale,
-            'submit' => true,
-        ]);
+        if (count($this->get('vimeet_infrastructure.repository.type_repository')->getTypesByEvent($event)) > 1) {
+            $changeType = new ChangeType($sheet, $sheet->getType());
 
-        if ($changeTypeForm->handleRequest($request)->isSubmitted() && $changeTypeForm->isValid()) {
-            if (null !== $changeType->type) {
-                $this->get('tactician.commandbus')->handle($changeType);
-                $this->addFlash('success', 'flash.admin.sheet.change_type.success');
-            }
-
-            return $this->redirectToRoute('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
+            $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
+                'event'  => $event,
+                'type'   => $sheet->getType(),
+                'locale' => $locale,
+                'submit' => true,
             ]);
+
+            if ($changeTypeForm->handleRequest($request)->isSubmitted() && $changeTypeForm->isValid()) {
+                if (null !== $changeType->type) {
+                    $this->get('tactician.commandbus')->handle($changeType);
+                    $this->addFlash('success', 'flash.admin.sheet.change_type.success');
+                }
+
+                return $this->redirectToRoute('admin_sheet_details', [
+                    'event' => $event->getId(),
+                    'sheet' => $sheet->getId(),
+                ]);
+            }
         }
 
         $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
@@ -204,7 +208,7 @@ class SheetController extends Controller
             'sheetTypeTitle' => $sheet->getType()->getTitle($locale),
             'details'        => $details,
             'addCommentForm' => $addCommentForm->createView(),
-            'changeTypeForm' => $changeTypeForm->createView(),
+            'changeTypeForm' => $changeTypeForm === null ? null : $changeTypeForm->createView(),
         ]);
     }
 }
