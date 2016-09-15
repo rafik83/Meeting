@@ -76,6 +76,11 @@ class Order
     private $groupsData;
 
     /**
+     * @var boolean
+     */
+    private $cancelled;
+
+    /**
      * @param Sheet             $sheet
      * @param bool              $vatApplicable
      * @param Order\BillingInfo $billingInfo
@@ -562,6 +567,22 @@ class Order
         }
 
         return null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCancelled()
+    {
+        return $this->cancelled;
+    }
+
+    /**
+     * Set cancelled
+     */
+    public function setCancelled()
+    {
+        $this->cancelled = true;
     }
 
     /**

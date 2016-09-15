@@ -831,6 +831,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
     command.product.create_option_handler:

@@ -150,7 +150,10 @@
                             {% for order in details.orders %}
                                 <tr>
                                     <td>
-                                        {{ order.id }}
+                                        {{ order.numero }}
+                                        {% if order.cancelled %}
+                                            <span class="label label-danger">{{ 'admin.order.cancelled'|trans }}</span>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {{ order.createdAt|localizeddate('medium', 'short') }}
