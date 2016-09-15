@@ -202,13 +202,16 @@ class SheetController extends Controller
             ]);
         }
 
+        $impersonationToken = $this->get('security.impersonate')->getEncodedToken($this->getUser(), $sheet->getOwner());
+
         return $this->render('AdminBundle:Sheet:details.html.twig', [
-            'event'          => $event,
-            'sheet'          => $sheet,
-            'sheetTypeTitle' => $sheet->getType()->getTitle($locale),
-            'details'        => $details,
-            'addCommentForm' => $addCommentForm->createView(),
-            'changeTypeForm' => $changeTypeForm === null ? null : $changeTypeForm->createView(),
+            'event'              => $event,
+            'sheet'              => $sheet,
+            'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
+            'details'            => $details,
+            'addCommentForm'     => $addCommentForm->createView(),
+            'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
+            'impersonationToken' => $impersonationToken,
         ]);
     }
 }

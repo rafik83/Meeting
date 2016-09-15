@@ -30,6 +30,8 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="sheetDashboard">
                     <div class="row">
+                        {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
+
                         {% if details.owner.shouldBeDisplayed %}
                             <div class="col-md-4">
                                 <div class="panel panel-default">
@@ -41,6 +43,7 @@
                                         {{ details.owner.email }}<br>
                                         {{ 'admin.sheet.details.owner.mobile'|trans }}: {{ details.owner.mobile }}<br>
                                         {{ 'admin.sheet.details.owner.phone'|trans }}: {{ details.owner.phone }}<br>
+                                        <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -59,6 +62,10 @@
                                         {% for object in participant.templateData.getProfileObjects %}
                                             {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
                                         {% endfor %}
+
+                                        {% if participant.isOwner %}
+                                            <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
