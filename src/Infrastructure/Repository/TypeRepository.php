@@ -126,7 +126,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypeViewsByEvent(Event $event, $locale)
+    public function getTypeViewsByEvent(Event $event, $locale, Type $exceptedType = null)
     {
         $queryBuilder = $this
             ->entityManager
@@ -138,6 +138,12 @@ class TypeRepository implements TypeRepositoryInterface
             ->where('type.event = :event')
             ->setParameter('event', $event)
             ->orderBy('type.position');
+
+        if (null !== $exceptedType) {
+            $queryBuilder
+                ->andWhere('type != :exceptedType')
+                ->setParameter('exceptedType', $exceptedType);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

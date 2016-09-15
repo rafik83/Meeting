@@ -247,6 +247,8 @@ admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.category: Catégorie
+admin.sheet.change.type.link: Changer
+admin.sheet.change.type.title: 'Changer le type de participation'
 admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'

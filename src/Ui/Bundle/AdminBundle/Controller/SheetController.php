@@ -12,12 +12,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
@@ -154,9 +156,30 @@ class SheetController extends Controller
 
         $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $locale);
 
+        $changeType = new ChangeType($sheet, $sheet->getType());
+
+        $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
+            'event'  => $event,
+            'type'   => $sheet->getType(),
+            'locale' => $locale,
+            'submit' => true,
+        ]);
+
+        if ($changeTypeForm->handleRequest($request)->isSubmitted() && $changeTypeForm->isValid()) {
+            if (null !== $changeType->type) {
+                $this->get('tactician.commandbus')->handle($changeType);
+                $this->addFlash('success', 'flash.admin.sheet.change_type.success');
+            }
+
+            return $this->redirectToRoute('admin_sheet_details', [
+                'event' => $event->getId(),
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
 
-        $form = $this->createForm(CommentType::class, $addComment, [
+        $addCommentForm = $this->createForm(CommentType::class, $addComment, [
             'action' => $this->generateUrl('admin_sheet_details', [
                 'event' => $event->getId(),
                 'sheet' => $sheet->getId(),
@@ -165,7 +188,7 @@ class SheetController extends Controller
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        if ($addCommentForm->handleRequest($request)->isSubmitted() && $addCommentForm->isValid()) {
             $this->get('tactician.commandbus')->handle($addComment);
             $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
 
@@ -176,10 +199,12 @@ class SheetController extends Controller
         }
 
         return $this->render('AdminBundle:Sheet:details.html.twig', [
-            'event'   => $event,
-            'sheet'   => $sheet,
-            'details' => $details,
-            'form'    => $form->createView(),
+            'event'          => $event,
+            'sheet'          => $sheet,
+            'sheetTypeTitle' => $sheet->getType()->getTitle($locale),
+            'details'        => $details,
+            'addCommentForm' => $addCommentForm->createView(),
+            'changeTypeForm' => $changeTypeForm->createView(),
         ]);
     }
 }

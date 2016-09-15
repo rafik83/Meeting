@@ -827,6 +827,12 @@ services:
             - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveData }
+    command.sheet.change_type_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:

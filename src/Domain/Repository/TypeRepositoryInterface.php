@@ -43,10 +43,11 @@ interface TypeRepositoryInterface
     /**
      * @param Event  $event
      * @param string $locale
+     * @param Type   $exceptedType
      *
      * @return TypeView[]
      */
-    public function getTypeViewsByEvent(Event $event, $locale);
+    public function getTypeViewsByEvent(Event $event, $locale, Type $exceptedType = null);
 
     /**
      * @param int    $typeId

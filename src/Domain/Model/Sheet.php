@@ -644,4 +644,12 @@ class Sheet implements TraceableInterface
     {
         $this->inCatalogAt = $inCatalogAt;
     }
+
+    /**
+     * @param Type $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 }
