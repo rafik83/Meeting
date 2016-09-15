@@ -36,7 +36,7 @@ class ChangeTypeHandler
             return;
         }
 
-        $changeType->sheet->setType($changeType->type);
+        $changeType->sheet->updateType($changeType->type);
         $this->sheetRepository->set($changeType->sheet);
     }
 }

@@ -648,8 +648,15 @@ class Sheet implements TraceableInterface
     /**
      * @param Type $type
      */
-    public function setType($type)
+    public function updateType($type)
     {
+        if ($this->type === $type) {
+            return;
+        }
+
         $this->type = $type;
+
+        // Set state to pending when type changed
+        $this->state = self::STATE_PENDING;
     }
 }
