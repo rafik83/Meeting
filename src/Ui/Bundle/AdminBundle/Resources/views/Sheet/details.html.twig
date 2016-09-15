@@ -5,22 +5,23 @@
 
 {% block content %}
     <h1>
+        <a href="{{ path('admin_sheet', { event: event.id }) }}" class="btn btn-link btn-sm" data-toggle="tooltip" title="{{ 'admin.sheet.go_back_to_list'|trans }}"><span class="glyphicon glyphicon-list"></span></a>
         {{ details.title }}
-        <span class="label label-default">{{ ('event.sheet.state.' ~ details.state)|trans }}</span>
-        <span class="label label-{{ details.remainingToPay == 0 ? 'success' : 'danger' }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.remainingToPay'|trans }}">{{ details.remainingToPay|localizedcurrency(event.currency) }}</span>
+
+        <span class="label label-info">
+            {{ sheetTypeTitle }}
+            {% if changeTypeForm is not null %}
+                <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}"><span class="glyphicon glyphicon-edit"></span></a>
+            {% endif %}
+        </span><span class="label label-default">
+            {{ ('event.sheet.state.' ~ details.state)|trans }}
+        </span><span class="label label-{{ details.remainingToPay == 0 ? 'success' : 'danger' }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.remainingToPay'|trans }}">
+            {{ details.remainingToPay|localizedcurrency(event.currency) }}
+        </span>
     </h1>
 
     <div class="row">
         <div class="col-md-9">
-            <p>
-                {{ sheetTypeTitle }}
-                {% if changeTypeForm is not null %}
-                    <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}">
-                        <span class="glyphicon glyphicon-edit"></span>
-                    </a>
-                {% endif %}
-            </p>
-
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#sheetDashboard" aria-controls="home" role="tab" data-toggle="tab">{{ 'admin.sheet.details.dashboard.title'|trans }}</a></li>
                 <li role="presentation"><a href="#sheetOrders" aria-controls="profile" role="tab" data-toggle="tab">{{ 'admin.sheet.details.orders_and_transactions.title'|trans }}</a></li>
