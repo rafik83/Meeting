@@ -54,8 +54,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             help:
                                                 fr: "Télécharger un logo pour améliorer votre visibilité"
                                                 en: "Upload a logo to improve your impact"
-                                            length: null
-                                            type: null
                                             required: false
                                     6fe62a03:
                                         component: "block"
@@ -563,7 +561,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Adresse"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -579,7 +576,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Code postal"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -595,7 +591,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Ville"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -611,7 +606,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Pays"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
