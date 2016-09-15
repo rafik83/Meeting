@@ -37,7 +37,7 @@ class GenderDataType extends AbstractType
                 'expanded'     => true,
                 'multiple'     => false,
                 'label'        => $gender->getOption('label', $locale),
-                'required'     => true,
+                'required'     => $gender->getRequired(),
             ]);
     }
 
