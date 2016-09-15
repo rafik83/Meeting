@@ -255,18 +255,15 @@
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="sheetTraces">
-                    {% if details.traces|length > 0 %}
-                        <ul>
-                            {% for trace in details.traces %}
-                                <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
-                                    {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
-                                    {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-danger">{{ 'admin.zero-result'|trans }}</p>
-                    {% endif %}
+                    <ul>
+                        <li>{{ 'admin.sheet.createdAt'|trans }} {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</li>
+                        {% for trace in details.traces %}
+                            <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
+                                {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
+                                {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
