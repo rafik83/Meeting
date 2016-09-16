@@ -20,6 +20,7 @@ Feature: Register with participant step
     When I go to this page "/fr/participant/1/step/3"
     Then I should see "Organisme"
     And I should see "register.step 3/3"
+    And I should see "Ceci est une description"
     And I fill in the following:
       | Nom (Société / Organisme)    | Elao              |
       | block[97ed778d][item][first] | category1         |
