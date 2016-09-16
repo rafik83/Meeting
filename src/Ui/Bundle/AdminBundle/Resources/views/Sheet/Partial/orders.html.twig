@@ -10,6 +10,7 @@
                     <th>{{ 'admin.order.id'|trans }}</th>
                     <th>{{ 'admin.order.createdAt'|trans }}</th>
                     <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,6 +28,11 @@
                         <td class="text-right">
                             {{ order.total|localizedcurrency(order.currency) }}
                             {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
+                        </td>
+                        <td class="text-right">
+                            <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: order.id }) }}" class="btn btn-default btn-sm">
+                                {{ 'admin.order_edit.link'|trans }}
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
