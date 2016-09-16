@@ -15,6 +15,7 @@
                         <span class="steps">- {{ 'register.step'|trans }} {{ stepNumber }}/{{ stepsCount }}</span>
                     {% endif %}
                 </h1>
+                <p>{{ stepDescription|html }}</p>
             </header>
             <div class="main__content">
                 {{ form_start(form, {attr: {class: 'styled-form'}}) }}
