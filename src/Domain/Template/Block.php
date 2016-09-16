@@ -411,6 +411,22 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param $locale
+     *
+     * @return null|string
+     */
+    public function getDescription($locale)
+    {
+        foreach ($this->getObjects() as $object) {
+            if ($object instanceof TemplateObject\Text && !$object->isTitle()) {
+                return $object->getContent($locale);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function normalize()
