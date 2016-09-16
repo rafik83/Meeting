@@ -75,9 +75,9 @@ class Type implements WhoInterface
     private $package;
 
     /**
-     * @var
+     * @var bool
      */
-    private $hidden;
+    private $hidden = false;
 
     /**
      * Type constructor.
