@@ -16,7 +16,6 @@ Proximum\Vimeet\Domain\Model\Type:
             type: text
         hidden:
             type: boolean
-            nullable: true
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria
