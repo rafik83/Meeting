@@ -656,7 +656,10 @@ class Sheet implements TraceableInterface
 
         $this->type = $type;
 
-        // Set state to pending when type changed
+        // Set state to pending
         $this->state = self::STATE_PENDING;
+
+        // Remove from catalog
+        $this->setInCatalog(false);
     }
 }
