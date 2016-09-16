@@ -81,7 +81,9 @@ class TypeUpdateType extends AbstractType
                 'label'      => false,
             ])
             ->add('rank', IntegerType::class)
-            ->add('hidden', CheckboxType::class)
+            ->add('hidden', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])

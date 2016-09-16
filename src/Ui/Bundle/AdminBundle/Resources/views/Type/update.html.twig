@@ -17,7 +17,12 @@
         {{ form_row(form.package) }}
     {% endif %}
 
-    {{ form_row(form.hidden) }}
+    <div class="form-group">
+        {{ form_label(form.hidden, null, { label_attr: { class: 'control-label col-md-3' }}) }}
+        <div class="col-md-9 checkbox">
+            {{ form_widget(form.hidden) }}
+        </div>
+    </div>
 
     {{ form_row(form.rank, {widget_columns: 1}) }}
     {{ form_row(form.validationCriteria) }}
