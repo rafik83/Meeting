@@ -78,7 +78,7 @@ class Order
     /**
      * @var boolean
      */
-    private $cancelled;
+    private $cancelled = false;
 
     /**
      * @param Sheet             $sheet
@@ -104,6 +104,7 @@ class Order
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
         $this->promotionCodes = new ArrayCollection();
+        $this->cancelled      = false;
     }
 
     /**
