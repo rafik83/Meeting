@@ -10,34 +10,33 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
-use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GenderDataType extends AbstractType
+class BooleanDataType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Gender $gender */
-        $gender = $options['object'];
-        $locale = $options['locale'];
+        /** @var TemplateObject\BooleanObject $booleanObject */
+        $booleanObject = $options['object'];
+        $locale        = $options['locale'];
 
         $builder
-            ->add('gender', ChoiceType::class, [
-                'choices'      => Gender::getGenders(),
-                'choice_label' => function ($value) {
-                    return sprintf('gender.%s', $value);
+            ->add('boolean', ChoiceType::class, [
+                'choices'      => TemplateObject\BooleanObject::getBooleanValues(),
+                'choice_label' => function ($key, $value) {
+                    return sprintf('boolean.%s', $value);
                 },
                 'expanded'     => true,
                 'multiple'     => false,
-                'label'        => $gender->getOption('label', $locale),
-                'required'     => $gender->getRequired(),
+                'label'        => $booleanObject->getOption('label', $locale),
+                'required'     => $booleanObject->getRequired(),
             ]);
     }
 
@@ -47,10 +46,10 @@ class GenderDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['object', 'locale']);
-        $resolver->setAllowedTypes('object', TemplateObject\Gender::class);
+        $resolver->setAllowedTypes('object', TemplateObject\BooleanObject::class);
         $resolver->setDefaults([
             'label'      => true,
-            'data_class' => TemplateObject\Gender::class,
+            'data_class' => TemplateObject\BooleanObject::class,
         ]);
     }
 
@@ -59,6 +58,6 @@ class GenderDataType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'gender_data';
+        return 'boolean_object_data';
     }
 }

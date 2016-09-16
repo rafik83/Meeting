@@ -761,7 +761,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Téléphone portable"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -777,7 +776,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Téléphone fixe"
                                 help:
                                     fr: ""
-                                length: "25"
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -916,7 +914,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                length: ""
                                 required: false
                                 type: "text"
                                 translatable: false
@@ -935,7 +932,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -954,7 +950,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -973,7 +968,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -992,10 +986,39 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 tags: ["sheet_country", "sheet_data"]
+                        57da9df7ced30:
+                            component: "object"
+                            type: "boolean"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Êtes vous candidat?"
+                                    en: "Are you candidate?"
+                                filter:
+                                    label: "Est candidat"
+                                required: true
+                                tags: ["sheet_data"]
+                        57da8f210fbf2:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Décrivez votre activité"
+                                    en: "Explain your company"
+                                placeholder:
+                                    fr: "Votre activité"
+                                    en: "Activity"
+                                help:
+                                    fr: ""
+                                    en: ""
+                                maxLength: 300
+                                required: true
+                                type: "textarea"
+                                tags: ["sheet_data"]
     registration_template_asd_days_in_one_step:
         __construct: false
         event: '@event_asddays_2016'
@@ -1086,7 +1109,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                  help:
                                      fr: ""
                                      en: ""
-                                 length: ""
                                  required: true
                                  type: "text"
                                  translatable: false

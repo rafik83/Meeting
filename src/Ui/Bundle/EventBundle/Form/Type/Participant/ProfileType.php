@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\GenderDataType;
@@ -38,6 +39,8 @@ class ProfileType extends AbstractType
                 $this->addGender($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Nomenclature) {
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\TemplateObject\BooleanObject) {
+                $this->addBoolean($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Telephone) {
                 $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
             } elseif ($object instanceof Template\TemplateObject\Country) {
@@ -90,6 +93,25 @@ class ProfileType extends AbstractType
             'object' => $object,
             'locale' => $locale,
             'label'  => false,
+        ]);
+    }
+
+    /**
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     */
+    private function addBoolean(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject $object,
+        $locale
+    ) {
+        $builder->add($key, BooleanDataType::class, [
+            'object'  => $object,
+            'locale'  => $locale,
+            'label'   => false,
         ]);
     }
 

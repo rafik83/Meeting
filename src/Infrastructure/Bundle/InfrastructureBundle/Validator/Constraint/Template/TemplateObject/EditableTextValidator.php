@@ -44,7 +44,9 @@ class EditableTextValidator extends TemplateObjectValidator
      */
     protected function checkMinLength(TemplateObject $object, Constraint $constraint)
     {
-        if ($constraint instanceof EditableTextConstraint && $object instanceof TemplateObject\EditableText && $object->hasMinLength()) {
+        if ($constraint instanceof EditableTextConstraint
+            && $object instanceof TemplateObject\EditableText && $object->hasMinLength()
+        ) {
             $this->validateAt($constraint->getPath(), $object->getContentValue(), new Length([
                 'min' => $object->getMinLength(),
             ]));
@@ -56,7 +58,9 @@ class EditableTextValidator extends TemplateObjectValidator
      */
     protected function checkMaxLength(TemplateObject $object, Constraint $constraint)
     {
-        if ($constraint instanceof EditableTextConstraint && $object instanceof TemplateObject\EditableText && $object->hasMaxLength()) {
+        if ($constraint instanceof EditableTextConstraint
+            && $object instanceof TemplateObject\EditableText && $object->hasMaxLength()
+        ) {
             $this->validateAt($constraint->getPath(), $object->getContentValue(), new Length([
                 'max' => $object->getMaxLength(),
             ]));

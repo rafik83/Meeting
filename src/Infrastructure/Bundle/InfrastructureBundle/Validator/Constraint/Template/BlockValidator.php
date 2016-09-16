@@ -12,28 +12,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Domain\Template\Block;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
-class BlockValidator extends ConstraintValidator
+class BlockValidator extends ParticipantDataValidator
 {
-    private $objects = [
-        'button-link'   => TemplateObjectConstraint::class,
-        'choice'        => TemplateObjectConstraint::class,
-        'collection'    => TemplateObjectConstraint::class,
-        'editable-text' => TemplateObject\EditableTextConstraint::class,
-        'image'         => TemplateObjectConstraint::class,
-        'media'         => TemplateObjectConstraint::class,
-        'nomenclature'  => TemplateObject\NomenclatureConstraint::class,
-        'participant'   => TemplateObjectConstraint::class,
-        'tag'           => TemplateObjectConstraint::class,
-        'text'          => TemplateObjectConstraint::class,
-        'carousel'      => TemplateObjectConstraint::class,
-        'telephone'     => TemplateObject\TelephoneConstraint::class,
-        'country'       => TemplateObject\CountryConstraint::class,
-        'url'           => TemplateObject\UrlConstraint::class,
-        'gender'        => TemplateObject\GenderConstraint::class,
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -46,7 +27,7 @@ class BlockValidator extends ConstraintValidator
         $validator = $this->context->getValidator()->inContext($this->context);
 
         foreach ($value->getEditableObjects() as $key => $object) {
-            $class      = $this->objects[$object->getType()];
+            $class      = $this->objectsConstraint[$object->getType()];
             $constraint = new $class(['key' => $key]);
             $validator->validate($object, $constraint, ['block', 'Default']);
         }

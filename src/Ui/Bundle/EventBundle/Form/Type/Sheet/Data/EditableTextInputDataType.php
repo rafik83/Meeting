@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,23 +21,61 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EditableTextInputDataType extends AbstractType
 {
     /**
+     * @var TranslatorAdapter
+     */
+    private $translator;
+
+    /**
+     * @param TranslatorAdapter $translator
+     */
+    public function __construct(TranslatorAdapter $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var TemplateObject\EditableText $text */
         $text   = $options['object'];
         $locale = $options['locale'];
-        $attr   = $text->getOption('maxLength') ? ['maxlength' => $text->getOption('maxLength')] : [];
+        $attr   = $text->hasMaxLength() ? ['maxlength' => $text->getMaxLength()] : [];
 
-        $builder
-            ->add('content', TextType::class, [
-                'label'              => $text->getOption('label', $locale),
-                'required'           => $text->getOption('required'),
-                'placeholder'        => $text->getOption('placeholder')[$locale],
-                'attr'               => $attr,
-                'translation_domain' => false,
-            ])
-        ;
+        if ($text->isTextarea()) {
+            $attr['rows'] = $options['rows'];
+
+            if ($text->hasMaxLength()) {
+                $attr['data-text-max-length-indicator']    = $text->getMaxLength();
+                $attr['data-text-max-length-translations'] = sprintf(
+                    '%s|%s|%s',
+                    $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.plural', [], 'forms', $locale),
+                    $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.singular', [], 'forms', $locale),
+                    $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.reached', [], 'forms', $locale)
+                );
+            }
+
+            $builder
+                ->add('content', TextareaType::class, [
+                    'placeholder'        => $text->getOption('placeholder', $locale),
+                    'label'              => $text->getOption('label', $locale),
+                    'attr'               => $attr,
+                    'required'           => $text->getOption('required'),
+                    'translation_domain' => false,
+                ])
+            ;
+        } else {
+            $builder
+                ->add('content', TextType::class, [
+                    'label'              => $text->getOption('label', $locale),
+                    'required'           => $text->getOption('required'),
+                    'placeholder'        => $text->getOption('placeholder', $locale),
+                    'attr'               => $attr,
+                    'translation_domain' => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -46,7 +86,8 @@ class EditableTextInputDataType extends AbstractType
         $resolver->setRequired(['object', 'locale']);
         $resolver->setAllowedTypes('object', TemplateObject\EditableText::class);
         $resolver->setDefaults([
-            'data_class' => TemplateObject\EditableText::class
+            'data_class' => TemplateObject\EditableText::class,
+            'rows'       => 7,
         ]);
     }
 
