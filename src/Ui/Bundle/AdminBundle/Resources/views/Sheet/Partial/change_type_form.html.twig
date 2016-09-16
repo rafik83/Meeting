@@ -1,0 +1,28 @@
+{% if changeTypeForm is not null %}
+    {{ form_start(changeTypeForm) }}
+    <div class="modal fade" id="changeType" tabindex="-1" role="dialog" aria-labelledby="changeTypeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="changeTypeLabel">{{ 'admin.sheet.change.type.title'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            {{ form_label(changeTypeForm.type) }}
+                            {{ form_errors(changeTypeForm.type) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(changeTypeForm.type) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ form_row(changeTypeForm.submit) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(changeTypeForm) }}
+{% endif %}

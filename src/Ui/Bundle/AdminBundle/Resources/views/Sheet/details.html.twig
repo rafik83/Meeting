@@ -1,5 +1,4 @@
 {% extends 'AdminBundle::base.html.twig' %}
-{% import 'AdminBundle::macro.html.twig' as macros %}
 
 {% block title %}{{ event.title }}: {{ details.title }}{% endblock %}
 
@@ -11,6 +10,7 @@
         {% spaceless %}
             <span class="label label-info">
                 {{ sheetTypeTitle }}
+
                 {% if changeTypeForm is not null %}
                     <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}"><span class="glyphicon glyphicon-edit"></span></a>
                 {% endif %}
@@ -42,292 +42,29 @@
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="sheetDashboard">
-                    <div class="row">
-                        {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
-
-                        {% if details.owner.shouldBeDisplayed %}
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        {{ 'admin.sheet.details.owner_not_participant.title'|trans }}
-                                    </div>
-                                    <div class="panel-body">
-                                        {{ details.owner.firstName }}  {{ details.owner.lastName }}<br>
-                                        {{ details.owner.email }}<br>
-                                        {{ 'admin.sheet.details.owner.mobile'|trans }}: {{ details.owner.mobile }}<br>
-                                        {{ 'admin.sheet.details.owner.phone'|trans }}: {{ details.owner.phone }}<br>
-                                        <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% for participant in details.participants %}
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        {{ 'admin.sheet.details.participant.title'|trans }} {{ loop.index }}
-
-                                        {% if participant.isOwner %}
-                                            ({{ 'admin.sheet.details.owner.title'|trans }})
-                                        {% endif %}
-                                    </div>
-                                    <div class="panel-body">
-                                        {% for object in participant.templateData.getProfileObjects %}
-                                            {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
-                                        {% endfor %}
-
-                                        {% if participant.isOwner %}
-                                            <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                    {{ include('AdminBundle:Sheet/Partial:participants.html.twig', { event: event, sheet: sheet, details: details, impersonationToken: impersonationToken }, false) }}
 
                     <hr>
 
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ 'admin.sheet.details.meeting.request.approved'|trans }}
-                                </div>
-                                <div class="panel-body text-center h1">
-                                    {{ details.approvedRequests }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ 'admin.sheet.details.meeting.request.pending'|trans }}
-                                </div>
-                                <div class="panel-body text-center h1">
-                                    {{ details.pendingRequests }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ 'admin.sheet.details.meeting.request.refused'|trans }}
-                                </div>
-                                <div class="panel-body text-center h1">
-                                    {{ details.refusedRequests }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ 'admin.sheet.details.meeting.proposition.approved'|trans }}
-                                </div>
-                                <div class="panel-body text-center h1">
-                                    {{ details.approvedPropositions }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ 'admin.sheet.details.meeting.proposition.pending'|trans }}
-                                </div>
-                                <div class="panel-body text-center h1">
-                                    {{ details.pendingPropositions }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ 'admin.sheet.details.meeting.proposition.refused'|trans }}
-                                </div>
-                                <div class="panel-body text-center h1">
-                                    {{ details.refusedPropositions }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{ include('AdminBundle:Sheet/Partial:meetings.html.twig', { details: details }, false) }}
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="sheetOrders">
-                    <h3>{{ 'admin.sheet.details.orders'|trans }}</h3>
+                    {{ include('AdminBundle:Sheet/Partial:orders.html.twig', { event: event, sheet: sheet, orders: details.orders }, false) }}
 
-                    {% if details.orders|length > 0 %}
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>{{ 'admin.order.id'|trans }}</th>
-                                <th>{{ 'admin.order.createdAt'|trans }}</th>
-                                <th class="text-right">{{ 'admin.order.total'|trans }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for order in details.orders %}
-                                <tr>
-                                    <td>
-                                        {{ order.numero }}
-                                        {% if order.cancelled %}
-                                            <span class="label label-danger">{{ 'admin.order.cancelled'|trans }}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {{ order.createdAt|localizeddate('medium', 'short') }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ order.total|localizedcurrency(order.currency) }}
-                                        {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p class="text-danger">{{ 'admin.zero-result'|trans }}</p>
-                    {% endif %}
-
-                    <h3>
-                        {{ 'admin.sheet.details.transactions'|trans }}
-                        <a href="{{ path('admin_sheet_transaction_create', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.add'|trans }}</a>
-                    </h3>
-
-                    {% if details.transactions|length > 0 %}
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>{{ 'admin.transaction.column.date'|trans }}</th>
-                                <th>{{ 'admin.transaction.column.state'|trans }}</th>
-                                <th>{{ 'admin.transaction.column.mode'|trans }}</th>
-                                <th class="text-right">{{ 'admin.transaction.column.total'|trans }}</th>
-                                <th>{{ 'admin.transaction.column.reference'|trans }}</th>
-                                <th>{{ 'admin.transaction.column.user'|trans }}</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for transaction in details.transactions %}
-                                <tr>
-                                    <td>{{ transaction.date|localizeddate('medium', 'short', app.request.locale) }}</td>
-                                    <td>{{ ('admin.transaction.state.' ~ transaction.state)|trans }}</a></td>
-                                    <td>{{ ('admin.transaction.mode.' ~ transaction.mode)|trans }}</td>
-                                    <td class="text-right">{{ transaction.amount|localizedcurrency(transaction.currency) }}</td>
-                                    <td>{{ transaction.reference }}</td>
-                                    <td>
-                                        {{ transaction.user.account.completeName }}
-                                        <br><small><a href="mailto:{{ transaction.user.email }}">{{ transaction.user.email }}</a></small>
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group">
-                                            <a href="{{ path('admin_sheet_transaction_update', {
-                                                'event': event.id,
-                                                'sheet': sheet.id,
-                                                'transaction': transaction.id
-                                            }) }}" class="btn btn-default btn-sm">{{ 'admin.transaction.edit'|trans }}</a>
-                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle"
-                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <li>
-                                                    {{ macros.delete_button(
-                                                    path('admin_sheet_transaction_remove', {
-                                                        'event': event.id,
-                                                        'sheet': sheet.id,
-                                                        'transaction': transaction.id
-                                                    }),
-                                                    'admin.transaction.remove'|trans,
-                                                    {}) }}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p class="text-danger">{{ 'admin.zero-result'|trans }}</p>
-                    {% endif %}
+                    {{ include('AdminBundle:Sheet/Partial:transactions.html.twig', { event: event, sheet: sheet, transactions: details.transactions }, false) }}
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="sheetTraces">
-                    <ul>
-                        <li>{{ 'admin.sheet.createdAt'|trans }} {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</li>
-                        {% for trace in details.traces %}
-                            <li>{{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
-                                {% if trace.author != '' %}{{ 'admin.sheet.trace.author'|trans({'%by%': trace.author}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}
-                                {% if trace.comment != '' %}{{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}{% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    {{ include('AdminBundle:Sheet/Partial:traces.html.twig', { sheet: sheet, traces: details.traces }, false) }}
                 </div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="well well-sm">
-                {{ form(addCommentForm, {horizontal: true}) }}
-            </div>
-
-            {% for comment in details.comments %}
-                <blockquote class="well well-sm">
-                    {{ comment.text|nl2br }}
-                    <footer>
-                        {{ 'admin.sheet.details.comments.author'|trans({
-                            '%firstname%': comment.author.firstname,
-                            '%lastname%': comment.author.lastname,
-                            '%date%': comment.createdAt|localizeddate('medium', 'short', app.request.locale)
-                        }) }}
-                    </footer>
-                </blockquote>
-            {% endfor %}
+            {{ include('AdminBundle:Sheet/Partial:comments.html.twig', { addCommentForm: addCommentForm, comments: details.comments }, false) }}
         </div>
     </div>
 
-    {#
-    <div class="row">
-        {{ form_start(addCommentForm) }}
-        <div class="col-xs-10">
-            {{ form_row(addCommentForm.text) }}
-        </div>
-        <div class="col-xs-2">
-            {{ form_row(addCommentForm.submit) }}
-        </div>
-        {{ form_rest(addCommentForm) }}
-        {{ form_end(addCommentForm) }}
-    </div>
-    #}
-
-    {% if changeTypeForm is not null %}
-        {{ form_start(changeTypeForm) }}
-        <div class="modal fade" id="changeType" tabindex="-1" role="dialog" aria-labelledby="changeTypeLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="changeTypeLabel">{{ 'admin.sheet.change.type.title'|trans }}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-4 text-right">
-                                {{ form_label(changeTypeForm.type) }}
-                                {{ form_errors(changeTypeForm.type) }}
-                            </div>
-                            <div class="col-md-8">
-                                {{ form_widget(changeTypeForm.type) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ form_row(changeTypeForm.submit) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{ form_end(changeTypeForm) }}
-    {% endif %}
+    {{ include('AdminBundle:Sheet/Partial:change_type_form.html.twig', { changeTypeForm: changeTypeForm }, false) }}
 {% endblock %}
