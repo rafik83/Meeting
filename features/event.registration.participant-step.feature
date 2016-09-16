@@ -21,12 +21,21 @@ Feature: Register with participant step
     Then I should see "Organisme"
     And I should see "register.step 3/3"
     And I fill in the following:
-      | Nom (Société / Organisme)    | Elao              |
-      | block[97ed778d][item][first] | category1         |
-      | Adresse                      | 10 rue Saint Marc |
-      | Code postal                  | 75002             |
-      | Ville                        | Paris             |
-      | block[e801edd4][country]     | FR                |
+      | Nom (Société / Organisme)    | Elao                     |
+      | block[97ed778d][item][first] | category1                |
+      | Adresse                      | 10 rue Saint Marc        |
+      | Code postal                  | 75002                    |
+      | Ville                        | Paris                    |
+      | Pays                         | FR                       |
+    When I press "register.finalize"
+    Then I should see "This value should not be blank."
+    And I fill in the following:
+    | Décrivez votre activité | Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description Ceci est une description|
+    When I press "register.finalize"
+    Then I should be on this page "/fr/participant/1/step/3"
+    And I should see "This value is too long. It should have 300 characters or less."
+    And I fill in the following:
+      | Décrivez votre activité | Ceci est une description |
     When I press "register.finalize"
     Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com"
     Then I should be on this page "/fr/sheet"

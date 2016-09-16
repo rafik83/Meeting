@@ -21,7 +21,7 @@ function EditableTextIndicator(element, maxIndicator, maxIndicatorTranslations)
 
 EditableTextIndicator.prototype.count = function ()
 {
-  var current   = this.element.value.length;
+  var current   = this.element.value.replace(/(\r\n|\n|\r)/g, '--').length;
   var remaining = this.max - current;
 
   if (remaining > 1) {
