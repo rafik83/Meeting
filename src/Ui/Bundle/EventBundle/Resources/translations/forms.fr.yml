@@ -1,3 +1,5 @@
+boolean.no: Non
+boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM

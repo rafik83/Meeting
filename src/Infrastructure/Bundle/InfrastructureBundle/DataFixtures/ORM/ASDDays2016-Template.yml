@@ -975,6 +975,18 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 tags: ["sheet_country", "sheet_data"]
+                        57da9df7ced30:
+                            component: "object"
+                            type: "boolean"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Êtes vous candidat?"
+                                    en: "Are you candidate?"
+                                filter:
+                                    label: "Est candidat"
+                                required: true
+                                tags: ["sheet_data"]
                         57da8f210fbf2:
                             component: "object"
                             type: "editable-text"

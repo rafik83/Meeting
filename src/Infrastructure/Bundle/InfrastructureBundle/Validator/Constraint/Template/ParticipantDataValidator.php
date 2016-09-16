@@ -15,12 +15,14 @@ use Symfony\Component\Validator\ConstraintValidator;
 abstract class ParticipantDataValidator extends ConstraintValidator
 {
     protected $objectsConstraint = [
+        'boolean'       => TemplateObject\BooleanObjectConstraint::class,
         'button-link'   => TemplateObjectConstraint::class,
         'carousel'      => TemplateObjectConstraint::class,
         'choice'        => TemplateObjectConstraint::class,
         'country'       => TemplateObject\CountryConstraint::class,
         'collection'    => TemplateObjectConstraint::class,
         'editable-text' => TemplateObject\EditableTextConstraint::class,
+        'gender'        => TemplateObject\GenderConstraint::class,
         'image'         => TemplateObjectConstraint::class,
         'media'         => TemplateObjectConstraint::class,
         'nomenclature'  => TemplateObject\NomenclatureConstraint::class,
@@ -29,6 +31,5 @@ abstract class ParticipantDataValidator extends ConstraintValidator
         'telephone'     => TemplateObject\TelephoneConstraint::class,
         'text'          => TemplateObjectConstraint::class,
         'url'           => TemplateObject\UrlConstraint::class,
-        'gender'        => TemplateObject\GenderConstraint::class,
     ];
 }
