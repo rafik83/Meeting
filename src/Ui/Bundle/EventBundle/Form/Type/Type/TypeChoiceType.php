@@ -49,7 +49,7 @@ class TypeChoiceType extends AbstractType
         $builder
             ->add('type', ChoiceType::class, [
                 'label'              => false,
-                'choices'            => $this->typeRepository->getTypeViewsByEvent($options['event'], $options['locale']),
+                'choices'            => $this->typeRepository->getVisibleTypesViewsByEvent($options['event'], $options['locale']),
                 'expanded'           => true,
                 'required'           => true,
                 'choice_label'       => 'title',
