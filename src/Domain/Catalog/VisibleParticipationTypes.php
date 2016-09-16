@@ -42,28 +42,18 @@ class VisibleParticipationTypes
         $rules = $this->ruleRepository->getByEvent($sheet->getEvent());
 
         $filteredRules = array_filter($rules, function (Rule $rule) use ($type) {
-            if ($rule->getSeerType() == $type) {
-                return true;
-            }
-            return false;
+            return $rule->getSeerType() === $type
+            || (!empty($rule->getSeerCategory()) && in_array($type, $rule->getSeerCategory()->getTypes()));
         });
 
-        foreach ($rules as $rule) {
-
-            if (!empty($rule->getSeerCategory()) && in_array($type, $rule->getSeerCategory()->getTypes())) {
-                $filteredRules[] = $rule;
-            }
-        }
-
         foreach ($filteredRules as $rule) {
-
             if (!empty($rule->getSeeableCategory())) {
                 foreach ($rule->getSeeableCategory()->getTypes() as $categoryType) {
                     $visibleTypes[$categoryType->getId()] = $categoryType;
                 }
             }
 
-            $visibleTypes[$rule->getSeeableType()->getId()] = $rule;
+            $visibleTypes[$rule->getSeeableType()->getId()] = $rule->getSeeableType();
         }
 
         return $visibleTypes;

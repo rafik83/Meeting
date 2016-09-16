@@ -46,7 +46,7 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->getVisiblesTypes($event, $request->getLocale());
+        $visibleTypes = $this->getVisibleTypes($event, $request->getLocale());
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
@@ -170,7 +170,7 @@ class CatalogController extends Controller
      * @return array
      * @throws \Exception
      */
-    private function getVisiblesTypes(Event $event, $locale)
+    private function getVisibleTypes(Event $event, $locale)
     {
         $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
 
