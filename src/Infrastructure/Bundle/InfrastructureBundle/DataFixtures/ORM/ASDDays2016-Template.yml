@@ -827,6 +827,20 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Organisme"
                                     en: "Company"
                                 type: "title"
+                        57dabfef501e9:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: |+
+                                        Ceci est une description
+
+                                        **Avec texte en gras**
+
+                                        [Lien](https://www.google.fr)
+                                    en: "Ceci est une description"
+                                type: "text"
                         3ad4b72f:
                             component: "object"
                             type: "editable-text"
