@@ -16,6 +16,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -56,6 +57,9 @@ class TypeCreateType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
+            ])
+            ->add('hidden', CheckboxType::class, [
+                'required' => false,
             ])
             ->add('rank', IntegerType::class, [
                 'required' => false,

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -80,6 +81,7 @@ class TypeUpdateType extends AbstractType
                 'label'      => false,
             ])
             ->add('rank', IntegerType::class)
+            ->add('hidden', CheckboxType::class)
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
