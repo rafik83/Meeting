@@ -32,6 +32,7 @@ Feature: add type
       | type_create_translations_fr_title | Test |
       | type_create_translations_en_title | Test |
       | type_create_rank                  | 1    |
+    And I check "type_create_hidden"
     And I press "form.type_create.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.type.create.success"
@@ -69,6 +70,7 @@ Feature: add type
       | type_update_translations_fr_title | TestEditedTwo |
       | type_update_translations_en_title | TestEditedTwo |
       | type_update_rank                  | 2             |
+    And the "type_update_hidden" checkbox should be checked
     When I press "form.type_update.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.type.update.success"
