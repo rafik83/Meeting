@@ -77,7 +77,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Móvil"
                                 help:
                                     es: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -93,7 +92,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Fijo"
                                 help:
                                     es: ""
-                                length: "25"
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -168,7 +166,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Sitio Internet"
                                 help:
                                     es: ""
-                                length: ""
                                 required: false
                                 type: "text"
                                 translatable: false
@@ -184,7 +181,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Dirección"
                                 help:
                                     es: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -200,7 +196,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Código postal"
                                 help:
                                     es: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -216,7 +211,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Ciudad"
                                 help:
                                     es: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -232,7 +226,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     es: "Paìs"
                                 help:
                                     es: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false

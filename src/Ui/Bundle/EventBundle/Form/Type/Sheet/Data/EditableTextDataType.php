@@ -37,14 +37,15 @@ class EditableTextDataType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var EditableText $object */
         $object    = $options['object'];
         $locale    = $options['locale'];
         $attributes = [
             'rows' => 7,
         ];
 
-        if (null !== $object->getOption('maxLength') && '' !== $object->getOption('maxLength')) {
-            $attributes['data-text-max-length-indicator']    = $object->getOption('maxLength');
+        if (0 !== $object->getMaxLength()) {
+            $attributes['data-text-max-length-indicator']    = $object->getMaxLength();
             $attributes['data-text-max-length-translations'] = sprintf(
                 '%s|%s|%s',
                 $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.plural', [], 'forms', $locale),

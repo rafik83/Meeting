@@ -91,6 +91,14 @@ class EditableText extends EditableObject implements ContentObjectInterface
     /**
      * @return bool
      */
+    public function isTextarea()
+    {
+        return $this->getOption('type') === 'textarea';
+    }
+
+    /**
+     * @return bool
+     */
     public function isRequired()
     {
         return (bool) $this->getOption('required');
@@ -117,7 +125,9 @@ class EditableText extends EditableObject implements ContentObjectInterface
      */
     public function hasMaxLength()
     {
-        return !empty($this->getOption('maxLength'));
+        return !empty($this->getOption('maxLength'))
+            && null !== $this->getOption('maxLength')
+            && '' !== $this->getOption('maxLength');
     }
 
     /**
