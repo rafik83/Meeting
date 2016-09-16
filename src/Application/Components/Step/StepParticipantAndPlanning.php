@@ -49,8 +49,8 @@ class StepParticipantAndPlanning
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
         $cart    = $this->cartManager->getCart($command->sheet, $command->currentStep);
 
-        if ($command->sheet->hasOrders()) {
-            $orderMerged = $this->orderMerger->merge($command->sheet->getOrders());
+        if ($command->sheet->hasNotCancelledOrders()) {
+            $orderMerged = $this->orderMerger->merge($command->sheet->getNotCancelledOrders());
         }
 
         $planningRow   = $cart->getPlanningRow();

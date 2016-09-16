@@ -40,7 +40,7 @@ class PlanGroupViewQueryHandler
 
         $plan = $cart->getPlanRow();
 
-        if($planGroupViewQuery->sheet->hasOrders()) {
+        if($planGroupViewQuery->sheet->hasNotCancelledOrders()) {
             return null;
         }
 

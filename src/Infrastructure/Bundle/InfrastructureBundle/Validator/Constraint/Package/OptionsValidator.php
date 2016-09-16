@@ -99,8 +99,8 @@ class OptionsValidator extends ConstraintValidator
             $options
         );
 
-        if ($selectOptions->sheet->hasOrders()) {
-            $order = $this->merger->merge($selectOptions->sheet->getOrders());
+        if ($selectOptions->sheet->hasNotCancelledOrders()) {
+            $order = $this->merger->merge($selectOptions->sheet->getNotCancelledOrders());
         }
 
         foreach ($selectOptions->options as $id => $quantity) {

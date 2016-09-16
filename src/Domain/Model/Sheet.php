@@ -379,6 +379,16 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Order[]
+     */
+    public function getNotCancelledOrders()
+    {
+        return array_filter($this->getOrders(), function (Order $order) {
+            return !$order->isCancelled();
+        });
+    }
+
+    /**
      * Get the sheet user owner
      *
      * @return User
@@ -610,7 +620,15 @@ class Sheet implements TraceableInterface
      */
     public function hasOrders()
     {
-        return (count($this->getOrders()) > 0);
+        return count($this->getOrders()) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNotCancelledOrders()
+    {
+        return count($this->getNotCancelledOrders()) > 0;
     }
 
     /**

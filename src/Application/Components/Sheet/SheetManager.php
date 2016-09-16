@@ -62,29 +62,6 @@ class SheetManager
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
-     *
-     * @return SheetDataView
-     */
-    public function getSheetDataView(Sheet $sheet, User $user, $locale)
-    {
-        return new SheetDataView(
-            $sheet->getId(),
-            $sheet->getEvent(),
-            $sheet->getType(),
-            $sheet->getParticipants()->toArray(),
-            $sheet->getData(),
-            $sheet->getPackageData(),
-            [],
-            $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
-            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet),
-            $sheet->getOrders()
-        );
-    }
-
-    /**
      * @param Sheet $sheet
      * @param User  $user
      *

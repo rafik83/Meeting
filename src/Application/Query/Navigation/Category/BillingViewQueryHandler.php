@@ -51,7 +51,7 @@ class BillingViewQueryHandler
             ])
         );
 
-        if (count($billingQuery->sheet->getOrders()) > 0) {
+        if ($billingQuery->sheet->hasOrders()) {
             $linksView[] = new LinkView(
                 'navigation.links.billing.order_history',
                 $this->navigationBuilder->getRoute('event_order_list', [
