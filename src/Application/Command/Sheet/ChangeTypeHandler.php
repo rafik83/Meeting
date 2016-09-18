@@ -73,13 +73,17 @@ class ChangeTypeHandler
 
         // if previous package different of new one, cancel orders
         if ($previousPackage !== $currentPackage) {
-            array_map(
-                function (Order $order) {
-                    $order->setCancelled();
-                    $this->orderRepository->set($order);
-                },
-                $this->orderRepository->findBySheet($changeType->sheet)
-            );
+            $orders = $this->orderRepository->findBySheet($changeType->sheet);
+
+            if (count($orders)) {
+                array_map(
+                    function (Order $order) {
+                        $order->setCancelled();
+                        $this->orderRepository->set($order);
+                    },
+                    $orders
+                );
+            }
         }
 
         // dispatch SHEET_CHANGED_TYPE event
