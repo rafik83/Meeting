@@ -159,7 +159,7 @@ class SheetController extends Controller
         $changeTypeForm = null;
 
         if (count($this->get('vimeet_infrastructure.repository.type_repository')->getTypesByEvent($event)) > 1) {
-            $changeType = new ChangeType($sheet, $sheet->getType());
+            $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), new \DateTime(), $locale);
 
             $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
                 'event'  => $event,

@@ -10,28 +10,40 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class ChangeType
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var Type
-     */
+    /** @var Type */
     public $type;
 
+    /** @var \DateTimeInterface */
+    public $date;
+
+    /** @var Admin */
+    public $admin;
+
+    /** @var string */
+    public $locale;
+
     /**
-     * @param Sheet  $sheet
-     * @param Type   $type
+     * @param Sheet              $sheet
+     * @param Type               $type
+     * @param Admin              $admin
+     * @param \DateTimeInterface $date
+     * @param string             $locale
      */
-    public function __construct(Sheet $sheet, Type $type)
+    public function __construct(Sheet $sheet, Type $type, Admin $admin, \DateTimeInterface $date, $locale)
     {
-        $this->sheet = $sheet;
-        $this->type  = $type;
+        $this->sheet  = $sheet;
+        $this->type   = $type;
+        $this->admin  = $admin;
+        $this->date   = $date;
+        $this->locale = $locale;
     }
 }

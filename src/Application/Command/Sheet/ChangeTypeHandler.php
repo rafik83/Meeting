@@ -10,30 +10,44 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ChangeTypeHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
+
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
+    /** @var TranslatorInterface */
+    private $translator;
 
     /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param OrderRepositoryInterface $orderRepository
+     * @param TranslatorInterface      $translator
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, OrderRepositoryInterface $orderRepository)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        OrderRepositoryInterface $orderRepository,
+        TranslatorInterface $translator,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->orderRepository = $orderRepository;
+        $this->translator      = $translator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -41,7 +55,9 @@ class ChangeTypeHandler
      */
     public function handle(ChangeType $changeType)
     {
-        if (null === $changeType->type || $changeType->type === $changeType->sheet->getType()) {
+        $previousType = $changeType->sheet->getType();
+
+        if (null === $changeType->type || $changeType->type === $previousType) {
             return;
         }
 
@@ -65,5 +81,19 @@ class ChangeTypeHandler
                 $this->orderRepository->findBySheet($changeType->sheet)
             );
         }
+
+        // dispatch SHEET_CHANGED_TYPE event
+        $this->eventDispatcher->dispatch(
+            Events::SHEET_CHANGED_TYPE,
+            new SheetChangedTypeEvent(
+                $changeType->sheet,
+                $changeType->admin,
+                $changeType->date,
+                $this->translator->trans('admin.sheet.trace.changed_type_comment', [
+                    '%fromType%' => $previousType->getTitle($changeType->locale),
+                    '%toType%'   => $changeType->type->getTitle($changeType->locale),
+                ])
+            )
+        );
     }
 }

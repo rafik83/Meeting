@@ -1,5 +1,8 @@
 <ul class="list-group">
-    <li class="list-group-item">{{ 'admin.sheet.createdAt'|trans }} {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</li>
+    <li class="list-group-item">
+        {{ 'admin.sheet.createdAt'|trans }}
+        <span class="badge">{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</span>
+    </li>
     {% for trace in traces %}
         <li class="list-group-item">
             {{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
@@ -11,6 +14,7 @@
             {% if trace.comment != '' %}
                 {{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}
             {% endif %}
+            <span class="badge">{{ trace.date|localizeddate('medium', 'short', app.request.locale) }}</span>
         </li>
     {% endfor %}
 </ul>
