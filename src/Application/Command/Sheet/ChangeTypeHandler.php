@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ChangeTypeHandler
 {
@@ -26,7 +26,7 @@ class ChangeTypeHandler
     /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    /** @var EventDispatcherInterface */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /** @var TranslatorInterface */
@@ -36,13 +36,13 @@ class ChangeTypeHandler
      * @param SheetRepositoryInterface $sheetRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param TranslatorInterface      $translator
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param DelayedEventDispatcher   $eventDispatcher
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         OrderRepositoryInterface $orderRepository,
         TranslatorInterface $translator,
-        EventDispatcherInterface $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->orderRepository = $orderRepository;
