@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
@@ -189,6 +190,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository       = $this->prophesize(SheetRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
 
         $expectedSheet = new Sheet($event, $type, [], $user, $now);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
@@ -213,7 +215,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $participantRepository->reveal(),
             $accountSynchronizer->reveal(),
-            $now
+            $now,
+            $eventDispatcher->reveal()
         );
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
