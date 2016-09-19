@@ -169,10 +169,8 @@ class SheetController extends Controller
             ]);
 
             if ($changeTypeForm->handleRequest($request)->isSubmitted() && $changeTypeForm->isValid()) {
-                if (null !== $changeType->type) {
-                    $this->get('tactician.commandbus')->handle($changeType);
-                    $this->addFlash('success', 'flash.admin.sheet.change_type.success');
-                }
+                $this->get('tactician.commandbus')->handle($changeType);
+                $this->addFlash('success', 'flash.admin.sheet.change_type.success');
 
                 return $this->redirectToRoute('admin_sheet_details', [
                     'event' => $event->getId(),
