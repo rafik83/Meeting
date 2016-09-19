@@ -42,4 +42,5 @@ final class Events
     const TRANSACTION_CONFIRMED                = 'transaction.confirm';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
+    const REGISTRATION_STEP                    = 'user.registration.step';
 }

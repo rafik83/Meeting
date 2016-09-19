@@ -198,6 +198,12 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
+    event_listener.registration_step_event_subscriber:
+            class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RegistrationStepEventSubscriber
+            arguments:
+                - '@components.registration.step_manager'
+            tags:
+                 - { name: kernel.event_subscriber }
     event_listener.mail_event_subscriber:
         class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
         arguments:
