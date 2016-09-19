@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Register;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class RegisterNewUser
 {
@@ -35,14 +36,21 @@ class RegisterNewUser
     public $event;
 
     /**
+     * @var Type
+     */
+    public $type;
+
+    /**
      * @param string $email
      * @param string $locale
      * @param Event  $event
+     * @param Type   $type
      */
-    public function __construct($email, $locale, Event $event)
+    public function __construct($email, $locale, Event $event, Type $type)
     {
         $this->email  = $email;
         $this->locale = $locale;
         $this->event  = $event;
+        $this->type   = $type;
     }
 }

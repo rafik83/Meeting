@@ -64,6 +64,8 @@ class RegisterNewUserHandler
         $user     = new User($register->email, $salt, null, $register->locale);
         $password = $this->encoder->encode($user, $register->password);
         $user->updatePassword($salt, $password);
+        $user->addEvent($register->event);
+        $user->addType($register->type);
 
         $this->userRepository->add($user);
 
