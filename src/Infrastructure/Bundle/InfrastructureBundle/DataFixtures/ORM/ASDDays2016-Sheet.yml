@@ -56,6 +56,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         owner: "@user_asddays_2"
         registrationData:
             3ad4b72f: { text: "Hello World Company" }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
@@ -69,6 +75,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         owner: "@user_asddays_3"
         registrationData:
             3ad4b72f: { text: "World Company Inc" }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
