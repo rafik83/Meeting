@@ -86,6 +86,22 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(type.id)')
+            ->from(Type::class, 'type', 'type.id')
+            ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeViewById($typeId, $locale)
     {
         $queryBuilder = $this
@@ -126,7 +142,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypeViewsByEvent(Event $event, $locale, Type $exceptedType = null)
+    public function getTypeViewsByEvent(Event $event, $locale, Type $excludedType = null)
     {
         $queryBuilder = $this
             ->entityManager
@@ -139,10 +155,10 @@ class TypeRepository implements TypeRepositoryInterface
             ->setParameter('event', $event)
             ->orderBy('type.position');
 
-        if (null !== $exceptedType) {
+        if (null !== $excludedType) {
             $queryBuilder
                 ->andWhere('type != :exceptedType')
-                ->setParameter('exceptedType', $exceptedType);
+                ->setParameter('exceptedType', $excludedType);
         }
 
         return $queryBuilder->getQuery()->getResult();
