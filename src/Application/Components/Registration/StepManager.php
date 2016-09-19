@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Registration;
 
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
@@ -76,5 +77,45 @@ class StepManager
         }
 
         return true;
+    }
+
+    /**
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     *
+     * @return array
+     */
+    public function getRedirectStep(Sheet $sheet, Participant $participant)
+    {
+        if (true === $participant->isRegistrationComplete()) {
+            return ['redirect' => false];
+        }
+
+        $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
+            $participant,
+            $participant->getLocale()
+        );
+
+        if ($sheet->getOwner() !== $participant->getUser()) {
+            return [
+                'redirect'   => true,
+                'route'      => 'event_account_participant_profile',
+                'parameters' => [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                ],
+            ];
+        }
+
+        return [
+            'redirect'   => true,
+            'route'      => 'event_participant_step',
+            'parameters' => [
+                'participant' => $participant->getId(),
+                'step'        => $registrationTemplate->getNextBlockPosition(
+                    $participant->getRegistrationStep()
+                ),
+            ],
+        ];
     }
 }

@@ -52,6 +52,18 @@ class SheetController extends Controller
         $locale = $locale ?: $request->getLocale();
         $sheet  = $this->getUserSheet($eventDomain->getEvent(), $locale);
 
+        $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
+        $participant           = $participantRepository->getParticipantForUserAndSheet($this->getUser(), $sheet);
+
+        if (null !== $participant) {
+            $registrationStepManager = $this->get('components.registration.step_manager');
+            if (false === $registrationStepManager->isRegistrationComplete($participant)) {
+                $redirectStep = $registrationStepManager->getRedirectStep($sheet, $participant);
+
+                return $this->redirectToRoute($redirectStep['route'], $redirectStep['parameters']);
+            }
+        }
+
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
