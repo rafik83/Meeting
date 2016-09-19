@@ -57,9 +57,9 @@ class SheetController extends Controller
 
         if (null !== $participant) {
             $registrationStepManager = $this->get('components.registration.step_manager');
-            if (false === $registrationStepManager->isRegistrationComplete($participant)) {
-                $redirectStep = $registrationStepManager->getRedirectStep($sheet, $participant);
+            $redirectStep            = $registrationStepManager->getRedirectStep($sheet, $participant);
 
+            if (true === $redirectStep['redirect']) {
                 return $this->redirectToRoute($redirectStep['route'], $redirectStep['parameters']);
             }
         }
