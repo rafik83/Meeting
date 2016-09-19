@@ -92,7 +92,8 @@ class RegisterController extends Controller
      */
     public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
-        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale(), $eventDomain->getEvent());
+        $type    = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
+        $command = new RegisterNewUser($this->getFlashEmail(), $request->getLocale(), $eventDomain->getEvent(), $type);
 
         if ($command->email === null || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
