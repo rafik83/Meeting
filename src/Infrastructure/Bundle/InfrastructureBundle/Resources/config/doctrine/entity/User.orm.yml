@@ -19,3 +19,8 @@ Proximum\Vimeet\Domain\Model\User:
     embedded:
         account:
             class: Proximum\Vimeet\Domain\Model\User\Account
+    manyToMany:
+        events:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
