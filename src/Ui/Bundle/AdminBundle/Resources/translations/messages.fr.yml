@@ -362,7 +362,6 @@ admin.type.already_exists: 'Un type de participation au titre identique existe d
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
 admin.type.hidden: 'Caché'
-admin.type.hidden.register.link: Lien d'inscription
 admin.type.link: 'Types de participation'
 admin.type.position: Position
 admin.type.register.link: Lien d'inscription
