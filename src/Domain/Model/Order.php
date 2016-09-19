@@ -581,7 +581,7 @@ class Order
     /**
      * Set cancelled
      */
-    public function setCancelled()
+    public function cancel()
     {
         $this->cancelled = true;
     }

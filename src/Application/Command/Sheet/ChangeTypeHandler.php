@@ -84,7 +84,7 @@ class ChangeTypeHandler
             if (count($orders)) {
                 array_map(
                     function (Order $order) {
-                        $order->setCancelled();
+                        $order->cancel();
                         $this->orderRepository->set($order);
                     },
                     $orders
