@@ -87,7 +87,7 @@ class StepManager
      */
     public function getRedirectStep(Sheet $sheet, Participant $participant)
     {
-        if (true === $participant->isRegistrationComplete()) {
+        if (true === $this->isRegistrationComplete($participant)) {
             return ['redirect' => false];
         }
 
