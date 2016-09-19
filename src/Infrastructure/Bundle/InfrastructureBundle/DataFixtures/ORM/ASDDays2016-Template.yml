@@ -998,6 +998,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Êtes vous candidat?"
                                     en: "Are you candidate?"
                                 filter:
+                                    active: true
                                     label: "Est candidat"
                                 required: true
                                 tags: ["sheet_data"]
