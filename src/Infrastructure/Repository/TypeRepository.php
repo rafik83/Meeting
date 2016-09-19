@@ -157,8 +157,8 @@ class TypeRepository implements TypeRepositoryInterface
 
         if (null !== $excludedType) {
             $queryBuilder
-                ->andWhere('type != :exceptedType')
-                ->setParameter('exceptedType', $excludedType);
+                ->andWhere('type != :excludedType')
+                ->setParameter('excludedType', $excludedType);
         }
 
         return $queryBuilder->getQuery()->getResult();
