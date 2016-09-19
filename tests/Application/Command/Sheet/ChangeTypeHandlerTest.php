@@ -74,7 +74,7 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $date
         );
 
-        $changeType = new ChangeType($sheet, $otherType, $admin, $date, 'fr');
+        $changeType = new ChangeType($sheet, $otherType, $admin, 'fr');
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
@@ -85,7 +85,8 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
             $translator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $date
         );
         $handler->handle($changeType);
 
@@ -127,26 +128,7 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime()
         );
 
-        $order = new Order(
-            $sheet,
-            true,
-            new Order\BillingInfo(
-                'gender',
-                'firstname',
-                'lastname',
-                'position',
-                'phone',
-                'mobile',
-                'email',
-                'company',
-                new Address('street', 'zipcode', 'city', 'country'),
-                'vatNumber'
-            ),
-            '',
-            $date
-        );
-
-        $changeType = new ChangeType($sheet, $otherType, $admin, $date, 'fr');
+        $changeType = new ChangeType($sheet, $otherType, $admin, 'fr');
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
@@ -157,7 +139,8 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
             $translator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $date
         );
         $handler->handle($changeType);
 

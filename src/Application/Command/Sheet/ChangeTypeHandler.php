@@ -32,22 +32,28 @@ class ChangeTypeHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param TranslatorInterface      $translator
      * @param DelayedEventDispatcher   $eventDispatcher
+     * @param \DateTimeInterface       $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         OrderRepositoryInterface $orderRepository,
         TranslatorInterface $translator,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        \DateTimeInterface $datetime
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->orderRepository = $orderRepository;
         $this->translator      = $translator;
         $this->eventDispatcher = $eventDispatcher;
+        $this->datetime        = $datetime;
     }
 
     /**
@@ -92,7 +98,7 @@ class ChangeTypeHandler
             new SheetChangedTypeEvent(
                 $changeType->sheet,
                 $changeType->admin,
-                $changeType->date,
+                $this->datetime,
                 $this->translator->trans('admin.sheet.trace.changed_type_comment', [
                     '%fromType%' => $previousType->getTitle($changeType->locale),
                     '%toType%'   => $changeType->type->getTitle($changeType->locale),

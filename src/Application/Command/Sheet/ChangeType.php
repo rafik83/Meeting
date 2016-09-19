@@ -22,9 +22,6 @@ class ChangeType
     /** @var Type */
     public $type;
 
-    /** @var \DateTimeInterface */
-    public $date;
-
     /** @var Admin */
     public $admin;
 
@@ -32,18 +29,16 @@ class ChangeType
     public $locale;
 
     /**
-     * @param Sheet              $sheet
-     * @param Type               $type
-     * @param Admin              $admin
-     * @param \DateTimeInterface $date
-     * @param string             $locale
+     * @param Sheet  $sheet
+     * @param Type   $type
+     * @param Admin  $admin
+     * @param string $locale
      */
-    public function __construct(Sheet $sheet, Type $type, Admin $admin, \DateTimeInterface $date, $locale)
+    public function __construct(Sheet $sheet, Type $type, Admin $admin, $locale)
     {
         $this->sheet  = $sheet;
         $this->type   = $type;
         $this->admin  = $admin;
-        $this->date   = $date;
         $this->locale = $locale;
     }
 }
