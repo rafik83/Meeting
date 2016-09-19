@@ -526,7 +526,7 @@ class Order
     public function countParticipant()
     {
         $participant = 0;
-        foreach($this->rows as $orderRow) {
+        foreach ($this->rows as $orderRow) {
             if (null !== $orderRow->getProduct()
                 && $orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT
             ) {
@@ -561,7 +561,7 @@ class Order
      */
     public function getPlan()
     {
-        foreach($this->rows as $row) {
+        foreach ($this->rows as $row) {
             if ($row->getType() === Product::TYPE_PLAN) {
                 return $row->getProduct();
             }
