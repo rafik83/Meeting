@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Event\Sheet;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\AbstractUser;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -20,7 +20,7 @@ class SheetChangedTypeEvent extends Event
     /** @var Sheet */
     private $sheet;
 
-    /** @var AbstractUser */
+    /** @var Admin */
     private $user;
 
     /** @var DateTimeInterface */
@@ -31,11 +31,11 @@ class SheetChangedTypeEvent extends Event
 
     /**
      * @param Sheet             $sheet
-     * @param AbstractUser      $user
+     * @param Admin             $user
      * @param DateTimeInterface $date
      * @param string            $comment
      */
-    public function __construct(Sheet $sheet, AbstractUser $user, DateTimeInterface $date, $comment)
+    public function __construct(Sheet $sheet, Admin $user, DateTimeInterface $date, $comment)
     {
         $this->sheet   = $sheet;
         $this->user    = $user;
@@ -52,7 +52,7 @@ class SheetChangedTypeEvent extends Event
     }
 
     /**
-     * @return AbstractUser
+     * @return Admin
      */
     public function getAuthor()
     {
