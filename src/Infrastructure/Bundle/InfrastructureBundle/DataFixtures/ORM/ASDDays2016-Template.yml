@@ -1126,3 +1126,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                 config:
                     style: "style-1"
                 children: []
+
+Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter:
+    filter_boolean_candidat:
+        __construct:
+            - '@event_asddays_2016'
+            - '57da9df7ced30'
+            - 'Êtes vous candidat?'
