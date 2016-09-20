@@ -74,7 +74,7 @@ class User extends AbstractUser
      */
     public function getEvents()
     {
-        return $this->events;
+        return $this->events->toArray();
     }
 
     /**
@@ -92,9 +92,9 @@ class User extends AbstractUser
     /**
      * @return Type
      */
-    public function getType()
+    public function getTypes()
     {
-        return $this->types;
+        return $this->types->toArray();
     }
 
     /**
