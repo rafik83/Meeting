@@ -35,12 +35,10 @@ class UserController extends Controller
                 $event->getId()
             );
 
-        foreach ($users->results as $user) {
-            
-        }
         return $this->render('AdminBundle:User:list.html.twig', [
-            'event' => $event,
-            'users' => $users
+            'event'  => $event,
+            'users'  => $users,
+            'locale' => $request->getLocale()
         ]);
     }
 
