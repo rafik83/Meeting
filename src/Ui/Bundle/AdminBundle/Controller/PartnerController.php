@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Partner\Create;
+use Proximum\Vimeet\Application\Command\Partner\Update;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +42,7 @@ class PartnerController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($create);
-                $this->addFlash('success', 'flash.admin.operator.create.success');
+                $this->addFlash('success', 'flash.admin.partner.create.success');
 
                 return $this->redirectToRoute('admin_list_operator');
             } catch (EmailAlreadyExistsException $ex) {
@@ -50,6 +53,45 @@ class PartnerController extends Controller
         }
 
         return $this->render('AdminBundle:Partner:create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Admin   $partner
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Admin $partner)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+
+        if (!$partner->isPartner()) {
+            throw $this->createAccessDeniedException('Only partner can be updated with this page');
+        }
+
+        $update = new Update($partner);
+        $form   = $this->createForm(UpdateType::class, $update, [
+            'submit' => true,
+            'events' => $this->getUser()->getEvents()->toArray(),
+            'user'   => $this->getUser(),
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($update);
+                $this->addFlash('success', 'flash.admin.partner.update.success');
+
+                return $this->redirectToRoute('admin_list_operator');
+            } catch (EmailAlreadyExistsException $ex) {
+                $form->get('email')->addError(
+                    $this->get('error_factory')->create('validators.emailAlreadyExist', $request->getLocale())
+                );
+            }
+        }
+
+        return $this->render('AdminBundle:Partner:update.html.twig', [
             'form' => $form->createView(),
         ]);
     }

@@ -52,6 +52,9 @@
                 </td>
                 <td>
                     {% if operator.partner %}
+                        <a class="btn btn-default" href="{{ path('admin_update_partner', {
+                            'partner': operator.id
+                        }) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
                     {% else %}
                         <a class="btn btn-default" href="{{ path('admin_update_operator', {'operator': operator.id}) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
                     {% endif %}

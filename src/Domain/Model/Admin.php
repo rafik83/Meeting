@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * "Compte admin/organisateur/collaborateur".
@@ -69,8 +69,16 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      * @param string            $role
      * @param DateTimeInterface $createdAt
      */
-    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role, DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        $email,
+        $salt,
+        $password,
+        $locale,
+        $firstname,
+        $lastname,
+        $role,
+        DateTimeInterface $createdAt
+    ) {
         parent::__construct($email, $salt, $password, $locale);
 
         $this->firstname = $firstname;
@@ -106,7 +114,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
             self::ROLE_OPERATOR,
             self::ROLE_ORGANIZER,
             self::ROLE_SUPER_ADMIN,
-            self::ROLE_PARTNER
+            self::ROLE_PARTNER,
         ];
     }
 
@@ -197,7 +205,9 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
-     * @param array $types
+     * Set type and associated event
+     *
+     * @param Type[] $types
      *
      * @return Admin
      */
@@ -210,7 +220,13 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         }
 
         foreach ($types as $type) {
-            $this->addType($type);
+            if (!$this->hasEvent($type->getEvent())) {
+                $this->addEvent($type->getEvent());
+            }
+
+            if (!$this->hasType($type)) {
+                $this->addType($type);
+            }
         }
 
         return $this;
@@ -335,7 +351,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
             $this->lastname,
             $this->password,
             $this->salt
-        ) = unserialize($serialized);
+            ) = unserialize($serialized);
     }
 
     /**
@@ -445,6 +461,6 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function getDisplayName()
     {
-        return $this->getFirstname() . ' ' . $this->getLastname();
+        return $this->getFirstname().' '.$this->getLastname();
     }
 }

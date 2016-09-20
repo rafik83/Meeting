@@ -687,6 +687,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Create }
+    command.partner.update_handler:
+        class: Proximum\Vimeet\Application\Command\Partner\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Update }
     command.admin.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
         arguments:

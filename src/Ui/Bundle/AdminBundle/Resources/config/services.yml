@@ -155,10 +155,20 @@ services:
         parent: form_type_product.abstract_update_type
         tags:
             - { name: form.type }
-    form_type_partner.create_type:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\CreateType
+    form_type_partner.partner_type:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+        abstract: true
+        tags:
+            - { name: form.type }
+    form_type_partner.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\CreateType
+        parent: form_type_partner.partner_type
+        tags:
+            - { name: form.type }
+    form_type_partner.update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\UpdateType
+        parent: form_type_partner.partner_type
         tags:
             - { name: form.type }
 

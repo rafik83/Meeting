@@ -10,30 +10,22 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner;
 
-use Proximum\Vimeet\Application\Command\Partner\Create;
-use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Application\Command\Partner\Update;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends PartnerType
+class UpdateType extends PartnerType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choices = $this->buildChoices($options['events'], $options['user']);
-
         $builder
             ->add('email', EmailType::class, [
                 'required' => true,
-            ])
-            ->add('password', TextType::class, [
-                'required' => isset($options['password_required']) ? $options['password_required'] : true,
             ])
             ->add('lastname', TextType::class, [
                 'required' => true,
@@ -43,7 +35,7 @@ class CreateType extends PartnerType
             ])
             ->add('types', TypeChoiceType::class, [
                 'multiple' => true,
-                'choices'  => $choices,
+                'choices'  => $this->buildChoices($options['events'], $options['user']),
             ]);
     }
 
@@ -57,8 +49,7 @@ class CreateType extends PartnerType
             'user',
         ]);
         $resolver->setDefaults([
-            'data_class'        => Create::class,
-            'password_required' => true,
+            'data_class' => Update::class,
         ]);
     }
 
@@ -67,6 +58,6 @@ class CreateType extends PartnerType
      */
     public function getBlockPrefix()
     {
-        return 'create_partner';
+        return 'update_partner';
     }
 }
