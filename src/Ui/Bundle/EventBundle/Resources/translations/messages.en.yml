@@ -1,7 +1,26 @@
 account.change_password.link: 'Change the password'
+account.change_password.title: 'Change the password'
+account.profile.company: Company
+account.profile.contactInformation: 'Contact information'
+account.profile.profile: Profile
+account.profile.title: Profile
+account.profile.updateAvatar: 'Change profile picture'
+account.update_email.title: 'Change my email'
+account.update.avatar.title: 'Profile picture'
+account.update.company.title: 'Company / Organization'
+account.update.profile.title: Profile
+account.update.title: 'Edit my Account'
 'Bad credentials.': 'Bad credentials.'
+billing_info.title: 'Billing information'
+catalog.complete_sheet: 'Show sheet details'
+common.backToPackage: 'Back to participation package'
+common.backToSheet: 'Back to participation sheet'
 common.need_help: 'Need help'
 common.next: Next
+common.update: Edit
+common.validate: Validate
+event.info.close: Close
+event.info.contact: 'Useful information'
 package.product.totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'
 package.product.unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
 package.vatMode.ati: 'incl. VAT'
