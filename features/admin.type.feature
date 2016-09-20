@@ -103,3 +103,7 @@ Feature: add type
     When I press "admin.type.remove.link"
     Then I should be on "/admin/fr/event/1/type"
     And I should see "flash.admin.type.remove.error"
+
+  Scenario: I should not see an hidden type
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/en/"
+    Then I should not see "Investisseur"
