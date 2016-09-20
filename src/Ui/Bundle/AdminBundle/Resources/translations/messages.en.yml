@@ -1,3 +1,9 @@
+account.update_email.title: 'Change my email'
+account.update.title: 'Edit my Account'
+admin.account.content.password: 'Change my password'
+admin.account.link: 'My account'
+admin.account.title: 'My account'
+admin.account.update_password.title: 'Change my password'
 admin.cancel: Cancel
 admin.category.add: Add
 admin.category.link: 'Participation categories'
@@ -34,9 +40,36 @@ admin.type.link: 'Participation types'
 admin.zero-result: admin.zero-result
 and: and
 and_more: 'and %count% other|and %count% others'
+boolean.no: 'No'
+boolean.yes: 'Yes'
 change_password.link: 'Change password'
 change_password.title: 'Change password'
-event.link.see_my_sheet: 'See my %type% sheet'
+event.activateAccount.password: 'Choose your password'
+event.catalog.category.seeSheet: 'View sheet details'
+event.catalog.sheet.meetingRequest: 'Request a meeting'
+event.link.go_back_to_sheet: 'Back to sheet'
+event.link.product.cancel: Cancel
+event.link.see_catalog: 'View cataog'
+event.link.see_meeting_proposition: 'My proposals received'
+event.link.see_meeting_request: 'My meeting requests'
+event.link.see_my_sheet: 'View my %type% sheet'
+event.link.see_schedule: 'View my planning %type%'
+event.meeting.approvedRequest.label: 'From %fromName% to %toName%'
+event.meeting.approvedRequest.title: 'Accept received proposal'
+event.meeting.cancelRequest.label: 'From %fromName% to %toName%'
+event.meeting.cancelRequest.title: 'Cancel my request'
+event.meeting.createRequest.title: 'Meeting request'
+event.meeting.editRequest.title: 'Edit my request'
+event.meeting.listProposition.accept: Accept
+event.meeting.listProposition.createdAt: Received
+event.meeting.listProposition.description: Description
+event.meeting.listProposition.edit: 'Edit received proposal'
+event.meeting.listProposition.from: From
+event.meeting.listProposition.informations: 'Proposal details'
+event.meeting.listProposition.participants: Participants
+event.meeting.listProposition.refuse: Reject
+event.meeting.listProposition.show: Show
+event.meeting.listProposition.state: State
 event.meeting.showDetailsRequest.from: From
 event.meeting.showDetailsRequest.message: 'Your conversation'
 event.meeting.showDetailsRequest.participants: Participants
@@ -47,7 +80,7 @@ event.sheet.add_participant.title: 'Add a participant'
 event.sheet.billing.title: Billing
 event.sheet.block.add_participant.title: 'Fill this participant'
 event.sheet.block.buy_participant.option: Option
-event.sheet.block.buy_participant.title: 'Add a participant'
+event.sheet.block.buy_participant.title: 'Add participant'
 event.sheet.block.delete_participant.title: 'Delete this participant'
 event.sheet.block.edit: Edit
 event.sheet.block.participants.title: Participants
@@ -57,18 +90,37 @@ event.sheet.cart.column.quantity: Quantity
 event.sheet.cart.column.total: Total
 event.sheet.cart.column.unitPrice: 'Unit Price'
 event.sheet.cart.label.billingStep: 'Go to the billing step'
-event.sheet.cart.label.totalPrice: 'Total price of your cart'
-event.sheet.cart.title: 'Your cart'
+event.sheet.cart.label.totalPrice: Total
+event.sheet.cart.title: 'Package summary'
+event.sheet.cart.totalWithoutTaxes: 'Total excl. Tax'
+event.sheet.completed.complete: Complete
+event.sheet.completed.incomplete: Incomplete
+event.sheet.listOrders.proForma: 'View proforma invoice'
+event.sheet.listOrders.title: 'My orders'
 event.sheet.package.column.choices: Choices
 event.sheet.package.column.description: Description
 event.sheet.package.column.label: Label
 event.sheet.package.column.quantity: Quantity
 event.sheet.package.column.unitPrice: 'Unit price'
+event.sheet.package.include: 'Included in your formula'
+event.sheet.package.includeQuantity: '{0} Included in your formula|{1} %count% Included in your formula|]1,Inf[ %count% Included in your formula'
+event.sheet.package.participant.boughtNumber: '{0}|{1} You have already add %count% participant to your sheet|]1,Inf[ You have already add %count% participants to your sheet'
 event.sheet.package.step.next: 'Choose your package'
 event.sheet.participant.already_exists: 'This participant has already been added'
 event.sheet.participant.email: Email
 event.sheet.participant.guest: Guest
 event.sheet.participant.owner: Owner
+event.sheet.payment.description: 'Choose payment method'
+event.sheet.payment.title: 'Payment method'
+event.sheet.state.accepted: Accepted
+event.sheet.state.pending: Pending
+event.sheet.state.validated: Validated
+event.sheet.summary.product: Option
+event.sheet.summary.quantity: Quantity
+event.sheet.summary.title: 'Package summary'
+event.sheet.summary.total: Total
+event.sheet.summary.unit_price: 'Unit price'
+event.sheet.summary.update_product: 'Update my participation'
 login.link: Login
 login.title: Login
 logout.confirmation: 'Are you sure you want to logout of your account?'
