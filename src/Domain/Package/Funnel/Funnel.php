@@ -187,7 +187,7 @@ class Funnel
      */
     public function isCompleted()
     {
-        if ($this->sheet->hasOrders()) {
+        if ($this->sheet->hasNotCancelledOrders()) {
             return $this->hasOneCompleted();
         }
 
@@ -235,7 +235,7 @@ class Funnel
     {
         $uncompletedStep = $this->getCurrentUncompletedStep();
 
-        if ($this->sheet->hasOrders()) {
+        if ($this->sheet->hasNotCancelledOrders()) {
             return $this->hasStep($step->index);
         }
 

@@ -83,8 +83,9 @@ class AddHandler
             throw new PromotionCodeNotFoundException();
         }
 
-        if ($add->sheet->hasOrders()) {
-            $order = $this->orderMerger->merge($add->sheet->getOrders());
+        if ($add->sheet->hasNotCancelledOrders()) {
+            $order = $this->orderMerger->merge($add->sheet->getNotCancelledOrders());
+
             if ($order->hasPromotionCode($promotionCode)) {
                 throw new PromotionCodeAlreadyExistException();
             }

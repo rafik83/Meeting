@@ -62,8 +62,8 @@ class SelectOptionsHandler
 
         $cart->clearOptions();
 
-        if ($sheet->hasOrders()) {
-            $orderMerged = $this->merger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
         foreach ($selectOptions->options as $id => $quantity) {

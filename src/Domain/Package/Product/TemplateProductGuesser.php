@@ -158,11 +158,11 @@ class TemplateProductGuesser
         }
 
         // first order
-        if (null !== $templateObject->getSheet() && !$templateObject->getSheet()->hasOrders()) {
+        if (null !== $templateObject->getSheet() && !$templateObject->getSheet()->hasNotCancelledOrders()) {
             return true;
         }
 
-        $order = $this->orderMerger->merge($templateObject->getSheet()->getOrders());
+        $order = $this->orderMerger->merge($templateObject->getSheet()->getNotCancelledOrders());
 
         // check if option is already bought a least 1
         foreach ($templateObject->getBuyableProducts() as $product) {

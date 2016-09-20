@@ -379,6 +379,16 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Order[]
+     */
+    public function getNotCancelledOrders()
+    {
+        return array_filter($this->getOrders(), function (Order $order) {
+            return !$order->isCancelled();
+        });
+    }
+
+    /**
      * Get the sheet user owner
      *
      * @return User
@@ -610,7 +620,15 @@ class Sheet implements TraceableInterface
      */
     public function hasOrders()
     {
-        return (count($this->getOrders()) > 0);
+        return count($this->getOrders()) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNotCancelledOrders()
+    {
+        return count($this->getNotCancelledOrders()) > 0;
     }
 
     /**
@@ -643,5 +661,23 @@ class Sheet implements TraceableInterface
     public function setInCatalogAt($inCatalogAt)
     {
         $this->inCatalogAt = $inCatalogAt;
+    }
+
+    /**
+     * @param Type $type
+     */
+    public function updateType($type)
+    {
+        if ($this->type === $type) {
+            return;
+        }
+
+        $this->type = $type;
+
+        // Set state to pending
+        $this->state = self::STATE_PENDING;
+
+        // Remove from catalog
+        $this->setInCatalog(false);
     }
 }

@@ -40,11 +40,11 @@ class QuantityMinGuesser
      */
     public function getMinProduct(Sheet $sheet, Product $product, $quantity)
     {
-        if (!$sheet->hasOrders()) {
+        if (!$sheet->hasNotCancelledOrders()) {
             return 0;
         }
 
-        $order = $this->merger->merge($sheet->getOrders());
+        $order = $this->merger->merge($sheet->getNotCancelledOrders());
 
         if ($order->hasPromotionCodeForProduct($product)) {
             if ($orderRow = $order->getRowForProduct($product)) {

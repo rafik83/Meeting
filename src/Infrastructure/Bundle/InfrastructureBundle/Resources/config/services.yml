@@ -828,6 +828,16 @@ services:
             - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveData }
+    command.sheet.change_type_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
@@ -1194,7 +1204,6 @@ services:
     vimeet_infrastructure.application.components.sheet.manager:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'

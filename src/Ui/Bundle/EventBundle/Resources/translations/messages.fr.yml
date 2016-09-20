@@ -73,7 +73,9 @@ nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
 nomenclature.submit: Enregistrer
+order.list.cancelled: Annulée
 order.list.column.date: Date
+order.list.column.numero: Numéro
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
 order.list.pay_remaining: 'Solder la totalité de ma participation'
