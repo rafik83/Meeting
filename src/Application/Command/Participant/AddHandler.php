@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
@@ -128,13 +129,19 @@ class AddHandler
         $this->cartManager->updateParticipantsQuantity($add->sheet);
 
         if (!$add->sheet->isOwner($user)) {
+            // send to the guest
             if ($user->isActive()) {
                 $this->sendCompleteProfileEvent($add, $user, $participant);
             } else {
-                $this->sendActivationEvent($add, $user); // send to the guest
-                $this->sendActivationConfirmEvent($add, $participant); // send to the owner
+                $this->sendActivationEvent($add, $user);
             }
+
+            // send to the adder
+            $this->sendActivationConfirmEvent($add, $participant);
         }
+
+        $sheetUpdated = new SheetUpdatedEvent($add->sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
 
         return new AddResult($participant);
     }
@@ -153,7 +160,7 @@ class AddHandler
     }
 
     /**
-     * Send confirm invitation email send to the sheet owner
+     * Send confirm invitation email send to the adder
      *
      * @param Add         $add
      * @param Participant $guest
