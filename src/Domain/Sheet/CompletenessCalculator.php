@@ -74,7 +74,7 @@ class CompletenessCalculator
         );
 
         $completeness = $completed / $total * 100;
-        $sheet->setCompleteness(round($completeness, PHP_ROUND_HALF_DOWN));
+        $sheet->setCompleteness(floor($completeness));
 
         $this->sheetRepository->set($sheet);
     }
