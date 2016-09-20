@@ -80,6 +80,7 @@ form.create_operator.children.email.label: Email
 form.create_operator.children.firstname.label: Prénom
 form.create_operator.children.lastname.label: Nom
 form.create_operator.children.submit.label: Envoyer
+form.create_operator.children.events.label: 'Événements disponible pour ce collaborateur'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'

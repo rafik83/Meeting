@@ -18,33 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends AbstractType
+class CreateType extends AbstractOperatorType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add('email', EmailType::class, [
-                'required' => true,
-            ])
-            ->add('lastname', TextType::class, [
-                'required' => true,
-            ])
-            ->add('firstname', TextType::class, [
-                'required' => true,
-            ])
-            ->add('events', EventChoiceType::class, [
-                'required'    => false,
-                'expanded'    => true,
-                'multiple'    => true,
-                'placeholder' => '',
-                'choices'     => $options['events']
-            ])
-        ;
-    }
-
     /**
      * {@inheritdoc}
      */
