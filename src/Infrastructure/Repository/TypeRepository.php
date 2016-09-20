@@ -136,7 +136,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.event = :event')
-            ->andWhere('type.hidden is null or type.hidden = 0')
+            ->andWhere('type.hidden = false')
             ->setParameter('event', $event)
             ->orderBy('type.position');
 
