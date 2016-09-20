@@ -370,6 +370,7 @@ admin.type.update.title: 'Modifier le type de participation'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
+admin.users.link: 'Utilisateurs'
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'
