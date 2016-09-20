@@ -152,4 +152,12 @@ interface TypeRepositoryInterface
      * @param Type $type
      */
     public function remove(Type $type);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Type[]
+     */
+    public function getVisibleTypesViewsByEvent(Event $event, $locale);
 }
