@@ -63,6 +63,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
     vimeet_infrastructure.repository.participant_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository
         arguments:
