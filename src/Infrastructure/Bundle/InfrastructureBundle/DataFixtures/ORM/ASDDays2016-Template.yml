@@ -1132,4 +1132,4 @@ Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter:
         __construct:
             - '@event_asddays_2016'
             - '57da9df7ced30'
-            - 'Êtes vous candidat?'
+            - 'Est candidat'
