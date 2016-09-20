@@ -79,7 +79,7 @@ class CreateHandler extends AbstractCreateHandler
         $password = $this->encoder->encode($admin, $create->password);
         $admin->updatePassword($salt, $password);
 
-        foreach ($create->organizer->getEvents() as $event) {
+        foreach ($create->events as $event) {
             $admin->addEvent($event);
         }
 

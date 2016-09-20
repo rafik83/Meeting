@@ -40,6 +40,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $command->password  = 'password';
         $command->firstname = 'toto';
         $command->lastname  = 'tata';
+        $command->events    = [$event, $event2];
 
         $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);

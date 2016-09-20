@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator;
 
 use Proximum\Vimeet\Application\Command\Operator\Create;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -34,6 +35,13 @@ class CreateType extends AbstractType
             ->add('firstname', TextType::class, [
                 'required' => true,
             ])
+            ->add('events', EventChoiceType::class, [
+                'required'    => false,
+                'expanded'    => true,
+                'multiple'    => true,
+                'placeholder' => '',
+                'choices'     => $options['events']
+            ])
         ;
     }
 
@@ -42,6 +50,9 @@ class CreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired([
+            'events',
+        ]);
         $resolver->setDefaults([
             'data_class' => Create::class,
         ]);
