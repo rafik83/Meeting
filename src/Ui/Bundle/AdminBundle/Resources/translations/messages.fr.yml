@@ -127,6 +127,7 @@ admin.nomenclature.table.read: Voir
 admin.nomenclature.table.title: Titre
 admin.nomenclature.title: Nomenclatures
 admin.operator_list.action.create: 'Créer un nouveau collaborateur'
+admin.operator_list.action.create.partner: 'Créer un nouveau partenaire'
 admin.operator_list.filter.empty_filter: 'Vider les filtres'
 admin.operator_list.link: 'Liste des collaborateurs'
 admin.operator_list.table.content.admin.events.none: Aucun
@@ -140,6 +141,8 @@ admin.operator_list.table.title.lastname: Nom
 admin.operator_list.title: 'Liste des collaborateurs'
 admin.operator.create.title: 'Créer un nouveau collaborateur'
 admin.operator.update.title: 'Editer un collaborateur'
+admin.partner.create.title: 'Créer un nouveau partenaire'
+admin.partner.update.title: 'Editer un partenaire'
 admin.order_edit.add_line: 'Ajouter une ligne'
 admin.order_edit.after: après
 admin.order_edit.columns.product: Produit

@@ -30,3 +30,5 @@ Proximum\Vimeet\Domain\Model\Admin:
     manyToMany:
         events:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type

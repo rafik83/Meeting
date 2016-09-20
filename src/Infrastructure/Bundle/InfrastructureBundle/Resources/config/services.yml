@@ -677,6 +677,16 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Update }
+    command.partner.create_handler:
+        class: Proximum\Vimeet\Application\Command\Partner\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@components.token.admin.activate_account_token_generator'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Create }
     command.admin.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
         arguments:

@@ -155,6 +155,12 @@ services:
         parent: form_type_product.abstract_update_type
         tags:
             - { name: form.type }
+    form_type_partner.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\CreateType
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Helper
