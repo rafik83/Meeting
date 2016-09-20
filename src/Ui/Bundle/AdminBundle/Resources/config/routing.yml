@@ -799,3 +799,11 @@ admin_event_template_package:
     methods: [GET]
     requirements:
         event: \d+
+
+# Event Template
+admin_users:
+    path: /event/{event}/users
+    defaults: { _controller: AdminBundle:User:list }
+    methods: [GET]
+    requirements:
+        event: \d+
