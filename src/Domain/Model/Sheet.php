@@ -76,9 +76,9 @@ class Sheet implements TraceableInterface
     private $state = self::STATE_PENDING;
 
     /**
-     * @var bool
+     * @var int
      */
-    private $completed = false;
+    private $completeness = 0;
 
     /**
      * @var bool
@@ -127,7 +127,7 @@ class Sheet implements TraceableInterface
         $this->participants = new ArrayCollection();
         $this->orders       = new ArrayCollection();
         $this->state        = self::STATE_PENDING;
-        $this->completed    = false;
+        $this->completeness = 0;
     }
 
     /**
@@ -475,21 +475,13 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @param int $completeness
+     *
      * @return Sheet
      */
-    public function markAsIncomplete()
+    public function setCompleteness($completeness)
     {
-        $this->completed = false;
-
-        return $this;
-    }
-
-    /**
-     * @return Sheet
-     */
-    public function markAsComplete()
-    {
-        $this->completed = true;
+        $this->completeness = $completeness;
 
         return $this;
     }
@@ -547,7 +539,15 @@ class Sheet implements TraceableInterface
      */
     public function isCompleted()
     {
-        return true === $this->completed;
+        return 100 === $this->completeness;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCompleteness()
+    {
+        return $this->completeness;
     }
 
     /**
