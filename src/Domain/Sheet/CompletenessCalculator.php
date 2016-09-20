@@ -17,9 +17,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
 
 class CompletenessCalculator
