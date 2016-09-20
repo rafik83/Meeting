@@ -8,6 +8,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: 'Paul' }
             838197c7: { text: 'GASCOIGNE' }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
 
     # Proximum participants
     proximum_participant_visiteur:
