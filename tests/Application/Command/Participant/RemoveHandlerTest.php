@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -19,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
@@ -41,6 +44,10 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $cartManager = $this->prophesize(CartManager::class);
 
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
+
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
@@ -55,7 +62,11 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Handle
-        $handler = new RemoveHandler($participantRepository->reveal(), $cartManager->reveal());
+        $handler = new RemoveHandler(
+            $participantRepository->reveal(),
+            $cartManager->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($remove);
 
         $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
@@ -80,6 +91,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $cartManager = $this->prophesize(CartManager::class);
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
@@ -94,7 +106,11 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Handle
-        $handler = new RemoveHandler($participantRepository->reveal(), $cartManager->reveal());
+        $handler = new RemoveHandler(
+            $participantRepository->reveal(),
+            $cartManager->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($remove);
 
         $this->assertEquals($expectedSheet, $sheet);
