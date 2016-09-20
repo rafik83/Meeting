@@ -205,6 +205,33 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @param array $types
+     *
+     * @return Admin
+     */
+    public function setTypeEvents(array $types)
+    {
+        foreach ($this->events as $event) {
+            $find = false;
+            foreach ($types as $type) {
+                if ($type->getEvent() === $event) {
+                    $find = true;
+                }
+
+                if (!$this->hasEvent($type->getEvent())) {
+                    $this->addEvent($type->getEvent());
+                }
+            }
+
+            if (false === $find) {
+                $this->removeEvent($event);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Set type and associated event
      *
      * @param Type[] $types
@@ -220,10 +247,6 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         }
 
         foreach ($types as $type) {
-            if (!$this->hasEvent($type->getEvent())) {
-                $this->addEvent($type->getEvent());
-            }
-
             if (!$this->hasType($type)) {
                 $this->addType($type);
             }

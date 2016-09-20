@@ -683,7 +683,6 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@components.token.admin.activate_account_token_generator'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Create }

@@ -11,11 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator;
 
 use Proximum\Vimeet\Application\Command\Operator\Create;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateType extends AbstractOperatorType

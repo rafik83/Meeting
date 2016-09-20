@@ -13,18 +13,12 @@ namespace Proximum\Vimeet\Application\Command\Partner;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\AbstractCreateHandler;
-use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class CreateHandler extends AbstractCreateHandler
 {
-    /**
-     * @var ActivateAccountTokenGenerator
-     */
-    private $activateAccountTokenGenerator;
-
     /**
      * @var \DateTimeInterface
      */
@@ -34,19 +28,16 @@ class CreateHandler extends AbstractCreateHandler
      * @param AdminRepositoryInterface      $adminRepository
      * @param PasswordEncoderInterface      $encoder
      * @param SaltGeneratorInterface        $saltGenerator
-     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator
      * @param \DateTimeInterface            $dateTime
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
-        ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         \DateTimeInterface $dateTime
     ) {
         parent::__construct($adminRepository, $encoder, $saltGenerator);
 
-        $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
         $this->dateTime                      = $dateTime;
     }
 

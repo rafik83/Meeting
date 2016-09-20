@@ -45,21 +45,8 @@ class UpdateHandler
             ->setEmail($update->email)
             ->setFirstname($update->firstname)
             ->setLastname($update->lastname)
+            ->setTypeEvents($update->types)
             ->setTypes($update->types);
-
-        // remove unused event
-        foreach ($update->partner->getEvents() as $event) {
-            $find = false;
-            foreach ($update->types as $type) {
-                if ($type->getEvent() === $event) {
-                    $find = true;
-                }
-            }
-
-            if (false === $find) {
-                $update->partner->removeEvent($event);
-            }
-        }
 
         $this->adminRepository->set($update->partner);
     }
