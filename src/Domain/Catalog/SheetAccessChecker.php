@@ -37,16 +37,6 @@ class SheetAccessChecker
     {
         $visibleTypes = $this->visibleParticipationTypes->getAllowedTypesList($userSheet);
 
-        if (empty($visibleTypes)) {
-            return true;
-        }
-
-        $isSheetVisible = array_key_exists($requestedSheet->getType()->getId(), $visibleTypes);
-
-        if (!$isSheetVisible) {
-            return false;
-        }
-
-        return $isSheetVisible;
+        return array_key_exists($requestedSheet->getType()->getId(), $visibleTypes);
     }
 }

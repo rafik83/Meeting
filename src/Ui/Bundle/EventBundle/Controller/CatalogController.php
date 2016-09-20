@@ -56,9 +56,7 @@ class CatalogController extends Controller
             if (array_key_exists($typeId, $visibleTypes)) {
                 $filters['type'][] = $typeView;
             } else {
-                if (count($visibleTypes) > 0) {
-                    unset($typeViews[$typeId]);
-                }
+                unset($typeViews[$typeId]);
             }
         }
 
@@ -78,18 +76,22 @@ class CatalogController extends Controller
             $filters = $searchForm->getData();
         }
 
-        try {
-            $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
-                $event,
-                $filters,
-                $request->query->getInt('page', 1),
-                100,
-                $request->getLocale(),
-                $sheet
-            );
-            $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
-        } catch (UnavailableCurrentPageException $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
+        if (empty($visibleTypes)) {
+            $paginatedResult = ['results' => [], 'total' => 0];
+        } else {
+            try {
+                    $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
+                        $event,
+                        $filters,
+                        $request->query->getInt('page', 1),
+                        100,
+                        $request->getLocale(),
+                        $sheet
+                    );
+                    $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
+            } catch (UnavailableCurrentPageException $exception) {
+                throw $this->createNotFoundException($exception->getMessage());
+            }
         }
 
         $template = 'EventBundle:Catalog:index.html.twig';
