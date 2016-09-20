@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
@@ -22,11 +23,18 @@ class UserRepository implements UserRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * @var Paginator
      */
-    public function __construct(EntityManager $entityManager)
+    private $paginator;
+
+    /**
+     * @param EntityManager $entityManager
+     * @param Paginator     $paginator
+     */
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
         $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -110,4 +118,41 @@ class UserRepository implements UserRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param $eventId
+     *
+     * @return array
+     */
+    public function getByEventId($eventId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join('user.events', 'event', 'WITH', 'event = :eventId')
+            ->setParameter('eventId', $eventId)
+            ->orderBy('user.email', 'ASC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($page, $limit, $eventId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user', 'user.id')
+            ->join('user.events', 'event', 'WITH', 'event = :eventId')
+            ->setParameter('eventId', $eventId)
+            ->orderBy('user.email', 'ASC');
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');
+    }
+
 }
