@@ -17,7 +17,7 @@ validators.meeting.slot.recipe.date_range: 'La date de début doit être antéri
 validators.nomenclature.import.error: 'Votre fichier comporte des erreurs'
 validators.nomenclature.import.missing_keys: 'Vous ne pouvez plus supprimer d''élément de cette nomenclature car il y a déjà des inscriptions'
 validators.option.participant.alreadyAddedBoughtParticipant: 'Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche'
-validators.option.participant.optionCanNotBeUnselected: 'Vous ne pouvez pas déselectionner cette option, vous devez d''abord supprimer des participants depuis votre fiche'
+validators.option.participant.optionCanNotBeUnselected: 'Vous ne pouvez pas désélectionner cette option, vous devez d''abord supprimer des participants depuis votre fiche'
 validators.option.quantityMustBeAdded: 'Vous devez ajouter une quantité si vous sélectionnez cette option'
 validators.password.min: 'Le mot de passe doit comporter au moins {{ limit }} caractères'
 validators.password.mismatch: 'Les 2 mots de passe ne sont pas identiques'
