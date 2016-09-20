@@ -1,0 +1,45 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block content %}
+    <h1 class="page-header">Liste des utilisateurs</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.users.type'|trans }}</th>
+            <th>{{ 'admin.users.email'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users.results %}
+            <tr>
+                <td>{{ user.email }}</td>
+                {#<td>{{ type.position }}</td>#}
+                <td class="text-right">
+                    {#<div class="btn-group">#}
+                        {#<a class="btn btn-default btn-sm" href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}">#}
+                            {#{{ 'admin.type.update.link'|trans }}#}
+                        {#</a>#}
+                        {#<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                            {#<span class="caret"></span>#}
+                        {#</button>#}
+                        {#<ul class="dropdown-menu dropdown-menu-right">#}
+                            {#<li>#}
+                                {#{{ macro.delete_button(#}
+                                {#path('admin_type_remove', { 'event': event.id, 'type': type.id }),#}
+                                {#'admin.type.remove.link'|trans,#}
+                                {#{ 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.type.action.confirmDelete'|trans }) }}#}
+                            {#</li>#}
+                        {#</ul>#}
+                    {#</div>#}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': users}) }}
+{% endblock %}
