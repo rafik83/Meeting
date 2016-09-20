@@ -49,7 +49,7 @@ class ChangeTypeType extends AbstractType
                     $options['type']
                 ),
                 'required'     => true,
-                'expanded' => true,
+                'expanded'     => true,
                 'choice_label' => 'title',
                 'choice_value' => 'id',
             ]);
