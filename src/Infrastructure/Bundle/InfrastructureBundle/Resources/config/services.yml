@@ -818,6 +818,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@buyable_object_resolver'
             - '@command.sheet.remove_data_handler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
     command.sheet.remove_data_handler:
@@ -950,6 +951,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@cart_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
@@ -1981,3 +1983,12 @@ services:
             - '@repository.payment.payment_repository'
             - '@domain.transaction.transaction_manager'
             - '@datetime'
+
+    #
+    # Sheet
+    #
+    sheet.completeness_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\CompletenessCalculator
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.sheet_repository'
