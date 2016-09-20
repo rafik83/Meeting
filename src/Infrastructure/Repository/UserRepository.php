@@ -120,25 +120,6 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param $eventId
-     *
-     * @return array
-     */
-    public function getByEventId($eventId)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('user')
-            ->from(User::class, 'user')
-            ->join('user.events', 'event', 'WITH', 'event = :eventId')
-            ->setParameter('eventId', $eventId)
-            ->orderBy('user.email', 'ASC');
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function paginate($page, $limit, $eventId)
