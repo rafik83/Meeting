@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Sheet\CompletenessCalculator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -39,12 +40,21 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetChangedTypeEvent $sheetChangedTypeEvent
+     */
+    public function onChangeType(SheetChangedTypeEvent $sheetChangedTypeEvent)
+    {
+        $this->completenessCalculator->calculateCompleteness($sheetChangedTypeEvent->getSheet());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_UPDATED => 'onSheetUpdated',
+            Events::SHEET_UPDATED      => 'onSheetUpdated',
+            Events::SHEET_CHANGED_TYPE => 'onChangeType',
         ];
     }
 }

@@ -26,6 +26,10 @@
                 </span>
             {% endif %}
 
+            <span class="label label-{{ details.completenessStatus }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.completeness'|trans }}">
+                {{ details.completeness }}%
+            </span>
+
             <span class="label label-{{ details.remainingToPay == 0 ? 'success' : 'danger' }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.remainingToPay'|trans }}">
                 {{ details.remainingToPay|localizedcurrency(event.currency) }}
             </span>

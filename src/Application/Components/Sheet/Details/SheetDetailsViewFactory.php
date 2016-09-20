@@ -134,7 +134,9 @@ class SheetDetailsViewFactory
             // Total of orders
             $this->balance->getTotal($sheet),
             // Remaining to pay
-            $this->balance->getBalance($sheet)
+            $this->balance->getBalance($sheet),
+            // Completeness
+            $sheet->getCompleteness()
         );
     }
 }
