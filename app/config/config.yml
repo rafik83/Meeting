@@ -164,7 +164,7 @@ fos_elastica:
                             type: date
                         hasOrder:
                             type: boolean
-                        hasUnpaidCart:
+                        hasCart:
                             type: boolean
                     persistence:
                         model_to_elastica_transformer:

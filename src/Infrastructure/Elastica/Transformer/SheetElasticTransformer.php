@@ -117,7 +117,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'inCatalog'         => $sheet->isInCatalog(),
             'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
             'hasOrder'          => $sheet->hasOrders(),
-            'hasUnpaidCart'     => $unpaidCart,
+            'hasCart'           => $unpaidCart,
         ]);
     }
 }
