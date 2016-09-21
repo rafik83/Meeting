@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Sheet;
 
-
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -22,7 +21,6 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
 
 class CompletenessCalculator
 {
-
     /**
      * @var TemplateDataFactory
      */
@@ -166,7 +164,6 @@ class CompletenessCalculator
                     }
 
                     if ($object->isTranslatable()) {
-
                         $total += $count * $localesCount;
 
                         foreach ($locales as $locale) {
