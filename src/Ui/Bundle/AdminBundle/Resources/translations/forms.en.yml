@@ -1,14 +1,98 @@
-form.activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
-form.activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
+form.activate_account_password.children.password.children.first.label: 'New password'
+form.activate_account_password.children.password.children.second.label: 'Confirm password'
+form.activate_account_password.children.submit.label: Submit
 form.add_participant.children.data.label: 'Participant personnal informations'
+form.add_participant.children.email.label: E-mail
+form.add_participant.children.submit.label: Submit
+form.admin_activate_account_password.children.password.children.first.label: 'New password'
+form.admin_activate_account_password.children.password.children.second.label: 'Confirm new password'
+form.admin_activate_account_password.children.submit.label: Submit
+form.admin_lib_add.children.submit.label: Add
+form.billing_info_update.children.city.label: City
+form.billing_info_update.children.company.label: Company
+form.billing_info_update.children.country.label: Country
+form.billing_info_update.children.email.label: Email
+form.billing_info_update.children.firstname.label: 'First Name'
+form.billing_info_update.children.function.label: Position
+form.billing_info_update.children.gender.label: Gender
+form.billing_info_update.children.lastname.label: 'Last Name'
+form.billing_info_update.children.mobile.label: 'Mobile phone'
+form.billing_info_update.children.phone.label: Phone
+form.billing_info_update.children.street.label: Address
+form.billing_info_update.children.submit.label: Save
+form.billing_info_update.children.vatNumber.label: 'European VAT number'
+form.billing_info_update.children.zipcode.label: Postcode
+form.billing_update.children.submit.label: Save
 form.buy_participant.children.data.label: 'Participant personnal informations'
+form.buy_participant.children.participantData.children.email.label: Email
+form.buy_participant.children.submit.label: Submit
+form.change_mail.children.mail.label: 'Enter your new email'
+form.change_mail.children.submit.label: Submit
+form.change_password_admin.children.currentPassword.label: 'Current password'
+form.change_password_admin.children.plainPassword.children.first.label: 'New password'
+form.change_password_admin.children.plainPassword.children.second.label: 'Confirm new password'
+form.change_password_admin.children.submit.label: Submit
 form.change_password.children.currentPassword.label: 'Current password'
 form.change_password.children.plainPassword.children.first.label: 'New password'
-form.change_password.children.plainPassword.children.second.label: 'Refill the new password'
+form.change_password.children.plainPassword.children.second.label: 'Confirm new password'
+form.change_password.children.submit.label: Submit
+form.choose_payment_mode.children.submit.label: Save
+form.content_update.children.submit.label: Save
+form.create_admin.children.email.label: Email
+form.create_admin.children.events.label: Events
+form.create_admin.children.firstname.label: 'First Name'
+form.create_admin.children.lastname.label: 'Last Name'
+form.create_admin.children.password.label: Password
+form.create_admin.children.role.label: 'Participant type'
+form.create_admin.children.submit.label: Submit
+form.create_admin.role.operator: Collaborater
+form.create_admin.role.organizer: Organizer
+form.create_admin.role.super_admin: Administrator
+form.create_operator.children.email.label: Email
+form.create_operator.children.firstname.label: 'First Name'
+form.create_operator.children.lastname.label: 'Last Name'
+form.create_operator.children.submit.label: Submit
+form.create_speaker.children.firstname.label: 'First Name'
+form.create_speaker.children.lastname.label: 'Last Name'
+form.create_speaker.children.logo.label: Logo
+form.create_speaker.children.organization.label: Company
+form.create_speaker.children.photo.label: 'Speaker picture'
+form.create_speaker.children.submit.label: Save
+form.create_speaker.children.translations.children.position.label: Function
+form.create_speaker.children.translations.label: Function
+form.create_transaction.children.amount.label: amount
+form.create_transaction.children.date.label: Date
+form.create_transaction.children.mode.label: 'Payment method'
+form.create_transaction.children.reference.label: Reference
+form.create_transaction.children.state.label: State
+form.create_transaction.children.submit.label: Save
+form.delete_participant.children.submit.label: 'Remove participant'
+form.dont_see_what.children.participant.label: Participant
+form.dont_see_what.children.sheet.label: Sheet
+form.dont_see_what.children.submit.label: Save
+form.event_billing_configuration.children.legalInfo.label: 'Legal information'
+form.event_billing_configuration.children.submit.label: Save
+form.event_billing_configuration.children.translations.prototype.children.bankInfo.label: 'Bank details'
+form.event_billing_configuration.children.translations.prototype.children.bankInfo.placeholder: IBAN
+form.event_billing_configuration.children.translations.prototype.children.billingAddress.label: 'Payment address'
+form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Payment Terms'
+form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
+form.event_configure_date.children.submit.label: Save
+form.event_create.children.currency.label: Currency
+form.event_create.children.vat.label: 'VAT (%)'
+form.event_payment_conditions_update.children.submit.label: Save
+form.event_update.children.vat.label: 'VAT (%)'
 form.field.private: 'Private field'
+form.filter_admin.children.submit.label: Filter
 form.login.children.password.label: Password
+form.login.children.rememberMe.label: 'Remember me 30 days'
 form.login.children.submit.label: Login
 form.login.children.username.label: Email
+form.new_password.children.password.children.first.label: 'New password'
+form.new_password.children.password.children.second.label: 'Confirm new password'
+form.new_password.children.submit.label: Validate
+form.nomenclature_update_type.children.submit.label: Save
+form.package_update.children.submit.label: Save
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Submit
 form.participant_update.children.data.label: Participation
