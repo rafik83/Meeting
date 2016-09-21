@@ -71,7 +71,46 @@ class Category implements WhoInterface
      */
     public function getTypes()
     {
-        return $this->types;
+        return $this->types->toArray();
+    }
+
+    /**
+     * Set Type
+     *
+     * @param Type $type
+     * @param int  $typeId
+     *
+     * @return Category
+     */
+    public function setType(Type $type, $typeId)
+    {
+        $this->types->set($typeId, $type);
+
+        return $this;
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return Category
+     */
+    public function addType(Type $type)
+    {
+        $this->types->add($type);
+
+        return $this;
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return Category
+     */
+    public function removeType(Type $type)
+    {
+        $this->types->removeElement($type);
+
+        return $this;
     }
 
     /**
