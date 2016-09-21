@@ -18,6 +18,11 @@ class OrderListView
     public $id;
 
     /**
+     * @var string
+     */
+    public $numero;
+
+    /**
      * @var int
      */
     public $sheetId;
@@ -59,6 +64,7 @@ class OrderListView
 
     /**
      * @param int                $id
+     * @param string             $numero
      * @param int                $sheetId
      * @param string             $sheetTitle
      * @param string             $sheetType
@@ -70,6 +76,7 @@ class OrderListView
      */
     public function __construct(
         $id,
+        $numero,
         $sheetId,
         $sheetTitle,
         $sheetType,
@@ -80,6 +87,7 @@ class OrderListView
         $currency
     ) {
         $this->id         = $id;
+        $this->numero     = $numero;
         $this->sheetId    = $sheetId;
         $this->sheetTitle = $sheetTitle;
         $this->sheetType  = $sheetType;

@@ -316,6 +316,14 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
      * @return DateTimeInterface
      */
     public function getCreatedAt()

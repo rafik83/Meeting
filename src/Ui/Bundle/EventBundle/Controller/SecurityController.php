@@ -157,11 +157,12 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Event $event
+     * @param Request $request
+     * @param Event   $event
      *
      * @return Response
      */
-    public function impersonatingUserAction(Event $event)
+    public function impersonatingUserAction(Request $request, Event $event)
     {
         $impersonatingUser = null;
 
@@ -177,9 +178,12 @@ class SecurityController extends Controller
             }
         }
 
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+
         return $this->render('EventBundle:Security:impersonating.html.twig', [
             'impersonatingUser' => $impersonatingUser,
             'event'             => $event,
+            'sheet'             => $sheet,
         ]);
     }
 }

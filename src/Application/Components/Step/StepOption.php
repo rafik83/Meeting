@@ -55,8 +55,8 @@ class StepOption
         $cart        = $this->cartManager->getCart($command->sheet, $command->currentStep);
         $orderMerged = null;
 
-        if ($sheet->hasOrders()) {
-            $orderMerged = $this->orderMerger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $orderMerged = $this->orderMerger->merge($sheet->getNotCancelledOrders());
         }
 
         /** @var CartRow[] $optionRows */

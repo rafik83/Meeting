@@ -25,6 +25,7 @@ class Trace
     const DISABLE         = 'disable';
     const ENABLE_CATALOG  = 'enable_catalog';
     const DISABLE_CATALOG = 'disable_catalog';
+    const CHANGED_TYPE    = 'changed_type';
 
     /**
      * @var int

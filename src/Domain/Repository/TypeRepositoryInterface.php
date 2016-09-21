@@ -42,12 +42,20 @@ interface TypeRepositoryInterface
     public function set(Type $type);
 
     /**
-     * @param Event  $event
-     * @param string $locale
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEvent(Event $event);
+
+    /**
+     * @param Event     $event
+     * @param string    $locale
+     * @param null|Type $excludedType
      *
      * @return TypeView[]
      */
-    public function getTypeViewsByEvent(Event $event, $locale);
+    public function getTypeViewsByEvent(Event $event, $locale, Type $excludedType = null);
 
     /**
      * @param int    $typeId

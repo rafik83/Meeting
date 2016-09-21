@@ -56,6 +56,7 @@ class FilterFullType extends AbstractType
             ->add('predefined', PredefinedFiltersChoiceType::class, [
                 'label'       => 'form.filter.label',
                 'placeholder' => '',
+                'event'       => $options['event'],
             ])
         ;
     }

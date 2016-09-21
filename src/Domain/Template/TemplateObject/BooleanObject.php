@@ -39,6 +39,30 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isFilter()
+    {
+        $filter = $this->getOption('filter');
+
+        return null !== $filter
+            && isset($filter['active'])
+            && true === $filter['active'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilterLabel()
+    {
+        $filter = $this->getOption('filter');
+
+        return null !== $filter
+            && isset($filter['label'])
+            && null !== $filter['label'] ? $filter['label'] : '';
+    }
+
+    /**
      * @return string
      */
     public function getBoolean()
