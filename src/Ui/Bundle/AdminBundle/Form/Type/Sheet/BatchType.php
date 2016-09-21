@@ -17,9 +17,25 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 class BatchType extends AbstractType
 {
+    /**
+     * @var AuthorizationChecker
+     */
+    private $authorizationChecker;
+
+    /**
+     * BatchType constructor.
+     *
+     * @param AuthorizationChecker $authorizationChecker
+     */
+    public function __construct(AuthorizationChecker $authorizationChecker)
+    {
+        $this->authorizationChecker = $authorizationChecker;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -28,7 +44,9 @@ class BatchType extends AbstractType
         $builder
             ->add('ids', ChoiceType::class, [
                 'choices'            => $options['ids'],
-                'choice_name'        => function ($id) { return $id; },
+                'choice_name'        => function ($id) {
+                    return $id;
+                },
                 'expanded'           => true,
                 'multiple'           => true,
                 'label'              => false,
@@ -44,12 +62,15 @@ class BatchType extends AbstractType
             ])
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
-            ->add('accept', SubmitType::class)
-            ->add('enable', SubmitType::class)
-            ->add('disable', SubmitType::class)
-            ->add('addCatalog', SubmitType::class)
-            ->add('removeCatalog', SubmitType::class)
-        ;
+            ->add('accept', SubmitType::class);
+
+        if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
+            $builder
+                ->add('enable', SubmitType::class)
+                ->add('disable', SubmitType::class)
+                ->add('addCatalog', SubmitType::class)
+                ->add('removeCatalog', SubmitType::class);
+        }
     }
 
     /**

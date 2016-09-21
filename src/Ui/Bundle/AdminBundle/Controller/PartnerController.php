@@ -29,7 +29,7 @@ class PartnerController extends Controller
      */
     public function createAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_PARTNER');
 
         $create = new Create($this->getUser());
 
@@ -65,17 +65,21 @@ class PartnerController extends Controller
      */
     public function updateAction(Request $request, Admin $partner)
     {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_PARTNER');
 
         if (!$partner->isPartner()) {
             throw $this->createAccessDeniedException('Only partner can be updated with this page');
         }
 
+        $events = ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) ?
+            $partner->getEvents()->toArray() :
+            $this->getUser()->getEvents()->toArray();
+
         $update = new Update($partner);
         $form   = $this->createForm(UpdateType::class, $update, [
             'submit' => true,
-            'events' => $this->getUser()->getEvents()->toArray(),
-            'user'   => $this->getUser(),
+            'events' => $events,
+            'user'   => $partner,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

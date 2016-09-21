@@ -228,6 +228,7 @@ admin.promotion_code.title: 'Codes promos'
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_SUPER_ADMIN: Admin
+admin.role.ROLE_PARTNER: Partenaire
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
