@@ -1,0 +1,46 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{ 'admin.sheet.details.orders'|trans }}
+    </div>
+    <div class="panel-body">
+        {% if orders|length > 0 %}
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{{ 'admin.order.id'|trans }}</th>
+                    <th>{{ 'admin.order.createdAt'|trans }}</th>
+                    <th class="text-right">{{ 'admin.order.total'|trans }}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>
+                            {{ order.numero }}
+                            {% if order.cancelled %}
+                                <span class="label label-danger">{{ 'admin.order.cancelled'|trans }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ order.createdAt|localizeddate('medium', 'short') }}
+                        </td>
+                        <td class="text-right">
+                            {{ order.total|localizedcurrency(order.currency) }}
+                            {{ ('admin.event.vatMode.' ~ order.totalVatMode)|trans }}
+                        </td>
+                        <td class="text-right">
+                            <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: order.id }) }}" class="btn btn-default btn-sm">
+                                {{ 'admin.order_edit.link'|trans }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-danger">{{ 'admin.zero-result'|trans }}</p>
+        {% endif %}
+    </div>
+</div>
+

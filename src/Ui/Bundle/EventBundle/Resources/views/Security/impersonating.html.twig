@@ -1,9 +1,12 @@
 {% if impersonatingUser %}
     <div class="well">
-        {{ impersonatingUser.firstname ~ ' ' ~ impersonatingUser.lastname }}
-        ({{ impersonatingUser.email }})
+        {{ 'admin.sheet.impersonateAs'|trans({
+            '%adminFullname%': impersonatingUser.fullname,
+            '%adminEmail%': impersonatingUser.email,
+            '%userEmail%': app.user.email
+        }) }}
 
-        <a href="{{ path('event', {'_switchto': '_exit', '_redirect': url('admin_sheet', { 'event': event.id })}) }}" class="btn btn-danger">
+        <a href="{{ path('event', {'_switchto': '_exit', '_redirect': url('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id })}) }}" class="btn btn-danger">
             {{ 'admin.sheet.exit_impersonation'|trans }}
         </a>
     </div>

@@ -43,8 +43,12 @@ class CheckboxesType extends AbstractType
             'expanded'                  => true,
             'multiple'                  => true,
             'choice_translation_domain' => false,
-            'choice_name'               => function (NomenclatureItem $item) { return $item->getKey(); },
-            'choice_value'              => function (NomenclatureItem $item) { return $item->getKey(); },
+            'choice_name'               => function (NomenclatureItem $item = null) {
+                return null === $item ? null : $item->getKey();
+            },
+            'choice_value'              => function (NomenclatureItem $item = null) {
+                return null === $item ? null : $item->getKey();
+            },
             'choice_label'              => function (Options $options) {
                 return function (NomenclatureItem $item) use ($options) {
                     return $item->getLabel($options['locale']);

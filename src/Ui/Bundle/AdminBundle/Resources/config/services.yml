@@ -37,10 +37,16 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: form.type }
-    form_type_.sheet.follower_choice_type:
+    form_type.sheet.follower_choice_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType
         arguments:
             - '@repository.admin_repository'
+        tags:
+            - { name: form.type }
+    form_type.sheet.change_type_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: form.type }
     form_type.event_choice_type:

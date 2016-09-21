@@ -8,7 +8,11 @@
 
 {% block content %}
 
-    <h1 class="page-header"><a href="{{ path('admin_sheet_order_list', {event: event.id}) }}">{{ 'admin.order_edit.list_command.label'|trans }}</a> / {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}</h1>
+    <h1 class="page-header">
+        <a href="{{ path('admin_sheet_order_list', {event: event.id}) }}" class="btn btn-link btn-sm" data-toggle="tooltip" title="{{ 'admin.order_edit.list_command.label'|trans }}"><span class="glyphicon glyphicon-list"></span></a>
+        <a href="{{ path('admin_sheet_details', { event: event.id, sheet: order.sheet.id}) }}">{{ sheet_info }}</a>
+        <small>/ {{ 'admin.order.edit'|trans }} {{ order.numero }}</small>
+    </h1>
 
     <table class="table table-condensed">
         <thead>

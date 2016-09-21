@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Sheet\ChangeType:
+    properties:
+        type:
+            - NotNull: ~

@@ -76,6 +76,11 @@ class Order
     private $groupsData;
 
     /**
+     * @var boolean
+     */
+    private $cancelled = false;
+
+    /**
      * @param Sheet             $sheet
      * @param bool              $vatApplicable
      * @param Order\BillingInfo $billingInfo
@@ -99,6 +104,7 @@ class Order
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
         $this->promotionCodes = new ArrayCollection();
+        $this->cancelled      = false;
     }
 
     /**
@@ -520,7 +526,7 @@ class Order
     public function countParticipant()
     {
         $participant = 0;
-        foreach($this->rows as $orderRow) {
+        foreach ($this->rows as $orderRow) {
             if (null !== $orderRow->getProduct()
                 && $orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT
             ) {
@@ -555,13 +561,29 @@ class Order
      */
     public function getPlan()
     {
-        foreach($this->rows as $row) {
+        foreach ($this->rows as $row) {
             if ($row->getType() === Product::TYPE_PLAN) {
                 return $row->getProduct();
             }
         }
 
         return null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCancelled()
+    {
+        return $this->cancelled;
+    }
+
+    /**
+     * Set cancelled
+     */
+    public function cancel()
+    {
+        $this->cancelled = true;
     }
 
     /**

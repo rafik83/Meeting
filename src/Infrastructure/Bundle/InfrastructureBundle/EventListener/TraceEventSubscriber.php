@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
@@ -94,11 +95,25 @@ class TraceEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetChangedTypeEvent $event
+     */
+    public function onSheetChangedType(SheetChangedTypeEvent $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            Trace::CHANGED_TYPE,
+            $event->getDate(),
+            $event->getComment(),
+            $event->getAuthor()
+        );
+    }
+
+    /**
      * @param TraceableInterface $traceable
      * @param string             $action
      * @param DateTimeInterface  $date
      * @param string             $comment
-     * @param AbstractUser|null  $user
+     * @param null|AbstractUser  $user
      */
     private function addTrace(
         TraceableInterface $traceable,
@@ -128,6 +143,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_VALIDATED      => 'onSheetValidated',
             Events::SHEET_ENABLE_DISABLE => 'onSheetEnableDisable',
             Events::SHEET_CATALOG        => 'onSheetCatalog',
+            Events::SHEET_CHANGED_TYPE   => 'onSheetChangedType',
         ];
     }
 }
