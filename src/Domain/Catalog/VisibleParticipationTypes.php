@@ -51,9 +51,9 @@ class VisibleParticipationTypes
                 foreach ($rule->getSeeableCategory()->getTypes() as $categoryType) {
                     $visibleTypes[$categoryType->getId()] = $categoryType;
                 }
+            } else {
+                $visibleTypes[$rule->getSeeableType()->getId()] = $rule->getSeeableType();
             }
-
-            $visibleTypes[$rule->getSeeableType()->getId()] = $rule->getSeeableType();
         }
 
         return $visibleTypes;
