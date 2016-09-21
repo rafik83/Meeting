@@ -12,8 +12,12 @@ namespace Proximum\Vimeet\Tests\Application\Command\Template\Registration;
 
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
 use Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,8 +57,62 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // mock
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
-        $handler = new UpdateHandler($registrationTemplateRepository->reveal());
+        $handler = new UpdateHandler($registrationTemplateRepository->reveal(), $eventDispatcher->reveal());
+        $handler->handle($update);
+    }
+
+    public function testHandleWithEvent()
+    {
+        $event = EventFactory::createEvent();
+
+        // context
+        $dateTime = new \DateTime();
+        $array    = [
+            '811f6edf' => [
+                'component' => "block",
+                'type'      => "12",
+                'config'    => [
+                    'style' => 'style-1',
+                ],
+                'children'  => [
+                    'dded0597' => [
+                        'component' => "object",
+                        'type'      => "text",
+                        'config'     =>[
+                            'content' => [
+                                'fr' => "Profil"
+                            ],
+                            'type' => "titre",
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
+        $registrationTemplate->setEvent($event);
+        $update               = new Update($registrationTemplate);
+        $update->title        = 'base toto';
+        $update->value        = $array;
+
+        // expected
+        $expectedTemplate = new RegistrationTemplate('base toto', $array, ['fr'], 'fr', $dateTime);
+        $expectedTemplate->setEvent($event);
+
+        // mock
+        $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
+        $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $registrationTemplateUpdated = new RegistrationTemplateUpdatedEvent($event);
+        $eventDispatcher
+            ->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated
+            )->shouldBeCalled();
+
+        $handler = new UpdateHandler(
+            $registrationTemplateRepository->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 }

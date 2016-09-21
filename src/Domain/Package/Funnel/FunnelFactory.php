@@ -56,9 +56,9 @@ class FunnelFactory
         }
 
         $funnel->setCart($cart);
-        $funnel->setCartStep($cartStep); // ??? $cartStep peut etre à null ici
+        $funnel->setCartStep($cartStep);
 
-        if ($package->isPlansEnabled() && !$sheet->hasOrders()) {
+        if ($package->isPlansEnabled() && !$sheet->hasNotCancelledOrders()) {
             $step = new Step($this->getNextIndex($funnel), $package->getPlansLabel($locale), Step::TYPE_PLAN);
 
             if (null !== $cart->getCurrentStep() && $cart->getCurrentStep() > $this->getNextIndex($funnel)) {

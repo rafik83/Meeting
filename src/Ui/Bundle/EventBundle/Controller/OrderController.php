@@ -102,19 +102,17 @@ class OrderController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $orders = $sheet->getNotCancelledOrders();
+
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
             || !$sheet->getPackage()->isPassable()
-            || count($sheet->getOrders()) === 0
+            || count($orders) === 0
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $orders = $this->get('vimeet_infrastructure.repository.order_repository')
-            ->findBySheet($sheet);
-
-        $orderMerger = $this->get('order.merger');
-        $order       = $orderMerger->merge($orders);
+        $order = $this->get('order.merger')->merge($orders);
 
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
             $sheet,

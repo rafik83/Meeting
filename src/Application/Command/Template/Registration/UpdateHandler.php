@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\Registration;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandler
 {
@@ -20,11 +23,20 @@ class UpdateHandler
     private $registrationTemplateRepository;
 
     /**
-     * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
+     * @var EventDispatcherInterface
      */
-    public function __construct(RegistrationTemplateRepositoryInterface $registrationTemplateRepository)
-    {
+    private $eventDispatcher;
+
+    /**
+     * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
+     * @param EventDispatcherInterface                $eventDispatcher
+     */
+    public function __construct(
+        RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->registrationTemplateRepository = $registrationTemplateRepository;
+        $this->eventDispatcher                = $eventDispatcher;
     }
 
     /**
@@ -37,5 +49,10 @@ class UpdateHandler
         $registrationTemplate->setValue($update->value);
 
         $this->registrationTemplateRepository->set($registrationTemplate);
+
+        if (null !== $update->registrationTemplate->getEvent()) {
+            $registrationTemplateUpdated = new RegistrationTemplateUpdatedEvent($registrationTemplate->getEvent());
+            $this->eventDispatcher->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated);
+        }
     }
 }

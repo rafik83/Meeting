@@ -7,7 +7,7 @@ admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
 mail.activateAccount.activate: 'Activer votre compte'
-mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation de %firstname% %lastname% pour l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace membre sur l’événement, cliquez sur le lien ci-dessous %linkInvitation%. Ce lien expirera dans 48h.\n"
+mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation de %firstname% %lastname% pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace membre, cliquez sur le lien ci-dessous."
 mail.activateAccount.end: 'Bien cordialement,'
 mail.activateAccount.subject: '[%event%] Activer votre compte'
 mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace membre."

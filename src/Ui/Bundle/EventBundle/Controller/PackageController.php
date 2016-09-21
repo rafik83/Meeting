@@ -63,7 +63,7 @@ class PackageController extends Controller
 
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!empty($sheet->getOrders())) {
+        if (!empty($sheet->getNotCancelledOrders())) {
             return $this->redirectToRoute('event_order_summary_total', [
                 'sheet' => $sheet->getId(),
             ]);
@@ -92,8 +92,13 @@ class PackageController extends Controller
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if (!$funnel->hasStep($step)) {
-            throw $this->createNotFoundException(sprintf('Unkown %s step for package of sheet %s', $step,
-                $sheet->getId()));
+            throw $this->createNotFoundException(
+                sprintf(
+                    'Unkown %s step for package of sheet %s',
+                    $step,
+                    $sheet->getId()
+                )
+            );
         }
 
         $currentStep = $funnel->getStep($step);

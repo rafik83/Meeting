@@ -17,16 +17,23 @@
             <div class="col-md-8">
                 <table class="table">
                     <thead>
+                        <th>{{ 'order.list.column.numero'|trans }}</th>
                         <th>{{ 'order.list.column.date'|trans }}</th>
-                        <th>{{ 'order.list.column.pro_forma'|trans }}</th>
                         <th>{{ 'order.list.column.total'|trans }}</th>
+                        <th>{{ 'order.list.column.pro_forma'|trans }}</th>
                     </thead>
                     <tbody>
                         {% for order in orders %}
                             <tr>
+                                <td>
+                                    {{ order.numero }}
+                                    {% if order.cancelled %}
+                                        <span class="label label-danger">{{ 'order.list.cancelled'|trans }}</span>
+                                    {% endif %}
+                                </td>
                                 <td>{{ order.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
-                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
                                 <td>{{ order.total|localizedcurrency(order.currency) }}</td>
+                                <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': sheet.id, 'order': order.id}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

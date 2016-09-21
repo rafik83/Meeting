@@ -16,7 +16,7 @@ final class Events
     const SHEET_ACCEPTED                       = 'sheet.accepted';
     const SHEET_INVITATION_CLOSE_TO_EXPIRATION = 'sheet.invitation.close_to_expiration';
     const SHEET_ADD_PARTICIPANT_CONFIRMATION   = 'sheet.participant.add.confirmation';
-    const SHEET_INVITATION_EXPIRE              = 'sheet.invitation.expire';
+    const SHEET_CHANGED_TYPE                   = 'sheet.changed_type';
     const USER_MAIL_CHANGED                    = 'change_mail';
     const MEETING_PARTICIPANT_ADDED            = 'meeting.participant.added';
     const MEETING_PARTICIPANT_REMOVED          = 'meeting.participant.removed';
@@ -43,4 +43,5 @@ final class Events
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
     const REGISTRATION_STEP                    = 'user.registration.step';
+    const REGISTRATION_TEMPLATE_UPDATED        = 'registration_template.updated';
 }

@@ -14,18 +14,11 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\View\SheetDataView;
 
 class SheetManager
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
-    private $participantRepository;
-
     /**
      * @var TypeRepositoryInterface
      */
@@ -44,44 +37,18 @@ class SheetManager
     /**
      * SheetManager constructor.
      *
-     * @param ParticipantRepositoryInterface $participantRepository
      * @param TypeRepositoryInterface        $typeRepository
      * @param SheetRepositoryInterface       $sheetRepository
      * @param RequestRepositoryInterface     $requestRepository
      */
     public function __construct(
-        ParticipantRepositoryInterface $participantRepository,
         TypeRepositoryInterface $typeRepository,
         SheetRepositoryInterface $sheetRepository,
         RequestRepositoryInterface $requestRepository
     ) {
-        $this->participantRepository = $participantRepository;
         $this->typeRepository        = $typeRepository;
         $this->sheetRepository       = $sheetRepository;
         $this->requestRepository     = $requestRepository;
-    }
-
-    /**
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
-     *
-     * @return SheetDataView
-     */
-    public function getSheetDataView(Sheet $sheet, User $user, $locale)
-    {
-        return new SheetDataView(
-            $sheet->getId(),
-            $sheet->getEvent(),
-            $sheet->getType(),
-            $sheet->getParticipants()->toArray(),
-            $sheet->getData(),
-            $sheet->getPackageData(),
-            [],
-            $this->participantRepository->getParticipantViewsBySheet($sheet->getId()),
-            $this->participantRepository->getParticipantForUserAndSheet($user, $sheet),
-            $sheet->getOrders()
-        );
     }
 
     /**

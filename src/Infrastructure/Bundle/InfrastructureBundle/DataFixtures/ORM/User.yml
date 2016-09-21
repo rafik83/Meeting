@@ -1,3 +1,59 @@
+Proximum\Vimeet\Domain\Model\User\Account (local):
+    account_user_test:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_visiteur:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_exposant:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_carnot:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_carnot2:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_admin:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_test:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_proximum_user_ui:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+    account_user_random_{1..30}:
+        __construct: false
+        firstName: <firstName()>
+        lastName: <lastName()>
+        phone: <e164PhoneNumber()>
+        mobile: <e164PhoneNumber()>
+
 Proximum\Vimeet\Domain\Model\User:
     user_test:
         __construct: false
@@ -5,12 +61,14 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
         password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
         locale: "fr"
+        account: '@account_user_test'
     user_random_{1..30}:
         __construct: false
         email: "random_<current()>@elao.com"
         salt: "salt"
         password: "encrypted-password"
         locale: "fr"
+        account: '@account_user_random_<current()>'
 
     # Proximum users
     proximum_user_visiteur:
@@ -19,24 +77,28 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_visiteur'
     proximum_user_exposant:
         __construct: false
         email: "test_exposant@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_exposant'
     proximum_user_carnot:
         __construct: false
         email: "test_carnot@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_carnot'
     proximum_user_carnot2:
         __construct: false
         email: "test2_carnot@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_carnot2'
     proximum_user_admin:
         __construct: false
         email: "test_admin@proximum.com"
@@ -49,9 +111,11 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_test'
     proximum_user_ui:
         __construct: false
         email: "test_UI@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_ui'

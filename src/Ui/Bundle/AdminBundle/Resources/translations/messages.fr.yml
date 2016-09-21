@@ -25,7 +25,7 @@ admin.category.add: Ajouter
 admin.category.link: 'Catégories de participation'
 admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
-admin.common.close: 'Fermer'
+admin.common.close: Fermer
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
@@ -157,6 +157,7 @@ admin.order_edit.total.withoutVAT: 'Total HT'
 admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
+admin.order.cancelled: 'Annulée'
 admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
@@ -174,7 +175,7 @@ admin.package.create: 'Créer un template'
 admin.package.duplicate: Dupliquer
 admin.package.duplicate.title: 'Dupliquer le forfait %title%'
 admin.package.import.link: 'Importer les forfaits et le catalogue produit'
-admin.package.import.title: "Importer les forfaits et le catalogue produit d'un événement"
+admin.package.import.title: 'Importer les forfaits et le catalogue produit d''un événement'
 admin.package.link: 'Template de forfait de participation'
 admin.package.steps.step1.label: Formules
 admin.package.steps.step2.label: 'Participants & Plannings'
@@ -225,14 +226,14 @@ admin.promotion_code.title: 'Codes promos'
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_SUPER_ADMIN: Admin
-admin.rule.see-what.title: Règle de %seer% sur %seeable%
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
-admin.rule.list.action.seeWhat: Voit quoi ?
-admin.rule.list.column.who: Qui
-admin.rule.list.column.see: Voit
+admin.rule.list.action.seeWhat: 'Voit quoi ?'
 admin.rule.list.column.actions: Actions
+admin.rule.list.column.see: Voit
+admin.rule.list.column.who: Qui
 admin.rule.list.title: 'Liste des règles'
+admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
 admin.schedule.link: Agenda
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
@@ -247,12 +248,15 @@ admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.category: Catégorie
+admin.sheet.change.type.link: Changer
+admin.sheet.change.type.title: 'Changer le type de participation'
 admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
+admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
@@ -263,6 +267,7 @@ admin.sheet.details.meeting.request.pending: 'Demandes en attente'
 admin.sheet.details.meeting.request.refused: 'Demandes refusées'
 admin.sheet.details.meeting.request.title: 'Demandes de rendez-vous'
 admin.sheet.details.orders: Commandes
+admin.sheet.details.orders_and_transactions.title: 'Commandes et transactions'
 admin.sheet.details.owner_not_participant.title: 'Propriétaire mais non participant'
 admin.sheet.details.owner.email: Email
 admin.sheet.details.owner.mobile: Mobile
@@ -277,16 +282,20 @@ admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.impersonate: Impersonnation
+admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
+admin.sheet.go_back_to_list: Retour à la liste des participations
 admin.sheet.read: Voir
 admin.sheet.state: Etat
 admin.sheet.title: Participations
 admin.sheet.trace.accept: 'Acceptée le %at%'
 admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement
-admin.sheet.trace.comment: 'avec le commentaire: %comment%'
+admin.sheet.trace.changed_type: 'Type de participation changé'
+admin.sheet.trace.changed_type_comment: 'Changé de %fromType% à %toType%'
+admin.sheet.trace.comment: 'avec le commentaire: "%comment%"'
 admin.sheet.trace.disable: 'Désactivée le %at%'
 admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.sheet.trace.enable: 'Activée le %at%'
@@ -341,7 +350,7 @@ admin.template.sheet.titleEvent: 'Templates assignés'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'
-admin.transaction.column.reference: Commentaire
+admin.transaction.column.reference: Référence
 admin.transaction.column.state: Statut
 admin.transaction.column.total: Total
 admin.transaction.column.user: Utilisateur

@@ -253,6 +253,8 @@ class SheetSearchQueryBuilder
                 $this->filterCreatedTotay();
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
+            } else {
+                $this->filterByBooleanFilter($filters['predefined']);
             }
         }
     }
@@ -323,5 +325,19 @@ class SheetSearchQueryBuilder
 
         $this->query->addMust($rangePredefinedDateBegin);
         $this->query->addMust($rangePredefinedDateEnd);
+    }
+
+    /**
+     * @param string $predefined
+     */
+    private function filterByBooleanFilter($predefined)
+    {
+        $nested     = new Nested();
+        $boolQuery  = new BoolQuery();
+        $matchQuery = new Match();
+        $matchQuery->setField('booleanFilter.key', $predefined);
+
+        $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
+        $this->query->addMust($nested);
     }
 }

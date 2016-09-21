@@ -61,8 +61,8 @@ class OptionViewQueryHandler
         }
 
         // handle new order
-        if ($optionViewQuery->sheet->hasOrders()) {
-            $orderMerged  = $this->merger->merge($optionViewQuery->sheet->getOrders());
+        if ($optionViewQuery->sheet->hasNotCancelledOrders()) {
+            $orderMerged  = $this->merger->merge($optionViewQuery->sheet->getNotCancelledOrders());
             $selectedPlan = $orderMerged->getPlan();
         }
 
