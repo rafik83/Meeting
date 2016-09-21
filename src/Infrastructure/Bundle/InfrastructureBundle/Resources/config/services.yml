@@ -194,6 +194,7 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.cart_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
+        lazy:  true
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.promotion_code_row_repository:
@@ -1773,6 +1774,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@repository.cart_row_repository'
 
     #
     # Product Transformer

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
@@ -32,13 +33,23 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private $participantInfoGuesser;
 
     /**
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @var CartRowRepositoryInterface
      */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    private $cartRowRepository;
+
+    /**
+     * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
+     * @param CartRowRepositoryInterface $cartRowRepository
+     */
+    public function __construct(
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        CartRowRepositoryInterface $cartRowRepository
+    ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->cartRowRepository      = $cartRowRepository;
     }
 
     /**
@@ -88,6 +99,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $sheet->getType()->getCategories()->toArray()
         );
 
+        $unpaidCart = count($this->cartRowRepository->findBySheet($sheet)) > 0;
+
         return new Document($sheet->getId(), [
             'id'                => $sheet->getId(),
             'sheetName'         => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
@@ -103,6 +116,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'createdAt'         => $sheet->getCreatedAt()->format('c'),
             'inCatalog'         => $sheet->isInCatalog(),
             'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
+            'hasOrder'          => $sheet->hasOrders(),
+            'hasUnpaidCart'     => $unpaidCart,
         ]);
     }
 }
