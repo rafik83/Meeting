@@ -9,7 +9,7 @@ PreventMultipleSubmit.prototype.onSubmit = function ()
 {
     setTimeout(function () {
         [].forEach.call(this.element.querySelectorAll('[type=submit]'), function (element) {
-            if (element.getAttribute('data-prevent-multiple-submit') !== false) {
+            if (element.getAttribute('data-prevent-multiple-submit') != false) {
                 element.disabled = true;
             }
         });
