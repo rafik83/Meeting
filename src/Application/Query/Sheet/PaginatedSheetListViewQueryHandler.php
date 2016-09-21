@@ -88,6 +88,10 @@ class PaginatedSheetListViewQueryHandler
      */
     public function handle(PaginatedSheetListViewQuery $query)
     {
+        if ($query->admin->hasAllowedTypes() && !isset($query->filters['type'])) {
+            $query->filters['type'] = $query->admin->getAllowedTypes();
+        }
+
         $sheets = $this->sheetSearchAdapter->find(
             $query->event,
             $query->filters,

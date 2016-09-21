@@ -43,9 +43,19 @@ class SheetController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filters        = [];
-        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, ['event' => $event, 'locale' => $locale]);
-        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, ['event' => $event, 'locale' => $locale]);
+        $filters = [];
+
+        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
+            'event'  => $event,
+            'locale' => $locale,
+            'user'   => $this->getUser()
+        ]);
+
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, [
+            'event'  => $event,
+            'locale' => $locale,
+        ]);
+
         $filterPartForm->handleRequest(Request::create($request->getUri()));
         $filtered       = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
 

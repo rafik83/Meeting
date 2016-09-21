@@ -39,7 +39,7 @@ class TypeChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale']);
+        $resolver->setRequired(['event', 'locale', 'user']);
         $resolver->setDefaults([
             'choice_label' => function (Options $options) {
                 return function (Type $type) use ($options) {
@@ -47,7 +47,14 @@ class TypeChoiceType extends AbstractType
                 };
             },
             'choices' => function (Options $options) {
-                return $this->typeRepository->getLocalizedTypesByEvent($options['event'], $options['locale']);
+                if ($options['user']->hasAllowedTypes()) {
+                    return $options['user']->getAllowedTypes();
+                }
+
+                return $this->typeRepository->getLocalizedTypesByEvent(
+                    $options['event'],
+                    $options['locale']
+                );
             },
             'choice_translation_domain' => false,
         ]);

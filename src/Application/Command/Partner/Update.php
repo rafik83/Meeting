@@ -49,6 +49,6 @@ class Update
         $this->email     = $partner->getEmail();
         $this->firstname = $partner->getFirstname();
         $this->lastname  = $partner->getLastname();
-        $this->types     = $partner->getTypes()->toArray();
+        $this->types     = $partner->getAllowedTypes();
     }
 }

@@ -127,11 +127,19 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Type[]
      */
-    public function getTypes()
+    public function getAllowedTypes()
     {
-        return $this->types;
+        return $this->types->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAllowedTypes()
+    {
+        return count($this->types) > 0;
     }
 
     /**

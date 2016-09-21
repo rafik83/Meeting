@@ -203,6 +203,8 @@ class SheetSearchQueryBuilder
                 foreach ($filters['type'] as $type) {
                     if ($type instanceof TypeView) {
                         $filterByTypes->addShould(new Match('type', $type->id));
+                    } elseif ($type instanceof Type) {
+                        $filterByTypes->addShould(new Match('type', $type->getId()));
                     }
                 }
 
