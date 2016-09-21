@@ -71,9 +71,9 @@ class PartnerController extends Controller
             throw $this->createAccessDeniedException('Only partner can be updated with this page');
         }
 
-        $events = ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) ?
-            $partner->getEvents()->toArray() :
-            $this->getUser()->getEvents()->toArray();
+        $events = ($this->isGranted('ROLE_ORGANIZER')) ?
+            $this->getUser()->getEvents()->toArray() :
+            $partner->getEvents()->toArray() ;
 
         $update = new Update($partner);
         $form   = $this->createForm(UpdateType::class, $update, [

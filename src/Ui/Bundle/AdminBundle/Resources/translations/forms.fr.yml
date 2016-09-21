@@ -178,6 +178,7 @@ form.filter_admin.role.all: 'Tous les types'
 form.filter_admin.role.operator: Collaborateur
 form.filter_admin.role.organizer: Organisateur
 form.filter_admin.role.super_admin: Admin
+form.filter_admin.role.partner: Partenaire
 form.filter_operator.children.submit.label: Filtrer
 form.filter_operator.event.all: 'Tous les événements'
 form.filter_sheet_template_organizer.children.event.label: Événement/Type(s)
