@@ -23,6 +23,8 @@ flash.admin.nomenclature.import.success: 'La nomenclature a bien été importée
 flash.admin.nomenclature.update.success: 'La nomenclature a bien été mise à jour'
 flash.admin.operator.create.success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
 flash.admin.operator.update.success: 'Le collaborateur a été édité avec succès'
+flash.admin.partner.create.success: 'Le nouveau partenaire a bien été créé'
+flash.admin.partner.update.success: 'Le partenaire a bien été édité avec succès'
 flash.admin.order.add_row.success: 'La ligne a été ajoutée'
 flash.admin.order.remove_row.success: 'La ligne a été supprimée'
 flash.admin.order.update_row.success: 'La ligne a été mise à jour'
