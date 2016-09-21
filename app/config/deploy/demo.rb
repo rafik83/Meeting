@@ -14,4 +14,4 @@ role :app, domain, :primary => true
 set :branch, "demo"
 
 # Tasks
-after :deploy, 'app_tasks:initdb'
+# after :deploy, 'app_tasks:initdb'
