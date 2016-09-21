@@ -18,6 +18,8 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -32,13 +34,23 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private $participantInfoGuesser;
 
     /**
+     * @var TemplateDataFactory
+     */
+    private $templateDataFactory;
+
+    /**
      * @param SheetInfoGuesser       $sheetInfoGuesser
      * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param TemplateDataFactory    $templateDataFactory
      */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        TemplateDataFactory $templateDataFactory
+    ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->templateDataFactory    = $templateDataFactory;
     }
 
     /**
@@ -88,6 +100,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $sheet->getType()->getCategories()->toArray()
         );
 
+        $templateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
+        $filtersValue = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
+
         return new Document($sheet->getId(), [
             'id'                => $sheet->getId(),
             'sheetName'         => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
@@ -103,6 +118,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'createdAt'         => $sheet->getCreatedAt()->format('c'),
             'inCatalog'         => $sheet->isInCatalog(),
             'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
+            'booleanFilter'     => $filtersValue,
         ]);
     }
 }
