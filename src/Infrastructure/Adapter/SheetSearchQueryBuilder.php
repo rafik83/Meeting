@@ -253,6 +253,10 @@ class SheetSearchQueryBuilder
                 $this->filterCreatedTotay();
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
+            } elseif ($filters['predefined'] === Constant::NO_ORDER) {
+                $this->filterNoOrder();
+            } elseif ($filters['predefined'] === Constant::UNPAID_CART) {
+                $this->filterUnpaidCart();
             }
         }
     }
@@ -323,5 +327,27 @@ class SheetSearchQueryBuilder
 
         $this->query->addMust($rangePredefinedDateBegin);
         $this->query->addMust($rangePredefinedDateEnd);
+    }
+
+    /**
+     * Sheet with no order
+     */
+    protected function filterNoOrder()
+    {
+        $matchHasOrder = new Match();
+        $matchHasOrder->setField('hasOrder', true);
+
+        $this->query->addMust($matchHasOrder);
+    }
+
+    /**
+     * Sheet with unpaid cart
+     */
+    protected function filterUnpaidCart()
+    {
+        $matchUnpaidCart = new Match();
+        $matchUnpaidCart->setField('hasUnpaidCart', true);
+
+        $this->query->addMust($matchUnpaidCart);
     }
 }

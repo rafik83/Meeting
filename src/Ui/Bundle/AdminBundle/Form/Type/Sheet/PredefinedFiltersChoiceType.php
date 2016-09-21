@@ -24,8 +24,10 @@ class PredefinedFiltersChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => [
-                'admin.sheet.created_today'     => Constant::CREATED_TODAY,
-                'admin.sheet.created_this_week' => Constant::CREATED_THIS_WEEK,
+                'admin.sheet.created_today'      => Constant::CREATED_TODAY,
+                'admin.sheet.created_this_week'  => Constant::CREATED_THIS_WEEK,
+                'admin.sheet.filter.no_order'    => Constant::NO_ORDER,
+                'admin.sheet.filter.unpaid_cart' => Constant::UNPAID_CART,
             ],
         ]);
     }

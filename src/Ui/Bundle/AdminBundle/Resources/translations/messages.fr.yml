@@ -275,6 +275,8 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
+admin.sheet.filter.no_order: 'Fiche sans commande'
+admin.sheet.filter.unpaid_cart: Fiche avec panier
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.inCatalog: 'Au catalogue'
