@@ -255,8 +255,10 @@ class SheetSearchQueryBuilder
                 $this->filterCreatedThisWeek();
             } elseif ($filters['predefined'] === Constant::NO_ORDER) {
                 $this->filterNoOrder();
-            } elseif ($filters['predefined'] === Constant::UNPAID_CART) {
-                $this->filterUnpaidCart();
+            } elseif ($filters['predefined'] === Constant::HAS_CART) {
+                $this->filterHasCart();
+            } else {
+                $this->filterByBooleanFilter($filters['predefined']);
             }
         }
     }
@@ -343,11 +345,25 @@ class SheetSearchQueryBuilder
     /**
      * Sheet with unpaid cart
      */
-    protected function filterUnpaidCart()
+    protected function filterHasCart()
     {
-        $matchUnpaidCart = new Match();
-        $matchUnpaidCart->setField('hasUnpaidCart', true);
+        $matchHasCart = new Match();
+        $matchHasCart->setField('hasCart', true);
 
-        $this->query->addMust($matchUnpaidCart);
+        $this->query->addMust($matchHasCart);
+    }
+
+    /**
+     * @param string $predefined
+     */
+    private function filterByBooleanFilter($predefined)
+    {
+        $nested     = new Nested();
+        $boolQuery  = new BoolQuery();
+        $matchQuery = new Match();
+        $matchQuery->setField('booleanFilter.key', $predefined);
+
+        $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
+        $this->query->addMust($nested);
     }
 }

@@ -71,16 +71,16 @@ class BuyableObjectResolver
         $cart  = $this->cartManager->getCart($sheet);
         $order = null;
 
-        if ($sheet->hasOrders()) {
-            $order = $this->orderMerger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $order = $this->orderMerger->merge($sheet->getNotCancelledOrders());
         }
 
         if (null === $object->getSelectedProduct()) {
             return;
         }
 
-        if ($object instanceof TemplateObject\Image ||
-            $object instanceof TemplateObject\MediaCollection
+        if ($object instanceof TemplateObject\Image
+            || $object instanceof TemplateObject\MediaCollection
         ) {
             $this->addPayableProduct($object, $cart, $order);
         }

@@ -52,9 +52,11 @@ class SelectParticipantAndPlanningHandler
 
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
+        $orders = $sheet->getNotCancelledOrders();
+
         // Update participant cart row
-        if ($sheet->hasOrders()) {
-            $order = $this->merger->merge($sheet->getOrders());
+        if (count($orders) > 0) {
+            $order = $this->merger->merge($orders);
             $cart->resolveParticipantsQuantity($order);
         } else {
             $cart->resolveParticipantsQuantity();
@@ -67,8 +69,9 @@ class SelectParticipantAndPlanningHandler
         // Update planning cart row
         $orderPlanningQuantity = 0;
 
-        if ($sheet->hasOrders()) {
-            $merged = $this->merger->merge($sheet->getOrders());
+        if (count($orders) > 0) {
+            $merged = $this->merger->merge($orders);
+
             if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
                 $orderPlanningQuantity = $orderRow->getQuantity();
             }

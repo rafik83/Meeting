@@ -90,8 +90,8 @@ class QuantityMaxGuesser
         }
 
         // handle new order
-        if ($sheet->hasOrders()) {
-            $orderMerged  = $this->merger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $orderMerged  = $this->merger->merge($sheet->getNotCancelledOrders());
             $selectedPlan = $orderMerged->getPlan();
         }
 

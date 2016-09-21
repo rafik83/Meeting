@@ -23,6 +23,7 @@ event.info.close: Close
 event.info.contact: 'Useful information'
 package.product.totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'
 package.product.unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
+package.summary.seeTermsOfSale: 'View general sales conditions'
 package.vatMode.ati: 'incl. VAT'
 package.vatMode.et: 'excl. VAT'
 register.already_registered: 'Already registered?'

@@ -58,6 +58,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: "Elao" }
+            57da9df7ced30: { boolean: "true" }
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -122,7 +123,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
         amount: 250
         date: <dateTimeBetween('-10days', 'now')>
         mode: bank_card
-        reference: TRANSCATION_01
+        reference: TRANSACTION_01
         state: paid
         currency: EUR
     transaction_2:
@@ -131,7 +132,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
         amount: 500
         date: <dateTimeBetween('-2days', 'now')>
         mode: bank_card
-        reference: TRANSCATION_02
+        reference: TRANSACTION_02
         state: pending
         currency: EUR
     transaction_3:
@@ -140,7 +141,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
         amount: 125
         date: <dateTimeBetween('-1days', 'now')>
         mode: bank_check
-        reference: TRANSCATION_03
+        reference: TRANSACTION_03
         state: pending
         currency: EUR
 

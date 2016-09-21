@@ -14,13 +14,13 @@ Proximum\Vimeet\Domain\Model\User:
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_1:
-        __construct: false
-        event: "@event_rdv_carnot_2016"
-        type: "@type_exposant"
-        createdAt: <dateTime()>
+        __construct:
+            - "@event_rdv_carnot_2016"
+            - "@type_exposant"
+            - []
+            - "@user_1"
+            - <dateTime()>
         lastLoginAt: <dateTime()>
-        owner: "@user_1"
-        data: []
         registrationData: []
 
 Proximum\Vimeet\Domain\Model\Participant:
