@@ -1,3 +1,5 @@
+boolean.no: Non
+boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
@@ -27,7 +29,7 @@ form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de pass
 form.search.orderBy.alphabetical: 'Ordre alphabétique'
 form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
 form.search.orderBy.label: TRIER
-form.search.type.at_least_one_checked: Au moins un type de participant doit être sélectionné
+form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.type.label: Participants
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL

@@ -164,11 +164,12 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
-            'event'      => $eventDomain->getEvent(),
-            'typeView'   => $typeView,
-            'form'       => $form->createView(),
-            'stepTitle'  => $participantBlock->getTitle($locale),
-            'stepsCount' => $registrationTemplate->getBlocksCount(),
+            'event'           => $eventDomain->getEvent(),
+            'typeView'        => $typeView,
+            'form'            => $form->createView(),
+            'stepTitle'       => $participantBlock->getTitle($locale),
+            'stepDescription' => $this->get('markdown')->toHtml($participantBlock->getDescription($locale)),
+            'stepsCount'      => $registrationTemplate->getBlocksCount(),
         ]);
     }
 
@@ -217,6 +218,7 @@ class RegisterController extends Controller
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
             'stepTitle'       => $participantBlock->getTitle($locale),
+            'stepDescription' => $this->get('markdown')->toHtml($participantBlock->getDescription($locale)),
             'participantCard' => $participantCard,
         ]);
     }

@@ -56,8 +56,8 @@ class ParticipantsViewQueryHandler
         $locale             = $participantsViewQuery->locale;
         $participantProduct = $participantsViewQuery->sheet->getPackage()->getParticipant();
 
-        if ($participantsViewQuery->sheet->hasOrders()) {
-            $orderMerged  = $this->orderMerger->merge($participantsViewQuery->sheet->getOrders());
+        if ($participantsViewQuery->sheet->hasNotCancelledOrders()) {
+            $orderMerged  = $this->orderMerger->merge($participantsViewQuery->sheet->getNotCancelledOrders());
             $selectedPlan = $orderMerged->getPlan();
         } else {
             $selectedPlan = $cart->getPlanRow()->getProduct();

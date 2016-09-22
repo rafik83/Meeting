@@ -19,6 +19,8 @@ Proximum\Vimeet\Domain\Model\Order:
             type: float
         currency:
             type: string
+        cancelled:
+            type: boolean
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

@@ -41,6 +41,7 @@ class TemplateDataFactory
         'options'               => TemplateObject::class,
         'tags'                  => TemplateObject\TagsCollection::class,
         'gender'                => TemplateObject\Gender::class,
+        'boolean'               => TemplateObject\BooleanObject::class,
     ];
 
     /**

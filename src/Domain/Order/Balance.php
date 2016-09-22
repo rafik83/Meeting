@@ -53,6 +53,18 @@ class Balance
     /**
      * @param Sheet $sheet
      *
+     * @return Order[]
+     */
+    public function getNotCancelledOrders(Sheet $sheet)
+    {
+        return array_filter($this->getOrders($sheet), function (Order $order) {
+            return !$order->isCancelled();
+        });
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
      * @return Transaction[]
      */
     public function getTransactions(Sheet $sheet)
@@ -67,7 +79,7 @@ class Balance
      */
     public function getTotal(Sheet $sheet)
     {
-        $orders = $this->getOrders($sheet);
+        $orders = $this->getNotCancelledOrders($sheet);
 
         return array_reduce($orders, function ($carry, Order $order) {
             return $carry + $order->getTotal();

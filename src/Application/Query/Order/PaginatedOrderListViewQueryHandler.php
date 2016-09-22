@@ -57,6 +57,7 @@ class PaginatedOrderListViewQueryHandler
             function (Order $order) use ($query) {
                 return new OrderListView(
                     $order->getId(),
+                    $order->getNumero(),
                     $order->getSheet()->getId(),
                     $this->sheetInfoGuesser->guessSheetName($order->getSheet(), $query->locale),
                     $order->getSheet()->getType()->getTitle($query->locale),

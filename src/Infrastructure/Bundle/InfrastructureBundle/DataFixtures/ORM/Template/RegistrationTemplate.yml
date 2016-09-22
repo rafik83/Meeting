@@ -103,7 +103,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Téléphone portable"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -119,7 +118,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Téléphone fixe"
                                 help:
                                     fr: ""
-                                length: "25"
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -208,7 +206,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Site internet"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: false
                                 type: "text"
                                 translatable: false
@@ -224,7 +221,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Adresse"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -240,7 +236,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Code postal"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -256,7 +251,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Ville"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false
@@ -272,7 +266,6 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Pays"
                                 help:
                                     fr: ""
-                                length: ""
                                 required: true
                                 type: "text"
                                 translatable: false

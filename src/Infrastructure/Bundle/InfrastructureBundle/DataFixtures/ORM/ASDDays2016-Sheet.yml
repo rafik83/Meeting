@@ -37,6 +37,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
         registrationData:
             3ad4b72f: { text: "Elao" }
+            57da9df7ced30: { boolean: "true" }
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
@@ -124,7 +125,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
         amount: 250
         date: <dateTimeBetween('-10days', 'now')>
         mode: bank_card
-        reference: TRANSCATION_01
+        reference: TRANSACTION_01
         state: paid
         currency: EUR
     transaction_2:
@@ -133,7 +134,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
         amount: 500
         date: <dateTimeBetween('-2days', 'now')>
         mode: bank_card
-        reference: TRANSCATION_02
+        reference: TRANSACTION_02
         state: pending
         currency: EUR
     transaction_3:
@@ -142,7 +143,7 @@ Proximum\Vimeet\Domain\Model\Transaction:
         amount: 125
         date: <dateTimeBetween('-1days', 'now')>
         mode: bank_check
-        reference: TRANSCATION_03
+        reference: TRANSACTION_03
         state: pending
         currency: EUR
 

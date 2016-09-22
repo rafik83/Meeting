@@ -224,6 +224,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Payment\PaymentRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.filter.boolean_template_filter_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Filter\BooleanTemplateFilterRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -783,6 +787,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler
         arguments:
             - '@repository.template.registration_template_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
     command.template.registration.add_locale_handler:
@@ -827,6 +832,16 @@ services:
             - '@buyable_object_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveData }
+    command.sheet.change_type_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
@@ -1192,7 +1207,6 @@ services:
     vimeet_infrastructure.application.components.sheet.manager:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
@@ -1444,6 +1458,14 @@ services:
             - '@template.template_data_factory'
             - '@application.nomenclature.nomenclature_cloner'
             - '@datetime'
+
+    #
+    # Filter
+    #
+    infrastructure.service.boolean_filters_builder:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder
+        arguments:
+            - '@repository.filter.boolean_template_filter_repository'
 
     #
     # Guesser
@@ -1773,6 +1795,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@template.template_data_factory'
 
     #
     # Product Transformer
@@ -1862,6 +1885,19 @@ services:
             - '@repository.promotion_code_repository'
             - '@package.specification.vat_applicable'
             - '@datetime'
+
+    #
+    # Catalog
+    #
+    catalog.visible_participation_types:
+        class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes
+        arguments:
+            - '@repository.rule_repository'
+
+    catalog.sheet_access_checker:
+        class: Proximum\Vimeet\Domain\Catalog\SheetAccessChecker
+        arguments:
+            - '@catalog.visible_participation_types'
 
     #
     # Promotion

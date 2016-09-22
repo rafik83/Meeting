@@ -80,8 +80,8 @@ class CartManager
     {
         $cart = $this->getCart($sheet, null);
 
-        if ($sheet->hasOrders()) {
-            $order = $this->orderMerger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $order = $this->orderMerger->merge($sheet->getNotCancelledOrders());
             $cart->resolveParticipantsQuantity($order);
             $this->save($cart);
 

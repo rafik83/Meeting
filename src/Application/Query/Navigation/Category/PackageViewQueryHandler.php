@@ -52,9 +52,8 @@ class PackageViewQueryHandler
         }
 
         $linksView = [];
-        $orders    = $packageQuery->sheet->getOrders();
 
-        if (count($orders) > 0) {
+        if ($packageQuery->sheet->hasOrders()) {
             $linksView[] = new LinkView(
                 'navigation.links.package.order_list',
                 $this->navigationBuilder->getRoute('event_order_list', [
@@ -62,12 +61,17 @@ class PackageViewQueryHandler
                 ])
             );
 
-            $linksView[] = new LinkView(
-                'navigation.links.package.order_summary_total',
-                $this->navigationBuilder->getRoute('event_order_summary_total', [
-                    'sheet' => $packageQuery->sheet->getId()
-                ])
-            );
+            if ($packageQuery->sheet->hasNotCancelledOrders()) {
+                $linksView[] = new LinkView(
+                    'navigation.links.package.order_summary_total',
+                    $this->navigationBuilder->getRoute(
+                        'event_order_summary_total',
+                        [
+                            'sheet' => $packageQuery->sheet->getId()
+                        ]
+                    )
+                );
+            }
         } else {
             $funnel = $this->funnelFactory->create($packageQuery->sheet, $packageQuery->locale);
 
