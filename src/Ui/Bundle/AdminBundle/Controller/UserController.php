@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,11 +38,33 @@ class UserController extends Controller
                 $event->getId()
             );
 
+        $filters        = [];
+        $filterFullForm = $this->createFilterForm(FilterType::class, $filters, ['event' => $event, 'locale' => $request->getLocale()]);
+
+        $filterFormView = $filterFullForm->createView();
+
         return $this->render('AdminBundle:User:list.html.twig', [
             'event'  => $event,
             'users'  => $users,
-            'locale' => $request->getLocale()
+            'locale' => $request->getLocale(),
+            'filter_form'      => $filterFormView,
         ]);
     }
 
+    /**
+     * @param string $type
+     * @param array  $data
+     * @param array  $options
+     *
+     * @return FormInterface
+     */
+    private function createFilterForm($type, $data, array $options = [])
+    {
+        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'required'           => false,
+            'allow_extra_fields' => true,
+        ]));
+    }
 }
