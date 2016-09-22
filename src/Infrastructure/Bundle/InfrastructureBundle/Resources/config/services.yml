@@ -64,6 +64,11 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+    vimeet_infrastructure.repository.user_event_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\UserEventRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
     vimeet_infrastructure.repository.participant_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository
         arguments:
@@ -778,6 +783,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@vimeet_infrastructure.repository.user_event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
