@@ -126,7 +126,7 @@ class CatalogController extends Controller
         $event = $eventDomain->getEvent();
 
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createNotFoundException();
+            throw $this->createAccessDeniedException();
         }
 
         if (!$sheet->isInCatalog()) {
