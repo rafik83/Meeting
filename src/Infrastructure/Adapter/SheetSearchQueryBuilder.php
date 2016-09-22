@@ -337,7 +337,7 @@ class SheetSearchQueryBuilder
     protected function filterNoOrder()
     {
         $matchHasOrder = new Match();
-        $matchHasOrder->setField('hasOrder', true);
+        $matchHasOrder->setField('hasOrder', false);
 
         $this->query->addMust($matchHasOrder);
     }

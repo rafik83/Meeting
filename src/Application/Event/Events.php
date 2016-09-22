@@ -43,4 +43,5 @@ final class Events
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
     const REGISTRATION_TEMPLATE_UPDATED        = 'registration_template.updated';
+    const PACKAGE_STEP_DONE                    = 'package.step.done';
 }
