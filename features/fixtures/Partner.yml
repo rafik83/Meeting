@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\Admin:
+    user_orga:
+        __construct:
+            - "partner@proximumgroup.com"
+            - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO"
+            - "YzzBNEhw7I6H5xPuziQEAPAsg5g=" #vimeet_admin
+            - 'fr'
+            - "Partner"
+            - "LAROSE"
+            - 'ROLE_PARTNER'
+            - <dateTime()>
+        events:
+            - '@event_rdv_carnot_2016'
+            - '@event_asddays_2016'
+        types:
+            - '@event_asddays_2016_type_fournisseur'
+            - '@event_asddays_2016_type_investisseur'
+            - '@type_visiteur'
+        lastLoginAt: <dateTime()>

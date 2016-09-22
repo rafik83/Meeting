@@ -505,6 +505,14 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @When /^(?:|I )go to "(?P<page>[^"]+)" without checking$/
+     */
+    public function visitWithoutCheckStatus($page)
+    {
+        parent::visit($this->baseUrl . $page);
+    }
+
+    /**
      * Checks, that current page PATH is equal to specified.
      *
      * @Then /^(?:|I )should be on this page "(?P<page>[^"]+)"$/
