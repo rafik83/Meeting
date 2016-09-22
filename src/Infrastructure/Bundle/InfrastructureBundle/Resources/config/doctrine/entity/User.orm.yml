@@ -19,24 +19,3 @@ Proximum\Vimeet\Domain\Model\User:
     embedded:
         account:
             class: Proximum\Vimeet\Domain\Model\User\Account
-    manyToMany:
-        events:
-            targetEntity: Proximum\Vimeet\Domain\Model\Event
-            joinTable:
-              name: user_event
-              joinColumns:
-                user_id:
-                  referencedColumnName: id
-              inverseJoinColumns:
-                event_id:
-                  referencedColumnName: id
-        types:
-            targetEntity: Proximum\Vimeet\Domain\Model\Type
-            joinTable:
-              name: user_type
-              joinColumns:
-                user_id:
-                  referencedColumnName: id
-              inverseJoinColumns:
-                type_id:
-                  referencedColumnName: id
