@@ -21,8 +21,8 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +60,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $adminRepository->add($expectedOperator)->shouldBeCalled();
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher                = $this->prophesize(DelayedEventDispatcher::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedOperator,
