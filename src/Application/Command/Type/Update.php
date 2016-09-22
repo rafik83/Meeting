@@ -77,7 +77,7 @@ class Update
         $this->type                                = $type;
         $this->rank                                = $type->getPosition();
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
-        $this->hidden                              = $type->getHidden();
+        $this->hidden                              = $type->isHidden();
 
         foreach ($type->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
