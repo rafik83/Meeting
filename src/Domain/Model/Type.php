@@ -335,7 +335,7 @@ class Type implements WhoInterface
     /**
      * @return bool
      */
-    public function getHidden()
+    public function isHidden()
     {
         return $this->hidden;
     }
