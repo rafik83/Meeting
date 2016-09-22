@@ -57,13 +57,13 @@ Feature: Partner available features
 
   Scenario: Partner can't access other page
     Given I am logged with "partner@proximumgroup.com" on admin
-    When I go to "/admin/fr/event/1/practical-info" without checking
+    When I go to "/admin/fr/event/1/practical-info"
     Then the response status code should be 403
-    When I go to "/admin/fr/event/1/category" without checking
+    When I go to "/admin/fr/event/1/category"
     Then the response status code should be 403
-    When I go to "/admin/fr/event/1/type" without checking
+    When I go to "/admin/fr/event/1/type"
     Then the response status code should be 403
-    When I go to "/admin/fr/event/1/order" without checking
+    When I go to "/admin/fr/event/1/order"
     Then the response status code should be 403
-    When I go to "/admin/fr/event/1/meeting" without checking
+    When I go to "/admin/fr/event/1/meeting"
     Then the response status code should be 403
