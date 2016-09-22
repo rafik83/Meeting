@@ -8,20 +8,19 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>{{ 'admin.users.type'|trans }}</th>
+            <th>{{ macro.choice_as_dropdown(filter_form.type) }}</th>
             <th>{{ 'admin.users.email'|trans }}</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        {% for user in users.results %}
+        {% for result in users.results %}
             <tr>
                 <td>
-                {% for type in user.types %}
-                    {{ type.getTitle(locale) }}
-                {% endfor %}
+                    {{ result.type.getTitle(locale) }}
                 </td>
-                <td>{{ user.email }}</td>
+                <td>{{ result.user.email }}</td>
+                <td>Voir fiche complète</td>
             </tr>
         {% endfor %}
         </tbody>
