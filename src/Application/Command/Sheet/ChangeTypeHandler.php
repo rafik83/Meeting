@@ -102,7 +102,9 @@ class ChangeTypeHandler
                 $this->translator->trans('admin.sheet.trace.changed_type_comment', [
                     '%fromType%' => $previousType->getTitle($changeType->locale),
                     '%toType%'   => $changeType->type->getTitle($changeType->locale),
-                ])
+                ]),
+                $previousType->getTitle($changeType->locale),
+                $changeType->locale
             )
         );
     }
