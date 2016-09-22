@@ -45,6 +45,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $expectedType->getValidationCriteria()->setSheetAccepted(true);
         $expectedType->setSheetTemplate($expectedSheetTemplate);
+        $expectedType->setHidden(true);
         $expectedType->setRegistrationTemplate($expectedRegistrationTemplate);
         $expectedType->setPackage($package);
 
@@ -55,6 +56,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->sheetTemplate        = $sheetTemplate;
         $create->registrationTemplate = $registrationTemplate;
         $create->package              = $package;
+        $create->hidden               = true;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);

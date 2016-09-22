@@ -28,16 +28,23 @@ class TypeListView
     public $title;
 
     /**
+     * @var bool
+     */
+    public $hidden;
+
+    /**
      * TypeListView constructor.
      *
      * @param int    $id
      * @param int    $position
      * @param string $title
+     * @param bool   $hidden
      */
-    public function __construct($id, $position, $title)
+    public function __construct($id, $position, $title, $hidden)
     {
         $this->id       = $id;
         $this->position = $position;
         $this->title    = $title;
+        $this->hidden   = $hidden;
     }
 }
