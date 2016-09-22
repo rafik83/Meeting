@@ -290,6 +290,7 @@ admin.sheet.go_back_to_list: Retour à la liste des participations
 admin.sheet.read: Voir
 admin.sheet.state: Etat
 admin.sheet.title: Participations
+admin.sheet.title.count: '{0} Aucun participation|{1} 1 Participation|]1,Inf[ %count% Participations'
 admin.sheet.trace.accept: 'Acceptée le %at%'
 admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement
