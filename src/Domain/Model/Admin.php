@@ -390,7 +390,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
             $this->lastname,
             $this->password,
             $this->salt
-            ) = unserialize($serialized);
+        ) = unserialize($serialized);
     }
 
     /**
@@ -500,6 +500,6 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function getDisplayName()
     {
-        return $this->getFirstname().' '.$this->getLastname();
+        return $this->getFirstname() . ' ' . $this->getLastname();
     }
 }

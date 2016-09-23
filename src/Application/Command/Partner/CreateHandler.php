@@ -74,9 +74,7 @@ class CreateHandler extends AbstractCreateHandler
                 $admin->addEvent($type->getEvent());
             }
 
-            if (!$admin->hasType($type)) {
-                $admin->addType($type);
-            }
+            $admin->addType($type);
         }
 
         $this->adminRepository->add($admin);

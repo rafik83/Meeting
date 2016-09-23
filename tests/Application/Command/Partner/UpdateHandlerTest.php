@@ -24,16 +24,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $oldType  = new Type($event);
         $type     = new Type($event);
 
-        $partner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata',
-            Admin::ROLE_PARTNER, $dateTime);
+        $partner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);
         $partner->addEvent($event);
         $partner->addType($oldType);
 
         $command        = new Update($partner);
         $command->types = [$oldType, $type];
 
-        $expectedPartner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata',
-            Admin::ROLE_PARTNER, $dateTime);
+        $expectedPartner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);
 
         $expectedPartner->addEvent($event);
         $expectedPartner->addType($type);

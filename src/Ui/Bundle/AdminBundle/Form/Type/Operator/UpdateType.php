@@ -20,9 +20,8 @@ class UpdateType extends AbstractOperatorType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired([
-            'events',
-        ]);
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => Update::class,
         ]);

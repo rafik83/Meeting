@@ -29,13 +29,14 @@ class PartnerController extends Controller
      */
     public function createAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_PARTNER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $create = new Create($this->getUser());
+        $events = $this->get('vimeet_infrastructure.repository.event_repository')->getEventsByAdmin($this->getUser());
 
         $form = $this->createForm(CreateType::class, $create, [
             'submit' => true,
-            'events' => $this->getUser()->getEvents()->toArray(),
+            'events' => $events,
             'user'   => $this->getUser(),
         ]);
 
@@ -65,15 +66,13 @@ class PartnerController extends Controller
      */
     public function updateAction(Request $request, Admin $partner)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_PARTNER');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         if (!$partner->isPartner()) {
             throw $this->createAccessDeniedException('Only partner can be updated with this page');
         }
 
-        $events = ($this->isGranted('ROLE_ORGANIZER')) ?
-            $this->getUser()->getEvents()->toArray() :
-            $partner->getEvents()->toArray() ;
+        $events = $this->get('vimeet_infrastructure.repository.event_repository')->getEventsByAdmin($this->getUser());
 
         $update = new Update($partner);
         $form   = $this->createForm(UpdateType::class, $update, [

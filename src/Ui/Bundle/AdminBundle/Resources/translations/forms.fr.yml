@@ -83,18 +83,18 @@ form.create_operator.children.email.label: Email
 form.create_operator.children.firstname.label: Prénom
 form.create_operator.children.lastname.label: Nom
 form.create_operator.children.submit.label: Envoyer
-form.create_operator.children.events.label: 'Événements disponible pour ce collaborateur'
+form.create_operator.children.events.label: 'Événements disponibles pour ce collaborateur'
 form.create_partner.children.email.label: Email
 form.create_partner.children.firstname.label: Prénom
 form.create_partner.children.lastname.label: Nom
 form.create_partner.children.submit.label: Créer
-form.create_partner.children.types.label: 'Types disponible pour ce collaborateur'
+form.create_partner.children.types.label: 'Types disponibles pour ce collaborateur'
 form.create_partner.children.password.label: 'Mot de passe'
 form.update_partner.children.email.label: Email
 form.update_partner.children.firstname.label: Prénom
 form.update_partner.children.lastname.label: Nom
 form.update_partner.children.submit.label: Créer
-form.update_partner.children.types.label: 'Types disponible pour ce collaborateur'
+form.update_partner.children.types.label: 'Types disponibles pour ce partenaire'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
