@@ -24,6 +24,6 @@ Feature: Display complete sheet from catalog
     And I go to this page "/fr/catalog/sheet/3"
     Then I should see "World Company Inc"
     And I should not see "sheet.object.action.edit"
-    And I should see "sheet.object.action.request"
+    And I should see "sheet.request_meeting"
     When I go to "http://asddays-2016.vimeet.proximum.dev/fr/catalog/sheet/2"
     Then the response status code should be 403
