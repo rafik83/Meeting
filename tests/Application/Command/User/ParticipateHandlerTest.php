@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
+use Proximum\Vimeet\Application\Components\User\TypeResolver;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -208,10 +209,12 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $participantRepository->add($expectedParticipant)->shouldBeCalled();
+        $typeResolver = $this->prophesize(TypeResolver::class);
 
         $handler = new ParticipateHandler(
             $sheetRepository->reveal(),
             $participantRepository->reveal(),
+            $typeResolver->reveal(),
             $accountSynchronizer->reveal(),
             $now
         );
