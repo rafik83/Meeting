@@ -42,8 +42,7 @@ abstract class AdminType extends AbstractType
                 'choices'  => [
                     'form.create_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
                     'form.create_admin.role.operator'    => Admin::ROLE_OPERATOR,
-                    'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
-                    'form.create_admin.role.partner'     => Admin::ROLE_PARTNER
+                    'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN
                 ],
                 'required' => true,
             ])

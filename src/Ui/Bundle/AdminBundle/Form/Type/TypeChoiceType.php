@@ -48,7 +48,10 @@ class TypeChoiceType extends AbstractType
             },
             'choices' => function (Options $options) {
                 if ($options['user']->hasAllowedTypes()) {
-                    return $options['user']->getAllowedTypes();
+                    return $this->typeRepository->getAllowedTypesByEvent(
+                        $options['user'],
+                        $options['event']
+                    );
                 }
 
                 return $this->typeRepository->getLocalizedTypesByEvent(

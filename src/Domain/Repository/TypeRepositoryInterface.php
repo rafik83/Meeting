@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -108,6 +109,14 @@ interface TypeRepositoryInterface
      * @return Type[]
      */
     public function getLocalizedTypesByEvent(Event $event, $locale);
+
+    /**
+     * @param Admin $admin
+     * @param Event $event
+     *
+     * @return Type[]
+     */
+    public function getAllowedTypesByEvent(Admin $admin, Event $event);
 
     /**
      * @param Event  $event

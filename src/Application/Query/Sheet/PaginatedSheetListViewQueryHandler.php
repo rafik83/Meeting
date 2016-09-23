@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
@@ -56,6 +57,11 @@ class PaginatedSheetListViewQueryHandler
     private $traceRepository;
 
     /**
+     * @var TypeRepositoryInterface
+     */
+    private $typeRepository;
+
+    /**
      * PaginatedSheetListViewQueryHandler constructor.
      *
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
@@ -64,6 +70,7 @@ class PaginatedSheetListViewQueryHandler
      * @param Impersonate                 $impersonate
      * @param SheetRepositoryInterface    $sheetRepository
      * @param TraceRepositoryInterface    $traceRepository
+     * @param TypeRepositoryInterface     $typeRepository
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -71,7 +78,8 @@ class PaginatedSheetListViewQueryHandler
         ParticipantInfoGuesser $participantInfoGuesser,
         Impersonate $impersonate,
         SheetRepositoryInterface $sheetRepository,
-        TraceRepositoryInterface $traceRepository
+        TraceRepositoryInterface $traceRepository,
+        TypeRepositoryInterface $typeRepository
     ) {
         $this->sheetSearchAdapter     = $sheetSearchAdapter;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
@@ -79,6 +87,7 @@ class PaginatedSheetListViewQueryHandler
         $this->impersonate            = $impersonate;
         $this->sheetRepository        = $sheetRepository;
         $this->traceRepository        = $traceRepository;
+        $this->typeRepository         = $typeRepository;
     }
 
     /**
@@ -89,7 +98,7 @@ class PaginatedSheetListViewQueryHandler
     public function handle(PaginatedSheetListViewQuery $query)
     {
         if ($query->admin->hasAllowedTypes() && !isset($query->filters['type'])) {
-            $query->filters['type'] = $query->admin->getAllowedTypes();
+            $query->filters['type'] = $this->typeRepository->getAllowedTypesByEvent($query->admin, $query->event);
         }
 
         $sheets = $this->sheetSearchAdapter->find(
