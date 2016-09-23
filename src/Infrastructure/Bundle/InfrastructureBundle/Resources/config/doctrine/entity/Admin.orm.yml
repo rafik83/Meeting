@@ -32,3 +32,4 @@ Proximum\Vimeet\Domain\Model\Admin:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+            inversedBy: admins
