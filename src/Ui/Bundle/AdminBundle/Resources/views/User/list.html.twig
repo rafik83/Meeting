@@ -20,7 +20,7 @@
                     {{ result.type.getTitle(locale) }}
                 </td>
                 <td>{{ result.user.email }}</td>
-                <td>Voir fiche complète</td>
+                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': result.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
