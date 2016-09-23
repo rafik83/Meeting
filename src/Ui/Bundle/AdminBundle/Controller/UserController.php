@@ -71,11 +71,11 @@ class UserController extends Controller
             ->getFullUser($user->getId());
 
         return $this->render('AdminBundle:User:show.html.twig', [
+            'event'  => $event,
             'user'   => $userDetails,
             'locale' => $request->getLocale(),
         ]);
     }
-
 
     /**
      * @param string $type
