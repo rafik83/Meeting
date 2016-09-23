@@ -257,6 +257,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@components.user.type_resolver'
             - '@account.synchronizer'
             - '@datetime'
         tags:
@@ -1257,6 +1258,15 @@ services:
         class: Proximum\Vimeet\Domain\Rule\Applyer
         arguments:
             - '@domain.rule.composer'
+
+    #
+    # User component
+    #
+    components.user.type_resolver:
+        class: Proximum\Vimeet\Application\Components\User\TypeResolver
+        arguments:
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Token component

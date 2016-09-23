@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Components\User\TypeResolver;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 
 class ParticipateHandler
 {
@@ -40,14 +42,21 @@ class ParticipateHandler
     private $dateTime;
 
     /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param TypeResolver                   $typeResolver
      * @param Synchronizer                   $accountSynchronizer
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
+        TypeResolver $typeResolver,
         Synchronizer $accountSynchronizer,
         \DateTimeInterface $dateTime
     ) {
@@ -55,6 +64,7 @@ class ParticipateHandler
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer   = $accountSynchronizer;
         $this->dateTime              = $dateTime;
+        $this->typeResolver          = $typeResolver;
     }
 
     /**
@@ -64,6 +74,8 @@ class ParticipateHandler
     {
         // Create a new sheet for this event
         $sheet = new Sheet($participate->event, $participate->type, [], $participate->user, $this->dateTime);
+
+        $this->typeResolver->resolve($participate->user, $participate->event, $participate->type);
 
         $sheetData       = [];
         $participantData = [];

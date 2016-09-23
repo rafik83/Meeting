@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,6 +58,26 @@ class UserController extends Controller
             'filter_form'      => $filterFormView,
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param User    $user
+     *
+     * @return Response
+     */
+    public function showAction(Request $request, Event $event, User $user)
+    {
+        $userDetails = $this
+            ->get('vimeet_infrastructure.repository.user_repository')
+            ->getFullUser($user->getId());
+
+        return $this->render('AdminBundle:User:show.html.twig', [
+            'user'   => $userDetails,
+            'locale' => $request->getLocale(),
+        ]);
+    }
+
 
     /**
      * @param string $type
