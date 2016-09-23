@@ -164,6 +164,7 @@ class SheetController extends Controller
     public function detailsAction(Request $request, Event $event, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
 
         $locale = $event->getAvailableLocale($request->getLocale());
 

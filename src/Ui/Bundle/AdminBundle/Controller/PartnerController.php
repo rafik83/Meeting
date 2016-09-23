@@ -46,7 +46,7 @@ class PartnerController extends Controller
                 $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.admin.partner.create.success');
 
-                if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
+                if ($this->isGranted('ROLE_SUPER_ADMIN')) {
                     return $this->redirectToRoute('admin_list_admin');
                 }
 
@@ -92,7 +92,7 @@ class PartnerController extends Controller
                 $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.admin.partner.update.success');
 
-                if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
+                if ($this->isGranted('ROLE_SUPER_ADMIN')) {
                     return $this->redirectToRoute('admin_list_admin');
                 }
 

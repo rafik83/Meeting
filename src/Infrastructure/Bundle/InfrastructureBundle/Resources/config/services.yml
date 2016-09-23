@@ -1351,6 +1351,8 @@ services:
     #
     components.security.admin_event_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
+    components.security.admin_sheet_access:
+        class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
 
     #
     # Guideline Component
