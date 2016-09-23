@@ -23,8 +23,6 @@ class AdminSheetAccess
      */
     public function canAccess(Admin $admin, Sheet $sheet)
     {
-
-
         if ($admin->hasAllowedTypes()) {
             return in_array($sheet->getType(), $admin->getAllowedTypes());
         }
