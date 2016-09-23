@@ -61,7 +61,7 @@ class StepManager
      *
      * @return bool
      */
-    public function isRegistrationComplete(Participant $participant)
+    private function isRegistrationComplete(Participant $participant)
     {
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
             $participant,

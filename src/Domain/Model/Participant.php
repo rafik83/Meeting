@@ -182,7 +182,6 @@ class Participant
         $this->order = $order;
     }
 
-
     /**
      * @return int
      */
