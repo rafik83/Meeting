@@ -373,6 +373,7 @@ admin.update_content.terms-of-sale.title: 'Modifier les conditions générales d
 admin.users.link: 'Utilisateurs'
 admin.users.type: Type
 admin.users.email: Email
+admin.users.details: 'Voir la fiche détaillée'
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'
