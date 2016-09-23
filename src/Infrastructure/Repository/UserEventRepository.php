@@ -24,11 +24,6 @@ class UserEventRepository implements UserEventRepositoryInterface
      */
     private $entityManager;
 
-    /**
-     * @var Paginator
-     */
-    private $paginator;
-
     /**s
      * @param EntityManager $entityManager
      * @param Paginator     $paginator
@@ -36,7 +31,6 @@ class UserEventRepository implements UserEventRepositoryInterface
     public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
         $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
     }
 
     /**
