@@ -104,18 +104,86 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: "@event_asddays_2016_account_user_1"
     user_asddays_2:
         __construct: false
         email: "user_asddays_2@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: "@event_asddays_2016_account_user_2"
     user_asddays_3:
         __construct: false
         email: "user_asddays_3@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: "@event_asddays_2016_account_user_3"
+
+Proximum\Vimeet\Domain\Model\User\Account (local):
+    event_asddays_2016_account_user_1:
+        __construct: false
+        firstName: "Martin"
+        lastName: "Dupont"
+        phone: "0668973246"
+        mobile: "0668973246"
+        position: "Consultant"
+        company: "Elao"
+        website: "www.monsite.fr"
+        address: "10 rue des lilas"
+        zipcode: "75002"
+        city: "Paris"
+        country: "FR"
+        gender: "man"
+        avatar: 'assets/images/asddays-logo.png'
+        companyAddress: "10 rue Saint Marc"
+        companyPhone: "0668973246"
+        companyZipCode: "75002"
+        companyCity: "Paris"
+        companyCountry: "FR"
+        companyWebsite: "www.elao.com"
+    event_asddays_2016_account_user_2:
+        __construct: false
+        firstName: "Jean"
+        lastName: "Durant"
+        phone: "0668973246"
+        mobile: "0668973246"
+        position: "Manager"
+        company: "Elao"
+        website: "www.monsite.fr"
+        address: "10 rue des lilas"
+        zipcode: "75002"
+        city: "Paris"
+        country: "FR"
+        gender: "man"
+        avatar: 'assets/images/asddays-logo.png'
+        companyAddress: "10 rue Saint Marc"
+        companyPhone: "0668973246"
+        companyZipCode: "75002"
+        companyCity: "Paris"
+        companyCountry: "FR"
+        companyWebsite: "www.elao.com"
+    event_asddays_2016_account_user_3:
+        __construct: false
+        firstName: "Julie"
+        lastName: "Pierini"
+        phone: "0668973246"
+        mobile: "0668973246"
+        position: "Chef de projet"
+        company: "Elao"
+        website: "www.monsite.fr"
+        address: "10 rue des lilas"
+        zipcode: "75002"
+        city: "Paris"
+        country: "FR"
+        gender: "woman"
+        avatar: 'assets/images/asddays-logo.png'
+        companyAddress: "10 rue Saint Marc"
+        companyPhone: "0668973246"
+        companyZipCode: "75002"
+        companyCity: "Paris"
+        companyCountry: "FR"
+        companyWebsite: "www.elao.com"
 
 Proximum\Vimeet\Domain\Model\Transaction:
     transaction_1:

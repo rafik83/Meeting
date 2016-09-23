@@ -1,0 +1,7 @@
+Proximum\Vimeet\Domain\Model\UserEvent:
+    event_asddays_2016_user_event_1:
+        __construct: ['@user_asddays_1', '@event_asddays_2016', '@event_asddays_2016_type_investisseur']
+    event_asddays_2016_user_event_2:
+        __construct: ['@user_asddays_2', '@event_asddays_2016', '@event_asddays_2016_type_fournisseur']
+    event_asddays_2016_user_event_3:
+        __construct: ['@user_asddays_3', '@event_asddays_2016', '@event_asddays_2016_type_donneur_ordre']
