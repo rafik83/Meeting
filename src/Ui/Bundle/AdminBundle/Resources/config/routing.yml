@@ -800,10 +800,18 @@ admin_event_template_package:
     requirements:
         event: \d+
 
-# Event Template
+# Users
 admin_users:
     path: /event/{event}/users
     defaults: { _controller: AdminBundle:User:list }
     methods: [GET]
     requirements:
         event: \d+
+
+admin_users_details:
+    path: /event/{event}/users/{user}
+    defaults: { _controller: AdminBundle:User:show }
+    methods: [GET]
+    requirements:
+        event: \d+
+        user: \d+
