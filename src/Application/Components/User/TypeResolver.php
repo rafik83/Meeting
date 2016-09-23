@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Components\User;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 
 class TypeResolver
@@ -24,22 +23,13 @@ class TypeResolver
     private $userEventRepository;
 
     /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
      * TypeResolver constructor.
      *
      * @param UserEventRepositoryInterface $userEventRepository
-     * @param TypeRepositoryInterface      $typeRepository
      */
-    public function __construct(
-        UserEventRepositoryInterface $userEventRepository,
-        TypeRepositoryInterface $typeRepository
-    ) {
+    public function __construct(UserEventRepositoryInterface $userEventRepository)
+    {
         $this->userEventRepository = $userEventRepository;
-        $this->typeRepository      = $typeRepository;
     }
 
     /**

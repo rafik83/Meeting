@@ -1266,7 +1266,6 @@ services:
         class: Proximum\Vimeet\Application\Components\User\TypeResolver
         arguments:
             - '@vimeet_infrastructure.repository.user_event_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Token component
