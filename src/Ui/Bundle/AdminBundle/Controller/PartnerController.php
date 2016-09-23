@@ -38,6 +38,7 @@ class PartnerController extends Controller
             'submit' => true,
             'events' => $events,
             'user'   => $this->getUser(),
+            'locale' => $request->getLocale(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -83,6 +84,7 @@ class PartnerController extends Controller
             'submit' => true,
             'events' => $events,
             'user'   => $partner,
+            'locale' => $request->getLocale(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

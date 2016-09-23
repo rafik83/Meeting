@@ -35,7 +35,7 @@ class UpdateType extends PartnerType
             ])
             ->add('types', TypeChoiceType::class, [
                 'multiple' => true,
-                'choices'  => $this->buildChoices($options['events'], $options['user']),
+                'choices'  => $this->buildChoices($options['events'], $options['user'], $options['locale']),
             ]);
     }
 
@@ -47,6 +47,7 @@ class UpdateType extends PartnerType
         $resolver->setRequired([
             'events',
             'user',
+            'locale',
         ]);
         $resolver->setDefaults([
             'data_class' => Update::class,

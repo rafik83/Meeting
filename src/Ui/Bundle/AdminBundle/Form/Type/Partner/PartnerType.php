@@ -37,16 +37,19 @@ abstract class PartnerType extends AbstractType
      *
      * @return array
      */
-    public function buildChoices(array $events, Admin $admin)
+    public function buildChoices(array $events, Admin $admin, $locale)
     {
         $choices = [];
 
         /** @var Event $event */
         foreach ($events as $event) {
             $types = $this->typeRepository->getTypesByEvent($event);
+
+            $localeToUse = $event->getAvailableLocale($locale);
+
             /** @var Type $type */
             foreach ($types as $type) {
-                $choices[$event->getTitle()][$type->getTitle($admin->getLocale())] = $type;
+                $choices[$event->getTitle()][$type->getTitle($localeToUse)] = $type;
             }
         }
 
