@@ -10,12 +10,16 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Exception\SheetDisabledException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\User\UserChecker as SymfonyUserChecker;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,23 +39,45 @@ class UserChecker extends SymfonyUserChecker
      * @var RequestStack
      */
     private $requestStack;
+    /**
+     * @var UserEventRepositoryInterface
+     */
+    private $userEventRepository;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var TypeRepositoryInterface
+     */
+    private $typeRepository;
 
     /**
      * UserChecker constructor.
      *
-     * @param RequestStack             $requestStack
-     * @param EventRepositoryInterface $eventRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     *
+     * @param RequestStack                 $requestStack
+     * @param EventRepositoryInterface     $eventRepository
+     * @param SheetRepositoryInterface     $sheetRepository
+     * @param UserEventRepositoryInterface $userEventRepository
+     * @param TypeRepositoryInterface      $typeRepository
+     * @param Session                      $session
      */
     public function __construct(
         RequestStack $requestStack,
         EventRepositoryInterface $eventRepository,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        UserEventRepositoryInterface $userEventRepository,
+        TypeRepositoryInterface $typeRepository,
+        Session $session
     ) {
-        $this->eventRepository = $eventRepository;
-        $this->sheetRepository = $sheetRepository;
-        $this->requestStack    = $requestStack;
+        $this->eventRepository     = $eventRepository;
+        $this->sheetRepository     = $sheetRepository;
+        $this->requestStack        = $requestStack;
+        $this->userEventRepository = $userEventRepository;
+        $this->session             = $session;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -67,6 +93,16 @@ class UserChecker extends SymfonyUserChecker
             return;
         }
 
+        $this->checkSheetDisabled($user, $event);
+        $this->checkUserType($user, $event);
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     */
+    private function checkSheetDisabled(User $user, Event $event)
+    {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
         if (!empty($sheets)) {
@@ -76,6 +112,29 @@ class UserChecker extends SymfonyUserChecker
             if (false === $sheet->isEnabled()) {
                 throw new SheetDisabledException('login.error.sheetDisabled');
             }
+        }
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     */
+    private function checkUserType(User $user, Event $event)
+    {
+        $userEvent = $this->userEventRepository->getUserEvent($user, $event);
+
+        $typeFlashBag = $this->session->getFlashBag()->get('register_type');
+        $typeId       = array_shift($typeFlashBag);
+
+        $type = $this->typeRepository->getById($typeId);
+
+        if (null === $type) {
+            return;
+        }
+
+        if ($userEvent->getType() !== $type) {
+            $userEvent->setType($type);
+            $this->userEventRepository->set($userEvent);
         }
     }
 }

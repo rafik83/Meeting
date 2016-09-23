@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 
@@ -31,4 +32,12 @@ interface UserEventRepositoryInterface
      * @return array
      */
     public function getByUser(User $user);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return UserEvent
+     */
+    public function getUserEvent(User $user, Event $event);
 }

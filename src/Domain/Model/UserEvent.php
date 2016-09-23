@@ -73,7 +73,7 @@ class UserEvent
     /**
      * @param User $user
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
     }
@@ -89,7 +89,7 @@ class UserEvent
     /**
      * @param Event $event
      */
-    public function setEvent($event)
+    public function setEvent(Event $event)
     {
         $this->event = $event;
     }
@@ -104,10 +104,14 @@ class UserEvent
 
     /**
      * @param Type $type
+     *
+     * @return UserEvent
      */
-    public function setType($type)
+    public function setType(Type $type)
     {
         $this->type = $type;
+
+        return $this;
     }
 }
 
