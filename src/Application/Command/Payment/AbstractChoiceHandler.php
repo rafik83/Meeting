@@ -88,6 +88,9 @@ abstract class AbstractChoiceHandler
         // Convert cart to order
         $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
 
+        // Attached the order to the sheet
+        $choice->sheet->addOrder($order);
+
         $event = new OrderConfirmEvent($order, $choice->user);
         $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
 

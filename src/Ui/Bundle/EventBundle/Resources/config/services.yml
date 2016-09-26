@@ -227,6 +227,12 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\XHRAuthenticationExpiredExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 250 }
+    event_listener.sheet.sheet_populate_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber
+        arguments:
+            - '@fos_elastica.object_persister.app.sheet'
+        tags:
+            - { name: kernel.event_subscriber }
 
     #
     # Twig extension

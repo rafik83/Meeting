@@ -194,6 +194,7 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.cart_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
+        lazy:  true
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.promotion_code_row_repository:
@@ -933,6 +934,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@buyable_object_resolver'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
@@ -940,6 +942,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
     command.package.step.select_options_handler:
@@ -948,6 +951,7 @@ services:
             - '@cart_manager'
             - '@datetime'
             - '@order.merger'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
@@ -1798,6 +1802,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@repository.cart_row_repository'
             - '@template.template_data_factory'
 
     #
