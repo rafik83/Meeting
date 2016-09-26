@@ -394,7 +394,7 @@ class Package
      *
      * @return Package
      */
-    public function setPlanning($planning)
+    public function setPlanning(Product $planning)
     {
         $this->planning = $planning;
 
@@ -408,7 +408,7 @@ class Package
      *
      * @return Package
      */
-    public function setParticipant($participant)
+    public function setParticipant(Product $participant)
     {
         $this->participant = $participant;
 
