@@ -228,6 +228,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Filter\BooleanTemplateFilterRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.filter.tagged_nomenclature_filter_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Filter\TaggedNomenclatureFilterRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers

@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter:
+    type:  entity
+    table: tagged_nomenclature_filter
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        tag:
+            type: string
+        nomenclaturesId:
+            type: json_array
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            orphanRemoval: true
