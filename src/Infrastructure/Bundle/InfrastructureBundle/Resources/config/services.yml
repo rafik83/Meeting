@@ -1457,6 +1457,7 @@ services:
             - '@repository.template.registration_template_repository'
             - '@template.template_data_factory'
             - '@application.nomenclature.nomenclature_cloner'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
 
     #
