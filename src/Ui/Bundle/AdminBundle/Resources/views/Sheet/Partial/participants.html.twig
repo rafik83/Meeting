@@ -38,5 +38,25 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ 'admin.sheet.details.company.title'|trans }} {{ loop.index }}
+
+                    {% if participant.isOwner %}
+                        ({{ 'admin.sheet.details.owner.title'|trans }})
+                    {% endif %}
+                </div>
+                <div class="panel-body">
+                    {% for object in participant.templateData.getCompanyObjects %}
+                        {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
+                    {% endfor %}
+
+                    {% if participant.isOwner %}
+                        <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     {% endfor %}
 </div>
