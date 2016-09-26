@@ -42,5 +42,6 @@ final class Events
     const TRANSACTION_CONFIRMED                = 'transaction.confirm';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
+    const SHEET_UPDATED                        = 'sheet.updated';
     const REGISTRATION_TEMPLATE_UPDATED        = 'registration_template.updated';
 }
