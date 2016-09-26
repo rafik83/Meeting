@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -271,6 +273,11 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedTemplateData->addChild(0, '811f6edf', $expectedBlock);
 
         $accountSynchronizer->set($expectedTemplateData, $user)->shouldBeCalled();
+
+        $eventDispatcher->dispatch(
+            Events::REGISTRATION_STEP,
+            new RegistrationStepEvent($expectedSheet, $expectedParticipant, 1)
+        )->shouldBeCalled();
 
         $handler->handle(
             new Participate(
