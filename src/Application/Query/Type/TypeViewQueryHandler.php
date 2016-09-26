@@ -55,9 +55,9 @@ class TypeViewQueryHandler
                 $type->getPosition(),
                 $type->getTitle($query->locale),
                 $type->isHidden(),
-                $type->getRegistrationTemplate()->getTitle(),
-                $type->getSheetTemplate()->getTitle(),
-                $type->getPackage()->getTitle()
+                (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
+                (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',
+                (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : ''
             );
         }
 
