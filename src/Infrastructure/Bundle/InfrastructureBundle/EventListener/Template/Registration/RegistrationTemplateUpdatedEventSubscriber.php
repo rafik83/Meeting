@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Template\Registration;
 
-
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter;
 use Proximum\Vimeet\Domain\Repository\Filter\BooleanTemplateFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
@@ -55,32 +55,41 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
     /**
      * @param RegistrationTemplateUpdatedEvent $event
      */
-    public function generateBooleanFilter(RegistrationTemplateUpdatedEvent $event)
+    public function onRegistrationTemplateUpdated(RegistrationTemplateUpdatedEvent $event)
     {
-        $this->booleanTemplateFilterRepository->deleteForEvent($event->getEvent());
-        $templates = $this->registrationTemplateRepository->getTemplateForGivenEvent($event->getEvent());
-
+        $templates     = $this->registrationTemplateRepository->getUsedTemplateForGivenEvent($event->getEvent());
         $templatesData = [];
 
         foreach ($templates as $template) {
             $templatesData[] = $this->templateDataFactory->createFromTemplate($template);
         }
 
+        $this->generateBooleanFilter($event->getEvent(), $templatesData);
+    }
+
+    /**
+     * @param Event $event
+     * @param array $templatesData
+     */
+    private function generateBooleanFilter(Event $event, array $templatesData)
+    {
+        $this->booleanTemplateFilterRepository->deleteForEvent($event);
+
         $filters = TemplateBooleanFilterIdentifier::getBooleanFilters($templatesData);
 
-        $filtersPrepared = [];
+        $filtersAdded = [];
 
         foreach ($filters as $filter) {
             // Avoid duplicate filter
-            if (!isset($filtersPrepared[$filter['key']])) {
+            if (!isset($filtersAdded[$filter['key']])) {
                 $booleanFilter = new BooleanTemplateFilter(
-                    $event->getEvent(),
+                    $event,
                     $filter['key'],
                     $filter['value']
                 );
 
                 $this->booleanTemplateFilterRepository->add($booleanFilter);
-                $filtersPrepared[$booleanFilter->getTemplateKey()] = $booleanFilter;
+                $filtersAdded[$booleanFilter->getTemplateKey()] = true;
             }
         }
     }
@@ -92,7 +101,7 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return [
-            Events::REGISTRATION_TEMPLATE_UPDATED => 'generateBooleanFilter',
+            Events::REGISTRATION_TEMPLATE_UPDATED => 'onRegistrationTemplateUpdated',
         ];
     }
 }
