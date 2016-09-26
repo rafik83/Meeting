@@ -13,12 +13,13 @@ namespace Proximum\Vimeet\Application\Command\Register;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ParticipantStepHandler
 {
@@ -38,7 +39,7 @@ class ParticipantStepHandler
     private $accountSynchronizer;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
@@ -51,14 +52,14 @@ class ParticipantStepHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
-     * @param EventDispatcherInterface       $eventDispatcher
+     * @param DelayedEventDispatcher       $eventDispatcher
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        EventDispatcherInterface $eventDispatcher,
+        DelayedEventDispatcher $eventDispatcher,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->sheetRepository        = $sheetRepository;
@@ -107,6 +108,10 @@ class ParticipantStepHandler
 
         // send email notification when user arrive to the last step of register funnel
         $this->triggerEvent($participantStep);
+
+        // Send Sheet Update Event to recalculate completeness of the sheet
+        $sheetUpdatedEvent = new SheetUpdatedEvent($participantStep->sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
     }
 
     /**

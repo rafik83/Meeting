@@ -62,22 +62,22 @@
                     <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
                 </th>
                 <th></th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.state) }}
                 </th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.completed) }}
                 </th>
-                <th>{{ 'admin.sheet.inCatalog'|trans }}</th>
-                <th>
+                <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.category) }}
                 </th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.type) }}
                 </th>
                 <th>{{ 'admin.sheet.createdAt'|trans }}</th>
                 <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.follower) }}
                 </th>
                 <th class="col-md-1"></th>
@@ -109,18 +109,22 @@
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>
                     <td>
-                        <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
-                            {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
-                        </span>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-{{ sheet.completenessStatus }}" role="progressbar" aria-valuenow="{{ sheet.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ sheet.completeness }}%;">
+                                {{ sheet.completeness }}%
+                            </div>
+                        </div>
                     </td>
                     <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
-                    <td>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                    <td><small>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</small></td>
                     <td>
+                        <small>
                         {% if sheet.lastLoginAt %}
                             {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
                         {% endif %}
+                        </small>
                     </td>
                     <td>{{ sheet.follower }}</td>
                     <td class="text-right">

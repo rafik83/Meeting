@@ -217,6 +217,12 @@ services:
              - '@components.sheet.sheet_validator'
         tags:
             - { name: kernel.event_subscriber }
+    event_listener.sheet.sheet_updated_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetUpdatedEventSubscriber
+        arguments:
+            - '@sheet.completeness_calculator'
+        tags:
+            - { name: kernel.event_subscriber }
     event_listener.xhr_authentication_expired_exception_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\XHRAuthenticationExpiredExceptionListener
         tags:

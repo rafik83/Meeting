@@ -71,8 +71,8 @@ class TagIdentifierTest extends \PHPUnit_Framework_TestCase
         $type2->setRegistrationTemplate($registrationTemplate2);
 
         $category = new Category($event);
-        $category->getTypes()->add($type);
-        $category->getTypes()->add($type2);
+        $category->addType($type);
+        $category->addType($type2);
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $title        = new EditableText('69b3cde2', 'editable-text', ['tags' => ['foobar']], 'fr', 'fr');

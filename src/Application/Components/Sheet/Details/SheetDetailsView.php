@@ -119,6 +119,11 @@ class SheetDetailsView
     public $remainingToPay;
 
     /**
+     * @var int
+     */
+    public $completeness;
+
+    /**
      * SheetDetailsView constructor.
      *
      * @param string            $title
@@ -137,6 +142,7 @@ class SheetDetailsView
      * @param Transaction[]     $transactions
      * @param float             $total
      * @param float             $remainingToPay
+     * @param int               $completeness
      */
     public function __construct(
         $title,
@@ -154,7 +160,8 @@ class SheetDetailsView
         array $orders,
         array $transactions,
         $total,
-        $remainingToPay
+        $remainingToPay,
+        $completeness
     ) {
         $this->title                = $title;
         $this->state                = $state;
@@ -172,5 +179,26 @@ class SheetDetailsView
         $this->transactions         = $transactions;
         $this->total                = $total;
         $this->remainingToPay       = $remainingToPay;
+        $this->completeness         = $completeness;
+    }
+
+    /**
+     * @return string
+     */
+    public function completenessStatus()
+    {
+        if ($this->completeness < 40) {
+            return 'danger';
+        }
+
+        if ($this->completeness < 100) {
+            return 'warning';
+        }
+
+        if ($this->completeness === 100) {
+            return 'success';
+        }
+
+        return 'danger';
     }
 }

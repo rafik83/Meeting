@@ -62,6 +62,7 @@ class CreateHandler
     {
         $type = new Type($create->event);
         $type->setPosition($create->rank);
+        $type->setHidden($create->hidden);
 
         $localesTitleAlreadyExists = [];
 

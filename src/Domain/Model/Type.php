@@ -75,6 +75,11 @@ class Type implements WhoInterface
     private $package;
 
     /**
+     * @var bool
+     */
+    private $hidden = false;
+
+    /**
      * Type constructor.
      *
      * @param Event $event
@@ -323,6 +328,26 @@ class Type implements WhoInterface
         } else {
             $this->translations->set($locale, new TypeTranslation($this, $locale, $title, $description));
         }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * @param bool $hidden
+     *
+     * @return Type
+     */
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
 
         return $this;
     }
