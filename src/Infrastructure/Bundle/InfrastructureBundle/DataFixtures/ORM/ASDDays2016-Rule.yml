@@ -1,0 +1,3 @@
+Proximum\Vimeet\Domain\Model\Rule:
+    rule_1:
+        __construct: ['@event_asddays_2016', '@event_asddays_2016_type_fournisseur', '@event_asddays_2016_type_investisseur', []]
