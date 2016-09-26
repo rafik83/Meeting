@@ -126,7 +126,7 @@ function init (target) {
         new QuantitySelector(element);
     });
 
-    [].forEach.call(target.querySelectorAll('.object--nomenclature'), function (element) {
+    [].forEach.call(target.querySelectorAll('.object--nomenclature, .object--collection.style--style-2, .object--collection.style--style-3'), function (element) {
         new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
     });
 
