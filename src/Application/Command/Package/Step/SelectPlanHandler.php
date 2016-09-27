@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectPlanHandler
 {
@@ -26,17 +29,25 @@ class SelectPlanHandler
     private $buyableObjectResolver;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * SelectPlanHandler constructor.
      *
-     * @param CartManager           $cartManager
-     * @param BuyableObjectResolver $buyableObjectResolver
+     * @param CartManager            $cartManager
+     * @param BuyableObjectResolver  $buyableObjectResolver
+     * @param DelayedEventDispatcher $eventDispatcher
      */
     public function __construct(
         CartManager $cartManager,
-        BuyableObjectResolver $buyableObjectResolver
+        BuyableObjectResolver $buyableObjectResolver,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->cartManager           = $cartManager;
         $this->buyableObjectResolver = $buyableObjectResolver;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -61,5 +72,8 @@ class SelectPlanHandler
 
         $this->buyableObjectResolver->resolveTemplate($selectPlan->sheet);
         $this->buyableObjectResolver->resolvePlan($selectPlan->sheet, $selectPlan->plan);
+
+        $packageStepDone = new StepDoneEvent($selectPlan->sheet);
+        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 }
