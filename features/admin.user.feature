@@ -26,7 +26,7 @@ Feature:
     And I should see "user_asddays_3@proximum.com"
 
   Scenario: I can filter users by type
-    And I am logged with "test@test.com" on admin
+    Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to this page "/admin/fr/event/1/users"
     And I follow "Investisseur"
@@ -39,7 +39,7 @@ Feature:
     And I should not see "user_asddays_3@proximum.com"
 
   Scenario: I can see details information from an user
-    And I am logged with "test@test.com" on admin
+    Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to this page "/admin/fr/event/1/users/39"
     Then I should see "gender.man"
