@@ -257,6 +257,7 @@ admin.sheet.createdAt: 'Date inscription'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: 'Société'
+admin.sheet.details.completeness: Complétude de la fiche
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
@@ -281,6 +282,8 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
+admin.sheet.filter.has_cart: Fiche avec panier
+admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
@@ -291,6 +294,7 @@ admin.sheet.go_back_to_list: Retour à la liste des participations
 admin.sheet.read: Voir
 admin.sheet.state: Etat
 admin.sheet.title: Participations
+admin.sheet.title.count: '{0} Aucun participation|{1} 1 Participation|]1,Inf[ %count% Participations'
 admin.sheet.trace.accept: 'Acceptée le %at%'
 admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement

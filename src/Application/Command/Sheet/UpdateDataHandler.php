@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateDataHandler
 {
@@ -32,20 +35,28 @@ class UpdateDataHandler
     private $removeDataHandler;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * UpdateDataHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param BuyableObjectResolver    $buyableObjectResolver
      * @param RemoveDataHandler        $removeDataHandler
+     * @param DelayedEventDispatcher   $eventDispatcher
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         BuyableObjectResolver $buyableObjectResolver,
-        RemoveDataHandler $removeDataHandler
+        RemoveDataHandler $removeDataHandler,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->buyableObjectResolver = $buyableObjectResolver;
         $this->removeDataHandler     = $removeDataHandler;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -65,5 +76,8 @@ class UpdateDataHandler
 
         $this->buyableObjectResolver->updateCart($command->sheet, $command->templateObject);
         $this->sheetRepository->set($command->sheet->setData($command->templateData->getData()));
+
+        $sheetUpdatedEvent = new SheetUpdatedEvent($command->sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
     }
 }
