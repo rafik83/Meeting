@@ -77,8 +77,8 @@ class RegisterNewUserHandler
 
         $userEvent = new UserEvent($user, $register->event, $register->type);
 
-        $this->userEventRepository->add($userEvent);
         $this->userRepository->add($user);
+        $this->userEventRepository->add($userEvent);
 
         return new RegisterNewUserResult($user);
     }
