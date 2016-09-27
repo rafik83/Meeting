@@ -12,19 +12,143 @@ account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
 'Bad credentials.': 'Bad credentials.'
 billing_info.title: 'Billing information'
-catalog.complete_sheet: 'Show sheet details'
-common.backToPackage: 'Back to participation package'
-common.backToSheet: 'Back to participation sheet'
+catalog.complete_sheet: 'View sheet details'
+common.backToPackage: 'Back to package'
+common.backToSheet: 'Back to sheet'
 common.need_help: 'Need help'
 common.next: Next
-common.update: Edit
+common.update: Modify
 common.validate: Validate
 event.info.close: Close
 event.info.contact: 'Useful information'
+gender.man: Mr
+gender.woman: Mrs
+navigation.category.billing: Billing
+navigation.category.catalog: Catalogue
+navigation.category.happening: 'Meeting administration'
+navigation.category.member_space: 'Member area'
+navigation.category.package: 'Package of participation'
+navigation.category.planning: 'Planning & Attendance'
+navigation.category.sheet: 'Presentation Sheet'
+navigation.close: Close
+navigation.links.billing.billing_info: 'Billing information'
+navigation.links.billing.order_history: 'Orders & Transactions'
+navigation.links.catalog.available_date: 'Available on the'
+navigation.links.catalog.incoming: 'To come up'
+navigation.links.catalog.sheet_not_in_catalog: 'Your participation is awaiting validation'
+navigation.links.happening.accept: 'Accepted requests'
+navigation.links.happening.decline: 'Refused requests'
+navigation.links.happening.open_date: 'Available on the'
+navigation.links.happening.proposal: 'Proposals received'
+navigation.links.happening.waiting: 'Requests pending'
+navigation.links.incoming: 'To come up'
+navigation.links.member_space.avatar: 'Profile picture'
+navigation.links.member_space.company: 'Compagny / Organization'
+navigation.links.member_space.profile: Profile
+navigation.links.package.order_list: 'My orders'
+navigation.links.package.order_summary_total: 'Global summary'
+navigation.links.package.payment: Payment
+navigation.links.package.summary: 'Order summary'
+navigation.links.planning.all_schedule: 'All Calendars'
+navigation.links.planning.available_date: 'Available on the'
+navigation.links.planning.conference: Conferences
+navigation.links.planning.final_date: 'Available on the'
+navigation.links.planning.flash_presentation: 'Flash presentations'
+navigation.links.planning.my_schedule: 'My calendar'
+navigation.links.planning.unavailability: 'Confirm my attendance'
+navigation.links.sheet.locale: Version
+navigation.menu: Menu
+nomenclature.back_to_sheet: 'Back to sheet'
+nomenclature.select_all: 'Select all'
+nomenclature.submit: Save
+order.list.column.total: Total
+order.list.pay_remaining: 'Full payment'
+order.list.title: 'My orders'
+order.transaction.list.column.total: Amount
+order.transaction.list.title: 'Transactions list'
+order.transaction.paypal.description: 'Participation of %sheetName% (sheet %sheetId%) on the event "%eventName%"'
+package.funnel.payment: Payment
+package.funnel.summary: 'Summary & billing details'
+package.options.included: Included
+package.participant_planning.validate: Validate
+package.participants.add: 'Add participants'
+package.participants.delete: 'Remove participants'
+package.participants.included: Included
+package.payment.bankInfo: 'Bank details'
+package.payment.billingAddress: 'Billing address'
+package.payment.deposit.title: Deposit
+package.payment.deposit.toPay: 'You can pay a deposit of %deposit% by selecting payment methods with deposit'
+package.payment.pay.label: Pay
+package.payment.title: Payment
+package.payment.total.title: Total
+package.payment.total.toPay: 'Total to pay'
+package.planning.label: 'Title & Description'
+package.planning.quantity: Quantity
+package.planning.quantityMax: 'Maximum quantity reached'
+package.planning.quantityMin: 'Maximum minimum reached'
+package.planning.total: Total
+package.planning.unitPrice: 'Unit price'
+package.plans.seeMore: 'View more benefits'
+package.plans.validate: Validate
+package.product.availability: '%availabilityCurrent% sur %availabilityMax%'
+package.product.available: Available
+package.product.buyableUntil: 'purchasable until %date%'
+package.product.deletableUntil: 'Can be removed until %date%'
+package.product.includedProduct: 'Included:'
+package.product.label: 'Title & Description'
+package.product.notDeletableSince: 'can not be removed sincel %date%'
+package.product.outOfStock: 'Sold out'
+package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
+package.product.quantity: Quantity
+package.product.quantityMax: 'Maximum quantity reached'
+package.product.quantityMin: 'Maximum minimum reached'
+package.product.selectOptions: 'Select your options'
+package.product.subjectedToValidationHelp: 'Subject to validation'
+package.product.total: Total
 package.product.totalPrice: '<sup>%currency%</sup> <span class="product-total-price">%price%</span><br><small>%vatMode%</small>'
+package.product.unavailable: 'Not available'
 package.product.unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
+package.product.unitPriceLabel: 'Unit price'
+package.product.validate: Validate
+package.select: Select
+package.summary.billingInfo.update: 'Modify billing information'
+package.summary.columns.quantity: Quantity
+package.summary.columns.title: Title
+package.summary.columns.total: Total
+package.summary.columns.unitPrice: 'Unit price'
+package.summary.edit: 'Modify package'
+package.summary.empty: 'No product has been added'
+package.summary.option: Options
+package.summary.pageTitle: 'Summary of your package of participation'
+package.summary.pay: 'Pay participation package'
+package.summary.promotion.button.label: Validate
+package.summary.promotion.label: 'Offers of discounts'
 package.summary.seeTermsOfSale: 'View general sales conditions'
+package.summary.title: Summary
+package.summary.total.title: 'Package of participation'
+package.summary.totalOfSummary: Total
+package.summary.totalPlusVat: 'Total to pay'
+package.summary.totalVat: '+ %vat%% VAT'
+package.title: 'Package of participation'
 package.vatMode.ati: 'incl. VAT'
 package.vatMode.et: 'excl. VAT'
+pro_forma.vatNumber.title: 'Intra-community VAT number'
 register.already_registered: 'Already registered?'
+register.finalize: Complete
+register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all"
 register.register_as: 'Register as:'
+sheet.edit.object: Edit
+sheet.object.action.add: Add
+sheet.object.action.backToSheet: 'Back to sheet'
+sheet.object.action.edit: Edit
+sheet.participant.remove: 'Remove from the sheet'
+sheet.participant.sendInvite: 'Send Invitation'
+sheet.title: 'Presentation sheet'
+summary.column.quantity: Quantity
+summary.column.title: Title
+summary.column.total: Total
+summary.column.unitPrice: 'Unit price'
+summary.promotionCode.title: 'Offers of discounts'
+summary.total: Total
+summary.totalToPay: 'Total to pay'
+summary.vatRate: '%vatRate%% VAT'
