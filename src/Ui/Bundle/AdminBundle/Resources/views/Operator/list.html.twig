@@ -19,6 +19,7 @@
     {% if  is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
         <div class="col-xs-12">
             <a href="{{ path('admin_create_operator') }}" class="btn btn-primary">{{ 'admin.operator_list.action.create'|trans }}</a>
+            <a href="{{ path('admin_create_partner') }}" class="btn btn-primary">{{ 'admin.operator_list.action.create.partner'|trans }}</a>
         </div>
     {% endif %}
     <table class="table">
@@ -47,7 +48,13 @@
                     </ul>
                 </td>
                 <td>
-                    <a class="btn btn-default" href="{{ path('admin_update_operator', {'operator': operator.id}) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
+                    {% if operator.partner %}
+                        <a class="btn btn-default" href="{{ path('admin_update_partner', {
+                            'partner': operator.id
+                        }) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
+                    {% else %}
+                        <a class="btn btn-default" href="{{ path('admin_update_operator', {'operator': operator.id}) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

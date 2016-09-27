@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectOptionsHandler
 {
@@ -31,15 +34,26 @@ class SelectOptionsHandler
     private $merger;
 
     /**
-     * @param CartManager        $cartManager
-     * @param \DateTimeInterface $now
-     * @param Merger             $merger
+     * @var DelayedEventDispatcher
      */
-    public function __construct(CartManager $cartManager, \DateTimeInterface $now, Merger $merger)
-    {
-        $this->cartManager = $cartManager;
-        $this->now         = $now;
-        $this->merger      = $merger;
+    private $eventDispatcher;
+
+    /**
+     * @param CartManager            $cartManager
+     * @param \DateTimeInterface     $now
+     * @param Merger                 $merger
+     * @param DelayedEventDispatcher $eventDispatcher
+     */
+    public function __construct(
+        CartManager $cartManager,
+        \DateTimeInterface $now,
+        Merger $merger,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
+        $this->cartManager     = $cartManager;
+        $this->now             = $now;
+        $this->merger          = $merger;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -62,8 +76,8 @@ class SelectOptionsHandler
 
         $cart->clearOptions();
 
-        if ($sheet->hasOrders()) {
-            $orderMerged = $this->merger->merge($sheet->getOrders());
+        if ($sheet->hasNotCancelledOrders()) {
+            $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
         foreach ($selectOptions->options as $id => $quantity) {
@@ -80,5 +94,8 @@ class SelectOptionsHandler
         }
 
         $this->cartManager->save($cart);
+
+        $packageStepDone = new StepDoneEvent($selectOptions->sheet);
+        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 }

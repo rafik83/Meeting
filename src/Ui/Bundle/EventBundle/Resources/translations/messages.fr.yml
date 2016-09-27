@@ -12,8 +12,8 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
-catalog.noResult: 'Aucun résultat trouvé'
 catalog.complete_sheet: 'Voir la fiche complète'
+catalog.noResult: 'Aucun résultat trouvé'
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'
@@ -73,7 +73,9 @@ nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tous sélectionner'
 nomenclature.select_none: Aucun
 nomenclature.submit: Enregistrer
+order.list.cancelled: Annulée
 order.list.column.date: Date
+order.list.column.numero: Numéro
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
 order.list.pay_remaining: 'Solder la totalité de ma participation'
@@ -185,9 +187,9 @@ sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
-sheet.request_meeting: 'Demander en RDV'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
+sheet.request_meeting: 'Demander en RDV'
 sheet.title: 'Fiche de présentation'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé

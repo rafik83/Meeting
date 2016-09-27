@@ -34,18 +34,18 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
+        $sheet1 = new Sheet($event, $type, [], $user1, $date);
+        $sheet2 = new Sheet($event, $type, [], $user2, $date);
+        $sheet3 = new Sheet($event, $type, [], $user3, $date);
 
         // Expected
-        $expectedSheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
+        $expectedSheet1 = new Sheet($event, $type, [], $user1, $date);
         $expectedSheet1->setEnable(false);
 
-        $expectedSheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
+        $expectedSheet2 = new Sheet($event, $type, [], $user2, $date);
         $expectedSheet2->setEnable(false);
 
-        $expectedSheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
+        $expectedSheet3 = new Sheet($event, $type, [], $user3, $date);
         $expectedSheet3->setEnable(false);
 
         // Mock
@@ -58,7 +58,7 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         foreach ([$expectedSheet1, $expectedSheet2, $expectedSheet3] as $sheet) {
             $sheetRepository->set($sheet)->shouldBeCalled();
             $eventDispatcher->dispatch(Events::SHEET_ENABLE_DISABLE,
-                new SheetEnableDisableEvent($sheet, $admin, new \DateTime(), false)
+                new SheetEnableDisableEvent($sheet, $admin, $date, false)
             )->shouldBeCalled();
         }
 

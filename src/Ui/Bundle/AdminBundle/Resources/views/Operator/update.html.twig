@@ -1,7 +1,5 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block content %}
-    <h2>{{ 'admin.operator.update.title'|trans }}</h2>
+{% block form_title 'admin.operator.update.title'|trans %}
 
-    {{ form(form) }}
-{% endblock %}
+{% block goback_link path('admin_list_operator') %}

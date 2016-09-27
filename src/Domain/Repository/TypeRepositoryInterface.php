@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -41,12 +42,20 @@ interface TypeRepositoryInterface
     public function set(Type $type);
 
     /**
-     * @param Event  $event
-     * @param string $locale
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEvent(Event $event);
+
+    /**
+     * @param Event     $event
+     * @param string    $locale
+     * @param null|Type $excludedType
      *
      * @return TypeView[]
      */
-    public function getTypeViewsByEvent(Event $event, $locale);
+    public function getTypeViewsByEvent(Event $event, $locale, Type $excludedType = null);
 
     /**
      * @param int    $typeId
@@ -102,6 +111,14 @@ interface TypeRepositoryInterface
     public function getLocalizedTypesByEvent(Event $event, $locale);
 
     /**
+     * @param Admin $admin
+     * @param Event $event
+     *
+     * @return Type[]
+     */
+    public function getAllowedTypesByEvent(Admin $admin, Event $event);
+
+    /**
      * @param Event  $event
      * @param string $locale
      *
@@ -152,4 +169,12 @@ interface TypeRepositoryInterface
      * @param Type $type
      */
     public function remove(Type $type);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Type[]
+     */
+    public function getVisibleTypesViewsByEvent(Event $event, $locale);
 }

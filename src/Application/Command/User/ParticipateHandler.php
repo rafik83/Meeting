@@ -11,12 +11,15 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ParticipateHandler
 {
@@ -46,10 +49,16 @@ class ParticipateHandler
     private $typeResolver;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param TypeResolver                   $typeResolver
      * @param Synchronizer                   $accountSynchronizer
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
@@ -57,11 +66,13 @@ class ParticipateHandler
         ParticipantRepositoryInterface $participantRepository,
         TypeResolver $typeResolver,
         Synchronizer $accountSynchronizer,
+        DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer   = $accountSynchronizer;
+        $this->eventDispatcher       = $eventDispatcher;
         $this->dateTime              = $dateTime;
         $this->typeResolver          = $typeResolver;
     }
@@ -99,9 +110,15 @@ class ParticipateHandler
         $participant = new Participant($sheet, $participate->user, $participantData, true);
         $this->participantRepository->add($participant);
 
+        $sheet->addParticipant($participant);
+
         $participate->sheet       = $sheet;
         $participate->participant = $participant;
 
         $this->accountSynchronizer->set($templateData, $participant->getUser());
+
+        // Send Sheet Update Event to calculate completeness of the sheet
+        $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
     }
 }

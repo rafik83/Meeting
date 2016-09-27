@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * "Compte admin/organisateur/collaborateur".
@@ -22,6 +22,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     const ROLE_ORGANIZER   = 'ROLE_ORGANIZER';
     const ROLE_OPERATOR    = 'ROLE_OPERATOR';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    const ROLE_PARTNER     = 'ROLE_PARTNER';
 
     /**
      * @var string
@@ -42,6 +43,11 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      * @var ArrayCollection
      */
     private $events;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $types;
 
     /**
      * @var DateTimeInterface
@@ -79,6 +85,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         $this->lastname  = $lastname;
         $this->role      = $role;
         $this->events    = new ArrayCollection();
+        $this->types     = new ArrayCollection();
         $this->createdAt = $createdAt;
     }
 
@@ -107,11 +114,12 @@ class Admin extends AbstractUser implements AdvancedUserInterface
             self::ROLE_OPERATOR,
             self::ROLE_ORGANIZER,
             self::ROLE_SUPER_ADMIN,
+            self::ROLE_PARTNER,
         ];
     }
 
     /**
-     * @return Event[]
+     * @return ArrayCollection of Events
      */
     public function getEvents()
     {
@@ -119,9 +127,25 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @return Type[]
+     */
+    public function getAllowedTypes()
+    {
+        return $this->types->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAllowedTypes()
+    {
+        return count($this->types) > 0;
+    }
+
+    /**
      * @param Event $event
      *
-     * @return self
+     * @return Admin
      */
     public function addEvent(Event $event)
     {
@@ -131,9 +155,21 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @param $type
+     *
+     * @return Admin
+     */
+    public function addType($type)
+    {
+        $this->types->add($type);
+
+        return $this;
+    }
+
+    /**
      * @param Event $event
      *
-     * @return self
+     * @return Admin
      */
     public function removeEvent(Event $event)
     {
@@ -143,9 +179,21 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @param Type $type
+     *
+     * @return Admin
+     */
+    public function removeType(Type $type)
+    {
+        $this->types->removeElement($type);
+
+        return $this;
+    }
+
+    /**
      * @param array $events
      *
-     * @return self
+     * @return Admin
      */
     public function setEvents(array $events)
     {
@@ -165,9 +213,60 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @param array $types
+     *
+     * @return Admin
+     */
+    public function setTypeEvents(array $types)
+    {
+        foreach ($this->events as $event) {
+            $find = false;
+            foreach ($types as $type) {
+                if ($type->getEvent() === $event) {
+                    $find = true;
+                }
+
+                if (!$this->hasEvent($type->getEvent())) {
+                    $this->addEvent($type->getEvent());
+                }
+            }
+
+            if (false === $find) {
+                $this->removeEvent($event);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set type and associated event
+     *
+     * @param Type[] $types
+     *
+     * @return Admin
+     */
+    public function setTypes(array $types)
+    {
+        foreach ($this->types as $type) {
+            if (!in_array($type, $types)) {
+                $this->removeType($type);
+            }
+        }
+
+        foreach ($types as $type) {
+            if (!$this->hasType($type)) {
+                $this->addType($type);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $email
      *
-     * @return self
+     * @return Admin
      */
     public function setEmail($email)
     {
@@ -179,7 +278,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     /**
      * @param string $firstname
      *
-     * @return self
+     * @return Admin
      */
     public function setFirstname($firstname)
     {
@@ -191,7 +290,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     /**
      * @param string $lastname
      *
-     * @return self
+     * @return Admin
      */
     public function setLastname($lastname)
     {
@@ -214,6 +313,14 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 
     /**
@@ -344,6 +451,24 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         return $this->events->exists(function ($index, Event $eventLinked) use ($event) {
             return $eventLinked->getId() === $event->getId();
         });
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return bool
+     */
+    public function hasType(Type $type)
+    {
+        return $this->types->contains($type);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPartner()
+    {
+        return $this->role === self::ROLE_PARTNER;
     }
 
     /**

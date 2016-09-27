@@ -64,6 +64,8 @@ form.change_password.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.change_password.children.submit.label: Envoyer
+form.change_type.children.submit.label: Changer
+form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
@@ -76,10 +78,23 @@ form.create_admin.children.submit.label: Envoyer
 form.create_admin.role.operator: Collaborateur
 form.create_admin.role.organizer: Organisateur
 form.create_admin.role.super_admin: Administrateur
+form.create_admin.role.partner: Partenaire
 form.create_operator.children.email.label: Email
 form.create_operator.children.firstname.label: Prénom
 form.create_operator.children.lastname.label: Nom
 form.create_operator.children.submit.label: Envoyer
+form.create_operator.children.events.label: 'Événements disponibles pour ce collaborateur'
+form.create_partner.children.email.label: Email
+form.create_partner.children.firstname.label: Prénom
+form.create_partner.children.lastname.label: Nom
+form.create_partner.children.submit.label: Créer
+form.create_partner.children.types.label: 'Types disponibles pour ce collaborateur'
+form.create_partner.children.password.label: 'Mot de passe'
+form.update_partner.children.email.label: Email
+form.update_partner.children.firstname.label: Prénom
+form.update_partner.children.lastname.label: Nom
+form.update_partner.children.submit.label: Créer
+form.update_partner.children.types.label: 'Types disponibles pour ce partenaire'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
@@ -163,6 +178,7 @@ form.filter_admin.role.all: 'Tous les types'
 form.filter_admin.role.operator: Collaborateur
 form.filter_admin.role.organizer: Organisateur
 form.filter_admin.role.super_admin: Admin
+form.filter_admin.role.partner: Partenaire
 form.filter_operator.children.submit.label: Filtrer
 form.filter_operator.event.all: 'Tous les événements'
 form.filter_sheet_template_organizer.children.event.label: Événement/Type(s)
@@ -208,11 +224,11 @@ form.happening_update.children.talkings.prototype.children.speaker.label: Interv
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
 form.import_products_and_template.children.event.label: 'Evénement à importer'
-form.import_products_and_template.children.submit.label: 'Importer'
+form.import_products_and_template.children.submit.label: Importer
 form.login.children.password.label: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté pendant 30 jours'
 form.login.children.submit.label: 'Se connecter'
-form.login.children.username.label: Email
+form.login.children.username.label: E-mail
 form.meeting_cancel.children.message.label: Message
 form.meeting_cancel.children.submit.label: Confirmer
 form.meeting_request_approve.children.submit.label: Envoyer
@@ -297,7 +313,7 @@ form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
-form.planning.add_with_participant: 'Ajouter un planning supplémentaire avec le participant'
+form.planning.add_with_participant: 'Ajouter un pack de rendez-vous supplémentaire avec le participant'
 form.position_meeting.children.fromParticipants.label: Participants
 form.position_meeting.children.slot.label: 'Créneau de rendez-vous'
 form.position_meeting.children.submit.label: Placer
@@ -434,14 +450,14 @@ form.promotion_code_update.children.stock.label: Stock
 form.promotion_code_update.children.submit.label: Enregistrer
 form.promotion_code_update.children.title.label: Titre
 form.promotion_code_update.children.validUntil.label: 'Valide jusqu''au'
-form.register.children.email.label: Email
+form.register.children.email.label: E-mail
 form.register.children.password.children.first.label: 'Mot de passe'
 form.register.children.password.children.second.label: 'Ressaisir le mot de passe'
-form.rule_see_what.children.seeWhat.label: Définir les règles de ce qui peut être vu ou pas
-form.rule_see_what.children.submit.label: Enregistrer la règle
-form.rule_see_what.see_what_column: Voit
-form.rule_see_what.not_see_what_column: Ne voit pas
 form.register.children.submit.label: Envoyer
+form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
+form.rule_see_what.children.submit.label: 'Enregistrer la règle'
+form.rule_see_what.not_see_what_column: 'Ne voit pas'
+form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
 form.sheet_batch.children.accept.label: Accepter
@@ -511,6 +527,7 @@ form.transaction.children.transaction_mode.bank_cash: Liquide
 form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
 form.transaction.children.transaction_mode.paypal: Paypal
+form.type_create.children.hidden.label: 'Caché'
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
@@ -537,6 +554,7 @@ form.type_template.registration.base: 'Template d''Inscription de base'
 form.type_template.registration.organizer: 'Mes templates d''Inscription'
 form.type_template.sheet.base: 'Template de Participation de base'
 form.type_template.sheet.organizer: 'Mes templates de Participation'
+form.type_update.children.hidden.label: 'Caché'
 form.type_update.children.package.label: 'Template de forfait de participation'
 form.type_update.children.rank.label: Position
 form.type_update.children.registrationTemplate.label: 'Template d''inscription'

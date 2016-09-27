@@ -17,7 +17,7 @@ files:
       # - reviewed  = Mark directly all translations as approved
       # - erase     = Replace existing translations by the ones in the files
       # - clean     = Delete translations which are not present in the files anymore
-      push: [clean]
+      push: []
 
       # Options when pulling (exporting) translation files:
       # - fallback_locale = If translation does not exist in a locale (eg. French), dump the default (eg. English) translation

@@ -65,7 +65,8 @@ class EventRepository implements EventRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\EventListView(event.id, event.title, event.domain, event.locales, event.fallback)')
-            ->from(Event::class, 'event');
+            ->from(Event::class, 'event')
+            ->orderBy('event.title');
 
         if ($admin->hasEvents()) {
             $queryBuilder

@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectParticipantAndPlanningHandler
 {
@@ -27,13 +30,23 @@ class SelectParticipantAndPlanningHandler
     private $merger;
 
     /**
-     * @param CartManager $cartManager
-     * @param Merger      $merger
+     * @var DelayedEventDispatcher
      */
-    public function __construct(CartManager $cartManager, Merger $merger)
-    {
-        $this->cartManager = $cartManager;
-        $this->merger      = $merger;
+    private $eventDispatcher;
+
+    /**
+     * @param CartManager            $cartManager
+     * @param Merger                 $merger
+     * @param DelayedEventDispatcher $eventDispatcher
+     */
+    public function __construct(
+        CartManager $cartManager,
+        Merger $merger,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
+        $this->cartManager     = $cartManager;
+        $this->merger          = $merger;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -52,9 +65,11 @@ class SelectParticipantAndPlanningHandler
 
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
+        $orders = $sheet->getNotCancelledOrders();
+
         // Update participant cart row
-        if ($sheet->hasOrders()) {
-            $order = $this->merger->merge($sheet->getOrders());
+        if (count($orders) > 0) {
+            $order = $this->merger->merge($orders);
             $cart->resolveParticipantsQuantity($order);
         } else {
             $cart->resolveParticipantsQuantity();
@@ -67,8 +82,9 @@ class SelectParticipantAndPlanningHandler
         // Update planning cart row
         $orderPlanningQuantity = 0;
 
-        if ($sheet->hasOrders()) {
-            $merged = $this->merger->merge($sheet->getOrders());
+        if (count($orders) > 0) {
+            $merged = $this->merger->merge($orders);
+
             if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
                 $orderPlanningQuantity = $orderRow->getQuantity();
             }
@@ -78,5 +94,8 @@ class SelectParticipantAndPlanningHandler
 
         $cart->setProduct($package->getPlanning(), $quantity);
         $this->cartManager->save($cart);
+
+        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);
+        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 }

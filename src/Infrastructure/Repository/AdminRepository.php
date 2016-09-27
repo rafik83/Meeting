@@ -169,8 +169,8 @@ class AdminRepository implements AdminRepositoryInterface
             ->createQueryBuilder()
             ->select('admin')
             ->from(Admin::class, 'admin', 'admin.id')
-            ->where('admin.role = :role')
-            ->setParameter('role', Admin::ROLE_OPERATOR);
+            ->where('admin.role IN (:role)')
+            ->setParameter('role', [Admin::ROLE_OPERATOR, Admin::ROLE_PARTNER]);
 
         if (isset($filters['event'])) {
             $queryBuilder

@@ -37,10 +37,16 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: form.type }
-    form_type_.sheet.follower_choice_type:
+    form_type.sheet.follower_choice_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType
         arguments:
             - '@repository.admin_repository'
+        tags:
+            - { name: form.type }
+    form_type.sheet.change_type_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: form.type }
     form_type.event_choice_type:
@@ -155,6 +161,35 @@ services:
         parent: form_type_product.abstract_update_type
         tags:
             - { name: form.type }
+    form_type_partner.partner_type:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        abstract: true
+        tags:
+            - { name: form.type }
+    form_type_partner.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\CreateType
+        parent: form_type_partner.partner_type
+        tags:
+            - { name: form.type }
+    form_type_partner.update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\UpdateType
+        parent: form_type_partner.partner_type
+        tags:
+            - { name: form.type }
+    form_type_sheet.batch_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType
+        arguments:
+            - '@security.authorization_checker'
+        tags:
+            - { name: form.type }
+
+    form_type_sheet.predefined_filters_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\PredefinedFiltersChoiceType
+        arguments:
+            - '@infrastructure.service.boolean_filters_builder'
+        tags:
+            - { name: form.type }
 
     #
     # Helper
@@ -172,5 +207,13 @@ services:
         arguments:
             - '@repository.template.sheet_template_repository'
             - '@repository.template.registration_template_repository'
+        tags:
+            - { name: kernel.event_subscriber }
+    event_listener.registration_template_updated_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Template\Registration\RegistrationTemplateUpdatedEventSubscriber
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@repository.filter.boolean_template_filter_repository'
+            - '@template.template_data_factory'
         tags:
             - { name: kernel.event_subscriber }

@@ -64,6 +64,11 @@ class Create
     public $rank;
 
     /**
+     * @var boolean
+     */
+    public $hidden;
+
+    /**
      * Create constructor.
      *
      * @param Event  $event

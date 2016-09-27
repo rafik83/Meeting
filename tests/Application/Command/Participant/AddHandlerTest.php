@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
@@ -119,6 +120,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $sheetAddConfirmationEvent
         )->shouldBeCalled();
         $eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
+        $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
 
         $cartManager = $this->prophesize(CartManager::class);
         $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();

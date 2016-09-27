@@ -83,6 +83,7 @@ class OperatorController extends Controller
             'action' => $this->generateUrl('admin_create_operator'),
             'method' => 'POST',
             'submit' => true,
+            'events' => $this->getUser()->getEvents(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

@@ -137,6 +137,11 @@ fos_elastica:
                             type: boolean
                         categories:
                             type: nested
+                        booleanFilter:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
                         type:
                             type: integer
                         followUp:
@@ -162,6 +167,10 @@ fos_elastica:
                             type: boolean
                         inCatalogAt:
                             type: date
+                        hasOrder:
+                            type: boolean
+                        hasCart:
+                            type: boolean
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer

@@ -337,7 +337,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos offres"
                                                 en: "Your offers"
                                             mode: "checkboxes"
-                                            required: true
                                             nomenclature: "@nomenclature_offre_besoins_asddays2016->id"
                                     63ccc105:
                                         component: "object"
@@ -354,7 +353,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos besoins"
                                                 en: "Your needs"
                                             mode: "checkboxes"
-                                            required: true
                                             nomenclature: "@nomenclature_offre_besoins_asddays2016->id"
     sheet_template_investisseur_asddays:
         __construct: false
@@ -998,6 +996,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                     fr: "Êtes vous candidat?"
                                     en: "Are you candidate?"
                                 filter:
+                                    active: true
                                     label: "Est candidat"
                                 required: true
                                 tags: ["sheet_data"]
@@ -1125,3 +1124,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                 config:
                     style: "style-1"
                 children: []
+
+Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter:
+    filter_boolean_candidat:
+        __construct:
+            - '@event_asddays_2016'
+            - '57da9df7ced30'
+            - 'Est candidat'

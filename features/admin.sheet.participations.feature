@@ -22,7 +22,7 @@ Feature: Edit participant status
     And I am logged with "test@test.com" on admin
     And I go to "/admin/fr/event"
     Then I go to "/admin/fr/event/1/sheet"
-    And I should see "admin.sheet.title"
+    And I should see "admin.sheet.title.count"
     Then I check "sheet_batch_ids_4"
     And I press "form.sheet_batch.children.validate.label"
     Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com"
@@ -31,7 +31,7 @@ Feature: Edit participant status
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to "/admin/fr/event/1/sheet"
-    Then I should see "admin.sheet.title"
+    Then I should see "admin.sheet.title.count"
     And I check "sheet_batch_ids_4"
     When I press "form.sheet_batch.children.disable.label"
     Then I should be on this page "/admin/fr/event/1/sheet"
@@ -41,7 +41,7 @@ Feature: Edit participant status
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to "/admin/fr/event/1/sheet"
-    Then I should see "admin.sheet.title"
+    Then I should see "admin.sheet.title.count"
     And I check "sheet_batch_ids_4"
     When I press "form.sheet_batch.children.addCatalog.label"
     Then I should be on this page "/admin/fr/event/1/sheet"
