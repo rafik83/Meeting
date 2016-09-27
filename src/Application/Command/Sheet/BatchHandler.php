@@ -106,6 +106,6 @@ class BatchHandler
             );
         }
 
-        return new BatchResult(0, $batch->getMessage());
+        return new BatchResult(0, $batch->getMessage() . 'no_action');
     }
 }

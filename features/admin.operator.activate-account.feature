@@ -33,6 +33,7 @@ Feature: Operator Activate Account
       | form.create_operator.children.email.label     | toto@toto.fr |
       | form.create_operator.children.lastname.label  | Toto         |
       | form.create_operator.children.firstname.label | Tata         |
+    And I check "Les rendez-vous CARNOT 2016"
     And I press "form.create_operator.children.submit.label"
     And the "admin.account_activated" mail should be sent to "toto@toto.fr"
     And the "admin.account_activated" mail should contain the link "http://vimeet.proximum.dev/app_test.php/admin/fr/activate-account"

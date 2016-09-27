@@ -683,6 +683,21 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Update }
+    command.partner.create_handler:
+        class: Proximum\Vimeet\Application\Command\Partner\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Create }
+    command.partner.update_handler:
+        class: Proximum\Vimeet\Application\Command\Partner\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Update }
     command.admin.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
         arguments:
@@ -1343,6 +1358,8 @@ services:
     #
     components.security.admin_event_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
+    components.security.admin_sheet_access:
+        class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
 
     #
     # Guideline Component
@@ -1542,6 +1559,7 @@ services:
             - '@security.impersonate'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.trace_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
     query.participant.card_list_view_query_handler:

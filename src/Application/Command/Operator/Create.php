@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Operator;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class Create
 {
@@ -43,6 +44,11 @@ class Create
      * @var \DateTimeInterface
      */
     public $date;
+
+    /**
+     * @var Event[]
+     */
+    public $events;
 
     /**
      * @param Admin              $organizer

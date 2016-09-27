@@ -36,6 +36,12 @@ services:
             - '@components.security.admin_event_access'
         tags:
             - { name: security.voter }
+    security.admin_sheet_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminSheetAccessVoter
+        arguments:
+            - '@components.security.admin_sheet_access'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension

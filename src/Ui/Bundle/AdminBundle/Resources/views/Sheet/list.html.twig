@@ -25,9 +25,7 @@
             <div class="col-md-4">
                 {% embed 'AdminBundle:Common:batch.html.twig' %}
                     {% block actions %}
-                        <li>
-                            {{ form_widget(batch_form.accept) }}
-                        </li>
+                        <li>{{ form_widget(batch_form.accept) }}</li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#validate-comment">
                                 {{ 'admin.sheet.validate'|trans }}
@@ -38,10 +36,18 @@
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
-                        <li>{{ form_widget(batch_form.enable) }}</li>
-                        <li>{{ form_widget(batch_form.disable) }}</li>
-                        <li>{{ form_widget(batch_form.addCatalog) }}</li>
-                        <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                        {% if batch_form.enable is defined %}
+                            <li>{{ form_widget(batch_form.enable) }}</li>
+                        {% endif %}
+                        {% if batch_form.disable is defined %}
+                            <li>{{ form_widget(batch_form.disable) }}</li>
+                        {% endif %}
+                        {% if batch_form.addCatalog is defined %}
+                            <li>{{ form_widget(batch_form.addCatalog) }}</li>
+                        {% endif %}
+                        {% if batch_form.removeCatalog is defined %}
+                            <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                        {% endif %}
                     {% endblock actions %}
                 {% endembed %}
             </div>

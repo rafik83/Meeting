@@ -1,24 +1,23 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
  * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator;
 
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AdminType extends AbstractType
+class AbstractOperatorType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -29,21 +28,10 @@ abstract class AdminType extends AbstractType
             ->add('email', EmailType::class, [
                 'required' => true,
             ])
-            ->add('password', TextType::class, [
-                'required' => isset($options['password_required']) ? $options['password_required'] : true,
-            ])
             ->add('lastname', TextType::class, [
                 'required' => true,
             ])
             ->add('firstname', TextType::class, [
-                'required' => true,
-            ])
-            ->add('role', ChoiceType::class, [
-                'choices'  => [
-                    'form.create_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
-                    'form.create_admin.role.operator'    => Admin::ROLE_OPERATOR,
-                    'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN
-                ],
                 'required' => true,
             ])
             ->add('events', EventChoiceType::class, [
@@ -51,7 +39,16 @@ abstract class AdminType extends AbstractType
                 'expanded'    => true,
                 'multiple'    => true,
                 'placeholder' => '',
+                'choices'     => $options['events']
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('events');
     }
 }

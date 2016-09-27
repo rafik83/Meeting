@@ -46,6 +46,7 @@ class FilterFullType extends AbstractType
                 'placeholder' => '',
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
+                'user'        => $options['user']
             ])
             ->add('follower', FollowerChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.follower.label',
@@ -65,7 +66,7 @@ class FilterFullType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale']);
+        $resolver->setRequired(['event', 'locale', 'user']);
     }
 
     /**

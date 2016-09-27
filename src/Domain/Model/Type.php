@@ -37,6 +37,11 @@ class Type implements WhoInterface
     /**
      * @var ArrayCollection
      */
+    private $admins;
+
+    /**
+     * @var ArrayCollection
+     */
     private $translations;
 
     /**
@@ -89,6 +94,7 @@ class Type implements WhoInterface
         $this->event              = $event;
         $this->translations       = new ArrayCollection();
         $this->categories         = new ArrayCollection();
+        $this->admins             = new ArrayCollection();
         $this->validationCriteria = new ValidationCriteria(false);
     }
 
@@ -350,5 +356,13 @@ class Type implements WhoInterface
         $this->hidden = $hidden;
 
         return $this;
+    }
+
+    /**
+     * @return Admin[]
+     */
+    public function getAdmins()
+    {
+        return $this->admins->toArray();
     }
 }
