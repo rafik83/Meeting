@@ -20,8 +20,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             nullable: true
         state:
             type: string
-        completed:
-            type: boolean
+        completeness:
+            type: integer
         enable:
             type: boolean
         inCatalog:

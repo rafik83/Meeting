@@ -151,7 +151,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getState(),
-            $sheet->isCompleted(),
+            $sheet->getCompleteness(),
             $sheet->isEnabled(),
             $sheet->isInCatalog(),
             $sheet->getType()->getCategoriesTitles($locale),

@@ -31,6 +31,9 @@
                     {{ details.remainingToPay|localizedcurrency(event.currency) }}
                 </span>
             {% endif %}
+            <span class="label label-{{ details.completenessStatus }}" data-toggle="tooltip" title="{{ 'admin.sheet.details.completeness'|trans }}">
+                {{ details.completeness }}%
+            </span>
         {% endspaceless %}
     </h1>
 

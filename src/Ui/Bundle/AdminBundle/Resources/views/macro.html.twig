@@ -66,7 +66,7 @@
 
             {% if selectedValue != null %}
                 <li>
-                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): ''})|url_encode }}">
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): '', 'page': 1})|url_encode }}">
                         {{ 'admin.filters.all'|trans }}
                     </a>
                 </li>
@@ -74,7 +74,7 @@
 
             {% for item in choice.vars.choices %}
                 <li {{ selectedValue == item.value ? 'class="active"' : '' }}>
-                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): item.value})|url_encode }}">
+                    <a href="?{{ app.request.query.all|merge({(choice.vars.id): item.value, 'page': 1})|url_encode }}">
                         {{ choice.vars.choice_translation_domain|default(false) is same as(false) ? item.label : item.label|trans }}
                     </a>
                 </li>

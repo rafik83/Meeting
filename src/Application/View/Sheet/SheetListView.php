@@ -96,9 +96,9 @@ class SheetListView
     public $traceBy = null;
 
     /**
-     * @var bool
+     * @var int
      */
-    public $completed;
+    public $completeness;
 
     /**
      * @var bool
@@ -116,7 +116,7 @@ class SheetListView
      * @param int                  $id
      * @param string               $title
      * @param string               $state
-     * @param bool                 $completed
+     * @param int                  $completeness
      * @param bool                 $enabled
      * @param bool                 $inCatalog
      * @param array                $categories
@@ -132,7 +132,7 @@ class SheetListView
         $id,
         $title,
         $state,
-        $completed,
+        $completeness,
         $enabled,
         $inCatalog,
         array $categories,
@@ -147,7 +147,7 @@ class SheetListView
         $this->id                 = $id;
         $this->title              = $title;
         $this->state              = $state;
-        $this->completed          = $completed;
+        $this->completeness       = $completeness;
         $this->enabled            = $enabled;
         $this->inCatalog          = $inCatalog;
         $this->categories         = $categories;
@@ -170,7 +170,7 @@ class SheetListView
      */
     public function isIncomplete()
     {
-        return false === $this->completed;
+        return 100 !== $this->completeness;
     }
 
     /**
@@ -187,5 +187,25 @@ class SheetListView
     public function isInCatalog()
     {
         return $this->inCatalog;
+    }
+
+    /**
+     * @return string
+     */
+    public function completenessStatus()
+    {
+        if ($this->completeness < 40) {
+            return 'danger';
+        }
+
+        if ($this->completeness < 100) {
+            return 'warning';
+        }
+
+        if ($this->completeness === 100) {
+            return 'success';
+        }
+
+        return 'danger';
     }
 }

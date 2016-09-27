@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlan;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
@@ -21,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
@@ -43,11 +46,18 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
         $cartManager->deleteCartStep($emptyCart)->shouldBeCalled();
         $cartManager->save($expectedCart)->shouldBeCalled();
         $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $packageStepDone = new StepDoneEvent($sheet);
+        $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $plans       = new SelectPlan($sheet, 1);
         $plans->plan = $product;
 
-        $plansHandler = new SelectPlanHandler($cartManager->reveal(), $buyableObjectResolver->reveal());
+        $plansHandler = new SelectPlanHandler(
+            $cartManager->reveal(),
+            $buyableObjectResolver->reveal(),
+            $eventDispatcher->reveal()
+        );
         $plansHandler->handle($plans);
     }
 
@@ -75,11 +85,18 @@ class SelectPlanHandlerTest extends \PHPUnit_Framework_TestCase
 
             return true;
         }))->shouldBeCalled();
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $packageStepDone = new StepDoneEvent($sheet);
+        $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $plans       = new SelectPlan($sheet, 1);
         $plans->plan = $product2;
 
-        $plansHandler = new SelectPlanHandler($cartManager->reveal(), $buyableObjectResolver->reveal());
+        $plansHandler = new SelectPlanHandler(
+            $cartManager->reveal(),
+            $buyableObjectResolver->reveal(),
+            $eventDispatcher->reveal()
+        );
         $plansHandler->handle($plans);
     }
 }

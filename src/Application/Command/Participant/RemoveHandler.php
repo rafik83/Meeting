@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RemoveHandler
 {
@@ -27,13 +30,23 @@ class RemoveHandler
     private $cartManager;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * @param ParticipantRepositoryInterface $participantRepository
      * @param CartManager                    $cartManager
+     * @param DelayedEventDispatcher         $eventDispatcher
      */
-    public function __construct(ParticipantRepositoryInterface $participantRepository, CartManager $cartManager)
-    {
+    public function __construct(
+        ParticipantRepositoryInterface $participantRepository,
+        CartManager $cartManager,
+        DelayedEventDispatcher $eventDispatcher
+    ) {
         $this->participantRepository = $participantRepository;
         $this->cartManager           = $cartManager;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -54,5 +67,8 @@ class RemoveHandler
 
         // Update cart
         $this->cartManager->updateParticipantsQuantity($remove->sheet);
+
+        $sheetUpdated = new SheetUpdatedEvent($remove->sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
     }
 }
