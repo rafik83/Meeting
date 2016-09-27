@@ -1133,3 +1133,10 @@ Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter:
             - '@event_asddays_2016'
             - '57da9df7ced30'
             - 'Est candidat'
+
+Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter:
+    tagged_nomenclature_filter_1:
+        __construct:
+            - '@event_asddays_2016'
+            - 'sheet_organization_category'
+            - ["@nomenclature_company_category_asddays2016->id"]
