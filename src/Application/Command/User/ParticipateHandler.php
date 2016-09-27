@@ -109,7 +109,6 @@ class ParticipateHandler
 
         $this->accountSynchronizer->set($templateData, $participant->getUser());
 
-
         $this->eventDispatcher->dispatch(
             Events::REGISTRATION_STEP,
             new RegistrationStepEvent($sheet, $participant, 1)

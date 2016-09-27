@@ -259,7 +259,6 @@ services:
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
