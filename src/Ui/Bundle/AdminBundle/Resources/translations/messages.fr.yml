@@ -379,6 +379,7 @@ admin.type.registration.template: 'Template d''inscription'
 admin.type.sheet.template: 'Template de présentation'
 admin.type.package: 'Forfait'
 admin.type.remove.link: Supprimer
+admin.type.list.title: 'Types de participation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'

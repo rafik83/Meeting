@@ -3,7 +3,7 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h1 class="page-header">Types de participation</h1>
+    <h1 class="page-header">{{ 'admin.type.list.title'|trans }}</h1>
 
     <a href="{{ path('admin_type_create', { 'event': event.id }) }}" class="btn btn-primary">{{ 'admin.type.create.link'|trans }}</a>
 
