@@ -56,4 +56,23 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
         $this->entityManager->persist($taggedNomenclatureFilter);
         $this->entityManager->flush($taggedNomenclatureFilter);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEventAndTag(Event $event, $tag)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('taggedNomenclatureFilter')
+            ->from(TaggedNomenclatureFilter::class, 'taggedNomenclatureFilter')
+            ->where('taggedNomenclatureFilter.event = :event')
+            ->andWhere('taggedNomenclatureFilter.tag = :tag')
+            ->setParameter('tag', $tag)
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

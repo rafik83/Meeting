@@ -24,4 +24,12 @@ interface TaggedNomenclatureFilterRepositoryInterface
      * @param TaggedNomenclatureFilter $taggedNomenclatureFilter
      */
     public function add(TaggedNomenclatureFilter $taggedNomenclatureFilter);
+
+    /**
+     * @param Event  $event
+     * @param string $tag
+     * 
+     * @return TaggedNomenclatureFilter
+     */
+    public function getByEventAndTag(Event $event, $tag);
 }
