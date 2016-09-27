@@ -75,7 +75,6 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $passwordEncoder->encode()->shouldNotBeCalled();
 
         $userRepository      = $this->prophesize(UserRepositoryInterface::class);
-        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
         $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
 
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
