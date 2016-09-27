@@ -45,15 +45,15 @@ class UserController extends Controller
             ->paginate(
                 $request->query->get('page', 1),
                 20,
-                $event->getId(),
+                $event,
                 $typeFilter
             );
 
         return $this->render('AdminBundle:User:list.html.twig', [
-            'event'  => $event,
-            'users'  => $users,
-            'locale' => $request->getLocale(),
-            'filter_form'      => $filterFormView,
+            'event'       => $event,
+            'users'       => $users,
+            'locale'      => $request->getLocale(),
+            'filter_form' => $filterFormView,
         ]);
     }
 
@@ -66,6 +66,16 @@ class UserController extends Controller
      */
     public function showAction(Request $request, Event $event, User $user)
     {
+       $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $userEvent = $this
+            ->get('vimeet_infrastructure.repository.user_event_repository')
+            ->getUserEvent($user, $event);
+
+        if (is_null($userEvent)) {
+            throw $this->createNotFoundException();
+        }
+
         $userDetails = $this
             ->get('vimeet_infrastructure.repository.user_repository')
             ->getFullUser($user->getId());
@@ -73,7 +83,6 @@ class UserController extends Controller
         return $this->render('AdminBundle:User:show.html.twig', [
             'event'  => $event,
             'user'   => $userDetails,
-            'locale' => $request->getLocale(),
         ]);
     }
 
