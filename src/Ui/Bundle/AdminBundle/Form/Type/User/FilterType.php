@@ -28,6 +28,7 @@ class FilterType extends AbstractType
                 'placeholder' => '',
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
+                'user'        => $options['user'],
             ])
         ;
     }
@@ -37,7 +38,7 @@ class FilterType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale']);
+        $resolver->setRequired(['event', 'locale', 'user']);
     }
 
     /**

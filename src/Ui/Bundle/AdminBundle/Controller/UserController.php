@@ -31,7 +31,12 @@ class UserController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $typeFilter = [];
-        $filterType = $this->createFilterForm(FilterType::class, $typeFilter, ['event' => $event, 'locale' => $request->getLocale()]);
+        $filterType = $this->createFilterForm(
+            FilterType::class,
+            $typeFilter,
+            ['event' => $event, 'locale' => $request->getLocale(), 'user' => $this->getUser()]
+        );
+
         $filtered   = $filterType->handleRequest($request)->isSubmitted() && $filterType->isValid();
 
         if ($filtered) {
@@ -78,7 +83,7 @@ class UserController extends Controller
 
         $userDetails = $this
             ->get('vimeet_infrastructure.repository.user_repository')
-            ->getFullUser($user->getId());
+            ->getFullUser($user);
 
         return $this->render('AdminBundle:User:show.html.twig', [
             'event'  => $event,
