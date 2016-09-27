@@ -29,7 +29,7 @@ interface UserEventRepositoryInterface
     /**
      * @param User $user
      *
-     * @return array
+     * @return UserEvent[]
      */
     public function getByUser(User $user);
 
