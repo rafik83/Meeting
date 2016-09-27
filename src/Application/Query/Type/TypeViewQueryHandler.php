@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Type;
 
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\View\TypeListsView;
-use Proximum\Vimeet\Domain\View\TypeListView;
+use Proximum\Vimeet\Application\View\Type\TypeListsView;
+use Proximum\Vimeet\Application\View\Type\TypeListView;
 
 class TypeViewQueryHandler
 {
@@ -53,7 +53,7 @@ class TypeViewQueryHandler
             $typeListsView->types[] = new TypeListView(
                 $type->getId(),
                 $type->getPosition(),
-                $type->getTitle($query->locale),
+                $type->getTitle($query->event->getAvailableLocale($query->locale)),
                 $type->isHidden(),
                 (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
                 (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',

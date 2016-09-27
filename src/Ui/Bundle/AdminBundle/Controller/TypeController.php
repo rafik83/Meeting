@@ -42,7 +42,7 @@ class TypeController extends Controller
         $typeViewQuery = new TypeViewQuery(
             $request->query->get('page', 1),
             $event,
-            $event->getAvailableLocale($request->getLocale())
+            $request->getLocale()
         );
 
         $typeListsView = $this->get('tactician.commandbus.query')->handle($typeViewQuery);
