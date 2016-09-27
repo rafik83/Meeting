@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class SheetDetailsView
 {
@@ -125,7 +125,7 @@ class SheetDetailsView
     public $completeness;
 
     /**
-     * @var TemplateData
+     * @var TemplateObject[]
      */
     public $companyObjects;
 
@@ -149,7 +149,7 @@ class SheetDetailsView
      * @param float             $total
      * @param float             $remainingToPay
      * @param int               $completeness
-     * @param TemplateData      $companyObjects
+     * @param TemplateObject[]  $companyObjects
      */
     public function __construct(
         $title,
@@ -169,7 +169,7 @@ class SheetDetailsView
         $total,
         $remainingToPay,
         $completeness,
-        TemplateData $companyObjects
+        array $companyObjects
     ) {
         $this->title                = $title;
         $this->state                = $state;

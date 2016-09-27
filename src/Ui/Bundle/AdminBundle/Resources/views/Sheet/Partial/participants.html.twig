@@ -1,8 +1,8 @@
 <div class="row">
     {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
-
+    <div class="col-md-6">
     {% if details.owner.shouldBeDisplayed %}
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {{ 'admin.sheet.details.owner_not_participant.title'|trans }}
@@ -18,7 +18,7 @@
         </div>
     {% endif %}
     {% for participant in details.participants %}
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {{ 'admin.sheet.details.participant.title'|trans }} {{ loop.index }}
@@ -39,18 +39,19 @@
             </div>
         </div>
     {% endfor %}
-    {% if details.companyObjects.getCompanyObjects is not empty %}
-    <div class="col-md-6">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                {{ 'admin.sheet.details.company.title'|trans }}
-            </div>
-            <div class="panel-body">
-                {% for object in details.companyObjects.getCompanyObjects %}
-                    {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
-                {% endfor %}
-            </div>
-        </div>
     </div>
-    {% endif %}
+    <div class="col-md-6">
+        {% if details.companyObjects is not empty %}
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    {{ 'admin.sheet.details.company.title'|trans }}
+                </div>
+                <div class="panel-body">
+                    {% for object in details.companyObjects %}
+                        {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>
