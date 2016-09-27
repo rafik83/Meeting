@@ -73,6 +73,6 @@ class TypeListView
         $this->hidden               = $hidden;
         $this->registrationTemplate = $registrationTemplate;
         $this->sheetTemplate        = $sheetTemplate;
-        $this->packageTemplate      = $package;
+        $this->package              = $package;
     }
 }
