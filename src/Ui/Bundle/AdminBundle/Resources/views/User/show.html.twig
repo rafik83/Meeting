@@ -8,9 +8,7 @@
             - {{ user.account.position }}</h1>
         <div class="col-md-4">
             {% if user.account.avatar is not empty %}
-                <div>
                     <img src="{{ user.account.avatar|imagine_filter('user_avatar') }}">
-                </div>
             {% endif %}
             <div>
                 <div class="coordinates">
