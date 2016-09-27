@@ -43,7 +43,7 @@ interface UserRepositoryInterface
      *
      * @return User|null
      */
-    public function getFullUser($id);
+    public function getFullUser(User $user);
 
     /**
      * @return User[]
