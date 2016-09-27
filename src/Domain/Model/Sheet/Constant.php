@@ -14,6 +14,8 @@ final class Constant
 {
     const CREATED_TODAY     = 'created_today';
     const CREATED_THIS_WEEK = 'created_this_week';
+    const NO_ORDER          = 'no_order';
+    const HAS_CART          = 'has_cart';
 
     const ORDER_BY_ALPHABETICAL          = 'alphabetical';
     const ORDER_BY_DATE_ADDED_TO_CATALOG = 'dateAddedToCatalog';

@@ -1,10 +1,12 @@
 Proximum\Vimeet\Domain\Model\Sheet:
     # Elao sheet
     sheet_test:
-        __construct: false
-        type: '@type_exposant'
-        event: '@event_rdv_carnot_2016'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_test'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: 'WorldCompanyInc' }
             93de093f: { text: "10 rue saint marc" }
@@ -19,11 +21,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
 
     # Proximum sheets
     proximum_sheet_visiteur:
-        __construct: false
-        type: '@type_visiteur'
-        event: '@event_rdv_carnot_2016'
-        data: []
-        owner: '@proximum_user_visiteur'
+        __construct:
+         - '@event_rdv_carnot_2016'
+         - '@type_visiteur'
+         - []
+         - '@proximum_user_visiteur'
+         - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
             93de093f: { text: "10 rue saint marc" }
@@ -35,10 +38,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_exposant:
-        __construct: false
-        type: '@type_exposant'
-        event: '@event_rdv_carnot_2016'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@proximum_user_exposant'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
             93de093f: { text: "10 rue saint marc" }
@@ -51,10 +56,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_carnot:
-        __construct: false
-        type: '@type_institute_carnot'
-        event: '@event_rdv_carnot_2016'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_institute_carnot'
+            - []
+            - '@proximum_user_carnot'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
             93de093f: { text: "10 rue saint marc" }
@@ -67,10 +74,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_admin:
-        __construct: false
-        type: '@type_exposant'
-        event: '@event_rdv_carnot_2016'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@proximum_user_admin'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
             93de093f: { text: "10 rue saint marc" }
@@ -83,11 +92,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_test:
-        __construct: false
-        type: '@type_exposant'
-        event: '@event_rdv_carnot_2016'
-        data: []
-        owner: '@proximum_user_test'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@proximum_user_test'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
             93de093f: { text: "10 rue saint marc" }
@@ -99,10 +109,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_ui:
-        __construct: false
-        type: '@type_visiteur'
-        event: '@event_rdv_carnot_2016'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur'
+            - []
+            - '@proximum_user_ui'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
             93de093f: { text: "10 rue saint marc" }
@@ -117,135 +129,135 @@ Proximum\Vimeet\Domain\Model\Sheet:
 
     # Random
     sheet_exposant1:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_1'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_random_1'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_exposant2:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_2'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_random_2'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_exposant3:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_3'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_random_3'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_exposant4:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_4'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_random_4'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_exposant5:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_5'
+        __construct:
+             - '@event_rdv_carnot_2016'
+             - '@type_exposant'
+             - []
+             - '@user_random_5'
+             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_exposant6:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_6'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_random_6'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_exposant7:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_exposant'
-        data: []
-        owner: '@user_random_13'
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_exposant'
+            - []
+            - '@user_random_13'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     sheet_investisseur1:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_investisseur'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_investisseur'
+            - []
+            - '@user_random_7'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        owner: '@user_random_7'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_investisseur2:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_investisseur'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_investisseur'
+            - []
+            - '@user_random_8'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        owner: '@user_random_8'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     sheet_visiteur1:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_visiteur'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur'
+            - []
+            - '@user_random_9'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        owner: '@user_random_9'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_visiteur2:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_visiteur'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur'
+            - []
+            - '@user_random_10'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        owner: '@user_random_10'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     sheet_visiteur_visio1:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_visiteur_visio'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur_visio'
+            - []
+            - '@user_random_11'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        owner: '@user_random_11'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     sheet_visiteur_visio2:
-        __construct: false
-        event: '@event_rdv_carnot_2016'
-        type: '@type_visiteur_visio'
-        data: []
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - '@type_visiteur_visio'
+            - []
+            - '@user_random_12'
+            - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
-        owner: '@user_random_12'
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>

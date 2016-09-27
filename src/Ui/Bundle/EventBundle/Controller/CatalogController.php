@@ -46,13 +46,17 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
+        $visibleTypes = $this->getVisibleTypes($event, $request->getLocale());
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
-        foreach ($typeViews as $typeView) {
-            if ($typeView->count > 0) {
+
+        foreach ($typeViews as $typeId => $typeView) {
+            if (array_key_exists($typeId, $visibleTypes)) {
                 $filters['type'][] = $typeView;
+            } else {
+                unset($typeViews[$typeId]);
             }
         }
 
@@ -72,18 +76,22 @@ class CatalogController extends Controller
             $filters = $searchForm->getData();
         }
 
-        try {
-            $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
-                $event,
-                $filters,
-                $request->query->getInt('page', 1),
-                100,
-                $request->getLocale(),
-                $sheet
-            );
-            $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
-        } catch (UnavailableCurrentPageException $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
+        if (empty($visibleTypes)) {
+            $paginatedResult = ['results' => [], 'total' => 0];
+        } else {
+            try {
+                    $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
+                        $event,
+                        $filters,
+                        $request->query->getInt('page', 1),
+                        100,
+                        $request->getLocale(),
+                        $sheet
+                    );
+                    $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
+            } catch (UnavailableCurrentPageException $exception) {
+                throw $this->createNotFoundException($exception->getMessage());
+            }
         }
 
         $template = 'EventBundle:Catalog:index.html.twig';
@@ -118,7 +126,7 @@ class CatalogController extends Controller
         $event = $eventDomain->getEvent();
 
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createNotFoundException();
+            throw $this->createAccessDeniedException();
         }
 
         if (!$sheet->isInCatalog()) {
@@ -158,6 +166,20 @@ class CatalogController extends Controller
     }
 
     /**
+     * @param Event $event
+     * @param string $locale
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function getVisibleTypes(Event $event, $locale)
+    {
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+
+        return $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+    }
+
+    /**
      * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
@@ -166,6 +188,12 @@ class CatalogController extends Controller
      */
     private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+
+        if (!$this->get('catalog.sheet_access_checker')->checkAccess($userSheet, $sheet)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale);
         $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
@@ -178,5 +206,4 @@ class CatalogController extends Controller
 
         return [$nomenclatures, $participants, $taggedData];
     }
-
 }

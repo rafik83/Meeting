@@ -19,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CreateHandler extends AbstractCreateHandler
 {
@@ -29,7 +29,7 @@ class CreateHandler extends AbstractCreateHandler
     private $activateAccountTokenGenerator;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
@@ -38,14 +38,14 @@ class CreateHandler extends AbstractCreateHandler
      * @param PasswordEncoderInterface                $encoder
      * @param SaltGeneratorInterface                  $saltGenerator
      * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param EventDispatcherInterface                $eventDispatcher
+     * @param DelayedEventDispatcher                $eventDispatcher
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        EventDispatcherInterface $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher
     ) {
         parent::__construct($adminRepository, $encoder, $saltGenerator);
 
@@ -79,7 +79,7 @@ class CreateHandler extends AbstractCreateHandler
         $password = $this->encoder->encode($admin, $create->password);
         $admin->updatePassword($salt, $password);
 
-        foreach ($create->organizer->getEvents() as $event) {
+        foreach ($create->events as $event) {
             $admin->addEvent($event);
         }
 

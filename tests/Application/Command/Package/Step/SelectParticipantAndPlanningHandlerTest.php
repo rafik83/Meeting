@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -24,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
@@ -70,10 +73,18 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldBeCalled();
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $packageStepDone = new StepDoneEvent($sheet);
+        $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
+
         $command                   = new SelectParticipantAndPlanning($sheet, 1);
         $command->planningQuantity = 1;
 
-        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal(), $orderMerger->reveal());
+        $handler = new SelectParticipantAndPlanningHandler(
+            $cartManager->reveal(),
+            $orderMerger->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($command);
     }
 
@@ -131,11 +142,18 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldBeCalled();
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $packageStepDone = new StepDoneEvent($sheet);
+        $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $command                   = new SelectParticipantAndPlanning($sheet, 1);
         $command->planningQuantity = 0;
 
-        $handler = new SelectParticipantAndPlanningHandler($cartManager->reveal(), $orderMerger->reveal());
+        $handler = new SelectParticipantAndPlanningHandler(
+            $cartManager->reveal(),
+            $orderMerger->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($command);
     }
 }

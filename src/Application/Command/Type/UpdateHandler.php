@@ -59,6 +59,7 @@ class UpdateHandler
     {
         $type = $update->type;
         $type->setPosition($update->rank);
+        $type->setHidden($update->hidden);
 
         if ($update->sheetTemplate !== $type->getSheetTemplate()) {
             $type->setSheetTemplate($this->getSheetTemplate($update, $type));

@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter;
+
+use Proximum\Vimeet\Application\Components\Security\AdminSheetAccess;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+
+class AdminSheetAccessVoter extends Voter
+{
+    /**
+     * @var AdminSheetAccess
+     */
+    private $adminSheetAccess;
+
+    /**
+     * AdminSheetAccessVoter constructor.
+     *
+     * @param AdminSheetAccess $adminSheetAccess
+     */
+    public function __construct(AdminSheetAccess $adminSheetAccess)
+    {
+        $this->adminSheetAccess = $adminSheetAccess;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supports($attribute, $subject)
+    {
+        return $attribute === 'PERMISSION_SHEET_ACCESS' && $subject instanceof Sheet;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    {
+        $user = $token->getUser();
+
+        if (!$user instanceof Admin) {
+            return false;
+        }
+
+        return $this->adminSheetAccess->canAccess($user, $subject);
+    }
+}

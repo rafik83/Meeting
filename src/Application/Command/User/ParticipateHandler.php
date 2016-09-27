@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -51,6 +52,7 @@ class ParticipateHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $dateTime
      * @param DelayedEventDispatcher         $eventDispatcher
      */
@@ -58,12 +60,13 @@ class ParticipateHandler
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        \DateTimeInterface $dateTime,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer   = $accountSynchronizer;
+        $this->eventDispatcher       = $eventDispatcher;
         $this->dateTime              = $dateTime;
         $this->eventDispatcher       = $eventDispatcher;
     }
@@ -99,14 +102,21 @@ class ParticipateHandler
         $participant = new Participant($sheet, $participate->user, $participantData, true);
         $this->participantRepository->add($participant);
 
+        $sheet->addParticipant($participant);
+
         $participate->sheet       = $sheet;
         $participate->participant = $participant;
 
         $this->accountSynchronizer->set($templateData, $participant->getUser());
 
+
         $this->eventDispatcher->dispatch(
             Events::REGISTRATION_STEP,
             new RegistrationStepEvent($sheet, $participant, 1)
         );
+
+        // Send Sheet Update Event to calculate completeness of the sheet
+        $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
     }
 }

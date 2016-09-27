@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -34,22 +35,30 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private $participantInfoGuesser;
 
     /**
+     * @var CartRowRepositoryInterface
+     */
+    private $cartRowRepository;
+
+    /**
      * @var TemplateDataFactory
      */
     private $templateDataFactory;
 
     /**
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     * @param TemplateDataFactory    $templateDataFactory
+     * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
+     * @param CartRowRepositoryInterface $cartRowRepository
+     * @param TemplateDataFactory        $templateDataFactory
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
+        CartRowRepositoryInterface $cartRowRepository,
         TemplateDataFactory $templateDataFactory
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->cartRowRepository      = $cartRowRepository;
         $this->templateDataFactory    = $templateDataFactory;
     }
 
@@ -100,6 +109,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $sheet->getType()->getCategories()->toArray()
         );
 
+        $unpaidCart = count($this->cartRowRepository->findBySheet($sheet)) > 0;
         $templateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
         $filtersValue = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
 
@@ -119,6 +129,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'inCatalog'         => $sheet->isInCatalog(),
             'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
             'booleanFilter'     => $filtersValue,
+            'hasOrder'          => $sheet->hasNotCancelledOrders(),
+            'hasCart'           => $unpaidCart,
         ]);
     }
 }

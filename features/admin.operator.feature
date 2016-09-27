@@ -23,6 +23,7 @@ Feature: Handle Operator
       | form.create_operator.children.email.label     | toto@toto.fr |
       | form.create_operator.children.lastname.label  | Toto         |
       | form.create_operator.children.firstname.label | Tata         |
+    And I check "Les rendez-vous CARNOT 2016"
     And I press "form.create_operator.children.submit.label"
     Then I should be on this page "/admin/fr/operator"
     And I should see "flash.admin.operator.create.success"

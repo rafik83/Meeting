@@ -14,6 +14,8 @@ Proximum\Vimeet\Domain\Model\Type:
             type: text
         viewTemplate:
             type: text
+        hidden:
+            type: boolean
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria
@@ -26,6 +28,9 @@ Proximum\Vimeet\Domain\Model\Type:
     manyToMany:
         categories:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
+            mappedBy: types
+        admins:
+            targetEntity: Proximum\Vimeet\Domain\Model\Admin
             mappedBy: types
     manyToOne:
         event:

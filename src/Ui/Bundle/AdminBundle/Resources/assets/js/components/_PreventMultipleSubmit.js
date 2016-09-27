@@ -7,13 +7,13 @@ function PreventMultipleSubmit(element)
 
 PreventMultipleSubmit.prototype.onSubmit = function ()
 {
-    var submitButton = this.element.querySelector('[type=submit]');
-
-    if (submitButton.getAttribute('data-prevent-multiple-submit') == false) {
-        return;
-    }
-
-    submitButton.disabled = true;
+    setTimeout(function () {
+        [].forEach.call(this.element.querySelectorAll('[type=submit]'), function (element) {
+            if (element.getAttribute('data-prevent-multiple-submit') != false) {
+                element.disabled = true;
+            }
+        });
+    }.bind(this), 1);
 };
 
 module.exports = PreventMultipleSubmit;

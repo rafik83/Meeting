@@ -498,7 +498,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      * @Given /^(?:|I )am on this page "(?P<page>[^"]+)"$/
      * @When /^(?:|I )go to this page "(?P<page>[^"]+)"$/
      */
-    public function visit($page)
+    public function goToThisPage($page)
     {
         parent::visit($this->baseUrl . $page);
         $this->assertResponseStatus(200);
@@ -509,7 +509,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      *
      * @Then /^(?:|I )should be on this page "(?P<page>[^"]+)"$/
      */
-    public function assertPageAddress($page)
+    public function shouldBeOnThisPage($page)
     {
         parent::assertPageAddress($this->baseUrl . $page);
         $this->assertResponseStatus(200);

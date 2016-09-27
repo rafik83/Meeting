@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Register;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -115,6 +116,10 @@ class ParticipantStepHandler
             $participantStep->participant,
             $participantStep->step
         ));
+
+        // Send Sheet Update Event to recalculate completeness of the sheet
+        $sheetUpdatedEvent = new SheetUpdatedEvent($participantStep->sheet);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
     }
 
     /**

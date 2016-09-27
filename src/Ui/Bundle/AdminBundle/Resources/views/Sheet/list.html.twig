@@ -2,10 +2,8 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block list_title 'admin.sheet.title'|trans %}
-
 {% block content %}
-    <h1 class="page-header">{{ block('list_title') }}</h1>
+    <h1 class="page-header">{{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}</h1>
 
     <div class="row filters">
         <div class="col-md-offset-4 col-md-4">
@@ -27,9 +25,7 @@
             <div class="col-md-4">
                 {% embed 'AdminBundle:Common:batch.html.twig' %}
                     {% block actions %}
-                        <li>
-                            {{ form_widget(batch_form.accept) }}
-                        </li>
+                        <li>{{ form_widget(batch_form.accept) }}</li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#validate-comment">
                                 {{ 'admin.sheet.validate'|trans }}
@@ -40,10 +36,18 @@
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
-                        <li>{{ form_widget(batch_form.enable) }}</li>
-                        <li>{{ form_widget(batch_form.disable) }}</li>
-                        <li>{{ form_widget(batch_form.addCatalog) }}</li>
-                        <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                        {% if batch_form.enable is defined %}
+                            <li>{{ form_widget(batch_form.enable) }}</li>
+                        {% endif %}
+                        {% if batch_form.disable is defined %}
+                            <li>{{ form_widget(batch_form.disable) }}</li>
+                        {% endif %}
+                        {% if batch_form.addCatalog is defined %}
+                            <li>{{ form_widget(batch_form.addCatalog) }}</li>
+                        {% endif %}
+                        {% if batch_form.removeCatalog is defined %}
+                            <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                        {% endif %}
                     {% endblock actions %}
                 {% endembed %}
             </div>
@@ -62,22 +66,22 @@
                     <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
                 </th>
                 <th></th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.state) }}
                 </th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.completed) }}
                 </th>
-                <th>{{ 'admin.sheet.inCatalog'|trans }}</th>
-                <th>
+                <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.category) }}
                 </th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.type) }}
                 </th>
                 <th>{{ 'admin.sheet.createdAt'|trans }}</th>
                 <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
-                <th>
+                <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.follower) }}
                 </th>
                 <th class="col-md-1"></th>
@@ -109,18 +113,22 @@
                         >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
                     </td>
                     <td>
-                        <span class="label {% if sheet.isIncomplete %}label-danger{% else %}label-success{% endif %}">
-                            {{ ('event.sheet.completed.' ~ (sheet.completed ? 'complete' : 'incomplete'))|trans }}
-                        </span>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-{{ sheet.completenessStatus }}" role="progressbar" aria-valuenow="{{ sheet.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ sheet.completeness }}%;">
+                                {{ sheet.completeness }}%
+                            </div>
+                        </div>
                     </td>
                     <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
-                    <td>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                    <td><small>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</small></td>
                     <td>
+                        <small>
                         {% if sheet.lastLoginAt %}
                             {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
                         {% endif %}
+                        </small>
                     </td>
                     <td>{{ sheet.follower }}</td>
                     <td class="text-right">
