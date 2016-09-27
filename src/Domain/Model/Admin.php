@@ -63,9 +63,17 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      * @param string            $role
      * @param DateTimeInterface $createdAt
      */
-    public function __construct($email, $salt, $password, $locale, $firstname, $lastname, $role, DateTimeInterface $createdAt)
-    {
-        parent::__construct($email, $salt, $password, $locale, null, null);
+    public function __construct(
+        $email,
+        $salt,
+        $password,
+        $locale,
+        $firstname,
+        $lastname,
+        $role,
+        DateTimeInterface $createdAt
+    ) {
+        parent::__construct($email, $salt, $password, $locale);
 
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
