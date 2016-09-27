@@ -116,3 +116,4 @@ Feature: add type
     And I should see "Investisseur"
     And I should see "Inscription Template Carnot"
     And I should see "Template RDV Carnot"
+    And I should see "Package RDV Carnot"
