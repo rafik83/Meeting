@@ -391,6 +391,8 @@ and: et
 and_more: 'et %count% autre|et %count% autres'
 boolean.no: Non
 boolean.yes: Oui
+boolean.false: Non
+boolean.true: Oui
 change_password.link: 'Changer le mot de passe'
 change_password.title: 'Changer le mot de passe'
 event.activateAccount.password: 'Définir votre mot de passe'
