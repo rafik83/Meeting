@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security;
 
-use Proximum\Vimeet\Application\Components\User\TypeResolver;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Exception\SheetDisabledException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -49,6 +49,7 @@ class UserChecker extends SymfonyUserChecker
      * @var TypeRepositoryInterface
      */
     private $typeRepository;
+
     /**
      * @var TypeResolver
      */

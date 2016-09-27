@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -123,17 +124,17 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, $eventId, array $filter)
+    public function paginate($page, $limit, Event $event, array $filter)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('user_event', 'user', 'type')
             ->from(UserEvent::class, 'user_event', 'user_event.id')
-            ->where('user_event.event = :eventId')
+            ->where('user_event.event = :event')
             ->join('user_event.user', 'user', 'WITH', 'user = user_event.user')
             ->join('user_event.type', 'type', 'WITH', 'type = user_event.type')
-            ->setParameter('eventId', $eventId)
+            ->setParameter('event', $event)
             ->orderBy('user.email', 'ASC');
 
         if (!empty($filter['type'])) {

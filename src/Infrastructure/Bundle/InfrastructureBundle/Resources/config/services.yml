@@ -1262,7 +1262,7 @@ services:
     # User component
     #
     components.user.type_resolver:
-        class: Proximum\Vimeet\Application\Components\User\TypeResolver
+        class: Proximum\Vimeet\Domain\UserEvent\TypeResolver
         arguments:
             - '@vimeet_infrastructure.repository.user_event_repository'
 
