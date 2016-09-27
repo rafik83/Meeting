@@ -68,15 +68,15 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getFullUser($id)
+    public function getFullUser(User $user)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('user')
             ->from(User::class, 'user')
-            ->where('user.id = :id')
-            ->setParameter('id', $id)
+            ->where('user = :user')
+            ->setParameter('user', $user)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
