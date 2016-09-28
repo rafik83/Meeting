@@ -27,13 +27,6 @@ interface UserEventRepositoryInterface
     public function set(UserEvent $userEvent);
 
     /**
-     * @param User $user
-     *
-     * @return UserEvent[]
-     */
-    public function getByUser(User $user);
-
-    /**
      * @param User  $user
      * @param Event $event
      *

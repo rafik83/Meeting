@@ -67,25 +67,6 @@ class UserEventRepository implements UserEventRepositoryInterface
     }
 
     /**
-     * @param User $user
-     *
-     * @return array
-     */
-    public function getByUser(User $user)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('user, event, user_event.type')
-            ->from(UserEvent::class, 'user', 'user.id')
-            ->join('user_event', 'user', 'WITH', 'user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('user.email', 'ASC');
-
-        return array_keys($queryBuilder->getQuery()->getResult());
-    }
-
-    /**
      * @param User  $user
      * @param Event $event
      *
