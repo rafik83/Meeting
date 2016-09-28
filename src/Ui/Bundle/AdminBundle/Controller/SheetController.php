@@ -45,9 +45,19 @@ class SheetController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filters        = [];
-        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, ['event' => $event, 'locale' => $locale]);
-        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, ['event' => $event, 'locale' => $locale]);
+        $filters = [];
+
+        $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
+            'event'  => $event,
+            'locale' => $locale,
+            'user'   => $this->getUser()
+        ]);
+
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, [
+            'event'  => $event,
+            'locale' => $locale,
+        ]);
+
         $filterPartForm->handleRequest(Request::create($request->getUri()));
         $filtered       = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
 
@@ -103,13 +113,16 @@ class SheetController extends Controller
 
         if ($batchForm->handleRequest($request)->isSubmitted()) {
             if ($batchForm->isValid()) {
-                $batch->validate      = $batchForm->get('validate')->isClicked();
                 $batch->assign        = $batchForm->get('assign')->isClicked();
                 $batch->accept        = $batchForm->get('accept')->isClicked();
-                $batch->enable        = $batchForm->get('enable')->isClicked();
-                $batch->disable       = $batchForm->get('disable')->isClicked();
-                $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
-                $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
+                $batch->validate      = $batchForm->get('validate')->isClicked();
+
+                if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
+                    $batch->enable        = $batchForm->get('enable')->isClicked();
+                    $batch->disable       = $batchForm->get('disable')->isClicked();
+                    $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
+                    $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
+                }
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
 
@@ -151,6 +164,7 @@ class SheetController extends Controller
     public function detailsAction(Request $request, Event $event, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
 
         $locale = $event->getAvailableLocale($request->getLocale());
 

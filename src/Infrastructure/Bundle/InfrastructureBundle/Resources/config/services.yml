@@ -194,6 +194,7 @@ services:
             - '@doctrine.orm.entity_manager'
     repository.cart_row_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\CartRowRepository
+        lazy:  true
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.promotion_code_row_repository:
@@ -260,6 +261,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
@@ -685,6 +687,21 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Update }
+    command.partner.create_handler:
+        class: Proximum\Vimeet\Application\Command\Partner\CreateHandler
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+            - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Create }
+    command.partner.update_handler:
+        class: Proximum\Vimeet\Application\Command\Partner\UpdateHandler
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Update }
     command.admin.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
         arguments:
@@ -827,6 +844,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@buyable_object_resolver'
             - '@command.sheet.remove_data_handler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\UpdateData }
     command.sheet.remove_data_handler:
@@ -935,6 +953,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@buyable_object_resolver'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectPlan }
     command.package.step.select_participant_and_planning_handler:
@@ -942,6 +961,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning }
     command.package.step.select_options_handler:
@@ -950,6 +970,7 @@ services:
             - '@cart_manager'
             - '@datetime'
             - '@order.merger'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Step\SelectOptions }
     command.info.update_info_handler:
@@ -969,6 +990,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@cart_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
@@ -1340,6 +1362,8 @@ services:
     #
     components.security.admin_event_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
+    components.security.admin_sheet_access:
+        class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
 
     #
     # Guideline Component
@@ -1540,6 +1564,7 @@ services:
             - '@security.impersonate'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.trace_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
     query.participant.card_list_view_query_handler:
@@ -1800,6 +1825,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@repository.cart_row_repository'
             - '@template.template_data_factory'
 
     #
@@ -2022,3 +2048,12 @@ services:
             - '@repository.payment.payment_repository'
             - '@domain.transaction.transaction_manager'
             - '@datetime'
+
+    #
+    # Sheet
+    #
+    sheet.completeness_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\CompletenessCalculator
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.sheet_repository'

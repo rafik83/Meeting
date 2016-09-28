@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject;
 
-
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObjectValidator;
 use Symfony\Component\Validator\Constraint;

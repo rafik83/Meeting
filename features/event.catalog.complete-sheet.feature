@@ -16,16 +16,14 @@ Feature: Display complete sheet from catalog
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml             |
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
     When I follow "navigation.links.catalog.available_date"
-    And I go to this page "/fr/catalog/sheet/1"
-    And I should see "Onera"
-    And I should not see "sheet.object.action.edit"
-    And I should not see "sheet.request_meeting"
-    When I follow "navigation.links.catalog.available_date"
-    And I go to this page "/fr/catalog/sheet/2"
-    And I should not see "Onera"
+    And I go to this page "/fr/catalog/sheet/3"
+    Then I should see "World Company Inc"
     And I should not see "sheet.object.action.edit"
     And I should see "sheet.request_meeting"
+    When I go to "http://asddays-2016.vimeet.proximum.dev/fr/catalog/sheet/2"
+    Then the response status code should be 403

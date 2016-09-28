@@ -167,6 +167,10 @@ fos_elastica:
                             type: boolean
                         inCatalogAt:
                             type: date
+                        hasOrder:
+                            type: boolean
+                        hasCart:
+                            type: boolean
                         organizationCategory:
                             type: string
                             index: "not_analyzed"

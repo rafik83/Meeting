@@ -161,6 +161,28 @@ services:
         parent: form_type_product.abstract_update_type
         tags:
             - { name: form.type }
+    form_type_partner.partner_type:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        abstract: true
+        tags:
+            - { name: form.type }
+    form_type_partner.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\CreateType
+        parent: form_type_partner.partner_type
+        tags:
+            - { name: form.type }
+    form_type_partner.update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner\UpdateType
+        parent: form_type_partner.partner_type
+        tags:
+            - { name: form.type }
+    form_type_sheet.batch_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType
+        arguments:
+            - '@security.authorization_checker'
+        tags:
+            - { name: form.type }
 
     form_type_sheet.predefined_filters_choice_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\PredefinedFiltersChoiceType

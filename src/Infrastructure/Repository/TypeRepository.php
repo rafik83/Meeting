@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -266,6 +267,24 @@ class TypeRepository implements TypeRepositoryInterface
             ->join('type.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllowedTypesByEvent(Admin $admin, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from(Type::class, 'type', 'type.id')
+            ->join('type.admins', 'admins', 'WITH', 'admins.id = :admin')
+            ->where('type.event = :event')
+            ->setParameter('admin', $admin)
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

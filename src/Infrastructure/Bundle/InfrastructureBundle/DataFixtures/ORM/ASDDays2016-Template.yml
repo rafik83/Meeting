@@ -337,7 +337,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos offres"
                                                 en: "Your offers"
                                             mode: "checkboxes"
-                                            required: true
                                             nomenclature: "@nomenclature_offre_besoins_asddays2016->id"
                                     63ccc105:
                                         component: "object"
@@ -354,7 +353,6 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos besoins"
                                                 en: "Your needs"
                                             mode: "checkboxes"
-                                            required: true
                                             nomenclature: "@nomenclature_offre_besoins_asddays2016->id"
     sheet_template_investisseur_asddays:
         __construct: false
