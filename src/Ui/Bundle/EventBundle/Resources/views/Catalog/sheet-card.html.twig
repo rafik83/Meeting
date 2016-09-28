@@ -1,10 +1,13 @@
 <div class="col-md-4">
     <div class="catalog__item {#catalog__item--checked#}">
         <header>
+            {% if not catalogSheetPreviewView.hasImage %}
+                <h3>{{ catalogSheetPreviewView.title }}</h3>
+            {% endif %}
         </header>
         <div class="content">
             {% for object in catalogSheetPreviewView.preview %}
-                {% if object.isImage and object.content is not empty %}
+                {% if object.isImage %}
                     <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
                 {% else %}
                     {% if object.isStrong %}

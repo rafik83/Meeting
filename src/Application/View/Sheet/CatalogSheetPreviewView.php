@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
-use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 
 class CatalogSheetPreviewView
 {
@@ -34,7 +34,7 @@ class CatalogSheetPreviewView
     public $type;
 
     /**
-     * @var TemplateObject[]
+     * @var PreviewView[]
      */
     public $preview;
 
@@ -50,5 +50,19 @@ class CatalogSheetPreviewView
         $this->title   = $title;
         $this->type    = $type;
         $this->preview = $preview;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasImage()
+    {
+        foreach ($this->preview as $previewView) {
+            if ($previewView->isImage()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
