@@ -77,17 +77,19 @@ class UserController extends Controller
             ->get('vimeet_infrastructure.repository.user_event_repository')
             ->getUserEvent($user, $event);
 
-        if (is_null($userEvent)) {
-            throw $this->createNotFoundException();
+        if (null === $userEvent) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'This user %s is not on this event %s',
+                    $user->getId(),
+                    $event->getId()
+                )
+            );
         }
-
-        $userDetails = $this
-            ->get('vimeet_infrastructure.repository.user_repository')
-            ->getFullUser($user);
 
         return $this->render('AdminBundle:User:show.html.twig', [
             'event'  => $event,
-            'user'   => $userDetails,
+            'user'   => $user,
         ]);
     }
 
