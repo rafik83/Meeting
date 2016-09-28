@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,6 +41,8 @@ class FilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event', 'locale', 'user']);
+        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('user', User::class);
     }
 
     /**
