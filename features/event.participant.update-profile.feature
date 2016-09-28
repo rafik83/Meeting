@@ -33,7 +33,6 @@ Feature: Update participant profile
     And I check the "gender.man" radio
     And I press "common.validate"
     Then I should be on this page "/fr/account/sheet/1/participant/1"
-    And I should see "YY"
     And I should see "Yeb YUPONT"
 
   Scenario: I can update the participant avatar

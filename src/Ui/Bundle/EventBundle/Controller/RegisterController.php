@@ -96,7 +96,7 @@ class RegisterController extends Controller
             $this->getFlashEmail(),
             $request->getLocale(),
             $eventDomain->getEvent(),
-            $typeView->id
+            $typeView
         );
 
         if ($command->email === null || $this->emailExists($command->email)) {
