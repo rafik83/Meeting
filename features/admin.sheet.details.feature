@@ -33,7 +33,13 @@ Feature: See sheet details
     And I should see "admin.sheet.details.meeting.request.pending"
     And I should see "admin.sheet.details.meeting.request.refused"
     And I should see "admin.sheet.details.meeting.proposition.refused"
-
+    And I should see "admin.sheet.details.company.title"
+    And I should see "Chiffre d'affaires"
+    And I should see "Nom (Société / Organisme)"
+    And I should see "Ville"
+    And I should see "Adresse"
+    And I should see "Site internet"
+    
   Scenario: I can add a comment on a sheet
     Given I am logged with "test@test.com" on admin
     Then I go to this page "/admin/fr/event/1/sheet/1"

@@ -260,6 +260,7 @@ admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
+admin.sheet.details.company.title: 'Société'
 admin.sheet.details.completeness: Complétude de la fiche
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
@@ -394,6 +395,8 @@ and: et
 and_more: 'et %count% autre|et %count% autres'
 boolean.no: Non
 boolean.yes: Oui
+boolean.false: Non
+boolean.true: Oui
 change_password.link: 'Changer le mot de passe'
 change_password.title: 'Changer le mot de passe'
 event.activateAccount.password: 'Définir votre mot de passe'
