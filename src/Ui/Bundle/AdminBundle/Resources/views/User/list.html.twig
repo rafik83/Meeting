@@ -3,6 +3,7 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
+    {% set locale = event.availableLocale(app.request.locale) %}
     <h1 class="page-header">{{ 'admin.users.title'|trans }}</h1>
 
     <table class="table table-hover">
@@ -14,17 +15,17 @@
         </tr>
         </thead>
         <tbody>
-        {% for user in users %}
+        {% for userEvent in userEvents %}
             <tr>
                 <td>
-                    {{ user.type.getTitle(event.availableLocale(app.request.locale)) }}
+                    {{ userEvent.type.getTitle(locale) }}
                 </td>
-                <td>{{ user.user.email }}</td>
-                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': user.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
+                <td>{{ userEvent.user.email }}</td>
+                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEvent.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': users}) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': userEvents}) }}
 {% endblock %}

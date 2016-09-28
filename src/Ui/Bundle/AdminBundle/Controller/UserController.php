@@ -45,7 +45,7 @@ class UserController extends Controller
 
         $filterFormView = $filterType->createView();
 
-        $users = $this
+        $userEvents = $this
             ->get('vimeet_infrastructure.repository.user_repository')
             ->paginate(
                 $request->query->get('page', 1),
@@ -56,7 +56,7 @@ class UserController extends Controller
 
         return $this->render('AdminBundle:User:list.html.twig', [
             'event'       => $event,
-            'users'       => $users,
+            'userEvents'  => $userEvents,
             'locale'      => $request->getLocale(),
             'filter_form' => $filterFormView,
         ]);
