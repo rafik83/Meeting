@@ -18,8 +18,10 @@ use Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -28,7 +30,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event             = EventFactory::createEvent();
-        $type              = new Type($event);
+        $type              = new TypeView(1, 'title', 'desc');
         $command           = new RegisterNewUser('test@test.com', 'fr', $event, $type);
         $command->password = 'password';
 
@@ -49,11 +51,14 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $userRepository->add($expectedUser)->shouldBeCalled();
 
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
         $handler = new RegisterNewUserHandler(
             $userRepository->reveal(),
             $passwordEncoder->reveal(),
             $saltGenerator->reveal(),
-            $userEventRepository->reveal()
+            $userEventRepository->reveal(),
+            $typeRepository->reveal()
         );
 
         $handler->handle($command);
@@ -64,7 +69,7 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(EmailAlreadyExistsException::class);
 
         $event             = EventFactory::createEvent();
-        $type              = new Type($event);
+        $type              = new TypeView(1, 'title', 'desc');
         $command           = new RegisterNewUser('test@test.com', 'fr', $event, $type);
         $command->password = 'password';
 
@@ -80,11 +85,14 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
         $userRepository->add()->shouldNotBeCalled();
 
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
         $handler = new RegisterNewUserHandler(
             $userRepository->reveal(),
             $passwordEncoder->reveal(),
             $saltGenerator->reveal(),
-            $userEventRepository->reveal()
+            $userEventRepository->reveal(),
+            $typeRepository->reveal()
         );
         $handler->handle($command);
     }

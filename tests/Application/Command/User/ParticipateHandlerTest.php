@@ -213,6 +213,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $typeResolver = $this->prophesize(TypeResolver::class);
+        $typeResolver->resolve($user, $event, $type)->shouldBeCalled();
 
         $sheetRepository->add(Argument::that(
             function (Sheet $sheet) use ($expectedSheetWithParticipant) {
