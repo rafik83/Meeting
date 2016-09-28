@@ -100,7 +100,7 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventDispatcher->dispatch(
             Events::SHEET_CHANGED_TYPE,
-            new SheetChangedTypeEvent($expectedSheet, $admin, $date, '')
+            new SheetChangedTypeEvent($expectedSheet, $admin, $date, '', '', 'fr')
         )->shouldBeCalled();
     }
 
@@ -154,7 +154,7 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventDispatcher->dispatch(
             Events::SHEET_CHANGED_TYPE,
-            new SheetChangedTypeEvent($expectedSheet, $admin, $date, '')
+            new SheetChangedTypeEvent($expectedSheet, $admin, $date, '', '', 'fr')
         )->shouldBeCalled();
     }
 }
