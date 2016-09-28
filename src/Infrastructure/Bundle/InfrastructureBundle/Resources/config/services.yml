@@ -805,6 +805,7 @@ services:
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
             - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
