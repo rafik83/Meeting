@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
-use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
@@ -53,32 +53,25 @@ class CatalogController extends Controller
             return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
         }
 
+        /*
+        $this->get('repository.filter.tagged_nomenclature_filter_repository')->getByEventAndTag($event);
+        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
+            new CatalogOrganizationCategoryViewQuery($event, $visibleTypes, [], $request->getLocale())
+        );
+        */
+
         $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new CatalogTypeViewQuery($event, $visibleTypes, [], $request->getLocale())
+            new TypeViewQuery($event, $visibleTypes, [], $request->getLocale())
         );
 
-        $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+        $filters = $this->getDefaultFilters($typeViews);
 
-        /** @var TypeView $typeView */
-        foreach ($typeViews as $typeId => $typeView) {
-            if ($typeView->count > 0) {
-                $filters['type'][] = $typeView;
-            }
-        }
+        $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
+            'action'    => $this->generateUrl('event_catalog_index'),
+            'typeViews' => $typeViews,
+        ]);
 
-        $searchForm = $this->get('form.factory')->createNamed(
-            '',
-            SearchType::class,
-            $filters,
-            [
-                'action'    => $this->generateUrl('event_catalog_index'),
-                'typeViews' => $typeViews,
-            ]
-        );
-
-        $filtered = $searchForm->handleRequest($request) && $searchForm->isValid();
-
-        if ($filtered) {
+        if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
             $filters = $searchForm->getData();
         }
 
@@ -194,5 +187,23 @@ class CatalogController extends Controller
         $taggedData = $registrationTemplateData->getAllTaggedDatas();
 
         return [$nomenclatures, $participants, $taggedData];
+    }
+
+    /**
+     * @param TypeView[] $typeViews
+     *
+     * @return array
+     */
+    private function getDefaultFilters(array $typeViews)
+    {
+        $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+
+        foreach ($typeViews as $typeView) {
+            if ($typeView->count > 0) {
+                $filters['type'][] = $typeView;
+            }
+        }
+
+        return $filters;
     }
 }

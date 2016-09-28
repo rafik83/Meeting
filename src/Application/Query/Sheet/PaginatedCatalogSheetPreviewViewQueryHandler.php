@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -28,23 +30,23 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private $sheetSearchAdapter;
 
     /**
-     * @var CatalogSheetPreviewViewQueryHandler
+     * @var SheetPreviewViewQueryHandler
      */
-    private $catalogSheetPreviewViewQueryHandler;
+    private $sheetPreviewViewQueryHandler;
 
     /**
-     * @param SheetRepositoryInterface            $sheetRepository
-     * @param SheetSearchAdapterInterface         $sheetSearchAdapter
-     * @param CatalogSheetPreviewViewQueryHandler $catalogSheetPreviewViewQueryHandler
+     * @param SheetRepositoryInterface     $sheetRepository
+     * @param SheetSearchAdapterInterface  $sheetSearchAdapter
+     * @param SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        CatalogSheetPreviewViewQueryHandler $catalogSheetPreviewViewQueryHandler
+        SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler
     ) {
-        $this->sheetRepository                     = $sheetRepository;
-        $this->sheetSearchAdapter                  = $sheetSearchAdapter;
-        $this->catalogSheetPreviewViewQueryHandler = $catalogSheetPreviewViewQueryHandler;
+        $this->sheetRepository              = $sheetRepository;
+        $this->sheetSearchAdapter           = $sheetSearchAdapter;
+        $this->sheetPreviewViewQueryHandler = $sheetPreviewViewQueryHandler;
     }
 
     /**
@@ -68,8 +70,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $sheets->results = array_map(
             function (Sheet $sheet) use ($query) {
                 return $this
-                    ->catalogSheetPreviewViewQueryHandler
-                    ->handle(new CatalogSheetPreviewViewQuery($sheet, $query->locale, $query->viewer));
+                    ->sheetPreviewViewQueryHandler
+                    ->handle(new SheetPreviewViewQuery($sheet, $query->locale, $query->viewer));
             },
             $sheets->results
         );

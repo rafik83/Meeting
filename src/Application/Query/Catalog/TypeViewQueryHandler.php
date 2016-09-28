@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Type;
+namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 
-class CatalogTypeViewQueryHandler
+class TypeViewQueryHandler
 {
     /**
      * @var TypeRepositoryInterface
@@ -39,11 +39,11 @@ class CatalogTypeViewQueryHandler
     }
 
     /**
-     * @param CatalogTypeViewQuery $query
+     * @param TypeViewQuery $query
      *
      * @return TypeView[]
      */
-    public function handle(CatalogTypeViewQuery $query)
+    public function handle(TypeViewQuery $query)
     {
         $types      = $this->typeRepository->getTypesTitleByEventAndLocale(
             $query->event,

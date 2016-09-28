@@ -1739,12 +1739,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
     query.sheet.catalog_sheet_preview_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\CatalogSheetPreviewViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@domain.rule.composer'
             - '@sheet.preview'
             - '@repository.rule_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
@@ -1754,12 +1756,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
     query.type.catalog_type_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@adapter.sheet_search_adapter'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery }
 
     ##
     # Navigation builder
