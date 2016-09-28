@@ -110,7 +110,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $sheet->getType()->getCategories()->toArray()
         );
 
-        $unpaidCart = count($this->cartRowRepository->findBySheet($sheet)) > 0;
+        $hasCart              = count($this->cartRowRepository->findBySheet($sheet)) > 0;
         $templateData         = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
         $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
         $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
@@ -132,7 +132,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
             'booleanFilter'        => $filtersValue,
             'hasOrder'             => $sheet->hasNotCancelledOrders(),
-            'hasCart'              => $unpaidCart,
+            'hasCart'              => $hasCart,
             'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
         ]);
     }
