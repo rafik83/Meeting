@@ -293,7 +293,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypesTitleByEventAndLocale(Event $event, $locale)
+    public function getTypesTitleByEventAndLocale(Event $event, $locale, array $types = null)
     {
         $queryBuilder = $this
             ->entityManager
@@ -305,6 +305,10 @@ class TypeRepository implements TypeRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('locale', $locale)
             ->orderBy('type.position');
+
+        if (null !== $types) {
+            $queryBuilder->andWhere('type IN (:types)')->setParameter('types', $types);
+        }
 
         return array_map(
             function ($type) {

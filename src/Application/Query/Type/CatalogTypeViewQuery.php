@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Type;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class CatalogTypeViewQuery
 {
@@ -18,6 +19,11 @@ class CatalogTypeViewQuery
      * @var Event
      */
     public $event;
+
+    /**
+     * @var Type[]
+     */
+    public $visibleTypes;
 
     /**
      * @var array
@@ -31,13 +37,15 @@ class CatalogTypeViewQuery
 
     /**
      * @param Event  $event
+     * @param Type[] $visibleTypes
      * @param array  $filters
      * @param string $locale
      */
-    public function __construct(Event $event, array $filters, $locale)
+    public function __construct(Event $event, array $visibleTypes, array $filters, $locale)
     {
-        $this->event   = $event;
-        $this->filters = $filters;
-        $this->locale  = $locale;
+        $this->event        = $event;
+        $this->visibleTypes = $visibleTypes;
+        $this->filters      = $filters;
+        $this->locale       = $locale;
     }
 }

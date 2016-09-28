@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuer
 use Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,22 +47,22 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->getVisibleTypes($event, $request->getLocale());
+        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
 
         if (empty($visibleTypes)) {
             return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
         }
 
-        $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
-        $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
+        $typeViews = $this->get('tactician.commandbus.query')->handle(
+            new CatalogTypeViewQuery($event, $visibleTypes, [], $request->getLocale())
+        );
 
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
+        /** @var TypeView $typeView */
         foreach ($typeViews as $typeId => $typeView) {
-            if (array_key_exists($typeId, $visibleTypes)) {
+            if ($typeView->count > 0) {
                 $filters['type'][] = $typeView;
-            } else {
-                unset($typeViews[$typeId]);
             }
         }
 
@@ -165,20 +166,6 @@ class CatalogController extends Controller
             'isCatalog'     => true,
             'userSheet'     => $userSheet,
         ]);
-    }
-
-    /**
-     * @param Event $event
-     * @param string $locale
-     *
-     * @return array
-     * @throws \Exception
-     */
-    private function getVisibleTypes(Event $event, $locale)
-    {
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
-
-        return $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
     }
 
     /**

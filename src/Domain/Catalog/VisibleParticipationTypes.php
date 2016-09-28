@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class VisibleParticipationTypes
@@ -32,7 +33,7 @@ class VisibleParticipationTypes
     /**
      * @param Sheet $sheet
      *
-     * @return array
+     * @return Type[]
      */
     public function getAllowedTypesList(Sheet $sheet)
     {
