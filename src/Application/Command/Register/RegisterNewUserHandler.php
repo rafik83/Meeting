@@ -70,12 +70,13 @@ class RegisterNewUserHandler
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $register->email));
         }
 
+        $type     = $this->get('vimeet_infrastructure.repository.type_repository')->getById($register->typeView->id);
         $salt     = $this->saltGenerator->generate();
         $user     = new User($register->email, $salt, null, $register->locale);
         $password = $this->encoder->encode($user, $register->password);
         $user->updatePassword($salt, $password);
 
-        $userEvent = new UserEvent($user, $register->event, $register->type);
+        $userEvent = new UserEvent($user, $register->event, $type);
 
         $this->userRepository->add($user);
         $this->userEventRepository->add($userEvent);
