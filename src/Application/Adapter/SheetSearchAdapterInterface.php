@@ -34,4 +34,12 @@ interface SheetSearchAdapterInterface
      * @return array
      */
     public function getTypeStats(Event $event, array $filters);
+
+    /**
+     * @param Event $event
+     * @param array $filters
+     *
+     * @return array
+     */
+    public function getOrganizationCategoryStats(Event $event, array $filters);
 }

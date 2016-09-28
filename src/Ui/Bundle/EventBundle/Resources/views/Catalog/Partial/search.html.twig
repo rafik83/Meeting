@@ -5,6 +5,10 @@
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
     {% endif %}
 
+    {% if searchForm.organizationCategory is defined %}
+        {{ form_row(searchForm.organizationCategory) }}
+    {% endif %}
+
     {#
     <form>
         <div class="filter">

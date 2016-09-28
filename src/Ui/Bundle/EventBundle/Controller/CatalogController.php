@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
@@ -41,7 +42,9 @@ class CatalogController extends Controller
             throw $this->createNotFoundException();
         }
 
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+        $locale = $request->getLocale();
+
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
 
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
@@ -53,21 +56,16 @@ class CatalogController extends Controller
             return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
         }
 
-        /*
-        $this->get('repository.filter.tagged_nomenclature_filter_repository')->getByEventAndTag($event);
-        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
-            new CatalogOrganizationCategoryViewQuery($event, $visibleTypes, [], $request->getLocale())
-        );
-        */
-
         $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, $visibleTypes, [], $request->getLocale())
+            new TypeViewQuery($event, $visibleTypes, [], $locale)
         );
 
         $filters = $this->getDefaultFilters($typeViews);
 
         $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'    => $this->generateUrl('event_catalog_index'),
+            'event'     => $event,
+            'locale'    => $locale,
             'typeViews' => $typeViews,
         ]);
 
@@ -82,7 +80,7 @@ class CatalogController extends Controller
                     $filters,
                     $request->query->getInt('page', 1),
                     100,
-                    $request->getLocale(),
+                    $locale,
                     $sheet
                 )
             );

@@ -35,6 +35,14 @@ interface NomenclatureRepositoryInterface
     public function findById($id);
 
     /**
+     * @param Event $event
+     * @param array $ids array of int
+     *
+     * @return Nomenclature[]
+     */
+    public function findByEventAndIds(Event $event, array $ids);
+
+    /**
      * @param Nomenclature $nomenclature
      */
     public function add(Nomenclature $nomenclature);
@@ -53,7 +61,7 @@ interface NomenclatureRepositoryInterface
      * @param Nomenclature $nomenclature
      * @param Event        $event
      *
-     * @return Nomenclature
+     * @return null|Nomenclature
      */
     public function findClone($nomenclature, $event);
 }

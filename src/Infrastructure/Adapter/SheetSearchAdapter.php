@@ -77,6 +77,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getOrganizationCategoryStats(Event $event, array $filters)
+    {
+        return $this->getStats($event, $filters, 'organizationCategory');
+    }
+
+    /**
      * @param Event  $event
      * @param array  $filters
      * @param string $field
