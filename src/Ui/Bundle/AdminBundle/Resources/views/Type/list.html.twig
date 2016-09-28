@@ -3,7 +3,7 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h1 class="page-header">Types de participation</h1>
+    <h1 class="page-header">{{ 'admin.type.list.title'|trans }}</h1>
 
     <a href="{{ path('admin_type_create', { 'event': event.id }) }}" class="btn btn-primary">{{ 'admin.type.create.link'|trans }}</a>
 
@@ -14,11 +14,14 @@
                 <th>{{ 'admin.type.position'|trans }}</th>
                 <th>{{ 'admin.type.hidden'|trans }}</th>
                 <th>{{ 'admin.type.register.link'|trans }}</th>
+                <th>{{ 'admin.type.registration.template'|trans }}</th>
+                <th>{{ 'admin.type.sheet.template'|trans }}</th>
+                <th>{{ 'admin.type.package'|trans }}</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-        {% for type in types.results %}
+        {% for type in types.types %}
             <tr>
                 <td>{{ type.title }}</td>
                 <td>{{ type.position }}</td>
@@ -28,6 +31,9 @@
                         {{ 'admin.type.register.link'|trans }}
                     </a>
                 </td>
+                <td>{{ type.registrationTemplate }}</td>
+                <td>{{ type.sheetTemplate }}</td>
+                <td>{{ type.package }}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}">
@@ -51,5 +57,5 @@
         </tbody>
     </table>
 
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': types}) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': types.results }) }}
 {% endblock %}

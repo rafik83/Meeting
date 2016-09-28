@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Type\Remove;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\Type\TypeUsedBySheetException;
+use Proximum\Vimeet\Application\Query\Type\TypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
@@ -38,18 +39,17 @@ class TypeController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $types = $this
-            ->get('vimeet_infrastructure.repository.type_repository')
-            ->paginate(
-                $request->query->get('page', 1),
-                20,
-                $event->getId(),
-                $event->getAvailableLocale($request->getLocale())
-            );
+        $typeViewQuery = new TypeViewQuery(
+            $request->query->get('page', 1),
+            $event,
+            $request->getLocale()
+        );
+
+        $typeListsView = $this->get('tactician.commandbus.query')->handle($typeViewQuery);
 
         return $this->render('AdminBundle:Type:list.html.twig', [
             'event' => $event,
-            'types' => $types,
+            'types' => $typeListsView,
         ]);
     }
 
