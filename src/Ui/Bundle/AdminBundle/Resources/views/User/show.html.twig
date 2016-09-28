@@ -4,8 +4,7 @@
 
 {% block content %}
     <div>
-        <h1 class="page-header">{{ ('gender.' ~ user.account.gender)|trans }} {{ user.account.completeName }}
-            - {{ user.account.position }}</h1>
+        <h1 class="page-header">{{ ('gender.' ~ user.account.gender)|trans }} {{ user.account.completeName }} - {{ user.account.position }}</h1>
         <div class="col-md-4">
             {% if user.account.avatar is not empty %}
                     <img src="{{ user.account.avatar|imagine_filter('user_avatar') }}">

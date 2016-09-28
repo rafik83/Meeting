@@ -14,13 +14,13 @@
         </tr>
         </thead>
         <tbody>
-        {% for result in users.results %}
+        {% for user in users %}
             <tr>
                 <td>
-                    {{ result.type.getTitle(event.availableLocale(app.request.locale)) }}
+                    {{ user.type.getTitle(event.availableLocale(app.request.locale)) }}
                 </td>
-                <td>{{ result.user.email }}</td>
-                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': result.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
+                <td>{{ user.user.email }}</td>
+                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': user.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
