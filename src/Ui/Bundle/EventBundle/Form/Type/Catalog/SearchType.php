@@ -32,19 +32,28 @@ class SearchType extends AbstractType
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
-            ])
-            ->add('type', ChoiceType::class, [
-                'label'        => 'form.search.type.label',
-                'expanded'     => true,
-                'multiple'     => true,
-                'choices'      => $options['typeViews'],
-                'choice_value' => function (TypeView $typeView) {
-                    return $typeView->id;
-                },
-                'choice_label' => function (TypeView $typeView) {
-                    return $typeView->title;
-                },
             ]);
+
+        // show type facette only if there is more than one filter
+        if (count($options['typeViews']) > 1) {
+            $builder
+                ->add(
+                    'type',
+                    ChoiceType::class,
+                    [
+                        'label'        => 'form.search.type.label',
+                        'expanded'     => true,
+                        'multiple'     => true,
+                        'choices'      => $options['typeViews'],
+                        'choice_value' => function (TypeView $typeView) {
+                            return $typeView->id;
+                        },
+                        'choice_label' => function (TypeView $typeView) {
+                            return $typeView->title;
+                        },
+                    ]
+                );
+        }
     }
 
     /**

@@ -1,7 +1,9 @@
 {{ form_start(searchForm) }}
 
 <div class="catalog__research">
-    {{ include('EventBundle:Catalog:checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+    {% if searchForm.type is defined %}
+        {{ include('EventBundle:Catalog:checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+    {% endif %}
 
     {#
     <form>
