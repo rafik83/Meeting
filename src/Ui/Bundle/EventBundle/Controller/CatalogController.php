@@ -46,7 +46,12 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes         = $this->getVisibleTypes($event, $request->getLocale());
+        $visibleTypes = $this->getVisibleTypes($event, $request->getLocale());
+
+        if (empty($visibleTypes)) {
+            return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
+        }
+
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
@@ -76,29 +81,25 @@ class CatalogController extends Controller
             $filters = $searchForm->getData();
         }
 
-        if (empty($visibleTypes)) {
-            $paginatedResult = ['results' => [], 'total' => 0];
-        } else {
-            try {
-                $paginatedResult = $this->get('tactician.commandbus.query')->handle(
-                    new PaginatedCatalogSheetPreviewViewQuery(
-                        $event,
-                        $filters,
-                        $request->query->getInt('page', 1),
-                        100,
-                        $request->getLocale(),
-                        $sheet
-                    )
-                );
-            } catch (UnavailableCurrentPageException $exception) {
-                throw $this->createNotFoundException($exception->getMessage());
-            }
+        try {
+            $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+                new PaginatedCatalogSheetPreviewViewQuery(
+                    $event,
+                    $filters,
+                    $request->query->getInt('page', 1),
+                    100,
+                    $request->getLocale(),
+                    $sheet
+                )
+            );
+        } catch (UnavailableCurrentPageException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
         }
 
-        $template = 'EventBundle:Catalog:index.html.twig';
-
         if ($request->isXmlHttpRequest()) {
-            $template = 'EventBundle:Catalog:catalog.html.twig';
+            $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
+        } else {
+            $template = 'EventBundle:Catalog:index.html.twig';
         }
 
         return $this->render($template, [
