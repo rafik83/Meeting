@@ -54,7 +54,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (null !== $orderBy) {
             if (Constant::ORDER_BY_ALPHABETICAL === $orderBy) {
                 $query->addSort(['sheetName.raw' => 'asc']);
-            } else if(Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
+            } elseif (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
                 $query->addSort(['inCatalogAt' => 'desc']);
             }
         }
@@ -73,24 +73,35 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function getTypeStats(Event $event, array $filters)
     {
+        return $this->getStats($event, $filters, 'type');
+    }
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $field
+     *
+     * @return array
+     */
+    private function getStats(Event $event, array $filters, $field)
+    {
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
 
-        $tagsAggregation = new Terms('type');
-        $tagsAggregation->setField('type');
+        $aggregation = new Terms($field);
+        $aggregation->setField($field);
 
-        $query->addAggregation($tagsAggregation);
+        $query->addAggregation($aggregation);
         $query->setSize(0);
 
-        $result = $this->searchable->search($query);
+        $result        = $this->searchable->search($query);
+        $stats         = [];
+        $elementsCount = $result->getAggregations()[$field]['buckets'];
 
-        $typeStats = [];
-        $typesCount = $result->getAggregations()['type']['buckets'];
-
-        foreach ($typesCount as $typeCount) {
-            $typeStats[$typeCount['key']] = $typeCount['doc_count'];
+        foreach ($elementsCount as $element) {
+            $stats[$element['key']] = $element['doc_count'];
         }
 
-        return $typeStats;
+        return $stats;
     }
 }

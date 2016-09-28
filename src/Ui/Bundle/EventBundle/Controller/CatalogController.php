@@ -46,7 +46,7 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->getVisibleTypes($event, $request->getLocale());
+        $visibleTypes         = $this->getVisibleTypes($event, $request->getLocale());
         $catalogTypeViewQuery = new CatalogTypeViewQuery($event, [], $request->getLocale());
         $typeViews            = $this->get('tactician.commandbus.query')->handle($catalogTypeViewQuery);
 
@@ -80,15 +80,16 @@ class CatalogController extends Controller
             $paginatedResult = ['results' => [], 'total' => 0];
         } else {
             try {
-                    $paginatedCatalogSheetPreviewViewQuery = new PaginatedCatalogSheetPreviewViewQuery(
+                $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+                    new PaginatedCatalogSheetPreviewViewQuery(
                         $event,
                         $filters,
                         $request->query->getInt('page', 1),
                         100,
                         $request->getLocale(),
                         $sheet
-                    );
-                    $paginatedResult = $this->get('tactician.commandbus.query')->handle($paginatedCatalogSheetPreviewViewQuery);
+                    )
+                );
             } catch (UnavailableCurrentPageException $exception) {
                 throw $this->createNotFoundException($exception->getMessage());
             }
