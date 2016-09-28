@@ -15,7 +15,7 @@ Feature:
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-UserEvent.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-UserEvent.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | Admin.yml                                                                |
     And I am logged with "test@test.com" on admin

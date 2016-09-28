@@ -39,13 +39,6 @@ interface UserRepositoryInterface
     public function findByEmail($email);
 
     /**
-     * @param int $id
-     *
-     * @return User|null
-     */
-    public function getFullUser(User $user);
-
-    /**
      * @return User[]
      */
     public function all();
