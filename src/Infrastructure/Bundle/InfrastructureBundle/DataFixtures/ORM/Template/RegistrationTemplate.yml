@@ -2081,7 +2081,10 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 content:
                                     fr: |+
-                                        Merci de compléter la répartition des dépenses par nature de votre candidature aux Funding Meetings. Après avoir complété cette étape, vous accéder à votre fiche de présentation qu’il vous appartient de compléter au mieux, afin de permettre au Comité de sélection de statuer sur votre candidature.
+                                        Merci de compléter la répartition des dépenses par nature de votre candidature aux Funding Meetings en K euros.
+
+                                        Après avoir complété cette étape, vous accéder à votre fiche de présentation qu’il vous appartient de compléter au mieux, afin de permettre au Comité de sélection de statuer sur votre candidature.
+
                                     en: ""
                                 type: "text"
                         57ed20688102dRD2016:
