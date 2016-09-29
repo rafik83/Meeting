@@ -32,7 +32,7 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: true
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
 

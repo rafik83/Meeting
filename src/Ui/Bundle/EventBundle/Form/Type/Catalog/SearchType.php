@@ -155,7 +155,8 @@ class SearchType extends AbstractType
             'required'     => false,
             'multiple'     => true,
             'attr'         => [
-                'class' => 'form-control select2',
+                'class'               => 'form-control select2',
+                'data-disallow-clear' => 'true',
             ],
         ]);
     }
