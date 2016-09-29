@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -34,12 +35,17 @@ class ChangeTypeHandler
 
     /** @var \DateTimeInterface */
     private $datetime;
+    /**
+     * @var StepManager
+     */
+    private $registrationStepManager;
 
     /**
      * @param SheetRepositoryInterface $sheetRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param TranslatorInterface      $translator
      * @param DelayedEventDispatcher   $eventDispatcher
+     * @param StepManager              $registrationStepManager
      * @param \DateTimeInterface       $datetime
      */
     public function __construct(
@@ -47,13 +53,15 @@ class ChangeTypeHandler
         OrderRepositoryInterface $orderRepository,
         TranslatorInterface $translator,
         DelayedEventDispatcher $eventDispatcher,
+        StepManager $registrationStepManager,
         \DateTimeInterface $datetime
     ) {
-        $this->sheetRepository = $sheetRepository;
-        $this->orderRepository = $orderRepository;
-        $this->translator      = $translator;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->sheetRepository         = $sheetRepository;
+        $this->orderRepository         = $orderRepository;
+        $this->translator              = $translator;
+        $this->eventDispatcher         = $eventDispatcher;
+        $this->datetime                = $datetime;
+        $this->registrationStepManager = $registrationStepManager;
     }
 
     /**
@@ -90,6 +98,11 @@ class ChangeTypeHandler
                     $orders
                 );
             }
+        }
+
+        // reset registration step to redirect participant on registration
+        if ($participant = $changeType->sheet->getParticipantOwner()) {
+            $this->registrationStepManager->resetRegistrationStep($participant);
         }
 
         // dispatch SHEET_CHANGED_TYPE event

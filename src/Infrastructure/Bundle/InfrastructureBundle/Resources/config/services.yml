@@ -857,6 +857,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@components.registration.step_manager'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
