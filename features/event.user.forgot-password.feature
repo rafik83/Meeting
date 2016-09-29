@@ -33,6 +33,6 @@ Feature: Forgot Password
       |form.new_password.children.password.children.first.label  | newpassword |
       |form.new_password.children.password.children.second.label | newpassword |
     And I press "common.validate"
-    Then I should be on "/fr/sheet"
+    Then I should be on "/fr/participant/1/step/1"
     And the response status code should be 200
     And I should see "flash.new_password.success"
