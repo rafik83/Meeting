@@ -1,31 +1,26 @@
-
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
     {% set label = item.label(locale, fallback) %}
-    {% if taggedData[item.tag] is defined %}
-        {% set value = taggedData[item.tag]|join(', ')|default %}
-    {% else %}
-        {% set value = [] %}
-    {% endif %}
-
-    {% if value is not empty %}
-        {% if value is url %}
-            <p>
-                <a href="{{ value }}" class="btn btn-primary"target="_blank">
-                    <i class="icon-Desktop"></i>
-                    {{ label }}
-                </a>
-            </p>
-        {% else %}
-            <header>
-                <h2>{{ label }}</h2>
-            </header>
-            <div class="section__content">
-                {% if item.tag in ["sheet_country", "participant_country"] %}
-                    <p>{{ value|country }}</p>
-                {% else %}
-                    <p>{{ value }}</p>
-                {% endif %}
-            </div>
-        {% endif %}
-    {% endif %}
+    <header>
+        <h2>{{ label }}</h2>
+    </header>
+    <div class="section__content">
+        <ul>
+            {% for tag in item.tags %}
+                <li>
+                    {% set value = taggedData[tag.tag]|default([])|join(', ') %}
+                    {% if tag.tag in ["sheet_country", "participant_country"] %}
+                        {% for taggedInfo in taggedData[tag.tag]|default([]) %}
+                            {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% if value is url %}
+                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}</a>
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
