@@ -51,18 +51,4 @@ class CatalogSheetPreviewView
         $this->type    = $type;
         $this->preview = $preview;
     }
-
-    /**
-     * @return bool
-     */
-    public function hasImage()
-    {
-        foreach ($this->preview as $previewView) {
-            if ($previewView->isImage() && !empty($previewView->content)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
