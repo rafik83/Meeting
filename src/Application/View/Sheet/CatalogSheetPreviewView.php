@@ -58,7 +58,7 @@ class CatalogSheetPreviewView
     public function hasImage()
     {
         foreach ($this->preview as $previewView) {
-            if ($previewView->isImage()) {
+            if ($previewView->isImage() && !empty($previewView->content)) {
                 return true;
             }
         }

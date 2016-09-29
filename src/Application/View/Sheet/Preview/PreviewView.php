@@ -37,7 +37,7 @@ class PreviewView
      */
     public function isImage()
     {
-        return $this->type === 'image' && !empty($this->content);
+        return $this->type === 'image';
     }
 
     /**
