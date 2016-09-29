@@ -1524,8 +1524,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Chiffres d’affaires 2016"
-                                    en: ""
+                                    fr: "Chiffres d’affaires 2016 en k€"
+                                    en: "Turnover 2016 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1542,8 +1542,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "EBE 2016"
-                                    en: ""
+                                    fr: "EBE 2016 en k€"
+                                    en: "EBITDA 2016 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1560,8 +1560,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Resultat Net 2016"
-                                    en: ""
+                                    fr: "Resultat Net 2016 en k€"
+                                    en: "Net Burn 2016 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1578,8 +1578,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "BFR 2016"
-                                    en: ""
+                                    fr: "BFR 2016 en k€"
+                                    en: "Working Capital Requirement 2016 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1596,8 +1596,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Cash Flow Généré 2016"
-                                    en: ""
+                                    fr: "Cash Flow Généré 2016 en k€"
+                                    en: "Cash-flow 2016 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1615,7 +1615,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Effectifs 2016"
-                                    en: ""
+                                    en: "Number of employees 2016"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1632,8 +1632,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Chiffres d’affaires 2017"
-                                    en: ""
+                                    fr: "Chiffres d’affaires 2017 en k€"
+                                    en: "Turnover 2017 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1650,8 +1650,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "EBE 2017"
-                                    en: ""
+                                    fr: "EBE 2017 en k€"
+                                    en: "EBITDA 2017 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1668,8 +1668,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Resultat Net 2017"
-                                    en: ""
+                                    fr: "Resultat Net 2017 en k€"
+                                    en: "Net Burn 2017 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1686,8 +1686,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "BFR 2017"
-                                    en: ""
+                                    fr: "BFR 2017 en k€"
+                                    en: "Working Capital Requirement 2017 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1704,8 +1704,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Cash Flow Généré 2017"
-                                    en: ""
+                                    fr: "Cash Flow Généré 2017 en k€"
+                                    en: "Cash-flow 2017 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1723,7 +1723,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Effectifs 2017"
-                                    en: ""
+                                    en: "Number of employees 2017"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1740,8 +1740,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Chiffres d’affaires 2018"
-                                    en: ""
+                                    fr: "Chiffres d’affaires 2018 en k€"
+                                    en: "Turnover 2018 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1758,8 +1758,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "EBE 2018"
-                                    en: ""
+                                    fr: "EBE 2018 en k€"
+                                    en: "EBITDA 2018 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1776,8 +1776,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Resultat Net 2018"
-                                    en: ""
+                                    fr: "Resultat Net 2018 en k€"
+                                    en: "Net Burn 2018 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1794,8 +1794,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "BFR 2018"
-                                    en: ""
+                                    fr: "BFR 2018 en k€"
+                                    en: "Working Capital Requirement 2018 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1812,8 +1812,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Cash Flow Généré 2018"
-                                    en: ""
+                                    fr: "Cash Flow Généré 2018 en k€"
+                                    en: "Cash-flow 2018 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1831,7 +1831,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Effectifs 2018"
-                                    en: ""
+                                    en: "Number of employees 2018"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1848,8 +1848,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Chiffres d’affaires 2019"
-                                    en: ""
+                                    fr: "Chiffres d’affaires 2019 en k€"
+                                    en: "Turnover 2019 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1866,8 +1866,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "EBE 2019"
-                                    en: ""
+                                    fr: "EBE 2019 en k€"
+                                    en: "EBITDA 2019 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1884,8 +1884,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Resultat Net 2019"
-                                    en: ""
+                                    fr: "Resultat Net 2019 en k€"
+                                    en: "Net Burn 2019 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1902,8 +1902,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "BFR 2019"
-                                    en: ""
+                                    fr: "BFR 2019 en k€"
+                                    en: "Working Capital Requirement 2019 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1920,8 +1920,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Cash Flow Généré 2019"
-                                    en: ""
+                                    fr: "Cash Flow Généré 2019 en k€"
+                                    en: "Cash-flow 2019 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1939,7 +1939,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Effectifs 2019"
-                                    en: ""
+                                    en: "Number of employees 2019"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1956,8 +1956,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Chiffres d’affaires 2020"
-                                    en: ""
+                                    fr: "Chiffres d’affaires 2020 en k€"
+                                    en: "Turnover 2020 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1974,8 +1974,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "EBE 2020"
-                                    en: ""
+                                    fr: "EBE 2020 en k€"
+                                    en: "EBITDA 2020 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -1992,8 +1992,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Resultat Net 2020"
-                                    en: ""
+                                    fr: "Resultat Net 2020 en k€"
+                                    en: "Net Burn 2020 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2010,8 +2010,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "BFR 2020"
-                                    en: ""
+                                    fr: "BFR 2020 en k€"
+                                    en: "Working Capital Requirement 2020 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2028,8 +2028,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "Cash Flow Généré 2020"
-                                    en: ""
+                                    fr: "Cash Flow Généré 2020 en k€"
+                                    en: "Cash-flow 2020 (k€)"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2047,7 +2047,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Effectifs 2020"
-                                    en: ""
+                                    en: "Number of employees 2020"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2090,8 +2090,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "R&D 2016"
-                                    en: ""
+                                    fr: "Recherche & Développement 2016"
+                                    en: "Research & Development 2016"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2109,7 +2109,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Marketing & Vente 2016"
-                                    en: ""
+                                    en: "Marketing & Sales 2016"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2127,7 +2127,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Autres dépenses 2016"
-                                    en: ""
+                                    en: "Other 2016"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2145,7 +2145,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Total des dépenses 2016"
-                                    en: ""
+                                    en: "Total 2016"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2162,8 +2162,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "R&D 2017"
-                                    en: ""
+                                    fr: "Recherche & Développement 2017"
+                                    en: "Research & Development 2017"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2181,7 +2181,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Marketing & Vente 2017"
-                                    en: ""
+                                    en: "Marketing & Sales 2017"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2199,7 +2199,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Autres dépenses 2017"
-                                    en: ""
+                                    en: "Other 2017"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2217,7 +2217,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Total des dépenses 2017"
-                                    en: ""
+                                    en: "Total 2017"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2234,8 +2234,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "R&D 2018"
-                                    en: ""
+                                    fr: "Recherche & Développement 2018"
+                                    en: "Research & Development 2018"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2253,7 +2253,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Marketing & Vente 2018"
-                                    en: ""
+                                    en: "Marketing & Sales 2018"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2271,7 +2271,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Autres dépenses 2018"
-                                    en: ""
+                                    en: "Other 2018"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2289,7 +2289,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Total des dépenses 2018"
-                                    en: ""
+                                    en: "Total 2018"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2306,8 +2306,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "R&D 2019"
-                                    en: ""
+                                    fr: "Recherche & Développement 2019"
+                                    en: "Research & Development 2019"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2325,7 +2325,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Marketing & Vente 2019"
-                                    en: ""
+                                    en: "Marketing & Sales 2019"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2343,7 +2343,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Autres dépenses 2019"
-                                    en: ""
+                                    en: "Other 2019"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2361,7 +2361,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Total des dépenses 2019"
-                                    en: ""
+                                    en: "Total 2019"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2378,8 +2378,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                             config:
                                 style: "style-1"
                                 label:
-                                    fr: "R&D 2020"
-                                    en: ""
+                                    fr: "Recherche & Développement 2020"
+                                    en: "Research & Development 2020"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2397,7 +2397,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Marketing & Vente 2020"
-                                    en: ""
+                                    en: "Marketing & Sales 2020"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2415,7 +2415,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Autres dépenses 2020"
-                                    en: ""
+                                    en: "Other 2020"
                                 placeholder:
                                     fr: ""
                                     en: ""
@@ -2433,7 +2433,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 style: "style-1"
                                 label:
                                     fr: "Total des dépenses 2020"
-                                    en: ""
+                                    en: "Total 2020"
                                 placeholder:
                                     fr: ""
                                     en: ""
