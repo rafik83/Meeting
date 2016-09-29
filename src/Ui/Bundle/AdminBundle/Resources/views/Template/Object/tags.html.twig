@@ -94,7 +94,12 @@
                                         data-collection-bind="__TAGS__"
                                         data-collection-add="tags-add-{{ uid|default('__UID__') }}"
                                         data-collection-delete="tags-delete-{{ uid|default('__UID__') }}"
-                                        data-prototype="{{ include('AdminBundle:Template:tags_select.html.twig', { 'sheet_tags': sheet_tags, 'uid': uid|default('__UID__'), 'locale': locale }, false)|e }}"
+                                        data-prototype="{{ include('AdminBundle:Template:tags_select.html.twig', {
+                                            'sheet_tags': sheet_tags,
+                                            'uid': uid|default('__UID__'),
+                                            'locale': locale,
+                                            'label': true
+                                        }, false)|e }}"
                                     >
                                         {% for tag in config.tags %}
                                             {{ include('AdminBundle:Template:tags_select.html.twig', {
@@ -103,7 +108,8 @@
                                                 'locale': locale,
                                                 'fallback': fallback,
                                                 'index': loop.index0,
-                                                'tag': tag
+                                                'tag': tag,
+                                                'label': true
                                             }, false) }}
                                         {% endfor %}
                                     </fieldset>
