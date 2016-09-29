@@ -7,23 +7,25 @@
         <h1 class="page-header">{{ ('gender.' ~ user.account.gender)|trans }} {{ user.account.completeName }} - {{ user.account.position }}</h1>
         <div class="col-md-4">
             {% if user.account.avatar is not empty %}
-                    <img src="{{ user.account.avatar|imagine_filter('user_avatar') }}">
+                <img src="{{ user.account.avatar|imagine_filter('user_avatar') }}" class="img-responsive img-thumbnail">
             {% endif %}
             <div>
                 <div class="coordinates">
                     <h4>{{ 'admin.user.contact-information'|trans }} :</h4>
                     <ul>
-                        {% if user.account.zipCode is not empty and user.account.address is not empty %}
-                            <li>
-                                <i class="glyphicon glyphicon-home"></i>
-                                {{ user.account.address }}, {{ user.account.zipCode }}
-                            </li>
-                        {% endif %}
+                        <li>
+                            <i class="glyphicon glyphicon-home"></i>
+                            {{ user.account.address }}, {{ user.account.zipCode }}, {{ user.account.city }}, {{ user.account.country|country }}
+                        </li>
                         <li><i class="glyphicon glyphicon-envelope"></i> {{ user.email }}</li>
                         <li><i class="glyphicon glyphicon-earphone"></i> {{ user.account.phone }}</li>
                         <li><i class="glyphicon glyphicon-phone"></i> {{ user.account.mobile }}</li>
                         {% if user.account.website is not empty %}
-                            <li>{{ user.account.website }}</li>
+                            <li>
+                                <a href="{{ user.account.website }}" target="_blank">
+                                    {{ user.account.website }}
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>
@@ -33,9 +35,12 @@
                 <ul>
                     <li>{{ user.account.company }}</li>
                     <li>{{ user.account.companyAddress }}</li>
-                    <li>{{ user.account.companyZipCode }} - {{ user.account.companyCity }}
-                        , {{ user.account.companyCountry }}</li>
-                    <li>{{ user.account.companyWebsite }}</li>
+                    <li>{{ user.account.companyZipCode }} - {{ user.account.companyCity }}, {{ user.account.companyCountry|country }}</li>
+                    <li>
+                        <a href="{{ user.account.companyWebsite }}" target="_blank">
+                            {{ user.account.companyWebsite }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
