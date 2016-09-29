@@ -4,13 +4,14 @@
 
 {% block content %}
     {% set locale = event.availableLocale(app.request.locale) %}
-    <h1 class="page-header">{{ 'admin.users.title'|trans }}</h1>
+    <h1 class="page-header">{{ 'admin.users.title'|trans }}: {{ userEvents.total }}</h1>
 
     <table class="table table-hover">
         <thead>
         <tr>
             <th>{{ macro.choice_as_dropdown(filter_form.type) }}</th>
             <th>{{ 'admin.users.email'|trans }}</th>
+            <th>{{ 'admin.users.name'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -21,6 +22,7 @@
                     {{ userEvent.type.getTitle(locale) }}
                 </td>
                 <td>{{ userEvent.user.email }}</td>
+                <td>{{ userEvent.user.account.completeName }}</td>
                 <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEvent.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
             </tr>
         {% endfor %}
