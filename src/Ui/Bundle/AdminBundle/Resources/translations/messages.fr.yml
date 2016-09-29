@@ -400,7 +400,7 @@ admin.users.link: 'Utilisateurs'
 admin.users.type: Type
 admin.users.email: Email
 admin.users.title: "Liste des utilisateurs"
-admin.users.details: 'Voir la fiche détaillée'
+admin.users.details: 'Voir le compte détaillé'
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'
