@@ -1532,7 +1532,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_1", "sheet_data"]
@@ -1550,7 +1550,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_2", "sheet_data"]
@@ -1568,7 +1568,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_3", "sheet_data"]
@@ -1586,7 +1586,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_4", "sheet_data"]
@@ -1604,7 +1604,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_5", "sheet_data"]
@@ -1622,7 +1622,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_6", "sheet_data"]
@@ -1640,7 +1640,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_7", "sheet_data"]
@@ -1658,7 +1658,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_8", "sheet_data"]
@@ -1676,7 +1676,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_9", "sheet_data"]
@@ -1694,7 +1694,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_10", "sheet_data"]
@@ -1712,7 +1712,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_11", "sheet_data"]
@@ -1730,7 +1730,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_12", "sheet_data"]
@@ -1748,7 +1748,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_13", "sheet_data"]
@@ -1766,7 +1766,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_14", "sheet_data"]
@@ -1784,7 +1784,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_15", "sheet_data"]
@@ -1802,7 +1802,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_16", "sheet_data"]
@@ -1820,7 +1820,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_17", "sheet_data"]
@@ -1838,7 +1838,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_18", "sheet_data"]
@@ -1856,7 +1856,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_19", "sheet_data"]
@@ -1874,7 +1874,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_20", "sheet_data"]
@@ -1892,7 +1892,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_21", "sheet_data"]
@@ -1910,7 +1910,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_22", "sheet_data"]
@@ -1928,7 +1928,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_23", "sheet_data"]
@@ -1946,7 +1946,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_24", "sheet_data"]
@@ -1964,7 +1964,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_25", "sheet_data"]
@@ -1982,7 +1982,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_26", "sheet_data"]
@@ -2000,7 +2000,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_27", "sheet_data"]
@@ -2018,7 +2018,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_28", "sheet_data"]
@@ -2036,7 +2036,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_29", "sheet_data"]
@@ -2054,7 +2054,393 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 help:
                                     fr: ""
                                     en: ""
-                                required: true
+                                required: false
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_generic_tag_30", "sheet_data"]
+            57ed1f4ee7c81:
+                component: "block"
+                type: "12"
+                config:
+                    style: "style-1"
+                children:
+                    -
+                        57ed1f5900e02:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: "Répartition des dépenses par nature"
+                                    en: ""
+                                type: "title"
+                        57ed1f5f1d76d:
+                            component: "object"
+                            type: "text"
+                            config:
+                                style: "style-1"
+                                content:
+                                    fr: |+
+                                        Merci de compléter la répartition des dépenses par nature de votre candidature aux Funding Meetings. Après avoir complété cette étape, vous accéder à votre fiche de présentation qu’il vous appartient de compléter au mieux, afin de permettre au Comité de sélection de statuer sur votre candidature.
+                                    en: ""
+                                type: "text"
+                        57ed20688102dRD2016:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "R&D 2016"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_31", "sheet_data"]
+                        57ed208f2b309MarketingVente2016:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Marketing & Vente 2016"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_32", "sheet_data"]
+                        57ed20b40d599AutresDepenses2016:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Autres dépenses 2016"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_33", "sheet_data"]
+                        57ed20d5ab952TotalDepenses2016:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Total des dépenses 2016"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_34", "sheet_data"]
+                        57ed20688102dRD2017:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "R&D 2017"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_35", "sheet_data"]
+                        57ed208f2b309MarketingVente2017:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Marketing & Vente 2017"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_36", "sheet_data"]
+                        57ed20b40d599AutresDepenses2017:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Autres dépenses 2017"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_37", "sheet_data"]
+                        57ed20d5ab952TotalDepenses2017:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Total des dépenses 2017"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_38", "sheet_data"]
+                        57ed20688102dRD2018:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "R&D 2018"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_39", "sheet_data"]
+                        57ed208f2b309MarketingVente2018:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Marketing & Vente 2018"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_40", "sheet_data"]
+                        57ed20b40d599AutresDepenses2018:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Autres dépenses 2018"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_41", "sheet_data"]
+                        57ed20d5ab952TotalDepenses2018:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Total des dépenses 2018"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_42", "sheet_data"]
+                        57ed20688102dRD2019:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "R&D 2019"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_43", "sheet_data"]
+                        57ed208f2b309MarketingVente2019:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Marketing & Vente 2019"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_44", "sheet_data"]
+                        57ed20b40d599AutresDepenses2019:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Autres dépenses 2019"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_45", "sheet_data"]
+                        57ed20d5ab952TotalDepenses2019:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Total des dépenses 2019"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_46", "sheet_data"]
+                        57ed20688102dRD2020:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "R&D 2020"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_47", "sheet_data"]
+                        57ed208f2b309MarketingVente2020:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Marketing & Vente 2020"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_48", "sheet_data"]
+                        57ed20b40d599AutresDepenses2020:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Autres dépenses 2020"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_49", "sheet_data"]
+                        57ed20d5ab952TotalDepenses2020:
+                            component: "object"
+                            type: "editable-text"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Total des dépenses 2020"
+                                    en: ""
+                                placeholder:
+                                    fr: ""
+                                    en: ""
+                                help:
+                                    fr: ""
+                                    en: ""
+                                required: false
+                                type: "text"
+                                translatable: false
+                                tags: ["sheet_generic_tag_50", "sheet_data"]
