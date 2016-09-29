@@ -37,7 +37,7 @@ class UserController extends Controller
             ['event' => $event, 'locale' => $request->getLocale(), 'user' => $this->getUser()]
         );
 
-        $filtered   = $filterType->handleRequest($request)->isSubmitted() && $filterType->isValid();
+        $filtered = $filterType->handleRequest($request)->isSubmitted() && $filterType->isValid();
 
         if ($filtered) {
             $typeFilter = $filterType->getData();
