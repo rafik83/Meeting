@@ -63,13 +63,12 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     * @param User    $user
+     * @param Event $event
+     * @param User  $user
      *
      * @return Response
      */
-    public function showAction(Request $request, Event $event, User $user)
+    public function showAction(Event $event, User $user)
     {
        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
