@@ -1771,6 +1771,12 @@ services:
             - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery }
+    query.type.type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypeViewQuery }
 
     ##
     # Navigation builder

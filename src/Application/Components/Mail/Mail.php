@@ -63,7 +63,7 @@ class Mail
     /**
      * @var string
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @param string     $sender

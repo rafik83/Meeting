@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
@@ -27,6 +28,7 @@ use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
@@ -293,6 +295,24 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetChangedTypeEvent $event
+     */
+    public function onSheetChangeType(SheetChangedTypeEvent $event)
+    {
+        $mail = new SheetChangeTypeMail(
+            $event->getSheet()->getEvent(),
+            $this->sender,
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getLocale(),
+            $event->getSheet()->getOwner(),
+            $event->getFromTypeTitle(),
+            $event->getSheet()->getType()->getTitle($event->getLocale())
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -311,6 +331,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::EVENT_PRE_REGISTERED               => 'onUserPreRegistered',
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
+            Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
         ];
     }
 }

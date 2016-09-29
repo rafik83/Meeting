@@ -107,3 +107,13 @@ Feature: add type
   Scenario: I should not see an hidden type
     When I go to this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/en/"
     Then I should not see "Investisseur"
+
+  Scenario: I see type list with associated template
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to this page "/admin/fr/event/1/type"
+    Then I should see "admin.type.list.title"
+    And I should see "Investisseur"
+    And I should see "Inscription Template Carnot"
+    And I should see "Template RDV Carnot"
+    And I should see "Package RDV Carnot"
