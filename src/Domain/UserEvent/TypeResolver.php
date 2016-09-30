@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\UserEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 
 class TypeResolver
@@ -41,7 +42,11 @@ class TypeResolver
     {
         $userEvent = $this->userEventRepository->getUserEvent($user, $event);
 
-        if ($userEvent->getType() !== $type) {
+        if (null === $userEvent) {
+            $userEvent = new UserEvent($user, $event, $type);
+            $this->userEventRepository->add($userEvent);
+
+        } elseif ($userEvent->getType() !== $type) {
             $userEvent->setType($type);
             $this->userEventRepository->set($userEvent);
         }

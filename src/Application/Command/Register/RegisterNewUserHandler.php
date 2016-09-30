@@ -64,7 +64,7 @@ class RegisterNewUserHandler
         $this->encoder             = $encoder;
         $this->saltGenerator       = $saltGenerator;
         $this->userEventRepository = $userEventRepository;
-        $this->typeRepository = $typeRepository;
+        $this->typeRepository      = $typeRepository;
     }
 
     /**
