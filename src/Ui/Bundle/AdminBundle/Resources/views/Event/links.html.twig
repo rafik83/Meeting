@@ -54,6 +54,11 @@
     </a>
 </li>
 <li>
+    <a href="{{ path('admin_users', { 'event': event.id }) }}">
+        {{ 'admin.users.link'|trans }}
+    </a>
+</li>
+<li>
     <a href="{{ path('admin_sheet', { 'event': event.id }) }}">
         {{ 'admin.sheet.link'|trans }}
     </a>
@@ -152,9 +157,4 @@
             </a>
         </li>
     </ul>
-</li>
-<li>
-    <a href="{{ path('admin_users', { 'event': event.id }) }}">
-        {{ 'admin.users.link'|trans }}
-    </a>
 </li>
