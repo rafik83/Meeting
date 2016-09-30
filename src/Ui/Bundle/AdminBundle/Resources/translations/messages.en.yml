@@ -4,6 +4,7 @@ admin.account.content.password: 'Change my password'
 admin.account.link: 'My account'
 admin.account.title: 'My account'
 admin.account.update_password.title: 'Change my password'
+admin.admin_list.table.content.update: Edit
 admin.cancel: Cancel
 admin.category.add: Add
 admin.category.link: 'Participation categories'
@@ -11,13 +12,26 @@ admin.event.see_on_front.link: 'See on front'
 admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
 admin.event.update.link: Update
+admin.happening_category.add: Add
+admin.happening_speaker.add: Add
+admin.happening_speaker.addTitle: 'Add Speaker'
 admin.happening_speaker.link: Speakers
+admin.happening_speaker.table.column.photo: 'Speaker picture'
+admin.happening.add: Add
 admin.happening.link: Conferences
 admin.meeting_request.link: 'Meeting requests'
 admin.meeting.link: Meetings
 admin.menu.link: admin.menu.link
 admin.new.link: admin.new.link
+admin.operator_list.table.content.update: Edit
+admin.operator.update.title: 'Edit collaborater'
+admin.order_edit.columns.quantity: Quantity
+admin.order_edit.columns.unitPrice: 'Unit price'
+admin.order_edit.VAT: VAT
+admin.plan.unitPrice: 'Unit price'
+admin.product.unitPrice: 'Unit price'
 admin.rule.link: 'Who see who'
+admin.sheet.details.transactions: Transactions
 admin.sheet.link: 'Participation sheets'
 admin.spot.active.no: 'No'
 admin.spot.active.yes: 'Yes'
@@ -36,6 +50,7 @@ admin.spot.listSpot.reference: Reference
 admin.spot.listSpot.seatCapacity: 'Seats capacity'
 admin.spot.listSpot.size: 'Size (m²)'
 admin.spot.listSpot.yes: 'Yes'
+admin.template.action.save: Save
 admin.type.link: 'Participation types'
 admin.zero-result: admin.zero-result
 and: and
@@ -76,7 +91,7 @@ event.meeting.showDetailsRequest.participants: Participants
 event.meeting.showDetailsRequest.state: State
 event.meeting.showDetailsRequest.title: 'Details request for appointment'
 event.meeting.showDetailsRequest.to: To
-event.sheet.add_participant.title: 'Add a participant'
+event.sheet.add_participant.title: 'Add participant'
 event.sheet.billing.title: Billing
 event.sheet.block.add_participant.title: 'Fill this participant'
 event.sheet.block.buy_participant.option: Option
@@ -89,17 +104,19 @@ event.sheet.cart.column.product: Product
 event.sheet.cart.column.quantity: Quantity
 event.sheet.cart.column.total: Total
 event.sheet.cart.column.unitPrice: 'Unit Price'
+event.sheet.cart.include: '{0} Inclued with %product% |]0,Inf[ %count% inclued with %product%'
+event.sheet.cart.includeTitle: 'Inclued with %product%'
 event.sheet.cart.label.billingStep: 'Go to the billing step'
 event.sheet.cart.label.totalPrice: Total
 event.sheet.cart.title: 'Package summary'
 event.sheet.cart.totalWithoutTaxes: 'Total excl. Tax'
 event.sheet.completed.complete: Complete
 event.sheet.completed.incomplete: Incomplete
-event.sheet.listOrders.proForma: 'View proforma invoice'
+event.sheet.listOrders.proForma: 'View proforma'
 event.sheet.listOrders.title: 'My orders'
 event.sheet.package.column.choices: Choices
 event.sheet.package.column.description: Description
-event.sheet.package.column.label: Label
+event.sheet.package.column.label: Title
 event.sheet.package.column.quantity: Quantity
 event.sheet.package.column.unitPrice: 'Unit price'
 event.sheet.package.include: 'Included in your formula'
