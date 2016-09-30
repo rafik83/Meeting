@@ -139,16 +139,19 @@ class RegisterController extends Controller
      */
     public function participateAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
+        $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->hasUserAlreadyCreatedParticipant($eventDomain->getEvent(), $this->getUser());
+        $this->hasUserAlreadyCreatedParticipant($event, $this->getUser());
 
         $locale               = $request->getLocale();
-        $event                = $eventDomain->getEvent();
         $type                 = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
         $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromType($type, $locale);
         $user                 = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
         $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
         $participantBlock     = $registrationTemplate->getFirstBlock();
+
+        // Add or update UserEvent type
+        $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 
         $form = $this->createForm(BlockType::class, $participantBlock, [
             'block'   => $participantBlock,
