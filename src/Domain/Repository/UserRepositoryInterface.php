@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\User\UserListView;
 
 interface UserRepositoryInterface
 {
@@ -42,4 +45,15 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function all();
+
+    /**
+     * @param int    $page
+     * @param int    $limit
+     * @param Event  $event
+     * @param array  $filter
+     * @param string $locale
+     *
+     * @return PaginatedResult
+     */
+    public function paginate($page, $limit, Event $event, array $filter, $locale);
 }

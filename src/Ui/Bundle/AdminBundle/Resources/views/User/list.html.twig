@@ -3,31 +3,39 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    {% set locale = event.availableLocale(app.request.locale) %}
-    <h1 class="page-header">{{ 'admin.users.title'|trans }}: {{ userEvents.total }}</h1>
+    <h1 class="page-header">{{ paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
     <table class="table table-hover">
         <thead>
         <tr>
             <th>{{ macro.choice_as_dropdown(filter_form.type) }}</th>
             <th>{{ 'admin.users.email'|trans }}</th>
-            <th>{{ 'admin.users.name'|trans }}</th>
+            <th>{{ 'admin.users.lastName'|trans }}</th>
+            <th>{{ 'admin.users.firstName'|trans }}</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        {% for userEvent in userEvents %}
+        {% for userListView in paginatedResult %}
             <tr>
-                <td>
-                    {{ userEvent.type.getTitle(locale) }}
+                <td>{{ userListView.typeTitle }}</td>
+                <td><a href="mailto:{{ userListView.email }}">{{ userListView.email }}</a></td>
+                <td>{{ userListView.lastName }}</td>
+                <td>{{ userListView.firstName }}</td>
+                <td class="text-right">
+                    {% if userListView.sheetId %}
+                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': userListView.sheetId }) }}" class="btn btn-default btn-sm">{{ 'admin.users.see-sheet'|trans }}</a>
+                    {% endif %}
+                    <a href="{{ path('admin_users_details', {'event': event.id, 'user': userListView.userId }) }}" class="btn btn-default btn-sm">{{ 'admin.users.details'|trans }}</a>
                 </td>
-                <td>{{ userEvent.user.email }}</td>
-                <td>{{ userEvent.user.account.completeName }}</td>
-                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEvent.user.id }) }}">{{ 'admin.users.details'|trans }}</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-danger">{{ 'admin.zero-result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': userEvents}) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': paginatedResult}) }}
 {% endblock %}

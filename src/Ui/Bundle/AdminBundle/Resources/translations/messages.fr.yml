@@ -396,12 +396,14 @@ admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
 admin.user.contact-information: 'Coordonnées'
 admin.user.company-information: 'Informations de société'
-admin.users.link: 'Utilisateurs'
-admin.users.type: Type
+admin.users.see-sheet: 'Voir la participation'
+admin.users.details: 'Voir le compte'
 admin.users.email: Email
-admin.users.name: Nom
-admin.users.title: "Liste des utilisateurs"
-admin.users.details: 'Voir le compte détaillé'
+admin.users.firstName: Prénom
+admin.users.lastName: Nom
+admin.users.link: 'Utilisateurs'
+admin.users.title: "Utilisateurs"
+admin.users.type: Type
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'

@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -107,26 +109,32 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($page, $limit, Event $event, array $filter)
+    public function paginate($page, $limit, Event $event, array $filter, $locale)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('user_event', 'user', 'type')
+            ->select('NEW Proximum\Vimeet\Domain\View\User\UserListView(user.id, user.email, user.account.lastName, user.account.firstName, typeTranslations.title, sheet.id, sheetType.id, sheetTypeTranslations.title)')
             ->from(UserEvent::class, 'user_event', 'user_event.id')
             ->where('user_event.event = :event')
-            ->join('user_event.user', 'user', 'WITH', 'user = user_event.user')
-            ->join('user_event.type', 'type', 'WITH', 'type = user_event.type')
             ->setParameter('event', $event)
-            ->orderBy('user.email', 'ASC');
+            ->join('user_event.user', 'user')
+            ->leftJoin('user_event.type', 'type')
+            ->leftJoin('type.translations', 'typeTranslations', 'WITH', 'typeTranslations.locale = :locale')
+            ->leftJoin(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->leftJoin('participant.sheet', 'sheet')
+            ->leftJoin('sheet.type', 'sheetType')
+            ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH', 'sheetTypeTranslations.locale = :locale')
+            ->setParameter('locale', $locale)
+            ->orderBy('user.account.lastName', 'ASC')
+            ->addOrderBy('user.email', 'ASC');
 
         if (!empty($filter['type'])) {
             $queryBuilder
-                ->andWhere('user_event.type = :type')
+                ->andWhere('sheet.type IS NOT NULL AND sheet.type = :type OR sheet.type IS NULL AND user_event.type = :type')
                 ->setParameter('type', $filter['type']->getId());
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'user_event', 'id');
     }
-
 }
