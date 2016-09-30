@@ -26,7 +26,6 @@ class DuplicateHandler
      */
     private $dateTime;
 
-
     /**
      * UpdateHandler constructor.
      *
@@ -71,6 +70,16 @@ class DuplicateHandler
 
         // handle package plans
         $package->setPlans($duplicate->package->getPlans());
+
+        // handle package participant
+        if (null !== $duplicate->package->getParticipant()) {
+            $package->setParticipant($duplicate->package->getParticipant());
+        }
+
+        // handle package planning
+        if (null !== $duplicate->package->getPlanning()) {
+            $package->setPlanning($duplicate->package->getPlanning());
+        }
 
         $this->packageRepository->add($package);
     }
