@@ -76,7 +76,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Catégory"
-                                                        tag: "sheet_organization_category"
+                                                        tags:
+                                                            - tag: "sheet_organization_category"
                                             -
                                                 90713a3d:
                                                     component: "object"
@@ -89,7 +90,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         help:
                                                             fr: ""
                                                             en: ""
-                                                        tag: "sheet_website"
+                                                        tags:
+                                                            - tag: "sheet_website"
                                 -
                                     d691d21c:
                                         component: "object"
@@ -425,7 +427,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Catégory"
-                                                        tag: "sheet_organization_category"
+                                                        tags:
+                                                            - tag: "sheet_organization_category"
                                             -
                                                 90713a3d:
                                                     component: "object"
