@@ -101,7 +101,7 @@ class ChangeTypeHandler
         }
 
         // reset registration step to redirect participant on registration
-        if ($participant = $changeType->sheet->getParticipantOwner()) {
+        foreach ($changeType->sheet->getParticipants() as $participant) {
             $this->registrationStepManager->resetRegistrationStep($participant);
         }
 
