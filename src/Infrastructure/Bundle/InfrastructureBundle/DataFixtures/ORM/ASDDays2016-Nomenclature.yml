@@ -133,7 +133,7 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
                     position45: { label: { fr: "Assistant chef de produits", en: "Assistant Product Manager", es: "" } }
                     position46: { label: { fr: "Assistant marketing", en: "Marketing Assistant", es: "" } }
                     position47: { label: { fr: "Brand Manager", en: "Brand Manager", es: "" } }
-                    position48: { label: { fr: "CDO / Responsable de la Direction du Numérique	CDO / Chief Digital Officer", es: "" } }
+                    position48: { label: { fr: "CDO / Responsable de la Direction du Numérique", en: "CDO / Chief Digital Officer", es: "" } }
                     position49: { label: { fr: "Chef de produits", en: "Product Manager", es: "" } }
                     position50: { label: { fr: "Community Manager", en: "Community Manager", es: "" } }
                     position51: { label: { fr: "Directeur marketing", en: "Marketing Director", es: "" } }
