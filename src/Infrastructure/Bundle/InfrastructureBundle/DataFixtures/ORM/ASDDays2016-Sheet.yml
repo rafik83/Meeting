@@ -20,6 +20,23 @@ Proximum\Vimeet\Domain\Model\User:
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
         account: "@event_asddays_2016_account_user_3"
+    # User without sheet
+    user_asddays_4:
+        __construct: false
+        email: "user_asddays_4@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+
+Proximum\Vimeet\Domain\Model\UserEvent:
+    event_asddays_2016_user_event_1:
+        __construct: ['@user_asddays_1', '@event_asddays_2016', '@event_asddays_2016_type_investisseur']
+    event_asddays_2016_user_event_2:
+        __construct: ['@user_asddays_2', '@event_asddays_2016', '@event_asddays_2016_type_fournisseur']
+    event_asddays_2016_user_event_3:
+        __construct: ['@user_asddays_3', '@event_asddays_2016', '@event_asddays_2016_type_donneur_ordre']
+    event_asddays_2016_user_event_4:
+        __construct: ['@user_asddays_4', '@event_asddays_2016', '@event_asddays_2016_type_donneur_ordre']
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
@@ -215,4 +232,3 @@ Proximum\Vimeet\Domain\Model\Transaction:
         reference: TRANSACTION_03
         state: pending
         currency: EUR
-
