@@ -114,26 +114,25 @@ class UserRepository implements UserRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\User\UserListView(user.id, user.email, user.account.lastName, user.account.firstName, typeTranslations.title, sheet.id, sheetType.id, sheetTypeTranslations.title)')
-            ->from(UserEvent::class, 'user_event', 'user_event.id')
-            ->where('user_event.event = :event')
-            ->setParameter('event', $event)
-            ->join('user_event.user', 'user')
-            ->leftJoin('user_event.type', 'type')
-            ->leftJoin('type.translations', 'typeTranslations', 'WITH', 'typeTranslations.locale = :locale')
+            ->from(User::class, 'user', 'user.id')
+            ->join(UserEvent::class, 'userEvent', 'WITH', 'userEvent.user = user AND userEvent.event = :event')
+            ->join('userEvent.type', 'type')
+            ->join('type.translations', 'typeTranslations', 'WITH', 'typeTranslations.locale = :locale')
             ->leftJoin(Participant::class, 'participant', 'WITH', 'participant.user = user')
-            ->leftJoin('participant.sheet', 'sheet')
+            ->leftJoin('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->leftJoin('sheet.type', 'sheetType')
             ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH', 'sheetTypeTranslations.locale = :locale')
-            ->setParameter('locale', $locale)
-            ->orderBy('user.account.lastName', 'ASC')
-            ->addOrderBy('user.email', 'ASC');
+            ->addOrderBy('user.account.lastName', 'ASC')
+            ->addOrderBy('user.email', 'ASC')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
 
         if (!empty($filter['type'])) {
             $queryBuilder
-                ->andWhere('sheet.type IS NOT NULL AND sheet.type = :type OR sheet.type IS NULL AND user_event.type = :type')
+                ->andWhere('sheet.type IS NOT NULL AND sheet.type = :type OR sheet.type IS NULL AND userEvent.type = :type')
                 ->setParameter('type', $filter['type']->getId());
         }
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, 'user_event', 'id');
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');
     }
 }
