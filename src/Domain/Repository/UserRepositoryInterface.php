@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\View\User\UserListView;
 
 interface UserRepositoryInterface
 {
