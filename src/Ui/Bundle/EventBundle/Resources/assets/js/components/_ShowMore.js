@@ -6,6 +6,10 @@ function ShowMore(element, buttonContainer)
     this.showState = false;
 
     // create show/hide link
+    this.icon = document.createElement('i');
+    this.icon.className = 'icon-Voir_1';
+    this.icon.style.marginLeft = '10px';
+
     this.link = document.createElement('a');
     this.link.setAttribute('href', '#');
 
@@ -15,6 +19,7 @@ function ShowMore(element, buttonContainer)
 
     if (this.element.clientHeight > this.maxHeight) {
         this.hide();
+        buttonContainer.appendChild(this.icon);
         buttonContainer.appendChild(this.link);
     }
 

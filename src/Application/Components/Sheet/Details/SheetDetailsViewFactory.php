@@ -136,7 +136,9 @@ class SheetDetailsViewFactory
             // Remaining to pay
             $this->balance->getBalance($sheet),
             // Completeness
-            $sheet->getCompleteness()
+            $sheet->getCompleteness(),
+            // Company Objects
+            $templateDataFactory->createCompanyTemplate($sheet, $locale)->getCompanyObjects()
         );
     }
 }
