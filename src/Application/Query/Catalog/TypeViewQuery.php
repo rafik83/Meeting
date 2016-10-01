@@ -15,37 +15,24 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 class TypeViewQuery
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var Type[]
-     */
+    /** @var Type[] */
     public $visibleTypes;
 
-    /**
-     * @var array
-     */
-    public $filters;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
      * @param Event  $event
      * @param Type[] $visibleTypes
-     * @param array  $filters
      * @param string $locale
      */
-    public function __construct(Event $event, array $visibleTypes, array $filters, $locale)
+    public function __construct(Event $event, array $visibleTypes, $locale)
     {
         $this->event        = $event;
         $this->visibleTypes = $visibleTypes;
-        $this->filters      = $filters;
         $this->locale       = $locale;
     }
 }

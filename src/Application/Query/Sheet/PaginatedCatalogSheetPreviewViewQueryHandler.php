@@ -56,26 +56,27 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
     {
-        $sheets = $this->sheetSearchAdapter->find(
+        $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
             array_merge(['inCatalog' => true], $query->filters),
             $query->filters['orderBy'],
             $query->page,
             $query->limit,
-            $query->locale
+            $query->locale,
+            true
         );
 
-        $sheets->results = $this->sheetRepository->findSheets($sheets->results);
+        $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
 
-        $sheets->results = array_map(
+        $paginatedResult->results = array_map(
             function (Sheet $sheet) use ($query) {
                 return $this
                     ->sheetPreviewViewQueryHandler
                     ->handle(new SheetPreviewViewQuery($sheet, $query->locale, $query->viewer));
             },
-            $sheets->results
+            $paginatedResult->results
         );
 
-        return $sheets;
+        return $paginatedResult;
     }
 }

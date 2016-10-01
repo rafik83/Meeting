@@ -16,8 +16,11 @@ use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -57,16 +60,19 @@ class CatalogController extends Controller
         }
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, $visibleTypes, [], $locale)
+            new TypeViewQuery($event, $visibleTypes, $locale)
+        );
+
+        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
+            new OrganizationCategoryViewQuery($event, $locale)
         );
 
         $filters = $this->getDefaultFilters($typeViews);
 
         $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
-            'action'    => $this->generateUrl('event_catalog_index'),
-            'event'     => $event,
-            'locale'    => $locale,
-            'typeViews' => $typeViews,
+            'action'                    => $this->generateUrl('event_catalog_index'),
+            'typeViews'                 => $typeViews,
+            'organizationCategoryViews' => $organizationCategoryViews,
         ]);
 
         if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
@@ -74,6 +80,7 @@ class CatalogController extends Controller
         }
 
         try {
+            /** @var PaginatedResult $paginatedResult */
             $paginatedResult = $this->get('tactician.commandbus.query')->handle(
                 new PaginatedCatalogSheetPreviewViewQuery(
                     $event,
@@ -87,6 +94,24 @@ class CatalogController extends Controller
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
+
+        // @todo type aggs need to be done with a ES query without type filter
+        $filteredTypeViews = $this->filterTypeViews(
+            $typeViews,
+            $paginatedResult->aggregations
+        );
+
+        // @todo organizationCategory aggs need to be done with a ES query without organizationCategory filter
+        $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
+            $organizationCategoryViews,
+            $paginatedResult->aggregations
+        );
+
+        $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
+            'action'                    => $this->generateUrl('event_catalog_index'),
+            'typeViews'                 => $filteredTypeViews,
+            'organizationCategoryViews' => $filteredOrganizationCategoryViews,
+        ]);
 
         if ($request->isXmlHttpRequest()) {
             $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
@@ -197,11 +222,67 @@ class CatalogController extends Controller
         $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         foreach ($typeViews as $typeView) {
-            if ($typeView->count > 0) {
-                $filters['type'][] = $typeView;
-            }
+            $filters['type'][] = $typeView;
         }
 
         return $filters;
+    }
+
+    /**
+     * @param TypeView[] $typeViews
+     * @param array|null $aggregations
+     *
+     * @return array
+     */
+    private function filterTypeViews(array $typeViews, array $aggregations = null)
+    {
+        $typeField = SheetSearchAdapter::ES_FIELD_TYPE;
+
+        $aggregationsIndexedByKey = [];
+
+        foreach ($aggregations[$typeField]['buckets'] as $item) {
+            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
+        }
+
+        foreach ($typeViews as $typeView) {
+            if (isset($aggregationsIndexedByKey[$typeView->id])) {
+                $typeView->count = $aggregationsIndexedByKey[$typeView->id];
+            }
+        }
+
+        return $typeViews;
+    }
+
+    /**
+     * @param OrganizationCategoryView[] $organizationCategoryViews
+     * @param array|null                 $aggregations
+     *
+     * @return array
+     */
+    private function filterOrganizationCategoryViews(array $organizationCategoryViews, array $aggregations = null)
+    {
+        $organizationCategoryField = SheetSearchAdapter::ES_FIELD_ORGANIZATION_CATEGORY;
+
+        if (null === $aggregations
+            || !isset($aggregations[$organizationCategoryField])
+            || !isset($aggregations[$organizationCategoryField]['buckets'])
+            || count($aggregations[$organizationCategoryField]['buckets']) < 2
+        ) {
+            return [];
+        }
+
+        $aggregationsIndexedByKey = [];
+
+        foreach ($aggregations[$organizationCategoryField]['buckets'] as $item) {
+            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
+        }
+
+        foreach ($organizationCategoryViews as $index => $organizationCategoryView) {
+            if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key]) || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0) {
+                unset($organizationCategoryViews[$index]);
+            }
+        }
+
+        return $organizationCategoryViews;
     }
 }

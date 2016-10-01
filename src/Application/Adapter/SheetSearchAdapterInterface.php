@@ -22,24 +22,9 @@ interface SheetSearchAdapterInterface
      * @param int         $page
      * @param int         $limit
      * @param string      $locale
+     * @param bool        $getAggregations
      *
      * @return PaginatedResult
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale);
-
-    /**
-     * @param Event $event
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getTypeStats(Event $event, array $filters);
-
-    /**
-     * @param Event $event
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getOrganizationCategoryStats(Event $event, array $filters);
+    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations);
 }

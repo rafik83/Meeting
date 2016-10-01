@@ -14,30 +14,19 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class OrganizationCategoryViewQuery
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var array
-     */
-    public $filters;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
+     * @param Event      $event
+     * @param string     $locale
      */
-    public function __construct(Event $event, array $filters, $locale)
+    public function __construct(Event $event, $locale)
     {
-        $this->event   = $event;
-        $this->filters = $filters;
-        $this->locale  = $locale;
+        $this->event        = $event;
+        $this->locale       = $locale;
     }
 }

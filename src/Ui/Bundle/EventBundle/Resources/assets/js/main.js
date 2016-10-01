@@ -50,7 +50,7 @@ function init (target) {
         $('.catalog').toggleClass('catalog--advanced');
     });
 
-    $('.catalog form input', target).on('change', function (event) {
+    $('.catalog form input[name="type[]"]', target).on('change', function (event) {
         this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
     });
 

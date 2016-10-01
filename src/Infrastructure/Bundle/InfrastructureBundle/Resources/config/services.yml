@@ -1759,14 +1759,12 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery }
     query.catalog.organization_category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQueryHandler
         arguments:
             - '@catalog.tagged_nomenclature_filter_getter'
-            - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery }
 

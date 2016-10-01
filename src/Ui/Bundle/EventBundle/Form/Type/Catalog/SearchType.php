@@ -11,17 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use League\Tactician\CommandBus;
-use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractType
@@ -42,9 +37,8 @@ class SearchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $event     = $options['event'];
-        $locale    = $options['locale'];
-        $typeViews = $options['typeViews'];
+        $typeViews                 = $options['typeViews'];
+        $organizationCategoryViews = $options['organizationCategoryViews'];
 
         $builder
             ->add('orderBy', ChoiceType::class, [
@@ -77,66 +71,7 @@ class SearchType extends AbstractType
                 );
         }
 
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $formEvent) use ($event, $locale) {
-                $data = $formEvent->getData();
-                $this->formModifierByType($event, $locale, $formEvent->getForm(), $data['type']);
-            }
-        );
-
-        $builder->get('type')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $formEvent) use ($event, $locale) {
-                $this->formModifierByType(
-                    $event,
-                    $locale,
-                    $formEvent->getForm()->getParent(),
-                    $formEvent->getForm()->getData()
-                );
-            }
-        );
-
-        // Set a higher priority to avoid ValidationListener
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $formEvent) {
-            $formEvent->stopPropagation();
-        }, 900);
-    }
-
-    /**
-     * {@inheridoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setRequired(['event', 'locale', 'typeViews']);
-        $resolver->setDefaults([
-            'required'        => false,
-            'method'          => 'GET',
-            'csrf_protection' => false,
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'catalog_search';
-    }
-
-    /**
-     * @param Event         $event
-     * @param string        $locale
-     * @param FormInterface $form
-     * @param array         $typeViews
-     */
-    private function formModifierByType(Event $event, $locale, FormInterface $form, $typeViews)
-    {
-        $organizationCategoryViews = $this->commandBus->handle(
-            new OrganizationCategoryViewQuery($event, ['type' => $typeViews], $locale)
-        );
-
-        $form->add('organizationCategory', ChoiceType::class, [
+        $builder->add('organizationCategory', ChoiceType::class, [
             'choices'      => $organizationCategoryViews,
             'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
                 if ($organizationCategoryView !== null) {
@@ -159,5 +94,26 @@ class SearchType extends AbstractType
                 'data-disallow-clear' => 'true',
             ],
         ]);
+    }
+
+    /**
+     * {@inheridoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['typeViews', 'organizationCategoryViews']);
+        $resolver->setDefaults([
+            'required'        => false,
+            'method'          => 'GET',
+            'csrf_protection' => false,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_search';
     }
 }

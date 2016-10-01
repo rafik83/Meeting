@@ -10,31 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
-use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 
 class OrganizationCategoryViewQueryHandler
 {
-    /** @var SheetSearchAdapterInterface */
-    private $sheetSearchAdapter;
-
-    /**
-     * @var TaggedNomenclatureFilterGetter
-     */
+    /** @var TaggedNomenclatureFilterGetter */
     private $taggedNomenclatureFilterGetter;
 
     /**
      * @param TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter
-     * @param SheetSearchAdapterInterface    $sheetSearchAdapter
      */
-    public function __construct(
-        TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter,
-        SheetSearchAdapterInterface $sheetSearchAdapter
-    ) {
+    public function __construct(TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter)
+    {
         $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
-        $this->sheetSearchAdapter             = $sheetSearchAdapter;
     }
 
     /**
@@ -50,17 +40,10 @@ class OrganizationCategoryViewQueryHandler
             $query->locale
         );
 
-        $organizationCategoryStats = $this->sheetSearchAdapter->getOrganizationCategoryStats(
-            $query->event,
-            array_merge(['inCatalog' => true], $query->filters)
-        );
-
         $organizationCategoryViews = [];
 
         foreach ($organizationCategoryItems as $key => $title) {
-            if (isset($organizationCategoryStats[$key]) && $organizationCategoryStats[$key] > 0) {
-                $organizationCategoryViews[$key] = new OrganizationCategoryView($key, $title);
-            }
+            $organizationCategoryViews[] = new OrganizationCategoryView($key, $title);
         }
 
         return $organizationCategoryViews;

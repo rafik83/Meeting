@@ -14,6 +14,7 @@ use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
+use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
@@ -23,6 +24,9 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
+    const ES_FIELD_TYPE                  = 'type';
+    const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
+
     /**
      * @var PaginatedFinderInterface Elastica finder
      */
@@ -46,7 +50,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale)
+    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations)
     {
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
@@ -59,57 +63,39 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             }
         }
 
+        if (true === $getAggregations) {
+            $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
+            $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
+        }
+
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);
         } catch (NotValidCurrentPageException $exception) {
             throw new UnavailableCurrentPageException(sprintf('Current page %s not available', $page));
         }
 
-        return new PaginatedResult($result->getCurrentPageResults(), $page, $limit, $result->getNbResults());
+        /** @var PaginatorAdapterInterface $paginatorAdapter */
+        $paginatorAdapter = $result->getAdapter();
+
+        return new PaginatedResult(
+            $result->getCurrentPageResults(),
+            $page,
+            $limit,
+            $result->getNbResults(),
+            true === $getAggregations ? $paginatorAdapter->getAggregations() : null
+        );
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getTypeStats(Event $event, array $filters)
-    {
-        return $this->getStats($event, $filters, 'type');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrganizationCategoryStats(Event $event, array $filters)
-    {
-        return $this->getStats($event, $filters, 'organizationCategory');
-    }
-
-    /**
-     * @param Event  $event
-     * @param array  $filters
      * @param string $field
      *
-     * @return array
+     * @return Terms
      */
-    private function getStats(Event $event, array $filters, $field)
+    private function getAggregation($field)
     {
-        $builder = new SheetSearchQueryBuilder($event, $filters);
-        $query   = new Query($builder->getQuery());
-
         $aggregation = new Terms($field);
         $aggregation->setField($field);
 
-        $query->addAggregation($aggregation);
-        $query->setSize(0);
-
-        $result        = $this->searchable->search($query);
-        $stats         = [];
-        $elementsCount = $result->getAggregations()[$field]['buckets'];
-
-        foreach ($elementsCount as $element) {
-            $stats[$element['key']] = $element['doc_count'];
-        }
-
-        return $stats;
+        return $aggregation;
     }
 }
