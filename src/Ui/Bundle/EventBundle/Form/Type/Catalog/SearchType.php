@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractType
 {
-    const FILTER_ORGANIZATION_CATAGORY = 'organizationCategory';
+    const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
     const FILTER_TYPE                  = 'type';
     const ORDER_BY                     = 'orderBy';
 
@@ -63,7 +63,7 @@ class SearchType extends AbstractType
                 );
         }
 
-        $builder->add(self::FILTER_ORGANIZATION_CATAGORY, ChoiceType::class, [
+        $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
             'label'        => 'form.search.organizationCategory.label',
             'choices'      => $organizationCategoryViews,
             'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {

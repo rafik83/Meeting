@@ -92,32 +92,14 @@ class CatalogController extends Controller
             throw $this->createNotFoundException($exception->getMessage());
         }
 
-        if (isset($filters[SearchType::FILTER_TYPE])
-            && count($filters[SearchType::FILTER_TYPE]) === count($visibleTypes)
-        ) {
-            $filteredTypeViews = $this->filterTypeViews(
-                $typeViews,
-                $paginatedResult->aggregations
-            );
-        } else {
-            // @todo if type filter is used, type aggs need to be done with a ES query without type filter
-            $filteredTypeViews = $this->filterTypeViews(
-                $typeViews,
-                $paginatedResult->aggregations
-            );
-        }
-
-//        if (!isset($filters[SearchType::FILTER_ORGANIZATION_CATAGORY])) {
-            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-                $organizationCategoryViews,
-                $paginatedResult->aggregations
-            );
-//        } else {
-//            // @todo if organizationCategory filter is used, organizationCategory aggs need to be done with a ES query without organizationCategory filter
-//            $filteredOrganizationCategoryViews = $organizationCategoryViews;
-//        }
-
-        $searchForm = $this->getSearchForm($filters, $filteredTypeViews, $filteredOrganizationCategoryViews);
+        $searchForm = $this->getFilteredSearchForm(
+            $event,
+            $visibleTypes,
+            $filters,
+            $paginatedResult->aggregations,
+            $typeViews,
+            $organizationCategoryViews
+        );
 
         if ($request->isXmlHttpRequest()) {
             $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
@@ -283,7 +265,10 @@ class CatalogController extends Controller
         }
 
         foreach ($organizationCategoryViews as $index => $organizationCategoryView) {
-            if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key]) || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0) {
+            // Show only filter which have result
+            if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key])
+                || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0
+            ) {
                 unset($organizationCategoryViews[$index]);
             }
         }
@@ -305,5 +290,69 @@ class CatalogController extends Controller
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
         ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param array $visibleTypes
+     * @param array $filters
+     * @param array $currentAggregations
+     * @param array $typeViews
+     * @param array $organizationCategoryViews
+     *
+     * @return FormInterface
+     */
+    private function getFilteredSearchForm(
+        Event $event,
+        array $visibleTypes,
+        array $filters,
+        array $currentAggregations,
+        array $typeViews,
+        array $organizationCategoryViews
+    ) {
+        $searchAdapter = $this->get('adapter.sheet_search_adapter');
+
+        if (isset($filters[SearchType::FILTER_TYPE])
+            && count($filters[SearchType::FILTER_TYPE]) === count($visibleTypes)
+        ) {
+            $filteredTypeViews = $this->filterTypeViews(
+                $typeViews,
+                $currentAggregations
+            );
+        } else {
+            // if type filter is used, type aggs need to be done with a ES query without type filter
+            $typeAggregations = $searchAdapter->getTypeAggregations(
+                $event,
+                $filters,
+                SearchType::FILTER_TYPE
+            );
+
+            $filteredTypeViews = $this->filterTypeViews(
+                $typeViews,
+                $typeAggregations
+            );
+        }
+
+        if (!isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
+            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
+                $organizationCategoryViews,
+                $currentAggregations
+            );
+        } else {
+            // if organizationCategory filter is used,
+            // organizationCategory aggs need to be done with a ES query without organizationCategory filter
+            $organizationCategoryAggregations = $searchAdapter->getOrganizationCategoryAggregations(
+                $event,
+                $filters,
+                SearchType::FILTER_ORGANIZATION_CATEGORY
+            );
+
+            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
+                $organizationCategoryViews,
+                $organizationCategoryAggregations
+            );
+        }
+
+        return $this->getSearchForm($filters, $filteredTypeViews, $filteredOrganizationCategoryViews);
     }
 }

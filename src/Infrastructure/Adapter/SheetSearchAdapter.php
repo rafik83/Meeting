@@ -82,6 +82,48 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getTypeAggregations(Event $event, array $filters, $filterToRemove)
+    {
+        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrganizationCategoryAggregations(Event $event, array $filters, $filterToRemove)
+    {
+        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_ORGANIZATION_CATEGORY);
+    }
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $filterToRemove
+     * @param string $elasticField
+     *
+     * @return array
+     */
+    private function searchAggregations(Event $event, array $filters, $filterToRemove, $elasticField)
+    {
+        // remove filter by type
+        unset($filters[$filterToRemove]);
+
+        // add inCatalog filter
+        $filters = array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $filters);
+
+        $builder = new SheetSearchQueryBuilder($event, $filters);
+        $query   = new Query($builder->getQuery());
+        $query->addAggregation($this->getAggregation($elasticField));
+        $query->setSize(0);
+
+        $result = $this->searchable->search($query);
+
+        return $result->getAggregations();
+    }
+
+    /**
      * @param string $field
      *
      * @return Terms
