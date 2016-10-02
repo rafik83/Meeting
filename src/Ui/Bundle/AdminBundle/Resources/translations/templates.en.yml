@@ -1,2 +1,3 @@
 template.action.save: Save
 template.object.editable-text: 'Editable text'
+template.tag.participant_gender: 'Participant gender'

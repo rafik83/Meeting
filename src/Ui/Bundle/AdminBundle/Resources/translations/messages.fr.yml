@@ -131,7 +131,7 @@ admin.operator_list.action.create.partner: 'Créer un nouveau partenaire'
 admin.operator_list.filter.empty_filter: 'Vider les filtres'
 admin.operator_list.link: 'Liste des collaborateurs'
 admin.operator_list.table.content.admin.events.none: Aucun
-admin.operator_list.table.content.update: Editer
+admin.operator_list.table.content.update: Éditer
 admin.operator_list.table.title.actions: Actions
 admin.operator_list.table.title.email: Email
 admin.operator_list.table.title.events: Événéments
@@ -140,9 +140,7 @@ admin.operator_list.table.title.lastLoginAt: 'Date de dernière connexion'
 admin.operator_list.table.title.lastname: Nom
 admin.operator_list.title: 'Liste des collaborateurs'
 admin.operator.create.title: 'Créer un nouveau collaborateur'
-admin.operator.update.title: 'Editer un collaborateur'
-admin.partner.create.title: 'Créer un nouveau partenaire'
-admin.partner.update.title: 'Editer un partenaire'
+admin.operator.update.title: 'Éditer un collaborateur'
 admin.order_edit.add_line: 'Ajouter une ligne'
 admin.order_edit.after: après
 admin.order_edit.columns.product: Produit
@@ -160,7 +158,7 @@ admin.order_edit.total.withoutVAT: 'Total HT'
 admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
-admin.order.cancelled: 'Annulée'
+admin.order.cancelled: Annulée
 admin.order.createdAt: 'Créée le'
 admin.order.edit: 'Modification commande:'
 admin.order.follower: 'Suivi commercial'
@@ -187,6 +185,8 @@ admin.package.table.column.event: Evènement
 admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
+admin.partner.create.title: 'Créer un nouveau partenaire'
+admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'
 admin.plan.link: 'Catalogue de formules'
 admin.plan.name: Nom
@@ -228,8 +228,8 @@ admin.promotion_code.table.no_result: 'Aucun code promo'
 admin.promotion_code.title: 'Codes promos'
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
-admin.role.ROLE_SUPER_ADMIN: Admin
 admin.role.ROLE_PARTNER: Partenaire
+admin.role.ROLE_SUPER_ADMIN: Admin
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
@@ -260,7 +260,8 @@ admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
-admin.sheet.details.completeness: Complétude de la fiche
+admin.sheet.details.company.title: 'Société'
+admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
@@ -285,15 +286,15 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
-admin.sheet.filter.has_cart: Fiche avec panier
+admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.follower: 'Suivi commercial'
+admin.sheet.go_back_to_list: 'Retour à la liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
-admin.sheet.go_back_to_list: Retour à la liste des participations
 admin.sheet.read: Voir
 admin.sheet.state: Etat
 admin.sheet.title: Participations
@@ -303,7 +304,7 @@ admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement
 admin.sheet.trace.changed_type: 'Type de participation changé'
 admin.sheet.trace.changed_type_comment: 'Changé de %fromType% à %toType%'
-admin.sheet.trace.comment: 'avec le commentaire: "%comment%"'
+admin.sheet.trace.comment: 'avec le commentaire: %comment%'
 admin.sheet.trace.disable: 'Désactivée le %at%'
 admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.sheet.trace.enable: 'Activée le %at%'
@@ -358,7 +359,7 @@ admin.template.sheet.titleEvent: 'Templates assignés'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
 admin.transaction.column.mode: 'Mode de paiement'
-admin.transaction.column.reference: Référence
+admin.transaction.column.reference: Commentaire
 admin.transaction.column.state: Statut
 admin.transaction.column.total: Total
 admin.transaction.column.user: Utilisateur
@@ -378,11 +379,15 @@ admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.type.already_exists: 'Un type de participation au titre identique existe déjà'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
-admin.type.hidden: 'Caché'
+admin.type.hidden: Caché
 admin.type.link: 'Types de participation'
 admin.type.position: Position
 admin.type.register.link: Lien d'inscription
+admin.type.registration.template: 'Template d''inscription'
+admin.type.sheet.template: 'Template de présentation'
+admin.type.package: 'Forfait'
 admin.type.remove.link: Supprimer
+admin.type.list.title: 'Types de participation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'
@@ -394,6 +399,8 @@ and: et
 and_more: 'et %count% autre|et %count% autres'
 boolean.no: Non
 boolean.yes: Oui
+boolean.false: Non
+boolean.true: Oui
 change_password.link: 'Changer le mot de passe'
 change_password.title: 'Changer le mot de passe'
 event.activateAccount.password: 'Définir votre mot de passe'
