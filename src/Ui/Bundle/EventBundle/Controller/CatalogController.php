@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -69,11 +70,7 @@ class CatalogController extends Controller
 
         $filters = $this->getDefaultFilters($typeViews);
 
-        $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
-            'action'                    => $this->generateUrl('event_catalog_index'),
-            'typeViews'                 => $typeViews,
-            'organizationCategoryViews' => $organizationCategoryViews,
-        ]);
+        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews);
 
         if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
             $filters = $searchForm->getData();
@@ -120,11 +117,7 @@ class CatalogController extends Controller
 //            $filteredOrganizationCategoryViews = $organizationCategoryViews;
 //        }
 
-        $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
-            'action'                    => $this->generateUrl('event_catalog_index'),
-            'typeViews'                 => $filteredTypeViews,
-            'organizationCategoryViews' => $filteredOrganizationCategoryViews,
-        ]);
+        $searchForm = $this->getSearchForm($filters, $filteredTypeViews, $filteredOrganizationCategoryViews);
 
         if ($request->isXmlHttpRequest()) {
             $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
@@ -296,5 +289,21 @@ class CatalogController extends Controller
         }
 
         return $organizationCategoryViews;
+    }
+
+    /**
+     * @param array                      $filters
+     * @param TypeView[]                 $typeViews
+     * @param OrganizationCategoryView[] $organizationCategoryViews
+     *
+     * @return FormInterface
+     */
+    private function getSearchForm(array $filters, array $typeViews, array $organizationCategoryViews)
+    {
+        return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
+            'action'                    => $this->generateUrl('event_catalog_index'),
+            'typeViews'                 => $typeViews,
+            'organizationCategoryViews' => $organizationCategoryViews,
+        ]);
     }
 }
