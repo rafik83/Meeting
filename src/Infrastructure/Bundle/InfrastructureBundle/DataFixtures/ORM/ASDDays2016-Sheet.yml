@@ -59,6 +59,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         completeness: 67
         registrationData:
             3ad4b72f: { text: "Elao" }
+            97ed778d: { items: ["category2"] }
             57da9df7ced30: { boolean: "true" }
         lastLoginAt: <dateTime()>
         inCatalog: true
@@ -72,6 +73,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: "Hello World Company" }
+            97ed778d: { items: ["category3"] }
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -85,6 +87,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: "World Company Inc" }
+            97ed778d: { items: ["category2"] }
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>

@@ -1,3 +1,7 @@
 Proximum\Vimeet\Domain\Model\Rule:
-    rule_1:
+    fournisseur_see_investisseur:
         __construct: ['@event_asddays_2016', '@event_asddays_2016_type_fournisseur', '@event_asddays_2016_type_investisseur', []]
+    fournisseur_see_fournisseur:
+        __construct: ['@event_asddays_2016', '@event_asddays_2016_type_fournisseur', '@event_asddays_2016_type_fournisseur', []]
+    fournisseur_see_donneur_ordre:
+        __construct: ['@event_asddays_2016', '@event_asddays_2016_type_fournisseur', '@event_asddays_2016_type_donneur_ordre', []]
