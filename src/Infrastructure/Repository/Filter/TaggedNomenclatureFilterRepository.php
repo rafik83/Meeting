@@ -42,8 +42,7 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
             ->where('taggedNomenclatureFilter.event = :event')
             ->setParameter('event', $event)
             ->getQuery()
-            ->execute()
-        ;
+            ->execute();
 
         $this->entityManager->flush();
     }

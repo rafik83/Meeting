@@ -107,7 +107,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     private function searchAggregations(Event $event, array $filters, $filterToRemove, $elasticField)
     {
-        // remove filter by type
+        // remove filter
         unset($filters[$filterToRemove]);
 
         // add inCatalog filter

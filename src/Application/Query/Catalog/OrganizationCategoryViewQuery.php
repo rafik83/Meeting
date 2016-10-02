@@ -21,12 +21,12 @@ class OrganizationCategoryViewQuery
     public $locale;
 
     /**
-     * @param Event      $event
-     * @param string     $locale
+     * @param Event  $event
+     * @param string $locale
      */
     public function __construct(Event $event, $locale)
     {
-        $this->event        = $event;
-        $this->locale       = $locale;
+        $this->event  = $event;
+        $this->locale = $locale;
     }
 }

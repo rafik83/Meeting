@@ -8,9 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-
 namespace Proximum\Vimeet\Application\Template\Registration;
-
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
