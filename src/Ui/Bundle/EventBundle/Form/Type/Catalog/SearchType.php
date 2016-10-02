@@ -21,17 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractType
 {
-    /** @var CommandBus */
-    private $commandBus;
-
-    /**
-     * @param CommandBus $commandBus
-     */
-    public function __construct(CommandBus $commandBus)
-    {
-        $this->commandBus = $commandBus;
-    }
-
     /**
      * {@inheridoc}
      */

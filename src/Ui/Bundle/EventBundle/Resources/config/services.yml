@@ -186,8 +186,6 @@ services:
 
     form_type.catalog_search_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType
-        arguments:
-            - '@tactician.commandbus.query'
         tags:
             - { name: form.type }
 
