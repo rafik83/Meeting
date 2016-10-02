@@ -6,7 +6,7 @@
     {% endif %}
 
     {% if searchForm.organizationCategory is defined %}
-        {{ form_row(searchForm.organizationCategory) }}
+        {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
 
     {#

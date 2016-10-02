@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
@@ -20,7 +21,6 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -95,17 +95,30 @@ class CatalogController extends Controller
             throw $this->createNotFoundException($exception->getMessage());
         }
 
-        // @todo type aggs need to be done with a ES query without type filter
-        $filteredTypeViews = $this->filterTypeViews(
-            $typeViews,
-            $paginatedResult->aggregations
-        );
+        if (isset($filters[SearchType::FILTER_TYPE])
+            && count($filters[SearchType::FILTER_TYPE]) === count($visibleTypes)
+        ) {
+            $filteredTypeViews = $this->filterTypeViews(
+                $typeViews,
+                $paginatedResult->aggregations
+            );
+        } else {
+            // @todo if type filter is used, type aggs need to be done with a ES query without type filter
+            $filteredTypeViews = $this->filterTypeViews(
+                $typeViews,
+                $paginatedResult->aggregations
+            );
+        }
 
-        // @todo organizationCategory aggs need to be done with a ES query without organizationCategory filter
-        $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-            $organizationCategoryViews,
-            $paginatedResult->aggregations
-        );
+//        if (!isset($filters[SearchType::FILTER_ORGANIZATION_CATAGORY])) {
+            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
+                $organizationCategoryViews,
+                $paginatedResult->aggregations
+            );
+//        } else {
+//            // @todo if organizationCategory filter is used, organizationCategory aggs need to be done with a ES query without organizationCategory filter
+//            $filteredOrganizationCategoryViews = $organizationCategoryViews;
+//        }
 
         $searchForm = $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index'),
@@ -219,10 +232,10 @@ class CatalogController extends Controller
      */
     private function getDefaultFilters(array $typeViews)
     {
-        $filters = ['orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL];
+        $filters = [SearchType::ORDER_BY => Sheet\Constant::ORDER_BY_ALPHABETICAL];
 
         foreach ($typeViews as $typeView) {
-            $filters['type'][] = $typeView;
+            $filters[SearchType::FILTER_TYPE][] = $typeView;
         }
 
         return $filters;
@@ -236,7 +249,7 @@ class CatalogController extends Controller
      */
     private function filterTypeViews(array $typeViews, array $aggregations = null)
     {
-        $typeField = SheetSearchAdapter::ES_FIELD_TYPE;
+        $typeField = SheetSearchAdapterInterface::ES_FIELD_TYPE;
 
         $aggregationsIndexedByKey = [];
 
@@ -261,12 +274,11 @@ class CatalogController extends Controller
      */
     private function filterOrganizationCategoryViews(array $organizationCategoryViews, array $aggregations = null)
     {
-        $organizationCategoryField = SheetSearchAdapter::ES_FIELD_ORGANIZATION_CATEGORY;
+        $organizationCategoryField = SheetSearchAdapterInterface::ES_FIELD_ORGANIZATION_CATEGORY;
 
         if (null === $aggregations
             || !isset($aggregations[$organizationCategoryField])
             || !isset($aggregations[$organizationCategoryField]['buckets'])
-            || count($aggregations[$organizationCategoryField]['buckets']) < 2
         ) {
             return [];
         }

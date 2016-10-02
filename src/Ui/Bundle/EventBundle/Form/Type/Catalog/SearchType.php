@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
-use League\Tactician\CommandBus;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
@@ -21,6 +20,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractType
 {
+    const FILTER_ORGANIZATION_CATAGORY = 'organizationCategory';
+    const FILTER_TYPE                  = 'type';
+    const ORDER_BY                     = 'orderBy';
+
     /**
      * {@inheridoc}
      */
@@ -43,7 +46,7 @@ class SearchType extends AbstractType
         if (count($typeViews) > 1) {
             $builder
                 ->add(
-                    'type',
+                    self::FILTER_TYPE,
                     ChoiceType::class,
                     [
                         'label'        => 'form.search.type.label',
@@ -60,7 +63,8 @@ class SearchType extends AbstractType
                 );
         }
 
-        $builder->add('organizationCategory', ChoiceType::class, [
+        $builder->add(self::FILTER_ORGANIZATION_CATAGORY, ChoiceType::class, [
+            'label'        => 'form.search.organizationCategory.label',
             'choices'      => $organizationCategoryViews,
             'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
                 if ($organizationCategoryView !== null) {

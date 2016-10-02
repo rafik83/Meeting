@@ -15,6 +15,9 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 interface SheetSearchAdapterInterface
 {
+    const ES_FIELD_TYPE                  = 'type';
+    const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
+
     /**
      * @param Event       $event
      * @param array       $filters

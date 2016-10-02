@@ -24,9 +24,6 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
-    const ES_FIELD_TYPE                  = 'type';
-    const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
-
     /**
      * @var PaginatedFinderInterface Elastica finder
      */
