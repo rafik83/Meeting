@@ -67,7 +67,7 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
      */
     public function getBoolean()
     {
-        return isset($this->data['boolean']) ? $this->data['boolean'] : null;
+        return isset($this->data['boolean']) ? $this->data['boolean'] : false;
     }
 
     /**
@@ -75,7 +75,7 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
      */
     public function getContentValue()
     {
-        return null !== $this->getBoolean() ? ($this->getBoolean() ? self::YES : self::NO) : null;
+        return null !== $this->getBoolean() ? ($this->getBoolean() ? self::YES : self::NO) : self::NO;
     }
 
     /**
