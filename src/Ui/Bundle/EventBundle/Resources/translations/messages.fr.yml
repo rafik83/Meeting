@@ -12,6 +12,8 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
+catalog.action.meeting.request.back: 'Retour'
+catalog.action.meeting.request.create: 'Demander en RDV'
 catalog.complete_sheet: 'Voir la fiche complète'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
