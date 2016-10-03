@@ -47,9 +47,15 @@ class MeetingRequestView
     public $previewViews;
 
     /**
+     * @var string
+     */
+    public $sheetName;
+
+    /**
      * MeetingRequestView constructor.
      *
      * @param Sheet              $sheet
+     * @param string             $sheetName
      * @param string             $state
      * @param string             $type
      * @param \DateTimeInterface $createdAt
@@ -58,6 +64,7 @@ class MeetingRequestView
      */
     public function __construct(
         Sheet $sheet,
+        $sheetName,
         $state,
         $type,
         \DateTimeInterface $createdAt,
@@ -65,6 +72,7 @@ class MeetingRequestView
         array $previewViews
     ) {
         $this->sheet          = $sheet;
+        $this->sheetName      = $sheetName;
         $this->state          = $state;
         $this->type           = $type;
         $this->createdAt      = $createdAt;

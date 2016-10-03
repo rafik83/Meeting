@@ -58,10 +58,11 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     * @param array $filters
      *
      * @return Request[]
      */
-    public function getAllRequestBySheet(Sheet $sheet);
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
 
     /**
      * @param Event $event

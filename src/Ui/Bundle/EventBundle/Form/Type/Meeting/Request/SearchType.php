@@ -30,10 +30,10 @@ class SearchType extends AbstractType
                 'expanded' => true,
                 'choices'  => [
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
-                    'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
+                    'form.search.orderBy.createdAt' => Constant::ORDER_BY_CREATED_AT,
                 ],
             ])
-            ->add('type', ChoiceType::class, [
+            ->add('state', ChoiceType::class, [
                 'label'        => 'form.search.meeting.type.label',
                 'expanded'     => true,
                 'multiple'     => false,

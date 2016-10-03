@@ -46,7 +46,8 @@ class MeetingRequestListViewQueryHandler
      */
     public function handle(MeetingRequestListViewQuery $meetingRequestListViewQuery)
     {
-        $meetingRequests = $this->meetingRequestRepository->getAllRequestBySheet($meetingRequestListViewQuery->sheet);
+        $meetingRequests = $this->meetingRequestRepository
+            ->getAllRequestBySheet($meetingRequestListViewQuery->sheet, $meetingRequestListViewQuery->filters);
 
         $meetingRequestListView = new MeetingRequestListView();
 
@@ -60,6 +61,11 @@ class MeetingRequestListViewQueryHandler
             );
 
             $meetingRequestListView->addRequestView($meetingRequestView);
+        }
+
+        if (!empty($meetingRequestListViewQuery->filters['orderBy'])) {
+            $order = $meetingRequestListViewQuery->filters['orderBy'];
+            $meetingRequestListView->sortBy($order);
         }
 
         return $meetingRequestListView;

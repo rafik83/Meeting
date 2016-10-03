@@ -25,14 +25,21 @@ class MeetingRequestListViewQuery
     public $locale;
 
     /**
+     * @var array
+     */
+    public $filters;
+
+    /**
      * MeetingRequestListViewQuery constructor.
      *
      * @param Sheet  $sheet
      * @param string $locale
+     * @param array  $filters
      */
-    public function __construct(Sheet $sheet, $locale)
+    public function __construct(Sheet $sheet, $locale, array $filters)
     {
-        $this->sheet  = $sheet;
-        $this->locale = $locale;
+        $this->sheet   = $sheet;
+        $this->locale  = $locale;
+        $this->filters = $filters;
     }
 }
