@@ -2,8 +2,11 @@
 
 {% block title 'event.meeting.listRequest.title'|trans %}
 
+{% block body_attributes 'class="grey"' %}
+
 {% block content %}
     <div class="catalog">
+        
         <div class="catalog__list catalog__list--block">
             <div class="row">
                 {% for meetingView in meetingRequestView.meetingRequestsView %}

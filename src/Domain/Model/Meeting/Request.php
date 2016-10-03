@@ -392,4 +392,17 @@ class Request implements MessageSubjectInterface
     {
         return self::STATE_CANCEL === $this->state;
     }
+
+    /**
+     * @return array
+     */
+    public static function getAllStates()
+    {
+        return [
+            self::STATE_SENT,
+            self::STATE_APPROVED,
+            self::STATE_CANCEL,
+            self::STATE_REFUSED,
+        ];
+    }
 }
