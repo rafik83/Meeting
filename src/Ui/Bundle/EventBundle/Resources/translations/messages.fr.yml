@@ -48,11 +48,11 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
-navigation.links.happening.accept: Acceptées
-navigation.links.happening.decline: Refusées
 navigation.links.happening.open_date: 'Disponible le'
 navigation.links.happening.proposal: 'Propositions de RDV'
-navigation.links.happening.waiting: 'Demandes en attente'
+navigation.links.happening.approved: 'Acceptées'
+navigation.links.happening.refused: 'Refusées'
+navigation.links.happening.sent: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'

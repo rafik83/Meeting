@@ -1829,6 +1829,9 @@ services:
             - '@navigation.navigation_builder'
     query.navigation.category_happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler
+        arguments:
+            - '@datetime'
+            - '@navigation.navigation_builder'
     query.navigation.category_member_space_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQueryHandler
         arguments:
