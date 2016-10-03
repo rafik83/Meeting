@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -58,13 +59,16 @@ class MeetingRequestController extends Controller
 
         $query = new MeetingRequestListViewQuery($sheet, $request->getLocale());
 
+        /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
 
         return $this->render('EventBundle:MeetingRequest:listRequest.html.twig', [
             'event'              => $eventDomain->getEvent(),
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestListView,
-            'searchForm'         => $searchForm,
+            'searchForm'         => $searchForm->createView(),
+            'isCatalog'          => true, // set menu link visible,
+            'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
         ]);
     }
 
