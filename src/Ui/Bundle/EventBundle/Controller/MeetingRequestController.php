@@ -56,14 +56,31 @@ class MeetingRequestController extends Controller
         }
 
         $filters    = [];
-        $searchForm = $this->createForm(SearchType::class, $filters);
+        $searchForm = $this->createForm(SearchType::class, $filters, [
+            'label' => null,
+            'action'=> $this->generateUrl('event_meeting_list_request', [
+                'sheet' => $sheet->getId()
+            ]),
+        ]);
 
-        $query = new MeetingRequestListViewQuery($sheet, $request->getLocale());
+        $searchForm->handleRequest($request);
+
+        if ($searchForm->isValid()) {
+            $filters = $searchForm->getData();
+        }
+
+        $query = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
 
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
 
-        return $this->render('EventBundle:MeetingRequest:listRequest.html.twig', [
+        $template = 'EventBundle:MeetingRequest:listRequest.html.twig';
+
+        if ($request->isXmlHttpRequest()) {
+            $template = 'EventBundle:MeetingRequest/Partials:catalog.html.twig';
+        }
+
+        return $this->render($template, [
             'event'              => $eventDomain->getEvent(),
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestListView,

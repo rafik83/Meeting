@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+
 class MeetingRequestListView
 {
     /**
@@ -31,5 +33,23 @@ class MeetingRequestListView
     public function addRequestView(MeetingRequestView $meetingRequestView)
     {
         $this->meetingRequestsView[] = $meetingRequestView;
+    }
+
+    /**
+     * @param string $order
+     */
+    public function sortBy($order)
+    {
+        switch ($order) {
+            case Constant::ORDER_BY_ALPHABETICAL:
+                uasort($this->meetingRequestsView, function ($viewA, $viewB) {
+                    if ($viewA->sheetName === $viewB->sheetName) {
+                        return 0;
+                    }
+
+                    return $viewA->sheetName < $viewB->sheetName ? -1 : 1;
+                });
+                break;
+        }
     }
 }

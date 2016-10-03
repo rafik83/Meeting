@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -22,13 +23,20 @@ class MeetingRequestViewQueryHandler
     private $preview;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
      * MeetingRequestViewQueryHandler constructor.
      *
-     * @param Preview $preview
+     * @param Preview          $preview
+     * @param SheetInfoGuesser $sheetInfoGuesser
      */
-    public function __construct(Preview $preview)
+    public function __construct(Preview $preview, SheetInfoGuesser $sheetInfoGuesser)
     {
-        $this->preview = $preview;
+        $this->preview          = $preview;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
     /**
@@ -38,11 +46,12 @@ class MeetingRequestViewQueryHandler
      */
     public function handle(MeetingRequestViewQuery $query)
     {
-        $sheet = $this->getViewedSheet($query);
+        $sheet    = $this->getViewedSheet($query);
         $previews = $this->preview->getPreview($sheet, $query->locale);
 
         return new MeetingRequestView(
             $sheet,
+            $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
             $query->meetingRequest->getState(),
             $sheet->getType()->getTitle($sheet->getEvent()->getAvailableLocale($query->locale)),
             $query->meetingRequest->getCreatedAt(),
