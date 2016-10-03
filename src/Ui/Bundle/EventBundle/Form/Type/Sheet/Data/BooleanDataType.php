@@ -36,7 +36,7 @@ class BooleanDataType extends AbstractType
                 'expanded'     => true,
                 'multiple'     => false,
                 'label'        => $booleanObject->getOption('label', $locale),
-                'required'     => $booleanObject->getRequired(),
+                'required'     => true,
             ]);
     }
 

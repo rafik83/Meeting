@@ -55,10 +55,10 @@ class Prefiller
                 $templateData->getTaggedContentLabel(Tag::PARTICIPANT_MOBILE),
                 $participant->getUser()->getEmail(),
                 new Address(
-                    $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ADDRESS),
-                    $templateData->getTaggedContentLabel(Tag::PARTICIPANT_ZIPCODE),
-                    $templateData->getTaggedContentLabel(Tag::PARTICIPANT_CITY),
-                    $templateData->getTaggedContentValue(Tag::PARTICIPANT_COUNTRY)
+                    $templateData->getTaggedContentLabel(Tag::SHEET_ADDRESS),
+                    $templateData->getTaggedContentLabel(Tag::SHEET_ZIPCODE),
+                    $templateData->getTaggedContentLabel(Tag::SHEET_CITY),
+                    $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY)
                 )
             );
         }

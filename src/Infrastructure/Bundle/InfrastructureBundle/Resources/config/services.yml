@@ -857,6 +857,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@components.registration.step_manager'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
@@ -1222,6 +1223,15 @@ services:
     #
     components.participant.participant_manager:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantManager
+
+    #
+    # Registration Component
+    #
+    components.registration.step_manager:
+        class: Proximum\Vimeet\Application\Components\Registration\StepManager
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.participant_repository'
 
     #
     # Sheet Component
