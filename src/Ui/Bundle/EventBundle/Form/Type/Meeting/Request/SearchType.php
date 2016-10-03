@@ -34,7 +34,7 @@ class SearchType extends AbstractType
                 ],
             ])
             ->add('state', ChoiceType::class, [
-                'label'        => 'form.search.meeting.type.label',
+                'label'        => 'form.search.meeting.state.label',
                 'expanded'     => true,
                 'multiple'     => false,
                 'choices'      => MeetingRequest::getAllStates(),

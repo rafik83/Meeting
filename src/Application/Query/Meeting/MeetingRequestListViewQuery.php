@@ -36,7 +36,7 @@ class MeetingRequestListViewQuery
      * @param string $locale
      * @param array  $filters
      */
-    public function __construct(Sheet $sheet, $locale, array $filters)
+    public function __construct(Sheet $sheet, $locale, array $filters = [])
     {
         $this->sheet   = $sheet;
         $this->locale  = $locale;

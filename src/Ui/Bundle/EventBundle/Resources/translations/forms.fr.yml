@@ -36,7 +36,7 @@ form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
 form.search.orderBy.label: TRIER
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.meeting.type.label: Gestion de RDV
-form.search.meeting.type.label: 'Gestion de RDV'
+form.search.meeting.state.label: 'Gestion de RDV'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.sent: 'Demandes en attente'
