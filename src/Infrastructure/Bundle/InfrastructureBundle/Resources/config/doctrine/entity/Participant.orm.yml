@@ -11,6 +11,11 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: json_array
         active:
             type: boolean
+        registrationStep:
+            type: integer
+            nullable: true
+        registrationComplete:
+            type: boolean
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

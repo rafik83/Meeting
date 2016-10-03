@@ -1224,6 +1224,15 @@ services:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantManager
 
     #
+    # Registration Component
+    #
+    components.registration.step_manager:
+        class: Proximum\Vimeet\Application\Components\Registration\StepManager
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.participant_repository'
+
+    #
     # Sheet Component
     #
     vimeet_infrastructure.application.components.sheet.manager:

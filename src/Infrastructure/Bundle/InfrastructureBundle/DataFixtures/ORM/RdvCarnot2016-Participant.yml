@@ -8,6 +8,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: 'Paul' }
             838197c7: { text: 'GASCOIGNE' }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
 
     # Proximum participants
     proximum_participant_visiteur:
@@ -18,6 +21,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     proximum_participant_exposant:
         __construct: false
         user: '@proximum_user_exposant'
@@ -26,6 +32,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     proximum_participant_carnot:
         __construct: false
         user: '@proximum_user_carnot'
@@ -34,6 +43,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     proximum_participant_carnot2:
         __construct: false
         user: '@proximum_user_carnot2'
@@ -42,6 +54,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     proximum_participant_admin:
         __construct: false
         user: '@proximum_user_admin'
@@ -50,6 +65,9 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     proximum_participant_test:
         __construct: false
         user: '@proximum_user_test'
