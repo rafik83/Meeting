@@ -6,6 +6,8 @@
 
 {% block content %}
     <div class="catalog">
+
+        {{ include('EventBundle:MeetingRequest/Partials:search.html.twig', {'searchForm': searchForm}) }}
         
         <div class="catalog__list catalog__list--block">
             <div class="row">
