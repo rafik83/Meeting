@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoPreferenceWithParticipantException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -37,34 +39,60 @@ class CreateRequestHandler
     private $eventDispatcher;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
      * CreateRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
      * @param EventDispatcherInterface   $eventDispatcher
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        \DateTimeInterface $dateTime
     ) {
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
+        $this->dateTime          = $dateTime;
     }
 
     /**
      * @param CreateRequest $createRequest
+     *
+     * @throws NoPreferenceWithParticipantException
      */
     public function handle(CreateRequest $createRequest)
     {
+        $participantFound  = false;
+        $noPreferenceFound = false;
+        foreach ($createRequest->participants as $participant) {
+            if (!$participant instanceof Participant) {
+                $noPreferenceFound = true;
+            }
+            
+            if ($participant instanceof  Participant) {
+                $participantFound = true;
+            }
+        }
+        
+        if (true === $participantFound && true === $noPreferenceFound) {
+            throw new NoPreferenceWithParticipantException('You can not have no preference and a participant selected at the same time');
+        }
+
         // Create new request
         $request = new Request(
             $createRequest->from,
             $createRequest->participants,
             $createRequest->to,
             [],
-            $createRequest->createdAt,
+            $this->dateTime,
             $createRequest->creator
         );
 
@@ -76,7 +104,7 @@ class CreateRequestHandler
                 $request,
                 $request->getFromSheet(),
                 $createRequest->description,
-                $createRequest->createdAt
+                $this->dateTime
             ));
         }
 
@@ -84,7 +112,7 @@ class CreateRequestHandler
         $this->eventDispatcher->dispatch(Events::REQUEST_SENT, new RequestSentEvent(
             $createRequest->creator,
             $request,
-            $createRequest->createdAt,
+            $this->dateTime,
             $createRequest->description
         ));
 
@@ -95,7 +123,7 @@ class CreateRequestHandler
                 $participant,
                 $request,
                 $createRequest->description,
-                $createRequest->createdAt
+                $this->dateTime
             ));
         }
     }

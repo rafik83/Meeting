@@ -43,27 +43,21 @@ class CreateRequest
     public $state;
 
     /**
-     * @var \DateTimeInterface
-     */
-    public $createdAt;
-
-    /**
      * @var User
      */
     public $creator;
 
     /**
-     * @param Sheet              $from
-     * @param Sheet              $to
-     * @param \DateTimeInterface $createdAt
-     * @param User               $creator
+     * @param Sheet $from
+     * @param Sheet $to
+     * @param User  $creator
      */
-    public function __construct(Sheet $from, Sheet $to, \DateTimeInterface $createdAt, User $creator)
+    public function __construct(Sheet $from, Sheet $to, User $creator)
     {
-        $this->from      = $from;
-        $this->to        = $to;
-        $this->state     = Request::STATE_SENT;
-        $this->createdAt = $createdAt;
-        $this->creator   = $creator;
+        $this->from         = $from;
+        $this->to           = $to;
+        $this->state        = Request::STATE_SENT;
+        $this->creator      = $creator;
+        $this->participants = [null];
     }
 }

@@ -24,7 +24,6 @@ class MeetingRequestCreateType extends AbstractMeetingRequestType
 
         $resolver->setDefaults([
             'data_class' => CreateRequest::class,
-            'submit'     => true,
         ]);
     }
 }
