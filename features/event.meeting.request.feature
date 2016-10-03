@@ -19,7 +19,16 @@ Feature: Meeting Request / Proposition
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
     And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
-    And I go to this page "/fr/sheet/1/meeting/request"
+    When I go to this page "/fr/sheet/1/meeting/request"
+    Then I should see "form.search.meeting.state.label"
+    And I should see "form.search.meeting.state.all"
+    And I should see "form.search.meeting.state.approved"
+    And I should see "form.search.meeting.state.sent"
+    And I should see "form.search.meeting.state.refused"
+    And I should see "form.search.meeting.state.receive"
+    And I should see "form.search.orderBy.label"
+    And I should see "form.search.orderBy.alphabetical"
+    And I should see "form.search.orderBy.createdAt"
 
   Scenario: I can see my meeting proposition
     Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
