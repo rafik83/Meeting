@@ -20,6 +20,7 @@
             > li {
                 display: inline-block;
                 margin-right: 4px;
+                color: $color-highlighted;
 
                 &:after {
                     content: '●';
@@ -29,7 +30,6 @@
 
                 &:nth-child(even) { background: none; }
                 &.highlight {
-                    color: $color-highlighted;
                     font-family: OpenSans;
                     text-transform: uppercase;
                 }

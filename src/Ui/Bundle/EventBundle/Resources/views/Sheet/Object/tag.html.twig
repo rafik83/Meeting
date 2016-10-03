@@ -1,7 +1,9 @@
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
     {% set label = item.label(locale, fallback) %}
     <header>
-        <h2>{{ label }}</h2>
+        {% if not item.hasOnlyTagUrl %}
+            <h2>{{ label }}</h2>
+        {% endif %}
     </header>
     <div class="section__content">
         <ul>
@@ -14,7 +16,8 @@
                         {% endfor %}
                     {% else %}
                         {% if value is url %}
-                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}</a>
+                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
+                            </a>
                         {% else %}
                             {{ value }}
                         {% endif %}
