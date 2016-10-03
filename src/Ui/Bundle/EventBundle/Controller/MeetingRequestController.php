@@ -85,6 +85,7 @@ class MeetingRequestController extends Controller
             'meetingRequestView' => $meetingRequestListView,
             'searchForm'         => $searchForm->createView(),
             'isCatalog'          => true, // set menu link visible,
+            'isMeeting'          => true,
             'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
         ]);
     }
