@@ -35,5 +35,14 @@
                 </a>
             </li>
         {% endif %}
+
+        {% if isMeeting is defined and sheet is defined %}
+            <li>
+                <a href="{{ path('event_meeting_list_request', {'sheet': sheet.id }) }}" class="btn btn-primary btn-lg">
+                    <i class="icon-RDV"></i>
+                    <span class="name">{{ 'navigation.category.happening'|trans }}</span>
+                </a>
+            </li>
+        {% endif %}
     </ul>
 </div>
