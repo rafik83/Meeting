@@ -4,7 +4,15 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_rdv_carnot_2016'
             - '@type_exposant'
-            - []
+            -
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
+                # Image
+                1b9a00b3: { file: "onera.jpg" }
+                # Lien
+                90713a3d: { url: "http://www.onera.fr/" }
+                # Description d'activité
+                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
             - '@user_test'
             - <dateTime()>
         registrationData:
@@ -24,7 +32,15 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
          - '@event_rdv_carnot_2016'
          - '@type_visiteur'
-         - []
+         -
+             # Titre de la fiche
+             dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
+             # Image
+             1b9a00b3: { file: "onera.jpg" }
+             # Lien
+             90713a3d: { url: "http://www.onera.fr/" }
+             # Description d'activité
+             d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
          - '@proximum_user_visiteur'
          - <dateTime()>
         registrationData:
@@ -41,7 +57,15 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_rdv_carnot_2016'
             - '@type_exposant'
-            - []
+            -
+            # Titre de la fiche
+                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
+                # Image
+                1b9a00b3: { file: "onera.jpg" }
+                # Lien
+                90713a3d: { url: "http://www.onera.fr/" }
+                # Description d'activité
+                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
             - '@proximum_user_exposant'
             - <dateTime()>
         registrationData:
@@ -132,7 +156,15 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_rdv_carnot_2016'
             - '@type_exposant'
-            - []
+            -
+            # Titre de la fiche
+                dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
+                # Image
+                1b9a00b3: { file: "onera.jpg" }
+                # Lien
+                90713a3d: { url: "http://www.onera.fr/" }
+                # Description d'activité
+                d691d21c: { text: { fr: "L'ONERA est aujourd'hui le premier acteur français de la recherche aéronautique, spaciale et de défence. Organisme pluridisciplinaire doté de moyens d'epérimentation uniques en Europe, il met ses compétences au services des agences de programmes, des institutionnels." } }
             - '@user_random_1'
             - <dateTime()>
         registrationData:
