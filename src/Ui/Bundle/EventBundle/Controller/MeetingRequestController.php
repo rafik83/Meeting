@@ -27,6 +27,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingReque
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestRefuseType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateFromType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -52,6 +53,9 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
+        $filters    = [];
+        $searchForm = $this->createForm(SearchType::class, $filters);
+
         $query = new MeetingRequestListViewQuery($sheet, $request->getLocale());
 
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
@@ -60,6 +64,7 @@ class MeetingRequestController extends Controller
             'event'              => $eventDomain->getEvent(),
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestListView,
+            'searchForm'         => $searchForm,
         ]);
     }
 
