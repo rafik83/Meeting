@@ -21,17 +21,17 @@
                 {#<a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>#}
             </div>
 
+            {% if not catalogSheetPreviewView.hasMeetingRequest %}
+                <div class="button">
+                    <a href="{{ path('event_catalog_sheet_meeting_request', { 'sheet': catalogSheetPreviewView.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#request-modal">
+                        <i class="icon-DemandeRDV"></i> Demander un RDV
+                    </a>
+                </div>
+            {% endif %}
+
             <p class="tags">
                 <i class="icon-LienTag"></i> {{ catalogSheetPreviewView.type }}
             </p>
-
-            {#
-            <div class="button">
-                <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander
-                    un RDV
-                </button>
-            </div>
-            #}
         </footer>
     </div>
 </div>
