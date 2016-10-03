@@ -24,6 +24,7 @@ class Request implements MessageSubjectInterface
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
     const STATE_CANCEL   = 'cancelled';
+    const STATE_RECEIVE  = 'receive';
     const STATE_ALL      = 'all';
 
     /**
@@ -401,9 +402,9 @@ class Request implements MessageSubjectInterface
     {
         return [
             self::STATE_ALL,
+            self::STATE_RECEIVE,
             self::STATE_SENT,
             self::STATE_APPROVED,
-            self::STATE_CANCEL,
             self::STATE_REFUSED,
         ];
     }

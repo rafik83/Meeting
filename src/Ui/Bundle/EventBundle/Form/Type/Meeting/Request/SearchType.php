@@ -29,8 +29,8 @@ class SearchType extends AbstractType
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
-                    'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
-                    'form.search.orderBy.createdAt' => Constant::ORDER_BY_CREATED_AT,
+                    'form.search.orderBy.alphabetical' => Constant::ORDER_BY_ALPHABETICAL,
+                    'form.search.orderBy.createdAt'    => Constant::ORDER_BY_CREATED_AT,
                 ],
             ])
             ->add('state', ChoiceType::class, [
@@ -42,7 +42,7 @@ class SearchType extends AbstractType
                     return $state;
                 },
                 'choice_label' => function ($state) {
-                    return $state;
+                    return 'form.search.meeting.state.' . $state;
                 },
             ]);
     }
