@@ -12,12 +12,14 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler;
+use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -42,8 +44,12 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $otherType    = new Type($event);
         $otherType->setPackage($otherPackage);
 
-        $user  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet = new Sheet($event, $type, [], $user, $date);
+        $user        = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet       = new Sheet($event, $type, [], $user, $date);
+        $participant = new Participant($sheet, $user, [], true);
+
+        $sheet->addParticipant($participant);
+
         $admin = new Admin(
             'email@email.com',
             'salt',
@@ -76,16 +82,18 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $changeType = new ChangeType($sheet, $otherType, $admin, 'fr');
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-        $translator      = $this->prophesize(TranslatorAdapter::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $orderRepository         = $this->prophesize(OrderRepositoryInterface::class);
+        $translator              = $this->prophesize(TranslatorAdapter::class);
+        $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
+        $registrationStepManager = $this->prophesize(StepManager::class);
 
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
             $translator->reveal(),
             $eventDispatcher->reveal(),
+            $registrationStepManager->reveal(),
             $date
         );
         $handler->handle($changeType);
@@ -97,6 +105,8 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Should be called because packages are different
         $orderRepository->findBySheet($expectedSheet)->shouldBeCalled()->willReturn([$order]);
+
+        $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
 
         $eventDispatcher->dispatch(
             Events::SHEET_CHANGED_TYPE,
@@ -115,9 +125,13 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $otherType = new Type($event);
         $otherType->setPackage($package);
 
-        $user  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet = new Sheet($event, $type, [], $user, $date);
-        $admin = new Admin(
+        $user        = new User('test@test.com', 'salt', 'password', 'fr');
+        $sheet       = new Sheet($event, $type, [], $user, $date);
+        $participant = new Participant($sheet, $user, [], true);
+
+        $sheet->addParticipant($participant);
+
+        $admin       = new Admin(
             'email@email.com',
             'salt',
             'password',
@@ -130,16 +144,18 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $changeType = new ChangeType($sheet, $otherType, $admin, 'fr');
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-        $translator      = $this->prophesize(TranslatorAdapter::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $orderRepository         = $this->prophesize(OrderRepositoryInterface::class);
+        $translator              = $this->prophesize(TranslatorAdapter::class);
+        $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
+        $registrationStepManager = $this->prophesize(StepManager::class);
 
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
             $translator->reveal(),
             $eventDispatcher->reveal(),
+            $registrationStepManager->reveal(),
             $date
         );
         $handler->handle($changeType);
@@ -151,6 +167,8 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Should not be called
         $orderRepository->findBySheet($expectedSheet)->shouldNotBeCalled();
+
+        $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
 
         $eventDispatcher->dispatch(
             Events::SHEET_CHANGED_TYPE,

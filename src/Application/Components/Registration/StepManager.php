@@ -58,6 +58,17 @@ class StepManager
 
     /**
      * @param Participant $participant
+     */
+    public function resetRegistrationStep(Participant $participant)
+    {
+        $participant->setRegistrationComplete($this->isRegistrationComplete($participant));
+        $participant->setRegistrationStep(0);
+
+        $this->participantRepository->set($participant);
+    }
+
+    /**
+     * @param Participant $participant
      *
      * @return bool
      */
