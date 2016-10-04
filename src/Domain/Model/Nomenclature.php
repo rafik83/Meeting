@@ -297,7 +297,25 @@ class Nomenclature
     {
         $labels = [];
 
-        if (2 === $this->depth) {
+        if (3 === $this->depth) {
+            foreach ($this->getValue() as $item) {
+                if (!isset($item['children'])) {
+                    continue;
+                }
+
+                foreach ($item['children'] as $secondDepth) {
+                    $labels[$item['label'][$locale]][$secondDepth['label'][$locale]] = array_map(
+                        function ($value) use ($locale) {
+                            return $value['label'][$locale];
+                        },
+                        $secondDepth['children']
+                    );
+                }
+            }
+
+            return $labels;
+
+        } elseif (2 === $this->depth) {
             foreach ($this->getValue() as $item) {
                 if (!isset($item['children'])) {
                     continue;

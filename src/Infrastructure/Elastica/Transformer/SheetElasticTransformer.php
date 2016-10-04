@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -115,6 +116,10 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
         $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
+
+        $this->getSearchableContent($sheet);
+
+
         return new Document($sheet->getId(), [
             'id'                   => $sheet->getId(),
             'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
@@ -135,5 +140,35 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             'hasCart'              => $hasCart,
             'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
         ]);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return string
+     */
+    private function getSearchableContent(Sheet $sheet)
+    {
+        $searchableContent = [];
+
+        foreach ($sheet->getEvent()->getLocales() as $locale) {
+            $data = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+            foreach ($data->getObjects() as $templateObject) {
+                if ($templateObject instanceof SearchableObjectInterface) {
+                    $content = $templateObject->getSearchableContent();
+
+                    if (null !== $content && !empty($content)) {
+                        $searchableContent[] = $content;
+                    } elseif (is_array($content)) {
+                        foreach ($content as $item) {
+                            $searchableContent[] = $item;
+                        }
+                    }
+                }
+            }
+        }
+
+        return implode(' ', $searchableContent);
     }
 }
