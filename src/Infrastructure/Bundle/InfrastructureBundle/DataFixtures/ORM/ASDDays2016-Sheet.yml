@@ -61,6 +61,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
             3ad4b72f: { text: "Elao" }
             97ed778d: { items: ["category2"] }
             57da9df7ced30: { boolean: "true" }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -74,6 +80,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: "Hello World Company" }
             97ed778d: { items: ["category3"] }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -88,6 +100,12 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: "World Company Inc" }
             97ed778d: { items: ["category2"] }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -103,6 +121,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             541f84d4: { text: "John" }
             838197c7: { text: "DOE" }
             1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     participant_asddays_2:
         __construct: false
         user: "@user_asddays_2"
@@ -112,6 +132,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             541f84d4: { text: "John" }
             838197c7: { text: "DOE" }
             1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
     participant_asddays_3:
         __construct: false
         user: "@user_asddays_3"
@@ -121,6 +143,8 @@ Proximum\Vimeet\Domain\Model\Participant:
             541f84d4: { text: "John" }
             838197c7: { text: "DOE" }
             1efb9cbb: { telephone: "+33909090909" }
+            4b674gba: { gender: "man" }
+            3b759fbb: { telephone: "+33069090909" }
 
 Proximum\Vimeet\Domain\Model\Transaction:
     transaction_1:

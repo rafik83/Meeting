@@ -85,7 +85,7 @@ Best practices:
 5. Merge the master branch into preprod `$ git merge origin/master`
 6. Generate the new migration : `$ bin/console doctrine:migrations:diff`
 7. Edit docblocks in generated file `/src/Infrastructure/Bundle/InfrastructureBundle/Migrations/VersionYYYYMMDDHHMMSS.php`
-8. Add a new branch, commit and push `git checkout -b migrations/VersionYYYYMMDDHHMMSS && git add && git commit -m "Add migrations" && git push origin migrations/VersionYYYYMMDDHHMMSS`
+8. Add a new branch, commit and push `git checkout -b migrations/VersionYYYYMMDDHHMMSS && git add . && git commit -m "Add migrations" && git push origin migrations/VersionYYYYMMDDHHMMSS`
 9. Add a merge request
 10. Merge migration branch into preprod : `git checkout preprod && git merge origin/migrations/VersionYYYYMMDDHHMMSS`
 11. Finally, push the preprod branch and deploy it!

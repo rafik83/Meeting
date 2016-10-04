@@ -93,3 +93,37 @@ Feature: Register and login user
     And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
     And I press "common.next"
     Then the response status code should be 200
+
+  Scenario: Redirect on registration unfinished step
+    When I go to this page "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/"
+    And I check the "Fournisseur" radio
+    And I press "common.next"
+    Then the response status code should be 200
+    When I fill in "email_email" with "test_unfinished_step@test.com"
+    And I press "common.next"
+    Then the response status code should be 200
+    When I fill in "register_new_user_password_first" with "p@ssw0rd"
+    And I fill in "register_new_user_password_second" with "p@ssw0rd"
+    And I press "common.next"
+    Then the response status code should be 200
+    Then I should see "Profil"
+    And I should see "register.step"
+    And I should see "1/3"
+    When I fill in the following:
+      | Prénom             | Paul         |
+      | Nom                | Dupont       |
+      | Téléphone portable | +33698765432 |
+      | Téléphone fixe     | +33198765432 |
+    Then I check the "gender.man" radio
+    And I select "Informatique" from "block[6c4a3a4f][item][first]"
+    And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
+    And I press "common.next"
+    Then the response status code should be 200
+    And I should see "register.step"
+    And I should see "2/3"
+    When I press "common.next"
+    Then the response status code should be 200
+    When I go to this page "http://asddays-2016.vimeet.proximum.dev/app_test.php/fr/"
+    Then I should be on this page "/fr/participant/5/step/3"
+    And I should see "register.step"
+    And I should see "3/3"

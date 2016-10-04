@@ -46,6 +46,16 @@ class Participant
     private $order;
 
     /**
+     * @var int
+     */
+    private $registrationStep;
+
+    /**
+     * @var bool
+     */
+    private $registrationComplete = false;
+
+    /**
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
@@ -170,5 +180,45 @@ class Participant
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRegistrationStep()
+    {
+        return $this->registrationStep;
+    }
+
+    /**
+     * @param int $registrationStep
+     *
+     * @return Participant
+     */
+    public function setRegistrationStep($registrationStep)
+    {
+        $this->registrationStep = $registrationStep;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRegistrationComplete()
+    {
+        return $this->registrationComplete;
+    }
+
+    /**
+     * @param boolean $registrationComplete
+     *
+     * @return Participant
+     */
+    public function setRegistrationComplete($registrationComplete)
+    {
+        $this->registrationComplete = $registrationComplete;
+
+        return $this;
     }
 }
