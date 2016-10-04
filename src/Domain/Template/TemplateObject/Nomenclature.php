@@ -276,12 +276,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
                     if (is_array($secondLevelChild)) {
                         foreach ($secondLevelChild as $lastLevelKey => $lastLevelLabel) {
                             if ($lastLevelKey === $item) {
-                                dump([$firstLevelKey, $secondLevelKey, $lastLevelLabel]);
                                 return [$firstLevelKey, $secondLevelKey, $lastLevelLabel];
                             }
                         }
                     } elseif ($secondLevelKey === $item) {
-                        return [$firstLevelKey, $secondLevelKey];
+                        return [$firstLevelKey, $secondLevelChild];
                     }
                 }
             } elseif ($firstLevelKey === $item) {

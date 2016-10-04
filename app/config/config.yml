@@ -130,6 +130,12 @@ fos_elastica:
                                 raw:
                                     type: string
                                     index: "not_analyzed"
+                        content_en:
+                            type: string
+                            analyzer: "english"
+                        content_fr:
+                            type: string
+                            analyzer: "french"
                         state:
                             type: string
                             index: "not_analyzed"

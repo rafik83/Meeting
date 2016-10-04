@@ -22,10 +22,13 @@ use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
+    private $availableLocaleForContent = ['fr', 'en'];
+
     /**
      * @var SheetInfoGuesser
      */
@@ -116,55 +119,61 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
         $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
+        $contentByLocale = [];
 
-        $this->getSearchableContent($sheet);
+        foreach ($sheet->getEvent()->getLocales() as $locale) {
+            if (!in_array($locale, $this->availableLocaleForContent)) {
+                throw new \Exception(sprintf('Locale %s is not available in elastic search content index', $locale));
+            }
 
+            $data = $this->templateDataFactory->createFromSheet($sheet, $locale);
+            $contentByLocale[sprintf('content_%s', $locale)] = $this->getSearchableContent($data->getObjects());
+        }
 
-        return new Document($sheet->getId(), [
-            'id'                   => $sheet->getId(),
-            'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
-            'state'                => $sheet->getState(),
-            'completed'            => $sheet->isCompleted(),
-            'type'                 => $sheet->getType()->getId(),
-            'categories'           => $categories,
-            'followUp'             => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
-            'participantNumber'    => count($sheet->getParticipants()),
-            'participants'         => $participants,
-            'event'                => $sheet->getEvent()->getId(),
-            'owner'                => $owner,
-            'createdAt'            => $sheet->getCreatedAt()->format('c'),
-            'inCatalog'            => $sheet->isInCatalog(),
-            'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
-            'booleanFilter'        => $filtersValue,
-            'hasOrder'             => $sheet->hasNotCancelledOrders(),
-            'hasCart'              => $hasCart,
-            'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
-        ]);
+        return new Document($sheet->getId(), array_merge(
+            [
+                'id'                   => $sheet->getId(),
+                'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+                'state'                => $sheet->getState(),
+                'completed'            => $sheet->isCompleted(),
+                'type'                 => $sheet->getType()->getId(),
+                'categories'           => $categories,
+                'followUp'             => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
+                'participantNumber'    => count($sheet->getParticipants()),
+                'participants'         => $participants,
+                'event'                => $sheet->getEvent()->getId(),
+                'owner'                => $owner,
+                'createdAt'            => $sheet->getCreatedAt()->format('c'),
+                'inCatalog'            => $sheet->isInCatalog(),
+                'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
+                'booleanFilter'        => $filtersValue,
+                'hasOrder'             => $sheet->hasNotCancelledOrders(),
+                'hasCart'              => $hasCart,
+                'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
+            ],
+            $contentByLocale
+        ));
     }
 
     /**
-     * @param Sheet $sheet
+     * @param TemplateObject[] $templatesObjects
      *
      * @return string
      */
-    private function getSearchableContent(Sheet $sheet)
+    private function getSearchableContent(array $templatesObjects)
     {
         $searchableContent = [];
 
-        foreach ($sheet->getEvent()->getLocales() as $locale) {
-            $data = $this->templateDataFactory->createFromSheet($sheet, $locale);
+        foreach ($templatesObjects as $templateObject) {
+            if ($templateObject instanceof SearchableObjectInterface) {
+                $content = $templateObject->getSearchableContent();
 
-            foreach ($data->getObjects() as $templateObject) {
-                if ($templateObject instanceof SearchableObjectInterface) {
-                    $content = $templateObject->getSearchableContent();
-
-                    if (null !== $content && !empty($content)) {
-                        $searchableContent[] = $content;
-                    } elseif (is_array($content)) {
-                        foreach ($content as $item) {
-                            $searchableContent[] = $item;
-                        }
+                if (is_array($content)) {
+                    foreach ($content as $item) {
+                        $searchableContent[] = $item;
                     }
+                } elseif (null !== $content && !empty($content)) {
+                    $searchableContent[] = $content;
                 }
             }
         }
