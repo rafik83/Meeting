@@ -30,13 +30,11 @@ class BooleanDataType extends AbstractType
         $builder
             ->add('boolean', ChoiceType::class, [
                 'choices'      => TemplateObject\BooleanObject::getBooleanValues(),
-                'choice_label' => function ($key, $value) {
-                    return sprintf('boolean.%s', $value);
-                },
                 'expanded'     => true,
                 'multiple'     => false,
+                'placeholder'  => false,
                 'label'        => $booleanObject->getOption('label', $locale),
-                'required'     => true,
+                'required'     => $booleanObject->getRequired(),
             ]);
     }
 
