@@ -72,7 +72,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                     component: "object"
                                                     type: "tag"
                                                     config:
-                                                        style: "style-1"
+                                                        style: "default"
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Catégory"
@@ -83,7 +83,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                     component: "object"
                                                     type: "tag"
                                                     config:
-                                                        style: "style-1"
+                                                        style: "default"
                                                         label:
                                                             fr: "Site internet"
                                                             en: "Website"
@@ -423,7 +423,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                     component: "object"
                                                     type: "tag"
                                                     config:
-                                                        style: "style-1"
+                                                        style: "default"
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Catégory"

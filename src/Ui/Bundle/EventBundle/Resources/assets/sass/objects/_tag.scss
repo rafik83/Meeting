@@ -24,7 +24,7 @@
 
                 &:after {
                     content: '●';
-                    color: #000000;
+                    color: $color-highlighted;
                 }
                 &:last-child:after { content: ' '; }
 

@@ -8,18 +8,20 @@
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}
-                <li>
+                <li class="highlight">
                     {% set value = taggedData[tag.tag]|default([])|join(', ') %}
                     {% if tag.tag in ["sheet_country", "participant_country"] %}
                         {% for taggedInfo in taggedData[tag.tag]|default([]) %}
-                            {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}">
+                                {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+                            </a>
                         {% endfor %}
                     {% else %}
                         {% if value is url %}
                             <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
                             </a>
                         {% else %}
-                            {{ value }}
+                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}">{{ value }}</a>
                         {% endif %}
                     {% endif %}
                 </li>
