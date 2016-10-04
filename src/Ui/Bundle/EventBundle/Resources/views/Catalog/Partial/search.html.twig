@@ -9,6 +9,10 @@
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
 
+    {% if searchForm.text is defined %}
+        {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.text }, false) }}
+    {% endif %}
+
     {#
     <form>
         <div class="filter">
