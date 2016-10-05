@@ -91,7 +91,8 @@ class SheetPreviewViewQueryHandler
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getType()->getTitle($locale),
             $this->preview->getPreview($sheet, $locale, $rule),
-            $meetingRequest
+            $meetingRequest,
+            $viewer === $sheet
         );
     }
 }
