@@ -58,6 +58,6 @@ class CreateRequest
         $this->to           = $to;
         $this->state        = Request::STATE_SENT;
         $this->creator      = $creator;
-        $this->participants = [null];
+        $this->participants = [];
     }
 }

@@ -65,27 +65,9 @@ class CreateRequestHandler
 
     /**
      * @param CreateRequest $createRequest
-     *
-     * @throws NoPreferenceWithParticipantException
      */
     public function handle(CreateRequest $createRequest)
     {
-        $participantFound  = false;
-        $noPreferenceFound = false;
-        foreach ($createRequest->participants as $participant) {
-            if (!$participant instanceof Participant) {
-                $noPreferenceFound = true;
-            }
-            
-            if ($participant instanceof  Participant) {
-                $participantFound = true;
-            }
-        }
-        
-        if (true === $participantFound && true === $noPreferenceFound) {
-            throw new NoPreferenceWithParticipantException('You can not have no preference and a participant selected at the same time');
-        }
-
         // Create new request
         $request = new Request(
             $createRequest->from,
