@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
 
 class MeetingRequestListViewQueryHandler
 {
@@ -40,14 +41,18 @@ class MeetingRequestListViewQueryHandler
     }
 
     /**
-     * @param MeetingRequestListViewQuery $meetingRequestListViewQuery
+     * @param MeetingRequestListViewQuery $query
      *
      * @return MeetingRequestListView
      */
-    public function handle(MeetingRequestListViewQuery $meetingRequestListViewQuery)
+    public function handle(MeetingRequestListViewQuery $query)
     {
+        if (!empty($query->filters['type'])) {
+            $query->filters['type'] = $this->transformTypeFilter($query->filters['type']);
+        }
+
         $meetingRequests = $this->meetingRequestRepository
-            ->getAllRequestBySheet($meetingRequestListViewQuery->sheet, $meetingRequestListViewQuery->filters);
+            ->getAllRequestBySheet($query->sheet, $query->filters);
 
         $meetingRequestListView = new MeetingRequestListView();
 
@@ -55,19 +60,37 @@ class MeetingRequestListViewQueryHandler
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
                 new MeetingRequestViewQuery(
                     $meetingRequest,
-                    $meetingRequestListViewQuery->sheet,
-                    $meetingRequestListViewQuery->locale
+                    $query->sheet,
+                    $query->locale
                 )
             );
 
             $meetingRequestListView->addRequestView($meetingRequestView);
         }
 
-        if (!empty($meetingRequestListViewQuery->filters['orderBy'])) {
-            $order = $meetingRequestListViewQuery->filters['orderBy'];
+        if (!empty($query->filters['orderBy'])) {
+            $order = $query->filters['orderBy'];
             $meetingRequestListView->sortBy($order);
         }
 
         return $meetingRequestListView;
+    }
+
+    /**
+     * Transform TypeView[] to array of IDs
+     *
+     * @param $typeViews
+     *
+     * @return array
+     */
+    public function transformTypeFilter($typeViews)
+    {
+        $types = [];
+
+        foreach($typeViews as $typeView) {
+            $types[] = $typeView->id;
+        }
+
+        return $types;
     }
 }

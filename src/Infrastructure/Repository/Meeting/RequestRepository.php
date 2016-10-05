@@ -184,18 +184,28 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
-            ->where('request.to = :sheet')
-            ->orWhere('request.from = :sheet')
+            ->where('request.to = :sheet OR request.from = :sheet')
             ->setParameter('sheet', $sheet);
 
+        // filter by state
         if (!empty($filters['state']) && $filters['state'] != Request::STATE_ALL) {
             $queryBuilder
                 ->andWhere('request.state = :state')
                 ->setParameter('state', $filters['state']);
         }
 
+        // order by
         if (empty($filters['orderBy']) || $filters['orderBy'] === Sheet\Constant::ORDER_BY_CREATED_AT) {
             $queryBuilder->orderBy('request.createdAt', 'DESC');
+        }
+
+        // filter by participant type
+        if (!empty($filters['type'])) {
+            $queryBuilder
+                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
+                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
+                ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
+                ->setParameter('types', $filters['type']);
         }
 
         return $queryBuilder->getQuery()->getResult();
