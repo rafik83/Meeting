@@ -73,12 +73,4 @@ abstract class AbstractMeetingRequestType extends AbstractType
     {
         $resolver->setRequired(['sheet', 'locale']);
     }
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'catalog_create_meeting_request';
-    }
 }

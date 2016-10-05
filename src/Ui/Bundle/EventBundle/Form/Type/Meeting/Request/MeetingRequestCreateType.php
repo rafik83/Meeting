@@ -26,4 +26,12 @@ class MeetingRequestCreateType extends AbstractMeetingRequestType
             'data_class' => CreateRequest::class,
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_create_meeting_request';
+    }
 }
