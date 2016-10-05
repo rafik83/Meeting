@@ -9,21 +9,21 @@ function CatalogSheetCardRequestCheckbox(element)
     [].forEach.call(this.all, function (item) {
         item.addEventListener('change', function (event) {
             if (this.count() === 0) {
-                this.displayNoPreference();
+                this.checkNoPreference();
             } else {
-                this.hideNoPreference();
+                this.uncheckNoPreference();
             }
         }.bind(this));
     }.bind(this));
 
-    if (this.count() === 0) {
-        this.displayNoPreference();
-    }
+
+    this.displayNoPreference();
 }
 
 CatalogSheetCardRequestCheckbox.prototype.displayNoPreference = function ()
 {
-    var noPreferenceHtml = '<div class="checkbox noPreferenceCheckbox"><label class="control-label"><input type="checkbox" disabled checked>' + this.placeholder + '</label></div>';
+    var toCheck          = this.count() === 0 ? 'checked' : '';
+    var noPreferenceHtml = '<div class="checkbox noPreferenceCheckbox"><label class="control-label"><input type="checkbox" disabled ' + toCheck + '>' + this.placeholder + '</label></div>';
 
     var node = document.createElement("div");
     node.innerHTML = noPreferenceHtml;
@@ -31,10 +31,17 @@ CatalogSheetCardRequestCheckbox.prototype.displayNoPreference = function ()
     this.element.appendChild(node);
 };
 
-CatalogSheetCardRequestCheckbox.prototype.hideNoPreference = function ()
+CatalogSheetCardRequestCheckbox.prototype.checkNoPreference = function ()
 {
     [].forEach.call(this.element.getElementsByClassName("noPreferenceCheckbox"), function (element) {
-        $(element).remove();
+        element.querySelector('input[type=checkbox]').checked = true;
+    }.bind(this));
+};
+
+CatalogSheetCardRequestCheckbox.prototype.uncheckNoPreference = function ()
+{
+    [].forEach.call(this.element.getElementsByClassName("noPreferenceCheckbox"), function (element) {
+        element.querySelector('input[type=checkbox]').checked = false;
     }.bind(this));
 };
 
