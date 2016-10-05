@@ -3,7 +3,23 @@
 <div class="catalog__research">
     <div class="filter">
         <h3>{{ form_label(searchForm.state) }}</h3>
-        {{ form_widget(searchForm.state) }}
+
+        {% for state in searchForm.children.state %}
+            <div class="radio">
+                <label class="control-label checkbox-inline">
+                    <span class="filter-label">
+                        {{ form_widget(state) }}
+                        {{ state.vars.label|trans({}, state.vars.translation_domain) }}
+                    </span>
+                    <span class="details">
+                        {% if stateListsView.byState(state.vars.value) is not null %}
+                            {{ stateListsView.byState(state.vars.value).count }}
+                        {% endif %}
+                    </span>
+                </label>
+            </div>
+        {% endfor %}
+
     </div>
 
 </div>

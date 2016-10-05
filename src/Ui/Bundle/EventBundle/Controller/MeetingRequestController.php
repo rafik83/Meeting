@@ -17,7 +17,10 @@ use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\StatusListViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
+use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -68,10 +71,14 @@ class MeetingRequestController extends Controller
             $filters = $searchForm->getData();
         }
 
-        $query = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
+        $query       = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
+        $statusQuery = new StateListViewQuery($sheet);
 
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
+
+        /** @var StateListsView $stateListsView */
+        $stateListsView         = $this->get('tactician.commandbus.query')->handle($statusQuery);
 
         $template = 'EventBundle:MeetingRequest:listRequest.html.twig';
 
@@ -83,6 +90,7 @@ class MeetingRequestController extends Controller
             'event'              => $eventDomain->getEvent(),
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestListView,
+            'stateListsView'     => $stateListsView,
             'searchForm'         => $searchForm->createView(),
             'isCatalog'          => true, // set menu link visible,
             'isMeeting'          => true,

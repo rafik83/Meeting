@@ -305,4 +305,30 @@ class RequestRepository implements RequestRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $state
+     *
+     * @return int
+     */
+    public function countSheetState(Sheet $sheet, $state)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('request.from = :sheet')
+            ->orWhere('request.to = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        if ($state !== Request::STATE_ALL) {
+            $queryBuilder
+                ->andWhere('request.state = :state')
+                ->setParameter('state', $state);
+        }
+
+        return count($queryBuilder->getQuery()->getResult());
+    }
 }
