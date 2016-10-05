@@ -43,19 +43,15 @@ CatalogSheetCard.prototype.onButtonClick = function(button)
 
 CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
 {
-    new CatalogSheetCardRequestCheckbox(this.modal.querySelector('[data-participants-checkbox]'));
+    if (this.modal.querySelector('[data-participants-checkbox]') !== null) {
+        new CatalogSheetCardRequestCheckbox(this.modal.querySelector('[data-participants-checkbox]'));
+    }
 
     $(this.modal.querySelector('form')).on('submit', function (event) {
         this.handleRequestForm();
 
         return false;
     }.bind(this));
-};
-
-CatalogSheetCard.prototype.requestFormCheckbox = function ()
-{
-    var checkboxes            = $(this.modal).querySelectorAll('input[type=checkbox]');
-    var placeholderPreference = $(this.modal).querySelector('data-placeholder-preference');
 };
 
 CatalogSheetCard.prototype.handleRequestForm = function ()
