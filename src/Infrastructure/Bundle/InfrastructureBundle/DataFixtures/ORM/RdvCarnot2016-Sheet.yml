@@ -9,6 +9,14 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: 'WorldCompanyInc' }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        owner: '@user_test'
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     # Proximum sheets
@@ -21,6 +29,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
          - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_exposant:
         __construct:
@@ -31,6 +46,14 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        owner: '@proximum_user_exposant'
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_carnot:
         __construct:
@@ -41,6 +64,14 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        owner: '@proximum_user_carnot'
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_admin:
         __construct:
@@ -51,6 +82,14 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        owner: '@proximum_user_admin'
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_test:
         __construct:
@@ -61,6 +100,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
     proximum_sheet_ui:
         __construct:
@@ -71,6 +117,14 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: <company()> }
+            93de093f: { text: "10 rue saint marc" }
+            de66af5d: { text: "75002" }
+            d224f0e7: { text: "Paris" }
+            e801edd4: { country: "FR" }
+            57da9df7ced30: { boolean: true }
+            57da8f210fbf2: { text: "Mon activité" }
+        owner: '@proximum_user_ui'
+        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
 
     # Random
