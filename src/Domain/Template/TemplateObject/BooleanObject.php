@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class BooleanObject extends EditableObject implements ContentObjectInterface
 {
-    const YES = 'yes';
-    const NO  = 'no';
+    const YES = true;
+    const NO  = false;
 
     /**
      * @param bool $boolean
@@ -33,8 +33,8 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
     public static function getBooleanValues()
     {
         return [
-            self::YES => true,
-            self::NO  => false,
+            'boolean.yes' => true,
+            'boolean.no'  => false,
         ];
     }
 
@@ -67,7 +67,7 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
      */
     public function getBoolean()
     {
-        return isset($this->data['boolean']) ? $this->data['boolean'] : false;
+        return isset($this->data['boolean']) ? $this->data['boolean'] : null;
     }
 
     /**
@@ -75,7 +75,7 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
      */
     public function getContentValue()
     {
-        return null !== $this->getBoolean() ? ($this->getBoolean() ? self::YES : self::NO) : self::NO;
+        return null !== $this->getBoolean() ? ($this->getBoolean() ? self::YES : self::NO) : null;
     }
 
     /**
