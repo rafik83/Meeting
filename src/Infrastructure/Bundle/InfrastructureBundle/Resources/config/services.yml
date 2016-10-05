@@ -1863,6 +1863,14 @@ services:
             - '@sheet.preview'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
 
+    query.meeting_request.status_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\StateListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery }
+
+
     #
     # Elastic Transformer
     #

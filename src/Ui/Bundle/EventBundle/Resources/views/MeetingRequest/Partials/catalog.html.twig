@@ -1,4 +1,7 @@
-{{ include('EventBundle:MeetingRequest/Partials:search.html.twig', {'searchForm': searchForm}) }}
+{{ include('EventBundle:MeetingRequest/Partials:search.html.twig', {
+    'searchForm': searchForm,
+    'stateListsView': stateListsView
+}) }}
 
 <div class="catalog__list catalog__list--block">
     <div class="row">
