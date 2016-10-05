@@ -23,8 +23,7 @@ Feature: Meeting Request Update
     Then I should see "event.meeting.request.state.from.sent"
     And I follow "event.meeting.listRequest.edit"
     And I should be on this page "/fr/sheet/1/meeting/request/1/edit"
-    When I check "Paul GASCOIGNE"
-    And I fill in "form.meeting_request_update_from.children.description.label" with "My meeting request description"
+    When I fill in "form.meeting_request_update_from.children.description.label" with "My meeting request description"
     And I press "form.meeting_request_update_from.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.meeting_request.edit.success"
