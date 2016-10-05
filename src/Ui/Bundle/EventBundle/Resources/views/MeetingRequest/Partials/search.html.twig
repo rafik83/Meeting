@@ -2,7 +2,7 @@
 
 <div class="catalog__research">
     <div class="filter">
-        <h3>{{ form_label(searchForm.state) }}</h3>
+        <h3>{{ searchForm.state.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
 
         {% for state in searchForm.children.state %}
             <div class="radio">
@@ -19,9 +19,13 @@
                 </label>
             </div>
         {% endfor %}
-
     </div>
 
+    <div class="filter">
+        <h3>{{ searchForm.type.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+
+        {{ form_widget(searchForm.type) }}
+    </div>
 </div>
 
 <div class="catalog__filters">

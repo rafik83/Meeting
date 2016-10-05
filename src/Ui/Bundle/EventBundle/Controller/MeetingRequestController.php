@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StatusListViewQuery;
+use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -57,11 +58,16 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
+        $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
+            $sheet, $request->getLocale()
+        ));
+
         $filters    = [];
         $searchForm = $this->createForm(SearchType::class, $filters, [
-            'label' => null,
-            'action'=> $this->generateUrl('event_meeting_list_request', [
-                'sheet' => $sheet->getId()
+            'label'     => null,
+            'typeViews' => $typeViews,
+            'action'    => $this->generateUrl('event_meeting_list_request', [
+                'sheet' => $sheet->getId(),
             ]),
         ]);
 

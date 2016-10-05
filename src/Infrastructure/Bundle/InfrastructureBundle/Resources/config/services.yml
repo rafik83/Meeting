@@ -1772,6 +1772,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypeViewQuery }
 
+    query.type.meeting_type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQueryHandler
+        arguments:
+            - '@catalog.visible_participation_types'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
+
     ##
     # Navigation builder
     ##

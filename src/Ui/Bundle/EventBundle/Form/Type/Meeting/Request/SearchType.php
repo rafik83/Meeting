@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,6 +45,18 @@ class SearchType extends AbstractType
                 'choice_label' => function ($state) {
                     return 'form.search.meeting.state.' . $state;
                 },
+            ])
+            ->add('type', ChoiceType::class, [
+                'label'        => 'form.search.type.label',
+                'expanded'     => true,
+                'multiple'     => true,
+                'choices'      => $options['typeViews'],
+                'choice_value' => function (TypeView $typeView) {
+                    return $typeView->id;
+                },
+                'choice_label' => function (TypeView $typeView) {
+                    return $typeView->title;
+                },
             ]);
     }
 
@@ -52,6 +65,7 @@ class SearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['typeViews']);
         $resolver->setDefaults([
             'required'        => false,
             'method'          => 'GET',
