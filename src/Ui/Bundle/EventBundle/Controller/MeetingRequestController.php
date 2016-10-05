@@ -63,6 +63,8 @@ class MeetingRequestController extends Controller
         ));
 
         $filters    = [];
+        $filters['type'] = $typeViews; // pre fill filters
+
         $searchForm = $this->createForm(SearchType::class, $filters, [
             'label'     => null,
             'typeViews' => $typeViews,
