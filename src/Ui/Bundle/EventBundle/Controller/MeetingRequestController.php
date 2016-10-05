@@ -16,16 +16,22 @@ use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
+use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\StatusListViewQuery;
+use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
+use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestRefuseType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateFromType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType;
-use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -51,16 +57,44 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
-        $meetingRequest = $this->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->getRequestSentBySheet($sheet);
+        $filters    = [];
+        $searchForm = $this->createForm(SearchType::class, $filters, [
+            'label' => null,
+            'action'=> $this->generateUrl('event_meeting_list_request', [
+                'sheet' => $sheet->getId()
+            ]),
+        ]);
 
-        $requestViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
-            ->generate($meetingRequest, $this->getUser(), $sheet, $request->getLocale());
+        $searchForm->handleRequest($request);
 
-        return $this->render('EventBundle:MeetingRequest:listRequest.html.twig', [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'request_views' => $requestViews,
+        if ($searchForm->isValid()) {
+            $filters = $searchForm->getData();
+        }
+
+        $query       = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
+        $statusQuery = new StateListViewQuery($sheet);
+
+        /** @var MeetingRequestListView $meetingRequestListView */
+        $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
+
+        /** @var StateListsView $stateListsView */
+        $stateListsView         = $this->get('tactician.commandbus.query')->handle($statusQuery);
+
+        $template = 'EventBundle:MeetingRequest:listRequest.html.twig';
+
+        if ($request->isXmlHttpRequest()) {
+            $template = 'EventBundle:MeetingRequest/Partials:catalog.html.twig';
+        }
+
+        return $this->render($template, [
+            'event'              => $eventDomain->getEvent(),
+            'sheet'              => $sheet,
+            'meetingRequestView' => $meetingRequestListView,
+            'stateListsView'     => $stateListsView,
+            'searchForm'         => $searchForm->createView(),
+            'isCatalog'          => true, // set menu link visible,
+            'isMeeting'          => true,
+            'resultsCount'       => count($meetingRequestListView->getMeetingRequestsView()),
         ]);
     }
 

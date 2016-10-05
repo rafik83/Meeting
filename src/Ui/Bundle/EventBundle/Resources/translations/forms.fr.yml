@@ -27,9 +27,17 @@ form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bleue'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.search.orderBy.alphabetical: 'Ordre alphabétique'
+form.search.orderBy.createdAt: 'Ordre chronologique'
 form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
 form.search.orderBy.label: TRIER
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
+form.search.meeting.state.label: 'Gestion de RDV'
+form.search.meeting.state.all: 'Tous les statuts'
+form.search.meeting.state.approved: Acceptées
+form.search.meeting.state.sent: 'Demandes en attente'
+form.search.meeting.state.refused: Refusées
+form.search.meeting.state.cancelled: Annulées
+form.search.meeting.state.receive: 'Propositions reçues'
 form.search.type.label: Participants
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL

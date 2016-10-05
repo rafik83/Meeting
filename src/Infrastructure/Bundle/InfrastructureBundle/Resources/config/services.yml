@@ -1811,6 +1811,9 @@ services:
             - '@navigation.navigation_builder'
     query.navigation.category_happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler
+        arguments:
+            - '@datetime'
+            - '@navigation.navigation_builder'
     query.navigation.category_member_space_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQueryHandler
         arguments:
@@ -1827,6 +1830,28 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+
+    query.meeting_request.meeting_request_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.meeting_request.meeting_request_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
+
+    query.meeting_request.meeting_request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler
+        arguments:
+            - '@sheet.preview'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+
+    query.meeting_request.status_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\StateListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery }
+
 
     #
     # Elastic Transformer

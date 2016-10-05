@@ -1,0 +1,33 @@
+<div class="col-md-4">
+    <div class="catalog__item {#catalog__item--checked#}">
+        <header></header>
+        <div class="content">
+            {% for object in meetingRequestView.previewViews %}
+                {% if object.isImage and object.content is not empty %}
+                    <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+                {% else %}
+                    {% if object.isStrong %}
+                        <p><strong>{{ object.content }}</strong></p>
+                    {% else %}
+                        <p>{{ object.content }}</p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <footer>
+            <div class="actions">
+                <a id="complete-sheet-link-{{ meetingRequestView.sheet.id }}" href="{{ path('event_catalog_complete_sheet', {'sheet': meetingRequestView.sheet.id }) }}" target="_blank"><i class="icon-Document_1"></i> <span>{{ 'catalog.complete_sheet'|trans }}</span></a>
+            </div>
+
+            <p class="tags">
+                <i class="icon-LienTag"></i> {{ meetingRequestView.type }}
+            </p>
+
+            <div class="button">
+                <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander
+                    un RDV
+                </button>
+            </div>
+        </footer>
+    </div>
+</div>

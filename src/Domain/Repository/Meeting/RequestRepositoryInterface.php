@@ -58,10 +58,11 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     * @param array $filters
      *
      * @return Request[]
      */
-    public function getAllRequestBySheet(Sheet $sheet);
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
 
     /**
      * @param Event $event
@@ -97,6 +98,14 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getRequestsByEventAndUser(Event $event, User $user);
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $state
+     *
+     * @return Request[]
+     */
+    public function countSheetState(Sheet $sheet, $state);
 
     /**
      * @param Sheet $sheet

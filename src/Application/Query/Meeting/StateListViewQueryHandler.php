@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Meeting;
+
+use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Application\View\Meeting\StateListView;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+
+class StateListViewQueryHandler
+{
+    /**
+     * @var RequestRepositoryInterface
+     */
+    private $requestRepository;
+
+    /**
+     * StatusListViewQueryHandler constructor.
+     *
+     * @param RequestRepositoryInterface $requestRepository
+     */
+    public function __construct(RequestRepositoryInterface $requestRepository)
+    {
+        $this->requestRepository = $requestRepository;
+    }
+
+    /**
+     * @param StateListViewQuery $query
+     *
+     * @return StateListsView
+     */
+    public function handle(StateListViewQuery $query)
+    {
+        $lists = new StateListsView();
+
+        foreach (Request::getAllStates() as $state) {
+            $count = $this->requestRepository->countSheetState($query->sheet, $state);
+
+            $lists->addStateListView(new StateListView(
+                $state,
+                $count
+            ));
+        }
+
+        return $lists;
+    }
+}
