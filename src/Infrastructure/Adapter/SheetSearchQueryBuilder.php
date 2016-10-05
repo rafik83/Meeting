@@ -108,6 +108,7 @@ class SheetSearchQueryBuilder
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
+        $this->filterByContent($filters);
     }
 
     /**
@@ -126,6 +127,26 @@ class SheetSearchQueryBuilder
         }
 
         $this->filterBySheetNameOrParticipantLastname($filters['text']);
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByContent(array &$filters)
+    {
+        if (!isset($filters['content']) || null === $filters['content']) {
+            return;
+        }
+
+        $filterByKeywordsQuery = new BoolQuery();
+
+        $matchSheetName = new Match('sheetName', $filters['content']);
+        $filterByKeywordsQuery->addShould($matchSheetName);
+
+        $matchContent = new Match('content_fr', $filters['content']);
+        $filterByKeywordsQuery->addShould($matchContent);
+
+        $this->query->addMust($filterByKeywordsQuery);
     }
 
     /**
@@ -214,8 +235,6 @@ class SheetSearchQueryBuilder
 
                 $this->query->addMust($filterByTypes);
             }
-
-
         }
     }
 
@@ -382,7 +401,7 @@ class SheetSearchQueryBuilder
     /**
      * @param string $predefined
      */
-    private function filterByBooleanFilter($predefined)
+    protected function filterByBooleanFilter($predefined)
     {
         $nested     = new Nested();
         $boolQuery  = new BoolQuery();

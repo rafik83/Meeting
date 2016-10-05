@@ -90,8 +90,8 @@ class SearchType extends AbstractType
         ]);
 
         $builder
-            ->add('text', TextType::class, [
-                'label' => 'form.search.text.label',
+            ->add('content', TextType::class, [
+                'label' => 'form.search.content.label',
             ]);
     }
 
