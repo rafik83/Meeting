@@ -14,8 +14,12 @@
 
 <div class="modal-body">
     <div class="object--form--field">
-        {% for key, child in form if key != 'submit' and key != 'selectedProduct' %}
-            {{ form_row(child) }}
+        {% for key, child in form if key != 'submit'%}
+            {% if key == 'participants' %}
+                {{ form_row(child, {'attr': { 'data-participants-checkbox': 'here', 'data-placeholder-preference': 'form.catalog_create_meeting_request.children.participants.default.no_preference'|trans({}, 'forms') }}) }}
+            {% else %}
+                {{ form_row(child) }}
+            {% endif %}
         {% endfor %}
     </div>
     <div class="validation">

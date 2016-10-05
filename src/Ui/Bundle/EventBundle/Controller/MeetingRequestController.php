@@ -132,6 +132,10 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('The viewer is not allowed to create a meeting request with this sheet');
         }
 
+        if ($from === $sheet) {
+            throw $this->createNotFoundException('You can not request a meeting with yourself');
+        }
+
         $createRequest = new CreateRequest($from, $sheet, $this->getUser());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', ['sheet' => $sheet->getId()]),
@@ -140,35 +144,20 @@ class MeetingRequestController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($createRequest);
-                $this->addFlash('success', 'flash.meeting_request.create.success');
+            $this->get('tactician.commandbus')->handle($createRequest);
 
-                $response = new JsonResponse();
-                $response->setData([
-                    'status' => 'ok',
-                    'html'   => '',
-                ]);
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'ok',
+                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig'),
+            ]);
 
-                return $response;
-            } catch (NoPreferenceWithParticipantException $exception) {
-                $form->get('participants')->addError(new FormError('validators.catalog.create_meeting_request.no_preference_with_participant'));
-
-                $response = new JsonResponse();
-                $response->setData([
-                    'status' => 'error',
-                    'html'   => $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
-                        'form' => $form->createView(),
-                    ])
-                ]);
-
-                return $response;
-            }
-        } elseif (!$form->isValid()) {
+            return $response;
+        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
             $response = new JsonResponse();
             $response->setData([
                 'status' => 'error',
-                'html'   => $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
+                'html'   => $this->renderView('EventBundle:MeetingRequest:createRequest.html.twig', [
                     'form' => $form->createView(),
                 ])
             ]);
