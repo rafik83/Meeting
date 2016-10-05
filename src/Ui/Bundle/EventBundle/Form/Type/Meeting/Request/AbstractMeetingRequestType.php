@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
@@ -51,18 +50,17 @@ abstract class AbstractMeetingRequestType extends AbstractType
         if (1 < $sheet->countParticipant()) {
             $builder
                 ->add('participants', ChoiceType::class, [
-                    'choices'      => array_merge($sheet->getParticipants()->toArray(), [null => null]),
+                    'choices'      => $sheet->getParticipants()->toArray(),
                     'choice_label' => function ($participant) use ($options) {
-                        if ($participant instanceof  Participant) {
-                            return $this->participantInfoGuesser
-                                ->guessParticipantCompleteName($participant, $options['locale']);
-                        } else {
-                            return 'form.catalog_create_meeting_request.children.participants.default.no_preference';
-                        }
+                        return $this->participantInfoGuesser
+                            ->guessParticipantCompleteName($participant, $options['locale']);
                     },
-                    'expanded' => true,
-                    'multiple' => true,
-                    'required' => false,
+                    'expanded'     => true,
+                    'multiple'     => true,
+                    'required'     => false,
+                    'choice_attr'  => function() {
+                        return ['class' => 'request-checkbox-select-participant'];
+                    },
                 ])
             ;
         }
