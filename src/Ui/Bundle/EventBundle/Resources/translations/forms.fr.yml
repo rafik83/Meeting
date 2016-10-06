@@ -3,6 +3,9 @@ boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.catalog_approve_meeting_request.children.description.label: 'Répondre à la proposition de RDV?'
+form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
+form.catalog_approve_meeting_request.children.submit.label: 'Accepter la proposition'
 form.catalog_create_meeting_request.children.description.label: 'Motiver votre demande de RDV ?'
 form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
 form.catalog_create_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
