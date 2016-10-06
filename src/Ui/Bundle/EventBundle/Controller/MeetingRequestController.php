@@ -18,10 +18,10 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
-use Proximum\Vimeet\Application\Query\Meeting\StatusListViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
@@ -62,7 +62,7 @@ class MeetingRequestController extends Controller
         $searchForm = $this->createForm(SearchType::class, $filters, [
             'label' => null,
             'action'=> $this->generateUrl('event_meeting_list_request', [
-                'sheet' => $sheet->getId()
+                'sheet' => $sheet->getId(),
             ]),
         ]);
 
@@ -172,6 +172,13 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
+        if (null !== $this
+                ->get('vimeet_infrastructure.repository.meeting.request_repository')
+                ->getRequestBetweenSheets($sheet, $from)
+        ) {
+            throw $this->createNotFoundException('You can not request a meeting as there is already one');
+        }
+
         $createRequest = new CreateRequest($from, $sheet, $this->getUser());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', ['sheet' => $sheet->getId()]),
@@ -195,7 +202,7 @@ class MeetingRequestController extends Controller
                 'status' => 'error',
                 'html'   => $this->renderView('EventBundle:MeetingRequest:createRequest.html.twig', [
                     'form' => $form->createView(),
-                ])
+                ]),
             ]);
 
             return $response;
@@ -210,40 +217,73 @@ class MeetingRequestController extends Controller
      * Approve a meeting request
      *
      * @param Request        $request
-     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
      * @return RedirectResponse|Response
      */
-    public function approveRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
-    {
+    public function approveRequestAction(
+        Request $request,
+        Sheet $sheet,
+        MeetingRequest $meetingRequest
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($this->getUser(), $meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
         }
 
+        $messages = $this
+            ->get('vimeet_infrastructure.repository.meeting.message_repository')
+            ->getMessagesByMeetingRequest($meetingRequest)
+        ;
+        $messageFrom = null;
+
+        /** @var Message $message */
+        foreach ($messages as $message) {
+            if ($message->getFrom() === $meetingRequest->getFromSheet()) {
+                $messageFrom = $message;
+            }
+        }
+
         $approveRequest = new ApproveRequest($meetingRequest, new \DateTime());
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
+            'action' => $this->generateUrl('event_meeting_request_approve', [
+                'sheet' => $sheet->getId(),
+                'meetingRequest' => $meetingRequest->getId()
+            ]),
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
         ]);
+        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($approveRequest);
-            $this->addFlash('success', 'flash.meeting_request.approved.success');
 
-            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'ok',
+                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig'),
+            ]);
+
+            return $response;
+        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'error',
+                'html'   => $this->renderView('EventBundle:MeetingRequest:approvedRequest.html.twig', [
+                    'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+                    'message'  => $messageFrom->getContent(),
+                    'form'     => $form->createView(),
+                ]),
+            ]);
+
+            return $response;
         }
 
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
-
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
-            'event'    => $eventDomain->getEvent(),
-            'sheet'    => $sheet,
             'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
+            'message'  => $messageFrom->getContent(),
             'form'     => $form->createView(),
         ]);
     }
@@ -409,13 +449,13 @@ class MeetingRequestController extends Controller
             $command = new UpdateRequestFrom($meetingRequest, new \DateTime(), $this->getUser());
             $form    = $this->createForm(MeetingRequestUpdateFromType::class, $command, [
                 'sheet'  => $sheet,
-                'locale' => $request->getLocale()
+                'locale' => $request->getLocale(),
             ]);
         } elseif ($meetingRequest->getToSheet() === $sheet) {
             $command = new UpdateRequestTo($meetingRequest, new \DateTime(), $this->getUser());
             $form    = $this->createForm(MeetingRequestUpdateToType::class, $command, [
                 'sheet'  => $sheet,
-                'locale' => $request->getLocale()
+                'locale' => $request->getLocale(),
             ]);
         } else {
             throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
