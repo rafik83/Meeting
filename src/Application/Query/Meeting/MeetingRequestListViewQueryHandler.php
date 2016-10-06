@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\View\TypeView;
 
 class MeetingRequestListViewQueryHandler
 {
