@@ -17,14 +17,14 @@ Feature: Change my mail
 
   Scenario: I can change my email
     When I go to this page "/fr/account/change_mail/azertyuiopqsdfghjklmwxcvbn"
-    Then I should be on this page "/fr/sheet"
+    Then I should be on this page "/fr/participant/1/step/1"
 
   Scenario: I can change my email full process
     When I go to this page "/fr/account/change-mail"
     Then I fill in the following:
       | form.change_mail.children.mail.label | truc@bidule.com |
     And I press "common.validate"
-    Then I should be on "/fr/sheet"
+    Then I should be on "/fr/participant/1/step/1"
     And the response status code should be 200
     And I should see "flash.change_mail.success"
     And the "change_mail_old" mail should be sent to "test@test.com"
@@ -32,7 +32,7 @@ Feature: Change my mail
     And the "change_mail_new" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/account/change_mail/"
     Then I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/account/change_mail/" link in the "change_mail_new" mail
     And the response status code should be 200
-    Then I should be on "/fr/sheet"
+    Then I should be on "/fr/participant/1/step/1"
 
 
 

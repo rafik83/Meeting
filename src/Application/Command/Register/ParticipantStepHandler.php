@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -52,7 +53,7 @@ class ParticipantStepHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
-     * @param DelayedEventDispatcher       $eventDispatcher
+     * @param DelayedEventDispatcher         $eventDispatcher
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      */
     public function __construct(
@@ -108,6 +109,13 @@ class ParticipantStepHandler
 
         // send email notification when user arrive to the last step of register funnel
         $this->triggerEvent($participantStep);
+
+        // trigger registration step process
+        $this->eventDispatcher->dispatch(Events::REGISTRATION_STEP, new RegistrationStepEvent(
+            $participantStep->sheet,
+            $participantStep->participant,
+            $participantStep->step
+        ));
 
         // Send Sheet Update Event to recalculate completeness of the sheet
         $sheetUpdatedEvent = new SheetUpdatedEvent($participantStep->sheet);

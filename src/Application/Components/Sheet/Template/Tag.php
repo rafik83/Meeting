@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
 final class Tag
 {
-    const GENERIC_TAGS_NUMBER = 50;
+    const GENERIC_TAGS_NUMBER = 60;
 
     // Getter
     const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
