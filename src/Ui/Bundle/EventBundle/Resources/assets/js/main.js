@@ -55,7 +55,7 @@ function init (target) {
         this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
     });
 
-    [].forEach.call(target.querySelectorAll('.catalog__item'), function (element) {
+    [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
         new CatalogSheetCard(element, target.getElementById('request-modal'));
     });
 
