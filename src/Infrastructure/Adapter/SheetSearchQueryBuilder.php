@@ -161,6 +161,7 @@ class SheetSearchQueryBuilder
         $multiMatch
             ->setMinimumShouldMatch('70%')
             ->setFields($fields)
+            ->setFuzziness(1)
             ->setQuery($filters['content']);
 
         $this->query->addMust($multiMatch);
