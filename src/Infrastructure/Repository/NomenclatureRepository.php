@@ -98,7 +98,25 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     }
 
     /**
-     * @param Nomenclature $nomenclature
+     * {@inheritdoc}
+     */
+    public function findByEventAndIds(Event $event, array $ids)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('nomenclature')
+            ->from(Nomenclature::class, 'nomenclature')
+            ->where('nomenclature.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->andWhere('nomenclature.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function add(Nomenclature $nomenclature)
     {
@@ -107,7 +125,7 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     }
 
     /**
-     * @param Nomenclature $nomenclature
+     * {@inheritdoc}
      */
     public function set(Nomenclature $nomenclature)
     {
@@ -115,10 +133,7 @@ class NomenclatureRepository implements NomenclatureRepositoryInterface
     }
 
     /**
-     * @param Nomenclature $nomenclature
-     * @param Event        $event
-     *
-     * @return Nomenclature|null
+     * {@inheritdoc}
      */
     public function findClone($nomenclature, $event)
     {

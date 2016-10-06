@@ -233,6 +233,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Filter\BooleanTemplateFilterRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.filter.tagged_nomenclature_filter_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Filter\TaggedNomenclatureFilterRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1501,6 +1505,7 @@ services:
             - '@repository.template.registration_template_repository'
             - '@template.template_data_factory'
             - '@application.nomenclature.nomenclature_cloner'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
 
     #
@@ -1753,28 +1758,35 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
-    query.sheet.catalog_sheet_preview_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\CatalogSheetPreviewViewQueryHandler
+    query.catalog.sheet_preview_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@domain.rule.composer'
             - '@sheet.preview'
             - '@repository.rule_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_search_adapter'
-            - '@query.sheet.catalog_sheet_preview_view_query_handler'
+            - '@query.catalog.sheet_preview_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
-    query.type.catalog_type_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQueryHandler
+    query.catalog.type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@adapter.sheet_search_adapter'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\CatalogTypeViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery }
+    query.catalog.organization_category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQueryHandler
+        arguments:
+            - '@catalog.tagged_nomenclature_filter_getter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery }
     query.type.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler
         arguments:
@@ -1950,6 +1962,12 @@ services:
         class: Proximum\Vimeet\Domain\Catalog\SheetAccessChecker
         arguments:
             - '@catalog.visible_participation_types'
+
+    catalog.tagged_nomenclature_filter_getter:
+        class: Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter
+        arguments:
+            - '@repository.filter.tagged_nomenclature_filter_repository'
+            - '@repository.nomenclature_repository'
 
     #
     # Promotion

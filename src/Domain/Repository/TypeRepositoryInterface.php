@@ -119,12 +119,13 @@ interface TypeRepositoryInterface
     public function getAllowedTypesByEvent(Admin $admin, Event $event);
 
     /**
-     * @param Event  $event
-     * @param string $locale
+     * @param Event      $event
+     * @param string     $locale
+     * @param array|null $types
      *
      * @return Type[] indexed by Type::id
      */
-    public function getTypesTitleByEventAndLocale(Event $event, $locale);
+    public function getTypesTitleByEventAndLocale(Event $event, $locale, array $types = null);
 
     /**
      * @param User|int $user

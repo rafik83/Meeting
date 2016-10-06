@@ -51,8 +51,10 @@ class UpdateHandler
         $this->registrationTemplateRepository->set($registrationTemplate);
 
         if (null !== $update->registrationTemplate->getEvent()) {
-            $registrationTemplateUpdated = new RegistrationTemplateUpdatedEvent($registrationTemplate->getEvent());
-            $this->eventDispatcher->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated);
+            $this->eventDispatcher->dispatch(
+                Events::REGISTRATION_TEMPLATE_UPDATED,
+                new RegistrationTemplateUpdatedEvent($registrationTemplate->getEvent())
+            );
         }
     }
 }

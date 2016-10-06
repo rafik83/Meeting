@@ -14,6 +14,7 @@ use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
+use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
@@ -46,17 +47,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale)
+    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations)
     {
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
 
-        if (null !== $orderBy) {
-            if (Constant::ORDER_BY_ALPHABETICAL === $orderBy) {
-                $query->addSort(['sheetName.raw' => 'asc']);
-            } else if(Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
-                $query->addSort(['inCatalogAt' => 'desc']);
-            }
+        if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
+            $query->addSort(['inCatalogAt' => 'desc']);
+        } else {
+            $query->addSort(['sheetName.raw' => 'asc']);
+        }
+
+        if (true === $getAggregations) {
+            $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
+            $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
         }
 
         try {
@@ -65,32 +69,70 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             throw new UnavailableCurrentPageException(sprintf('Current page %s not available', $page));
         }
 
-        return new PaginatedResult($result->getCurrentPageResults(), $page, $limit, $result->getNbResults());
+        /** @var PaginatorAdapterInterface $paginatorAdapter */
+        $paginatorAdapter = $result->getAdapter();
+
+        return new PaginatedResult(
+            $result->getCurrentPageResults(),
+            $page,
+            $limit,
+            $result->getNbResults(),
+            true === $getAggregations ? $paginatorAdapter->getAggregations() : null
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getTypeStats(Event $event, array $filters)
+    public function getTypeAggregations(Event $event, array $filters, $filterToRemove)
     {
+        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrganizationCategoryAggregations(Event $event, array $filters, $filterToRemove)
+    {
+        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_ORGANIZATION_CATEGORY);
+    }
+
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $filterToRemove
+     * @param string $elasticField
+     *
+     * @return array
+     */
+    private function searchAggregations(Event $event, array $filters, $filterToRemove, $elasticField)
+    {
+        // remove filter
+        unset($filters[$filterToRemove]);
+
+        // add inCatalog filter
+        $filters = array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $filters);
+
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
-
-        $tagsAggregation = new Terms('type');
-        $tagsAggregation->setField('type');
-
-        $query->addAggregation($tagsAggregation);
+        $query->addAggregation($this->getAggregation($elasticField));
         $query->setSize(0);
 
         $result = $this->searchable->search($query);
 
-        $typeStats = [];
-        $typesCount = $result->getAggregations()['type']['buckets'];
+        return $result->getAggregations();
+    }
 
-        foreach ($typesCount as $typeCount) {
-            $typeStats[$typeCount['key']] = $typeCount['doc_count'];
-        }
+    /**
+     * @param string $field
+     *
+     * @return Terms
+     */
+    private function getAggregation($field)
+    {
+        $aggregation = new Terms($field);
+        $aggregation->setField($field);
 
-        return $typeStats;
+        return $aggregation;
     }
 }

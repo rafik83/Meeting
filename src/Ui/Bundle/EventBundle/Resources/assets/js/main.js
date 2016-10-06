@@ -32,7 +32,7 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: true
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
 
@@ -50,7 +50,7 @@ function init (target) {
         $('.catalog').toggleClass('catalog--advanced');
     });
 
-    $('.catalog form input', target).on('change', function (event) {
+    $('.catalog form input, .catalog form select', target).on('change', function () {
         this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
     });
 

@@ -1,27 +1,31 @@
-
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
     {% set label = item.label(locale, fallback) %}
-    {% if taggedData[item.tag] is defined %}
-        {% set value = taggedData[item.tag]|join(', ')|default %}
-    {% else %}
-        {% set value = [] %}
-    {% endif %}
-
-    {% if value is not empty %}
-        {% if value is url %}
-            <p>
-                <a href="{{ value }}" class="btn btn-primary"target="_blank">
-                    <i class="icon-Desktop"></i>
-                    {{ label }}
-                </a>
-            </p>
-        {% else %}
-            <header>
-                <h2>{{ label }}</h2>
-            </header>
-            <div class="section__content">
-                <p>{{ value }}</p>
-            </div>
+    <header>
+        {% if not item.hasOnlyTagUrl %}
+            <h2>{{ label }}</h2>
         {% endif %}
-    {% endif %}
+    </header>
+    <div class="section__content">
+        <ul>
+            {% for tag in item.tags %}
+                <li class="highlight">
+                    {% set value = taggedData[tag.tag]|default([])|join(', ') %}
+                    {% if tag.tag in ["sheet_country", "participant_country"] %}
+                        {% for taggedInfo in taggedData[tag.tag]|default([]) %}
+                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}">
+                                {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        {% if value is url %}
+                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
+                            </a>
+                        {% else %}
+                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}">{{ value }}</a>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
