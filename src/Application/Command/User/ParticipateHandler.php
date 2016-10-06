@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -60,6 +61,7 @@ class ParticipateHandler
      * @param Synchronizer                   $accountSynchronizer
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $dateTime
+     * @param DelayedEventDispatcher         $eventDispatcher
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -75,6 +77,7 @@ class ParticipateHandler
         $this->eventDispatcher       = $eventDispatcher;
         $this->dateTime              = $dateTime;
         $this->typeResolver          = $typeResolver;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -116,6 +119,11 @@ class ParticipateHandler
         $participate->participant = $participant;
 
         $this->accountSynchronizer->set($templateData, $participant->getUser());
+
+        $this->eventDispatcher->dispatch(
+            Events::REGISTRATION_STEP,
+            new RegistrationStepEvent($sheet, $participant, 1)
+        );
 
         // Send Sheet Update Event to calculate completeness of the sheet
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);

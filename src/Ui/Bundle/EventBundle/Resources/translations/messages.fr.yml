@@ -14,6 +14,8 @@ account.update.title: 'Modifier mon compte'
 billing_info.title: 'Info de facturation'
 catalog.complete_sheet: 'Voir la fiche complète'
 catalog.noResult: 'Aucun résultat trouvé'
+catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
+catalog.search.no-filter-to-refine: "Aucun filtre ne permet d'affiner la recherche."
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'
@@ -78,16 +80,16 @@ order.list.column.date: Date
 order.list.column.numero: Numéro
 order.list.column.pro_forma: 'Pro Forma'
 order.list.column.total: Total
-order.list.pay_remaining: 'Solder la totalité de ma participation'
+order.list.pay_remaining: 'Solder la totalité'
 order.list.pro_forma.link: 'Voir la Pro Forma'
 order.list.remainingToPay: 'Reste à payer'
 order.list.title: 'Liste de vos commandes'
-order.transaction.howtopay: 'Comment payer ?'
+order.transaction.howtopay: 'How to pay ?'
 order.transaction.list.column.date: Date
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: État
-order.transaction.list.column.total: Somme
-order.transaction.list.title: 'Liste de vos transactions'
+order.transaction.list.column.total: Montant
+order.transaction.list.title: 'Liste des transactions'
 order.transaction.mode.bank_card: 'Carte bleue'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
@@ -106,11 +108,11 @@ package.participants.delete: 'Supprimer des participants'
 package.participants.included: inclus
 package.payment.bankInfo: 'Coordonnées bancaires'
 package.payment.billingAddress: 'Adresse de facturation'
-package.payment.deposit.title: 'Accompte:'
+package.payment.deposit.title: 'Accompte :'
 package.payment.deposit.toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
 package.payment.pay.label: Payer
 package.payment.title: Paiement
-package.payment.total.title: 'Total:'
+package.payment.total.title: Total
 package.payment.total.toPay: 'Le total à régler est de: %total%'
 package.planning.label: 'Intitulé & descriptions'
 package.planning.quantity: Quantité
@@ -124,7 +126,7 @@ package.product.availability: '%availabilityCurrent% sur %availabilityMax%'
 package.product.available: Disponible
 package.product.buyableUntil: 'Achetable jusqu''au %date%'
 package.product.deletableUntil: 'Supprimable jusqu''au %date%'
-package.product.includedProduct: 'Inclus:'
+package.product.includedProduct: 'Inclus :'
 package.product.label: 'Intitulé & descriptions'
 package.product.notDeletableSince: 'Non supprimable depuis le %date%'
 package.product.outOfStock: Epuisé
@@ -156,17 +158,17 @@ package.summary.promotion.label: 'Offres de réductions'
 package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
 package.summary.title: Récapitulatif
 package.summary.total.title: 'Forfait de participation'
-package.summary.totalOfSummary: 'Total de la commande'
+package.summary.totalOfSummary: Total
 package.summary.totalPlusVat: 'Total à régler'
 package.summary.totalVat: '+ TVA applicable de %vat%%'
 package.title: 'Forfait de participation'
 package.vatMode.ati: TTC
 package.vatMode.et: HT
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
-pro_forma.date.title: 'Date:'
-pro_forma.number.title: 'N° pro-forma:'
+pro_forma.date.title: 'Date :'
+pro_forma.number.title: 'N° pro-forma :'
 pro_forma.title: 'Pro Forma - %date%'
-pro_forma.vatNumber.title: 'TVA Intracommunautaire'
+pro_forma.vatNumber.title: 'Numéro TVA'
 register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
@@ -176,11 +178,11 @@ register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape
 select2.no_results: 'Aucun résultat'
-sheet.edit.object: 'Editer "%label%"'
+sheet.edit.object: 'Éditer "%label%"'
 sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
 sheet.object.action.add: 'Ajouter:'
 sheet.object.action.backToSheet: 'Retour à la fiche'
-sheet.object.action.edit: Editer
+sheet.object.action.edit: Éditer
 sheet.object.action.remove: 'Supprimer:'
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'

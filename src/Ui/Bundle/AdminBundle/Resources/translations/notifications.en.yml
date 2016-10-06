@@ -1,1 +1,3 @@
 notification.meeting_request.accepted.action: notification.meeting_request.accepted.action
+notification.sheet.validated.action: 'Sheet has been validated'
+notification.sheet.validated.message: 'Your presentation sheet has been validated'

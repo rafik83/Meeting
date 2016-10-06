@@ -1,3 +1,4 @@
 {% if object.boolean != null %}
-    <b>{{ object.getDefaultLabel }}:</b>  {{ ('boolean.' ~ object.contentValue)|trans}}<br>
+    {% set trad = object.contentValue == true ? 'yes' : 'no' %}
+    <b>{{ object.getDefaultLabel }}:</b>  {{ ('boolean.' ~ trad)|trans}}<br>
 {% endif %}

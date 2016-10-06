@@ -71,71 +71,142 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
         depth: 2
         value:
             domainPositionCommerciale:
-                label: { fr: "Commerciale/Vente", en: "Commerciale/Vente", es: "Comercial / Retail" }
+                label: { fr: "Commerciale/Vente", en: "Commercial / Sales", es: "" }
                 children:
-                    position4: { label: { fr: "Assistant commercial", en: "Assistant commercial", es: "Asistente Comercial" } }
-                    position5: { label: { fr: "Assistant export", en: "Assistant export", es: "Asistente para la exportación" } }
-                    position6: { label: { fr: "Télévendeur / Téléprospecteur", en: "Télévendeur / Téléprospecteur", es: "Televentas / teleoperador" } }
-                    position7: { label: { fr: "Commercial sédentaire", en: "Commercial sédentaire", es: "Commercial sédentaire" } }
-                    position8: { label: { fr: "Vendeur non-cadre / Conseiller de vente", en: "Vendeur non-cadre / Conseiller de vente", es: "Vendeur non-cadre / Conseiller de vente" } }
-                    position9: { label: { fr: "Technico-commercial non-cadre", en: "Technico-commercial non-cadre", es: "Technico-commercial non-cadre" } }
-                    position10: { label: { fr: "Ingénieur technico-commercial", en: "Ingénieur technico-commercial", es: "Ingénieur technico-commercial" } }
-                    position11: { label: { fr: "Ingénieur commercial ou d'affaires", en: "Ingénieur commercial ou d'affaires", es: "Ingénieur commercial ou d'affaires" } }
-                    position12: { label: { fr: "Responsable d'une agence commerciale", en: "Responsable d'une agence commerciale", es: "Responsable d'une agence commerciale" } }
-                    position13: { label: { fr: "Responsable d'une équipe de vente", en: "Responsable d'une équipe de vente", es: "Responsable d'une équipe de vente" } }
-                    position14: { label: { fr: "Responsable régional des ventes", en: "Responsable régional des ventes", es: "Responsable régional des ventes" } }
-                    position15: { label: { fr: "Responsable export", en: "Responsable export", es: "Responsable export" } }
-                    position16: { label: { fr: "Directeur des ventes export", en: "Directeur des ventes export", es: "Directeur des ventes export" } }
-                    position17: { label: { fr: "Directeur des ventes", en: "Directeur des ventes", es: "Directeur des ventes" } }
-                    position18: { label: { fr: "Directeur commercial", en: "Directeur commercial", es: "Directeur commercial" } }
+                    position1: { label: { fr: "Assistant commercial", en: "Sales Assistant", es: "" } }
+                    position2: { label: { fr: "Assistant export", en: "Export Assistant", es: "" } }
+                    position3: { label: { fr: "Chef de publicité", en: "Head of Advertising", es: "" } }
+                    position4: { label: { fr: "Directeur commercial", en: "Commercial Director", es: "" } }
+                    position5: { label: { fr: "Directeur de publicité", en: "Advertising Executive", es: "" } }
+                    position6: { label: { fr: "Directeur des ventes", en: "Sales Director", es: "" } }
+                    position7: { label: { fr: "Directeur des ventes export", en: "Director Export Sales", es: "" } }
+                    position8: { label: { fr: "Directeur du développement", en: "Development Director", es: "" } }
+                    position9: { label: { fr: "Ingénieur commercial ou d'affaires", en: "Business Engineer", es: "" } }
+                    position10: { label: { fr: "Ingénieur technico-commercial", en: "Technical Sales Engineer", es: "" } }
+                    position11: { label: { fr: "Responsable Commercial", en: "Sales Manager", es: "" } }
+                    position12: { label: { fr: "Responsable comptes clés", en: "Key Account Manager", es: "" } }
+                    position13: { label: { fr: "Responsable des ventes", en: "Sales Manager", es: "" } }
+                    position14: { label: { fr: "Responsable du développement", en: "Development Manager", es: "" } }
+                    position15: { label: { fr: "Responsable export", en: "Export Manager", es: "" } }
+                    position16: { label: { fr: "Responsable régional des ventes", en: "Regional Sales Manager", es: "" } }
+                    position17: { label: { fr: "Responsable Technico-commercial", en: "Technical Sales Manager", es: "" } }
             domainPositionCommunication:
-                label: { fr: "Communication", en: "Communication", es: "Communication" }
+                label: { fr: "Communication", en: "Communication", es: "" }
                 children:
-                    position19: { label: { fr: "Chargé de communication", en: "Chargé de communication", es: "Chargé de communication" } }
-                    position20: { label: { fr: "Directeur de la communication", en: "Directeur de la communication", es: "Directeur de la communication" } }
+                    position18: { label: { fr: "Chargé de communication", en: "Communication Manager", es: "" } }
+                    position19: { label: { fr: "Directeur de la communication", en: "Communication Director", es: "" } }
+                    position20: { label: { fr: "Responsable communication", en: "Communication Manager", es: "" } }
             domainPositionDirection:
-                label: { fr: "Direction", en: "Direction", es: "Direction" }
+                label: { fr: "Direction", en: "Direction", es: "" }
                 children:
-                    position21: { label: { fr: "Directeur général adjoint", en: "Directeur général adjoint", es: "Directeur général adjoint" } }
-                    position22: { label: { fr: "Directeur d'une division", en: "Directeur d'une division", es: "Directeur d'une division" } }
-                    position23: { label: { fr: "Directeur général", en: "Directeur général", es: "Directeur général" } }
-                    position24: { label: { fr: "Président-directeur général / Chef d'entreprise", en: "Président-directeur général / Chef d'entreprise", es: "Président-directeur général / Chef d'entreprise" } }
+                    position20: { label: { fr: "Co-Fondateur", en: "Co-Founder", es: "" } }
+                    position21: { label: { fr: "Directeur Associé", en: "Associate Director", es: "" } }
+                    position22: { label: { fr: "Directeur de Division", en: "Division Director", es: "" } }
+                    position23: { label: { fr: "Directeur de la Stratégie", en: "CSO / Chief Strategy Officer", es: "" } }
+                    position24: { label: { fr: "Directeur des ressources humaines", en: "Human Resources Director", es: "" } }
+                    position25: { label: { fr: "Directeur général", en: "General Manager", es: "" } }
+                    position26: { label: { fr: "Directeur Général Adjoint", en: "Deputy General Director", es: "" } }
+                    position27: { label: { fr: "Fondateur", en: "Founder", es: "" } }
+                    position28: { label: { fr: "Président", en: "President", es: "" } }
+                    position29: { label: { fr: "Président-directeur général / Chef d'entreprise", en: "CEO / Chief Executive Officer", es: "" } }
+                    position30: { label: { fr: "Secrétaire Général", en: "General Secretary", es: "" } }
             domainPositionInformatique:
-                label: { fr: "Informatique", en: "Informatique", es: "Informatique" }
+                label: { fr: "Informatique", en: "IT", es: "" }
                 children:
-                    position25: { label: { fr: "Technicien support clients", en: "Technicien support clients", es: "Technicien support clients" } }
-                    position26: { label: { fr: "Technicien micro-informatique", en: "Technicien micro-informatique", es: "Technicien micro-informatique" } }
-                    position27: { label: { fr: "Administrateur de base de données", en: "Administrateur de base de données", es: "Administrateur de base de données" } }
-                    position28: { label: { fr: "Ingénieur réseau", en: "Ingénieur réseau", es: "Ingénieur réseau" } }
-                    position29: { label: { fr: "Ingénieur système", en: "Ingénieur système", es: "Ingénieur système" } }
-                    position30: { label: { fr: "Gestionnaire de parc informatique", en: "Gestionnaire de parc informatique", es: "Gestionnaire de parc informatique" } }
-                    position31: { label: { fr: "Responsable d'application", en: "Responsable d'application", es: "Responsable d'application" } }
-                    position32: { label: { fr: "Responsable d'exploitation / Responsable de production", en: "Responsable d'exploitation / Responsable de production", es: "Responsable d'exploitation / Responsable de production" } }
-                    position33: { label: { fr: "Analyste programmeur / Développeur", en: "Analyste programmeur / Développeur", es: "Analyste programmeur / Développeur" } }
-                    position34: { label: { fr: "Analyste fonctionnel", en: "Analyste fonctionnel", es: "Analyste fonctionnel" } }
-                    position35: { label: { fr: "Ingénieur d'études / Ingénieur de développement informatique", en: "Ingénieur d'études / Ingénieur de développement informatique", es: "Ingénieur d'études / Ingénieur de développement informatique" } }
-                    position36: { label: { fr: "Chef de projet informatique", en: "Chef de projet informatique", es: "Chef de projet informatique" } }
-                    position37: { label: { fr: "Responsable des systèmes d'information", en: "Responsable des systèmes d'information", es: "Responsable des systèmes d'information" } }
-                    position38: { label: { fr: "Directeur des systèmes d'information / directeur informatique", en: "Directeur des systèmes d'information / directeur informatique", es: "Directeur des systèmes d'information / directeur informatique" } }
+                    position31: { label: { fr: "Administrateur de base de données", en: "Database Administrator", es: "" } }
+                    position32: { label: { fr: "Analyste fonctionnel", en: "Functional Analyst", es: "" } }
+                    position33: { label: { fr: "Chef de projet informatique", en: "IT Project Manager", es: "" } }
+                    position34: { label: { fr: "Développeur", en: "Developer", es: "" } }
+                    position35: { label: { fr: "DSI / Directeur Informatique", en: "IST Manager", es: "" } }
+                    position36: { label: { fr: "Gestionnaire de parc informatique", en: "IT Asset Manager", es: "" } }
+                    position37: { label: { fr: "Ingénieur de développement informatique", en: "IT Development Engineer", es: "" } }
+                    position38: { label: { fr: "Ingénieur d'études", en: "Studies Engineer", es: "" } }
+                    position39: { label: { fr: "Ingénieur réseau", en: "Network Engineer", es: "" } }
+                    position40: { label: { fr: "Ingénieur système", en: "System Engineer", es: "" } }
+                    position41: { label: { fr: "Responsable d'application", en: "Application Manager", es: "" } }
+                    position42: { label: { fr: "Responsable des systèmes d'information", en: "Head of Information Systems", es: "" } }
+                    position43: { label: { fr: "Responsable d'exploitation / Responsable de production", en: "Operations Manager", es: "" } }
+                    position44: { label: { fr: "Responsable Support Client", en: "Cusomer Support Manager", es: "" } }
             domainPositionMarketing:
-                label: { fr: "Marketing", en: "Marketing", es: "Marketing" }
+                label: { fr: "Marketing", en: "Marketing", es: "" }
                 children:
-                    position39: { label: { fr: "Assistant marketing / Assistant chef de produits", en: "Assistant marketing / Assistant chef de produits", es: "Assistant marketing / Assistant chef de produits" } }
-                    position40: { label: { fr: "Chef de produits", en: "Chef de produits", es: "Chef de produits" } }
-                    position41: { label: { fr: "Directeur marketing / Responsable marketing", en: "Directeur marketing / Responsable marketing", es: "Directeur marketing / Responsable marketing" } }
+                    position45: { label: { fr: "Assistant chef de produits", en: "Assistant Product Manager", es: "" } }
+                    position46: { label: { fr: "Assistant marketing", en: "Marketing Assistant", es: "" } }
+                    position47: { label: { fr: "Brand Manager", en: "Brand Manager", es: "" } }
+                    position48: { label: { fr: "CDO / Responsable de la Direction du Numérique	CDO / Chief Digital Officer", es: "" } }
+                    position49: { label: { fr: "Chef de produits", en: "Product Manager", es: "" } }
+                    position50: { label: { fr: "Community Manager", en: "Community Manager", es: "" } }
+                    position51: { label: { fr: "Directeur marketing", en: "Marketing Director", es: "" } }
+                    position52: { label: { fr: "Responsable E-commerce", en: "E-Commerce Manager", es: "" } }
+                    position53: { label: { fr: "Directeur de la création", en: "Creative Director", es: "" } }
+                    position54: { label: { fr: "Responsable marketing", en: "Marketing Manager", es: "" } }
             domainPositionRecherche:
-                label: { fr: "Recherche/Etudes et Laboratoire", en: "Recherche/Etudes et Laboratoire", es: "Recherche/Etudes et Laboratoire" }
+                label: { fr: "Recherche/Etudes et Laboratoire", en: "Research / Studies and Laboratory", es: "" }
                 children:
-                    position66: { label: { fr: "Agent de laboratoire", en: "Agent de laboratoire", es: "Agent de laboratoire" } }
-                    position67: { label: { fr: "Technicien de laboratoire", en: "Technicien de laboratoire", es: "Technicien de laboratoire" } }
-                    position68: { label: { fr: "Responsable de laboratoire", en: "Responsable de laboratoire", es: "Responsable de laboratoire" } }
-                    position69: { label: { fr: "Dessinateur", en: "Dessinateur", es: "Dessinateur" } }
-                    position70: { label: { fr: "Dessinateur d'études", en: "Dessinateur d'études", es: "Dessinateur d'études" } }
-                    position71: { label: { fr: "Dessinateur-projeteur", en: "Dessinateur-projeteur", es: "Dessinateur-projeteur" } }
-                    position72: { label: { fr: "Ingénieur chef de projet", en: "Ingénieur chef de projet", es: "Ingénieur chef de projet" } }
-                    position73: { label: { fr: "Responsable bureau d'études", en: "Responsable bureau d'études", es: "Responsable bureau d'études" } }
-                    position74: { label: { fr: "Responsable recherche / Responsable développement", en: "Responsable recherche / Responsable développement", es: "Responsable recherche / Responsable développement" } }
-                    position75: { label: { fr: "Directeur recherche et développement", en: "Directeur recherche et développement", es: "Directeur recherche et développement" } }
+                    position55: { label: { fr: "Chef de projet R&D", en: "Head of R&D Project", es: "" } }
+                    position56: { label: { fr: "Chercheur", en: "Searcher", es: "" } }
+                    position57: { label: { fr: "Directeur de Laboratoire", en: "Laboratory Director", es: "" } }
+                    position58: { label: { fr: "Directeur Open Innovation", en: "Open Innovation Director", es: "" } }
+                    position59: { label: { fr: "Directeur R&D", en: "R&D Director", es: "" } }
+                    position60: { label: { fr: "Directeur de Projet", en: "Project Director", es: "" } }
+                    position61: { label: { fr: "Ingénieur chef de projet", en: "Senior Project Engineer", es: "" } }
+                    position62: { label: { fr: "Ingénieur R&D", en: "R&D Engineer", es: "" } }
+                    position63: { label: { fr: "Responsable bureau d'études", en: "Engineering Manager", es: "" } }
+                    position64: { label: { fr: "Responsable de laboratoire", en: "Laboratory Manager", es: "" } }
+                    position65: { label: { fr: "Responsable Open Innovation", en: "Open Innovation Manager", es: "" } }
+                    position66: { label: { fr: "Responsable R&D", en: "R&D Manager", es: "" } }
+            domainPositionTechnique:
+                label: { fr: "Techniques - Qualité - Environnement", en: "Technical - Quality - Environment", es: "" }
+                children:
+                    position67: { label: { fr: "Directeur de production", en: "Production Director", es: "" } }
+                    position68: { label: { fr: "Directeur environnement", en: "Environment Director", es: "" } }
+                    position69: { label: { fr: "Directeur industriel", en: "Industrial Director", es: "" } }
+                    position70: { label: { fr: "Directeur technique", en: "Technical Director", es: "" } }
+                    position71: { label: { fr: "Ingénieur maintenance", en: "Maintenance Engineer", es: "" } }
+                    position72: { label: { fr: "Ingénieur méthode", en: "Method Engineer", es: "" } }
+                    position73: { label: { fr: "Ingénieur qualité", en: "Quality Engineer", es: "" } }
+                    position74: { label: { fr: "Ingénieur sécurité", en: "Security Engineer", es: "" } }
+                    position75: { label: { fr: "Responsable de Production", en: "Production Manager", es: "" } }
+                    position76: { label: { fr: "Responsable d'exploitation", en: "Operations Manager", es: "" } }
+                    position77: { label: { fr: "Responsable qualité", en: "Quality Manager", es: "" } }
+                    position78: { label: { fr: "Responsable sécurité", en: "Security Manager", es: "" } }
+                    position79: { label: { fr: "Responsable technique", en: "Technical Manager", es: "" } }
+                    position80: { label: { fr: "Responsable technique maintenance", en: "Maintenance Manager", es: "" } }
+            domainPositionAchat:
+                label: { fr: "Achats", en: "Purchasing Department", es: "" }
+                children:
+                    position81: { label: { fr: "Acheteur", en: "Purchaser", es: "" } }
+                    position82: { label: { fr: "Directeur des Achats", en: "Purchasing Director", es: "" } }
+                    position83: { label: { fr: "Responsable achats", en: "Purchasing Manager", es: "" } }
+                    position84: { label: { fr: "Responsable sourcing", en: "Sourcing Manager", es: "" } }
+            domainPositionLogistique:
+                label: { fr: "Logistique ", en: "Logistic Department", es: "" }
+                children:
+                    position85: { label: { fr: "Affréteur", en: "Charterer", es: "" } }
+                    position86: { label: { fr: "Agent en transport", en: "Transport Agent", es: "" } }
+                    position87: { label: { fr: "Directeur de la supply chain", en: "Supply Chain Director", es: "" } }
+                    position88: { label: { fr: "Directeur des Opérations", en: "Operations Director", es: "" } }
+                    position89: { label: { fr: "Directeur des Transports", en: "Transport Director", es: "" } }
+                    position90: { label: { fr: "Directeur Logistique", en: "Logistic Director", es: "" } }
+                    position91: { label: { fr: "Responsable des approvisionnements", en: "Procurement Manager", es: "" } }
+                    position92: { label: { fr: "Responsable logistique", en: "Logistic Manager", es: "" } }
+                    position93: { label: { fr: "Responsable transport", en: "Transport Manager", es: "" } }
+            domainPositionAutres:
+                label: { fr: "Autres", en: "Others", es: "" }
+                children:
+                    position94: { label: { fr: "Avocat", en: "Lawyer", es: "" } }
+                    position95: { label: { fr: "Chargé de mission", en: "Project Manager", es: "" } }
+                    position96: { label: { fr: "Chargé d'études", en: "Research Officer", es: "" } }
+                    position97: { label: { fr: "Conférencier", en: "Speaker", es: "" } }
+                    position98: { label: { fr: "Consultant", en: "Consultant", es: "" } }
+                    position99: { label: { fr: "Elu", en: "Elected", es: "" } }
+                    position100: { label: { fr: "Enseignant", en: "Teacher", es: "" } }
+                    position101: { label: { fr: "Responsable des Ressources Humaines", en: "Human Ressources Manager", es: "" } }
+                    position102: { label: { fr: "Journaliste", en: "Journalist", es: "" } }
+                    position103: { label: { fr: "Juriste", en: "Jurist", es: "" } }
+                    position104: { label: { fr: "Rédacteur en chef", en: "Editor in Chief", es: "" } }
+                    position105: { label: { fr: "Rédacteur en chef Adjoint", en: "Deputy Chief Editor", es: "" } }
+                    position106: { label: { fr: "Responsable des Partenariats", en: "Partnerships Manager", es: "" } }
     nomenclature_service_rdvcarnot2016:
         __construct: false
         event: '@event_rdv_carnot_2016'
@@ -166,15 +237,17 @@ Proximum\Vimeet\Domain\Model\Nomenclature:
         title: "Catégorie"
         depth: 1
         value:
-            category1: { label: { fr: "PME", en: "PME" }}
+            category1: { label: { fr: "PME", en: "SMEs" }}
             category2: { label: { fr: "Start-up", en: "Start-up" }}
             category3: { label: { fr: "Grand groupe", en: "Large group" }}
             category4: { label: { fr: "Organisme public", en: "Publique organization" }}
-            category5: { label: { fr: "ETI", en: "ETI" }}
+            category5: { label: { fr: "ETI", en: "Midcaps Companies" }}
             category6: { label: { fr: "Institutionnelle", en: "Institutional" }}
-            category6: { label: { fr: "Structure de recherche", en: "Research structure" }}
-            category6: { label: { fr: "Association", en: "Association" }}
-            category6: { label: { fr: "Pôle de compétitivité", en: "Cluster" }}
+            category7: { label: { fr: "Structure de recherche", en: "Research structure" }}
+            category8: { label: { fr: "Association", en: "Association" }}
+            category9: { label: { fr: "Pôle de compétitivité / Cluster", en: "Cluster" }}
+            category10: { label: { fr: "Expert", en: "Expert"}}
+            category11: { label: { fr: "Investisseur", en: "Investor"}}
     nomenclature_company_staff_rdvcarnot2016:
         __construct: false
         event: '@event_rdv_carnot_2016'

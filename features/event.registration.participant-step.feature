@@ -29,6 +29,7 @@ Feature: Register with participant step
       | Ville                         | Paris             |
       | Pays                          | FR                |
       | block[57da9df7ced30][boolean] | 1                 |
+      | Décrivez votre activité       |                   |
     When I press "register.finalize"
     Then I should see "This value should not be blank."
     And I fill in the following:
