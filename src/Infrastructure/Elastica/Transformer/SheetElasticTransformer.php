@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
+use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -63,14 +64,6 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->cartRowRepository      = $cartRowRepository;
         $this->templateDataFactory    = $templateDataFactory;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getAvailableLocalesForContent()
-    {
-        return ['fr', 'en'];
     }
 
     /**
@@ -136,7 +129,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $content[] = $localeContent;
 
             // if locale field exists in ES, add it
-            if (in_array($locale, self::getAvailableLocalesForContent())) {
+            if (in_array($locale, AvailableLocales::getAvailableLocalesForContent())) {
                 $contentByLocale[sprintf('content_%s', $locale)] = $localeContent;
             }
         }

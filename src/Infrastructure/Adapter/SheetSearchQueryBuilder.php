@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer;
+use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 
 class SheetSearchQueryBuilder
 {
@@ -150,7 +150,7 @@ class SheetSearchQueryBuilder
         // Boost sheetname by 5
         $fields = ['sheetName^5', 'content'];
 
-        if (in_array($this->locale, SheetElasticTransformer::getAvailableLocalesForContent())) {
+        if (in_array($this->locale, AvailableLocales::getAvailableLocalesForContent())) {
             // If locale field is available, boost it by 2
             $fields[] = sprintf('content_%s^2', $this->locale);
         }
