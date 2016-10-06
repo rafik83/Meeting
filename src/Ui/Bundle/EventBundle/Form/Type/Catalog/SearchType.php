@@ -38,6 +38,7 @@ class SearchType extends AbstractType
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
+                    'form.search.orderBy.relevance'          => Constant::ORDER_BY_RELEVANCE,
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],

@@ -27,8 +27,6 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
-    private $availableLocaleForContent = ['fr', 'en'];
-
     /**
      * @var SheetInfoGuesser
      */
@@ -65,6 +63,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->cartRowRepository      = $cartRowRepository;
         $this->templateDataFactory    = $templateDataFactory;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAvailableLocalesForContent()
+    {
+        return ['fr', 'en'];
     }
 
     /**
@@ -119,15 +125,20 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
         $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
+        $content         = [];
         $contentByLocale = [];
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
-            if (!in_array($locale, $this->availableLocaleForContent)) {
-                throw new \Exception(sprintf('Locale %s is not available in elastic search content index', $locale));
-            }
+            $data          = $this->templateDataFactory->createFromSheet($sheet, $locale);
+            $localeContent = $this->getSearchableContent($data->getObjects());
 
-            $data = $this->templateDataFactory->createFromSheet($sheet, $locale);
-            $contentByLocale[sprintf('content_%s', $locale)] = $this->getSearchableContent($data->getObjects());
+            // Add locale content in same field
+            $content[] = $localeContent;
+
+            // if locale field exists in ES, add it
+            if (in_array($locale, self::getAvailableLocalesForContent())) {
+                $contentByLocale[sprintf('content_%s', $locale)] = $localeContent;
+            }
         }
 
         return new Document($sheet->getId(), array_merge(
@@ -150,6 +161,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasOrder'             => $sheet->hasNotCancelledOrders(),
                 'hasCart'              => $hasCart,
                 'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
+                'content'              => implode(' ', $content),
             ],
             $contentByLocale
         ));

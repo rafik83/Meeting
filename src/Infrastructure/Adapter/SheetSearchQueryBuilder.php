@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Match;
+use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer;
 
 class SheetSearchQueryBuilder
 {
@@ -31,15 +33,22 @@ class SheetSearchQueryBuilder
     private $query;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * SheetSearchQuery constructor.
      *
-     * @param Event $event
-     * @param array $filters
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
      */
-    public function __construct(Event $event, array $filters)
+    public function __construct(Event $event, array $filters, $locale)
     {
-        $this->query = new BoolQuery();
+        $this->locale = $locale;
 
+        $this->query = new BoolQuery();
         $this->matchEvent($event);
         $this->hasOwner();
         $this->hasParticipant();
@@ -138,15 +147,21 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $filterByKeywordsQuery = new BoolQuery();
+        // Boost sheetname by 5
+        $fields = ['sheetName^5', 'content'];
 
-        $matchSheetName = new Match('sheetName', $filters['content']);
-        $filterByKeywordsQuery->addShould($matchSheetName);
+        if (in_array($this->locale, SheetElasticTransformer::getAvailableLocalesForContent())) {
+            // If locale field is available, boost it by 2
+            $fields[] = sprintf('content_%s^2', $this->locale);
+        }
 
-        $matchContent = new Match('content_fr', $filters['content']);
-        $filterByKeywordsQuery->addShould($matchContent);
+        $multiMatch = new MultiMatch();
+        $multiMatch
+            ->setMinimumShouldMatch('70%')
+            ->setFields($fields)
+            ->setQuery($filters['content']);
 
-        $this->query->addMust($filterByKeywordsQuery);
+        $this->query->addMust($multiMatch);
     }
 
     /**

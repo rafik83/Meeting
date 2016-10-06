@@ -49,13 +49,15 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations)
     {
-        $builder = new SheetSearchQueryBuilder($event, $filters);
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query->addSort(['inCatalogAt' => 'desc']);
-        } else {
+        } elseif (Constant::ORDER_BY_ALPHABETICAL === $orderBy) {
             $query->addSort(['sheetName.raw' => 'asc']);
+        } else {
+            $query->addSort(['_score' => 'desc']);
         }
 
         if (true === $getAggregations) {
@@ -84,28 +86,35 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypeAggregations(Event $event, array $filters, $filterToRemove)
+    public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove)
     {
-        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_TYPE);
+        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_TYPE);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getOrganizationCategoryAggregations(Event $event, array $filters, $filterToRemove)
+    public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove)
     {
-        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_ORGANIZATION_CATEGORY);
+        return $this->searchAggregations(
+            $event,
+            $locale,
+            $filters,
+            $filterToRemove,
+            self::ES_FIELD_ORGANIZATION_CATEGORY
+        );
     }
 
     /**
      * @param Event  $event
+     * @param string $locale
      * @param array  $filters
      * @param string $filterToRemove
      * @param string $elasticField
      *
      * @return array
      */
-    private function searchAggregations(Event $event, array $filters, $filterToRemove, $elasticField)
+    private function searchAggregations(Event $event, $locale, array $filters, $filterToRemove, $elasticField)
     {
         // remove filter
         unset($filters[$filterToRemove]);
@@ -113,7 +122,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         // add inCatalog filter
         $filters = array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $filters);
 
-        $builder = new SheetSearchQueryBuilder($event, $filters);
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
         $query->addAggregation($this->getAggregation($elasticField));
         $query->setSize(0);
