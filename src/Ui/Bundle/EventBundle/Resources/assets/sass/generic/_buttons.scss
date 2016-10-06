@@ -43,6 +43,21 @@ button, a {
     }
 }
 
+.btn-primary {
+    &.accept {
+       background: #21A200 !important;
+    }
+}
+
+.btn-gray {
+    &.accept {
+        color: #21A200 !important;
+    }
+    &.reject {
+        color: #FF4902 !important;
+    }
+}
+
 .btn-inactive {
   background: $button-bg-color-inactive !important;
 
