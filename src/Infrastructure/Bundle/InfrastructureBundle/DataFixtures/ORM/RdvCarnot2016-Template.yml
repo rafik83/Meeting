@@ -70,7 +70,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Category"
-                                                        tag: "sheet_organization"
+                                                        tags:
+                                                            - tag: "sheet_organization"
                                             -
                                                 90713a3d:
                                                     component: "object"
@@ -83,7 +84,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                         help:
                                                             fr: ""
                                                             en: ""
-                                                        tag: "participant_website"
+                                                        tags:
+                                                            - tag: "participant_website"
                                 -
                                     d691d21c:
                                         component: "object"

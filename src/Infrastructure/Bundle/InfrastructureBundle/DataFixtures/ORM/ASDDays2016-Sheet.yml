@@ -60,7 +60,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
         registrationData:
             3ad4b72f: { text: "Elao" }
             97ed778d: { items: ["category2"] }
-            57da9df7ced30: { boolean: "true" }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
             d224f0e7: { text: "Paris" }
