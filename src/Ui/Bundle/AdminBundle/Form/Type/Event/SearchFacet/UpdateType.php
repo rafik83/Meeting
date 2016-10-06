@@ -1,0 +1,71 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class UpdateType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('searchFacets', CollectionType::class, [
+                'entry_type'    => SearchFacetType::class,
+                'entry_options' => [
+                    'required' => false,
+                    'event' => $options['event'],
+                ],
+                'label' => false,
+            ])
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['event', 'types']);
+        $resolver->setAllowedTypes('event', Event::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'search_facet_update';
+    }
+
+    /**
+     * this gets called in the final stage before rendering the form
+     *
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        foreach ($view['searchFacets']->children as $key => $childView)
+        {
+            $childView->vars['label'] = str_replace('prototype', $options['types'][$key], $childView->vars['label']);
+        }
+    }
+}
