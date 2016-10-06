@@ -3,7 +3,8 @@
 {% set config = {
     label: { (locale): 'template.object.tag'|trans },
     tag: '',
-    style: ''
+    style: '',
+    tags: []
 }|merge(config|default({})) %}
 
 <div class="object" data-object="tag" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
@@ -47,12 +48,32 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.object.tag'|trans }}</label>
-                                    <select class="form-control" name="tag">
-                                        {% for tag in sheet_tags %}
-                                            <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                                    <label class="form-label">{{ 'template.tags.title'|trans }}</label>
+                                    <fieldset
+                                            id="tags-{{ uid|default('__UID__') }}"
+                                            data-collection-bind="__TAGS__"
+                                            data-collection-add="tags-add-{{ uid|default('__UID__') }}"
+                                            data-collection-delete="tags-delete-{{ uid|default('__UID__') }}"
+                                            data-prototype="{{ include('AdminBundle:Template:tags_select.html.twig', {
+                                                'sheet_tags': sheet_tags,
+                                                'uid': uid|default('__UID__'),
+                                                'locale': locale,
+                                                'label': false
+                                            }, false)|e }}"
+                                    >
+                                        {% for tag in config.tags %}
+                                            {{ include('AdminBundle:Template:tags_select.html.twig', {
+                                                'sheet_tags': sheet_tags,
+                                                'uid': uid|default('__UID__'),
+                                                'locale': locale,
+                                                'fallback': fallback,
+                                                'index': loop.index0,
+                                                'tag': tag,
+                                                'label': false
+                                            }, false) }}
                                         {% endfor %}
-                                    </select>
+                                    </fieldset>
+                                    <button type="button" id="tags-add-{{ uid|default('__UID__') }}" class="btn btn-success btn-sm">+</button>
                                 </div>
                             </div>
                             <div class="modal-footer">

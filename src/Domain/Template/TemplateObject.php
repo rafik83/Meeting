@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -278,5 +279,21 @@ class TemplateObject extends AbstractChild
     public function setSheet($sheet)
     {
         $this->sheet = $sheet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOnlyTagUrl()
+    {
+        if (count($this->getTags()) === 1) {
+            $tag = $this->getTags()[0];
+
+            if ($tag["tag"] === Tag::SHEET_WEBSITE) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

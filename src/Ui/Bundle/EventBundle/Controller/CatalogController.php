@@ -220,7 +220,7 @@ class CatalogController extends Controller
      * @param TypeView[] $typeViews
      * @param array|null $aggregations
      *
-     * @return array
+     * @return TypeView[]
      */
     private function filterTypeViews(array $typeViews, array $aggregations = null)
     {
@@ -245,7 +245,7 @@ class CatalogController extends Controller
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param array|null                 $aggregations
      *
-     * @return array
+     * @return OrganizationCategoryView[]
      */
     private function filterOrganizationCategoryViews(array $organizationCategoryViews, array $aggregations = null)
     {
