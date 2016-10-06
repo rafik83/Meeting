@@ -42,3 +42,10 @@ Feature: Meeting Request / Proposition
     And I should see "Investisseur"
     And I should see "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense."
     And I should see "catalog.complete_sheet"
+
+  Scenario: I can filter by participant type (not see Exposant type)
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr"
+    When I go to this page "/fr/sheet/1/meeting/request"
+    Then I uncheck "type_2"
+    And I should not see "Exposant" in the "footer" element
