@@ -14,6 +14,8 @@ Feature: Meeting Request / Proposition
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Category.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Rule.yml            |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
@@ -30,10 +32,8 @@ Feature: Meeting Request / Proposition
     And I should see "form.search.orderBy.label"
     And I should see "form.search.orderBy.alphabetical"
     And I should see "form.search.orderBy.createdAt"
+    And I should see "form.search.type.label"
+    And I should see "Exposant"
+    And I should see "Investisseur"
     And I should see "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense."
     And I should see "catalog.complete_sheet"
-    And I should see "Exposant"
-
-  Scenario: I can see my meeting proposition
-    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
-    And I go to this page "/fr/sheet/1/meeting/proposition"

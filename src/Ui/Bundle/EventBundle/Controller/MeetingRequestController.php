@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Meeting\TypeViewTransformer;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
@@ -73,6 +74,9 @@ class MeetingRequestController extends Controller
             ]),
         ]);
 
+        $typeTransformer = new TypeViewTransformer();
+        $filters['type'] = $typeTransformer->reverseTransform($filters['type']);
+
         $searchForm->handleRequest($request);
 
         if ($searchForm->isValid()) {
@@ -109,6 +113,7 @@ class MeetingRequestController extends Controller
     /**
      * List meeting requests the sheet received
      *
+     * @deprecated
      * @param Request   $request
      * @param EventDomain $eventDomain
      * @param Sheet     $sheet

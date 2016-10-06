@@ -18,9 +18,9 @@ class TypeViewTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      */
-    public function transform($value)
+    public function transform($typeViews)
     {
-        return $value;
+        return $typeViews;
     }
 
     /**
