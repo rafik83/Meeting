@@ -48,4 +48,5 @@ Feature: Meeting Request / Proposition
     And I go to this page "/fr"
     When I go to this page "/fr/sheet/1/meeting/request"
     Then I uncheck "type_2"
+    And I should be on this page "/fr/sheet/1/meeting/request?type%5B%5D=3&type%5B%5D=4&type%5B%5D=2&type%5B%5D=5"
     And I should not see "Exposant" in the "footer" element
