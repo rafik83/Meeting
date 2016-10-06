@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 
 class BatchValidate extends AbstractBatch
