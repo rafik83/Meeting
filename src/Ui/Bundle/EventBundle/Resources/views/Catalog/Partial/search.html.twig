@@ -1,7 +1,13 @@
 {{ form_start(searchForm) }}
 
 <div class="catalog__research">
-    {{ include('EventBundle:Catalog:checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+    {% if searchForm.type is defined %}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+    {% endif %}
+
+    {% if searchForm.organizationCategory is defined %}
+        {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
+    {% endif %}
 
     {#
     <form>
@@ -65,7 +71,7 @@
     </div>
 
     <div class="sort">
-        {{ include('EventBundle:Catalog:order-by-form.html.twig', { form: searchForm.orderBy }, false) }}
+        {{ include('EventBundle:Catalog:Partial/order-by-form.html.twig', { form: searchForm.orderBy }, false) }}
 
         {#
         <div class="btn-group" role="group">

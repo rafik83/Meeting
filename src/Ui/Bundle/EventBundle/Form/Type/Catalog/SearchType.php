@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -19,11 +20,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractType
 {
+    const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
+    const FILTER_TYPE                  = 'type';
+    const ORDER_BY                     = 'orderBy';
+
     /**
      * {@inheridoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $typeViews                 = $options['typeViews'];
+        $organizationCategoryViews = $options['organizationCategoryViews'];
+
         $builder
             ->add('orderBy', ChoiceType::class, [
                 'label'    => 'form.search.orderBy.label',
@@ -32,19 +40,53 @@ class SearchType extends AbstractType
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
-            ])
-            ->add('type', ChoiceType::class, [
-                'label'        => 'form.search.type.label',
-                'expanded'     => true,
-                'multiple'     => true,
-                'choices'      => $options['typeViews'],
-                'choice_value' => function (TypeView $typeView) {
-                    return $typeView->id;
-                },
-                'choice_label' => function (TypeView $typeView) {
-                    return $typeView->title;
-                },
             ]);
+
+        // show type facette only if there is more than one filter
+        if (count($typeViews) > 1) {
+            $builder
+                ->add(
+                    self::FILTER_TYPE,
+                    ChoiceType::class,
+                    [
+                        'label'        => 'form.search.type.label',
+                        'expanded'     => true,
+                        'multiple'     => true,
+                        'choices'      => $typeViews,
+                        'choice_value' => function (TypeView $typeView) {
+                            return $typeView->id;
+                        },
+                        'choice_label' => function (TypeView $typeView) {
+                            return $typeView->title;
+                        },
+                    ]
+                );
+        }
+
+        $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
+            'label'        => 'form.search.organizationCategory.label',
+            'choices'      => $organizationCategoryViews,
+            'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
+                if ($organizationCategoryView !== null) {
+                    return $organizationCategoryView->key;
+                }
+
+                return null;
+            },
+            'choice_label' => function (OrganizationCategoryView $organizationCategoryView = null) {
+                if ($organizationCategoryView !== null) {
+                    return $organizationCategoryView->title;
+                }
+
+                return null;
+            },
+            'required'     => false,
+            'multiple'     => true,
+            'attr'         => [
+                'class'               => 'form-control select2',
+                'data-disallow-clear' => 'true',
+            ],
+        ]);
     }
 
     /**
@@ -52,7 +94,7 @@ class SearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['typeViews']);
+        $resolver->setRequired(['typeViews', 'organizationCategoryViews']);
         $resolver->setDefaults([
             'required'        => false,
             'method'          => 'GET',

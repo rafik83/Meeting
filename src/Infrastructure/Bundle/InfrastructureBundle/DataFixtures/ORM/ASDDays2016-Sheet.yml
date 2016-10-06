@@ -59,6 +59,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         completeness: 67
         registrationData:
             3ad4b72f: { text: "Elao" }
+            97ed778d: { items: ["category2"] }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
             d224f0e7: { text: "Paris" }
@@ -78,6 +79,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: "Hello World Company" }
+            97ed778d: { items: ["category3"] }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
             d224f0e7: { text: "Paris" }
@@ -98,6 +100,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         registrationData:
             3ad4b72f: { text: "World Company Inc" }
+            97ed778d: { items: ["category2"] }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
             d224f0e7: { text: "Paris" }

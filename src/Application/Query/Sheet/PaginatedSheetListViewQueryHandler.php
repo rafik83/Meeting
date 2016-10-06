@@ -107,7 +107,8 @@ class PaginatedSheetListViewQueryHandler
             null,
             $query->page,
             $query->limit,
-            $query->locale
+            $query->locale,
+            false
         );
 
         $lastAccepts     = $this->traceRepository->getLastByTraceableObjectsAndAction($sheets->results, Trace::ACCEPT);

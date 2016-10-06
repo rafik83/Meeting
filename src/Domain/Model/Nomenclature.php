@@ -450,6 +450,7 @@ class Nomenclature
     /**
      * @param Nomenclature|NomenclatureItem $currentLevel
      * @param array                         $levelsArchitecture
+     * @param string                        $locale
      * @param int|null                      $firstLevelKey
      *
      * @return array

@@ -3,19 +3,21 @@ var $      = require('jquery'),
 
 function CatalogFilters(field, filterForm, catalog)
 {
-    var checked = $(filterForm).find('input[name="'+field.attr('name')+'"]:not([disabled]):checked');
+    if ('checkbox' === field.attr('type')) {
+        var checked = $(filterForm).find('input[name="'+field.attr('name')+'"]:not([disabled]):checked');
 
-    if (0 === checked.length) {
-        alert($(field).closest('ul').data('message-at-least-one-checked'));
+        if (0 === checked.length) {
+            alert($(field).closest('ul').data('message-at-least-one-checked'));
 
-        return true;
+            return true;
+        }
     }
 
     var action = $(filterForm).attr('action');
     var data = $(filterForm).serialize();
 
     $(catalog).find('.catalog__item').fadeTo('fast', 0.3);
-    $(filterForm).find('input').attr('disabled','disabled');
+    $(filterForm).find('input, select').attr('disabled','disabled');
 
     history.pushState({}, '', action + '?' + data);
 

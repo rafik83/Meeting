@@ -214,6 +214,7 @@ services:
         arguments:
             - '@repository.template.registration_template_repository'
             - '@repository.filter.boolean_template_filter_repository'
+            - '@repository.filter.tagged_nomenclature_filter_repository'
             - '@template.template_data_factory'
         tags:
             - { name: kernel.event_subscriber }

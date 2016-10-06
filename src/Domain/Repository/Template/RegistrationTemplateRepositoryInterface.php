@@ -40,6 +40,13 @@ interface RegistrationTemplateRepositoryInterface
     public function getTemplateForGivenEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return RegistrationTemplate[]
+     */
+    public function getUsedTemplateForGivenEvent(Event $event);
+
+    /**
      * @param RegistrationTemplate $registrationTemplate
      */
     public function add(RegistrationTemplate $registrationTemplate);

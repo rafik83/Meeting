@@ -41,20 +41,27 @@ class PaginatedResult implements Countable, Iterator
     public $pages;
 
     /**
+     * @var array|null
+     */
+    public $aggregations;
+
+    /**
      * PaginatedResult constructor.
      *
-     * @param array $results
-     * @param int   $page
-     * @param int   $limit
-     * @param int   $total
+     * @param array      $results
+     * @param int        $page
+     * @param int        $limit
+     * @param int        $total
+     * @param array|null $aggregations
      */
-    public function __construct(array $results, $page, $limit, $total)
+    public function __construct(array $results, $page, $limit, $total, array $aggregations = null)
     {
-        $this->results = array_values($results);
-        $this->page    = $page;
-        $this->limit   = $limit;
-        $this->total   = $total;
-        $this->pages   = (int) ceil($total / $limit);
+        $this->results      = array_values($results);
+        $this->page         = $page;
+        $this->limit        = $limit;
+        $this->total        = $total;
+        $this->pages        = (int)ceil($total / $limit);
+        $this->aggregations = $aggregations;
     }
 
     /**

@@ -67,7 +67,7 @@ class Category implements WhoInterface
     /**
      * Get types.
      *
-     * @return ArrayCollection
+     * @return Type[]
      */
     public function getTypes()
     {
