@@ -307,10 +307,7 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $state
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function countSheetState(Sheet $sheet, $state)
     {

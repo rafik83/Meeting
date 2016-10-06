@@ -103,7 +103,7 @@ interface RequestRepositoryInterface
      * @param Sheet  $sheet
      * @param string $state
      *
-     * @return Request[]
+     * @return int
      */
     public function countSheetState(Sheet $sheet, $state);
 

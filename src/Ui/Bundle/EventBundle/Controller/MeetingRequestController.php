@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
-use Proximum\Vimeet\Application\Query\Meeting\StatusListViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
