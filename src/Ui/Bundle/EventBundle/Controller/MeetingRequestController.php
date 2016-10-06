@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
@@ -56,7 +57,9 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
-        $filters    = [];
+        // pre fill filters
+        $filters = SearchType::getDefaultFilters();
+
         $searchForm = $this->createForm(SearchType::class, $filters, [
             'label' => null,
             'action'=> $this->generateUrl('event_meeting_list_request', [
