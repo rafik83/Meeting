@@ -33,20 +33,28 @@ class BatchEnableDisableHandler
     private $batchCatalogHandler;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * BatchEnableDisableHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param DelayedEventDispatcher   $eventDispatcher
      * @param BatchCatalogHandler      $batchCatalogHandler
+     * @param \DateTimeInterface       $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         DelayedEventDispatcher $eventDispatcher,
-        BatchCatalogHandler $batchCatalogHandler
+        BatchCatalogHandler $batchCatalogHandler,
+        \DateTimeInterface $datetime
     ) {
         $this->sheetRepository     = $sheetRepository;
         $this->eventDispatcher     = $eventDispatcher;
         $this->batchCatalogHandler = $batchCatalogHandler;
+        $this->datetime            = $datetime;
     }
 
     /**
@@ -66,7 +74,7 @@ class BatchEnableDisableHandler
             if ($batchEnableDisable->state === false) {
                 $this->batchCatalogHandler->handle(new BatchCatalog(
                     $batchEnableDisable->ids,
-                    $batchEnableDisable->date,
+                    $this->datetime,
                     $batchEnableDisable->state,
                     $batchEnableDisable->admin
                 ));
@@ -77,7 +85,7 @@ class BatchEnableDisableHandler
                 new SheetEnableDisableEvent(
                     $sheet,
                     $batchEnableDisable->admin,
-                    new \DateTime(),
+                    $this->datetime,
                     $batchEnableDisable->state
                 )
             );

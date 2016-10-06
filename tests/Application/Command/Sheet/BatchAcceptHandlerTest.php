@@ -27,14 +27,15 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event = EventFactory::createEvent();
-        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
+        $date  = new \DateTime();
+        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
         $type  = new Type($event);
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
+        $sheet1 = new Sheet($event, $type, [], $user1, $date);
+        $sheet2 = new Sheet($event, $type, [], $user2, $date);
+        $sheet3 = new Sheet($event, $type, [], $user3, $date);
         $sheet3->markAsAccepted();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -45,9 +46,9 @@ class BatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
             return !$accept->sheet->isAccepted();
         }))->shouldBeCalledTimes(2);
 
-        $command = new BatchAccept([1, 2, 3], $admin, new \DateTime());
+        $command = new BatchAccept([1, 2, 3], $admin);
 
-        $handler = new BatchAcceptHandler($sheetRepository->reveal(), $acceptHandler->reveal());
+        $handler = new BatchAcceptHandler($sheetRepository->reveal(), $acceptHandler->reveal(), $date);
         $result  = $handler->handle($command);
 
         $this->assertEquals(2, $result->count);

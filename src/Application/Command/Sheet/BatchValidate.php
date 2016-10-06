@@ -26,11 +26,6 @@ class BatchValidate extends AbstractBatch
     public $admin;
 
     /**
-     * @var DateTimeInterface
-     */
-    public $date;
-
-    /**
      * @var string
      */
     public $comment;
@@ -38,16 +33,14 @@ class BatchValidate extends AbstractBatch
     /**
      * BatchValidate constructor.
      *
-     * @param array             $ids
-     * @param Admin             $admin
-     * @param DateTimeInterface $date
-     * @param string            $comment
+     * @param array  $ids
+     * @param Admin  $admin
+     * @param string $comment
      */
-    public function __construct(array $ids, Admin $admin, DateTimeInterface $date, $comment)
+    public function __construct(array $ids, Admin $admin, $comment)
     {
         $this->ids     = $ids;
         $this->admin   = $admin;
-        $this->date    = $date;
         $this->comment = $comment;
     }
 }
