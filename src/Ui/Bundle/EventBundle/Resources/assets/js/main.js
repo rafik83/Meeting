@@ -44,12 +44,6 @@ function init (target) {
         });
     });
 
-    $('.display-catalog-research', target).on('click', function (e) {
-        $(this).toggleClass('btn-active');
-        $(this).toggleClass('btn-inactive');
-        $('.catalog').toggleClass('catalog--advanced');
-    });
-
     $('.catalog form input, .catalog form select', target).on('change', function () {
         this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
     });

@@ -9,7 +9,7 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
-    <div class="catalog">
+    <div class="catalog catalog--advanced">
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult }, false) }}
     </div>
 {% endblock %}
