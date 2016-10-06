@@ -79,6 +79,8 @@ class SheetSearchQueryBuilder
 
     /**
      * Has owner
+     *
+     * @deprecated To be removed, used for dev reason
      */
     protected function hasOwner()
     {
