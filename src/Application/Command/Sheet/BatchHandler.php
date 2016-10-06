@@ -71,7 +71,6 @@ class BatchHandler
             return $this->batchValidateHandler->handle(new BatchValidate(
                 $batch->ids,
                 $batch->admin,
-                $batch->date,
                 $batch->validateComment
             ));
         }
@@ -95,14 +94,14 @@ class BatchHandler
             $state = (true === $batch->addCatalog) ? true : false;
 
             return $this->batchCatalogHandler->handle(
-                new BatchCatalog($batch->ids, $batch->date, $state, $batch->admin)
+                new BatchCatalog($batch->ids, $state, $batch->admin)
             );
         }
         if ($batch->addCatalog || $batch->removeCatalog) {
             $state = (true === $batch->addCatalog) ? true : false;
 
             return $this->batchCatalogHandler->handle(
-                new BatchCatalog($batch->ids, $batch->date, $state, $batch->admin)
+                new BatchCatalog($batch->ids, $state, $batch->admin)
             );
         }
 
