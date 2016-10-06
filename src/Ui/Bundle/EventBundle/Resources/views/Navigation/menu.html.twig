@@ -5,11 +5,6 @@
                 {{ render(controller('EventBundle:Navigation:menu')) }}
             </div>
         </li>
-        {% if isCatalog is defined and isCatalog == true and resultsCount is defined and resultsCount > 0 %}
-        <li>
-            <button class="btn btn-primary btn-lg btn-inactive display-catalog-research"><i class="icon-Rechercher"></i> Recherche avancée</button>
-        </li>
-        {% endif %}
     </ul>
 
     <ul class="sub-header__item">
