@@ -56,7 +56,7 @@ class SearchFacetController extends Controller
             $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.event.filter_facet.success');
 
-            return $this->redirectToRoute('admin_event_search_filters', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_event_search_facets', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Event/SearchFacet:update.html.twig', [
