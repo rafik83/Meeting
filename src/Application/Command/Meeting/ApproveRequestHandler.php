@@ -3,13 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class ApproveRequestHandler
@@ -20,11 +22,28 @@ class ApproveRequestHandler
     private $requestRepository;
 
     /**
-     * @param RequestRepositoryInterface $requestRepository
+     * @var \DateTimeInterface
      */
-    public function __construct(RequestRepositoryInterface $requestRepository)
-    {
+    private $datetime;
+
+    /**
+     * @var MessageRepositoryInterface
+     */
+    private $messageRepository;
+
+    /**
+     * @param RequestRepositoryInterface $requestRepository
+     * @param MessageRepositoryInterface $messageRepository
+     * @param \DateTimeInterface         $datetime
+     */
+    public function __construct(
+        RequestRepositoryInterface $requestRepository,
+        MessageRepositoryInterface $messageRepository,
+        \DateTimeInterface $datetime
+    ) {
         $this->requestRepository = $requestRepository;
+        $this->datetime          = $datetime;
+        $this->messageRepository = $messageRepository;
     }
 
     /**
@@ -32,10 +51,20 @@ class ApproveRequestHandler
      */
     public function handle(ApproveRequest $approveRequest)
     {
-        foreach ($approveRequest->toParticipants as $participant) {
+        foreach ($approveRequest->participants as $participant) {
             $approveRequest->request->addToParticipant($participant);
         }
 
-        $this->requestRepository->set($approveRequest->request->approve($approveRequest->date));
+        // Add message
+        if ($approveRequest->description) {
+            $this->messageRepository->add(new Message(
+                $approveRequest->request,
+                $approveRequest->request->getToSheet(),
+                $approveRequest->description,
+                $this->datetime
+            ));
+        }
+
+        $this->requestRepository->set($approveRequest->request->approve($this->datetime));
     }
 }

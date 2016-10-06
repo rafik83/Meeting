@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,22 +21,21 @@ class ApproveRequest
     public $request;
 
     /**
+     * @var string
+     */
+    public $description;
+
+    /**
      * @var Participant[]
      */
-    public $toParticipants;
+    public $participants;
 
     /**
-     * @var \DateTimeInterface
+     * @param Request $request
      */
-    public $date;
-
-    /**
-     * @param Request            $request
-     * @param \DateTimeInterface $date
-     */
-    public function __construct(Request $request, \DateTimeInterface $date)
+    public function __construct(Request $request)
     {
-        $this->request = $request;
-        $this->date    = $date;
+        $this->request      = $request;
+        $this->participants = [];
     }
 }
