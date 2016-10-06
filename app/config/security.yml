@@ -78,7 +78,7 @@ security:
         - { path: ^/admin/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%domain%' }
         - { path: '^/admin/(fr|en)/event$', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%domain%' }
         - { path: '^/admin/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%domain%' }
-        - { path: '^/admin/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USERS, host: '%domain%' }
+        - { path: '^/admin/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%domain%' }
         - { path: ^/admin/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%domain%' }
         - { path: ^/admin, role: ROLE_ALLOWED_TO_ADMIN, host: '%domain%' }
         - { path: ^/(\w+)/sheet, role: ROLE_USER }
@@ -88,14 +88,14 @@ security:
             - 'ROLE_ALLOWED_TO_SWITCH'
             - 'ROLE_ALLOWED_TO_ACCOUNT'
             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
-            - 'ROLE_ALLOWED_TO_MANAGE_USERS'
+            - 'ROLE_ALLOWED_TO_MANAGE_USER'
             - 'ROLE_ALLOWED_TO_OPERATE'
             - 'ROLE_ALLOWED_TO_PARTNER'
         ROLE_ALLOWED_TO_PARTNER:
             - 'ROLE_ALLOWED_TO_SWITCH'
             - 'ROLE_ALLOWED_TO_ACCOUNT'
             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
-            - 'ROLE_ALLOWED_TO_MANAGE_USERS'
+            - 'ROLE_ALLOWED_TO_MANAGE_USER'
 
         ROLE_SUPER_ADMIN: ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
         ROLE_ORGANIZER:   ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
