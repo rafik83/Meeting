@@ -22,15 +22,23 @@
             </div>
 
             {% if not catalogSheetPreviewView.isItMySheet %}
-                <div class="buttons-zone">
+                <div class="buttons-zone button">
                 {% if not catalogSheetPreviewView.hasMeetingRequest %}
-                    <div class="button btn btn-primary" data-modal-load="{{ path('event_catalog_sheet_meeting_request', { 'sheet': catalogSheetPreviewView.id }) }}">
-                        <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.create'|trans }}
-                    </div>
+                    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': catalogSheetPreviewView.sheet}) }}
                 {% else %}
-                    <div class="button btn btn-gray">
-                        <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.pending'|trans }}
-                    </div>
+                    {% if catalogSheetPreviewView.meetingRequestIsProposition %}
+                        {% if catalogSheetPreviewView.meetingRequestIsPending %}
+                        {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest, 'sheet': viewer}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
+                            {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
+                        {% endif %}
+                    {% else %}
+                        {% if catalogSheetPreviewView.meetingRequestIsPending %}
+                        {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
+                            {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
                 </div>
             {% endif %}
