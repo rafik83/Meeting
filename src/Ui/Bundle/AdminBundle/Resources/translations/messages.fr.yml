@@ -316,7 +316,7 @@ admin.sheet.validate: Valider
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
-admin.spot.catalog_filters: 'Filtres catalogue'
+admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.delete: Supprimer

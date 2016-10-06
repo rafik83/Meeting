@@ -3,7 +3,11 @@
 {% block form_title 'admin.event.search_facet.title'|trans %}
 
 {% block form_content %}
-    {{ form_row(form.searchFacets) }}
+    {% for searchFacet in form.searchFacets %}
+        {{ form_row(searchFacet.enabled) }}
+        {{ form_label(searchFacet) }}
+        {{ form_row(searchFacet.translations, {widget_columns: 8}) }}
+    {% endfor %}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}
