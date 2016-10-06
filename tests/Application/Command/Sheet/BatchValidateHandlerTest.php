@@ -28,16 +28,16 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event   = EventFactory::createEvent();
         $type    = new Type($event);
-        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
         $date    = new \DateTime();
+        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
         $comment = 'truc muche';
 
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
         $user2  = new User('test@test.com', 'salt', 'password', 'fr');
         $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheet2 = new Sheet($event, $type, [], $user2, new \DateTime());
-        $sheet3 = new Sheet($event, $type, [], $user3, new \DateTime());
+        $sheet1 = new Sheet($event, $type, [], $user1, $date);
+        $sheet2 = new Sheet($event, $type, [], $user2, $date);
+        $sheet3 = new Sheet($event, $type, [], $user3, $date);
         $sheet3->markAsValidated();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -48,9 +48,9 @@ class BatchValidateHandlerTest extends \PHPUnit_Framework_TestCase
             return !$validate->sheet->isValidated();
         }))->shouldBeCalledTimes(2);
 
-        $command = new BatchValidate([1, 2, 3], $admin, $date, $comment);
+        $command = new BatchValidate([1, 2, 3], $admin, $comment);
 
-        $handler = new BatchValidateHandler($sheetRepository->reveal(), $validateHandler->reveal());
+        $handler = new BatchValidateHandler($sheetRepository->reveal(), $validateHandler->reveal(), $date);
         $result  = $handler->handle($command);
 
         $this->assertEquals(2, $result->count);
