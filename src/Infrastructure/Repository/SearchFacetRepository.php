@@ -1,0 +1,74 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Repository;
+
+use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
+
+class SearchFacetRepository implements SearchFacetRepositoryInterface
+{
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(SearchFacet $searchFacet)
+    {
+        $this->entityManager->persist($searchFacet);
+        $this->entityManager->flush($searchFacet);
+
+        foreach ($searchFacet->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(SearchFacet $searchFacet)
+    {
+        $this->entityManager->flush($searchFacet);
+
+        foreach ($searchFacet->getTranslations() as $translation) {
+            $this->entityManager->flush($translation);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('searchFacet', 'translations')
+            ->from(SearchFacet::class, 'searchFacet')
+            ->where('searchFacet.event = :event')
+            ->join('searchFacet.translations', 'translations')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+}
