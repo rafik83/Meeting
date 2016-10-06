@@ -40,6 +40,8 @@
     {% endif %}
 
     {% if isCatalog and userSheet != sheet %}
-        <a class="btn btn-primary" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
+        <div class="buttons-zone button">
+            {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': userSheet, 'meetingRequest': meetingRequest}) }}
+        </div>
     {% endif %}
 </section>
