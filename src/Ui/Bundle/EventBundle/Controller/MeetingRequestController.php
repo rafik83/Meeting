@@ -134,6 +134,10 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('You can not request a meeting with yourself');
         }
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Not allowed method');
+        }
+
         $createRequest = new CreateRequest($from, $sheet, $this->getUser());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', ['sheet' => $sheet->getId()]),
