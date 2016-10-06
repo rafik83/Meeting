@@ -127,10 +127,10 @@ class UserRepository implements UserRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
 
-        if (!empty($filter['type'])) {
+        if (!empty($filter['types'])) {
             $queryBuilder
-                ->andWhere('sheet.type IS NOT NULL AND sheet.type = :type OR sheet.type IS NULL AND userEvent.type = :type')
-                ->setParameter('type', $filter['type']->getId());
+                ->andWhere('sheet.type IS NOT NULL AND sheet.type IN (:types) OR sheet.type IS NULL AND userEvent.type IN (:types)')
+                ->setParameter('types', $filter['types']);
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');

@@ -47,13 +47,21 @@ class UserController extends Controller
 
         $filterFormView = $filterType->createView();
 
+        if (!isset($typeFilter['type'])) {
+            $filters['types'] = $this
+                ->get('vimeet_infrastructure.repository.type_repository')
+                ->getAllowedTypesByEvent($this->getUser(), $event);
+        } else {
+            $filters['types'] = [$typeFilter['type']];
+        }
+
         $paginatedResult = $this
             ->get('vimeet_infrastructure.repository.user_repository')
             ->paginate(
                 $request->query->get('page', 1),
                 20,
                 $event,
-                $typeFilter,
+                $filters,
                 $locale
             );
 
