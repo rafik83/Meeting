@@ -37,6 +37,7 @@ admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.search_facet.title: "Filtres du catalogue"
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
@@ -315,6 +316,7 @@ admin.sheet.validate: Valider
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
+admin.spot.catalog_filters: 'Filtres catalogue'
 admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.delete: Supprimer
