@@ -62,7 +62,7 @@ class StepManager
     public function resetRegistrationStep(Participant $participant)
     {
         $participant->setRegistrationComplete($this->isRegistrationComplete($participant));
-        $participant->setRegistrationStep(0);
+        $participant->setRegistrationStep($this->getLastCompleteStep($participant));
 
         $this->participantRepository->set($participant);
     }
@@ -88,6 +88,33 @@ class StepManager
         }
 
         return true;
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return int
+     */
+    private function getLastCompleteStep(Participant $participant)
+    {
+        $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
+            $participant,
+            $participant->getLocale()
+        );
+
+        $step = 0;
+
+        foreach ($registrationTemplate->getBlocks() as $block) {
+            foreach ($block->getObjects() as $object) {
+                if (true === $object->getRequired() && empty($object->getData())) {
+                    return $step;
+                }
+            }
+
+            $step++;
+        }
+
+        return $registrationTemplate->getBlocksCount();
     }
 
     /**
@@ -118,14 +145,16 @@ class StepManager
             ];
         }
 
+        $nextStep = $registrationTemplate->getNextBlockPosition($participant->getRegistrationStep());
+
         return [
             'redirect'   => true,
             'route'      => 'event_participant_step',
             'parameters' => [
                 'participant' => $participant->getId(),
-                'step'        => $registrationTemplate->getNextBlockPosition(
-                    $participant->getRegistrationStep()
-                ),
+                'step'        => $nextStep !== null ?
+                    $nextStep :
+                    $registrationTemplate->getBlocksCount()
             ],
         ];
     }

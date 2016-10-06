@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RegistrationTemplateClonerTest extends \PHPUnit_Framework_TestCase
@@ -50,11 +51,13 @@ class RegistrationTemplateClonerTest extends \PHPUnit_Framework_TestCase
         $sheetTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $templateDataFactory     = $this->prophesize(TemplateDataFactory::class);
         $nomenclatureCloner      = $this->prophesize(NomenclatureCloner::class);
+        $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
 
         $cloner = new RegistrationTemplateCloner(
             $sheetTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $nomenclatureCloner->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
 
@@ -125,11 +128,13 @@ class RegistrationTemplateClonerTest extends \PHPUnit_Framework_TestCase
         $sheetTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $templateDataFactory     = $this->prophesize(TemplateDataFactory::class);
         $nomenclatureCloner      = $this->prophesize(NomenclatureCloner::class);
+        $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
 
         $cloner = new RegistrationTemplateCloner(
             $sheetTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $nomenclatureCloner->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
 

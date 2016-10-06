@@ -10,26 +10,25 @@
 
 namespace Proximum\Vimeet\Domain\View\Catalog;
 
-class TypeView
+class OrganizationCategoryView
 {
-    /** @var int */
-    public $id;
-
-    /** @var string */
-    public $title;
-
-    /** @var int */
-    public $count;
+    /**
+     * @var string
+     */
+    public $key;
 
     /**
-     * @param int    $id
-     * @param string $title
-     * @param int    $count
+     * @var string
      */
-    public function __construct($id, $title, $count)
+    public $title;
+
+    /**
+     * @param string $key
+     * @param string $title
+     */
+    public function __construct($key, $title)
     {
-        $this->id    = $id;
+        $this->key   = $key;
         $this->title = $title;
-        $this->count = $count;
     }
 }

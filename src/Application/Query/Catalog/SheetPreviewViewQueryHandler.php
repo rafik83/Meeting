@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet;
+namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\CatalogSheetPreviewView;
@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
 
-class CatalogSheetPreviewViewQueryHandler
+class SheetPreviewViewQueryHandler
 {
     /**
      * @var SheetInfoGuesser
@@ -57,11 +57,11 @@ class CatalogSheetPreviewViewQueryHandler
     }
 
     /**
-     * @param CatalogSheetPreviewViewQuery $catalogSheetPreviewViewQuery
+     * @param SheetPreviewViewQuery $catalogSheetPreviewViewQuery
      *
      * @return CatalogSheetPreviewView
      */
-    public function handle(CatalogSheetPreviewViewQuery $catalogSheetPreviewViewQuery)
+    public function handle(SheetPreviewViewQuery $catalogSheetPreviewViewQuery)
     {
         $viewer = $catalogSheetPreviewViewQuery->viewer;
         $sheet  = $catalogSheetPreviewViewQuery->sheet;

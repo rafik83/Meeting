@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet;
+namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class CatalogSheetPreviewViewQuery
+class SheetPreviewViewQuery
 {
     /**
      * @var Sheet

@@ -6,7 +6,7 @@
             {% set disabled = choices[child.vars.value].count == 0 %}
             <li class="filter__item">
                 <label class="checkbox-inline {{ disabled ? 'count_zero' : '' }}">
-                    <span class="filter-label">{{ form_widget(child, {disabled: disabled}) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                    <span class="filter-label">{{ form_widget(child, {attr: {class: disabled ? 'disabled' : ''}}) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
                     <span class="details">{{ choices[child.vars.value].count }}</span>
                 </label>
             </li>
