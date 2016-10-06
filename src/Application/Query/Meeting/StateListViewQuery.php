@@ -25,7 +25,7 @@ class StateListViewQuery
     public $filters;
 
     /**
-     * StatusListViewQuery constructor.
+     * StateListViewQuery constructor.
      *
      * @param Sheet $sheet
      * @param array $filters

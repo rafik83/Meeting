@@ -63,7 +63,7 @@ class MeetingRequestController extends Controller
             $sheet, $request->getLocale()
         ));
 
-        $filters    = [];
+        $filters         = SearchType::getDefaultFilters();
         $filters['type'] = $typeViews; // pre fill filters
 
         $searchForm = $this->createForm(SearchType::class, $filters, [

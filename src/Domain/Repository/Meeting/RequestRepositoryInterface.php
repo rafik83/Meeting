@@ -104,7 +104,7 @@ interface RequestRepositoryInterface
      * @param string $state
      * @param array  $filters
      *
-     * @return Request[]
+     * @return int
      */
     public function countSheetState(Sheet $sheet, $state, array $filters = []);
 

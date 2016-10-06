@@ -328,6 +328,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->where('request.from = :sheet')
             ->orWhere('request.to = :sheet')
+            ->andWhere('request.state != :cancelState')
+            ->setParameter('cancelState', Request::STATE_CANCEL)
             ->setParameter('sheet', $sheet);
 
         if ($state !== Request::STATE_ALL) {

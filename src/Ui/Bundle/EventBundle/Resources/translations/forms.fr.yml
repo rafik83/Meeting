@@ -38,6 +38,7 @@ form.search.meeting.state.sent: 'Demandes en attente'
 form.search.meeting.state.refused: Refusées
 form.search.meeting.state.cancelled: Annulées
 form.search.meeting.state.receive: 'Propositions reçues'
+form.search.organizationCategory.label: Structure
 form.search.type.label: Participants
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL

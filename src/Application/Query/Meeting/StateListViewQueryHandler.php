@@ -23,7 +23,7 @@ class StateListViewQueryHandler
     private $requestRepository;
 
     /**
-     * StatusListViewQueryHandler constructor.
+     * StateListViewQueryHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
      */
