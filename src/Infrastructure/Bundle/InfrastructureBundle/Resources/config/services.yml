@@ -472,6 +472,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.refuse_request_handler:
