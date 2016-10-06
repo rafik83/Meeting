@@ -317,12 +317,9 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $state
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function countSheetState(Sheet $sheet, $state)
+    public function countSheetState(Sheet $sheet, $state, array $filters = [])
     {
         $queryBuilder = $this
             ->entityManager
@@ -337,6 +334,15 @@ class RequestRepository implements RequestRepositoryInterface
             $queryBuilder
                 ->andWhere('request.state = :state')
                 ->setParameter('state', $state);
+        }
+
+        // filter by participant type
+        if (!empty($filters['type'])) {
+            $queryBuilder
+                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
+                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
+                ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
+                ->setParameter('types', $filters['type']);
         }
 
         return count($queryBuilder->getQuery()->getResult());

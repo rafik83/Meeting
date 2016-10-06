@@ -47,10 +47,6 @@ class MeetingRequestListViewQueryHandler
      */
     public function handle(MeetingRequestListViewQuery $query)
     {
-        if (!empty($query->filters['type'])) {
-            $query->filters['type'] = $this->transformTypeFilter($query->filters['type']);
-        }
-
         $meetingRequests = $this->meetingRequestRepository
             ->getAllRequestBySheet($query->sheet, $query->filters);
 
@@ -74,23 +70,5 @@ class MeetingRequestListViewQueryHandler
         }
 
         return $meetingRequestListView;
-    }
-
-    /**
-     * Transform TypeView[] to array of IDs
-     *
-     * @param $typeViews
-     *
-     * @return array
-     */
-    public function transformTypeFilter($typeViews)
-    {
-        $types = [];
-
-        foreach($typeViews as $typeView) {
-            $types[] = $typeView->id;
-        }
-
-        return $types;
     }
 }

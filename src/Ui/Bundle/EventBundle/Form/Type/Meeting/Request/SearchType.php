@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Meeting\TypeViewTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -58,6 +59,8 @@ class SearchType extends AbstractType
                     return $typeView->title;
                 },
             ]);
+
+        $builder->get('type')->addModelTransformer(new TypeViewTransformer());
     }
 
     /**

@@ -102,10 +102,11 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet  $sheet
      * @param string $state
+     * @param array  $filters
      *
      * @return Request[]
      */
-    public function countSheetState(Sheet $sheet, $state);
+    public function countSheetState(Sheet $sheet, $state, array $filters = []);
 
     /**
      * @param Sheet $sheet

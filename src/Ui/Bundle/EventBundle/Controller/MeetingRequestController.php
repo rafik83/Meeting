@@ -80,7 +80,7 @@ class MeetingRequestController extends Controller
         }
 
         $query       = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
-        $statusQuery = new StateListViewQuery($sheet);
+        $statusQuery = new StateListViewQuery($sheet, $filters);
 
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
