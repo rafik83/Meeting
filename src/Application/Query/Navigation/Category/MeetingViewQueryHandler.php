@@ -50,57 +50,61 @@ class MeetingViewQueryHandler
      */
     public function handle(MeetingViewQuery $meetingViewQuery)
     {
-        $happeningOpenDate = $meetingViewQuery
+        $catalogOnlineDate = $meetingViewQuery
             ->sheet
             ->getEvent()
             ->getConfiguration()
-            ->getHappeningsOpenDate();
+            ->getCatalogOnlineDate();
 
         $linksView = [];
 
-        if ($happeningOpenDate === null) {
+        if ($catalogOnlineDate === null) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
-        } elseif ($happeningOpenDate < $this->dateTime) {
+        } elseif ($catalogOnlineDate < $this->dateTime) {
 
-            $linksView[] = new LinkView(
-                'navigation.links.meetingRequest.proposal',
-                $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $meetingViewQuery->sheet->getId(),
-                ]),
-                null,
-                null
-            );
+            if (!$meetingViewQuery->sheet->isInCatalog()) {
+                // catalog opened but sheet not in catalog
+                $linksView[] = new LinkView('navigation.links.catalog.sheet_not_in_catalog');
+            } else {
+                $linksView[] = new LinkView(
+                    'navigation.links.meetingRequest.proposal',
+                    $this->navigationBuilder->getRoute('event_meeting_list_request', [
+                        'sheet' => $meetingViewQuery->sheet->getId(),
+                    ]),
+                    null,
+                    null
+                );
 
-            $linksView[] = new LinkView(
-                'navigation.links.meetingRequest.sent',
-                $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $meetingViewQuery->sheet->getId(),
-                    'state' => Request::STATE_SENT
-                ]),
-                null,
-                null
-            );
+                $linksView[] = new LinkView(
+                    'navigation.links.meetingRequest.sent',
+                    $this->navigationBuilder->getRoute('event_meeting_list_request', [
+                        'sheet' => $meetingViewQuery->sheet->getId(),
+                        'state' => Request::STATE_SENT,
+                    ]),
+                    null,
+                    null
+                );
 
-            $linksView[] = new LinkView(
-                'navigation.links.meetingRequest.approved',
-                $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $meetingViewQuery->sheet->getId(),
-                    'state' => Request::STATE_APPROVED
-                ]),
-                null,
-                null
-            );
+                $linksView[] = new LinkView(
+                    'navigation.links.meetingRequest.approved',
+                    $this->navigationBuilder->getRoute('event_meeting_list_request', [
+                        'sheet' => $meetingViewQuery->sheet->getId(),
+                        'state' => Request::STATE_APPROVED,
+                    ]),
+                    null,
+                    null
+                );
 
-            $linksView[] = new LinkView(
-                'navigation.links.meetingRequest.refused',
-                $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $meetingViewQuery->sheet->getId(),
-                    'state' => Request::STATE_REFUSED
-                ]),
-                null,
-                null
-            );
-
+                $linksView[] = new LinkView(
+                    'navigation.links.meetingRequest.refused',
+                    $this->navigationBuilder->getRoute('event_meeting_list_request', [
+                        'sheet' => $meetingViewQuery->sheet->getId(),
+                        'state' => Request::STATE_REFUSED,
+                    ]),
+                    null,
+                    null
+                );
+            }
         } else {
             $formatter = new IntlDateFormatter(
                 $meetingViewQuery->locale,
@@ -108,13 +112,13 @@ class MeetingViewQueryHandler
                 IntlDateFormatter::LONG
             );
             $formatter->setPattern('d MMMM Y');
-            $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
+            $catalogOnlineDateFormatted = $formatter->format($catalogOnlineDate);
 
             $linksView[] = new LinkView(
                 'navigation.links.meetingRequest.open_date',
                 null,
                 null,
-                new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
+                new StateButtonView(false, $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '')
             );
         }
 
