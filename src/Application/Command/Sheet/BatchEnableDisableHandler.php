@@ -74,7 +74,6 @@ class BatchEnableDisableHandler
             if ($batchEnableDisable->state === false) {
                 $this->batchCatalogHandler->handle(new BatchCatalog(
                     $batchEnableDisable->ids,
-                    $this->datetime,
                     $batchEnableDisable->state,
                     $batchEnableDisable->admin
                 ));

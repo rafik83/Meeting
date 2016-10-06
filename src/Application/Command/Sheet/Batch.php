@@ -56,11 +56,6 @@ class Batch extends AbstractBatch
     public $admin;
 
     /**
-     * @var DateTimeInterface
-     */
-    public $date;
-
-    /**
      * @var string
      */
     public $validateComment;
@@ -76,12 +71,10 @@ class Batch extends AbstractBatch
     public $removeCatalog;
 
     /**
-     * @param Admin             $admin
-     * @param DateTimeInterface $date
+     * @param Admin $admin
      */
-    public function __construct(Admin $admin, DateTimeInterface $date)
+    public function __construct(Admin $admin)
     {
         $this->admin = $admin;
-        $this->date  = $date;
     }
 }
