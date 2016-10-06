@@ -39,7 +39,7 @@ class MeetingRequestView
     /**
      * @var MeetingRequest
      */
-    private $meetingRequest;
+    public $meetingRequest;
 
     /**
      * @var PreviewView[]
@@ -78,5 +78,21 @@ class MeetingRequestView
         $this->createdAt      = $createdAt;
         $this->meetingRequest = $meetingRequest;
         $this->previewViews   = $previewViews;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending()
+    {
+        return $this->meetingRequest->isSent();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProposition()
+    {
+        return $this->meetingRequest->getFromSheet() === $this->sheet;
     }
 }
