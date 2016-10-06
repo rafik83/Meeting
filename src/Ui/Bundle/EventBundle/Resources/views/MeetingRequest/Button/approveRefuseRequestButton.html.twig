@@ -1,0 +1,6 @@
+<div class="btn btn-gray reject" data-modal-load="">
+    <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.refuse'|trans }}
+</div>
+<div class="btn btn-primary accept" data-modal-load="{{ path('event_meeting_request_approve', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
+    <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.approve'|trans }}
+</div>
