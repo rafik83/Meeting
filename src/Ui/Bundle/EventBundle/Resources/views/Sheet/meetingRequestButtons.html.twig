@@ -1,0 +1,17 @@
+{% if meetingRequest is null %}
+    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': sheet}) }}
+{% else %}
+    {% if meetingRequest.fromSheet != userSheet%}
+        {% if meetingRequest.isSent %}
+            {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': meetingRequest, 'sheet': userSheet}) }}
+        {% elseif meetingRequest.isApproved %}
+            {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
+        {% endif %}
+    {% else %}
+        {% if meetingRequest.isSent %}
+            {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
+        {% elseif meetingRequest.isApproved %}
+            {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
+        {% endif %}
+    {% endif %}
+{% endif %}
