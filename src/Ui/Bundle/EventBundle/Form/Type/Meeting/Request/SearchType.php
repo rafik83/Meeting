@@ -46,21 +46,25 @@ class SearchType extends AbstractType
                 'choice_label' => function ($state) {
                     return 'form.search.meeting.state.' . $state;
                 },
-            ])
-            ->add('type', ChoiceType::class, [
-                'label'        => 'form.search.type.label',
-                'expanded'     => true,
-                'multiple'     => true,
-                'choices'      => $options['typeViews'],
-                'choice_value' => function (TypeView $typeView) {
-                    return $typeView->id;
-                },
-                'choice_label' => function (TypeView $typeView) {
-                    return $typeView->title;
-                },
             ]);
 
-        $builder->get('type')->addModelTransformer(new TypeViewTransformer());
+        if (count($options['typeViews']) > 0) {
+            $builder
+                ->add('type', ChoiceType::class, [
+                    'label'        => 'form.search.type.label',
+                    'expanded'     => true,
+                    'multiple'     => true,
+                    'choices'      => $options['typeViews'],
+                    'choice_value' => function (TypeView $typeView) {
+                        return $typeView->id;
+                    },
+                    'choice_label' => function (TypeView $typeView) {
+                        return $typeView->title;
+                    },
+                ]);
+
+            $builder->get('type')->addModelTransformer(new TypeViewTransformer());
+        }
     }
 
     /**
