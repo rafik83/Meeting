@@ -32,7 +32,7 @@ class MeetingTypeViewQuery
      */
     public function __construct(Sheet $sheet, $locale)
     {
-        $this->locale  = $sheet->getEvent()->getAvailableLocale($locale);
+        $this->locale  = $locale;
         $this->sheet   = $sheet;
     }
 }

@@ -53,7 +53,7 @@ class MeetingRequestViewQueryHandler
             $sheet,
             $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
             $query->meetingRequest->getState(),
-            $sheet->getType()->getTitle($sheet->getEvent()->getAvailableLocale($query->locale)),
+            $sheet->getType()->getTitle($query->locale),
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
             $previews

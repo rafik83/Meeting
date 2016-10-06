@@ -15,8 +15,8 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\CatalogViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\CatalogViewQueryHandler;
-use Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQuery;
-use Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\PackageViewQuery;
@@ -44,9 +44,9 @@ class CategoryViewQueryHandler
     private $catalogViewQueryHandler;
 
     /**
-     * @var HappeningViewQueryHandler
+     * @var MeetingViewQueryHandler
      */
-    private $happeningViewQueryHandler;
+    private $meetingViewQueryHandler;
 
     /**
      * @var PlanningViewQueryHandler
@@ -69,7 +69,7 @@ class CategoryViewQueryHandler
      * @param MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler
      * @param BillingViewQueryHandler     $billingViewQueryHandler
      * @param CatalogViewQueryHandler     $catalogViewQueryHandler
-     * @param HappeningViewQueryHandler   $happeningViewQueryHandler
+     * @param MeetingViewQueryHandler     $meetingViewQueryHandler
      * @param PlanningViewQueryHandler    $planningViewQueryHandler
      * @param SheetViewQueryHandler       $sheetViewQueryHandler
      * @param PackageViewQueryHandler     $packageViewQueryHandler
@@ -78,7 +78,7 @@ class CategoryViewQueryHandler
         MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler,
         BillingViewQueryHandler $billingViewQueryHandler,
         CatalogViewQueryHandler $catalogViewQueryHandler,
-        HappeningViewQueryHandler $happeningViewQueryHandler,
+        MeetingViewQueryHandler $meetingViewQueryHandler,
         PlanningViewQueryHandler $planningViewQueryHandler,
         SheetViewQueryHandler $sheetViewQueryHandler,
         PackageViewQueryHandler $packageViewQueryHandler
@@ -86,7 +86,7 @@ class CategoryViewQueryHandler
         $this->memberSpaceViewQueryHandler = $memberSpaceViewQueryHandler;
         $this->billingViewQueryHandler     = $billingViewQueryHandler;
         $this->catalogViewQueryHandler     = $catalogViewQueryHandler;
-        $this->happeningViewQueryHandler   = $happeningViewQueryHandler;
+        $this->meetingViewQueryHandler     = $meetingViewQueryHandler;
         $this->planningViewQueryHandler    = $planningViewQueryHandler;
         $this->sheetViewQueryHandler       = $sheetViewQueryHandler;
         $this->packageViewQueryHandler     = $packageViewQueryHandler;
@@ -136,7 +136,7 @@ class CategoryViewQueryHandler
                 ));
                 break;
             case Category::HAPPENING:
-                return $this->happeningViewQueryHandler->handle(new HappeningViewQuery(
+                return $this->meetingViewQueryHandler->handle(new MeetingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale

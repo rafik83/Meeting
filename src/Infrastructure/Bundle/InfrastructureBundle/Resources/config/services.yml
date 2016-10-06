@@ -1829,7 +1829,7 @@ services:
             - '@datetime'
             - '@navigation.navigation_builder'
     query.navigation.category_happening_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler
         arguments:
             - '@datetime'
             - '@navigation.navigation_builder'

@@ -19,7 +19,7 @@ use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
-class HappeningViewQueryHandler
+class MeetingViewQueryHandler
 {
     /**
      * @var DateTimeInterface
@@ -32,7 +32,7 @@ class HappeningViewQueryHandler
     private $navigationBuilder;
 
     /**
-     * CatalogViewQueryHandler constructor.
+     * MeetingViewQueryHandler constructor.
      *
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
@@ -44,13 +44,13 @@ class HappeningViewQueryHandler
     }
 
     /**
-     * @param HappeningViewQuery $happeningViewQuery
+     * @param MeetingViewQuery $meetingViewQuery
      *
      * @return CategoryView
      */
-    public function handle(HappeningViewQuery $happeningViewQuery)
+    public function handle(MeetingViewQuery $meetingViewQuery)
     {
-        $happeningOpenDate = $happeningViewQuery
+        $happeningOpenDate = $meetingViewQuery
             ->sheet
             ->getEvent()
             ->getConfiguration()
@@ -63,18 +63,18 @@ class HappeningViewQueryHandler
         } elseif ($happeningOpenDate < $this->dateTime) {
 
             $linksView[] = new LinkView(
-                'navigation.links.happening.proposal',
+                'navigation.links.meetingRequest.proposal',
                 $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $happeningViewQuery->sheet->getId(),
+                    'sheet' => $meetingViewQuery->sheet->getId(),
                 ]),
                 null,
                 null
             );
 
             $linksView[] = new LinkView(
-                'navigation.links.happening.sent',
+                'navigation.links.meetingRequest.sent',
                 $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $happeningViewQuery->sheet->getId(),
+                    'sheet' => $meetingViewQuery->sheet->getId(),
                     'state' => Request::STATE_SENT
                 ]),
                 null,
@@ -82,9 +82,9 @@ class HappeningViewQueryHandler
             );
 
             $linksView[] = new LinkView(
-                'navigation.links.happening.approved',
+                'navigation.links.meetingRequest.approved',
                 $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $happeningViewQuery->sheet->getId(),
+                    'sheet' => $meetingViewQuery->sheet->getId(),
                     'state' => Request::STATE_APPROVED
                 ]),
                 null,
@@ -92,9 +92,9 @@ class HappeningViewQueryHandler
             );
 
             $linksView[] = new LinkView(
-                'navigation.links.happening.refused',
+                'navigation.links.meetingRequest.refused',
                 $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $happeningViewQuery->sheet->getId(),
+                    'sheet' => $meetingViewQuery->sheet->getId(),
                     'state' => Request::STATE_REFUSED
                 ]),
                 null,
@@ -103,7 +103,7 @@ class HappeningViewQueryHandler
 
         } else {
             $formatter = new IntlDateFormatter(
-                $happeningViewQuery->locale,
+                $meetingViewQuery->locale,
                 IntlDateFormatter::LONG,
                 IntlDateFormatter::LONG
             );
@@ -111,7 +111,7 @@ class HappeningViewQueryHandler
             $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
 
             $linksView[] = new LinkView(
-                'navigation.links.happening.open_date',
+                'navigation.links.meetingRequest.open_date',
                 null,
                 null,
                 new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
