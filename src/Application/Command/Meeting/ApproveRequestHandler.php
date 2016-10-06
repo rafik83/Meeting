@@ -55,6 +55,8 @@ class ApproveRequestHandler
             $approveRequest->request->addToParticipant($participant);
         }
 
+        $this->requestRepository->set($approveRequest->request->approve($this->datetime));
+
         // Add message
         if ($approveRequest->description) {
             $this->messageRepository->add(new Message(
@@ -64,7 +66,5 @@ class ApproveRequestHandler
                 $this->datetime
             ));
         }
-
-        $this->requestRepository->set($approveRequest->request->approve($this->datetime));
     }
 }
