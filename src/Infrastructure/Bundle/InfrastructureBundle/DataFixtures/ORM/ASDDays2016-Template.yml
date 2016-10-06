@@ -72,24 +72,26 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                     component: "object"
                                                     type: "tag"
                                                     config:
-                                                        style: "style-1"
+                                                        style: "default"
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Catégory"
-                                                        tag: "sheet_organization_category"
+                                                        tags:
+                                                            - tag: "sheet_organization_category"
                                             -
                                                 90713a3d:
                                                     component: "object"
                                                     type: "tag"
                                                     config:
-                                                        style: "style-1"
+                                                        style: "default"
                                                         label:
                                                             fr: "Site internet"
                                                             en: "Website"
                                                         help:
                                                             fr: ""
                                                             en: ""
-                                                        tag: "sheet_website"
+                                                        tags:
+                                                            - tag: "sheet_website"
                                 -
                                     d691d21c:
                                         component: "object"
@@ -421,11 +423,12 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                     component: "object"
                                                     type: "tag"
                                                     config:
-                                                        style: "style-1"
+                                                        style: "default"
                                                         label:
                                                             fr: "Catégorie"
                                                             en: "Catégory"
-                                                        tag: "sheet_organization_category"
+                                                        tags:
+                                                            - tag: "sheet_organization_category"
                                             -
                                                 90713a3d:
                                                     component: "object"
