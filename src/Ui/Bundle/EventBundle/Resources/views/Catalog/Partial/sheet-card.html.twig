@@ -1,11 +1,14 @@
 <div class="col-md-4">
     <div class="catalog__item {#catalog__item--checked#}">
-        <header>
-        </header>
+        <header></header>
         <div class="content">
             {% for object in catalogSheetPreviewView.preview %}
-                {% if object.isImage and object.content is not empty %}
-                    <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+                {% if object.isImage %}
+                    {% if object.content is not empty %}
+                        <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+                    {% else %}
+                        <h3>{{ catalogSheetPreviewView.title }}</h3>
+                    {% endif %}
                 {% else %}
                     {% if object.isStrong %}
                         <p><strong>{{ object.content }}</strong></p>
