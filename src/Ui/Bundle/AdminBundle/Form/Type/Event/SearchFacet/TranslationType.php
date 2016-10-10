@@ -32,9 +32,8 @@ class TranslationType extends AbstractType
             ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var SearchFacetTranslation $searchFacetTranslation */
+            $form                   = $event->getForm();
             $searchFacetTranslation = $event->getData();
-            $form    = $event->getForm();
 
             if ($searchFacetTranslation->getSearchFacet()->hasPlaceholder()) {
                 $form->add(

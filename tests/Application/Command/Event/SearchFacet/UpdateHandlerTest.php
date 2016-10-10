@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\Model\SearchFacet;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()

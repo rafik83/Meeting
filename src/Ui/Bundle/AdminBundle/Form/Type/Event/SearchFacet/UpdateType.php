@@ -26,7 +26,6 @@ class UpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('searchFacets', CollectionType::class, [
                 'entry_type'    => SearchFacetType::class,
@@ -68,8 +67,7 @@ class UpdateType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        foreach ($view['searchFacets']->children as $key => $childView)
-        {
+        foreach ($view['searchFacets']->children as $key => $childView) {
             $childView->vars['label'] = str_replace('prototype', $options['types'][$key], $childView->vars['label']);
         }
     }
