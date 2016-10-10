@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class Update
 {
     /**

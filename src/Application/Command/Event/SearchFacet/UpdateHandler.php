@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\SearchFacet;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 
 class UpdateHandler
