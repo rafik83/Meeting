@@ -15,6 +15,7 @@ billing_info.title: 'Info de facturation'
 catalog.action.meeting.request.back: 'Retour'
 catalog.action.meeting.request.create: 'Demander en RDV'
 catalog.action.meeting.request.approve: 'Proposition reçue'
+catalog.action.meeting.request.refuse: 'Proposition reçue'
 catalog.complete_sheet: 'Voir la fiche complète'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
@@ -23,6 +24,8 @@ catalog.meeting_request.pending: Demande en attente
 catalog.meeting_request.approve: Accepter
 catalog.meeting_request.request.approved: Demande acceptée
 catalog.meeting_request.proposition.approved: Proposition acceptée
+catalog.meeting_request.proposition.refused: Proposition refusée
+catalog.meeting_request.request.refused: Demande refusée
 catalog.meeting_request.create: Demander en RDV
 catalog.meeting_request.refuse: Refuser
 common.backToPackage: 'Retour au forfait'
