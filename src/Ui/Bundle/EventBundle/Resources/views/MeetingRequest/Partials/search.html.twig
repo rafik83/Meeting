@@ -21,11 +21,13 @@
             {% endfor %}
         </ul>
     </div>
-    <div class="filter">
-        <h3>{{ searchForm.type.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
 
-        {{ form_widget(searchForm.type) }}
-    </div>
+    {% if searchForm.type %}
+        <div class="filter">
+            <h3>{{ searchForm.type.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+            {{ form_widget(searchForm.type) }}
+        </div>
+    {% endif %}
 </div>
 
 <div class="catalog__filters">
