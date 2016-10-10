@@ -20,26 +20,6 @@ class Update
     public $searchFacets;
 
     /**
-     * @var bool
-     */
-    public $enabled;
-
-    /**
-     * @var string
-     */
-    public $type;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var Event
-     */
-    public $event;
-
-    /**
      * Update constructor.
      *
      * @param array $searchFacets

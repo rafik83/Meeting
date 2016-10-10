@@ -35,12 +35,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        /** @var SearchFacet $searchFacet */
         foreach ($update->searchFacets as $searchFacet) {
-
-            $update->enabled = $searchFacet->isEnabled();
-            $update->type    = $searchFacet->getType();
-            $update->event   = $searchFacet->getEvent();
 
             foreach ($searchFacet->getTranslations() as $locale => $translation) {
                 $searchFacet->translate($locale, $translation->getLabel(), $translation->getPlaceholder());

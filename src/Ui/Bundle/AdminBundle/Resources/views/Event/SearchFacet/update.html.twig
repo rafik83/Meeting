@@ -4,8 +4,8 @@
 
 {% block form_content %}
     {% for searchFacet in form.searchFacets %}
-        {{ form_row(searchFacet.enabled) }}
         {{ form_label(searchFacet) }}
+        {{ form_row(searchFacet.enabled, {'label': 'admin.event.search_facet.enabled.label'|trans }) }}
         {{ form_row(searchFacet.translations, {widget_columns: 8}) }}
     {% endfor %}
 {% endblock form_content %}
