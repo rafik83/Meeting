@@ -164,9 +164,13 @@ class CatalogController extends Controller
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);
         $ruleApplyer->applyRuleForCardList($participants, $rules);
 
-        $meetingRequest = $this
-            ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->getRequestBetweenSheets($sheet, $userSheet);
+        if ($sheet === $userSheet) {
+            $meetingRequest = null;
+        } else {
+            $meetingRequest = $this
+                ->get('vimeet_infrastructure.repository.meeting.request_repository')
+                ->getRequestBetweenSheets($sheet, $userSheet);
+        }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'          => $eventDomain->getEvent(),

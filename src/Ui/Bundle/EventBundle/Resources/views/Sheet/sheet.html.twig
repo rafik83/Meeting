@@ -13,7 +13,7 @@
 
             {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
                 <div class="buttons-zone button request-meeting-sheet">
-                    {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': userSheet, 'meetingRequest': meetingRequest}) }}
+                    {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
                 </div>
             {% endif %}
 

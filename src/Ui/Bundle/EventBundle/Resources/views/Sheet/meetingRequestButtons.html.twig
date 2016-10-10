@@ -1,4 +1,4 @@
-{% if meetingRequest is null %}
+{% if meetingRequest is null or not meetingRequest %}
     {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': sheet}) }}
 {% else %}
     {% if meetingRequest.fromSheet != userSheet%}
