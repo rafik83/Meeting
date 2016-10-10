@@ -21,46 +21,42 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
         // Context
-
         $event     = EventFactory::createEvent();
         $type      = new Type($event);
         $user      = new User('test@test.fr', 'test', 'test', 'fr');
         $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
         $user3     = new User('test3@test.fr', 'test', 'test', 'fr');
-        $sheetFrom = new Sheet($event, $type, [], $user2, new \DateTime());
-        $sheetTo   = new Sheet($event, $type, [], $user3, new \DateTime());
         $dateTime  = new DateTime();
+        $sheetFrom = new Sheet($event, $type, [], $user2, $dateTime);
+        $sheetTo   = new Sheet($event, $type, [], $user3, $dateTime);
 
         // Request to refuse
-
-        $request = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
         $refuseRequest = new RefuseRequest($request, $user, $dateTime);
         $refuseRequest->message = 'this is a test';
 
         // Expected
-
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
         $expectedRequest->refuse($dateTime);
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'this is a test', $dateTime);
         $exectedEvent    = new RequestRefusedEvent($user, $request, $dateTime, 'this is a test');
 
-        // Dependencies
-
+        // Dependenciesgit status
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $eventDispatcher->dispatch('meeting_request.refused', $exectedEvent);
 
         // Handle
