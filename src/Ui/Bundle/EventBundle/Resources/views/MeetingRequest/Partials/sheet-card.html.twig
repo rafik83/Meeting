@@ -25,12 +25,16 @@
                         {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': meetingRequestView.meetingRequest, 'sheet': sheet}) }}
                     {% elseif meetingRequestView.meetingRequest.isApproved %}
                         {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
+                    {% elseif meetingRequestView.meetingRequest.isRefused %}
+                        {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {}) }}
                     {% endif %}
                 {% else %}
                     {% if meetingRequestView.isPending %}
-                        <div class="btn btn-gray">
-                            <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.pending'|trans }}
-                        </div>
+                        {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
+                    {% elseif meetingRequestView.meetingRequest.isApproved %}
+                        {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
+                    {% elseif meetingRequestView.meetingRequest.isRefused %}
+                        {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {}) }}
                     {% endif %}
                 {% endif %}
             </div>

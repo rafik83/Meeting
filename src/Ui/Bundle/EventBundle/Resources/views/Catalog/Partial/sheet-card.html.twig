@@ -34,12 +34,16 @@
                             {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest, 'sheet': viewer}) }}
                         {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
                             {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isRefused %}
+                            {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {}) }}
                         {% endif %}
                     {% else %}
                         {% if catalogSheetPreviewView.meetingRequestIsPending %}
-                        {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
+                            {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
                         {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
                             {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isRefused %}
+                            {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {}) }}
                         {% endif %}
                     {% endif %}
                 {% endif %}

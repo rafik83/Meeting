@@ -1,15 +1,45 @@
-{% extends 'EventBundle::base.html.twig' %}
-
 {% form_theme form '@Ui/default.html.twig' %}
 
-{% block title 'event.meeting.refusedRequest.title'|trans %}
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        <i class="icon-RDV"></i>
+        {{ 'catalog.action.meeting.request.refuse'|trans }}
+    </h4>
+</div>
 
-{% block content %}
-    <h1>{{ 'event.meeting.refusedRequest.title'|trans }}</h1>
-    <h2>{{ 'event.meeting.refusedRequest.label'|trans({'%toName%': toName, '%fromName%': fromName}) }}</h2>
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            {{ form(form) }}
-        </div>
+{{ form_start(form) }}
+{{ form_errors(form) }}
+<div class="modal-body">
+    <div class="object--form--field" style="margin-top: 0;">
+        {% if message is not null %}
+            <div class="message" style="margin-bottom: 10px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div>
+                            <div class="text-center">
+                                {{ fromName }}
+                            </div>
+                            <div class="img-thumbnail">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% for key, child in form if key != 'submit'%}
+                {{ form_row(child) }}
+        {% endfor %}
     </div>
-{% endblock %}
+    <div class="validation button">
+        <button type="submit" class="btn btn-primary reject">
+            <i class="icon-Fermer_4"></i> {{ 'form.catalog_refuse_meeting_request.children.submit.label'|trans({}, 'forms') }}
+        </button>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
+    </button>
+</div>
+{{ form_end(form) }}
