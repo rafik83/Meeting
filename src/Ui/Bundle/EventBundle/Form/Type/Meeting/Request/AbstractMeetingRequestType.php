@@ -43,7 +43,8 @@ abstract class AbstractMeetingRequestType extends AbstractType
 
         $builder
             ->add('description', TextType::class, [
-                'required' => false,
+                'placeholder' => $options['placeholder_description'],
+                'required'    => false,
             ])
         ;
 
@@ -72,5 +73,6 @@ abstract class AbstractMeetingRequestType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['sheet', 'locale']);
+        $resolver->setDefault('placeholder_description', '');
     }
 }
