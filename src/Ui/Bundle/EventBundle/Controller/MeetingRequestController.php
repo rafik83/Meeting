@@ -205,6 +205,10 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
         }
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Not allowed method');
+        }
+
         $messages = $this
             ->get('vimeet_infrastructure.repository.meeting.message_repository')
             ->getMessagesByMeetingRequest($meetingRequest)
@@ -218,10 +222,10 @@ class MeetingRequestController extends Controller
             }
         }
 
-        $approveRequest = new ApproveRequest($meetingRequest, new \DateTime());
+        $approveRequest = new ApproveRequest($meetingRequest);
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
-                'sheet' => $sheet->getId(),
+                'sheet'          => $sheet->getId(),
                 'meetingRequest' => $meetingRequest->getId()
             ]),
             'sheet'  => $sheet,
@@ -264,37 +268,76 @@ class MeetingRequestController extends Controller
      * Refuse a meeting request
      *
      * @param Request        $request
-     * @param EventDomain      $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
-     * @return RedirectResponse|Response
+     * @return Response|JsonResponse
      */
-    public function refuseRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
-    {
+    public function refuseRequestAction(
+        Request $request,
+        Sheet $sheet,
+        MeetingRequest $meetingRequest
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($this->getUser(), $meetingRequest, $sheet)) {
-            throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
+            throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
         }
 
-        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser(), new \DateTime());
-        $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($refuseRequest);
-            $this->addFlash('success', 'flash.meeting_request.refused.success');
-
-            return $this->redirectToRoute('event_meeting_list_proposition', ['sheet' => $sheet->getId()]);
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Not allowed method');
         }
+
+        $messages = $this
+            ->get('vimeet_infrastructure.repository.meeting.message_repository')
+            ->getMessagesByMeetingRequest($meetingRequest)
+        ;
+        $messageFrom = null;
+
+        /** @var Message $message */
+        foreach ($messages as $message) {
+            if ($message->getFrom() === $meetingRequest->getFromSheet()) {
+                $messageFrom = $message;
+            }
+        }
+
+        $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
+        $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest, [
+            'action' => $this->generateUrl('event_meeting_request_refuse', [
+                'sheet'          => $sheet->getId(),
+                'meetingRequest' => $meetingRequest->getId()
+            ]),
+        ]);
 
         $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($refuseRequest);
+
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'ok',
+                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig'),
+            ]);
+
+            return $response;
+        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'error',
+                'html'   => $this->renderView('EventBundle:MeetingRequest:refusedRequest.html.twig', [
+                    'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
+                    'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
+                    'form'     => $form->createView(),
+                ]),
+            ]);
+
+            return $response;
+        }
+
         return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
-            'event'    => $eventDomain->getEvent(),
-            'sheet'    => $sheet,
             'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
+            'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
             'form'     => $form->createView(),
         ]);
     }
