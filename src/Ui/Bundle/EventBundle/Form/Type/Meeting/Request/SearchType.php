@@ -48,7 +48,7 @@ class SearchType extends AbstractType
                 },
             ]);
 
-        if (count($options['typeViews']) > 0) {
+        if (count($options['typeViews']) > 1) {
             $builder
                 ->add('type', ChoiceType::class, [
                     'label'        => 'form.search.type.label',
