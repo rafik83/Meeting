@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\View\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 
 class CatalogSheetPreviewView
