@@ -12,19 +12,13 @@ namespace Proximum\Vimeet\Domain\View\Catalog;
 
 class TypeView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $count;
 
     /**

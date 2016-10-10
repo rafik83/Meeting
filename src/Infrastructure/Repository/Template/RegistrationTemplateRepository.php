@@ -98,6 +98,22 @@ class RegistrationTemplateRepository implements RegistrationTemplateRepositoryIn
     /**
      * {@inheritdoc}
      */
+    public function getUsedTemplateForGivenEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(RegistrationTemplate::class, 'template')
+            ->join('template.types', 'type', 'WITH', 'template.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(RegistrationTemplate $registrationTemplate)
     {
         $this->entityManager->persist($registrationTemplate);

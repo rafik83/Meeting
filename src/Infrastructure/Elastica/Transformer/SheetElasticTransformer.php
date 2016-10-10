@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Elastica\Transformer;
 use Elastica\Document;
 use FOS\ElasticaBundle\Transformer\ModelToElasticaTransformerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -109,28 +110,30 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $sheet->getType()->getCategories()->toArray()
         );
 
-        $unpaidCart = count($this->cartRowRepository->findBySheet($sheet)) > 0;
-        $templateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
-        $filtersValue = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
+        $hasCart              = count($this->cartRowRepository->findBySheet($sheet)) > 0;
+        $templateData         = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
+        $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
+        $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
         return new Document($sheet->getId(), [
-            'id'                => $sheet->getId(),
-            'sheetName'         => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
-            'state'             => $sheet->getState(),
-            'completed'         => $sheet->isCompleted(),
-            'type'              => $sheet->getType()->getId(),
-            'categories'        => $categories,
-            'followUp'          => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
-            'participantNumber' => count($sheet->getParticipants()),
-            'participants'      => $participants,
-            'event'             => $sheet->getEvent()->getId(),
-            'owner'             => $owner,
-            'createdAt'         => $sheet->getCreatedAt()->format('c'),
-            'inCatalog'         => $sheet->isInCatalog(),
-            'inCatalogAt'       => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
-            'booleanFilter'     => $filtersValue,
-            'hasOrder'          => $sheet->hasNotCancelledOrders(),
-            'hasCart'           => $unpaidCart,
+            'id'                   => $sheet->getId(),
+            'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            'state'                => $sheet->getState(),
+            'completed'            => $sheet->isCompleted(),
+            'type'                 => $sheet->getType()->getId(),
+            'categories'           => $categories,
+            'followUp'             => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
+            'participantNumber'    => count($sheet->getParticipants()),
+            'participants'         => $participants,
+            'event'                => $sheet->getEvent()->getId(),
+            'owner'                => $owner,
+            'createdAt'            => $sheet->getCreatedAt()->format('c'),
+            'inCatalog'            => $sheet->isInCatalog(),
+            'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
+            'booleanFilter'        => $filtersValue,
+            'hasOrder'             => $sheet->hasNotCancelledOrders(),
+            'hasCart'              => $hasCart,
+            'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
         ]);
     }
 }

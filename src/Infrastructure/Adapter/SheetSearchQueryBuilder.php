@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 
 class SheetSearchQueryBuilder
@@ -79,6 +80,8 @@ class SheetSearchQueryBuilder
 
     /**
      * Has participant
+     *
+     * @deprecated To be removed, used for dev reason
      */
     protected function hasParticipant()
     {
@@ -104,6 +107,7 @@ class SheetSearchQueryBuilder
         $this->filterByFollower($filters);
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
+        $this->filterByOrganizationCategory($filters);
     }
 
     /**
@@ -288,6 +292,26 @@ class SheetSearchQueryBuilder
             $matchInCatalog->setField('inCatalog', $filters['inCatalog']);
 
             $this->query->addMust($matchInCatalog);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByOrganizationCategory(array &$filters)
+    {
+        if (isset($filters['organizationCategory']) && is_array($filters['organizationCategory'])) {
+            $matchOrganizationCategory = new BoolQuery();
+
+            foreach ($filters['organizationCategory'] as $organizationCategory) {
+                if ($organizationCategory instanceof OrganizationCategoryView) {
+                    $matchOrganizationCategory->addShould(
+                        new Match('organizationCategory', $organizationCategory->key)
+                    );
+                }
+            }
+
+            $this->query->addMust($matchOrganizationCategory);
         }
     }
 

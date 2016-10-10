@@ -1,7 +1,0 @@
-{% if paginatedResult.total > 0 %}
-    {{ include('EventBundle:Catalog:search.html.twig', { searchForm: searchForm, typeViews: typeViews, total: paginatedResult.total }, false) }}
-{% endif %}
-
-<div class="catalog__list catalog__list--block">
-    {{ include('EventBundle:Catalog:list.html.twig', { paginatedResult: paginatedResult }, false) }}
-</div>

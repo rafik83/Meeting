@@ -10,6 +10,6 @@
 
 {% block content %}
     <div class="catalog">
-        {{ include('EventBundle:Catalog:catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult }, false) }}
+        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult }, false) }}
     </div>
 {% endblock %}

@@ -10,4 +10,31 @@
         font-family: openSans;
         margin: 0;
     }
+
+    &.style--default {
+
+        // Inline list
+        ul {
+            margin-bottom: 20px;
+
+            > li {
+                display: inline-block;
+                margin-right: 4px;
+                color: $color-highlighted;
+
+                &:after {
+                    content: '●';
+                    color: $color-highlighted;
+                }
+                &:last-child:after { content: ' '; }
+
+                &:nth-child(even) { background: none; }
+                &.highlight {
+                    font-family: OpenSans;
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+    }
 }
