@@ -23,6 +23,7 @@ class MeetingRequestApproveType extends AbstractMeetingRequestType
     {
         $resolver->setRequired(['sheet', 'locale']);
         $resolver->setAllowedTypes('sheet', Sheet::class);
+        $resolver->setDefault('placeholder_description', 'form.catalog_approve_meeting_request.children.description.placeholder');
         $resolver->setDefaults([
             'data_class' => ApproveRequest::class,
         ]);
