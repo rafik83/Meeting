@@ -1,7 +1,5 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
-{% import 'EventBundle::macro.html.twig' as macros %}
-
 <div class="modal-header">
     <h4 class="modal-title" id="myModalLabel">
         <i class="icon-RDV"></i>
@@ -13,6 +11,7 @@
 {{ form_errors(form) }}
 <div class="modal-body">
     <div class="object--form--field" style="margin-top: 0;">
+        {% if message is not null %}
         <div class="message" style="margin-bottom: 10px;">
             <div class="row">
                 <div class="col-md-8">
@@ -27,6 +26,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         {% for key, child in form if key != 'submit'%}
             {% if key == 'participants' %}
                 {{ form_row(child, {'attr': { 'data-participants-checkbox': 'here', 'data-placeholder-preference': 'form.catalog_create_meeting_request.children.participants.default.no_preference'|trans({}, 'forms') }}) }}

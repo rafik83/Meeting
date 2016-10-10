@@ -28,7 +28,7 @@
                 {% else %}
                     {% if catalogSheetPreviewView.meetingRequestIsProposition %}
                         {% if catalogSheetPreviewView.meetingRequestIsPending %}
-                        {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest, 'sheet': viewer}) }}
+                            {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest, 'sheet': viewer}) }}
                         {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
                             {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
                         {% endif %}

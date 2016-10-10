@@ -6,8 +6,8 @@
 <div class="catalog__list catalog__list--block">
     <div class="row">
         {% for meetingView in meetingRequestView.meetingRequestsView %}
-        {{ include('EventBundle:MeetingRequest/Partials:sheet-card.html.twig', {'meetingRequestView': meetingView, 'sheet': sheet}) }}
-        {% if loop.index % 3 == 0 %}</div><div class="row">{% endif %}
+            {{ include('EventBundle:MeetingRequest/Partials:sheet-card.html.twig', {'meetingRequestView': meetingView, 'sheet': sheet}) }}
+            {% if loop.index % 3 == 0 %}</div><div class="row">{% endif %}
         {% else %}
             <div class="col-md-12 important fail text-center">
                 {{ 'catalog.noResult'|trans }}

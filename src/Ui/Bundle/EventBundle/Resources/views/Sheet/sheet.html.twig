@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <section class="main {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}catalog__sheet{% endif %}">
+    {% set isRequestMeetingEnabled = isCatalog is defined and isCatalog == true and userSheet != sheet %}
+    <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
         <header>
             <h1>
                 <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
             </h1>
 
-            {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
+            {% if isRequestMeetingEnabled %}
                 <div class="buttons-zone button request-meeting-sheet">
                     {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
                 </div>
@@ -68,7 +69,7 @@
         </div>
     </div>
 
-    {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
+    {% if isRequestMeetingEnabled %}
         {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
     {% endif %}
 

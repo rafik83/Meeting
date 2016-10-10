@@ -245,7 +245,7 @@ class MeetingRequestController extends Controller
                 'status' => 'error',
                 'html'   => $this->renderView('EventBundle:MeetingRequest:approvedRequest.html.twig', [
                     'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-                    'message'  => $messageFrom->getContent(),
+                    'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
                     'form'     => $form->createView(),
                 ]),
             ]);
@@ -255,7 +255,7 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
             'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'message'  => $messageFrom->getContent(),
+            'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
             'form'     => $form->createView(),
         ]);
     }
