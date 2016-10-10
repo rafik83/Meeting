@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
-use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
