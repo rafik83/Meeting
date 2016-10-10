@@ -39,7 +39,7 @@ class MeetingRequestView
     /**
      * @var MeetingRequest
      */
-    private $meetingRequest;
+    public $meetingRequest;
 
     /**
      * @var PreviewView[]
