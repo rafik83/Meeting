@@ -15,6 +15,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationType extends AbstractType
@@ -27,11 +29,23 @@ class TranslationType extends AbstractType
         $builder
             ->add('label', TextType::class, [
                 'label' => 'form.search_facet_translation.children.label.label',
-            ])
-            ->add('placeholder', TextareaType::class, [
-                'label'    => 'form.search_facet_translation.children.placeholder.label',
-            ])
-        ;
+            ]);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var SearchFacetTranslation $searchFacetTranslation */
+            $searchFacetTranslation = $event->getData();
+            $form    = $event->getForm();
+
+            if ($searchFacetTranslation->getSearchFacet()->hasPlaceholder()) {
+                $form->add(
+                    'placeholder',
+                    TextareaType::class,
+                    [
+                        'label' => 'form.search_facet_translation.children.placeholder.label',
+                    ]
+                );
+            }
+        });;
     }
 
     /**

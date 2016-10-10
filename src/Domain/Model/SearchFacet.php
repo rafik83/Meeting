@@ -176,4 +176,12 @@ class SearchFacet
         }
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasPlaceholder()
+    {
+        return $this->type !== self::TYPE_TYPE && $this->type !== self::TYPE_CATEGORY;
+    }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
+use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -25,6 +26,7 @@ class UpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
             ->add('searchFacets', CollectionType::class, [
                 'entry_type'    => SearchFacetType::class,
@@ -44,6 +46,9 @@ class UpdateType extends AbstractType
     {
         $resolver->setRequired(['event', 'types']);
         $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setDefaults([
+            'data_class' => Update::class,
+        ]);
     }
 
     /**
