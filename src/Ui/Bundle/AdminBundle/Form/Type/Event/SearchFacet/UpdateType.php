@@ -30,6 +30,7 @@ class UpdateType extends AbstractType
                 'entry_type'    => SearchFacetType::class,
                 'entry_options' => [
                     'required' => false,
+                    'help' => true
                 ],
                 'label' => false,
             ])
@@ -66,6 +67,7 @@ class UpdateType extends AbstractType
     {
         foreach ($view['searchFacets']->children as $key => $childView) {
             $childView->vars['label'] = str_replace('prototype', $options['types'][$key], $childView->vars['label']);
+            $childView->vars['help']  = str_replace('prototype', $options['types'][$key], $childView->vars['help']);
         }
     }
 }
