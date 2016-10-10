@@ -22,7 +22,7 @@
         </ul>
     </div>
 
-    {% if searchForm.type %}
+    {% if searchForm.type is defined %}
         <div class="filter">
             <h3>{{ searchForm.type.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
             {{ form_widget(searchForm.type) }}
