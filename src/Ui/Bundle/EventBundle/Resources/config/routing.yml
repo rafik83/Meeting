@@ -364,13 +364,6 @@ event_meeting_list_request:
     methods:  [GET]
     defaults: { _controller: EventBundle:MeetingRequest:listRequest }
 
-event_meeting_list_proposition:
-    path: /sheet/{sheet}/meeting/proposition
-    requirements:
-        sheet: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:MeetingRequest:listProposition }
-
 event_meeting_request_approve:
     path: /sheet/{sheet}/meeting/request/{meetingRequest}/approve
     requirements:

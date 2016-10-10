@@ -100,36 +100,6 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * List meeting requests the sheet received
-     *
-     * @param Request   $request
-     * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
-     *
-     * @return Response
-     */
-    public function listPropositionAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if (!$sheet->hasUser($this->getUser())) {
-            throw $this->createAccessDeniedException('You can not update this data');
-        }
-
-        $meetingProposition = $this->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->getPropositionReceivedBySheet($sheet);
-
-        $propositionViews   = $this->get('vimeet_infrastructure.application.components.meeting.request_views_builder')
-            ->generate($meetingProposition, $this->getUser(), $sheet, $request->getLocale());
-
-        return $this->render('EventBundle:MeetingRequest:listProposition.html.twig', [
-            'event'             => $eventDomain->getEvent(),
-            'sheet'             => $sheet,
-            'proposition_views' => $propositionViews,
-        ]);
-    }
-
-    /**
      * Create a meeting request between two sheet
      *
      * @param Request     $request
