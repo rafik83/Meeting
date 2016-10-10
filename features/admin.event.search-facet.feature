@@ -22,6 +22,6 @@ Feature: See and update search facet
       | search_facet_translation.children.placeholder.label | Votre recherche par groupement |
     And I check "search_facet_update_searchFacets_0_enabled"
     And I press "search_facet_update_submit"
-    Then I should see "flash.admin.event.filter_facet.success"
+    Then I should see "flash.admin.event.filter_facet.update.success"
     And the "search_facet_translation.children.label.label" field should contain "Groupements"
     And the "search_facet_translation.children.placeholder.label" field should contain "Votre recherche par groupement"

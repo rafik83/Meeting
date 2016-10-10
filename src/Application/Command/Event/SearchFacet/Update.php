@@ -10,17 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\SearchFacet;
 
+use Proximum\Vimeet\Domain\Model\SearchFacet;
+
 class Update
 {
     /**
-     * @var array
+     * @var SearchFacet[]
      */
     public $searchFacets;
 
     /**
      * Update constructor.
      *
-     * @param array $searchFacets
+     * @param SearchFacet[] $searchFacets
      */
     public function __construct(array $searchFacets)
     {

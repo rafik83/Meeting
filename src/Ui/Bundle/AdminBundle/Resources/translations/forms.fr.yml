@@ -462,7 +462,7 @@ form.search_facet_update.children.searchFacets.category.label: 'Catégorie'
 form.search_facet_update.children.searchFacets.keywords.label: 'Mots clés'
 form.search_facet_update.children.searchFacets.localization.label: 'Localisation'
 form.search_facet_update.children.searchFacets.organizationCategory.label: 'Structure'
-form.search_facet_update.children.searchFacets.position.label: 'Position'
+form.search_facet_update.children.searchFacets.position.label: 'Fonction'
 form.search_facet_update.children.searchFacets.type.label: 'Type'
 form.search_facet_update.children.submit.label: 'Enregistrer'
 form.sheet_batch.children.accept.label: Accepter

@@ -43,8 +43,6 @@ class SearchFacetType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
-        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults(array(
             'data_class' => SearchFacet::class,
         ));

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\SearchFacet;
 
 interface SearchFacetRepositoryInterface
@@ -24,4 +25,10 @@ interface SearchFacetRepositoryInterface
      */
     public function add(SearchFacet $searchFacet);
 
+    /**
+     * @param Event $event
+     *
+     * @return SearchFacet[]
+     */
+    public function getByEvent(Event $event);
 }

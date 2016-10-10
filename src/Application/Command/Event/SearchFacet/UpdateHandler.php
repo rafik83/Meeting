@@ -35,7 +35,6 @@ class UpdateHandler
     public function handle(Update $update)
     {
         foreach ($update->searchFacets as $searchFacet) {
-
             foreach ($searchFacet->getTranslations() as $locale => $translation) {
                 $searchFacet->translate($locale, $translation->getLabel(), $translation->getPlaceholder());
             }

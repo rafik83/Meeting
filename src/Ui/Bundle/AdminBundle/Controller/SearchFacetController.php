@@ -45,14 +45,13 @@ class SearchFacetController extends Controller
         $command = new Update($searchFacets);
 
         $form    = $this->createForm(UpdateType::class, $command, [
-            'event'  => $event,
             'submit' => true,
             'types'  => $types,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.event.filter_facet.success');
+            $this->addFlash('success', 'flash.admin.event.filter_facet.update.success');
 
             return $this->redirectToRoute('admin_event_search_facets', ['event' => $event->getId()]);
         }

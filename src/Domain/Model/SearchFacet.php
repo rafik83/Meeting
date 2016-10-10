@@ -122,15 +122,7 @@ class SearchFacet
     }
 
     /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return ArrayCollection
+     * @return SearchFacetTranslation[]
      */
     public function getTranslations()
     {
@@ -138,7 +130,7 @@ class SearchFacet
     }
 
     /**
-     * @param ArrayCollection $translations
+     * @param SearchFacetTranslation[] $translations
      */
     public function setTranslations($translations)
     {
@@ -174,6 +166,7 @@ class SearchFacet
                 $translation->update($label, $placeholder);
             }
         }
+
         return $this;
     }
 
@@ -182,6 +175,6 @@ class SearchFacet
      */
     public function hasPlaceholder()
     {
-        return $this->type !== self::TYPE_TYPE && $this->type !== self::TYPE_CATEGORY;
+        return !in_array($this->type, [self::TYPE_TYPE, self::TYPE_CATEGORY]);
     }
 }

@@ -31,7 +31,6 @@ class UpdateType extends AbstractType
                 'entry_type'    => SearchFacetType::class,
                 'entry_options' => [
                     'required' => false,
-                    'event' => $options['event'],
                 ],
                 'label' => false,
             ])
@@ -43,8 +42,7 @@ class UpdateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'types']);
-        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setRequired(['types']);
         $resolver->setDefaults([
             'data_class' => Update::class,
         ]);
