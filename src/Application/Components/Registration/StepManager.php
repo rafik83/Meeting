@@ -145,7 +145,7 @@ class StepManager
             ];
         }
 
-        $nextStep = $registrationTemplate->getNextBlockPosition($participant->getRegistrationStep());
+        $nextStep = $registrationTemplate->getNextBlockPosition($this->getLastCompleteStep($participant));
 
         return [
             'redirect'   => true,
