@@ -20,7 +20,7 @@ class StateListViewQuery
     public $sheet;
 
     /**
-     * StatusListViewQuery constructor.
+     * StateListViewQuery constructor.
      *
      * @param Sheet $sheet
      */

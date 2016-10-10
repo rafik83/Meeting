@@ -58,11 +58,13 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
-        $filters    = [];
+        // pre fill filters
+        $filters = SearchType::getDefaultFilters();
+
         $searchForm = $this->createForm(SearchType::class, $filters, [
             'label' => null,
             'action'=> $this->generateUrl('event_meeting_list_request', [
-                'sheet' => $sheet->getId(),
+                'sheet' => $sheet->getId()
             ]),
         ]);
 

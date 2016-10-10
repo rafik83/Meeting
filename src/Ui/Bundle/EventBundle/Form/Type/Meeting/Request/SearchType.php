@@ -66,4 +66,15 @@ class SearchType extends AbstractType
     {
         return '';
     }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return [
+            'orderBy' => Constant::ORDER_BY_ALPHABETICAL,
+            'state'   => MeetingRequest::STATE_ALL,
+        ];
+    }
 }

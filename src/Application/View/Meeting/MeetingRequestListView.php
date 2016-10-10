@@ -40,9 +40,22 @@ class MeetingRequestListView
      */
     public function sortBy($order)
     {
+<<<<<<< HEAD
         switch ($order) {
             case Constant::ORDER_BY_ALPHABETICAL:
                 uasort($this->meetingRequestsView, function (MeetingRequestView $viewA,  MeetingRequestView$viewB) {
+=======
+        if ($this->meetingRequestsView === null) {
+            return;
+        }
+
+        switch ($order) {
+            case Constant::ORDER_BY_ALPHABETICAL:
+                uasort($this->meetingRequestsView, function (
+                    MeetingRequestView $viewA,
+                    MeetingRequestView $viewB
+                ) {
+>>>>>>> origin/feature/574-meeting-request-list
                     return strcmp($viewA->sheetName, $viewB->sheetName);
                 });
                 break;

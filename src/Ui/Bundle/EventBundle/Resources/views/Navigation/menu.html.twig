@@ -5,19 +5,23 @@
                 {{ render(controller('EventBundle:Navigation:menu')) }}
             </div>
         </li>
-        {% if isCatalog is defined and isCatalog == true and resultsCount is defined and resultsCount > 0 %}
-        <li>
-            <button class="btn btn-primary btn-lg btn-inactive display-catalog-research"><i class="icon-Rechercher"></i> Recherche avancée</button>
-        </li>
-        {% endif %}
     </ul>
 
     <ul class="sub-header__item">
-        {% if isCatalog is defined %}
+        {% if isCatalog is defined or (isMeeting is defined and sheet is defined) %}
+            {% set classCatalog = (isMeeting is defined) ? 'btn-inactive' : '' %}
             <li>
-                <a href="{{ path('event_catalog_index') }}" class="btn btn-primary btn-lg">
+                <a href="{{ path('event_catalog_index') }}" class="btn btn-primary {{ classCatalog }} btn-lg">
                     <i class="icon-Contact_1"></i>
                     <span class="name">{{ 'navigation.category.catalog'|trans }}</span>
+                </a>
+            </li>
+
+            <li>
+                {% set classMeeting = (isMeeting is defined) ? '' : 'btn-inactive' %}
+                <a href="{{ path('event_meeting_list_request', {'sheet': sheet.id }) }}" class="btn btn-primary {{ classMeeting }} btn-lg">
+                    <i class="icon-RDV"></i>
+                    <span class="name">{{ 'navigation.category.happening'|trans }}</span>
                 </a>
             </li>
         {% else %}
