@@ -354,28 +354,10 @@ class MeetingRequestController extends Controller
             $isItRequest = true;
         }
 
-        $messages = $this
-            ->get('vimeet_infrastructure.repository.meeting.message_repository')
-            ->getMessagesByMeetingRequest($meetingRequest)
-        ;
-
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
-
-        $fromName    = $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale());
-        $fromMessage = null;
-        $toName      = $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale());
-        $toMessage   = null;
-
-        /** @var Message $message */
-        foreach ($messages as $message) {
-            if ($message->getFrom() === $meetingRequest->getFromSheet()) {
-                $fromMessage = $message->getContent();
-            }
-
-            if ($message->getFrom() === $meetingRequest->getToSheet()) {
-                $toMessage = $message->getContent();
-            }
-        }
+        /** @var DiscussionMeetingRequestView $discussion */
+        $discussion = $this
+            ->get('tactician.commandbus.query')
+            ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
         $form = null;
 
@@ -405,11 +387,8 @@ class MeetingRequestController extends Controller
                 $response->setData([
                     'status' => 'error',
                     'html'   => $this->renderView('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
-                        'fromName'    => $fromName,
-                        'fromMessage' => $fromMessage,
+                        'discussion'  => $discussion,
                         'isItRequest' => $isItRequest,
-                        'toName'      => $toName,
-                        'toMessage'   => $toMessage,
                         'form'        => $form->createView(),
                     ]),
                 ]);
@@ -419,11 +398,8 @@ class MeetingRequestController extends Controller
         }
 
         return $this->render('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
-            'fromName'    => $fromName,
-            'fromMessage' => $fromMessage,
+            'discussion'  => $discussion,
             'isItRequest' => $isItRequest,
-            'toName'      => $toName,
-            'toMessage'   => $toMessage,
             'form'        => $form !== null ? $form->createView() : null,
         ]);
     }

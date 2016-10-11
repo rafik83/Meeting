@@ -11,34 +11,7 @@
 </div>
 <div class="modal-body">
     <div class="object--form--field" style="margin-top: 0;">
-        <div class="message" style="margin-bottom: 10px;">
-            <div class="row">
-                {% if fromMessage is not null %}
-                    <div class="col-md-8">
-                        <div>
-                            <div class="text-center">
-                                {{ fromName }}
-                            </div>
-                            <div class="img-thumbnail">
-                                {{ fromMessage }}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if toMessage is not null %}
-                    <div class="col-md-offset-4 col-md-8">
-                        <div>
-                            <div class="text-center">
-                                {{ toName }}
-                            </div>
-                            <div class="img-thumbnail pull-right">
-                                {{ toMessage }}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+        {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
     </div>
 </div>
 <div class="modal-footer">
