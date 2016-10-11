@@ -34,7 +34,6 @@ class UnRefuseMeetingRequestHandler
     ) {
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->dateTime                 = $dateTime;
-
     }
 
     /**

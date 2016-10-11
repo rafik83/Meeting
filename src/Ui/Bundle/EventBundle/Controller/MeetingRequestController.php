@@ -349,10 +349,7 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $isItRequest = false;
-        if ($meetingRequest->getFromSheet()->hasUser($this->getUser())) {
-            $isItRequest = true;
-        }
+        $isItRequest = $meetingRequest->getFromSheet()->hasUser($this->getUser());
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
