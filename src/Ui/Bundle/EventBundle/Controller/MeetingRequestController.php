@@ -369,7 +369,9 @@ class MeetingRequestController extends Controller
                 ]),
             ]);
 
-            if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $isSubmitted = $form->handleRequest($request)->isSubmitted();
+
+            if ($isSubmitted && $form->isValid()) {
                 $this->get('tactician.commandbus')->handle($unRefuse);
 
                 $response = new JsonResponse();
@@ -382,7 +384,7 @@ class MeetingRequestController extends Controller
                 ]);
 
                 return $response;
-            } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+            } elseif ($isSubmitted && !$form->isValid()) {
                 $response = new JsonResponse();
                 $response->setData([
                     'status' => 'error',
