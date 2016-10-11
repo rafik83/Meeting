@@ -160,7 +160,8 @@ class MeetingRequestController extends Controller
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        $isSubmitted = $form->handleRequest($request)->isSubmitted();
+        if ($isSubmitted && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($createRequest);
 
             $response = new JsonResponse();
@@ -170,7 +171,7 @@ class MeetingRequestController extends Controller
             ]);
 
             return $response;
-        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+        } elseif ($isSubmitted && !$form->isValid()) {
             $response = new JsonResponse();
             $response->setData([
                 'status' => 'error',
@@ -226,7 +227,9 @@ class MeetingRequestController extends Controller
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        $isSubmitted = $form->handleRequest($request)->isSubmitted();
+
+        if ($isSubmitted && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($approveRequest);
 
             $response = new JsonResponse();
@@ -236,7 +239,7 @@ class MeetingRequestController extends Controller
             ]);
 
             return $response;
-        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+        } elseif ($isSubmitted && !$form->isValid()) {
             $response = new JsonResponse();
             $response->setData([
                 'status' => 'error',
@@ -292,7 +295,9 @@ class MeetingRequestController extends Controller
             ]),
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+        $isSubmitted = $form->handleRequest($request)->isSubmitted();
+
+        if ($isSubmitted && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($refuseRequest);
 
             $response = new JsonResponse();
@@ -302,7 +307,7 @@ class MeetingRequestController extends Controller
             ]);
 
             return $response;
-        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+        } elseif ($isSubmitted && !$form->isValid()) {
             $response = new JsonResponse();
             $response->setData([
                 'status' => 'error',
