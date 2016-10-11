@@ -14,6 +14,7 @@ use Elastica\Query\BoolQuery;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
+use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -108,6 +109,7 @@ class SheetSearchQueryBuilder
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
+        $this->filterByPosition($filters);
     }
 
     /**
@@ -391,5 +393,29 @@ class SheetSearchQueryBuilder
 
         $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
         $this->query->addMust($nested);
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByPosition(array &$filters)
+    {
+        if (isset($filters['position']) && is_array($filters['position'])) {
+            $nested = new Nested();
+            $nested->setPath('participants');
+
+            $matchPosition = new BoolQuery();
+
+            foreach ($filters['position'] as $position) {
+                if ($position instanceof PositionView) {
+                    $matchPosition->addShould(
+                        new Match('participants.position', $position->getKey())
+                    );
+                }
+            }
+
+            $nested->setQuery($matchPosition);
+            $this->query->addMust($nested);
+        }
     }
 }

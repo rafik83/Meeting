@@ -69,6 +69,30 @@ class TaggedInfoGuesser
     }
 
     /**
+     * @param AbstractTemplate $template
+     * @param array            $data
+     * @param string           $tag
+     * @param string           $locale
+     * @param null             $default
+     *
+     * @return mixed|null
+     */
+    public function guessFirstKey(AbstractTemplate $template, $data, $tag, $locale, $default = null)
+    {
+        $templateData = $this->templateDataFactory->createFromTemplate(
+            $template,
+            $data,
+            $locale,
+            $template->getFallback()
+        );
+
+        $taggedDatas = $templateData->getTaggedKeys($tag);
+        $taggedData  = array_shift($taggedDatas);
+
+        return $taggedData !== null ? $taggedData : $default;
+    }
+
+    /**
      * @param TemplateData $templateData
      * @param string       $tag
      * @param string|null  $default

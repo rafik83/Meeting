@@ -176,7 +176,7 @@ class ParticipantInfoGuesser
     {
         $template = $participant->getSheet()->getType()->getRegistrationTemplate();
 
-        return $this->taggedInfoGuesser->guessFirst(
+        return $this->taggedInfoGuesser->guessFirstKey(
             $template,
             $participant->getData(),
             Tag::PARTICIPANT_POSITION,

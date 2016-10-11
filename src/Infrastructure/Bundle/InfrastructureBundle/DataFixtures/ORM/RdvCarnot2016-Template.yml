@@ -612,3 +612,15 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 type: "text"
                                 translatable: false
                                 tags: ["participant_country", "sheet_data"]
+
+Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter:
+    tagged_nomenclature_filter_1:
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - 'sheet_organization_category'
+            - ["@nomenclature_company_category_rdvcarnot2016->id"]
+    tagged_nomenclature_filter_2:
+        __construct:
+            - '@event_rdv_carnot_2016'
+            - 'participant_position'
+            - ["@nomenclature_position_rdvcarnot2016->id"]

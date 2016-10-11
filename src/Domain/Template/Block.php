@@ -309,6 +309,36 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param $tag
+     *
+     * @return array
+     */
+    public function getTaggedKeys($tag)
+    {
+        $tagged = [];
+
+        foreach ($this->children as $children) {
+            foreach ($children as $block) {
+                if ($block instanceof Block) {
+                    $tagged = array_merge($tagged, $block->getTaggedKeys($tag));
+                }
+
+                if ($block instanceof TemplateObject) {
+                    if ($block->hasTag($tag) && $block instanceof TemplateObject\ContentObjectInterface) {
+                        if ($block instanceof TemplateObject\Nomenclature) {
+                            $tagged[] = $block->getNomenclatureKey();
+                        } else {
+                            $tagged[] = $block->getContentValue();
+                        }
+                    }
+                }
+            }
+        }
+
+        return $tagged;
+    }
+
+    /**
      * @return array
      */
     public function getAllTaggedDatas()
@@ -322,7 +352,7 @@ class Block extends AbstractChild
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
-                    $tagged[$tag][] = $object->getNomenclatureLabel();
+                    $tagged[$tag][] = $object->getKeyForLabel($object->getNomenclatureLabel());
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
                 }

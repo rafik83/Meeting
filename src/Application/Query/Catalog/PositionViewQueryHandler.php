@@ -36,7 +36,7 @@ class PositionViewQueryHandler
      */
     public function handle(PositionViewQuery $query)
     {
-        $positionItems = $this->taggedNomenclatureFilterGetter->getNomenclaturesItems(
+        $positionItems = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
             $query->event,
             Tag::PARTICIPANT_POSITION,
             $query->locale

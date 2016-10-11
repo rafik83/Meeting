@@ -61,6 +61,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
             $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
+            $query->addAggregation($this->getAggregation(self::ES_FIELD_POSITION));
         }
 
         try {

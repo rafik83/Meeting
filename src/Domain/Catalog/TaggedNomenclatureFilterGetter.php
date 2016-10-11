@@ -56,13 +56,62 @@ class TaggedNomenclatureFilterGetter
         $nomenclatureItems = [];
 
         foreach ($nomenclatures as $nomenclature) {
-            foreach ($nomenclature->getChildren() as $nomenclatureItem) {
-                $nomenclatureItems[$nomenclatureItem->getKey()] = $nomenclatureItem->getLabel($locale);
-            }
+            $nomenclatureItems = array_merge(
+                $nomenclatureItems,
+                $this->buildNomenclature($nomenclature->getChildren(), $locale)
+            );
         }
 
         asort($nomenclatureItems);
 
         return $nomenclatureItems;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $tag
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getLastNomenclaturesItems(Event $event, $tag, $locale)
+    {
+        $taggedNomenclatureFilter = $this->taggedNomenclatureFilterRepository->getByEventAndTag(
+            $event,
+            $tag
+        );
+
+        $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
+            $event,
+            $taggedNomenclatureFilter->getNomenclaturesId()
+        );
+
+        $nomenclatureItems = [];
+
+        foreach ($nomenclatures as $nomenclature) {
+            $nomenclatureItems = array_merge(
+                $nomenclatureItems,
+                $this->buildNomenclature($nomenclature->getLastLevel(), $locale)
+            );
+        }
+
+        return $nomenclatureItems;
+    }
+
+    /**
+     * @param string $locale
+     * @param array  $nomenclatureItems
+     *
+     * @return array
+     */
+    private function buildNomenclature($nomenclatureItems, $locale)
+    {
+        $buildItems = [];
+
+        foreach ($nomenclatureItems as $nomenclatureItem) {
+            $buildItems[$nomenclatureItem->getKey()] = $nomenclatureItem->getLabel($locale);
+        }
+
+        return $buildItems;
     }
 }
