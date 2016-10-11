@@ -1139,3 +1139,8 @@ Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter:
             - '@event_asddays_2016'
             - 'sheet_organization_category'
             - ["@nomenclature_company_category_asddays2016->id"]
+    tagged_nomenclature_filter_2:
+        __construct:
+            - '@event_asddays_2016'
+            - 'participant_position'
+            - ["@nomenclature_position_asddays2016->id"]
