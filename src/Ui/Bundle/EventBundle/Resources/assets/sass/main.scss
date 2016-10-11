@@ -85,6 +85,13 @@
     font-size: 50px;
 }
 
+.text-underline {
+    text-decoration: underline;
+    &i {
+      text-decoration: none;
+    }
+}
+
 .no-gutter > [class*='col-'] {
     padding-right:0;
     padding-left:0;
