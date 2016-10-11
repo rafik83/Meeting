@@ -279,19 +279,6 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $messages = $this
-            ->get('vimeet_infrastructure.repository.meeting.message_repository')
-            ->getMessagesByMeetingRequest($meetingRequest)
-        ;
-        $messageFrom = null;
-
-        /** @var Message $message */
-        foreach ($messages as $message) {
-            if ($message->getFrom() === $meetingRequest->getFromSheet()) {
-                $messageFrom = $message;
-            }
-        }
-
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
             ->get('tactician.commandbus.query')
@@ -320,8 +307,8 @@ class MeetingRequestController extends Controller
             $response->setData([
                 'status' => 'error',
                 'html'   => $this->renderView('EventBundle:MeetingRequest:refusedRequest.html.twig', [
-                    'discussions' => $discussion,
-                    'form'        => $form->createView(),
+                    'discussion' => $discussion,
+                    'form'       => $form->createView(),
                 ]),
             ]);
 
