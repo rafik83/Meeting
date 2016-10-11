@@ -485,6 +485,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\RefuseRequest }
+    command.meeting.un_refuse_meeting_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.cancel_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelHandler
         arguments:

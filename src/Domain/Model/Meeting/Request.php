@@ -214,6 +214,19 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @param DateTimeInterface $date
+     *
+     * @return Request
+     */
+    public function unRefuse(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_SENT;
+        $this->stateUpdatedAt = $date;
+
+        return $this;
+    }
+
+    /**
      * @deprecated
      *
      * @param string $state
