@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
+use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
@@ -209,18 +211,10 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $messages = $this
-            ->get('vimeet_infrastructure.repository.meeting.message_repository')
-            ->getMessagesByMeetingRequest($meetingRequest)
-        ;
-        $messageFrom = null;
-
-        /** @var Message $message */
-        foreach ($messages as $message) {
-            if ($message->getFrom() === $meetingRequest->getFromSheet()) {
-                $messageFrom = $message;
-            }
-        }
+        /** @var DiscussionMeetingRequestView $discussion */
+        $discussion = $this
+            ->get('tactician.commandbus.query')
+            ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
         $approveRequest = new ApproveRequest($meetingRequest);
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
@@ -231,7 +225,6 @@ class MeetingRequestController extends Controller
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
         ]);
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($approveRequest);
@@ -248,9 +241,8 @@ class MeetingRequestController extends Controller
             $response->setData([
                 'status' => 'error',
                 'html'   => $this->renderView('EventBundle:MeetingRequest:approvedRequest.html.twig', [
-                    'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-                    'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
-                    'form'     => $form->createView(),
+                    'discussion' => $discussion,
+                    'form'       => $form->createView(),
                 ]),
             ]);
 
@@ -258,9 +250,8 @@ class MeetingRequestController extends Controller
         }
 
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
-            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
-            'form'     => $form->createView(),
+            'discussion' => $discussion,
+            'form'       => $form->createView(),
         ]);
     }
 
@@ -301,6 +292,11 @@ class MeetingRequestController extends Controller
             }
         }
 
+        /** @var DiscussionMeetingRequestView $discussion */
+        $discussion = $this
+            ->get('tactician.commandbus.query')
+            ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
+
         $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
         $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest, [
             'action' => $this->generateUrl('event_meeting_request_refuse', [
@@ -308,8 +304,6 @@ class MeetingRequestController extends Controller
                 'meetingRequest' => $meetingRequest->getId()
             ]),
         ]);
-
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($refuseRequest);
@@ -326,9 +320,8 @@ class MeetingRequestController extends Controller
             $response->setData([
                 'status' => 'error',
                 'html'   => $this->renderView('EventBundle:MeetingRequest:refusedRequest.html.twig', [
-                    'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-                    'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
-                    'form'     => $form->createView(),
+                    'discussions' => $discussion,
+                    'form'        => $form->createView(),
                 ]),
             ]);
 
@@ -336,9 +329,8 @@ class MeetingRequestController extends Controller
         }
 
         return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
-            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'message'  => null !== $messageFrom ? $messageFrom->getContent() : null,
-            'form'     => $form->createView(),
+            'discussion' => $discussion,
+            'form'       => $form->createView(),
         ]);
     }
 

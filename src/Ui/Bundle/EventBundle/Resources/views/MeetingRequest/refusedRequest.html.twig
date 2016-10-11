@@ -11,24 +11,9 @@
 {{ form_errors(form) }}
 <div class="modal-body">
     <div class="object--form--field" style="margin-top: 0;">
-        {% if message is not null %}
-            <div class="message" style="margin-bottom: 10px;">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div>
-                            <div class="text-center">
-                                {{ fromName }}
-                            </div>
-                            <div class="img-thumbnail">
-                                {{ message }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+        {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
         {% for key, child in form if key != 'submit'%}
-                {{ form_row(child) }}
+            {{ form_row(child) }}
         {% endfor %}
     </div>
     <div class="validation button">

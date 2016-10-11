@@ -1871,7 +1871,16 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery }
-
+    query.meeting.message.message_meeting_request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\Message\MessageMeetingRequestViewQueryHandler
+    query.meeting.message.discussion_meeting_request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@query.meeting.message.message_meeting_request_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery }
 
     #
     # Elastic Transformer
