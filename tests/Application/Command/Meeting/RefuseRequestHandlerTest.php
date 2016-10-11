@@ -49,7 +49,7 @@ class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'this is a test', $dateTime);
         $exectedEvent    = new RequestRefusedEvent($user, $request, $dateTime, 'this is a test');
 
-        // Dependenciesgit status
+        // Dependencies
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
