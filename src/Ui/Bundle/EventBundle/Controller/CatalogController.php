@@ -13,14 +13,17 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -68,9 +71,13 @@ class CatalogController extends Controller
             new OrganizationCategoryViewQuery($event, $locale)
         );
 
+        $positionViews = $this->get('tactician.commandbus.query')->handle(
+            new PositionViewQuery($event, $locale)
+        );
+
         $filters = $this->getDefaultFilters($typeViews);
 
-        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews);
+        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews);
 
         if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
             $filters = $searchForm->getData();
@@ -98,7 +105,8 @@ class CatalogController extends Controller
             $filters,
             $paginatedResult->aggregations,
             $typeViews,
-            $organizationCategoryViews
+            $organizationCategoryViews,
+            $positionViews
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -280,15 +288,21 @@ class CatalogController extends Controller
      * @param array                      $filters
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
+     * @param PositionView[]             $positionViews
      *
      * @return FormInterface
      */
-    private function getSearchForm(array $filters, array $typeViews, array $organizationCategoryViews)
-    {
+    private function getSearchForm(
+        array $filters,
+        array $typeViews,
+        array $organizationCategoryViews,
+        array $positionViews
+    ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index'),
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
+            'positionViews'             => $positionViews,
         ]);
     }
 
@@ -297,8 +311,9 @@ class CatalogController extends Controller
      * @param array $visibleTypes
      * @param array $filters
      * @param array $currentAggregations
-     * @param array $typeViews
-     * @param array $organizationCategoryViews
+     * @param TypeView[] $typeViews
+     * @param CategoryView[] $organizationCategoryViews
+     * @param PositionView[] $positionViews
      *
      * @return FormInterface
      */
@@ -308,7 +323,8 @@ class CatalogController extends Controller
         array $filters,
         array $currentAggregations,
         array $typeViews,
-        array $organizationCategoryViews
+        array $organizationCategoryViews,
+        array $positionViews
     ) {
         $searchAdapter = $this->get('adapter.sheet_search_adapter');
 
@@ -353,6 +369,11 @@ class CatalogController extends Controller
             );
         }
 
-        return $this->getSearchForm($filters, $filteredTypeViews, $filteredOrganizationCategoryViews);
+        return $this->getSearchForm(
+            $filters,
+            $filteredTypeViews,
+            $filteredOrganizationCategoryViews,
+            $positionViews // TODO: filter la liste des fonctions
+        );
     }
 }
