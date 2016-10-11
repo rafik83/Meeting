@@ -41,6 +41,7 @@ class UnRefuseMeetingRequestHandler
      */
     public function handle(UnRefuseMeetingRequest $unRefuseMeetingRequest)
     {
-        $this->meetingRequestRepository->set($unRefuseMeetingRequest->meetingRequest->unRefuse($this->dateTime));
+        $unRefuseMeetingRequest->meetingRequest->unRefuse($this->dateTime);
+        $this->meetingRequestRepository->set($unRefuseMeetingRequest->meetingRequest);
     }
 }
