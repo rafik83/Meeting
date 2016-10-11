@@ -16,6 +16,8 @@ catalog.action.meeting.request.back: 'Retour'
 catalog.action.meeting.request.create: 'Demander en RDV'
 catalog.action.meeting.request.approve: 'Proposition reçue'
 catalog.action.meeting.request.refuse: 'Proposition reçue'
+catalog.action.meeting.request.show.refuse: 'Demande refusée'
+catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
 catalog.complete_sheet: 'Voir la fiche complète'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
