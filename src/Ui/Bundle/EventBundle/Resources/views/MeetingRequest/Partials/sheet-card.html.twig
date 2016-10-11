@@ -26,7 +26,7 @@
                     {% elseif meetingRequestView.meetingRequest.isApproved %}
                         {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
                     {% elseif meetingRequestView.meetingRequest.isRefused %}
-                        {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {}) }}
+                        {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': meetingRequestView.meetingRequest}) }}
                     {% endif %}
                 {% else %}
                     {% if meetingRequestView.isPending %}
@@ -34,7 +34,7 @@
                     {% elseif meetingRequestView.meetingRequest.isApproved %}
                         {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
                     {% elseif meetingRequestView.meetingRequest.isRefused %}
-                        {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {}) }}
+                        {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': meetingRequestView.meetingRequest}) }}
                     {% endif %}
                 {% endif %}
             </div>

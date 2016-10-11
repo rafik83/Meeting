@@ -9,8 +9,8 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
-    <div class="catalog">
-        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult, 'viewer': sheet }, false) }}
+    <div class="catalog catalog--advanced">
+        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult, 'sheet': sheet }, false) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}
