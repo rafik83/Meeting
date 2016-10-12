@@ -62,8 +62,11 @@ class MeetingRequestController extends Controller
             $sheet, $request->getLocale()
         ));
 
-        $filters         = SearchType::getDefaultFilters();
-        $filters['type'] = $typeViews; // pre fill filters
+        $filters = SearchType::getDefaultFilters();
+
+        if (count($typeViews) > 1) {
+            $filters['type'] = $typeViews; // pre fill filters
+        }
 
         $searchForm = $this->createForm(SearchType::class, $filters, [
             'label'     => null,
@@ -73,8 +76,10 @@ class MeetingRequestController extends Controller
             ]),
         ]);
 
-        $typeTransformer = new TypeViewTransformer();
-        $filters['type'] = $typeTransformer->reverseTransform($filters['type']);
+        if (!$searchForm->isSubmitted()) {
+            $typeTransformer = new TypeViewTransformer();
+            $filters['type'] = $typeTransformer->reverseTransform($typeViews);
+        }
 
         $searchForm->handleRequest($request);
 
