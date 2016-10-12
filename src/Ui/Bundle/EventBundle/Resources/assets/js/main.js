@@ -45,14 +45,16 @@ function init (target) {
         });
     });
 
-    $('.display-catalog-research', target).on('click', function (e) {
-        $(this).toggleClass('btn-active');
-        $(this).toggleClass('btn-inactive');
-        $('.catalog').toggleClass('catalog--advanced');
+    $('.catalog form', target).on('submit', function (event) {
+        event.preventDefault();
     });
 
     $('.catalog form input, .catalog form select', target).on('change', function () {
-        this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+        var result = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+
+        if ('checkbox' === $(this).attr('type')) {
+            this.checked = result;
+        }
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__item'), function (element) {

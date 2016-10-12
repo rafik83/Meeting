@@ -94,6 +94,7 @@ class CatalogController extends Controller
 
         $searchForm = $this->getFilteredSearchForm(
             $event,
+            $locale,
             $visibleTypes,
             $filters,
             $paginatedResult->aggregations,
@@ -207,11 +208,10 @@ class CatalogController extends Controller
      */
     private function getDefaultFilters(array $typeViews)
     {
-        $filters = [SearchType::ORDER_BY => Sheet\Constant::ORDER_BY_ALPHABETICAL];
-
-        foreach ($typeViews as $typeView) {
-            $filters[SearchType::FILTER_TYPE][] = $typeView;
-        }
+        $filters = [
+            SearchType::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchType::FILTER_TYPE => $typeViews,
+        ];
 
         return $filters;
     }
@@ -293,17 +293,19 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Event $event
-     * @param array $visibleTypes
-     * @param array $filters
-     * @param array $currentAggregations
-     * @param array $typeViews
-     * @param array $organizationCategoryViews
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $visibleTypes
+     * @param array  $filters
+     * @param array  $currentAggregations
+     * @param array  $typeViews
+     * @param array  $organizationCategoryViews
      *
      * @return FormInterface
      */
     private function getFilteredSearchForm(
         Event $event,
+        $locale,
         array $visibleTypes,
         array $filters,
         array $currentAggregations,
@@ -323,6 +325,7 @@ class CatalogController extends Controller
             // if type filter is used, type aggs need to be done with a ES query without type filter
             $typeAggregations = $searchAdapter->getTypeAggregations(
                 $event,
+                $locale,
                 $filters,
                 SearchType::FILTER_TYPE
             );
@@ -343,6 +346,7 @@ class CatalogController extends Controller
             // organizationCategory aggs need to be done with a ES query without organizationCategory filter
             $organizationCategoryAggregations = $searchAdapter->getOrganizationCategoryAggregations(
                 $event,
+                $locale,
                 $filters,
                 SearchType::FILTER_ORGANIZATION_CATEGORY
             );
