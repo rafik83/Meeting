@@ -37,7 +37,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             93de093f: { text: "<streetAddress()>" }
             de66af5d: { text: '<numberBetween(1000, 95000)>' }
             d224f0e7: { text: "<city()>" }
-            e801edd4: { country: '<randomElement(["fr", "es", "de"])>' }
+            e801edd4: { country: '<randomElement(["FR", "ES", "DE"])>' }
             57da9df7ced30: { boolean: '<boolean()>' }
             57da8f210fbf2: { text: "<sentence()>" }
         createdAt: <dateTime()>

@@ -21,10 +21,12 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
+use Symfony\Component\Intl\Intl;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -155,6 +157,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasCart'              => $hasCart,
                 'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'              => implode(' ', $content),
+                'country'              => $this->getCountryNames($templateData, $sheet->getEvent()->getLocales()),
+                'city'                 => $this->getCity($templateData),
+                'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($templateData),
             ],
             $contentByLocale
         ));
@@ -184,5 +189,77 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return implode(' ', $searchableContent);
+    }
+
+    /**
+     * @param TemplateData $templateData
+     *
+     * @return mixed
+     */
+    private function getCountryCode(TemplateData $templateData)
+    {
+        return $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY);
+    }
+
+    /**
+     * @param TemplateData $templateData
+     * @param array        $locales
+     *
+     * @return array
+     */
+    private function getCountryNames(TemplateData $templateData, array $locales)
+    {
+        $countryNames = [];
+        $countryCode  = $this->getCountryCode($templateData);
+
+        if ($countryCode) {
+            $regionBundle = Intl::getRegionBundle();
+
+            foreach ($locales as $locale) {
+                $countryNames[$locale] = $regionBundle->getCountryName($countryCode, $locale);
+            }
+        }
+
+        return $countryNames;
+    }
+
+    /**
+     * @param TemplateData $templateData
+     *
+     * @return null|string
+     */
+    private function getTwoFirstCharsOfFranceZipcode(TemplateData $templateData)
+    {
+        $countryCode = $this->getCountryCode($templateData);
+
+        if ('FR' !== $countryCode) {
+            return null;
+        }
+
+        $zipcode = $templateData->getTaggedContentValue(Tag::SHEET_ZIPCODE);
+
+        if (!$zipcode) {
+            return null;
+        }
+
+        if (4 === strlen($zipcode)) {
+            return '0' . substr($zipcode, 0, 1);
+        }
+
+        if (5 === strlen($zipcode)) {
+            return substr($zipcode, 0, 2);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param TemplateData $templateData
+     *
+     * @return null|string
+     */
+    private function getCity(TemplateData $templateData)
+    {
+        return $templateData->getTaggedContentValue(Tag::SHEET_CITY) ?: null;
     }
 }
