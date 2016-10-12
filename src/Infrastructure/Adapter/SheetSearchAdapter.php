@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
@@ -61,7 +62,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
             $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
-            $query->addAggregation($this->getAggregation(self::ES_FIELD_POSITION));
+            $query->addAggregation($this->getNestedAggregation(self::ES_FIELD_POSITION));
         }
 
         try {
@@ -96,6 +97,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     public function getOrganizationCategoryAggregations(Event $event, array $filters, $filterToRemove)
     {
         return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_ORGANIZATION_CATEGORY);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPositionAggregations(Event $event, array $filters, $filterToRemove)
+    {
+        return $this->searchAggregations($event, $filters, $filterToRemove, self::ES_FIELD_POSITION);
     }
 
     /**
@@ -135,5 +144,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $aggregation->setField($field);
 
         return $aggregation;
+    }
+
+    private function getNestedAggregation($field)
+    {
+        $nested = new Nested($field, 'participants');
+        $nested->addAggregation($this->getAggregation($field));
+
+        return $nested;
     }
 }

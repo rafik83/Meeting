@@ -285,6 +285,41 @@ class CatalogController extends Controller
     }
 
     /**
+     * @param PositionView[] $positionViews
+     * @param array|null     $aggregations
+     *
+     * @return array
+     */
+    private function filterPositionViews(array $positionViews, array $aggregations = null)
+    {
+        $positionField = SheetSearchAdapterInterface::ES_FIELD_POSITION;
+
+        if (null === $aggregations
+            || !isset($aggregations[$positionField])
+            || !isset($aggregations[$positionField][$positionField]['buckets'])
+        ) {
+            return [];
+        }
+
+        $aggregationsIndexedByKey = [];
+
+        foreach ($aggregations[$positionField][$positionField]['buckets'] as $item) {
+            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
+        }
+
+        foreach ($positionViews as $index => $positionView) {
+            // Show only filter which have result
+            if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
+                || $aggregationsIndexedByKey[$positionView->getKey()] === 0
+            ) {
+                unset($positionViews[$index]);
+            }
+        }
+
+        return $positionViews;
+    }
+
+    /**
      * @param array                      $filters
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
@@ -307,11 +342,11 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Event $event
-     * @param array $visibleTypes
-     * @param array $filters
-     * @param array $currentAggregations
-     * @param TypeView[] $typeViews
+     * @param Event          $event
+     * @param array          $visibleTypes
+     * @param array          $filters
+     * @param array          $currentAggregations
+     * @param TypeView[]     $typeViews
      * @param CategoryView[] $organizationCategoryViews
      * @param PositionView[] $positionViews
      *
@@ -328,52 +363,55 @@ class CatalogController extends Controller
     ) {
         $searchAdapter = $this->get('adapter.sheet_search_adapter');
 
-        if (isset($filters[SearchType::FILTER_TYPE])
-            && count($filters[SearchType::FILTER_TYPE]) === count($visibleTypes)
+        if (!isset($filters[SearchType::FILTER_TYPE])
+            || count($filters[SearchType::FILTER_TYPE]) !== count($visibleTypes)
         ) {
-            $filteredTypeViews = $this->filterTypeViews(
-                $typeViews,
-                $currentAggregations
-            );
-        } else {
             // if type filter is used, type aggs need to be done with a ES query without type filter
             $typeAggregations = $searchAdapter->getTypeAggregations(
                 $event,
                 $filters,
                 SearchType::FILTER_TYPE
             );
-
-            $filteredTypeViews = $this->filterTypeViews(
-                $typeViews,
-                $typeAggregations
-            );
         }
 
-        if (!isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
-            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-                $organizationCategoryViews,
-                $currentAggregations
-            );
-        } else {
+        if (isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
             // if organizationCategory filter is used,
             // organizationCategory aggs need to be done with a ES query without organizationCategory filter
-            $organizationCategoryAggregations = $searchAdapter->getOrganizationCategoryAggregations(
+            $categoryOrganisationAggregations = $searchAdapter->getOrganizationCategoryAggregations(
                 $event,
                 $filters,
                 SearchType::FILTER_ORGANIZATION_CATEGORY
             );
+        }
 
-            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-                $organizationCategoryViews,
-                $organizationCategoryAggregations
+        if (isset($filters[SearchType::FILTER_POSITION])) {
+            $positionAggregations = $searchAdapter->getPositionAggregations(
+                $event,
+                $filters,
+                SearchType::FILTER_ORGANIZATION_CATEGORY
             );
         }
+
+        $filteredTypeViews = $this->filterTypeViews(
+            $typeViews,
+            isset($typeAggregations) ? $typeAggregations : $currentAggregations
+        );
+
+        $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
+            $organizationCategoryViews,
+            isset($categoryOrganisationAggregations) ? $categoryOrganisationAggregations : $currentAggregations
+        );
+
+        $filteredPositionViews = $this->filterPositionViews(
+            $positionViews,
+            isset($positionAggregations) ? $positionAggregations : $currentAggregations
+        );
 
         return $this->getSearchForm(
             $filters,
             $filteredTypeViews,
             $filteredOrganizationCategoryViews,
-            $positionViews // TODO: filter la liste des fonctions
+            $filteredPositionViews
         );
     }
 }
