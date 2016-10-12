@@ -125,7 +125,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $builder = new SheetSearchQueryBuilder($event, $filters);
         $query   = new Query($builder->getQuery());
-        $query->addAggregation($this->getAggregation($elasticField));
+
+        if($elasticField === self::ES_FIELD_POSITION) {
+            $query->addAggregation($this->getNestedAggregation($elasticField));
+        } else {
+            $query->addAggregation($this->getAggregation($elasticField));
+        }
+
         $query->setSize(0);
 
         $result = $this->searchable->search($query);

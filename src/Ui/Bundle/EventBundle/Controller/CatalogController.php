@@ -294,6 +294,8 @@ class CatalogController extends Controller
     {
         $positionField = SheetSearchAdapterInterface::ES_FIELD_POSITION;
 
+        dump($aggregations);
+
         if (null === $aggregations
             || !isset($aggregations[$positionField])
             || !isset($aggregations[$positionField][$positionField]['buckets'])
@@ -388,7 +390,7 @@ class CatalogController extends Controller
             $positionAggregations = $searchAdapter->getPositionAggregations(
                 $event,
                 $filters,
-                SearchType::FILTER_ORGANIZATION_CATEGORY
+                SearchType::FILTER_POSITION
             );
         }
 
