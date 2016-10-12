@@ -86,7 +86,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -106,7 +105,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -127,7 +125,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
