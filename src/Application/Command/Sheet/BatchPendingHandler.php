@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class BatchPendingHandler
 {
@@ -21,13 +24,30 @@ class BatchPendingHandler
     private $sheetRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * BatchPendingHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param DelayedEventDispatcher   $eventDispatcher
+     * @param \DateTimeInterface       $datetime
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        DelayedEventDispatcher $eventDispatcher,
+        \DateTimeInterface $datetime
+    ) {
         $this->sheetRepository = $sheetRepository;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->datetime        = $datetime;
     }
 
     /**
@@ -40,9 +60,19 @@ class BatchPendingHandler
         $sheets = $this->sheetRepository->getSheetsById($batchPending->ids);
 
         foreach ($sheets as $sheet) {
-            $sheet->setState(Sheet::STATE_PENDING);
+            if (!$sheet->isPending()) {
+                $sheet->setState(Sheet::STATE_PENDING);
+                $this->sheetRepository->set($sheet);
 
-            $this->sheetRepository->set($sheet);
+                $this->eventDispatcher->dispatch(
+                    Events::SHEET_PENDING,
+                    new SheetPendingEvent(
+                        $sheet,
+                        $batchPending->admin,
+                        $this->datetime
+                    )
+                );
+            }
         }
 
         return new BatchResult(count($sheets), $batchPending->getMessage() . 'pending.success');

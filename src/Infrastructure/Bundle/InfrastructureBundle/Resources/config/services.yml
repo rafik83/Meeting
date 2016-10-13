@@ -653,6 +653,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPending }
     command.sheet.remove_image_handler:

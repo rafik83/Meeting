@@ -26,6 +26,7 @@ class Trace
     const ENABLE_CATALOG  = 'enable_catalog';
     const DISABLE_CATALOG = 'disable_catalog';
     const CHANGED_TYPE    = 'changed_type';
+    const PENDING         = 'pending';
 
     /**
      * @var int
@@ -168,6 +169,6 @@ class Trace
      */
     public static function identifier(TraceableInterface $traceable)
     {
-        return $traceable->getTraceableName().$traceable->getId();
+        return $traceable->getTraceableName() . $traceable->getId();
     }
 }

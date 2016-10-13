@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Trace;
@@ -74,6 +75,20 @@ class TraceEventSubscriber implements EventSubscriberInterface
         $this->addTrace(
             $event->getSheet(),
             ($event->getState()) ? Trace::ENABLE : Trace::DISABLE,
+            $event->getDate(),
+            '',
+            $event->getAuthor()
+        );
+    }
+
+    /**
+     * @param SheetPendingEvent $event
+     */
+    public function onSheetPending(SheetPendingEvent $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            Trace::PENDING,
             $event->getDate(),
             '',
             $event->getAuthor()
@@ -144,6 +159,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_ENABLE_DISABLE => 'onSheetEnableDisable',
             Events::SHEET_CATALOG        => 'onSheetCatalog',
             Events::SHEET_CHANGED_TYPE   => 'onSheetChangedType',
+            Events::SHEET_PENDING        => 'onSheetPending',
         ];
     }
 }
