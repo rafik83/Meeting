@@ -222,11 +222,7 @@ class SheetSearchQueryBuilder
     protected function filterByState(array &$filters)
     {
         if (isset($filters['state']) && in_array($filters['state'], Sheet::getAllStates())) {
-            $match2 = new Match();
-            $match2
-                ->setFieldQuery('state', $filters['state']);
-
-            $this->query->addMust($match2);
+            $this->query->addMust(new Match('state', $filters['state']));
         }
     }
 
