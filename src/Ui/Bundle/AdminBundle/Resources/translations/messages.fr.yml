@@ -498,6 +498,8 @@ event.sheet.cart.title: 'Récapitulatif de votre panier'
 event.sheet.cart.totalWithoutTaxes: 'Total HT'
 event.sheet.completed.complete: Complète
 event.sheet.completed.incomplete: Incomplète
+event.sheet.enableState.disabled: Non active
+event.sheet.enableState.enabled: Active
 event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
 event.sheet.listOrders.title: 'Liste de vos commandes'
 event.sheet.package.column.choices: Choix

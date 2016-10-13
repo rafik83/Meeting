@@ -112,6 +112,7 @@ class SheetSearchQueryBuilder
 
         $this->filterByText($filters);
         $this->filterByState($filters);
+        $this->filterByEnabled($filters);
         $this->filterByCompleted($filters);
         $this->filterByType($filters);
         $this->filterByCategory($filters);
@@ -226,6 +227,16 @@ class SheetSearchQueryBuilder
                 ->setFieldQuery('state', $filters['state']);
 
             $this->query->addMust($match2);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByEnabled(array &$filters)
+    {
+        if (isset($filters['enabled'])) {
+            $this->query->addMust(new Match('enabled', (bool) $filters['enabled']));
         }
     }
 
