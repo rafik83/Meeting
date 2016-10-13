@@ -10,6 +10,7 @@ var $                     = require('jquery'),
     EditableTextIndicator = require('./components/_EditableTextIndicator'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
+    CatalogSheetCard      = require('./components/_CatalogSheetCard'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
@@ -44,14 +45,20 @@ function init (target) {
         });
     });
 
-    $('.display-catalog-research', target).on('click', function (e) {
-        $(this).toggleClass('btn-active');
-        $(this).toggleClass('btn-inactive');
-        $('.catalog').toggleClass('catalog--advanced');
+    $('.catalog form', target).on('submit', function (event) {
+        event.preventDefault();
     });
 
     $('.catalog form input, .catalog form select', target).on('change', function () {
-        this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+        var result = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+
+        if ('checkbox' === $(this).attr('type')) {
+            this.checked = result;
+        }
+    });
+
+    [].forEach.call(target.querySelectorAll('.catalog__item'), function (element) {
+        new CatalogSheetCard(element, target.getElementById('request-modal'));
     });
 
     $('.dropdown-menu', target).on('click', function (e) {

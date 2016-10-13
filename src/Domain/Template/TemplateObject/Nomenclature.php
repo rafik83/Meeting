@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
-class Nomenclature extends EditableObject implements ContentObjectInterface
+class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface
 {
     /**
      * @var NomenclatureModel
@@ -254,5 +254,60 @@ class Nomenclature extends EditableObject implements ContentObjectInterface
             && !in_array(Tag::SHEET_ORGANIZATION_STAFF, $tags)
             && !in_array(Tag::SHEET_ORGANIZATION_TURNOVER, $tags)
         ;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLabelsOfAllSelectedLevels()
+    {
+        $nomenclatureLabels = $this->getNomenclatureLabels();
+
+        $labels = [];
+
+        foreach ($this->getItems() as $item) {
+            foreach ($this->getLabelsByItem($nomenclatureLabels, $item) as $label) {
+                $labels[] = $label;
+            }
+        }
+
+        return array_unique($labels);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchableContent()
+    {
+        return $this->getLabelsOfAllSelectedLevels();
+    }
+
+    /**
+     * @param array  $nomenclatureLabels
+     * @param string $item
+     *
+     * @return array
+     */
+    private function getLabelsByItem(&$nomenclatureLabels, $item)
+    {
+        foreach ($nomenclatureLabels as $firstLevelKey => $child) {
+            if (is_array($child)) {
+                foreach ($child as $secondLevelKey => $secondLevelChild) {
+                    if (is_array($secondLevelChild)) {
+                        foreach ($secondLevelChild as $lastLevelKey => $lastLevelLabel) {
+                            if ($lastLevelKey === $item) {
+                                return [$firstLevelKey, $secondLevelKey, $lastLevelLabel];
+                            }
+                        }
+                    } elseif ($secondLevelKey === $item) {
+                        return [$firstLevelKey, $secondLevelChild];
+                    }
+                }
+            } elseif ($firstLevelKey === $item) {
+                return [$child];
+            }
+        }
+
+        return [];
     }
 }

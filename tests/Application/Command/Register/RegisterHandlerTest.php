@@ -16,8 +16,12 @@ use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -26,7 +30,8 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event             = EventFactory::createEvent();
-        $command           = new RegisterNewUser('test@test.com', 'fr', $event);
+        $type              = new TypeView(1, 'title', 'desc');
+        $command           = new RegisterNewUser('test@test.com', 'fr', $event, $type);
         $command->password = 'password';
 
         $user         = new User('test@test.com', '__salt__', null, 'fr');
@@ -41,13 +46,21 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $userRepository  = $this->prophesize(UserRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $userEventRepository  = $this->prophesize(UserEventRepositoryInterface::class);
 
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $userRepository->add($expectedUser)->shouldBeCalled();
 
-        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(),
-            $saltGenerator->reveal(), $eventDispatcher->reveal());
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $handler = new RegisterNewUserHandler(
+            $userRepository->reveal(),
+            $passwordEncoder->reveal(),
+            $saltGenerator->reveal(),
+            $userEventRepository->reveal(),
+            $typeRepository->reveal()
+        );
+
         $handler->handle($command);
     }
 
@@ -56,7 +69,8 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(EmailAlreadyExistsException::class);
 
         $event             = EventFactory::createEvent();
-        $command           = new RegisterNewUser('test@test.com', 'fr', $event);
+        $type              = new TypeView(1, 'title', 'desc');
+        $command           = new RegisterNewUser('test@test.com', 'fr', $event, $type);
         $command->password = 'password';
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
@@ -65,13 +79,21 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
         $passwordEncoder->encode()->shouldNotBeCalled();
 
-        $userRepository  = $this->prophesize(UserRepositoryInterface::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $userRepository      = $this->prophesize(UserRepositoryInterface::class);
+        $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
+
         $userRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
         $userRepository->add()->shouldNotBeCalled();
 
-        $handler = new RegisterNewUserHandler($userRepository->reveal(), $passwordEncoder->reveal(),
-            $saltGenerator->reveal(), $eventDispatcher->reveal());
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $handler = new RegisterNewUserHandler(
+            $userRepository->reveal(),
+            $passwordEncoder->reveal(),
+            $saltGenerator->reveal(),
+            $userEventRepository->reveal(),
+            $typeRepository->reveal()
+        );
         $handler->handle($command);
     }
 }

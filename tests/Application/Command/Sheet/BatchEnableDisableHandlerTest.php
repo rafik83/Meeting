@@ -28,7 +28,7 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         $type  = new Type($event);
         $date  = new \DateTime();
 
-        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', new \DateTime());
+        $admin   = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
 
         // Actual sheet
         $user1  = new User('test@test.com', 'salt', 'password', 'fr');
@@ -63,11 +63,12 @@ class BatchEnableDisableHandlerTest extends \PHPUnit_Framework_TestCase
         }
 
         // Command
-        $command = new BatchEnableDisable([1, 2, 3], false, $admin, $date);
+        $command = new BatchEnableDisable([1, 2, 3], false, $admin);
         $handler = new BatchEnableDisableHandler(
             $sheetRepository->reveal(),
             $eventDispatcher->reveal(),
-            $batchCatalogHandler->reveal()
+            $batchCatalogHandler->reveal(),
+            $date
         );
 
         $result = $handler->handle($command);

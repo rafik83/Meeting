@@ -24,7 +24,14 @@ class MeetingRequestCreateType extends AbstractMeetingRequestType
 
         $resolver->setDefaults([
             'data_class' => CreateRequest::class,
-            'submit'     => true,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_create_meeting_request';
     }
 }

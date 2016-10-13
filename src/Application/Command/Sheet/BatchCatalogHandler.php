@@ -28,17 +28,25 @@ class BatchCatalogHandler
     private $eventDispatcher;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * BatchCatalogHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param DelayedEventDispatcher   $eventDispatcher
+     * @param \DateTimeInterface       $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        \DateTimeInterface $datetime
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->eventDispatcher = $eventDispatcher;
+        $this->datetime        = $datetime;
     }
 
     /**
@@ -58,7 +66,7 @@ class BatchCatalogHandler
                     new SheetCatalogEvent(
                         $sheet,
                         $command->admin,
-                        new \DateTime(),
+                        $this->datetime,
                         $command->state
                     )
                 );
@@ -67,7 +75,7 @@ class BatchCatalogHandler
             $sheet->setInCatalog($command->state);
 
             if ($command->state === true) {
-                $sheet->setInCatalogAt($command->date);
+                $sheet->setInCatalogAt($this->datetime);
             }
 
             $this->sheetRepository->set($sheet);

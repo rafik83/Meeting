@@ -30,23 +30,16 @@ class BatchEnableDisable extends AbstractBatch
     public $admin;
 
     /**
-     * @var \DateTimeInterface
-     */
-    public $date;
-
-    /**
      * BatchValidate constructor.
      *
-     * @param array              $ids
-     * @param bool               $state
-     * @param Admin              $admin
-     * @param \DateTimeInterface $date
+     * @param array $ids
+     * @param bool  $state
+     * @param Admin $admin
      */
-    public function __construct(array $ids, $state, Admin $admin, \DateTimeInterface $date)
+    public function __construct(array $ids, $state, Admin $admin)
     {
         $this->ids   = $ids;
         $this->state = $state;
         $this->admin = $admin;
-        $this->date  = $date;
     }
 }

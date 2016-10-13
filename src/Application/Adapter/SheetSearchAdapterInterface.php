@@ -35,19 +35,21 @@ interface SheetSearchAdapterInterface
 
     /**
      * @param Event  $event
+     * @param string $locale
      * @param array  $filters
      * @param string $filterToRemove
      *
      * @return array
      */
-    public function getTypeAggregations(Event $event, array $filters, $filterToRemove);
+    public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove);
 
     /**
      * @param Event  $event
+     * @param string $locale
      * @param array  $filters
      * @param string $filterToRemove
      *
      * @return array
      */
-    public function getOrganizationCategoryAggregations(Event $event, array $filters, $filterToRemove);
+    public function getOrganizationCategoryAggregations(Event $event, $locale, array $filters, $filterToRemove);
 }

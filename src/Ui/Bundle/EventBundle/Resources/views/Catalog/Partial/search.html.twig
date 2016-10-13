@@ -12,6 +12,9 @@
     {% if searchForm.position is defined %}
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.position }, false) }}
     {% endif %}
+    {% if searchForm.content is defined %}
+        {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.content }, false) }}
+    {% endif %}
 
     {#
     <form>
@@ -37,13 +40,6 @@
                         </label>
                     </li>
                 </ul>
-            </div>
-        </div>
-        <div class="filter">
-            <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-3"
-                aria-expanded="false" aria-controls="collapse-3">Structures</h3>
-
-            <div class="collapse" id="collapse-3">
             </div>
         </div>
         <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>

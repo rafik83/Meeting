@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class ItemCollection extends TemplateObject
+class ItemCollection extends TemplateObject implements SearchableObjectInterface
 {
     /**
      * @var Item[]
@@ -125,7 +125,8 @@ class ItemCollection extends TemplateObject
         $this->items = array_map(
             function (array $item) {
                 return new Item($this, $item['title']);
-            }, array_values($data['items'])
+            },
+            array_values($data['items'])
         );
     }
 
@@ -147,5 +148,17 @@ class ItemCollection extends TemplateObject
     public function getMax()
     {
         return $this->getOption('max');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchableContent()
+    {
+        $this->buildItems($this->getData());
+
+        return array_map(function (Item $item) {
+            return $item->getTitle();
+        }, $this->items);
     }
 }

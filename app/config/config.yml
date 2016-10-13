@@ -130,6 +130,14 @@ fos_elastica:
                                 raw:
                                     type: string
                                     index: "not_analyzed"
+                        content:
+                            type: string
+                        content_en:
+                            type: string
+                            analyzer: "english"
+                        content_fr:
+                            type: string
+                            analyzer: "french"
                         state:
                             type: string
                             index: "not_analyzed"
@@ -244,6 +252,10 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail: { size: [800, 320], mode: inset }
+        user_avatar:
+            quality: 100
+            filters:
+                thumbnail: { size: [400, 150], mode: inset }
 
 # Doctrine migrations configuration
 doctrine_migrations:

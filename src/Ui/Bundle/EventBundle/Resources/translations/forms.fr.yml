@@ -3,6 +3,10 @@ boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.catalog_create_meeting_request.children.description.label: 'Motiver votre demande de RDV ?'
+form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
+form.catalog_create_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
+form.catalog_create_meeting_request.children.submit.label: 'Valider la demande de RDV'
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
@@ -28,11 +32,13 @@ form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.search.orderBy.alphabetical: 'Ordre alphabétique'
 form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
+form.search.orderBy.relevance: 'Pertinence'
 form.search.orderBy.label: TRIER
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.organizationCategory.label: Structures
 form.search.type.label: Participants
 form.search.position.label: Fonctions
+form.search.content.label: Mots clés
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Texte

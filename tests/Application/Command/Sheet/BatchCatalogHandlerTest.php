@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -67,8 +65,8 @@ class BatchCatalogHandlerTest extends \PHPUnit_Framework_TestCase
         }
 
         // Command
-        $command = new BatchCatalog([1, 2, 3], $date, true, $admin);
-        $handler = new BatchCatalogHandler($sheetRepository->reveal(), $eventDispatcher->reveal());
+        $command = new BatchCatalog([1, 2, 3], true, $admin);
+        $handler = new BatchCatalogHandler($sheetRepository->reveal(), $eventDispatcher->reveal(), $date);
 
         $result = $handler->handle($command);
         $this->assertEquals(3, $result->count);
