@@ -1,6 +1,11 @@
 mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
 mail.activateAccount.subject: '[%event%] Activate your account'
+mail.changeMailNew.end: Regards
+mail.changeMailNew.subject: 'Your new email ID'
+mail.changeMailNew.validate: 'Validate Your new email'
+mail.changeMailOld.subject: 'Email change request'
 mail.orderConfirm.body: "Dear %Name%,\n\nYour order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
+mail.orderConfirm.linkToProForma: 'View Proforma invoice'
 mail.orderConfirm.subject: 'Your order has been registered'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
