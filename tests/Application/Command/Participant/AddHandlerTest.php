@@ -32,6 +32,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -84,11 +85,11 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             )
         )->shouldBeCalled();
 
-        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
-
+        $sheetRepository               = $this->prophesize(SheetRepositoryInterface::class);
+        $templateDataFactory           = $this->prophesize(Template\TemplateDataFactory::class);
         $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcher::class);
+        $typeResolver                  = $this->prophesize(TypeResolver::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedUser,
@@ -160,7 +161,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $eventDispatcher->reveal(),
-            $cartManager->reveal()
+            $cartManager->reveal(),
+            $typeResolver->reveal()
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
@@ -194,11 +196,11 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
-        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
-
+        $sheetRepository               = $this->prophesize(SheetRepositoryInterface::class);
+        $templateDataFactory           = $this->prophesize(Template\TemplateDataFactory::class);
         $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcher::class);
+        $typeResolver                  = $this->prophesize(TypeResolver::class);
 
         $cartManager = $this->prophesize(CartManager::class);
 
@@ -239,7 +241,8 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
             $templateDataFactory->reveal(),
             $activateAccountTokenGenerator->reveal(),
             $eventDispatcher->reveal(),
-            $cartManager->reveal()
+            $cartManager->reveal(),
+            $typeResolver->reveal()
         );
 
         $handler->handle($add);

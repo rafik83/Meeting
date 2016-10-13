@@ -42,6 +42,8 @@ form.change_password.children.currentPassword.label: 'Current password'
 form.change_password.children.plainPassword.children.first.label: 'New password'
 form.change_password.children.plainPassword.children.second.label: 'Confirm new password'
 form.change_password.children.submit.label: Send
+form.change_type.children.submit.label: Change
+form.change_type.children.type.label: 'Type of participation'
 form.choose_payment_mode.children.submit.label: Save
 form.content_update.children.submit.label: Save
 form.create_admin.children.email.label: Email
@@ -68,7 +70,7 @@ form.create_speaker.children.translations.children.position.label: Function
 form.create_speaker.children.translations.label: Function
 form.create_transaction.children.amount.label: amount
 form.create_transaction.children.date.label: Date
-form.create_transaction.children.mode.label: 'Payment method'
+form.create_transaction.children.mode.label: 'Mode of payment'
 form.create_transaction.children.reference.label: Reference
 form.create_transaction.children.state.label: State
 form.create_transaction.children.submit.label: Save
@@ -86,11 +88,13 @@ form.event_billing_configuration.children.translations.prototype.children.paymen
 form.event_configure_date.children.submit.label: Save
 form.event_create.children.country.label: Country
 form.event_create.children.currency.label: Currency
+form.event_create.children.mode.label: Mode
 form.event_create.children.submit.label: Save
 form.event_create.children.vat.label: 'VAT (%)'
 form.event_payment_conditions_update.children.minimumForDeposit.label: 'Total amount from which the deposit is applicable'
 form.event_payment_conditions_update.children.submit.label: Save
 form.event_practical_info_update.children.submit.label: Save
+form.event_update.children.mode.label: Mode
 form.event_update.children.submit.label: Save
 form.event_update.children.vat.label: 'VAT (%)'
 form.field.private: 'Private field'
@@ -165,6 +169,7 @@ form.schedule_config.children.submit.label: Save
 form.sheet_batch.children.addCatalog.label: 'Add to catalogue'
 form.sheet_comment.children.submit.label: Save
 form.sheet_comment.children.text.placeholder: 'Add comment'
+form.sheet_filter.children.state.label: State
 form.sheet_template_add_locale.children.submit.label: Add
 form.sheet_template_create.children.submit.label: Save
 form.sheet_template_duplicate.children.submit.label: Save
@@ -174,6 +179,12 @@ form.spot_batch_create.children.recipes.label_add: Add
 form.spot_batch_create.children.submit.label: Save
 form.spot_create.children.submit.label: Save
 form.template_registration_update.children.submit.label: Save
+form.transaction.children.state.pending: Pending
+form.transaction.children.transaction_mode.bank_card: 'Bank card'
+form.transaction.children.transaction_mode.bank_cash: Cash
+form.transaction.children.transaction_mode.bank_check: Cheque
+form.transaction.children.transaction_mode.bank_transfer: Transfer
+form.transaction.children.transaction_mode.paypal: Paypal
 form.type_create.children.submit.label: Save
 form.type_template_field_update_lib_choice.children.choices.label_add: Add
 form.type_template_field_update_lib_choice.children.submit.label: Save
@@ -181,6 +192,7 @@ form.type_template_field_update.children.submit.label: Save
 form.type_update.children.submit.label: Save
 form.update_speaker.children.photo.label: 'Speaker picture'
 form.update_speaker.children.submit.label: Save
+form.update_transaction.children.mode.label: 'Mode of payment'
 form.update_transaction.children.submit.label: Save
 form.update_unavailability.children.submit.label: Modify
 form.vatMode.ati: 'Incl. Tax'

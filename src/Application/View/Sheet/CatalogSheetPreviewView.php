@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
-use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 
 class CatalogSheetPreviewView
 {
@@ -34,21 +36,67 @@ class CatalogSheetPreviewView
     public $type;
 
     /**
-     * @var TemplateObject[]
+     * @var PreviewView[]
      */
     public $preview;
 
     /**
-     * @param int    $id
-     * @param string $title
-     * @param string $type
-     * @param array  $preview
+     * @var Meeting\Request|null
      */
-    public function __construct($id, $title, $type, array $preview)
+    public $meetingRequest;
+
+    /**
+     * @var bool
+     */
+    public $isItMySheet;
+
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @param int             $id
+     * @param Sheet           $sheet
+     * @param string          $title
+     * @param string          $type
+     * @param array           $preview
+     * @param Meeting\Request $meetingRequest
+     * @param bool            $isItMySheet
+     */
+    public function __construct($id, Sheet $sheet, $title, $type, array $preview, Meeting\Request $meetingRequest = null, $isItMySheet)
     {
-        $this->id      = $id;
-        $this->title   = $title;
-        $this->type    = $type;
-        $this->preview = $preview;
+        $this->id             = $id;
+        $this->sheet          = $sheet;
+        $this->title          = $title;
+        $this->type           = $type;
+        $this->preview        = $preview;
+        $this->meetingRequest = $meetingRequest;
+        $this->isItMySheet    = $isItMySheet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMeetingRequest()
+    {
+        return null !== $this->meetingRequest;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function meetingRequestIsPending()
+    {
+        return $this->meetingRequest->isSent();
+    }
+
+    /**
+     * @return bool
+     */
+    public function meetingRequestIsProposition()
+    {
+        return $this->meetingRequest->getFromSheet() === $this->sheet;
     }
 }

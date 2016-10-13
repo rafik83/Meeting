@@ -65,7 +65,9 @@
                 <th class="minwidth">
                     <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
                 </th>
-                <th></th>
+                <th nowrap="nowrap">
+                    {{ macro.choice_as_dropdown(filter_form.enabled) }}
+                </th>
                 <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.state) }}
                 </th>

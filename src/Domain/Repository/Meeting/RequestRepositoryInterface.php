@@ -58,10 +58,11 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     * @param array $filters
      *
      * @return Request[]
      */
-    public function getAllRequestBySheet(Sheet $sheet);
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
 
     /**
      * @param Event $event
@@ -91,12 +92,28 @@ interface RequestRepositoryInterface
     public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $state);
 
     /**
+     * @param Sheet $one
+     * @param Sheet $another
+     *
+     * @return Request|null
+     */
+    public function getRequestBetweenSheets(Sheet $one, Sheet $another);
+
+    /**
      * @param Event $event
      * @param User  $user
      *
      * @return Request[]
      */
     public function getRequestsByEventAndUser(Event $event, User $user);
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $state
+     *
+     * @return int
+     */
+    public function countSheetState(Sheet $sheet, $state);
 
     /**
      * @param Sheet $sheet

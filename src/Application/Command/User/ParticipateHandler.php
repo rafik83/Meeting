@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ParticipateHandler
@@ -44,6 +45,11 @@ class ParticipateHandler
     private $dateTime;
 
     /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
      * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
@@ -51,6 +57,7 @@ class ParticipateHandler
     /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param TypeResolver                   $typeResolver
      * @param Synchronizer                   $accountSynchronizer
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param \DateTimeInterface             $dateTime
@@ -59,6 +66,7 @@ class ParticipateHandler
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
+        TypeResolver $typeResolver,
         Synchronizer $accountSynchronizer,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
@@ -68,6 +76,7 @@ class ParticipateHandler
         $this->accountSynchronizer   = $accountSynchronizer;
         $this->eventDispatcher       = $eventDispatcher;
         $this->dateTime              = $dateTime;
+        $this->typeResolver          = $typeResolver;
         $this->eventDispatcher       = $eventDispatcher;
     }
 
@@ -78,6 +87,8 @@ class ParticipateHandler
     {
         // Create a new sheet for this event
         $sheet = new Sheet($participate->event, $participate->type, [], $participate->user, $this->dateTime);
+
+        $this->typeResolver->resolve($participate->user, $participate->event, $participate->type);
 
         $sheetData       = [];
         $participantData = [];

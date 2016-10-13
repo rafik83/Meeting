@@ -1,11 +1,14 @@
 <div class="col-md-4">
     <div class="catalog__item {#catalog__item--checked#}">
-        <header>
-        </header>
+        <header></header>
         <div class="content">
             {% for object in catalogSheetPreviewView.preview %}
-                {% if object.isImage and object.content is not empty %}
-                    <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+                {% if object.isImage %}
+                    {% if object.content is not empty %}
+                        <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+                    {% else %}
+                        <h3>{{ catalogSheetPreviewView.title }}</h3>
+                    {% endif %}
                 {% else %}
                     {% if object.isStrong %}
                         <p><strong>{{ object.content }}</strong></p>
@@ -21,17 +24,35 @@
                 {#<a href=""><i class="icon-EtoilePleine"></i> <span>Retirer des favoris</span></a>#}
             </div>
 
+            {% if not catalogSheetPreviewView.isItMySheet %}
+                <div class="buttons-zone button">
+                {% if not catalogSheetPreviewView.hasMeetingRequest %}
+                    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': catalogSheetPreviewView.sheet}) }}
+                {% else %}
+                    {% if catalogSheetPreviewView.meetingRequestIsProposition %}
+                        {% if catalogSheetPreviewView.meetingRequestIsPending %}
+                            {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest, 'sheet': viewer}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
+                            {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isRefused %}
+                            {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest}) }}
+                        {% endif %}
+                    {% else %}
+                        {% if catalogSheetPreviewView.meetingRequestIsPending %}
+                            {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
+                            {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
+                        {% elseif catalogSheetPreviewView.meetingRequest.isRefused %}
+                            {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest}) }}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                </div>
+            {% endif %}
+
             <p class="tags">
                 <i class="icon-LienTag"></i> {{ catalogSheetPreviewView.type }}
             </p>
-
-            {#
-            <div class="button">
-                <button type="button" class="btn btn-primary"><i class="icon-DemandeRDV"></i> Demander
-                    un RDV
-                </button>
-            </div>
-            #}
         </footer>
     </div>
 </div>

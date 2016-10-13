@@ -16,7 +16,8 @@ Feature: Display complete sheet from catalog
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
+    And elastica is populate
     When I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
@@ -24,6 +25,6 @@ Feature: Display complete sheet from catalog
     And I go to this page "/fr/catalog/sheet/1"
     Then I should see "Onera"
     And I should not see "sheet.object.action.edit"
-    And I should see "sheet.request_meeting"
+    And I should see "catalog.meeting_request.create"
     When I go to "http://asddays-2016.vimeet.proximum.dev/fr/catalog/sheet/3"
     Then the response status code should be 403
