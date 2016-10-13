@@ -58,7 +58,7 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
-        new CatalogSheetCard(element, target.getElementById('request-modal'));
+        new CatalogSheetCard(element, document.getElementById('request-modal'));
     });
 
     $('.dropdown-menu', target).on('click', function (e) {
