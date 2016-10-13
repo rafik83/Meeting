@@ -183,15 +183,39 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
+<<<<<<< Updated upstream
             ->from(Request::class, 'request')
             ->where('request.to = :sheet')
             ->orWhere('request.from = :sheet')
             ->setParameter('sheet', $sheet);
+=======
+            ->from(Request::class, 'request');
+
+        if (empty($filters['state']) ||
+            !in_array($filters['state'], [Request::STATE_RECEIVE, Request::STATE_SENT,])
+        ) {
+            $queryBuilder
+                ->where('request.to = :sheet OR request.from = :sheet')
+                ->setParameter('sheet', $sheet);
+        }
+>>>>>>> Stashed changes
 
         if (!empty($filters['state']) && $filters['state'] != Request::STATE_ALL) {
-            $queryBuilder
-                ->andWhere('request.state = :state')
-                ->setParameter('state', $filters['state']);
+            if ($filters['state'] === Request::STATE_RECEIVE) {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->andWhere('request.to = :sheet')
+                    ->setParameter('state', Request::STATE_SENT)
+                    ->setParameter('sheet', $sheet);
+            } elseif ($filters['state'] === Request::STATE_SENT) {
+                $queryBuilder
+                    ->andWhere('request.from = :sheet')
+                    ->setParameter('sheet', $sheet);
+            } else {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', $filters['state']);
+            }
         }
 
         if (empty($filters['orderBy']) || $filters['orderBy'] === Sheet\Constant::ORDER_BY_CREATED_AT) {
@@ -316,16 +340,32 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
-            ->where('request.from = :sheet')
-            ->orWhere('request.to = :sheet')
-            ->andWhere('request.state != :cancelState')
-            ->setParameter('cancelState', Request::STATE_CANCEL)
-            ->setParameter('sheet', $sheet);
+            ->where('request.state != :cancelState')
+            ->setParameter('cancelState', Request::STATE_CANCEL);
 
-        if ($state !== Request::STATE_ALL) {
+        if (!in_array($state, [Request::STATE_RECEIVE, Request::STATE_SENT,])) {
             $queryBuilder
-                ->andWhere('request.state = :state')
-                ->setParameter('state', $state);
+                ->andWhere('request.to = :sheet OR request.from = :sheet')
+                ->setParameter('sheet', $sheet);
+        }
+
+        // filter by state
+        if ($state != Request::STATE_ALL) {
+            if ($state === Request::STATE_RECEIVE) {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->andWhere('request.to = :sheet')
+                    ->setParameter('state', Request::STATE_SENT)
+                    ->setParameter('sheet', $sheet);
+            } elseif ($state === Request::STATE_SENT) {
+                $queryBuilder
+                    ->andWhere('request.from = :sheet')
+                    ->setParameter('sheet', $sheet);
+            } else {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', $state);
+            }
         }
 
         return count($queryBuilder->getQuery()->getResult());
