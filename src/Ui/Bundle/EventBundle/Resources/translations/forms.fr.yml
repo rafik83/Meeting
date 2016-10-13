@@ -3,10 +3,19 @@ boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.catalog_approve_meeting_request.children.description.label: 'Répondre à la proposition de RDV?'
+form.catalog_approve_meeting_request.children.description.placeholder: 'Ecrire un message'
+form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
+form.catalog_approve_meeting_request.children.submit.label: 'Accepter la proposition'
 form.catalog_create_meeting_request.children.description.label: 'Motiver votre demande de RDV ?'
+form.catalog_create_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
 form.catalog_create_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
 form.catalog_create_meeting_request.children.submit.label: 'Valider la demande de RDV'
+form.catalog_refuse_meeting_request.children.message.label: Motiver votre refus ?
+form.catalog_refuse_meeting_request.children.message.placeholder: 'Ecrire une message'
+form.catalog_refuse_meeting_request.children.submit.label: Refuser la proposition
+form.catalog_un_refuse_meeting_request.children.submit.label: 'Annuler votre refus'
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
@@ -31,10 +40,19 @@ form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bleue'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.search.orderBy.alphabetical: 'Ordre alphabétique'
+form.search.orderBy.createdAt: 'Ordre chronologique'
 form.search.orderBy.dateAddedToCatalog: 'Inscriptions récentes'
 form.search.orderBy.relevance: 'Pertinence'
 form.search.orderBy.label: TRIER
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
+form.search.meeting.state.label: 'Gestion de RDV'
+form.search.meeting.state.all: 'Tous les statuts'
+form.search.meeting.state.approved: Acceptées
+form.search.meeting.state.sent: 'Demandes en attente'
+form.search.meeting.state.refused: Refusées
+form.search.meeting.state.cancelled: Annulées
+form.search.meeting.state.receive: 'Propositions reçues'
+form.search.meeting.type.label: Gestion de RDV
 form.search.organizationCategory.label: Structure
 form.search.type.label: Participants
 form.search.content.label: Mots clés

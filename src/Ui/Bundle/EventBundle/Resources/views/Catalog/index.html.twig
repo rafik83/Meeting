@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="catalog catalog--advanced">
-        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult }, false) }}
+        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult, 'sheet': sheet }, false) }}
     </div>
     <div class="modal fade clear-on-hidden-modal" id="request-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
         <div class="modal-dialog" role="document">
@@ -18,4 +18,5 @@
             </div>
         </div>
     </div>
+    {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}

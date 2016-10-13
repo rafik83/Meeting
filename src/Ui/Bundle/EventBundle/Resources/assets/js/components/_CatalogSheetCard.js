@@ -4,10 +4,10 @@ var $                               = require('jquery'),
 
 function CatalogSheetCard(element, modal)
 {
-    this.element     = element;
-    this.buttonsZone = element.querySelector('.buttons-zone');
-    this.buttons     = [];
-    this.modal       = modal;
+    this.element      = element;
+    this.buttonsZones = element.querySelectorAll('.buttons-zone');
+    this.buttons      = [];
+    this.modal        = modal;
 
     this.identifyButtons();
 }
@@ -16,7 +16,7 @@ CatalogSheetCard.prototype.identifyButtons = function ()
 {
     this.buttons = [];
 
-    [].forEach.call(this.element.querySelectorAll('.button'), function (element) {
+    [].forEach.call(this.element.querySelectorAll('.buttons-zone .btn'), function (element) {
         var button = new CatalogSheetCardButton(element);
         this.buttons.push(button);
 
@@ -67,7 +67,9 @@ CatalogSheetCard.prototype.handleRequestForm = function ()
     // Update sheets list
     $.post(action, data, function(response) {
       if (response.status === 'ok') {
-          $(this.buttonsZone).html(response.html);
+          [].forEach.call(this.buttonsZones, function (buttonZone) {
+              $(buttonZone).html(response.html)
+          });
           $(this.modal).modal('hide');
           this.identifyButtons();
       }

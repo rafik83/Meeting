@@ -1,0 +1,30 @@
+
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        <i class="icon-Fermer_4"></i>
+        {% if isItRequest %}
+            {{ 'catalog.action.meeting.request.show.refuse'|trans }}
+        {% else %}
+            {{ 'catalog.action.meeting.proposition.show.refuse'|trans }}
+        {% endif %}
+    </h4>
+</div>
+<div class="modal-body">
+    <div class="object--form--field" style="margin-top: 0;">
+        {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
+    </div>
+</div>
+<div class="modal-footer">
+    {% if form != null %}
+        {{ form_start(form) }}
+        <div class="validation pull-left">
+            <button type="submit" class="btn btn-no-style text-underline">
+                <i class="icon-Fermer_4"></i> {{ 'form.catalog_un_refuse_meeting_request.children.submit.label'|trans({}, 'forms') }}
+            </button>
+        </div>
+        {{ form_end(form) }}
+    {% endif %}
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
+    </button>
+</div>

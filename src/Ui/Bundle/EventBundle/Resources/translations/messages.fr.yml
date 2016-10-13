@@ -14,12 +14,22 @@ account.update.title: 'Modifier mon compte'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.request.back: 'Retour'
 catalog.action.meeting.request.create: 'Demander en RDV'
+catalog.action.meeting.request.approve: 'Proposition reçue'
+catalog.action.meeting.request.refuse: 'Proposition reçue'
+catalog.action.meeting.request.show.refuse: 'Demande refusée'
+catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
 catalog.complete_sheet: 'Voir la fiche complète'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
 catalog.search.no-filter-to-refine: "Aucun filtre ne permet d'affiner la recherche."
 catalog.meeting_request.pending: Demande en attente
+catalog.meeting_request.approve: Accepter
+catalog.meeting_request.request.approved: Demande acceptée
+catalog.meeting_request.proposition.approved: Proposition acceptée
+catalog.meeting_request.proposition.refused: Proposition refusée
+catalog.meeting_request.request.refused: Demande refusée
 catalog.meeting_request.create: Demander en RDV
+catalog.meeting_request.refuse: Refuser
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'
@@ -48,11 +58,11 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
-navigation.links.happening.accept: Acceptées
-navigation.links.happening.decline: Refusées
 navigation.links.happening.open_date: 'Disponible le'
 navigation.links.happening.proposal: 'Propositions de RDV'
-navigation.links.happening.waiting: 'Demandes en attente'
+navigation.links.happening.approved: 'Acceptées'
+navigation.links.happening.refused: 'Refusées'
+navigation.links.happening.sent: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'

@@ -88,6 +88,7 @@ class SheetPreviewViewQueryHandler
 
         return new CatalogSheetPreviewView(
             $sheet->getId(),
+            $sheet,
             $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             $sheet->getType()->getTitle($locale),
             $this->preview->getPreview($sheet, $locale, $rule),
