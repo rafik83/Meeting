@@ -183,12 +183,6 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-<<<<<<< Updated upstream
-            ->from(Request::class, 'request')
-            ->where('request.to = :sheet')
-            ->orWhere('request.from = :sheet')
-            ->setParameter('sheet', $sheet);
-=======
             ->from(Request::class, 'request');
 
         if (empty($filters['state']) ||
@@ -198,7 +192,6 @@ class RequestRepository implements RequestRepositoryInterface
                 ->where('request.to = :sheet OR request.from = :sheet')
                 ->setParameter('sheet', $sheet);
         }
->>>>>>> Stashed changes
 
         if (!empty($filters['state']) && $filters['state'] != Request::STATE_ALL) {
             if ($filters['state'] === Request::STATE_RECEIVE) {

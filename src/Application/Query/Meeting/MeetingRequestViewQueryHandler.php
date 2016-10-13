@@ -53,13 +53,8 @@ class MeetingRequestViewQueryHandler
         return new MeetingRequestView(
             $sheet,
             $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
-<<<<<<< Updated upstream
-            $query->meetingRequest->getState(),
-            $sheet->getType()->getTitle($sheet->getEvent()->getAvailableLocale($query->locale)),
-=======
             $this->getFilterState($query),
             $sheet->getType()->getTitle($query->locale),
->>>>>>> Stashed changes
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
             $previews
