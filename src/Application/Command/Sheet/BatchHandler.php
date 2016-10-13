@@ -38,6 +38,11 @@ class BatchHandler
     private $batchCatalogHandler;
 
     /**
+     * @var BatchPendingHandler
+     */
+    private $batchPendingHandler;
+
+    /**
      * BatchHandler constructor.
      *
      * @param BatchValidateHandler      $batchValidateHandler
@@ -45,19 +50,22 @@ class BatchHandler
      * @param BatchAcceptHandler        $batchAcceptHandler
      * @param BatchEnableDisableHandler $batchEnableDisableHandler
      * @param BatchCatalogHandler       $batchCatalogHandler
+     * @param BatchPendingHandler       $batchPendingHandler
      */
     public function __construct(
         BatchValidateHandler $batchValidateHandler,
         BatchAssignHandler $batchAssignHandler,
         BatchAcceptHandler $batchAcceptHandler,
         BatchEnableDisableHandler $batchEnableDisableHandler,
-        BatchCatalogHandler $batchCatalogHandler
+        BatchCatalogHandler $batchCatalogHandler,
+        BatchPendingHandler $batchPendingHandler
     ) {
         $this->batchValidateHandler      = $batchValidateHandler;
         $this->batchAssignHandler        = $batchAssignHandler;
         $this->batchAcceptHandler        = $batchAcceptHandler;
         $this->batchEnableDisableHandler = $batchEnableDisableHandler;
         $this->batchCatalogHandler       = $batchCatalogHandler;
+        $this->batchPendingHandler       = $batchPendingHandler;
     }
 
     /**
@@ -90,6 +98,7 @@ class BatchHandler
                 new BatchEnableDisable($batch->ids, $state, $batch->admin)
             );
         }
+
         if ($batch->addCatalog || $batch->removeCatalog) {
             $state = (true === $batch->addCatalog) ? true : false;
 
@@ -97,11 +106,18 @@ class BatchHandler
                 new BatchCatalog($batch->ids, $state, $batch->admin)
             );
         }
+
         if ($batch->addCatalog || $batch->removeCatalog) {
             $state = (true === $batch->addCatalog) ? true : false;
 
             return $this->batchCatalogHandler->handle(
                 new BatchCatalog($batch->ids, $state, $batch->admin)
+            );
+        }
+
+        if ($batch->pending) {
+            return $this->batchPendingHandler->handle(
+                new BatchPending($batch->ids, $batch->admin)
             );
         }
 

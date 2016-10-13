@@ -48,6 +48,9 @@
                         {% if batch_form.removeCatalog is defined %}
                             <li>{{ form_widget(batch_form.removeCatalog) }}</li>
                         {% endif %}
+                        {% if batch_form.pending is defined %}
+                            <li>{{ form_widget(batch_form.pending) }}</li>
+                        {% endif %}
                     {% endblock actions %}
                 {% endembed %}
             </div>

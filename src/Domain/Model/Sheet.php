@@ -539,6 +539,20 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @param string $state
+     *
+     * @return Sheet
+     */
+    public function setState($state)
+    {
+        if (in_array($state, self::getAllStates())) {
+            $this->state = $state;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isAccepted()

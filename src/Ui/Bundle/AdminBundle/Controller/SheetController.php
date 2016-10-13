@@ -122,6 +122,7 @@ class SheetController extends Controller
                     $batch->disable       = $batchForm->get('disable')->isClicked();
                     $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
                     $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
+                    $batch->pending       = $batchForm->get('pending')->isClicked();
                 }
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
