@@ -21,7 +21,7 @@ admin.happening.add: Add
 admin.happening.link: Conferences
 admin.meeting_request.link: 'Meeting requests'
 admin.meeting.link: Meetings
-admin.menu.link: admin.menu.link
+admin.menu.link: Menu
 admin.new.link: admin.new.link
 admin.operator_list.table.content.update: Edit
 admin.operator.update.title: 'Edit collaborater'
@@ -31,8 +31,13 @@ admin.order_edit.VAT: VAT
 admin.plan.unitPrice: 'Unit price'
 admin.product.unitPrice: 'Unit price'
 admin.rule.link: 'Who see who'
+admin.sheet.change.type.link: Change
+admin.sheet.change.type.title: 'Change the type of participation'
 admin.sheet.details.transactions: Transactions
 admin.sheet.link: 'Participation sheets'
+admin.sheet.state: State
+admin.sheet.trace.changed_type: 'The type of participation has been changed'
+admin.sheet.trace.changed_type_comment: 'Changed from %fromType% to %toType%'
 admin.spot.active.no: 'No'
 admin.spot.active.yes: 'Yes'
 admin.spot.batch_create.title: 'Add spots per batch'
@@ -51,6 +56,10 @@ admin.spot.listSpot.seatCapacity: 'Seats capacity'
 admin.spot.listSpot.size: 'Size (m²)'
 admin.spot.listSpot.yes: 'Yes'
 admin.template.action.save: Save
+admin.transaction.mode.bank_check: Cheque
+admin.transaction.mode.bank_transfer: Transfer
+admin.transaction.mode.paypal: Paypal
+admin.transaction.state.pending: Pending
 admin.type.link: 'Participation types'
 admin.zero-result: admin.zero-result
 and: and
@@ -69,6 +78,8 @@ event.link.see_meeting_proposition: 'My proposals received'
 event.link.see_meeting_request: 'My meeting requests'
 event.link.see_my_sheet: 'View my %type% sheet'
 event.link.see_schedule: 'View my planning %type%'
+event.meeting.approvedRequest.label: 'From %fromName% to %toName%'
+event.meeting.approvedRequest.title: 'Accept received proposal'
 event.meeting.cancelRequest.label: 'From %fromName% to %toName%'
 event.meeting.cancelRequest.title: 'Cancel my request'
 event.meeting.createRequest.title: 'Meeting request'
@@ -125,8 +136,8 @@ event.sheet.participant.already_exists: 'This participant has already been added
 event.sheet.participant.email: Email
 event.sheet.participant.guest: Guest
 event.sheet.participant.owner: Owner
-event.sheet.payment.description: 'Choose payment method'
-event.sheet.payment.title: 'Payment method'
+event.sheet.payment.description: 'Choose your mode of payment'
+event.sheet.payment.title: 'Mode of payment'
 event.sheet.state.accepted: Accepted
 event.sheet.state.pending: Pending
 event.sheet.state.validated: Validated

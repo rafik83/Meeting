@@ -16,7 +16,14 @@ form.package_summary_promotion_code.children.submit.label: Validate
 form.package_summary_promotion_code.placeholder: 'Enter promotional code'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'I agree and accept the terms and the general sales conditions relating to this participation package.'
 form.payment_choice_with_deposit.children.deposit.label: 'Choose whether to pay the full or a deposit'
+form.payment_choice_with_deposit.children.depositMode.deposit: Deposit
 form.payment_choice_with_deposit.children.depositMode.total: Total
+form.payment_choice_with_deposit.children.mode.label: 'Choose your mode of payment'
+form.payment_choice.children.mode.label: 'Choose your mode of payment'
+form.payment_choice.children.paymentMode.bank_card: 'Bank card'
+form.payment_choice.children.paymentMode.bank_check: Cheque
+form.payment_choice.children.paymentMode.bank_transfer: Transfer
+form.payment_choice.children.paymentMode.paypal: 'Paypal or Bank card'
 form.register.newUser.password.placeholder: 'Choose your password'
 form.sheet_button_link_data.children.submit.label: Save
 form.sheet_button_link_data.children.url.label: URL
