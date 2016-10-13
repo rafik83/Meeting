@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class EditableText extends EditableObject implements ContentObjectInterface
+class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface
 {
     /**
      * @param string|null locale
@@ -162,5 +162,13 @@ class EditableText extends EditableObject implements ContentObjectInterface
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchableContent()
+    {
+        return $this->getContentValue();
     }
 }

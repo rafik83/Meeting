@@ -211,24 +211,40 @@
 }
 
 .catalog__research {
+  background: #fff;
   position: absolute;
   left: -300px;
   top: 0;
   width: 300px;
+  min-height: 400px;
   height: 100%;
   padding: 25px;
-  background: #FFFFFF;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, .3);
   transition: left 0.5s ease-in-out;
   margin-left: -20px;
 
-  > form {
-    margin-bottom: 20px;
+  .btn {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 
-    .btn {
-      display: flex;
-      justify-content: center;
-      width: 100%;
+  input[type="text"] {
+    background: #fff;
+    width: 100%;
+    border: 1px solid #BBBDBF;
+    padding: 11px 12px;
+    height: auto;
+    border-radius: 0 !important;
+
+    &:focus {
+      outline: none;
+      border-bottom: 2px solid $gradient-right-color !important;
+    }
+
+    &.error {
+      color: $bg-fail-color;
+      border-bottom: 2px solid $bg-fail-color;
     }
   }
 
@@ -302,7 +318,6 @@
       > span {
         text-decoration: underline
       }
-    ;
     }
   }
 }

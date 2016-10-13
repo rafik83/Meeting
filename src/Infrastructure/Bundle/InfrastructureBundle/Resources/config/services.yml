@@ -59,8 +59,17 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.repository.search_facet:
+        class: Proximum\Vimeet\Infrastructure\Repository\SearchFacetRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet.components.paginator'
+    vimeet_infrastructure.repository.user_event_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\UserEventRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.participant_repository:
@@ -260,6 +269,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@components.user.type_resolver'
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
@@ -275,6 +285,7 @@ services:
             - '@components.token.user.activate_account_token_generator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@cart_manager'
+            - '@components.user.type_resolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
@@ -816,6 +827,8 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.adapter.encoder_adapter'
             - '@vimeet_infrastructure.adapter.salt_generator'
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
@@ -1114,6 +1127,12 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
+    command.event.search_facet.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.search_facet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\SearchFacet\Update }
     command.payment.abstract_choice_handler:
         abstract: true
         arguments:
@@ -1314,6 +1333,14 @@ services:
         class: Proximum\Vimeet\Domain\Rule\Applyer
         arguments:
             - '@domain.rule.composer'
+
+    #
+    # User component
+    #
+    components.user.type_resolver:
+        class: Proximum\Vimeet\Domain\UserEvent\TypeResolver
+        arguments:
+            - '@vimeet_infrastructure.repository.user_event_repository'
 
     #
     # Token component

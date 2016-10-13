@@ -45,8 +45,16 @@ function init (target) {
         });
     });
 
+    $('.catalog form', target).on('submit', function (event) {
+        event.preventDefault();
+    });
+
     $('.catalog form input, .catalog form select', target).on('change', function () {
-        this.checked = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+        var result = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
+
+        if ('checkbox' === $(this).attr('type')) {
+            this.checked = result;
+        }
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {

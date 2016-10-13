@@ -37,6 +37,8 @@ admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.search_facet.enabled.label: "Activé"
+admin.event.search_facet.title: "Filtres du catalogue"
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
@@ -315,6 +317,7 @@ admin.sheet.validate: Valider
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
+admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.delete: Supprimer
@@ -394,6 +397,16 @@ admin.type.update.title: 'Modifier le type de participation'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
+admin.user.contact-information: 'Coordonnées'
+admin.user.company-information: 'Informations de société'
+admin.users.see-sheet: 'Voir la participation'
+admin.users.details: 'Voir le compte'
+admin.users.email: Email
+admin.users.firstName: Prénom
+admin.users.lastName: Nom
+admin.users.link: 'Utilisateurs'
+admin.users.title: "Utilisateurs"
+admin.users.type: Type
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'

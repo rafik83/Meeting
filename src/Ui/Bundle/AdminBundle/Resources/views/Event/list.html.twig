@@ -19,19 +19,15 @@
             {% for event in events %}
                 <tr>
                     <td>
-                        {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
-                                    {{ event.title }}
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    {{ include('AdminBundle:Event:links.html.twig', {event: event}) }}
-                                </ul>
-                            </div>
-                        {% else %}
-                            <a href="{{ path('admin_sheet', { 'event': event.id }) }}">{{ event.title }}</a>
-                        {% endif %}
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                {{ event.title }}
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {{ include('AdminBundle:Event:links.html.twig', {event: event}) }}
+                            </ul>
+                        </div>
                     </td>
                     <td>
                         {% for locale in event.locales %}
