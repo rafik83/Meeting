@@ -196,6 +196,8 @@ sheet.object.showMore.title: 'Voir moins'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander en RDV'
+sheet.submit.validation: 'Soumettre ma fiche'
+sheet.submit.validation.pending: 'Fiche soumisse à validation'
 sheet.title: 'Fiche de présentation'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé

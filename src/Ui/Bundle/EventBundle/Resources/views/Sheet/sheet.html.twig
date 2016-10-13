@@ -11,6 +11,12 @@
                 <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
             </h1>
 
+            {% if sheet.isPending %}
+                <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary request-meeting">{{ 'sheet.submit.validation'|trans }}</a>
+            {% elseif sheet.isValidationPending %}
+                <span>{{ 'sheet.submit.validation.pending'|trans }}</span>
+            {% endif %}
+
             {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
                 <a class="btn btn-primary request-meeting" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
             {% endif %}

@@ -19,9 +19,10 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
  */
 class Sheet implements TraceableInterface
 {
-    const STATE_PENDING   = 'pending';
-    const STATE_VALIDATED = 'validated';
-    const STATE_ACCEPTED  = 'accepted';
+    const STATE_PENDING            = 'pending';
+    const STATE_VALIDATED          = 'validated';
+    const STATE_ACCEPTED           = 'accepted';
+    const STATE_VALIDATION_PENDING = 'validation_pending';
 
     /**
      * @var int
@@ -139,6 +140,7 @@ class Sheet implements TraceableInterface
             self::STATE_ACCEPTED,
             self::STATE_PENDING,
             self::STATE_VALIDATED,
+            self::STATE_VALIDATION_PENDING
         ];
     }
 
@@ -569,6 +571,22 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isPending()
+    {
+        return $this->state === self::STATE_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidationPending()
+    {
+        return $this->state === self::STATE_VALIDATION_PENDING;
+    }
+
+    /**
      * Get follower
      *
      * @return Admin
@@ -679,5 +697,15 @@ class Sheet implements TraceableInterface
 
         // Remove from catalog
         $this->setInCatalog(false);
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function submitToValidation()
+    {
+        $this->state = self::STATE_VALIDATION_PENDING;
+
+        return $this;
     }
 }
