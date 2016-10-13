@@ -326,6 +326,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getValidationState()
+    {
+        return $this->validationState;
+    }
+
+    /**
      * @return Package
      */
     public function getPackage()
@@ -744,7 +752,7 @@ class Sheet implements TraceableInterface
      */
     public function submitToValidation()
     {
-        $this->state = self::STATE_VALIDATION_PENDING;
+        $this->validationState = self::STATE_VALIDATION_PENDING;
 
         return $this;
     }

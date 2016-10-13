@@ -649,14 +649,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
-    command.sheet.batch_pending_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
+    command.sheet.batch_draft_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchDraftHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPending }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchDraft }
     command.sheet.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\RemoveImageHandler
         arguments:
@@ -748,7 +748,7 @@ services:
             - '@command.sheet.batch_accept_handler'
             - '@command.sheet.batch_enable_disable_handler'
             - '@command.sheet.batch_catalog_handler'
-            - '@command.sheet.batch_pending_handler'
+            - '@command.sheet.batch_draft_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
     command.sheet.accept_handler:

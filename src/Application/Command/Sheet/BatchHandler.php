@@ -38,9 +38,9 @@ class BatchHandler
     private $batchCatalogHandler;
 
     /**
-     * @var BatchPendingHandler
+     * @var BatchDraftHandler
      */
-    private $batchPendingHandler;
+    private $batchDraftHandler;
 
     /**
      * BatchHandler constructor.
@@ -50,7 +50,7 @@ class BatchHandler
      * @param BatchAcceptHandler        $batchAcceptHandler
      * @param BatchEnableDisableHandler $batchEnableDisableHandler
      * @param BatchCatalogHandler       $batchCatalogHandler
-     * @param BatchPendingHandler       $batchPendingHandler
+     * @param BatchDraftHandler         $batchDraftHandler
      */
     public function __construct(
         BatchValidateHandler $batchValidateHandler,
@@ -58,14 +58,14 @@ class BatchHandler
         BatchAcceptHandler $batchAcceptHandler,
         BatchEnableDisableHandler $batchEnableDisableHandler,
         BatchCatalogHandler $batchCatalogHandler,
-        BatchPendingHandler $batchPendingHandler
+        BatchDraftHandler $batchDraftHandler
     ) {
         $this->batchValidateHandler      = $batchValidateHandler;
         $this->batchAssignHandler        = $batchAssignHandler;
         $this->batchAcceptHandler        = $batchAcceptHandler;
         $this->batchEnableDisableHandler = $batchEnableDisableHandler;
         $this->batchCatalogHandler       = $batchCatalogHandler;
-        $this->batchPendingHandler       = $batchPendingHandler;
+        $this->batchDraftHandler         = $batchDraftHandler;
     }
 
     /**
@@ -116,8 +116,8 @@ class BatchHandler
         }
 
         if ($batch->draft) {
-            return $this->batchPendingHandler->handle(
-                new BatchPending($batch->ids, $batch->admin)
+            return $this->batchDraftHandler->handle(
+                new BatchDraft($batch->ids, $batch->admin)
             );
         }
 
