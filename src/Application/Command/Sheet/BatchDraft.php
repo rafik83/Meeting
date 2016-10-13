@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class BatchPending extends AbstractBatch
+class BatchDraft extends AbstractBatch
 {
     /**
      * @var Admin

@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher;
 
-class SheetPendingEvent extends EventDispatcher\Event
+class SheetDraftEvent extends EventDispatcher\Event
 {
     /**
      * @var Sheet

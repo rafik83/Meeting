@@ -521,6 +521,9 @@ event.sheet.state.accepted: Acceptée
 event.sheet.state.pending: 'En attente'
 event.sheet.state.validated: Validée
 event.sheet.state.validation_pending: 'Soumis à validation'
+event.sheet.validationState.validation_draft: Brouillon
+event.sheet.validationState.validation_pending: 'En attente'
+event.sheet.validationState.validation_validated: 'Validée'
 event.sheet.summary.action: Action
 event.sheet.summary.product: Produit
 event.sheet.summary.quantity: Quantité

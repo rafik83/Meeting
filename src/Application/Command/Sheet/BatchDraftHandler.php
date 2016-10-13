@@ -11,12 +11,12 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
-class BatchPendingHandler
+class BatchDraftHandler
 {
     /**
      * @var SheetRepositoryInterface
@@ -51,22 +51,22 @@ class BatchPendingHandler
     }
 
     /**
-     * @param BatchPending $batchPending
+     * @param BatchDraft $batchPending
      *
      * @return BatchResult
      */
-    public function handle(BatchPending $batchPending)
+    public function handle(BatchDraft $batchPending)
     {
         $sheets = $this->sheetRepository->getSheetsById($batchPending->ids);
 
         foreach ($sheets as $sheet) {
-            if (!$sheet->isPending()) {
-                $sheet->setState(Sheet::STATE_PENDING);
+            if (!$sheet->isValidationDraft()) {
+                $sheet->setValidationState(Sheet::STATE_VALIDATION_DRAFT);
                 $this->sheetRepository->set($sheet);
 
                 $this->eventDispatcher->dispatch(
-                    Events::SHEET_PENDING,
-                    new SheetPendingEvent(
+                    Events::SHEET_VALIDATION_DRAFT,
+                    new SheetDraftEvent(
                         $sheet,
                         $batchPending->admin,
                         $this->datetime
@@ -75,6 +75,6 @@ class BatchPendingHandler
             }
         }
 
-        return new BatchResult(count($sheets), $batchPending->getMessage() . 'pending.success');
+        return new BatchResult(count($sheets), $batchPending->getMessage() . 'draft.success');
     }
 }

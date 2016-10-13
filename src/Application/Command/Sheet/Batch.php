@@ -72,7 +72,7 @@ class Batch extends AbstractBatch
     /**
      * @var bool
      */
-    public $pending;
+    public $draft;
 
     /**
      * @param Admin $admin

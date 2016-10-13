@@ -20,6 +20,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             nullable: true
         state:
             type: string
+        validationState:
+            type: string
         completeness:
             type: integer
         enable:

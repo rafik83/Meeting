@@ -115,7 +115,7 @@ class BatchHandler
             );
         }
 
-        if ($batch->pending) {
+        if ($batch->draft) {
             return $this->batchPendingHandler->handle(
                 new BatchPending($batch->ids, $batch->admin)
             );

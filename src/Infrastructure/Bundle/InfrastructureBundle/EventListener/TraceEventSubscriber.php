@@ -84,11 +84,11 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetPendingEvent $event
      */
-    public function onSheetPending(SheetPendingEvent $event)
+    public function onSheetValidationDraft(SheetPendingEvent $event)
     {
         $this->addTrace(
             $event->getSheet(),
-            Trace::PENDING,
+            Trace::VALIDATION_DRAFT,
             $event->getDate(),
             '',
             $event->getAuthor()
@@ -154,12 +154,12 @@ class TraceEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_ACCEPTED       => 'onSheetAccepted',
-            Events::SHEET_VALIDATED      => 'onSheetValidated',
-            Events::SHEET_ENABLE_DISABLE => 'onSheetEnableDisable',
-            Events::SHEET_CATALOG        => 'onSheetCatalog',
-            Events::SHEET_CHANGED_TYPE   => 'onSheetChangedType',
-            Events::SHEET_PENDING        => 'onSheetPending',
+            Events::SHEET_ACCEPTED         => 'onSheetAccepted',
+            Events::SHEET_VALIDATED        => 'onSheetValidated',
+            Events::SHEET_ENABLE_DISABLE   => 'onSheetEnableDisable',
+            Events::SHEET_CATALOG          => 'onSheetCatalog',
+            Events::SHEET_CHANGED_TYPE     => 'onSheetChangedType',
+            Events::SHEET_VALIDATION_DRAFT => 'onSheetValidationDraft',
         ];
     }
 }

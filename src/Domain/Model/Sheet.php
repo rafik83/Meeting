@@ -19,10 +19,16 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
  */
 class Sheet implements TraceableInterface
 {
-    const STATE_PENDING            = 'pending';
-    const STATE_VALIDATED          = 'validated';
-    const STATE_ACCEPTED           = 'accepted';
-    const STATE_VALIDATION_PENDING = 'validation_pending';
+    const STATE_PENDING   = 'pending';
+    const STATE_VALIDATED = 'validated';
+    const STATE_ACCEPTED  = 'accepted';
+
+    /**
+     * "Etat de validation de la fiche"
+     */
+    const STATE_VALIDATION_DRAFT     = 'validation_draft';
+    const STATE_VALIDATION_PENDING   = 'validation_pending';
+    const STATE_VALIDATION_VALIDATED = 'validation_validated';
 
     /**
      * @var int
@@ -75,6 +81,13 @@ class Sheet implements TraceableInterface
      * @var string
      */
     private $state = self::STATE_PENDING;
+
+    /**
+     * "Etat de la validation de la fiche par l'utilisateur"
+     *
+     * @var string
+     */
+    private $validationState = self::STATE_VALIDATION_DRAFT;
 
     /**
      * @var int
@@ -141,6 +154,18 @@ class Sheet implements TraceableInterface
             self::STATE_PENDING,
             self::STATE_VALIDATED,
             self::STATE_VALIDATION_PENDING
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAllValidationStates()
+    {
+        return [
+            self::STATE_VALIDATION_DRAFT,
+            self::STATE_VALIDATION_PENDING,
+            self::STATE_VALIDATION_VALIDATED,
         ];
     }
 
@@ -539,14 +564,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @param string $state
+     * @param string $validationState
      *
      * @return Sheet
      */
-    public function setState($state)
+    public function setValidationState($validationState)
     {
-        if (in_array($state, self::getAllStates())) {
-            $this->state = $state;
+        if (in_array($validationState, self::getAllValidationStates())) {
+            $this->validationState = $validationState;
         }
 
         return $this;
@@ -587,17 +612,18 @@ class Sheet implements TraceableInterface
     /**
      * @return bool
      */
-    public function isPending()
+    public function isValidationPending()
     {
-        return $this->state === self::STATE_PENDING;
+        return $this->validationState === self::STATE_VALIDATION_PENDING;
+
     }
 
     /**
      * @return bool
      */
-    public function isValidationPending()
+    public function isValidationDraft()
     {
-        return $this->state === self::STATE_VALIDATION_PENDING;
+        return $this->validationState === self::STATE_VALIDATION_DRAFT;
     }
 
     /**

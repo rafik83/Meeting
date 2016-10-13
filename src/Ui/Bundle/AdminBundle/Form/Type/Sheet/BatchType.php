@@ -71,7 +71,7 @@ class BatchType extends AbstractType
                 ->add('disable', SubmitType::class)
                 ->add('addCatalog', SubmitType::class)
                 ->add('removeCatalog', SubmitType::class)
-                ->add('pending', SubmitType::class)
+                ->add('draft', SubmitType::class)
             ;
         }
     }

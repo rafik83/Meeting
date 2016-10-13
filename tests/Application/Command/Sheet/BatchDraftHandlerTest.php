@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
-use Proximum\Vimeet\Application\Command\Sheet\BatchPending;
-use Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler;
+use Proximum\Vimeet\Application\Command\Sheet\BatchDraft;
+use Proximum\Vimeet\Application\Command\Sheet\BatchDraftHandler;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchPendingHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchDraftHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -37,21 +37,21 @@ class BatchPendingHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = new Sheet($event, $type, [], $user2, $date);
         $sheet3 = new Sheet($event, $type, [], $user3, $date);
 
-        $sheet1->setState(Sheet::STATE_ACCEPTED);
-        $sheet2->setState(Sheet::STATE_ACCEPTED);
-        $sheet3->setState(Sheet::STATE_ACCEPTED);
+        $sheet1->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
+        $sheet2->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
+        $sheet3->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
 
         // Expected
         $expectedSheet1 = new Sheet($event, $type, [], $user1, $date);
-        $expectedSheet1->setState(Sheet::STATE_PENDING);
+        $expectedSheet1->setValidationState(Sheet::STATE_VALIDATION_DRAFT);
 
         $expectedSheet2 = new Sheet($event, $type, [], $user2, $date);
-        $expectedSheet2->setState(Sheet::STATE_PENDING);
+        $expectedSheet2->setValidationState(Sheet::STATE_VALIDATION_DRAFT);
 
         $expectedSheet3 = new Sheet($event, $type, [], $user3, $date);
-        $expectedSheet3->setState(Sheet::STATE_PENDING);
+        $expectedSheet3->setValidationState(Sheet::STATE_VALIDATION_DRAFT);
 
-        $command = new BatchPending([1, 2, 3], $admin);
+        $command = new BatchDraft([1, 2, 3], $admin);
 
         // Mock
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -64,14 +64,14 @@ class BatchPendingHandlerTest extends \PHPUnit_Framework_TestCase
         foreach ([$expectedSheet1, $expectedSheet2, $expectedSheet3] as $sheet) {
             $sheetRepository->set($sheet)->shouldBeCalled();
 
-            $eventDispatcher->dispatch(Events::SHEET_PENDING,
-                new SheetPendingEvent($sheet, $admin, $date)
+            $eventDispatcher->dispatch(Events::SHEET_VALIDATION_DRAFT,
+                new SheetDraftEvent($sheet, $admin, $date)
             )->shouldBeCalled();
         }
 
         // Handler
 
-        $handler = new BatchPendingHandler(
+        $handler = new BatchDraftHandler(
             $sheetRepository->reveal(),
             $eventDispatcher->reveal(),
             $date
