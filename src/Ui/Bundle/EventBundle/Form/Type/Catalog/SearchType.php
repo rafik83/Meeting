@@ -23,6 +23,7 @@ class SearchType extends AbstractType
 {
     const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
     const FILTER_TYPE                  = 'type';
+    const FILTER_CONTENT               = 'content';
     const ORDER_BY                     = 'orderBy';
 
     /**
@@ -34,7 +35,7 @@ class SearchType extends AbstractType
         $organizationCategoryViews = $options['organizationCategoryViews'];
 
         $builder
-            ->add('orderBy', ChoiceType::class, [
+            ->add(self::ORDER_BY, ChoiceType::class, [
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
@@ -91,7 +92,7 @@ class SearchType extends AbstractType
         ]);
 
         $builder
-            ->add('content', TextType::class, [
+            ->add(self::FILTER_CONTENT, TextType::class, [
                 'label' => 'form.search.content.label',
             ]);
     }
