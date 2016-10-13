@@ -38,6 +38,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ path('admin_event_search_facets', { 'event': event.id }) }}">
+                    {{ 'admin.spot.search_facets.link'|trans }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
                     {{ 'admin.event.see_on_front.link'|trans }}
                 </a>

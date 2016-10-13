@@ -164,6 +164,13 @@ admin_event_configure_dates:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:dates }
 
+admin_event_search_facets:
+    path: /event/{event}/search-facets
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:SearchFacet:update }
+
 #
 # Content
 #

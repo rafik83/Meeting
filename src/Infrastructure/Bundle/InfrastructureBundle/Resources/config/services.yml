@@ -59,6 +59,10 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
             - '@vimeet_infrastructure.repository.type_repository'
+    vimeet_infrastructure.repository.search_facet:
+        class: Proximum\Vimeet\Infrastructure\Repository\SearchFacetRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
@@ -1114,6 +1118,12 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update }
+    command.event.search_facet.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.search_facet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\SearchFacet\Update }
     command.payment.abstract_choice_handler:
         abstract: true
         arguments:
