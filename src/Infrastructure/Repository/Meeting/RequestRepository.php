@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -186,21 +187,21 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request');
 
         if (empty($filters['state']) ||
-            !in_array($filters['state'], [Request::STATE_RECEIVE, Request::STATE_SENT,])
+            !in_array($filters['state'], [Meeting\Constant::STATE_RECEIVE, Meeting\Constant::STATE_SENT,])
         ) {
             $queryBuilder
                 ->where('request.to = :sheet OR request.from = :sheet')
                 ->setParameter('sheet', $sheet);
         }
 
-        if (!empty($filters['state']) && $filters['state'] != Request::STATE_ALL) {
-            if ($filters['state'] === Request::STATE_RECEIVE) {
+        if (!empty($filters['state']) && $filters['state'] != Meeting\Constant::STATE_ALL) {
+            if ($filters['state'] === Meeting\Constant::STATE_RECEIVE) {
                 $queryBuilder
                     ->andWhere('request.state = :state')
                     ->andWhere('request.to = :sheet')
-                    ->setParameter('state', Request::STATE_SENT)
+                    ->setParameter('state', Meeting\Constant::STATE_SENT)
                     ->setParameter('sheet', $sheet);
-            } elseif ($filters['state'] === Request::STATE_SENT) {
+            } elseif ($filters['state'] === Meeting\Constant::STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
                     ->setParameter('sheet', $sheet);
@@ -334,23 +335,23 @@ class RequestRepository implements RequestRepositoryInterface
             ->select('request')
             ->from(Request::class, 'request')
             ->where('request.state != :cancelState')
-            ->setParameter('cancelState', Request::STATE_CANCEL);
+            ->setParameter('cancelState', Meeting\Constant::STATE_CANCEL);
 
-        if (!in_array($state, [Request::STATE_RECEIVE, Request::STATE_SENT,])) {
+        if (!in_array($state, [Meeting\Constant::STATE_RECEIVE, Meeting\Constant::STATE_SENT,])) {
             $queryBuilder
                 ->andWhere('request.to = :sheet OR request.from = :sheet')
                 ->setParameter('sheet', $sheet);
         }
 
         // filter by state
-        if ($state != Request::STATE_ALL) {
-            if ($state === Request::STATE_RECEIVE) {
+        if ($state != Meeting\Constant::STATE_ALL) {
+            if ($state === Meeting\Constant::STATE_RECEIVE) {
                 $queryBuilder
                     ->andWhere('request.state = :state')
                     ->andWhere('request.to = :sheet')
-                    ->setParameter('state', Request::STATE_SENT)
+                    ->setParameter('state', Meeting\Constant::STATE_SENT)
                     ->setParameter('sheet', $sheet);
-            } elseif ($state === Request::STATE_SENT) {
+            } elseif ($state === Meeting\Constant::STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
                     ->setParameter('sheet', $sheet);
