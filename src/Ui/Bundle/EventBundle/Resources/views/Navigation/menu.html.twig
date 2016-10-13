@@ -32,12 +32,14 @@
                     <span class="name">{{ 'sheet.title'|trans }}</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ path('event_package') }}" class="btn btn-primary btn-lg {{ funnel ? '' : 'btn-inactive' }}">
-                    <i class="icon-Panier_2"></i>
-                    <span class="name">{{ 'package.title'|trans }}</span>
-                </a>
-            </li>
+            {% if sheet is defined and sheet.package.isPassable == true %}
+                <li>
+                    <a href="{{ path('event_package') }}" class="btn btn-primary btn-lg {{ funnel ? '' : 'btn-inactive' }}">
+                        <i class="icon-Panier_2"></i>
+                        <span class="name">{{ 'package.title'|trans }}</span>
+                    </a>
+                </li>
+            {% endif %}
         {% endif %}
 
         {% if isMeeting is defined and sheet is defined %}
