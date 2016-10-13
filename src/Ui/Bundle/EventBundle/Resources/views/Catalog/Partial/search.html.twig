@@ -9,6 +9,12 @@
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
 
+    {% if searchForm.localization is defined %}
+        {{ form_label(searchForm.localization) }}
+        {{ form_widget(searchForm.localization, { 'attr': { 'class': 'hide' } }) }}
+        <select class="form-control select2 filter-localization" multiple="multiple" data-source="{{ path('event_catalog_search_localization') }}"></select>
+    {% endif %}
+
     {% if searchForm.content is defined %}
         {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.content }, false) }}
     {% endif %}

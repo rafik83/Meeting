@@ -22,6 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SearchType extends AbstractType
 {
     const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
+    const FILTER_LOCALIZATION          = 'localization';
     const FILTER_TYPE                  = 'type';
     const FILTER_CONTENT               = 'content';
     const ORDER_BY                     = 'orderBy';
@@ -89,6 +90,11 @@ class SearchType extends AbstractType
                 'class'               => 'form-control select2',
                 'data-disallow-clear' => 'true',
             ],
+        ]);
+
+        $builder->add(self::FILTER_LOCALIZATION, TextType::class, [
+            'label'    => 'form.search.localization.label',
+            'required' => false,
         ]);
 
         $builder

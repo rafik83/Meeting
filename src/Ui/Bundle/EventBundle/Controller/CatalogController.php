@@ -119,6 +119,17 @@ class CatalogController extends Controller
     }
 
     /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function searchLocalizationAction(Request $request, EventDomain $eventDomain)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+    }
+
+    /**
      * Display a sheet.
      *
      * @param Request     $request
