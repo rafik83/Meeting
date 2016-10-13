@@ -37,20 +37,28 @@ class CreateRequestHandler
     private $eventDispatcher;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
      * CreateRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
      * @param EventDispatcherInterface   $eventDispatcher
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        \DateTimeInterface $dateTime
     ) {
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
+        $this->dateTime          = $dateTime;
     }
 
     /**
@@ -64,7 +72,7 @@ class CreateRequestHandler
             $createRequest->participants,
             $createRequest->to,
             [],
-            $createRequest->createdAt,
+            $this->dateTime,
             $createRequest->creator
         );
 
@@ -76,7 +84,7 @@ class CreateRequestHandler
                 $request,
                 $request->getFromSheet(),
                 $createRequest->description,
-                $createRequest->createdAt
+                $this->dateTime
             ));
         }
 
@@ -84,7 +92,7 @@ class CreateRequestHandler
         $this->eventDispatcher->dispatch(Events::REQUEST_SENT, new RequestSentEvent(
             $createRequest->creator,
             $request,
-            $createRequest->createdAt,
+            $this->dateTime,
             $createRequest->description
         ));
 
@@ -95,7 +103,7 @@ class CreateRequestHandler
                 $participant,
                 $request,
                 $createRequest->description,
-                $createRequest->createdAt
+                $this->dateTime
             ));
         }
     }

@@ -330,4 +330,28 @@ class RequestRepository implements RequestRepositoryInterface
 
         return count($queryBuilder->getQuery()->getResult());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequestBetweenSheets(Sheet $one, Sheet $another)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->setMaxResults(1);
+
+        // Between
+        $queryBuilder
+            ->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->andX('request.from = :one', 'request.to = :another'),
+                $queryBuilder->expr()->andX('request.from = :another', 'request.to = :one')
+            ))
+            ->setParameter('one', $one)
+            ->setParameter('another', $another);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

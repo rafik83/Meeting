@@ -48,10 +48,10 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
      */
     public function __construct($email, $salt, $password, $locale)
     {
-        $this->email     = $email;
-        $this->salt      = $salt;
-        $this->password  = $password;
-        $this->locale    = $locale;
+        $this->email    = $email;
+        $this->salt     = $salt;
+        $this->password = $password;
+        $this->locale   = $locale;
     }
 
     /**
@@ -149,7 +149,7 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
             $this->id,
             $this->email,
             $this->password,
-            $this->salt
+            $this->salt,
         ) = unserialize($serialized);
     }
 

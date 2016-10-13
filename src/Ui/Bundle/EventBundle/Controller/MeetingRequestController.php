@@ -33,6 +33,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingReque
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -136,7 +137,7 @@ class MeetingRequestController extends Controller
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
-     * @return RedirectResponse|Response
+     * @return Response|JsonResponse
      */
     public function createRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {
@@ -145,7 +146,7 @@ class MeetingRequestController extends Controller
         $event = $eventDomain->getEvent();
 
         if (!$sheet->isInCatalog()) {
-            throw $this->createAccessDeniedException('Sheet not in catalog');
+            throw $this->createNotFoundException('Sheet not in catalog');
         }
 
         if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
@@ -155,33 +156,54 @@ class MeetingRequestController extends Controller
         $from = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
 
         if (!$from->isInCatalog()) {
-            throw $this->createAccessDeniedException('Sheet not in catalog');
+            throw $this->createNotFoundException('Viewer Sheet not in catalog');
         }
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate($this->getUser(), $from, $sheet)) {
-            throw $this->createAccessDeniedException('You are not allowed to create this meeting request.');
+        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($from);
+
+        if (!in_array($sheet->getType(), $visibleTypes)) {
+            throw $this->createNotFoundException('The viewer is not allowed to create a meeting request with this sheet');
         }
 
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
+        if ($from === $sheet) {
+            throw $this->createNotFoundException('You can not request a meeting with yourself');
+        }
 
-        $createRequest = new CreateRequest($from, $sheet, new \DateTime(), $this->getUser());
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Not allowed method');
+        }
+
+        $createRequest = new CreateRequest($from, $sheet, $this->getUser());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
+            'action' => $this->generateUrl('event_catalog_sheet_meeting_request', ['sheet' => $sheet->getId()]),
             'sheet'  => $from,
             'locale' => $request->getLocale(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($createRequest);
-            $this->addFlash('success', 'flash.meeting_request.create.success');
 
-            return $this->redirectToRoute('event_catalog_complete_sheet', ['sheet' => $sheet->getId()]);
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'ok',
+                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig'),
+            ]);
+
+            return $response;
+        } elseif ($form->handleRequest($request)->isSubmitted() && !$form->isValid()) {
+            $response = new JsonResponse();
+            $response->setData([
+                'status' => 'error',
+                'html'   => $this->renderView('EventBundle:MeetingRequest:createRequest.html.twig', [
+                    'form' => $form->createView(),
+                ])
+            ]);
+
+            return $response;
         }
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
-            'event'    => $eventDomain->getEvent(),
-            'fromName' => $sheetInfoGuesser->guessSheetName($from, $request->getLocale()),
-            'toName'   => $sheetInfoGuesser->guessSheetName($sheet, $request->getLocale()),
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 

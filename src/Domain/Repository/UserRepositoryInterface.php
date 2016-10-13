@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface UserRepositoryInterface
@@ -39,14 +41,18 @@ interface UserRepositoryInterface
     public function findByEmail($email);
 
     /**
-     * @param int $id
-     *
-     * @return User|null
-     */
-    public function getFullUser($id);
-
-    /**
      * @return User[]
      */
     public function all();
+
+    /**
+     * @param int    $page
+     * @param int    $limit
+     * @param Event  $event
+     * @param array  $filter
+     * @param string $locale
+     *
+     * @return PaginatedResult
+     */
+    public function paginate($page, $limit, Event $event, array $filter, $locale);
 }

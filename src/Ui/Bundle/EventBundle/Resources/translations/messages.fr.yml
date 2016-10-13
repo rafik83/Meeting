@@ -12,10 +12,14 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
+catalog.action.meeting.request.back: 'Retour'
+catalog.action.meeting.request.create: 'Demander en RDV'
 catalog.complete_sheet: 'Voir la fiche complète'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
 catalog.search.no-filter-to-refine: "Aucun filtre ne permet d'affiner la recherche."
+catalog.meeting_request.pending: Demande en attente
+catalog.meeting_request.create: Demander en RDV
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'

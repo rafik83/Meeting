@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddHandler
@@ -67,6 +68,11 @@ class AddHandler
     private $cartManager;
 
     /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
      * AddHandler constructor.
      *
      * @param UserRepositoryInterface        $userRepository
@@ -76,6 +82,7 @@ class AddHandler
      * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param CartManager                    $cartManager
+     * @param TypeResolver                   $typeResolver
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -84,7 +91,8 @@ class AddHandler
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         DelayedEventDispatcher $eventDispatcher,
-        CartManager $cartManager
+        CartManager $cartManager,
+        TypeResolver $typeResolver
     ) {
         $this->userRepository                = $userRepository;
         $this->participantRepository         = $participantRepository;
@@ -93,6 +101,7 @@ class AddHandler
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
         $this->eventDispatcher               = $eventDispatcher;
         $this->cartManager                   = $cartManager;
+        $this->typeResolver                  = $typeResolver;
     }
 
     /**
@@ -139,6 +148,9 @@ class AddHandler
             // send to the adder
             $this->sendActivationConfirmEvent($add, $participant);
         }
+
+        // Add UserEvent to new user
+        $this->typeResolver->resolve($user, $add->sheet->getEvent(), $add->sheet->getType());
 
         $sheetUpdated = new SheetUpdatedEvent($add->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
