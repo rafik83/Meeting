@@ -47,7 +47,7 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime     = new DateTime;
 
         // Command
-        $createRequest = new CreateRequest($sheetFrom, $sheetTo, $dateTime, $user1);
+        $createRequest = new CreateRequest($sheetFrom, $sheetTo, $user1);
         $createRequest->description = 'test';
         $createRequest->participants = [$participant1, $participant2];
 
@@ -68,7 +68,7 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch('meeting_request.participant.added', new ParticipantAddedEvent($user1, $participant2, $expectedRequest, 'test', $dateTime));
 
         // Handler
-        $handler = new CreateRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $eventDispatcher->reveal());
+        $handler = new CreateRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $eventDispatcher->reveal(), $dateTime);
         $handler->handle($createRequest);
     }
 

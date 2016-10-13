@@ -26,15 +26,25 @@ class BatchAcceptHandler
     private $acceptHandler;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param AcceptHandler            $acceptHandler
+     * @param \DateTimeInterface       $datetime
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, AcceptHandler $acceptHandler)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        AcceptHandler $acceptHandler,
+        \DateTimeInterface $datetime
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->acceptHandler   = $acceptHandler;
+        $this->datetime        = $datetime;
     }
 
     /**
@@ -54,7 +64,7 @@ class BatchAcceptHandler
 
         // Accept sheets
         foreach ($sheets as $sheet) {
-            $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $batchAccept->date));
+            $this->acceptHandler->handle(new Accept($sheet, $batchAccept->admin, $this->datetime));
         }
 
         return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');

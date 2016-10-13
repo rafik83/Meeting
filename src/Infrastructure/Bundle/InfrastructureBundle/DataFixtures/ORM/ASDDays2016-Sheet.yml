@@ -5,18 +5,38 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: "@event_asddays_2016_account_user_1"
     user_asddays_2:
         __construct: false
         email: "user_asddays_2@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: "@event_asddays_2016_account_user_2"
     user_asddays_3:
         __construct: false
         email: "user_asddays_3@proximum.com"
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: "@event_asddays_2016_account_user_3"
+    # User without sheet
+    user_asddays_4:
+        __construct: false
+        email: "user_asddays_4@proximum.com"
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+
+Proximum\Vimeet\Domain\Model\UserEvent:
+    event_asddays_2016_user_event_1:
+        __construct: ['@user_asddays_1', '@event_asddays_2016', '@event_asddays_2016_type_investisseur']
+    event_asddays_2016_user_event_2:
+        __construct: ['@user_asddays_2', '@event_asddays_2016', '@event_asddays_2016_type_fournisseur']
+    event_asddays_2016_user_event_3:
+        __construct: ['@user_asddays_3', '@event_asddays_2016', '@event_asddays_2016_type_donneur_ordre']
+    event_asddays_2016_user_event_4:
+        __construct: ['@user_asddays_4', '@event_asddays_2016', '@event_asddays_2016_type_donneur_ordre']
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_1:
@@ -66,7 +86,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -86,7 +105,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -107,7 +125,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
-        createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
@@ -148,6 +165,71 @@ Proximum\Vimeet\Domain\Model\Participant:
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
 
+Proximum\Vimeet\Domain\Model\User\Account (local):
+    event_asddays_2016_account_user_1:
+        __construct: false
+        firstName: "Martin"
+        lastName: "Dupont"
+        phone: "+33668973246"
+        mobile: "+33668973246"
+        position: "Consultant"
+        company: "Elao"
+        website: "http://www.monsite.fr"
+        address: "10 rue des lilas"
+        zipcode: "75002"
+        city: "Paris"
+        country: "FR"
+        gender: "man"
+        avatar: 'assets/images/asddays-logo.png'
+        companyAddress: "10 rue Saint Marc"
+        companyPhone: "0668973246"
+        companyZipCode: "75002"
+        companyCity: "Paris"
+        companyCountry: "FR"
+        companyWebsite: "http://www.elao.com"
+    event_asddays_2016_account_user_2:
+        __construct: false
+        firstName: "Jean"
+        lastName: "Durant"
+        phone: "+33668973246"
+        mobile: "+33668973246"
+        position: "Manager"
+        company: "Elao"
+        website: "http://www.monsite.fr"
+        address: "10 rue des lilas"
+        zipcode: "75002"
+        city: "Paris"
+        country: "FR"
+        gender: "man"
+        avatar: 'assets/images/asddays-logo.png'
+        companyAddress: "10 rue Saint Marc"
+        companyPhone: "0668973246"
+        companyZipCode: "75002"
+        companyCity: "Paris"
+        companyCountry: "FR"
+        companyWebsite: "http://www.elao.com"
+    event_asddays_2016_account_user_3:
+        __construct: false
+        firstName: "Julie"
+        lastName: "Pierini"
+        phone: "+33668973246"
+        mobile: "+33668973246"
+        position: "Chef de projet"
+        company: "Elao"
+        website: "http://www.monsite.fr"
+        address: "10 rue des lilas"
+        zipcode: "75002"
+        city: "Paris"
+        country: "FR"
+        gender: "woman"
+        avatar: 'assets/images/asddays-logo.png'
+        companyAddress: "10 rue Saint Marc"
+        companyPhone: "0668973246"
+        companyZipCode: "75002"
+        companyCity: "Paris"
+        companyCountry: "FR"
+        companyWebsite: "http://www.elao.com"
+
 Proximum\Vimeet\Domain\Model\Transaction:
     transaction_1:
         __construct: false
@@ -176,4 +258,3 @@ Proximum\Vimeet\Domain\Model\Transaction:
         reference: TRANSACTION_03
         state: pending
         currency: EUR
-

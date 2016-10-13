@@ -36,7 +36,7 @@ class Preview
      * @param string            $locale
      * @param ComposedRule|null $composedRule
      *
-     * @return TemplateObject[]
+     * @return PreviewView[]
      */
     public function getPreview(Sheet $sheet, $locale, ComposedRule $composedRule = null)
     {
@@ -73,6 +73,12 @@ class Preview
         return $previewObjects;
     }
 
+    /**
+     * @param string            $tag
+     * @param ComposedRule|null $composedRule
+     *
+     * @return bool
+     */
     private function isTagVisible($tag, ComposedRule $composedRule = null)
     {
         if (null === $composedRule) {

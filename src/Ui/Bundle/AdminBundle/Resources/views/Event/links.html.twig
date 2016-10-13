@@ -1,160 +1,179 @@
-<li class="dropdown-submenu">
-    <a href="{{ path('admin_event_update', { 'event': event.id }) }}">{{ 'admin.event.settings.link'|trans }}</a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('admin_event_update', { 'event': event.id }) }}">
-                {{ 'admin.event.update.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_content_update', { 'event': event.id, 'type': 'terms-of-sale' }) }}">
-                {{ 'admin.update_content.terms-of-sale.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_billing_configuration', { 'event': event.id }) }}">
-                {{ 'admin.event.billing.configuration.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_payment_conditions', { 'event': event.id }) }}">
-                {{ 'admin.event.paymentConditions.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
-                {{ 'admin.spot.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">
-                {{ 'admin.event.practicalInfo.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_configure_dates', { 'event': event.id }) }}">
-                {{ 'admin.spot.configure_dates'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_search_facets', { 'event': event.id }) }}">
-                {{ 'admin.spot.search_facets.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
-                {{ 'admin.event.see_on_front.link'|trans }}
-            </a>
-        </li>
-    </ul>
-</li>
-<li>
-    <a href="{{ path('admin_product', { 'event': event.id }) }}">
-        {{ 'admin.product.link'|trans }}
-    </a>
-</li>
-<li>
-    <a href="{{ path('admin_promotion_code_list', { 'event': event.id }) }}">
-        {{ 'admin.promotion_code.link'|trans }}
-    </a>
-</li>
-<li>
-    <a href="{{ path('admin_sheet', { 'event': event.id }) }}">
-        {{ 'admin.sheet.link'|trans }}
-    </a>
-</li>
-<li>
-    <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}">
-        {{ 'admin.schedule.link'|trans }}
-    </a>
-</li>
-<li>
-    <a href="{{ path('admin_nomenclature_event', { 'event': event.id }) }}">
-        {{ 'admin.nomenclature.link'|trans }}
-    </a>
-</li>
-<li>
-    <a href="{{ path('admin_sheet_order_list', { 'event': event.id }) }}">
-        {{ 'admin.order.link'|trans }}
-    </a>
-</li>
-<li class="dropdown-submenu">
-    <a href="{{ path('admin_type_list', { 'event': event.id }) }}">{{ 'admin.type.link'|trans }}</a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('admin_type_list', { 'event': event.id }) }}">
-            {{ 'admin.type.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_category_list', { 'event': event.id }) }}">
-            {{ 'admin.category.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_rule_list', { 'event': event.id }) }}">
-            {{ 'admin.rule.link'|trans }}
-            </a>
-        </li>
-    </ul>
-</li>
-<li class="dropdown-submenu">
-    <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">{{ 'admin.meeting.link'|trans }}</a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}">
-            {{ 'admin.meeting_request.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
-            {{ 'admin.meeting.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_meeting_request_sheets_list', { 'event': event.id }) }}">
-                {{ 'admin.meeting_request_sheets_list.link'|trans }}
-            </a>
-        </li>
-    </ul>
-</li>
-<li class="dropdown-submenu">
-    <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.link'|trans }}</a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">
-                {{ 'admin.happening.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_happening_category_list', { 'event': event.id }) }}">
-                {{ 'admin.happening_category.link'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}">
-                {{ 'admin.happening_speaker.link'|trans }}
-            </a>
-        </li>
-    </ul>
-</li>
-<li class="dropdown-submenu">
-    <a href="#">{{ 'admin.event.template.link'|trans }}</a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('admin_event_template_registration', { 'event': event.id }) }}">
-                {{ 'admin.event.template.registration'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_template_sheet', { 'event': event.id }) }}">
-                {{ 'admin.event.template.sheet'|trans }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_event_template_package', { 'event': event.id }) }}">
-                {{ 'admin.event.template.package'|trans }}
-            </a>
-        </li>
-    </ul>
-</li>
+{% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_event_update', { 'event': event.id }) }}">{{ 'admin.event.settings.link'|trans }}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_event_update', { 'event': event.id }) }}">
+                    {{ 'admin.event.update.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_content_update', { 'event': event.id, 'type': 'terms-of-sale' }) }}">
+                    {{ 'admin.update_content.terms-of-sale.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_billing_configuration', { 'event': event.id }) }}">
+                    {{ 'admin.event.billing.configuration.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_payment_conditions', { 'event': event.id }) }}">
+                    {{ 'admin.event.paymentConditions.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_spot_list', { 'event': event.id }) }}">
+                    {{ 'admin.spot.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">
+                    {{ 'admin.event.practicalInfo.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_configure_dates', { 'event': event.id }) }}">
+                    {{ 'admin.spot.configure_dates'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_search_facets', { 'event': event.id }) }}">
+                    {{ 'admin.spot.search_facets.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ app.request.baseUrl }}">
+                    {{ 'admin.event.see_on_front.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="{{ path('admin_product', { 'event': event.id }) }}">
+            {{ 'admin.product.link'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_promotion_code_list', { 'event': event.id }) }}">
+            {{ 'admin.promotion_code.link'|trans }}
+        </a>
+    </li>
+{% endif %}
+
+{% if is_granted('ROLE_ALLOWED_TO_MANAGE_USER') %}
+    <li>
+        <a href="{{ path('admin_users', { 'event': event.id }) }}">
+            {{ 'admin.users.link'|trans }}
+        </a>
+    </li>
+{% endif %}
+
+{% if is_granted('ROLE_ALLOWED_TO_MANAGE_SHEET') %}
+    <li>
+        <a href="{{ path('admin_sheet', { 'event': event.id }) }}">
+            {{ 'admin.sheet.link'|trans }}
+        </a>
+    </li>
+{% endif %}
+
+{% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
+    <li>
+        <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}">
+            {{ 'admin.schedule.link'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_nomenclature_event', { 'event': event.id }) }}">
+            {{ 'admin.nomenclature.link'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_sheet_order_list', { 'event': event.id }) }}">
+            {{ 'admin.order.link'|trans }}
+        </a>
+    </li>
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_type_list', { 'event': event.id }) }}">{{ 'admin.type.link'|trans }}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_type_list', { 'event': event.id }) }}">
+                {{ 'admin.type.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_category_list', { 'event': event.id }) }}">
+                {{ 'admin.category.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_rule_list', { 'event': event.id }) }}">
+                {{ 'admin.rule.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">{{ 'admin.meeting.link'|trans }}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}">
+                {{ 'admin.meeting_request.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
+                {{ 'admin.meeting.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_meeting_request_sheets_list', { 'event': event.id }) }}">
+                    {{ 'admin.meeting_request_sheets_list.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.link'|trans }}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">
+                    {{ 'admin.happening.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_happening_category_list', { 'event': event.id }) }}">
+                    {{ 'admin.happening_category.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}">
+                    {{ 'admin.happening_speaker.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+{% endif %}
+
+{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+    <li class="dropdown-submenu">
+        <a href="#">{{ 'admin.event.template.link'|trans }}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_event_template_registration', { 'event': event.id }) }}">
+                    {{ 'admin.event.template.registration'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_template_sheet', { 'event': event.id }) }}">
+                    {{ 'admin.event.template.sheet'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_template_package', { 'event': event.id }) }}">
+                    {{ 'admin.event.template.package'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+{% endif %}

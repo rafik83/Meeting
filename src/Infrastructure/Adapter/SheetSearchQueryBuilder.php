@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Match;
+use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 
 class SheetSearchQueryBuilder
 {
@@ -31,15 +33,22 @@ class SheetSearchQueryBuilder
     private $query;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * SheetSearchQuery constructor.
      *
-     * @param Event $event
-     * @param array $filters
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
      */
-    public function __construct(Event $event, array $filters)
+    public function __construct(Event $event, array $filters, $locale)
     {
-        $this->query = new BoolQuery();
+        $this->locale = $locale;
 
+        $this->query = new BoolQuery();
         $this->matchEvent($event);
         $this->hasOwner();
         $this->hasParticipant();
@@ -70,6 +79,8 @@ class SheetSearchQueryBuilder
 
     /**
      * Has owner
+     *
+     * @deprecated To be removed, used for dev reason
      */
     protected function hasOwner()
     {
@@ -108,6 +119,7 @@ class SheetSearchQueryBuilder
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
+        $this->filterByContent($filters);
     }
 
     /**
@@ -126,6 +138,33 @@ class SheetSearchQueryBuilder
         }
 
         $this->filterBySheetNameOrParticipantLastname($filters['text']);
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByContent(array &$filters)
+    {
+        if (!isset($filters['content']) || null === $filters['content']) {
+            return;
+        }
+
+        // Boost sheetname by 5
+        $fields = ['sheetName^5', 'content'];
+
+        if (in_array($this->locale, AvailableLocales::getAvailableLocalesForContent())) {
+            // If locale field is available, boost it by 2
+            $fields[] = sprintf('content_%s^2', $this->locale);
+        }
+
+        $multiMatch = new MultiMatch();
+        $multiMatch
+            ->setMinimumShouldMatch('70%')
+            ->setFields($fields)
+            ->setFuzziness(1)
+            ->setQuery($filters['content']);
+
+        $this->query->addMust($multiMatch);
     }
 
     /**
@@ -214,8 +253,6 @@ class SheetSearchQueryBuilder
 
                 $this->query->addMust($filterByTypes);
             }
-
-
         }
     }
 
@@ -382,7 +419,7 @@ class SheetSearchQueryBuilder
     /**
      * @param string $predefined
      */
-    private function filterByBooleanFilter($predefined)
+    protected function filterByBooleanFilter($predefined)
     {
         $nested     = new Nested();
         $boolQuery  = new BoolQuery();

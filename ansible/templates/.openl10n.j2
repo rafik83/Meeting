@@ -1,25 +1,26 @@
 # Server configuration
 server:
-    hostname: openl10n.elao.ninja
-    username: proximum.vimeet
-    password: YUdB8sCR
+    hostname: openl10n.vimeet.events
+    use_ssl:  true
+    username: vimeet
+    password: _see_in_1password_vimeet_
 
 # Project identifier
-project: proximum.vimeet
+project: vimeet
 
 # Path to the translation files
 files:
   -
-    pattern: src/Bundle/*Bundle/Resources/translations/*.<locale>.*
+    pattern: src/Ui/Bundle/*Bundle/Resources/translations/*.<locale>.*
     options:
       # Options when pushing (importing) translation files:
       # - reviewed  = Mark directly all translations as approved
       # - erase     = Replace existing translations by the ones in the files
       # - clean     = Delete translations which are not present in the files anymore
-      push: [clean]
+      push: []
 
       # Options when pulling (exporting) translation files:
       # - fallback_locale = If translation does not exist in a locale (eg. French), dump the default (eg. English) translation
       # - fallback_key    = If the default translation (eg. English) does not exist, use the key as a valid translation
       # - reviewed        = Dump only reviewed translations (and ignore the rest)
-      # pull: [fallback_locale, fallback_key, reviewed]
+      pull: [fallback_locale]

@@ -301,6 +301,9 @@ services:
             - '@request_stack'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@components.user.type_resolver'
+            - '@session'
 
     #
     # Services
