@@ -22,7 +22,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: string
         validationState:
             type: string
-            default: 'draft'
+            options:
+                default: 'draft'
         completeness:
             type: integer
         enable:
