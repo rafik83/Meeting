@@ -5,14 +5,17 @@
 {% endblock %}
 
 {% block content %}
-    <section class="main">
+    {% set isRequestMeetingEnabled = isCatalog is defined and isCatalog == true and userSheet != sheet %}
+    <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
         <header>
             <h1>
                 <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
             </h1>
 
-            {% if isCatalog is defined and isCatalog == true and userSheet != sheet %}
-                <a class="btn btn-primary request-meeting" href="{{ path('event_catalog_sheet_meeting_request', {'sheet': sheet.id}) }}"><i class="icon-DemandeRDV"></i>{{ 'sheet.request_meeting'|trans }}</a>
+            {% if isRequestMeetingEnabled %}
+                <div class="buttons-zone button request-meeting-sheet">
+                    {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
+                </div>
             {% endif %}
 
             {% if isCatalog is not defined or isCatalog == false %}
@@ -45,7 +48,8 @@
                     'nomenclatures': nomenclatures,
                     'participants': participants,
                     'isCatalog': isCatalog|default(false),
-                    'userSheet': userSheet|default(false)
+                    'userSheet': userSheet|default(false),
+                    'meetingRequest' : meetingRequest|default(false),
                 }, false) }}
             {% endfor %}
         </div>
@@ -64,5 +68,9 @@
             </div>
         </div>
     </div>
+
+    {% if isRequestMeetingEnabled %}
+        {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
+    {% endif %}
 
 {% endblock %}

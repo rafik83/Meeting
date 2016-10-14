@@ -44,8 +44,7 @@ function init (target) {
             nationalMode: false
         });
     });
-
-
+    
     $('.catalog form', target).on('submit', function (event) {
         event.preventDefault();
     });
@@ -58,8 +57,8 @@ function init (target) {
         }
     });
 
-    [].forEach.call(target.querySelectorAll('.catalog__item'), function (element) {
-        new CatalogSheetCard(element, target.getElementById('request-modal'));
+    [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
+        new CatalogSheetCard(element, document.getElementById('request-modal'));
     });
 
     $('.dropdown-menu', target).on('click', function (e) {

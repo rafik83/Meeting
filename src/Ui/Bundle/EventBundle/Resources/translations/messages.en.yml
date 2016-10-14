@@ -61,12 +61,23 @@ navigation.menu: Menu
 nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
 nomenclature.submit: Save
+order.list.column.numero: Number
 order.list.column.total: Total
 order.list.pay_remaining: 'Full payment'
+order.list.pro_forma.link: 'View Proforma'
 order.list.title: 'My orders'
+order.transaction.list.column.mode: Mode
+order.transaction.list.column.state: State
 order.transaction.list.column.total: Amount
 order.transaction.list.title: 'Transactions list'
+order.transaction.mode.bank_card: 'Bank card'
+order.transaction.mode.bank_check: Cheque
+order.transaction.mode.bank_transfer: Transfer
+order.transaction.mode.paypal: Paypal
 order.transaction.paypal.description: 'Participation of %sheetName% (sheet %sheetId%) on the event "%eventName%"'
+order.transaction.state.cancelled: Cancelled
+order.transaction.state.paid: Paid
+order.transaction.state.pending: Pending
 package.funnel.payment: Payment
 package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
@@ -77,11 +88,11 @@ package.participants.included: Included
 package.payment.bankInfo: 'Bank details'
 package.payment.billingAddress: 'Billing address'
 package.payment.deposit.title: Deposit
-package.payment.deposit.toPay: 'You can pay a deposit of %deposit% by selecting payment methods with deposit'
+package.payment.deposit.toPay: 'You can pay a deposit of %deposit% by selecting payment with deposit'
 package.payment.pay.label: Pay
 package.payment.title: Payment
 package.payment.total.title: Total
-package.payment.total.toPay: 'Total to pay'
+package.payment.total.toPay: '%total%'
 package.planning.label: 'Title & Description'
 package.planning.quantity: Quantity
 package.planning.quantityMax: 'Maximum quantity reached'
@@ -132,7 +143,11 @@ package.summary.totalVat: '+ %vat%% VAT'
 package.title: 'Package of participation'
 package.vatMode.ati: 'incl. VAT'
 package.vatMode.et: 'excl. VAT'
-pro_forma.vatNumber.title: 'Intra-community VAT number'
+pro_forma.bankInfo.title: 'Bank details'
+pro_forma.date.title: 'Date:'
+pro_forma.number.title: 'Proforma N°:'
+pro_forma.title: 'Proforma - %date%'
+pro_forma.vatNumber.title: 'VAT number'
 register.already_registered: 'Already registered?'
 register.finalize: Complete
 register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all"
@@ -148,6 +163,7 @@ summary.column.quantity: Quantity
 summary.column.title: Title
 summary.column.total: Total
 summary.column.unitPrice: 'Unit price'
+summary.product.included: Included
 summary.promotionCode.title: 'Offers of discounts'
 summary.total: Total
 summary.totalToPay: 'Total to pay'
