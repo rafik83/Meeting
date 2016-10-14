@@ -53,7 +53,7 @@ Feature: Edit participant status
     When I go to "/admin/fr/event/1/sheet"
     Then I should see "admin.sheet.title.count"
     And I check "sheet_batch_ids_4"
-    When I press "form.sheet_batch.children.draft.label"
+    When I press "form.sheet_batch.children.validationStateDraft"
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.draft.success"
     And I should see "event.sheet.validationState.draft" in the "#sheet-4" element
@@ -64,7 +64,7 @@ Feature: Edit participant status
     When I go to "/admin/fr/event/1/sheet"
     Then I should see "admin.sheet.title.count"
     And I check "sheet_batch_ids_4"
-    When I press "form.sheet_batch.children.validationValidate.label"
+    When I press "form.sheet_batch.children.validationStateValidate.label"
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.validation.validate.success"
     And I should see "event.sheet.validationState.validated" in the "#sheet-4" element
