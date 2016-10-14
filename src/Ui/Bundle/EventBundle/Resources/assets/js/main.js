@@ -33,7 +33,7 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
+            allowClear: true
         });
     });
 
@@ -57,8 +57,8 @@ function init (target) {
         }
     });
 
-    [].forEach.call(target.querySelectorAll('.catalog__item'), function (element) {
-        new CatalogSheetCard(element, target.getElementById('request-modal'));
+    [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
+        new CatalogSheetCard(element, document.getElementById('request-modal'));
     });
 
     $('.dropdown-menu', target).on('click', function (e) {

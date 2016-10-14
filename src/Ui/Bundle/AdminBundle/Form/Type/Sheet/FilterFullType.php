@@ -27,6 +27,10 @@ class FilterFullType extends AbstractType
             ->add('text', SheetTextSearchType::class, [
                 'label' => 'form.sheet_filter.children.text_search.label',
             ])
+            ->add('enabled', EnabledChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.enabled.label',
+                'placeholder' => '',
+            ])
             ->add('state', StateChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.state.label',
                 'placeholder' => '',

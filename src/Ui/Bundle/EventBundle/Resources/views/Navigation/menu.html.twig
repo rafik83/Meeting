@@ -8,11 +8,20 @@
     </ul>
 
     <ul class="sub-header__item">
-        {% if isCatalog is defined %}
+        {% if isCatalog is defined or (isMeeting is defined and sheet is defined) %}
+            {% set classCatalog = (isMeeting is defined) ? 'btn-inactive' : '' %}
             <li>
-                <a href="{{ path('event_catalog_index') }}" class="btn btn-primary btn-lg">
+                <a href="{{ path('event_catalog_index') }}" class="btn btn-primary {{ classCatalog }} btn-lg">
                     <i class="icon-Contact_1"></i>
                     <span class="name">{{ 'navigation.category.catalog'|trans }}</span>
+                </a>
+            </li>
+
+            <li>
+                {% set classMeeting = (isMeeting is defined) ? '' : 'btn-inactive' %}
+                <a href="{{ path('event_meeting_list_request', {'sheet': sheet.id }) }}" class="btn btn-primary {{ classMeeting }} btn-lg">
+                    <i class="icon-RDV"></i>
+                    <span class="name">{{ 'navigation.category.happening'|trans }}</span>
                 </a>
             </li>
         {% else %}
@@ -23,10 +32,21 @@
                     <span class="name">{{ 'sheet.title'|trans }}</span>
                 </a>
             </li>
+            {% if sheet is defined and sheet.package.isPassable == true %}
+                <li>
+                    <a href="{{ path('event_package') }}" class="btn btn-primary btn-lg {{ funnel ? '' : 'btn-inactive' }}">
+                        <i class="icon-Panier_2"></i>
+                        <span class="name">{{ 'package.title'|trans }}</span>
+                    </a>
+                </li>
+            {% endif %}
+        {% endif %}
+
+        {% if isMeeting is defined and sheet is defined %}
             <li>
-                <a href="{{ path('event_package') }}" class="btn btn-primary btn-lg {{ funnel ? '' : 'btn-inactive' }}">
-                    <i class="icon-Panier_2"></i>
-                    <span class="name">{{ 'package.title'|trans }}</span>
+                <a href="{{ path('event_meeting_list_request', {'sheet': sheet.id }) }}" class="btn btn-primary btn-lg">
+                    <i class="icon-RDV"></i>
+                    <span class="name">{{ 'navigation.category.happening'|trans }}</span>
                 </a>
             </li>
         {% endif %}

@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RefuseRequestHandler
 {
@@ -30,7 +30,7 @@ class RefuseRequestHandler
     private $messageRepository;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
@@ -44,13 +44,13 @@ class RefuseRequestHandler
      *
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
-     * @param EventDispatcherInterface   $eventDispatcher
+     * @param DelayedEventDispatcher     $eventDispatcher
      * @param DateTimeInterface          $createdAt
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
-        EventDispatcherInterface $eventDispatcher,
+        DelayedEventDispatcher $eventDispatcher,
         DateTimeInterface $createdAt
     ) {
         $this->requestRepository = $requestRepository;
@@ -65,7 +65,7 @@ class RefuseRequestHandler
     public function handle(RefuseRequest $refuseRequest)
     {
         // Refuse request
-        $this->requestRepository->set($refuseRequest->request->refuse($refuseRequest->date));
+        $this->requestRepository->set($refuseRequest->request->refuse($this->createdAt));
 
         // Add message
         if ($refuseRequest->message) {

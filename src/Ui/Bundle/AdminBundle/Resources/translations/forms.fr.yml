@@ -455,22 +455,22 @@ form.rule_see_what.not_see_what_column: 'Ne voit pas'
 form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
-form.search_facet_translation.children.label.label: "Label"
-form.search_facet_translation.children.placeholder.label: "Placeholder"
-form.search_facet_translation.children.enabled.label: "Activé"
+form.search_facet_translation.children.enabled.label: Activé
+form.search_facet_translation.children.label.label: Label
+form.search_facet_translation.children.placeholder.label: Placeholder
 form.search_facet_update.children.searchFacets.category.help: ''
-form.search_facet_update.children.searchFacets.category.label: 'Catégorie'
+form.search_facet_update.children.searchFacets.category.label: Catégorie
 form.search_facet_update.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
 form.search_facet_update.children.searchFacets.keywords.label: 'Mots clés'
 form.search_facet_update.children.searchFacets.localization.help: 'Champs tagués ville, pays et code postal (à 2 chiffres uniquement pour la France)'
-form.search_facet_update.children.searchFacets.localization.label: 'Localisation'
+form.search_facet_update.children.searchFacets.localization.label: Localisation
 form.search_facet_update.children.searchFacets.organizationCategory.help: 'Tag catégorie de la société'
-form.search_facet_update.children.searchFacets.organizationCategory.label: 'Structure'
+form.search_facet_update.children.searchFacets.organizationCategory.label: Structure
 form.search_facet_update.children.searchFacets.position.help: 'Nomenclature sur champ tagué fonction du participant'
-form.search_facet_update.children.searchFacets.position.label: 'Fonction'
+form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
-form.search_facet_update.children.searchFacets.type.label: 'Type'
-form.search_facet_update.children.submit.label: 'Enregistrer'
+form.search_facet_update.children.searchFacets.type.label: Type
+form.search_facet_update.children.submit.label: Enregistrer
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
@@ -486,6 +486,7 @@ form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.completed.label: Complétude
+form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.validationState.label: 'Etat de validation'
@@ -537,7 +538,7 @@ form.transaction.children.state.cancelled: Annulé
 form.transaction.children.state.paid: Réglé
 form.transaction.children.state.pending: 'En attente'
 form.transaction.children.transaction_mode.bank_card: 'Carte bancaire'
-form.transaction.children.transaction_mode.bank_cash: Liquide
+form.transaction.children.transaction_mode.bank_cash: 'Argent comptant'
 form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
 form.transaction.children.transaction_mode.paypal: Paypal
