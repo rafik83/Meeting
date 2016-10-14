@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class MeetingViewQueryHandler
@@ -70,6 +70,7 @@ class MeetingViewQueryHandler
                     'navigation.links.meetingRequest.proposal',
                     $this->navigationBuilder->getRoute('event_meeting_list_request', [
                         'sheet' => $meetingViewQuery->sheet->getId(),
+                        'state' => Meeting\Constant::FILTER_STATE_RECEIVE
                     ]),
                     null,
                     null
@@ -79,7 +80,7 @@ class MeetingViewQueryHandler
                     'navigation.links.meetingRequest.sent',
                     $this->navigationBuilder->getRoute('event_meeting_list_request', [
                         'sheet' => $meetingViewQuery->sheet->getId(),
-                        'state' => Request::STATE_SENT,
+                        'state' => Meeting\Constant::FILTER_STATE_SENT,
                     ]),
                     null,
                     null
@@ -89,7 +90,7 @@ class MeetingViewQueryHandler
                     'navigation.links.meetingRequest.approved',
                     $this->navigationBuilder->getRoute('event_meeting_list_request', [
                         'sheet' => $meetingViewQuery->sheet->getId(),
-                        'state' => Request::STATE_APPROVED,
+                        'state' => Meeting\Constant::FILTER_STATE_APPROVED,
                     ]),
                     null,
                     null
@@ -99,7 +100,7 @@ class MeetingViewQueryHandler
                     'navigation.links.meetingRequest.refused',
                     $this->navigationBuilder->getRoute('event_meeting_list_request', [
                         'sheet' => $meetingViewQuery->sheet->getId(),
-                        'state' => Request::STATE_REFUSED,
+                        'state' => Meeting\Constant::FILTER_STATE_REFUSED,
                     ]),
                     null,
                     null
@@ -122,6 +123,6 @@ class MeetingViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::HAPPENING, Category::HAPPENING_ICON, $linksView);
+        return new CategoryView(Category::MEETING, Category::MEETING_ICON, $linksView);
     }
 }

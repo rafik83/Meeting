@@ -135,7 +135,7 @@ class CategoryViewQueryHandler
                     $categoryViewQuery->locale
                 ));
                 break;
-            case Category::HAPPENING:
+            case Category::MEETING:
                 return $this->meetingViewQueryHandler->handle(new MeetingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
