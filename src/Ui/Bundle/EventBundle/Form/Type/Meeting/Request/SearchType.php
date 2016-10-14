@@ -74,7 +74,7 @@ class SearchType extends AbstractType
     {
         return [
             'orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL,
-            'state'   => Meeting\Constant::STATE_ALL,
+            'state'   => Meeting\Constant::FILTER_STATE_ALL,
         ];
     }
 }

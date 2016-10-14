@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MeetingRequestViewQueryHandler
@@ -70,13 +71,13 @@ class MeetingRequestViewQueryHandler
      */
     private function getFilterState(MeetingRequestViewQuery $query)
     {
-        if ($query->meetingRequest->getState() === Constant::STATE_SENT) {
+        if ($query->meetingRequest->getState() === Request::STATE_SENT) {
             if ($query->meetingRequest->getFromSheet() === $query->sheet) {
-                return Constant::STATE_SENT;
+                return Constant::FILTER_STATE_SENT;
             }
 
             if ($query->meetingRequest->getToSheet() === $query->sheet) {
-                return Constant::STATE_RECEIVE;
+                return Constant::FILTER_STATE_RECEIVE;
             }
         }
 

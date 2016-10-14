@@ -186,22 +186,20 @@ class RequestRepository implements RequestRepositoryInterface
             ->select('request')
             ->from(Request::class, 'request');
 
-        if (empty($filters['state']) ||
-            !in_array($filters['state'], [Meeting\Constant::STATE_RECEIVE, Meeting\Constant::STATE_SENT,])
-        ) {
+        if (empty($filters['state']) || !Meeting\Constant::isSentOrReceiveFilter($filters['state'])) {
             $queryBuilder
                 ->where('request.to = :sheet OR request.from = :sheet')
                 ->setParameter('sheet', $sheet);
         }
 
-        if (!empty($filters['state']) && $filters['state'] != Meeting\Constant::STATE_ALL) {
-            if ($filters['state'] === Meeting\Constant::STATE_RECEIVE) {
+        if (!empty($filters['state']) && $filters['state'] != Meeting\Constant::FILTER_STATE_ALL) {
+            if ($filters['state'] === Meeting\Constant::FILTER_STATE_RECEIVE) {
                 $queryBuilder
                     ->andWhere('request.state = :state')
                     ->andWhere('request.to = :sheet')
-                    ->setParameter('state', Meeting\Constant::STATE_SENT)
+                    ->setParameter('state', Meeting\Request::STATE_SENT)
                     ->setParameter('sheet', $sheet);
-            } elseif ($filters['state'] === Meeting\Constant::STATE_SENT) {
+            } elseif ($filters['state'] === Meeting\Constant::FILTER_STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
                     ->setParameter('sheet', $sheet);
@@ -327,7 +325,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countSheetState(Sheet $sheet, $state)
+    public function countSheetState(Sheet $sheet, $filterState)
     {
         $queryBuilder = $this
             ->entityManager
@@ -335,30 +333,30 @@ class RequestRepository implements RequestRepositoryInterface
             ->select('request')
             ->from(Request::class, 'request')
             ->where('request.state != :cancelState')
-            ->setParameter('cancelState', Meeting\Constant::STATE_CANCEL);
+            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
 
-        if (!in_array($state, [Meeting\Constant::STATE_RECEIVE, Meeting\Constant::STATE_SENT,])) {
+        if (!Meeting\Constant::isSentOrReceiveFilter($filterState)) {
             $queryBuilder
                 ->andWhere('request.to = :sheet OR request.from = :sheet')
                 ->setParameter('sheet', $sheet);
         }
 
         // filter by state
-        if ($state != Meeting\Constant::STATE_ALL) {
-            if ($state === Meeting\Constant::STATE_RECEIVE) {
+        if ($filterState != Meeting\Constant::FILTER_STATE_ALL) {
+            if ($filterState === Meeting\Constant::FILTER_STATE_RECEIVE) {
                 $queryBuilder
                     ->andWhere('request.state = :state')
                     ->andWhere('request.to = :sheet')
-                    ->setParameter('state', Meeting\Constant::STATE_SENT)
+                    ->setParameter('state', Meeting\Request::STATE_SENT)
                     ->setParameter('sheet', $sheet);
-            } elseif ($state === Meeting\Constant::STATE_SENT) {
+            } elseif ($filterState === Meeting\Constant::FILTER_STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
                     ->setParameter('sheet', $sheet);
             } else {
                 $queryBuilder
                     ->andWhere('request.state = :state')
-                    ->setParameter('state', $state);
+                    ->setParameter('state', Meeting\Constant::getMappedRequestState($filterState));
             }
         }
 
