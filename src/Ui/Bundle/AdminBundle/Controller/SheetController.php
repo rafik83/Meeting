@@ -113,17 +113,17 @@ class SheetController extends Controller
 
         if ($batchForm->handleRequest($request)->isSubmitted()) {
             if ($batchForm->isValid()) {
-                $batch->assign        = $batchForm->get('assign')->isClicked();
-                $batch->accept        = $batchForm->get('accept')->isClicked();
-                $batch->validate      = $batchForm->get('validate')->isClicked();
+                $batch->assign             = $batchForm->get('assign')->isClicked();
+                $batch->accept             = $batchForm->get('accept')->isClicked();
+                $batch->validate           = $batchForm->get('validate')->isClicked();
+                $batch->draft              = $batchForm->get('validationStateDraft')->isClicked();
+                $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
-                    $batch->enable             = $batchForm->get('enable')->isClicked();
-                    $batch->disable            = $batchForm->get('disable')->isClicked();
-                    $batch->addCatalog         = $batchForm->get('addCatalog')->isClicked();
-                    $batch->removeCatalog      = $batchForm->get('removeCatalog')->isClicked();
-                    $batch->draft              = $batchForm->get('draft')->isClicked();
-                    $batch->validationValidate = $batchForm->get('validationValidate')->isClicked();
+                    $batch->enable        = $batchForm->get('enable')->isClicked();
+                    $batch->disable       = $batchForm->get('disable')->isClicked();
+                    $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
+                    $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
                 }
 
                 $result = $this->get('tactician.commandbus')->handle($batch);
