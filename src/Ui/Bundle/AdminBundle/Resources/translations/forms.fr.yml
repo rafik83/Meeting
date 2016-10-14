@@ -480,8 +480,8 @@ form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
-form.sheet_batch.children.draft.label: 'Remettre la fiche en brouillon'
-form.sheet_batch.children.validationValidate.label: 'Valider le contenu de la fiche'
+form.sheet_batch.children.validationStateDraft.label: 'Remettre la fiche en brouillon'
+form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de la fiche'
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie

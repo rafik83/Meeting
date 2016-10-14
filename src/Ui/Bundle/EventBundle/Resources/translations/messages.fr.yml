@@ -211,6 +211,7 @@ sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander en RDV'
 sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.pending: 'En attente de validation'
+sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.title: 'Fiche de présentation'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
