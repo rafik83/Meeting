@@ -829,7 +829,6 @@ services:
             - '@vimeet_infrastructure.adapter.salt_generator'
             - '@vimeet_infrastructure.repository.user_event_repository'
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\RegisterNewUser }
     command.template.registration.update_handler:
@@ -975,6 +974,7 @@ services:
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Register\ParticipantStep }
     command.package.step.select_plans_handler:

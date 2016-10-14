@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -50,24 +51,32 @@ class ParticipantStepHandler
     private $participantInfoGuesser;
 
     /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param ParticipantInfoGuesser         $participantInfoGuesser
+     * @param UserRepositoryInterface        $userRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
         DelayedEventDispatcher $eventDispatcher,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        UserRepositoryInterface $userRepository
     ) {
         $this->sheetRepository        = $sheetRepository;
         $this->participantRepository  = $participantRepository;
         $this->accountSynchronizer    = $accountSynchronizer;
         $this->eventDispatcher        = $eventDispatcher;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->userRepository         = $userRepository;
     }
 
     /**
@@ -130,10 +139,24 @@ class ParticipantStepHandler
         // check if user are in last register funnel step
         if ($participantStep->templateData->getNextBlockPosition($participantStep->step) === null) {
 
+            $user = $participantStep->participant->getUser();
+
+            if (!$user->isWelcomed()) {
+                // trigger registered event
+                $registeredEvent = new RegisteredEvent(
+                    $participantStep->sheet->getEvent(),
+                    $participantStep->participant->getUser(),
+                    $participantStep->locale
+                );
+
+                $this->eventDispatcher->dispatch(Events::USER_REGISTERED, $registeredEvent);
+                $this->userRepository->set($user->welcomed());
+            }
+
             $preRegisteredEvent = new PreRegisterEvent(
                 $this->participantInfoGuesser,
                 $participantStep->sheet->getEvent(),
-                $participantStep->participant->getUser(),
+                $user,
                 $participantStep->locale,
                 $participantStep->participant,
                 $participantStep->sheet

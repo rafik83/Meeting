@@ -23,6 +23,11 @@ class User extends AbstractUser
     private $account;
 
     /**
+     * @var bool
+     */
+    private $welcomed = false;
+
+    /**
      * @return Account
      */
     public function getAccount()
@@ -38,6 +43,24 @@ class User extends AbstractUser
     public function setAccount(Account $account)
     {
         $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWelcomed()
+    {
+        return true === $this->welcomed;
+    }
+
+    /**
+     * @return User
+     */
+    public function welcomed()
+    {
+        $this->welcomed = true;
 
         return $this;
     }
