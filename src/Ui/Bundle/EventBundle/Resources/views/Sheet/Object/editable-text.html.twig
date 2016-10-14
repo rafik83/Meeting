@@ -14,11 +14,20 @@
             </header>
         {% endif %}
     {% endif %}
+
     {% if item.option('type') == 'text' %}
         {% if item.isTranslatable %}
-            <p>{{ item.content(locale)|default|nl2br }}</p>
+            {% if item.tag %}
+                <p>{{ item.content(locale)|default(taggedData[item.tag]|join(', '))|nl2br }}</p>
+            {% else %}
+                <p>{{ item.content(locale)|default|nl2br }}</p>
+            {% endif %}
         {% else %}
-            <p>{{ item.content|default|nl2br }}</p>
+            {% if item.tag %}
+                <p>{{ item.content|default(taggedData[item.tag]|join(', '))|nl2br }}</p>
+            {% else %}
+                <p>{{ item.content|default|nl2br }}</p>
+            {% endif %}
         {% endif %}
     {% endif %}
 
