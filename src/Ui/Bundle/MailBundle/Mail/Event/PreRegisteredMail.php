@@ -87,6 +87,14 @@ class PreRegisteredMail extends Mail
     }
 
     /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->sheet->getType()->getTitle($this->locale);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSubjectParameters()
