@@ -75,6 +75,13 @@ class Batch extends AbstractBatch
     public $draft;
 
     /**
+     * "L'utilisateur a bien completé sa fiche"
+     *
+     * @var bool
+     */
+    public $validationValidate;
+
+    /**
      * @param Admin $admin
      */
     public function __construct(Admin $admin)

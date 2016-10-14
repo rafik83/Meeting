@@ -118,11 +118,12 @@ class SheetController extends Controller
                 $batch->validate      = $batchForm->get('validate')->isClicked();
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
-                    $batch->enable        = $batchForm->get('enable')->isClicked();
-                    $batch->disable       = $batchForm->get('disable')->isClicked();
-                    $batch->addCatalog    = $batchForm->get('addCatalog')->isClicked();
-                    $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
-                    $batch->draft         = $batchForm->get('draft')->isClicked();
+                    $batch->enable             = $batchForm->get('enable')->isClicked();
+                    $batch->disable            = $batchForm->get('disable')->isClicked();
+                    $batch->addCatalog         = $batchForm->get('addCatalog')->isClicked();
+                    $batch->removeCatalog      = $batchForm->get('removeCatalog')->isClicked();
+                    $batch->draft              = $batchForm->get('draft')->isClicked();
+                    $batch->validationValidate = $batchForm->get('validationValidate')->isClicked();
                 }
 
                 $result = $this->get('tactician.commandbus')->handle($batch);

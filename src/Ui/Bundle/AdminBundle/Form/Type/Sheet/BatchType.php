@@ -72,6 +72,7 @@ class BatchType extends AbstractType
                 ->add('addCatalog', SubmitType::class)
                 ->add('removeCatalog', SubmitType::class)
                 ->add('draft', SubmitType::class)
+                ->add('validationValidate', SubmitType::class)
             ;
         }
     }

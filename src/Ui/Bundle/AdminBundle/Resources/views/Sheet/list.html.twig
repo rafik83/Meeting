@@ -31,25 +31,32 @@
                                 {{ 'admin.sheet.validate'|trans }}
                             </a>
                         </li>
+                        <li role="separator" class="divider"></li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
                         {% if batch_form.enable is defined %}
+                            <li role="separator" class="divider"></li>
                             <li>{{ form_widget(batch_form.enable) }}</li>
                         {% endif %}
                         {% if batch_form.disable is defined %}
                             <li>{{ form_widget(batch_form.disable) }}</li>
                         {% endif %}
                         {% if batch_form.addCatalog is defined %}
+                            <li role="separator" class="divider"></li>
                             <li>{{ form_widget(batch_form.addCatalog) }}</li>
                         {% endif %}
                         {% if batch_form.removeCatalog is defined %}
                             <li>{{ form_widget(batch_form.removeCatalog) }}</li>
                         {% endif %}
                         {% if batch_form.draft is defined %}
+                            <li role="separator" class="divider"></li>
                             <li>{{ form_widget(batch_form.draft) }}</li>
+                        {% endif %}
+                        {% if batch_form.validationValidate is defined %}
+                            <li>{{ form_widget(batch_form.validationValidate) }}</li>
                         {% endif %}
                     {% endblock actions %}
                 {% endembed %}

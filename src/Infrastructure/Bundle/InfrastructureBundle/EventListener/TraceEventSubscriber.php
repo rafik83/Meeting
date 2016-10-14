@@ -15,9 +15,11 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\TraceableInterface;
@@ -82,13 +84,27 @@ class TraceEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param SheetPendingEvent $event
+     * @param SheetDraftEvent $event
      */
-    public function onSheetValidationDraft(SheetPendingEvent $event)
+    public function onSheetValidationDraft(SheetDraftEvent $event)
     {
         $this->addTrace(
             $event->getSheet(),
             Trace::VALIDATION_DRAFT,
+            $event->getDate(),
+            '',
+            $event->getAuthor()
+        );
+    }
+
+    /**
+     * @param SheetValidationValidateEvent $event
+     */
+    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            Trace::VALIDATION_VALIDATE,
             $event->getDate(),
             '',
             $event->getAuthor()
@@ -154,12 +170,13 @@ class TraceEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_ACCEPTED         => 'onSheetAccepted',
-            Events::SHEET_VALIDATED        => 'onSheetValidated',
-            Events::SHEET_ENABLE_DISABLE   => 'onSheetEnableDisable',
-            Events::SHEET_CATALOG          => 'onSheetCatalog',
-            Events::SHEET_CHANGED_TYPE     => 'onSheetChangedType',
-            Events::SHEET_VALIDATION_DRAFT => 'onSheetValidationDraft',
+            Events::SHEET_ACCEPTED            => 'onSheetAccepted',
+            Events::SHEET_VALIDATED           => 'onSheetValidated',
+            Events::SHEET_ENABLE_DISABLE      => 'onSheetEnableDisable',
+            Events::SHEET_CATALOG             => 'onSheetCatalog',
+            Events::SHEET_CHANGED_TYPE        => 'onSheetChangedType',
+            Events::SHEET_VALIDATION_DRAFT    => 'onSheetValidationDraft',
+            Events::SHEET_VALIDATION_VALIDATE => 'onSheetValidationValidate',
         ];
     }
 }

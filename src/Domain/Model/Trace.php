@@ -17,16 +17,17 @@ use DateTimeInterface;
  */
 class Trace
 {
-    const ACCEPT           = 'accept';
-    const VALIDATE         = 'validate';
-    const CREATE           = 'create';
-    const UPDATE           = 'update';
-    const ENABLE           = 'enable';
-    const DISABLE          = 'disable';
-    const ENABLE_CATALOG   = 'enable_catalog';
-    const DISABLE_CATALOG  = 'disable_catalog';
-    const CHANGED_TYPE     = 'changed_type';
-    const VALIDATION_DRAFT = 'validation_draft';
+    const ACCEPT              = 'accept';
+    const VALIDATE            = 'validate';
+    const CREATE              = 'create';
+    const UPDATE              = 'update';
+    const ENABLE              = 'enable';
+    const DISABLE             = 'disable';
+    const ENABLE_CATALOG      = 'enable_catalog';
+    const DISABLE_CATALOG     = 'disable_catalog';
+    const CHANGED_TYPE        = 'changed_type';
+    const VALIDATION_DRAFT    = 'validation_draft';
+    const VALIDATION_VALIDATE = 'validation_validate';
 
     /**
      * @var int
