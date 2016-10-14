@@ -306,7 +306,7 @@ class Nomenclature
                 foreach ($item['children'] as $secondDepth) {
                     $labels[$item['label'][$locale]][$secondDepth['label'][$locale]] = array_map(
                         function ($value) use ($locale) {
-                            return $value['label'][$locale];
+                            return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
                         },
                         $secondDepth['children']
                     );
@@ -322,7 +322,7 @@ class Nomenclature
                 }
 
                 $labels[$item['label'][$locale]] = array_map(function ($value) use ($locale) {
-                    return $value['label'][$locale];
+                    return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
                 }, $item['children']);
             }
 
@@ -330,7 +330,7 @@ class Nomenclature
 
         } elseif (1 === $this->depth) {
             $labels = array_map(function ($value) use ($locale) {
-                return $value['label'][$locale];
+                return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
             }, $this->getValue());
 
             return $labels;
