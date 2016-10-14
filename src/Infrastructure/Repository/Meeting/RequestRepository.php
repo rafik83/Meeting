@@ -205,6 +205,8 @@ class RequestRepository implements RequestRepositoryInterface
             } elseif ($filters['state'] === Meeting\Constant::FILTER_STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', Meeting\Request::STATE_SENT)
                     ->setParameter('sheet', $sheet);
             } else {
                 $queryBuilder
@@ -365,6 +367,8 @@ class RequestRepository implements RequestRepositoryInterface
             } elseif ($filterState === Meeting\Constant::FILTER_STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', Meeting\Request::STATE_SENT)
                     ->setParameter('sheet', $sheet);
             } else {
                 $queryBuilder
