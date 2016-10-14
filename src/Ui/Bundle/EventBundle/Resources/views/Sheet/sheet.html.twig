@@ -13,9 +13,13 @@
             </h1>
 
             {% if sheet.isValidationDraft %}
-                <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary request-meeting">{{ 'sheet.submit.validation'|trans }}</a>
+                <div class="buttons-zone button request-meeting-sheet">
+                    <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary request-meeting">{{ 'sheet.submit.validation'|trans }}</a>
+                </div>
             {% elseif sheet.isValidationPending %}
-                <span>{{ 'sheet.submit.validation.pending'|trans }}</span>
+                <div class="buttons-zone button request-meeting-sheet">
+                    <p>{{ 'sheet.submit.validation.pending'|trans }}</p>
+                </div>
             {% endif %}
 
             {% if isRequestMeetingEnabled %}

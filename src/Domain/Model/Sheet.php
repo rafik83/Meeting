@@ -26,9 +26,9 @@ class Sheet implements TraceableInterface
     /**
      * "Etat de validation de la fiche"
      */
-    const STATE_VALIDATION_DRAFT     = 'validation_draft';
-    const STATE_VALIDATION_PENDING   = 'validation_pending';
-    const STATE_VALIDATION_VALIDATED = 'validation_validated';
+    const STATE_VALIDATION_DRAFT     = 'draft';
+    const STATE_VALIDATION_PENDING   = 'pending';
+    const STATE_VALIDATION_VALIDATED = 'validated';
 
     /**
      * @var int
