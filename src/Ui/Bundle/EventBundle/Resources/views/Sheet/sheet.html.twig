@@ -12,20 +12,22 @@
                 <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
             </h1>
 
-            {% if sheet.isValidationDraft %}
-                <div class="buttons-zone button request-meeting-sheet">
-                    <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary request-meeting">{{ 'sheet.submit.validation'|trans }}</a>
-                </div>
-            {% elseif sheet.isValidationPending %}
-                <div class="buttons-zone button request-meeting-sheet">
-                    <p>{{ 'sheet.submit.validation.pending'|trans }}</p>
-                </div>
-            {% endif %}
-
             {% if isRequestMeetingEnabled %}
                 <div class="buttons-zone button request-meeting-sheet">
                     {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
                 </div>
+            {% else %}
+                {% if sheet.isValidationDraft %}
+                    <div class="buttons-zone button request-meeting-sheet">
+                        <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'sheet.submit.validation'|trans }}</a>
+                    </div>
+                {% elseif sheet.isValidationPending %}
+                    <div class="buttons-zone button request-meeting-sheet">
+                        <a class="btn btn-link" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
+                            <span class="label label-default">{{ 'sheet.submit.validation.pending'|trans }}</span>
+                        </a>
+                    </div>
+                {% endif %}
             {% endif %}
 
             {% if isCatalog is not defined or isCatalog == false %}
