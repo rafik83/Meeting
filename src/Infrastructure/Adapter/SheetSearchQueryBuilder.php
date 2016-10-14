@@ -120,6 +120,7 @@ class SheetSearchQueryBuilder
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
+        $this->filterByLocalization($filters);
         $this->filterByContent($filters);
     }
 
@@ -356,6 +357,28 @@ class SheetSearchQueryBuilder
             }
 
             $this->query->addMust($matchOrganizationCategory);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByLocalization(array &$filters)
+    {
+        if (isset($filters['localization'])) {
+            $localizations = explode(' ', $filters['localization']);
+
+            $boolQuery = new BoolQuery();
+
+            foreach ($localizations as $localization) {
+                if (2 === strlen($localization) && is_int($localization)) {
+                    $boolQuery->addShould(new Match('zipcode', $localization));
+                } else {
+                    $boolQuery->addShould(new Match('city', $localization));
+                }
+            }
+
+            $this->query->addMust($boolQuery);
         }
     }
 
