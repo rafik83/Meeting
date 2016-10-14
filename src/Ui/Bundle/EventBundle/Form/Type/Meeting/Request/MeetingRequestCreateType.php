@@ -22,9 +22,17 @@ class MeetingRequestCreateType extends AbstractMeetingRequestType
     {
         parent::configureOptions($resolver);
 
+        $resolver->setDefault('placeholder_description', 'form.catalog_create_meeting_request.children.description.placeholder');
         $resolver->setDefaults([
             'data_class' => CreateRequest::class,
-            'submit'     => true,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_create_meeting_request';
     }
 }

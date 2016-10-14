@@ -79,4 +79,20 @@ class MeetingRequestView
         $this->meetingRequest = $meetingRequest;
         $this->previewViews   = $previewViews;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPending()
+    {
+        return $this->meetingRequest->isSent();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProposition()
+    {
+        return $this->meetingRequest->getFromSheet() === $this->sheet;
+    }
 }

@@ -7,7 +7,8 @@
     <div class="row">
         {% for meetingView in meetingRequestView.meetingRequestsView %}
             {{ include('EventBundle:MeetingRequest/Partials:sheet-card.html.twig', {
-                'meetingRequestView': meetingView
+                'meetingRequestView': meetingView,
+                'sheet': sheet
             }) }}
             {% if loop.index % 3 == 0 %} </div><div class="row"> {% endif %}
         {% else %}

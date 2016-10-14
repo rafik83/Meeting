@@ -12,10 +12,24 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
+catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
+catalog.action.meeting.request.approve: 'Proposition reçue'
+catalog.action.meeting.request.back: Retour
+catalog.action.meeting.request.create: 'Demander en RDV'
+catalog.action.meeting.request.refuse: 'Proposition reçue'
+catalog.action.meeting.request.show.refuse: 'Demande refusée'
 catalog.complete_sheet: 'Voir la fiche complète'
+catalog.meeting_request.approve: Accepter
+catalog.meeting_request.create: 'Demander en RDV'
+catalog.meeting_request.pending: 'Demande en attente'
+catalog.meeting_request.proposition.approved: 'Proposition acceptée'
+catalog.meeting_request.proposition.refused: 'Proposition refusée'
+catalog.meeting_request.refuse: Refuser
+catalog.meeting_request.request.approved: 'Demande acceptée'
+catalog.meeting_request.request.refused: 'Demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
-catalog.noVisibleTypes: "Vous n'avez accès à aucun type de participation"
-catalog.search.no-filter-to-refine: "Aucun filtre ne permet d'affiner la recherche."
+catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
+catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'
@@ -49,6 +63,14 @@ navigation.links.meetingRequest.proposal: 'Propositions de RDV'
 navigation.links.meetingRequest.approved: 'Acceptées'
 navigation.links.meetingRequest.refused: 'Refusées'
 navigation.links.meetingRequest.sent: 'Demandes en attente'
+navigation.links.happening.accept: Acceptées
+navigation.links.happening.approved: Acceptées
+navigation.links.happening.decline: Refusées
+navigation.links.happening.open_date: 'Disponible le'
+navigation.links.happening.proposal: 'Propositions de RDV'
+navigation.links.happening.refused: Refusées
+navigation.links.happening.sent: 'Demandes en attente'
+navigation.links.happening.waiting: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
@@ -72,16 +94,16 @@ new_password.help.reset: 'A l''aide de ce message, vous pouvez réinitialiser vo
 new_password.mail.title: 'Un e-mail vous a été envoyé !'
 new_password.needHelp: 'Besoin d''aide'
 nomenclature.back_to_sheet: 'Retour à la fiche'
-nomenclature.select_all: 'Tous sélectionner'
+nomenclature.select_all: 'Tout sélectionner'
 nomenclature.select_none: Aucun
 nomenclature.submit: Enregistrer
 order.list.cancelled: Annulée
 order.list.column.date: Date
 order.list.column.numero: Numéro
-order.list.column.pro_forma: 'Pro Forma'
+order.list.column.pro_forma: Pro-forma
 order.list.column.total: Total
 order.list.pay_remaining: 'Solder la totalité'
-order.list.pro_forma.link: 'Voir la Pro Forma'
+order.list.pro_forma.link: 'Voir la pro-forma'
 order.list.remainingToPay: 'Reste à payer'
 order.list.title: 'Liste de vos commandes'
 order.transaction.howtopay: 'How to pay ?'
@@ -90,7 +112,7 @@ order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: État
 order.transaction.list.column.total: Montant
 order.transaction.list.title: 'Liste des transactions'
-order.transaction.mode.bank_card: 'Carte bleue'
+order.transaction.mode.bank_card: 'Carte bancaire'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Transfert
 order.transaction.mode.paypal: Paypal
@@ -113,7 +135,7 @@ package.payment.deposit.toPay: 'Vous pouvez choisir de payer un accompte de %dep
 package.payment.pay.label: Payer
 package.payment.title: Paiement
 package.payment.total.title: Total
-package.payment.total.toPay: 'Le total à régler est de: %total%'
+package.payment.total.toPay: '%total%'
 package.planning.label: 'Intitulé & descriptions'
 package.planning.quantity: Quantité
 package.planning.quantityMax: 'Quantité maximum atteinte'
@@ -167,22 +189,22 @@ package.vatMode.et: HT
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
 pro_forma.date.title: 'Date :'
 pro_forma.number.title: 'N° pro-forma :'
-pro_forma.title: 'Pro Forma - %date%'
+pro_forma.title: 'Pro-forma - %date%'
 pro_forma.vatNumber.title: 'Numéro TVA'
 register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
-register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaire,\n- Renforcez votre réseau professionel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacuns...\n"
-register.privacy_policies: 'Protection de la vie privée : conformement à la loi Informatique et Libertes du 6 janvier 1978 modifiee en 2004, vous disposez d’un droit d’acces et de rectification aux données personnelles/informations vous concernant en nous adressant un e-mail à (à déterminer)'
+register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
+register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@proximumgroup.com.'
 register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape
 select2.no_results: 'Aucun résultat'
-sheet.edit.object: 'Éditer "%label%"'
+sheet.edit.object: 'Compléter "%label%"'
 sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
 sheet.object.action.add: 'Ajouter:'
 sheet.object.action.backToSheet: 'Retour à la fiche'
-sheet.object.action.edit: Éditer
+sheet.object.action.edit: Compléter
 sheet.object.action.remove: 'Supprimer:'
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'

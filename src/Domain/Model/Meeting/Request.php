@@ -24,8 +24,6 @@ class Request implements MessageSubjectInterface
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
     const STATE_CANCEL   = 'cancelled';
-    const STATE_RECEIVE  = 'receive';
-    const STATE_ALL      = 'all';
 
     /**
      * @var int
@@ -211,6 +209,15 @@ class Request implements MessageSubjectInterface
         $this->stateUpdatedAt = $date;
 
         return $this;
+    }
+
+    /**
+     * @param DateTimeInterface $date
+     */
+    public function unRefuse(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_SENT;
+        $this->stateUpdatedAt = $date;
     }
 
     /**
@@ -401,11 +408,10 @@ class Request implements MessageSubjectInterface
     public static function getAllStates()
     {
         return [
-            self::STATE_ALL,
-            self::STATE_RECEIVE,
             self::STATE_SENT,
             self::STATE_APPROVED,
             self::STATE_REFUSED,
+            self::STATE_CANCEL
         ];
     }
 }

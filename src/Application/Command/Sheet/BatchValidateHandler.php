@@ -26,15 +26,25 @@ class BatchValidateHandler
     private $validateHandler;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * BatchValidateHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
      * @param ValidateHandler          $validateHandler
+     * @param \DateTimeInterface       $datetime
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository, ValidateHandler $validateHandler)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        ValidateHandler $validateHandler,
+        \DateTimeInterface $datetime
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->validateHandler = $validateHandler;
+        $this->datetime        = $datetime;
     }
 
     /**
@@ -55,7 +65,7 @@ class BatchValidateHandler
         // Validate sheets
         /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
-            $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $batchValidate->date, $batchValidate->comment));
+            $this->validateHandler->handle(new Validate($sheet, $batchValidate->admin, $this->datetime, $batchValidate->comment));
         }
 
         return new BatchResult(count($sheets), $batchValidate->getMessage() . 'validate.success');

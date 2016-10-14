@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,8 +24,9 @@ class MeetingRequestRefuseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', TextareaType::class, [
-                'required' => false,
+            ->add('message', TextType::class, [
+                'placeholder' => 'form.catalog_refuse_meeting_request.children.message.placeholder',
+                'required'    => false,
             ]);
     }
 
@@ -36,7 +37,14 @@ class MeetingRequestRefuseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RefuseRequest::class,
-            'submit'     => true,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_refuse_meeting_request';
     }
 }

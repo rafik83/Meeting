@@ -31,18 +31,12 @@ class RefuseRequest
     public $message;
 
     /**
-     * @var \DateTimeInterface
-     */
-    public $date;
-
-    /**
      * @param Request $request
      * @param User    $emitter
      */
-    public function __construct(Request $request, User $emitter, \DateTimeInterface $date)
+    public function __construct(Request $request, User $emitter)
     {
         $this->request = $request;
         $this->emitter = $emitter;
-        $this->date    = $date;
     }
 }

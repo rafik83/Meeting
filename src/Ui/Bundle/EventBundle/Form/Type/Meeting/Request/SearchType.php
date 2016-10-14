@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Meeting\TypeViewTransformer;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,15 +32,15 @@ class SearchType extends AbstractType
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
-                    'form.search.orderBy.alphabetical' => Constant::ORDER_BY_ALPHABETICAL,
-                    'form.search.orderBy.createdAt'    => Constant::ORDER_BY_CREATED_AT,
+                    'form.search.orderBy.alphabetical' => Sheet\Constant::ORDER_BY_ALPHABETICAL,
+                    'form.search.orderBy.createdAt'    => Sheet\Constant::ORDER_BY_CREATED_AT,
                 ],
             ])
             ->add('state', ChoiceType::class, [
                 'label'        => 'form.search.meeting.state.label',
                 'expanded'     => true,
                 'multiple'     => false,
-                'choices'      => MeetingRequest::getAllStates(),
+                'choices'      => Meeting\Constant::getAllStates(),
                 'choice_value' => function ($state) {
                     return $state;
                 },
@@ -94,8 +95,8 @@ class SearchType extends AbstractType
     public static function getDefaultFilters()
     {
         return [
-            'orderBy' => Constant::ORDER_BY_ALPHABETICAL,
-            'state'   => MeetingRequest::STATE_ALL,
+            'orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL,
+            'state'   => Meeting\Constant::FILTER_STATE_ALL,
         ];
     }
 }

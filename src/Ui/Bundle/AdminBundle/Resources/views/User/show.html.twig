@@ -1,0 +1,63 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block content %}
+    <h1 class="page-header">
+        {% if user.account.gender %}
+            {{ ('gender.' ~ user.account.gender)|trans }}
+        {% endif %}
+
+        {{ user.account.completeName|trim|default(user.email) }}
+
+        {% if user.account.position %}
+            <small>{{ user.account.position }}</small>
+        {% endif %}
+    </h1>
+
+    {% if user.account.avatar is not empty %}
+        <img src="{{ user.account.avatar|imagine_filter('user_avatar') }}" class="img-responsive img-thumbnail">
+    {% endif %}
+
+    <h4>{{ 'admin.user.contact-information'|trans }}</h4>
+    <ul>
+        <li><i class="glyphicon glyphicon-envelope"></i> {{ user.email }}</li>
+        <li><i class="glyphicon glyphicon-earphone"></i> {{ user.account.phone|default('-') }}</li>
+        <li><i class="glyphicon glyphicon-phone"></i> {{ user.account.mobile|default('-') }}</li>
+        <li>
+            <i class="glyphicon glyphicon-home"></i>
+            {{ [user.account.address|default('-'), user.account.zipCode|default('-'), user.account.city|default('-'), user.account.country|country|default('-')]|join(', ') }}
+        </li>
+
+        {% if user.account.website is not empty %}
+            <li>
+                <a href="{{ user.account.website }}" target="_blank">
+                    {{ user.account.website }}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <h4>{{ 'admin.user.company-information'|trans }}</h4>
+    <ul>
+        <li>{{ user.account.company|default('-') }}</li>
+        <li>{{ [user.account.companyAddress|default('-'), user.account.companyZipCode|default('-'), user.account.companyCity|default('-'), user.account.companyCountry|country|default('-')]|join(', ') }}</li>
+
+        {% if user.account.companyWebsite is not empty %}
+            <li>
+                <a href="{{ user.account.companyWebsite }}" target="_blank">
+                    {{ user.account.companyWebsite }}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <div class="form-group submit-section">
+        <div class="col-sm-3">
+            <a href="{{ path('admin_users', {'event': event.id}) }}" class="btn btn-link">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                {{ 'admin.goback.link'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}

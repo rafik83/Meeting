@@ -94,6 +94,7 @@ class CatalogController extends Controller
 
         $searchForm = $this->getFilteredSearchForm(
             $event,
+            $locale,
             $visibleTypes,
             $filters,
             $paginatedResult->aggregations,
@@ -155,20 +156,34 @@ class CatalogController extends Controller
             ->get('repository.rule_repository')
             ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType())
         ;
+
+        if (empty($rules)) {
+            throw $this->createNotFoundException('You do not have the right to see this sheet');
+        }
+
         $ruleApplyer = $this->get('domain.rule.applyer');
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);
         $ruleApplyer->applyRuleForCardList($participants, $rules);
 
+        if ($sheet === $userSheet) {
+            $meetingRequest = null;
+        } else {
+            $meetingRequest = $this
+                ->get('vimeet_infrastructure.repository.meeting.request_repository')
+                ->getRequestBetweenSheets($sheet, $userSheet);
+        }
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
-            'isCatalog'     => true,
-            'userSheet'     => $userSheet,
+            'event'          => $eventDomain->getEvent(),
+            'sheet'          => $sheet,
+            'taggedData'     => $taggedData,
+            'locale'         => $locale,
+            'nomenclatures'  => $nomenclatures,
+            'participants'   => $participants,
+            'templateData'   => $templateData,
+            'isCatalog'      => true,
+            'userSheet'      => $userSheet,
+            'meetingRequest' => $meetingRequest,
         ]);
     }
 
@@ -207,11 +222,10 @@ class CatalogController extends Controller
      */
     private function getDefaultFilters(array $typeViews)
     {
-        $filters = [SearchType::ORDER_BY => Sheet\Constant::ORDER_BY_ALPHABETICAL];
-
-        foreach ($typeViews as $typeView) {
-            $filters[SearchType::FILTER_TYPE][] = $typeView;
-        }
+        $filters = [
+            SearchType::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchType::FILTER_TYPE => $typeViews,
+        ];
 
         return $filters;
     }
@@ -293,17 +307,19 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Event $event
-     * @param array $visibleTypes
-     * @param array $filters
-     * @param array $currentAggregations
-     * @param array $typeViews
-     * @param array $organizationCategoryViews
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $visibleTypes
+     * @param array  $filters
+     * @param array  $currentAggregations
+     * @param array  $typeViews
+     * @param array  $organizationCategoryViews
      *
      * @return FormInterface
      */
     private function getFilteredSearchForm(
         Event $event,
+        $locale,
         array $visibleTypes,
         array $filters,
         array $currentAggregations,
@@ -323,6 +339,7 @@ class CatalogController extends Controller
             // if type filter is used, type aggs need to be done with a ES query without type filter
             $typeAggregations = $searchAdapter->getTypeAggregations(
                 $event,
+                $locale,
                 $filters,
                 SearchType::FILTER_TYPE
             );
@@ -343,6 +360,7 @@ class CatalogController extends Controller
             // organizationCategory aggs need to be done with a ES query without organizationCategory filter
             $organizationCategoryAggregations = $searchAdapter->getOrganizationCategoryAggregations(
                 $event,
+                $locale,
                 $filters,
                 SearchType::FILTER_ORGANIZATION_CATEGORY
             );

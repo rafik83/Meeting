@@ -42,6 +42,7 @@ Feature: Meeting Request / Proposition
     And I should see "Investisseur"
     And I should see "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense."
     And I should see "catalog.complete_sheet"
+    And I should see "Exposant"
 
   Scenario: I can filter by participant type (not see Exposant type)
     Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"

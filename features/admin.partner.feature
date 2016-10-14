@@ -26,8 +26,9 @@ Feature: Partner available features
     When I go to this page "/admin/fr/event"
     Then I should see "ASD Days"
     And I should see "Les rendez-vous CARNOT 2016"
-    When I follow "ASD Days"
-    Then I should be on this page "/admin/fr/event/1/sheet"
+    And I should see "admin.users.link"
+    And I should see "admin.sheet.link"
+    When I follow "admin.sheet.link"
     And I should see "admin.sheet.title"
     When I check radio "sheet_batch_ids_1"
     Then I should see "form.sheet_batch.children.accept.label"
@@ -67,3 +68,10 @@ Feature: Partner available features
     Then the response status code should be 403
     When I go to "/admin/fr/event/1/meeting"
     Then the response status code should be 403
+
+  Scenario: I can see users list
+    Given I am logged with "partner@proximumgroup.com" on admin
+    When I go to "/admin/fr/event/1/users"
+    And I should see "admin.users.title"
+    And I should see "user_asddays_1@proximum.com"
+    And I should not see "user_asddays_4@proximum.com"

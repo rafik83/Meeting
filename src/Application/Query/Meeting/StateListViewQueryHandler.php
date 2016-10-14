@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Application\View\Meeting\StateListView;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class StateListViewQueryHandler
@@ -41,7 +41,7 @@ class StateListViewQueryHandler
     {
         $lists = new StateListsView();
 
-        foreach (Request::getAllStates() as $state) {
+        foreach (Meeting\Constant::getAllStates() as $state) {
             $count = $this->requestRepository->countSheetState($query->sheet, $state, $query->filters);
 
             $lists->addStateListView(new StateListView(
