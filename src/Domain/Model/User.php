@@ -58,7 +58,7 @@ class User extends AbstractUser
     /**
      * @return User
      */
-    public function welcomed()
+    public function welcome()
     {
         $this->welcomed = true;
 

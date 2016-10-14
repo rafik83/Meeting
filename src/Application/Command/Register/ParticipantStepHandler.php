@@ -150,7 +150,7 @@ class ParticipantStepHandler
                 );
 
                 $this->eventDispatcher->dispatch(Events::USER_REGISTERED, $registeredEvent);
-                $this->userRepository->set($user->welcomed());
+                $this->userRepository->set($user->welcome());
             }
 
             $preRegisteredEvent = new PreRegisterEvent(
