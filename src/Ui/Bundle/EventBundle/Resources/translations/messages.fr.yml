@@ -166,6 +166,7 @@ package.summary.columns.title: Intitulé
 package.summary.columns.total: Total
 package.summary.columns.unitPrice: 'Prix unitaire'
 package.summary.edit: 'Modifier ma participation'
+package.summary.order-list: 'Liste des commandes'
 package.summary.empty: 'Votre panier est vide'
 package.summary.option: Option
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
@@ -173,6 +174,7 @@ package.summary.pay: 'Régler le forfait de participation'
 package.summary.promotion.button.label: Valider
 package.summary.promotion.label: 'Offres de réductions'
 package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
+package.summary.settle.link: 'Solder la totalité de la participation'
 package.summary.title: Récapitulatif
 package.summary.total.title: 'Forfait de participation'
 package.summary.totalOfSummary: Total

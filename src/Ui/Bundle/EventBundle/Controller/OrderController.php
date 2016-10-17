@@ -120,11 +120,14 @@ class OrderController extends Controller
             $request->getLocale()
         ));
 
+        $balance = $this->get('order.balance');
+
         return $this->render('EventBundle:Order/SummaryTotal:summaryTotal.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'sheet' => $sheet,
-            'order' => $order,
-            'view'  => $view,
+            'event'          => $eventDomain->getEvent(),
+            'sheet'          => $sheet,
+            'order'          => $order,
+            'view'           => $view,
+            'remainingToPay' => $balance->getRemainingToPay($sheet)
         ]);
     }
 }

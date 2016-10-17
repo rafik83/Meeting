@@ -10,10 +10,17 @@
                 <div class="content-header clearfix">
                     <h2 class="pull-left">{{ 'package.summary.title'|trans }}</h2>
                     <div class="pull-right">
+                        <a class="btn btn-primary" href="{{ path('event_order_list', {
+                            'sheet': view.sheet.id
+                        }) }}">
+                            {{ 'package.summary.order-list'|trans }}
+                        </a>
                         <a class="btn btn-primary" href="{{ path('event_package_step', {
                             'sheet': view.sheet.id,
                             'step': 1
-                        }) }}">{{ 'package.summary.edit'|trans }}</a>
+                        }) q}}">
+                            {{ 'package.summary.edit'|trans }}
+                        </a>
                     </div>
                 </div>
 
@@ -57,6 +64,11 @@
                                         <span>{{ view.totalWithVat|localizedcurrency(view.currency) }} {{ ('package.vatMode.' ~ view.totalVatMode)|trans }}</span>
                                     </li>
                                 </ul>
+                            </div>
+                            <div class="col-lg-3 pull-right">
+                                {% if 0 < remainingToPay %}
+                                    <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'package.summary.settle.link'|trans }}</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
