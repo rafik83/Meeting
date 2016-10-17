@@ -8,6 +8,10 @@
     text-shadow: none !important;
   }
 
+  body {
+    font-size: 10px !important;
+  }
+
   pre,
   blockquote {
     border: 1px solid #999;
@@ -25,6 +29,13 @@
 
   img {
     max-width: 100% !important;
+  }
+
+  h2 {
+    font-size: 16px !important;
+    border-bottom: 1px solid #2f2f2f !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 4px !important;
   }
 
   p,
@@ -51,10 +62,64 @@
     &:after,
     &:before {
       content: none !important;
+      font-size: 8px !important;
     }
   }
 
-  .header, .sub-header, .btn-primary, .edit-link, .tabs a, .link-show-more, .image-background > .placeholder {
+  .object--nomenclature.style--style-3 {
+    margin-top: 4px !important;
+    border: none !important;
+    border-left: none !important;
+  }
+
+  .object--nomenclature.style--style-3:before {
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .object--collection.style--style-3 {
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .object--collection.style--style-1 {
+    padding-top: 0 !important;
+    border-top: none !important;
+  }
+
+  .object--collection.style--style-1 ul > li {
+    padding: 0 !important;
+  }
+
+  .object--nomenclature ul > li:after,
+  .object--collection.style--style-2 ul > li:after,
+  .object--collection.style--style-3 ul > li:after {
+    font-size: 6px !important;
+  }
+
+  .section {
+    margin-bottom: 4px !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .section--list {
+    padding-top: 5px !important;
+    border-top: none !important;
+  }
+
+  .object--nomenclature .badge-skill {
+    padding: 0 !important;
+    vertical-align: bottom !important;
+    display: inline !important;
+  }
+
+  .object--text.style--style-2 > header {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .header, .sub-header, .btn, .edit-link, .tabs a, .link-show-more, .image-background > .placeholder {
     display: none !important;
   }
 }
