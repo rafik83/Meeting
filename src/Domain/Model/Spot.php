@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Domain\Model;
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
 
 /**
@@ -52,6 +53,11 @@ class Spot
     private $active;
 
     /**
+     * @var ArrayCollection
+     */
+    private $sheets;
+
+    /**
      * Spot constructor.
      *
      * @param string $reference
@@ -75,6 +81,7 @@ class Spot
         $this->meetingCapacity = $meetingCapacity;
         $this->seatCapacity    = $seatCapacity;
         $this->active          = $active;
+        $this->sheets          = new ArrayCollection();
     }
 
     /**
@@ -175,5 +182,29 @@ class Spot
         }
 
         return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSheets()
+    {
+        return !$this->sheets->isEmpty();
+    }
+
+    /**
+     * @return int
+     */
+    public function countSheets()
+    {
+        return $this->sheets->count();
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function addSheet(Sheet $sheet)
+    {
+        $this->sheets->add($sheet);
     }
 }
