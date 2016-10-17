@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\QueryBuilder\Spot;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 class FilteredQueryBuilder extends QueryBuilder
