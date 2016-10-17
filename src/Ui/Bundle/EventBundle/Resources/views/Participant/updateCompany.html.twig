@@ -18,6 +18,11 @@
 
                 <div class="inputs">
                     {% for child in form %}
+                        {% if child.vars.data.tags is defined %}
+                            {% for tag in child.vars.data.tagsWithoutSetters %}
+                                <a name="field_{{ tag }}"></a>
+                            {% endfor %}
+                        {% endif %}
                         {{ form_row(child) }}
                     {% endfor %}
 
