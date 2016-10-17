@@ -43,8 +43,8 @@ class SummaryQuery
      */
     public function __construct(Sheet $sheet, Order $order, $locale)
     {
-        $this->sheet   = $sheet;
-        $this->order   = $order;
-        $this->locale  = $locale;
+        $this->sheet  = $sheet;
+        $this->order  = $order;
+        $this->locale = $locale;
     }
 }
