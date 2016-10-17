@@ -121,6 +121,14 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @return array
+     */
+    public function getTagsWithoutSetters()
+    {
+        return array_diff($this->getTags(), Tag::getSetters());
+    }
+
+    /**
      * @param string $keyTag
      */
     public function removeTag($keyTag)
