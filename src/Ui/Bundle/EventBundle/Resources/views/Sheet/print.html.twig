@@ -1,0 +1,14 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'sheet.title'|trans }}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        {% set isRequestMeetingEnabled = false %}
+        {{ include('EventBundle:Sheet/Partial:sheet-content.html.twig') }}
+    </div>
+{% endblock body %}
+
+{% block javascripts '' %}

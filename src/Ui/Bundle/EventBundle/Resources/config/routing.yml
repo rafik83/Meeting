@@ -203,6 +203,23 @@ event_sheet_handle_remove_participant:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
 
+event_sheet_print:
+    path:     /sheet/{sheet}/print/{locale}
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:redirectToPrint }
+
+event_sheet_internal_print:
+    path:     /_internal/{user}/sheet/{sheet}/print/{locale}
+    requirements:
+        user: \d+
+        sheet: \d+
+        locale: '[a-z]{2}'
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:print }
+
 #
 # Sheet Billing
 #

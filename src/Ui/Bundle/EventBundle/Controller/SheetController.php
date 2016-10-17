@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
@@ -29,10 +30,13 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SheetController extends Controller
 {
@@ -67,6 +71,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -83,16 +88,89 @@ class SheetController extends Controller
     }
 
     /**
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param string      $locale
+     *
+     * @return BinaryFileResponse
+     */
+    public function redirectToPrintAction(EventDomain $eventDomain, Sheet $sheet, $locale)
+    {
+        $pathToPdf = sprintf('%s/%s.pdf', sys_get_temp_dir(), $this->getUser()->getId() . '-' . $sheet->getId());
+
+        $urlToPrint = $this->generateUrl(
+            'event_sheet_internal_print',
+            [
+                'sheet'  => $sheet->getId(),
+                'locale' => $locale,
+                'user'   => $this->getUser()->getId(),
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $process = new Process(
+            sprintf(
+                '%s %s %s %s',
+                $this->getParameter('phantomjs_path'),
+                $this->getParameter('phantomjs_script'),
+                $urlToPrint,
+                $pathToPdf
+            )
+        );
+
+        $process->setTimeout(3600);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
+
+        return new BinaryFileResponse($pathToPdf);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param User        $user
+     * @param string      $locale
+     *
+     * @return Response
+     */
+    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
+    {
+        $locale       = $eventDomain->getEvent()->getAvailableLocale($locale);
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $user,
+            $locale
+        );
+
+        return $this->render('EventBundle:Sheet:print.html.twig', [
+            'event'         => $eventDomain->getEvent(),
+            'sheet'         => $sheet,
+            'taggedData'    => $taggedData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
+            'templateData'  => $templateData,
+        ]);
+    }
+
+    /**
      * @param Event  $event
      * @param Sheet  $sheet
+     * @param User   $fromUser
      * @param string $locale
      *
      * @return array
      */
-    private function sheetInfos(Event $event, Sheet $sheet, $locale)
+    private function sheetInfos(Event $event, Sheet $sheet, User $fromUser, $locale)
     {
         $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale);
+        $cardListViewQuery = new CardListViewQuery($sheet, $fromUser, $locale);
         $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
 
         $registrationTemplateData = $this
@@ -255,6 +333,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
@@ -381,6 +460,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -529,6 +609,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);

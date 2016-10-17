@@ -40,3 +40,6 @@ parameters:
     paypal_password:  "U3BUA8GS7FM44K7F"
     paypal_signature: "AKarEPU9IGhpxmdZtMXPhpeKKLPRAe-BNJglO3FIWyFQxmJFjwjXo1hC"
     paypal_sandbox:   true
+
+    phantomjs_path:   phantomjs
+    phantomjs_script: '%kernel.root_dir%/../phantomjs/print.js'
