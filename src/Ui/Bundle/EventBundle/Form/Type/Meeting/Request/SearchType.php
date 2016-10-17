@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Domain\Model\Sheet\Constant;
-use Proximum\Vimeet\Domain\View\TypeView;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Meeting\TypeViewTransformer;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -56,15 +55,7 @@ class SearchType extends AbstractType
                     'expanded'     => true,
                     'multiple'     => true,
                     'choices'      => $options['typeViews'],
-                    'choice_value' => function (TypeView $typeView) {
-                        return $typeView->id;
-                    },
-                    'choice_label' => function (TypeView $typeView) {
-                        return $typeView->title;
-                    },
                 ]);
-
-            $builder->get('type')->addModelTransformer(new TypeViewTransformer());
         }
     }
 
@@ -90,13 +81,41 @@ class SearchType extends AbstractType
     }
 
     /**
+     * @param TypeView[] $typeViews
+     *
      * @return array
      */
-    public static function getDefaultFilters()
+    public static function getDefaultFilters($typeViews = [])
     {
-        return [
+        $defaultFilters = [
             'orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL,
             'state'   => Meeting\Constant::FILTER_STATE_ALL,
         ];
+
+        // Allow to filters by type if there are more than 1
+        if (count($typeViews) > 1) {
+            $defaultFilters['type'] = array_values(self::transformTypeViews($typeViews));
+        }
+
+        return $defaultFilters;
+    }
+
+    /**
+     * @param TypeView[] $typeViews
+     *
+     * @return array
+     */
+    public static function transformTypeViews($typeViews)
+    {
+        $typeViews = array_combine(
+            array_map(function (TypeView $typeView) {
+                return $typeView->title;
+            }, $typeViews),
+            array_map(function (TypeView $typeView) {
+                return $typeView->id;
+            }, $typeViews)
+        );
+
+        return $typeViews;
     }
 }

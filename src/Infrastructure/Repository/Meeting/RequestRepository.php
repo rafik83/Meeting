@@ -184,34 +184,32 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-            ->where('request.to = :sheet OR request.from = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->from(Request::class, 'request');
 
         if (!empty($filters['state']) && !Meeting\Constant::isSentOrReceiveFilter($filters['state'])) {
             $queryBuilder
-                ->andWhere('request.to = :sheet OR request.from = :sheet')
-                ->setParameter('sheet', $sheet);
+                ->andWhere('request.to = :sheet1 OR request.from = :sheet1')
+                ->setParameter('sheet1', $sheet);
         }
 
         // Filter by state
         if (!empty($filters['state']) && $filters['state'] != Meeting\Constant::FILTER_STATE_ALL) {
             if ($filters['state'] === Meeting\Constant::FILTER_STATE_RECEIVE) {
                 $queryBuilder
-                    ->andWhere('request.state = :state')
-                    ->andWhere('request.to = :sheet')
-                    ->setParameter('state', Meeting\Request::STATE_SENT)
-                    ->setParameter('sheet', $sheet);
+                    ->andWhere('request.state = :state1')
+                    ->andWhere('request.to = :sheet2')
+                    ->setParameter('state1', Meeting\Request::STATE_SENT)
+                    ->setParameter('sheet2', $sheet);
             } elseif ($filters['state'] === Meeting\Constant::FILTER_STATE_SENT) {
                 $queryBuilder
-                    ->andWhere('request.from = :sheet')
-                    ->andWhere('request.state = :state')
-                    ->setParameter('state', Meeting\Request::STATE_SENT)
-                    ->setParameter('sheet', $sheet);
+                    ->andWhere('request.from = :sheet3')
+                    ->andWhere('request.state = :state2')
+                    ->setParameter('state2', Meeting\Request::STATE_SENT)
+                    ->setParameter('sheet3', $sheet);
             } else {
                 $queryBuilder
-                    ->andWhere('request.state = :state')
-                    ->setParameter('state', $filters['state']);
+                    ->andWhere('request.state = :state3')
+                    ->setParameter('state3', $filters['state']);
             }
         }
 
@@ -223,9 +221,10 @@ class RequestRepository implements RequestRepositoryInterface
         // filter by participant type
         if (!empty($filters['type'])) {
             $queryBuilder
-                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
-                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
+                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet4')
+                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet4')
                 ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
+                ->setParameter('sheet4', $sheet)
                 ->setParameter('types', $filters['type']);
         }
 

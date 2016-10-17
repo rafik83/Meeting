@@ -19,16 +19,15 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
-use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
+use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Meeting\TypeViewTransformer;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
@@ -67,29 +66,19 @@ class MeetingRequestController extends Controller
             $sheet, $request->getLocale()
         ));
 
-        $filters = SearchType::getDefaultFilters();
+        $defaults   = SearchType::getDefaultFilters($typeViews);
+        $searchForm = $this->createSearchForm($sheet, $defaults, SearchType::transformTypeViews($typeViews));
 
-        if (count($typeViews) > 1) {
-            $filters['type'] = $typeViews; // pre fill filters
-        }
+        if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
+            $filters = array_merge($defaults, array_filter(
+                $searchForm->getData(), function ($data) {
+                    return !empty($data);
+                })
+            );
 
-        $searchForm = $this->createForm(SearchType::class, $filters, [
-            'label'     => null,
-            'typeViews' => $typeViews,
-            'action'    => $this->generateUrl('event_meeting_list_request', [
-                'sheet' => $sheet->getId(),
-            ]),
-        ]);
-
-        if (!$searchForm->isSubmitted()) {
-            $typeTransformer = new TypeViewTransformer();
-            $filters['type'] = $typeTransformer->reverseTransform($typeViews);
-        }
-
-        $searchForm->handleRequest($request);
-
-        if ($searchForm->isValid()) {
-            $filters = $searchForm->getData();
+            $searchForm = $this->createSearchForm($sheet, $filters, SearchType::transformTypeViews($typeViews));
+        } else {
+            $filters = $defaults;
         }
 
         $query       = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
@@ -567,6 +556,24 @@ class MeetingRequestController extends Controller
             'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             'form'     => $form->createView(),
             'sheet'    => $sheet,
+        ]);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $filters
+     * @param array $typeViews
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    private function createSearchForm(Sheet $sheet, array $filters, array $typeViews)
+    {
+        return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
+            'label'     => null,
+            'typeViews' => $typeViews,
+            'action'    => $this->generateUrl('event_meeting_list_request', [
+                'sheet' => $sheet->getId(),
+            ]),
         ]);
     }
 }
