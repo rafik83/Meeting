@@ -16,6 +16,10 @@ Proximum\Vimeet\Domain\Model\User:
             type: string
         locale:
             type: string
+        welcomed:
+            type: boolean
+            options:
+                default: false
     embedded:
         account:
             class: Proximum\Vimeet\Domain\Model\User\Account
