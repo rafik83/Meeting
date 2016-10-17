@@ -390,7 +390,7 @@ admin_sheet_assign_spot:
         event: \d+
         sheet: \d+
     methods: [POST]
-    defaults: { _controller: AdminBundle:Sheet:AssignSpot }
+    defaults: { _controller: AdminBundle:Sheet:assignSpot }
 
 #
 # Order

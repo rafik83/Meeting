@@ -238,7 +238,7 @@ class SheetController extends Controller
      *
      * @return JsonResponse
      */
-    public function AssignSpotAction(Request $request, Event $event, Sheet $sheet)
+    public function assignSpotAction(Request $request, Event $event, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
