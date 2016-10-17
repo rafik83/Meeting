@@ -139,6 +139,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'id'                   => $sheet->getId(),
                 'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
                 'state'                => $sheet->getState(),
+                'validationState'      => $sheet->getValidationState(),
                 'enabled'              => $sheet->isEnabled(),
                 'completed'            => $sheet->isCompleted(),
                 'type'                 => $sheet->getType()->getId(),

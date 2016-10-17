@@ -83,8 +83,8 @@
     </div>
 {% endmacro %}
 
-{% macro state_label(label, value, states) %}
-    <span class="label label-{{ states[value]|default('default') }}">
+{% macro state_label(label, value, states, title) %}
+    <span class="label label-{{ states[value]|default('default') }}" data-toggle="tooltip" data-placement="top" title="{{ title|default }}">
         {{ label }}
     </span>
 {% endmacro %}
