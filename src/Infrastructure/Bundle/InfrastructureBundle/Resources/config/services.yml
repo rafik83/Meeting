@@ -1221,6 +1221,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Import\Import }
+    command.sheet.assign_spot_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AssignSpotHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AssignSpot }
 
     #
     # Security
