@@ -1,0 +1,60 @@
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important; // Black prints faster: h5bp.com/s
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group; // h5bp.com/t
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  .section__content {
+    .show-less {
+      max-height: none !important;;
+      overflow: visible !important;
+    }
+  }
+
+  // Folded corner
+  .style--style-2, .object--media {
+    &:after,
+    &:before {
+      content: none !important;
+    }
+  }
+
+  .header, .sub-header, .btn-primary, .edit-link, .tabs a, .link-show-more, .image-background > .placeholder {
+    display: none !important;
+  }
+}
