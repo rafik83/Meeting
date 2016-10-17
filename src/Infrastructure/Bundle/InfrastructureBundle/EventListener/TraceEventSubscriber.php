@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetEnableDisableEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetPendingEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
