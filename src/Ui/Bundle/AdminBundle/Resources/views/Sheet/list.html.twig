@@ -81,8 +81,8 @@
                 <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.type) }}
                 </th>
-                <th>{{ 'admin.sheet.createdAt'|trans }}</th>
                 <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
+                <th>{{ 'admin.sheet.spot'|trans }}</th>
                 <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.follower) }}
                 </th>
@@ -124,13 +124,21 @@
                     <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>{{ sheet.categories|join(', ') }}</td>
                     <td>{{ sheet.type }}</td>
-                    <td><small>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</small></td>
                     <td>
                         <small>
                         {% if sheet.lastLoginAt %}
                             {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
                         {% endif %}
                         </small>
+                    </td>
+                    <td>
+                        <div class="updatable" data-type="string" data-url="{{ path('admin_sheet_assign_spot', {'event': event.id, 'sheet': sheet.id}) }}" data-update="{{ { 'value': sheet.spotReference }|json_encode }}">
+                            {% if sheet.spotReference != null %}
+                                {{ sheet.spotReference }}
+                            {% else %}
+                                <span class="glyphicon glyphicon-edit"></span>
+                            {% endif %}
+                        </div>
                     </td>
                     <td>{{ sheet.follower }}</td>
                     <td class="text-right">
