@@ -503,8 +503,10 @@ class SheetController extends Controller
 
         $remove = new Remove($sheet);
         $form   = $this->createForm(RemoveType::class, $remove, [
-            'action'       => $this->generateUrl('event_sheet_handle_remove_participant',
-                ['locale' => $locale, 'key' => $key,]),
+            'action' => $this->generateUrl(
+                'event_sheet_handle_remove_participant',
+                ['locale' => $locale, 'key' => $key]
+            ),
             'participants' => $sheet->getParticipants(),
         ]);
 
