@@ -13,11 +13,13 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -50,13 +52,18 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1);
         $expectedRequest->approve($dateTime);
 
-        $approveRequest = new ApproveRequest($request, $dateTime);
-        $approveRequest->toParticipants = [$toParticipant3, $toParticipant4];
+        $approveRequest = new ApproveRequest($request);
+        $approveRequest->participants = [$toParticipant3, $toParticipant4];
+        $approveRequest->description = 'content';
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
 
-        $handler = new ApproveRequestHandler($requestRepository->reveal());
+        $message = new Message($expectedRequest, $sheetTo, 'content', $dateTime);
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($message)->shouldBeCalled();
+
+        $handler = new ApproveRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $dateTime);
         $handler->handle($approveRequest);
     }
 

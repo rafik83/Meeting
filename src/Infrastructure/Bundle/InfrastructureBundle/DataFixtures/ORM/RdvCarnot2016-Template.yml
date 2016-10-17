@@ -85,7 +85,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                             fr: ""
                                                             en: ""
                                                         tags:
-                                                            - tag: "participant_website"
+                                                            - tag: "sheet_website"
                                 -
                                     d691d21c:
                                         component: "object"
@@ -551,7 +551,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: false
                                 type: "text"
                                 translatable: false
-                                tags: ["participant_website", "sheet_data"]
+                                tags: ["sheet_website", "sheet_data"]
                         93de093f:
                             component: "object"
                             type: "editable-text"
@@ -566,7 +566,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["participant_address", "sheet_data"]
+                                tags: ["sheet_address", "sheet_data"]
                         de66af5d:
                             component: "object"
                             type: "editable-text"
@@ -581,7 +581,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["participant_zipcode", "sheet_data"]
+                                tags: ["sheet_zipcode", "sheet_data"]
                         d224f0e7:
                             component: "object"
                             type: "editable-text"
@@ -596,7 +596,7 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 required: true
                                 type: "text"
                                 translatable: false
-                                tags: ["participant_city", "sheet_data"]
+                                tags: ["sheet_city", "sheet_data"]
                         e801edd4:
                             component: "object"
                             type: "country"

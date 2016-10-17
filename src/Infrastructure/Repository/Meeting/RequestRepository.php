@@ -177,7 +177,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllRequestBySheet(Sheet $sheet)
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = [])
     {
         $queryBuilder = $this
             ->entityManager
@@ -186,8 +186,17 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->where('request.to = :sheet')
             ->orWhere('request.from = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->orderBy('request.createdAt', 'DESC');
+            ->setParameter('sheet', $sheet);
+
+        if (!empty($filters['state']) && $filters['state'] != Request::STATE_ALL) {
+            $queryBuilder
+                ->andWhere('request.state = :state')
+                ->setParameter('state', $filters['state']);
+        }
+
+        if (empty($filters['orderBy']) || $filters['orderBy'] === Sheet\Constant::ORDER_BY_CREATED_AT) {
+            $queryBuilder->orderBy('request.createdAt', 'DESC');
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -319,5 +328,30 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('another', $another);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countSheetState(Sheet $sheet, $state)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('request.from = :sheet')
+            ->orWhere('request.to = :sheet')
+            ->andWhere('request.state != :cancelState')
+            ->setParameter('cancelState', Request::STATE_CANCEL)
+            ->setParameter('sheet', $sheet);
+
+        if ($state !== Request::STATE_ALL) {
+            $queryBuilder
+                ->andWhere('request.state = :state')
+                ->setParameter('state', $state);
+        }
+
+        return count($queryBuilder->getQuery()->getResult());
     }
 }

@@ -164,7 +164,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_test'
-        state: 'cancelled'
+        state: 'receive'
     meeting_request5:
         __construct:
             - '@sheet_test'
@@ -209,7 +209,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
-        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+        state: <randomElement(['sent', 'approved', 'refused', 'receive'])>
     meeting_proposition4:
         __construct:
             - '@sheet_exposant4'
@@ -218,7 +218,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
-        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+        state: <randomElement(['sent', 'approved', 'refused', 'receive'])>
     meeting_proposition5:
         __construct:
             - '@sheet_exposant5'
@@ -227,7 +227,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
-        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+        state: <randomElement(['sent', 'approved', 'refused', 'receive'])>
     meeting_proposition6:
         __construct:
             - '@sheet_exposant6'
@@ -236,4 +236,4 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             - []
             - <dateTimeBetween('-100 days', 'now')>
             - '@user_random_2'
-        state: <randomElement(['sent', 'approved', 'refused', 'cancelled'])>
+        state: <randomElement(['sent', 'approved', 'refused', 'receive'])>

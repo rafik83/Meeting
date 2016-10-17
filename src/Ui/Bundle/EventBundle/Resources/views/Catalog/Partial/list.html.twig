@@ -1,6 +1,6 @@
 <div class="row">
     {% for catalogSheetPreviewView in paginatedResult.results %}
-        {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', { catalogSheetPreviewView: catalogSheetPreviewView }) }}
+        {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', { catalogSheetPreviewView: catalogSheetPreviewView, 'viewer': viewer }) }}
         {% if loop.index % 3 == 0 %}</div><div class="row">{% endif %}
     {% else %}
         <div class="col-md-12 important fail text-center">

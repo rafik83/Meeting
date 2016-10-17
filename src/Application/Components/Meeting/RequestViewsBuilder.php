@@ -15,6 +15,10 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
 
+/**
+ * Class RequestViewsBuilder
+ * @deprecated
+ */
 class RequestViewsBuilder
 {
     /**

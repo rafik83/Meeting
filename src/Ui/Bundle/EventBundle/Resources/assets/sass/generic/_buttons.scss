@@ -6,7 +6,7 @@ button, a {
 }
 
 .btn {
-    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-lg {
+    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-no-style, &.btn-lg {
         position: relative;
         font-size: 15px;
         line-height: 22px;
@@ -41,6 +41,30 @@ button, a {
         background: $bg-container-color !important;
         color: $color-highlighted !important;
     }
+}
+
+.btn-primary {
+    &.accept {
+       background: #21A200 !important;
+    }
+    &.reject {
+      background: #FF4902 !important;
+    }
+}
+
+.btn-gray {
+    &.accept {
+        color: #21A200 !important;
+    }
+    &.reject {
+        color: #FF4902 !important;
+    }
+}
+
+.btn-no-style {
+  text-transform: none !important;
+  color: $color-highlighted !important;
+  background: $button-bg-color-inactive !important;
 }
 
 .btn-inactive {

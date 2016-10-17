@@ -164,20 +164,34 @@ class CatalogController extends Controller
             ->get('repository.rule_repository')
             ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType())
         ;
+
+        if (empty($rules)) {
+            throw $this->createNotFoundException('You do not have the right to see this sheet');
+        }
+
         $ruleApplyer = $this->get('domain.rule.applyer');
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);
         $ruleApplyer->applyRuleForCardList($participants, $rules);
 
+        if ($sheet === $userSheet) {
+            $meetingRequest = null;
+        } else {
+            $meetingRequest = $this
+                ->get('vimeet_infrastructure.repository.meeting.request_repository')
+                ->getRequestBetweenSheets($sheet, $userSheet);
+        }
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
-            'isCatalog'     => true,
-            'userSheet'     => $userSheet,
+            'event'          => $eventDomain->getEvent(),
+            'sheet'          => $sheet,
+            'taggedData'     => $taggedData,
+            'locale'         => $locale,
+            'nomenclatures'  => $nomenclatures,
+            'participants'   => $participants,
+            'templateData'   => $templateData,
+            'isCatalog'      => true,
+            'userSheet'      => $userSheet,
+            'meetingRequest' => $meetingRequest,
         ]);
     }
 
