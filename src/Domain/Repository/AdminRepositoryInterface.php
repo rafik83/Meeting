@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Type;
 
 interface AdminRepositoryInterface
 {
@@ -70,4 +71,12 @@ interface AdminRepositoryInterface
      * @return PaginatedResult
      */
     public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters);
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     *
+     * @return Admin[]
+     */
+    public function getAllowedOrganiserAndPartner(Event $event, Type $type);
 }

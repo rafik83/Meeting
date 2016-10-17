@@ -10,7 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetSubmittedEvent;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SubmitValidationHandler
 {
@@ -20,13 +26,46 @@ class SubmitValidationHandler
     private $sheetRepository;
 
     /**
+     * @var AdminRepositoryInterface
+     */
+    private $adminRepository;
+
+    /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * SubmitValidationHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
+     * @param AdminRepositoryInterface $adminRepository
+     * @param SheetInfoGuesser         $sheetInfoGuesser
+     * @param DelayedEventDispatcher   $eventDispatcher
+     * @param DateTimeInterface        $datetime
      */
-    public function __construct(SheetRepositoryInterface $sheetRepository)
-    {
-        $this->sheetRepository = $sheetRepository;
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        AdminRepositoryInterface $adminRepository,
+        SheetInfoGuesser $sheetInfoGuesser,
+        DelayedEventDispatcher $eventDispatcher,
+        DateTimeInterface $datetime
+    ) {
+        $this->sheetRepository  = $sheetRepository;
+        $this->adminRepository  = $adminRepository;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->datetime         = $datetime;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
     /**
@@ -34,8 +73,44 @@ class SubmitValidationHandler
      */
     public function handle(SubmitValidation $command)
     {
+        // put sheet to validation
         $command->sheet->submitToValidation();
-
         $this->sheetRepository->set($command->sheet);
+
+        $follower          = $command->sheet->getFollower();
+        $sheetOrganization = $this->sheetInfoGuesser->guessSheetName($command->sheet, $command->locale);
+
+        if ($follower != null) {
+            // notify sheet's follower
+            $this->eventDispatcher->dispatch(
+                Events::SHEET_VALIDATION_PENDING,
+                new SheetSubmittedEvent(
+                    $command->sheet,
+                    $follower,
+                    $this->datetime,
+                    $sheetOrganization,
+                    $command->locale
+                )
+            );
+        } else {
+            // notify all organizer and partner allowed to manage this sheet
+            $admins = $this->adminRepository->getAllowedOrganiserAndPartner(
+                $command->sheet->getEvent(),
+                $command->sheet->getType()
+            );
+
+            foreach ($admins as $admin) {
+                $this->eventDispatcher->dispatch(
+                    Events::SHEET_VALIDATION_PENDING,
+                    new SheetSubmittedEvent(
+                        $command->sheet,
+                        $admin,
+                        $this->datetime,
+                        $sheetOrganization,
+                        $command->locale
+                    )
+                );
+            }
+        }
     }
 }

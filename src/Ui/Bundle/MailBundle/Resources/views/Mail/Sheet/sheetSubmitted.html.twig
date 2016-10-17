@@ -1,0 +1,24 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'mail.sheet.submitted.body'|trans({
+        '%sheetOrganization%': mail.sheetOrganization,
+        '%firstname%': mail.owner.account.firstname|capitalize,
+        '%lastname%': mail.owner.account.lastname|upper,
+        '%date%': mail.datetime|localizeddate('medium', 'none', mail.locale)
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+
+    {{ macros.button(
+        'mail.sheet.submitted.link'|trans({}, 'mail', mail.locale),
+        url('admin_sheet_details', {'event': mail.event.id, 'sheet': mail.sheet.id})
+    ) }}
+
+    <br>
+
+    {{ 'mail.sheet.submitted.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

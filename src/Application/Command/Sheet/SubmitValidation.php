@@ -20,12 +20,19 @@ class SubmitValidation
     public $sheet;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * SubmitValidation constructor.
      *
      * @param Sheet $sheet
+     * @param       $locale
      */
-    public function __construct(Sheet $sheet)
+    public function __construct(Sheet $sheet, $locale)
     {
-        $this->sheet = $sheet;
+        $this->sheet  = $sheet;
+        $this->locale = $locale;
     }
 }
