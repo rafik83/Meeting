@@ -203,16 +203,16 @@ event_sheet_handle_remove_participant:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Sheet:handleRemoveParticipant }
 
-event_sheet_print:
-    path:     /sheet/{sheet}/print/{locale}
+event_sheet_pdf:
+    path:     /sheet/{sheet}/pdf/{locale}
     requirements:
         sheet: \d+
         locale: '[a-z]{2}'
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:redirectToPrint }
+    defaults: { _controller: EventBundle:Sheet:generatePdf }
 
-event_sheet_internal_print:
-    path:     /_internal/{user}/sheet/{sheet}/print/{locale}
+event_sheet_internal_generate_pdf:
+    path:     /_internal/{user}/sheet/{sheet}/generate-pdf/{locale}
     requirements:
         user: \d+
         sheet: \d+

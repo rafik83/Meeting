@@ -94,12 +94,12 @@ class SheetController extends Controller
      *
      * @return BinaryFileResponse
      */
-    public function redirectToPrintAction(EventDomain $eventDomain, Sheet $sheet, $locale)
+    public function generatePdfAction(EventDomain $eventDomain, Sheet $sheet, $locale)
     {
         $pathToPdf = sprintf('%s/%s.pdf', sys_get_temp_dir(), $this->getUser()->getId() . '-' . $sheet->getId());
 
         $urlToPrint = $this->generateUrl(
-            'event_sheet_internal_print',
+            'event_sheet_internal_generate_pdf',
             [
                 'sheet'  => $sheet->getId(),
                 'locale' => $locale,

@@ -1,7 +1,6 @@
 var system = require('system');
-
-var page = new WebPage();
-var args = system.args;
+var page   = require('webpage').create();
+var args   = system.args;
 
 page.paperSize = {
     format      : "A4",
@@ -10,8 +9,8 @@ page.paperSize = {
 };
 
 page.viewportSize = {
-    width: 1200,
-    height: 800
+    width:  800,
+    height: 600
 };
 
 page.open(args[1], function() {

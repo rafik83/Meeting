@@ -4,7 +4,7 @@
 
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
-            <a href="{{ path('event_sheet_print', { sheet: sheet.id, locale: locale }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-print"></span>Pdf</a>
+            <a href="{{ path('event_sheet_pdf', { sheet: sheet.id, locale: locale }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-print"></span>Pdf</a>
         </h1>
 
         {% if isRequestMeetingEnabled %}
