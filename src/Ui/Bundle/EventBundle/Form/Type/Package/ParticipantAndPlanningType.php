@@ -42,7 +42,7 @@ class ParticipantAndPlanningType extends AbstractType
 
         $maxErrorMessage = 'package.planning.quantityMax';
 
-        if ($sheet->getParticipants()->count() < $sheet->getPackage()->getPlanning()->getQuantityMax()) {
+        if ($sheet->countParticipants() < $sheet->getPackage()->getPlanning()->getQuantityMax()) {
             $maxErrorMessage = 'package.planning.quantityMax.forParticipation';
         }
 
