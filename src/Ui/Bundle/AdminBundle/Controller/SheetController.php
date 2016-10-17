@@ -11,9 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
+use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -26,6 +29,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -225,5 +229,46 @@ class SheetController extends Controller
             'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
             'impersonationToken' => $impersonationToken,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Sheet   $sheet
+     *
+     * @return JsonResponse
+     */
+    public function AssignSpotAction(Request $request, Event $event, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        $data = json_decode($request->getContent(), true);
+
+        try {
+            $command = new AssignSpot($event, $sheet, $data['value']);
+            /** @var AssignSpotResult $result */
+            $result = $this->get('tactician.commandbus')->handle($command);
+        } catch (SpotNotFoundException $exception) {
+            return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.notFound')], 404);
+        } catch (\Exception $exception) {
+            return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.exception')], 500);
+        }
+
+        if ($result->hasInfo()) {
+            $infos = [
+                'info' => $this->get('translator')->trans(
+                    'admin.sheet.assign.spot.numberOfSheet',['%count%' => $result->getSheetNumber()]
+                ),
+            ];
+        } else {
+            $infos = [];
+        }
+
+        return new JsonResponse(
+            array_merge([
+            'spotCode' => $command->spotCode,
+            ], $infos)
+        );
     }
 }
