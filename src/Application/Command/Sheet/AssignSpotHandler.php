@@ -46,7 +46,7 @@ class AssignSpotHandler
     public function handle(AssignSpot $assignSpot)
     {
         if ($assignSpot->spotCode === null || $assignSpot->spotCode === '') {
-            $assignSpot->sheet->removeSpot(null);
+            $assignSpot->sheet->removeSpot();
             $numberOfSheet = 0;
         } else {
             $spot = $this->spotRepository->findByReference($assignSpot->event, $assignSpot->spotCode);
@@ -56,6 +56,7 @@ class AssignSpotHandler
             }
 
             $assignSpot->sheet->setSpot($spot);
+            $spot->addSheet($assignSpot->sheet);
             $numberOfSheet = $spot->countSheets();
         }
 
