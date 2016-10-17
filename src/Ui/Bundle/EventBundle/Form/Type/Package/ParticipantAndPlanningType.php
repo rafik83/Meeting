@@ -40,11 +40,17 @@ class ParticipantAndPlanningType extends AbstractType
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
 
+        $maxErrorMessage = 'package.planning.quantityMax';
+
+        if ($sheet->getParticipants()->count() < $sheet->getPackage()->getPlanning()->getQuantityMax()) {
+            $maxErrorMessage = 'package.planning.quantityMax.forParticipation';
+        }
+
         $builder->add('planningQuantity', QuantityType::class, [
             'label'      => false,
             'max'        => $this->quantityMaxGuesser->getMaxPlanning($sheet),
             'minMessage' => 'package.planning.quantityMin',
-            'maxMessage' => 'package.planning.quantityMax',
+            'maxMessage' => $maxErrorMessage,
         ]);
     }
 
