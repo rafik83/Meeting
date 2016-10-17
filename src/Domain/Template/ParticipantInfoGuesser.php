@@ -174,13 +174,8 @@ class ParticipantInfoGuesser
      */
     public function guessParticipantPosition(Participant $participant, $locale)
     {
-        $template = $participant->getSheet()->getType()->getRegistrationTemplate();
+        $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
-        return $this->taggedInfoGuesser->guessFirstKey(
-            $template,
-            $participant->getData(),
-            Tag::PARTICIPANT_POSITION,
-            $locale
-        );
+        return $templateData->getTaggedContentValue(Tag::PARTICIPANT_POSITION);
     }
 }
