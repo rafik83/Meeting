@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <div class="pull-right">
-                            {% if 0 < remainingToPay %}
+                            {% if 0 < view.remainingToPay %}
                                 <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'package.summary.settle.link'|trans }}</a>
                             {% endif %}
                         </div>

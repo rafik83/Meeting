@@ -68,6 +68,7 @@ class SummaryQueryHandler
             $summaryQuery->order->getTotalWithoutVat(),
             $summaryQuery->order->getTotalWithVat(),
             $summaryQuery->order->getCurrency(),
+            $summaryQuery->balance->getRemainingToPay($summaryQuery->sheet),
             $summaryQuery->sheet
         );
     }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Balance;
 
 class SummaryQuery
 {
@@ -31,14 +32,21 @@ class SummaryQuery
     public $locale;
 
     /**
-     * @param Sheet  $sheet
-     * @param Order  $order
-     * @param string $locale
+     * @var Balance
      */
-    public function __construct(Sheet $sheet, Order $order, $locale)
+    public $balance;
+
+    /**
+     * @param Sheet   $sheet
+     * @param Order   $order
+     * @param Balance $balance
+     * @param string  $locale
+     */
+    public function __construct(Sheet $sheet, Order $order, Balance $balance, $locale)
     {
-        $this->sheet  = $sheet;
-        $this->order  = $order;
-        $this->locale = $locale;
+        $this->sheet   = $sheet;
+        $this->order   = $order;
+        $this->locale  = $locale;
+        $this->balance = $balance;
     }
 }

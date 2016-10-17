@@ -117,17 +117,15 @@ class OrderController extends Controller
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
             $sheet,
             $order,
+            $this->get('order.balance'),
             $request->getLocale()
         ));
-
-        $balance = $this->get('order.balance');
 
         return $this->render('EventBundle:Order/SummaryTotal:summaryTotal.html.twig', [
             'event'          => $eventDomain->getEvent(),
             'sheet'          => $sheet,
             'order'          => $order,
             'view'           => $view,
-            'remainingToPay' => $balance->getRemainingToPay($sheet)
         ]);
     }
 }
