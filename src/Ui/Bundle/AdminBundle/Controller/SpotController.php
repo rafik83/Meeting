@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
+use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
@@ -65,12 +66,12 @@ class SpotController extends Controller
             $filters = $filterForm->getData();
         }
 
-        $spots = $this->get('vimeet_infrastructure.repository.spot_repository')->getSpotFilter($event, $filters);
+        $spotsList = $this->get('tactician.commandbus.query')->handle(new ListViewQuery($event, $locale, $filters));
 
         $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:Spot:list.html.twig', [
-            'spots'           => $spots,
+            'spotsList'       => $spotsList,
             'event'           => $event,
             'filter_form'     => $filterForm->createView(),
             'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),

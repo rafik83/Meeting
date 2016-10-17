@@ -207,4 +207,12 @@ class Spot
     {
         $this->sheets->add($sheet);
     }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return $this->sheets->toArray();
+    }
 }

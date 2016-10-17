@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\QueryBuilder\Spot;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 class FilteredQueryBuilder extends QueryBuilder
@@ -25,8 +26,10 @@ class FilteredQueryBuilder extends QueryBuilder
         parent::__construct($em);
 
         $this
-            ->select('spot')
-            ->from(Spot::class, 'spot');
+            ->select('spot, sheets')
+            ->from(Spot::class, 'spot')
+            ->leftJoin('spot.sheets', 'sheets')
+            ->orderBy('spot.reference');
     }
 
     /**
