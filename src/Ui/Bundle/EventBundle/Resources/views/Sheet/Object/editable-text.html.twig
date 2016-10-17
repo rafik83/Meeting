@@ -24,8 +24,7 @@
 
     {% if not isCatalog %}
         <footer>
-            <i class="icon-Note_2"></i>
-            <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
+            <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" class="edit-link" data-toggle="modal" data-target="#edit-modal"><i class="icon-Note_2"></i> {{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
         </footer>
     {% endif %}
 </section>

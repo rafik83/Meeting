@@ -24,7 +24,7 @@
             </div>
             {% if not isCatalog %}
                 <footer>
-                    <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                    <a href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}" class="edit-link"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                 </footer>
             {% endif %}
         </section>
@@ -47,7 +47,7 @@
             </div>
             {% if not isCatalog %}
                 <footer>
-                    <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                    <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                 </footer>
             {% endif %}
         </section>
@@ -72,7 +72,7 @@
                     </div>
                     {% if not isCatalog %}
                         <footer>
-                            <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                            <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                         </footer>
                     {% endif %}
                 </section>
@@ -87,7 +87,7 @@
                 </div>
                 {% if not isCatalog %}
                     <footer>
-                        <i class="icon-Note_2"></i> <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}">{{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
+                        <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
                     </footer>
                 {% endif %}
             </section>
