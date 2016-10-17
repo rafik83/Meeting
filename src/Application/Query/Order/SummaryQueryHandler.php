@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\SummaryView;
+use Proximum\Vimeet\Domain\Order\Balance;
 
 class SummaryQueryHandler
 {
@@ -29,15 +30,23 @@ class SummaryQueryHandler
     private $promotionCodesViewQueryHandler;
 
     /**
+     * @var Balance
+     */
+    private $balance;
+
+    /**
      * @param GroupsViewQueryHandler         $groupsViewQueryHandler
      * @param PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
+     * @param Balance                        $balance
      */
     public function __construct(
         GroupsViewQueryHandler $groupsViewQueryHandler,
-        PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler
+        PromotionCodesViewQueryHandler $promotionCodesViewQueryHandler,
+        Balance $balance
     ) {
         $this->groupsViewQueryHandler         = $groupsViewQueryHandler;
         $this->promotionCodesViewQueryHandler = $promotionCodesViewQueryHandler;
+        $this->balance                        = $balance;
     }
     /**
      * @param SummaryQuery $summaryQuery
@@ -68,7 +77,7 @@ class SummaryQueryHandler
             $summaryQuery->order->getTotalWithoutVat(),
             $summaryQuery->order->getTotalWithVat(),
             $summaryQuery->order->getCurrency(),
-            $summaryQuery->balance->getRemainingToPay($summaryQuery->sheet),
+            $this->balance->getRemainingToPay($summaryQuery->sheet),
             $summaryQuery->sheet
         );
     }

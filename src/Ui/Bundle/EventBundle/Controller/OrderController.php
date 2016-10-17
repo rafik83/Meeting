@@ -117,7 +117,6 @@ class OrderController extends Controller
         $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
             $sheet,
             $order,
-            $this->get('order.balance'),
             $request->getLocale()
         ));
 

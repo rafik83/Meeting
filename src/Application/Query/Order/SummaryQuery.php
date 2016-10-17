@@ -39,14 +39,12 @@ class SummaryQuery
     /**
      * @param Sheet   $sheet
      * @param Order   $order
-     * @param Balance $balance
      * @param string  $locale
      */
-    public function __construct(Sheet $sheet, Order $order, Balance $balance, $locale)
+    public function __construct(Sheet $sheet, Order $order, $locale)
     {
         $this->sheet   = $sheet;
         $this->order   = $order;
         $this->locale  = $locale;
-        $this->balance = $balance;
     }
 }
