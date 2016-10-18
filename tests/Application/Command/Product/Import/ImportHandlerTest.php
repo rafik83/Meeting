@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Import;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Import\Import;
 use Proximum\Vimeet\Application\Command\Product\Import\ImportHandler;
@@ -41,6 +42,20 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
             true,
             $dateTime
         );
+        $product2 = new Product(
+            $event,
+            Product::TYPE_PARTICIPANT,
+            'participant',
+            'image3',
+            10,
+            null,
+            20,
+            30,
+            true,
+            $dateTime,
+            true,
+            $dateTime
+        );
 
         $expectedProduct = new Product(
             $currentEvent,
@@ -56,8 +71,24 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
             true,
             $dateTime
         );
+        $expectedProduct2 = new Product(
+            $currentEvent,
+            Product::TYPE_PARTICIPANT,
+            'participant',
+            'image4',
+            10,
+            null,
+            20,
+            30,
+            true,
+            $dateTime,
+            true,
+            $dateTime
+        );
         $expectedProduct->translate('fr', '', '', '', '', '');
         $expectedProduct->translate('en', '', '', '', '', '');
+        $expectedProduct2->translate('fr', '', '', '', '', '');
+        $expectedProduct2->translate('en', '', '', '', '', '');
 
         $package         = new Package($event, '', $dateTime);
         $expectedPackage = new Package($currentEvent, '', $dateTime);
@@ -65,8 +96,18 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedPackage->translate('en', '', '', '');
 
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $productRepository->findByEvent($event)->shouldBeCalled()->willReturn([$product]);
-        $productRepository->add($expectedProduct)->shouldBeCalled();
+        $productRepository->findByEvent($event)->shouldBeCalled()->willReturn([$product, $product2]);
+
+        $productRepository->add(Argument::that(function (Product $product) use ($expectedProduct, $expectedProduct2) {
+            if (($product->getType() === $expectedProduct->getType() || $product->getType() === $expectedProduct2->getType())
+                && ($product->getUnitPrice() === $expectedProduct->getUnitPrice() || $product->getUnitPrice() === $expectedProduct2->getUnitPrice())
+                && ($product->getQuantityMax() === $expectedProduct->getQuantityMax() || $product->getQuantityMax() === $expectedProduct2->getQuantityMax())
+            ) {
+                return true;
+            }
+
+            return false;
+        }))->shouldBeCalled();
 
         $packageRepository = $this->prophesize(PackageRepositoryInterface::class);
         $packageRepository->findByEvent($event)->shouldBeCalled()->willReturn([$package]);
@@ -74,6 +115,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $fileStorage       = $this->prophesize(FileStorageInterface::class);
         $fileStorage->copyAndRename('image')->shouldBeCalled()->willReturn('image2');
+        $fileStorage->copyAndRename('image3')->shouldBeCalled()->willReturn('image4');
 
         $import = new Import($currentEvent);
         $import->event = $event;
