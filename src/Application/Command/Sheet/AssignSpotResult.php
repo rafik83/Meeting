@@ -18,20 +18,11 @@ class AssignSpotResult
     private $sheetNumber;
 
     /**
-     * @var bool
-     */
-    private $info = false;
-
-    /**
      * @param int $sheetNumber
      */
     public function __construct($sheetNumber)
     {
         $this->sheetNumber = $sheetNumber;
-
-        if ($sheetNumber > 1) {
-            $this->info = true;
-        }
     }
 
     /**
@@ -39,7 +30,7 @@ class AssignSpotResult
      */
     public function hasInfo()
     {
-        return $this->info;
+        return $this->sheetNumber > 1;
     }
 
     /**

@@ -258,7 +258,7 @@ class SheetController extends Controller
         if ($result->hasInfo()) {
             $infos = [
                 'info' => $this->get('translator')->trans(
-                    'admin.sheet.assign.spot.numberOfSheet',['%count%' => $result->getSheetNumber()]
+                    'admin.sheet.assign.spot.numberOfSheet', ['%count%' => $result->getSheetNumber()]
                 ),
             ];
         } else {
@@ -267,7 +267,7 @@ class SheetController extends Controller
 
         return new JsonResponse(
             array_merge([
-            'spotCode' => $command->spotCode,
+                'value' => $command->spotCode,
             ], $infos)
         );
     }

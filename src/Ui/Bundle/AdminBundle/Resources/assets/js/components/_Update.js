@@ -19,6 +19,8 @@ function Update(element)
     this.input.addEventListener('blur', this.blured.bind(this));
     this.input.addEventListener('keypress', this.keyupped.bind(this));
     this.input.addEventListener('keyup', this.keyupped.bind(this));
+
+    this.placeholder();
 }
 
 Update.prototype.clicked = function (event)
@@ -41,15 +43,20 @@ Update.prototype.blured = function (event)
     this.save();
 };
 
-Update.prototype.close = function ()
+Update.prototype.placeholder = function ()
 {
-    this.editing = false;
-
     if (this.data.value === null || this.data.value === '') {
         this.element.innerHTML = '<span class="glyphicon glyphicon-edit"></span>';
     } else {
         this.element.innerHTML = this.data.value;
     }
+};
+
+Update.prototype.close = function ()
+{
+    this.editing = false;
+
+    this.placeholder();
 };
 
 Update.prototype.getInputValue = function ()

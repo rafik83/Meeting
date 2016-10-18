@@ -135,10 +135,6 @@
                         <div {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}class="updatable" data-type="string" data-url="{{ path('admin_sheet_assign_spot', {'event': event.id, 'sheet': sheet.id}) }}" data-update="{{ { 'value': sheet.spotReference }|json_encode }}" {% endif %}>
                             {% if sheet.spotReference != null %}
                                 {{ sheet.spotReference }}
-                            {% else %}
-                                {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
-                                    <span class="glyphicon glyphicon-edit"></span>
-                                {% endif %}
                             {% endif %}
                         </div>
                     </td>
