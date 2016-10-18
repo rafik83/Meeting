@@ -41,5 +41,6 @@ parameters:
     paypal_signature: "AKarEPU9IGhpxmdZtMXPhpeKKLPRAe-BNJglO3FIWyFQxmJFjwjXo1hC"
     paypal_sandbox:   true
 
-    phantomjs_path:   '%kernel.root_dir%/../node_modules/.bin/phantomjs'
-    phantomjs_script: '%kernel.root_dir%/../phantomjs/print.js'
+    phantomjs_path:          '%kernel.root_dir%/../node_modules/.bin/phantomjs'
+    phantomjs_script:        '%kernel.root_dir%/../phantomjs/render.js'
+    phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'

@@ -35,8 +35,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SheetController extends Controller
 {
@@ -96,34 +94,7 @@ class SheetController extends Controller
      */
     public function generatePdfAction(EventDomain $eventDomain, Sheet $sheet, $locale)
     {
-        $pathToPdf = sprintf('%s/%s.pdf', sys_get_temp_dir(), $this->getUser()->getId() . '-' . $sheet->getId());
-
-        $urlToPrint = $this->generateUrl(
-            'event_sheet_internal_generate_pdf',
-            [
-                'sheet'  => $sheet->getId(),
-                'locale' => $locale,
-                'user'   => $this->getUser()->getId(),
-            ],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $process = new Process(
-            sprintf(
-                '%s %s %s %s',
-                $this->getParameter('phantomjs_path'),
-                $this->getParameter('phantomjs_script'),
-                $urlToPrint,
-                $pathToPdf
-            )
-        );
-
-        $process->setTimeout(3600);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException($process->getErrorOutput());
-        }
+        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($this->getUser(), $sheet, $locale);
 
         return new BinaryFileResponse($pathToPdf);
     }
@@ -136,7 +107,7 @@ class SheetController extends Controller
      *
      * @return Response
      */
-    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
+    public function printAction(Request $request, EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
     {
         $locale       = $eventDomain->getEvent()->getAvailableLocale($locale);
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);

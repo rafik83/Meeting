@@ -10,6 +10,7 @@ security:
             algorithm: sha1
             iterations: 5
             encode_as_base64: true
+        Symfony\Component\Security\Core\User\User: plaintext
 
     providers:
         user_provider:
@@ -20,11 +21,23 @@ security:
             entity:
                 class: Proximum\Vimeet\Domain\Model\Admin
                 property: email
+        phantomjs_provider:
+            memory:
+                users:
+                    phantomjs:
+                        password: '%phantomjs_http_password%'
+                        roles: 'ROLE_PHANTOMJS'
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        internal:
+            pattern: '^/([a-z]{2})/_internal/'
+            anonymous: false
+            http_basic:
+                provider: phantomjs_provider
 
         admin:
             anonymous: ~
@@ -81,7 +94,10 @@ security:
         - { path: '^/admin/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%domain%' }
         - { path: ^/admin/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%domain%' }
         - { path: ^/admin, role: ROLE_ALLOWED_TO_ADMIN, host: '%domain%' }
-        - { path: ^/(\w+)/sheet, role: ROLE_USER }
+        # Front
+        - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }
+        # Print
+        - { path: '^/([a-z]{2})/_internal', roles: ROLE_PHANTOMJS }
 
     role_hierarchy:
         ROLE_ALLOWED_TO_ADMIN:

@@ -2,6 +2,9 @@ var system = require('system');
 var page   = require('webpage').create();
 var args   = system.args;
 
+page.settings.userName = "phantomjs";
+page.settings.password = args[3];
+
 page.paperSize = {
     format      : "A4",
     orientation : "portrait",
@@ -9,7 +12,7 @@ page.paperSize = {
 };
 
 page.viewportSize = {
-    width:  800,
+    width:  1200,
     height: 600
 };
 

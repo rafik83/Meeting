@@ -1,17 +1,17 @@
 {% set isRequestMeetingEnabled = isCatalog is defined and isCatalog == true and userSheet != sheet %}
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
-    <header>
+    <header class="sheet-header">
 
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
-            <a href="{{ path('event_sheet_pdf', { sheet: sheet.id, locale: locale }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-print"></span>Pdf</a>
         </h1>
 
-        {% if isRequestMeetingEnabled %}
-            <div class="buttons-zone button request-meeting-sheet">
+        <div class="buttons-zone button request-meeting-sheet">
+            {% if isRequestMeetingEnabled %}
                 {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
-            </div>
-        {% endif %}
+            {% endif %}
+            <a href="{{ path('event_sheet_generate_pdf', { sheet: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
+        </div>
 
         {% if isCatalog is not defined or isCatalog == false %}
             <ul class="tabs">
