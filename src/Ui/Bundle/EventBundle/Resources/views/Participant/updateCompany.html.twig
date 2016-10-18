@@ -16,7 +16,7 @@
 
                 {{ form_errors(form) }}
 
-                <div class="inputs">
+                <div class="inputs" data-company-info-update="true">
                     {% for child in form %}
                         {% if child.vars.data.tagsWithoutSetters is defined %}
                             {% for tag in child.vars.data.tagsWithoutSetters %}
