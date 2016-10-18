@@ -174,26 +174,6 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * @return null|string
      */
-    public function getNomenclatureKey()
-    {
-        $labels = $this->getNomenclatureLabels();
-
-        if (isset($labels[$this->getItem()])) {
-            return $this->getItem();
-        }
-
-        foreach ($labels as $values) {
-            if (null !== $this->getItem() && isset($values[$this->getItem()])) {
-                return $this->getItem();
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return null|string
-     */
     public function getNomenclatureLabel()
     {
         $labels = $this->getNomenclatureLabels();
