@@ -384,7 +384,7 @@ class Product
     /**
      * @return int|null
      */
-    public function getRowQuantityMax()
+    public function getRawQuantityMax()
     {
         return $this->quantityMax;
     }

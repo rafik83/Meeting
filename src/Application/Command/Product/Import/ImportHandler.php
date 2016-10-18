@@ -109,7 +109,7 @@ class ImportHandler
             $fromProduct->getName(),
             $image,
             $fromProduct->getUnitPrice(),
-            $fromProduct->getRowQuantityMax(),
+            $fromProduct->getRawQuantityMax(),
             $fromProduct->getAvailabilityCurrent(),
             $fromProduct->getAvailabilityMax(),
             $fromProduct->isUpdatable(),
