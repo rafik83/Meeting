@@ -27,7 +27,7 @@ AnchorFocuser.prototype.focusField = function ()
             $(this.input).focus();
 
             // In case of select2, you have to open it in order to focus the field
-            if (this.input.tagName === 'SELECT') {
+            if (this.input.tagName === 'SELECT' && this.input.classList.contains('select2')) {
                 $(this.input).select2('open');
             }
         }.bind(this), 100);
