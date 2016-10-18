@@ -189,7 +189,7 @@ fos_elastica:
                             index: "not_analyzed"
                         city:
                             type: string
-                            index: "not_analyzed"
+                            analyzer: "sheetAnalyzer"
                         country:
                             type: nested
                             index: "not_analyzed"

@@ -371,7 +371,7 @@ class SheetSearchQueryBuilder
             $boolQuery = new BoolQuery();
 
             foreach ($localizations as $localization) {
-                if (2 === strlen($localization) && is_int($localization)) {
+                if (strlen($localization) >= 2 && preg_match('/^[0-9]*$/', $localization)) {
                     $boolQuery->addShould(new Match('zipcode', $localization));
                 } else {
                     $boolQuery->addShould(new Match('city', $localization));

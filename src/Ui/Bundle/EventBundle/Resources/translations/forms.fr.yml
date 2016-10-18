@@ -40,6 +40,7 @@ form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bancaire'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.search.content.label: 'Mots clés'
+form.search.localization.label: 'Zones géographiques'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
