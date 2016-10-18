@@ -174,7 +174,6 @@ package.summary.pay: 'Régler le forfait de participation'
 package.summary.promotion.button.label: Valider
 package.summary.promotion.label: 'Offres de réductions'
 package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
-package.summary.settle.link: 'Solder la totalité de ma participation'
 package.summary.title: Récapitulatif
 package.summary.total.title: 'Forfait de participation'
 package.summary.totalOfSummary: Total

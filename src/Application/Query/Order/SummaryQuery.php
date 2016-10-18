@@ -32,11 +32,6 @@ class SummaryQuery
     public $locale;
 
     /**
-     * @var Balance
-     */
-    public $balance;
-
-    /**
      * @param Sheet   $sheet
      * @param Order   $order
      * @param string  $locale
