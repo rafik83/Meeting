@@ -66,11 +66,12 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="pull-right">
-                            {% if 0 < view.remainingToPay %}
+                        
+                        {% if 0 < view.remainingToPay %}
+                            <div class="text-right">
                                 <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'order.list.pay_remaining'|trans }}</a>
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </section>
             </div>
