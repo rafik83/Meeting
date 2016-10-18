@@ -375,6 +375,14 @@ class SheetSearchQueryBuilder
                     $boolQuery->addShould(new Match('zipcode', $localization));
                 } else {
                     $boolQuery->addShould(new Match('city', $localization));
+
+                    $nested     = new Nested();
+                    $nestedBoolQuery  = new BoolQuery();
+                    $matchQuery = new Match();
+                    $matchQuery->setField('country.' . $this->locale, $localization);
+
+                    $nested->setQuery($nestedBoolQuery->addMust($matchQuery))->setPath('country');
+                    $boolQuery->addShould($nested);
                 }
             }
 
