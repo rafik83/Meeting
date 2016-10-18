@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Order;
 
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Order\Balance;
 
 class SummaryQuery
 {
