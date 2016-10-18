@@ -80,7 +80,7 @@ class SubmitValidationHandler
         $follower          = $command->sheet->getFollower();
         $sheetOrganization = $this->sheetInfoGuesser->guessSheetName($command->sheet, $command->locale);
 
-        if ($follower != null) {
+        if ($follower !== null) {
             // notify sheet's follower
             $this->eventDispatcher->dispatch(
                 Events::SHEET_VALIDATION_PENDING,

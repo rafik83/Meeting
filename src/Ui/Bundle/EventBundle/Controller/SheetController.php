@@ -564,9 +564,7 @@ class SheetController extends Controller
 
         $this->get('tactician.commandbus')->handle($submitValidation);
 
-        return $this->redirectToRoute('event_sheet_locale', [
-            'locale' => $request->getLocale(),
-        ]);
+        return $this->redirectToRoute('event_sheet');
     }
 
     /**
