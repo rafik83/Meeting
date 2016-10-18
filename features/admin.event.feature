@@ -12,6 +12,7 @@ Feature: See, create and update event
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"
@@ -61,7 +62,8 @@ Feature: See, create and update event
     And I should see "flash.admin.event.update.success"
     And I go to "/admin/fr/event"
     And I should see "Other event"
-    And I follow "admin.event.update.link"
+    And I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr"
     Then the response status code should be 200
     And I should see "LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/en"
     And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
