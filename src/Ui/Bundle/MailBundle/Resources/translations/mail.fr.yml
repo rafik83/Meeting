@@ -39,8 +39,10 @@ mail.resetPassword.link: 'Réinitialiser le mot de passe'
 mail.resetPassword.subject: '[%event%] Mot de passe oublié'
 mail.sheet.add_participant_confirmation.body: "Bonjour %firstname% %lastname%,\n\nVotre invitation à %guestEmail% pour l’événement %event% a bien été envoyée.\n\nCordialement,"
 mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
-mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%.\n\nCordialement,"
+mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
+mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.participant.profile.link: 'Votre profil participant'
 mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.\n\nNous vous rappelons ci-dessous les prochaines étapes de votre participation :<ul>\n<li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>\n<li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %scheduleDate%. Ensuite l’ensemble des participants auront jusqu’au %scheduleDate% pour valider les différentes propositions reçues.</li>\n<li>Le %scheduleDate% votre planning sera disponible en ligne.</li></ul>\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
 mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
