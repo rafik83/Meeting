@@ -12,7 +12,7 @@
                     {% set value = taggedData[tag.tag]|default([])|join(', ') %}
                     {% if tag.tag in ["sheet_country", "participant_country"] %}
                         {% for taggedInfo in taggedData[tag.tag]|default([]) %}
-                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}">
+                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
                                 {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
                             </a>
                         {% endfor %}
@@ -21,7 +21,7 @@
                             <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
                             </a>
                         {% else %}
-                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}">{{ value }}</a>
+                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">{{ value }}</a>
                         {% endif %}
                     {% endif %}
                 </li>

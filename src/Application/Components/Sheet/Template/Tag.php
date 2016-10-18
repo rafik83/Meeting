@@ -68,6 +68,17 @@ final class Tag
     /**
      * @return array
      */
+    public static function getSetters()
+    {
+        return [
+            Tag::PARTICIPANT_DATA,
+            Tag::SHEET_DATA,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public static function getParticipantTags()
     {
         return [
