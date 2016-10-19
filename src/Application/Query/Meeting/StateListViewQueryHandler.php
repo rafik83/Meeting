@@ -42,9 +42,10 @@ class StateListViewQueryHandler
         $lists = new StateListsView();
 
         foreach (Meeting\Constant::getAllStates() as $state) {
-            $query->filters['state'] = $state;
-
-            $count = $this->requestRepository->countSheetState($query->sheet, $query->filters);
+            $count = $this->requestRepository->countSheetState(
+                $query->sheet,
+                array_merge($query->filters, ['state' => $state])
+            );
 
             $lists->addStateListView(new StateListView(
                 $state,

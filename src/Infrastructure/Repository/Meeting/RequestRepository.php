@@ -345,8 +345,6 @@ class RequestRepository implements RequestRepositoryInterface
      * @param QueryBuilder $queryBuilder
      * @param Sheet        $sheet
      * @param array        $filters
-     *
-     * @return QueryBuilder
      */
     private function filterQueryBuilder(QueryBuilder &$queryBuilder, Sheet $sheet, array $filters)
     {
@@ -361,18 +359,16 @@ class RequestRepository implements RequestRepositoryInterface
                 $queryBuilder
                     ->andWhere('request.state = :state')
                     ->andWhere('request.to = :sheet')
-                    ->setParameter('state', Meeting\Request::STATE_SENT)
-                    ->setParameter('sheet', $sheet);
+                    ->setParameter('state', Meeting\Request::STATE_SENT);
             } elseif ($filters['state'] === Meeting\Constant::FILTER_STATE_SENT) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
                     ->andWhere('request.state = :state')
-                    ->setParameter('state', Meeting\Request::STATE_SENT)
-                    ->setParameter('sheet', $sheet);
+                    ->setParameter('state', Meeting\Request::STATE_SENT);
             } else {
                 $queryBuilder
                     ->andWhere('request.state = :state')
-                    ->setParameter('state', $filters['state']);
+                    ->setParameter('state', Meeting\Constant::getMappedRequestState($filters['state']));
             }
         }
 
@@ -387,7 +383,6 @@ class RequestRepository implements RequestRepositoryInterface
                 ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
                 ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
                 ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
-                ->setParameter('sheet', $sheet)
                 ->setParameter('types', $filters['type']);
         }
 
