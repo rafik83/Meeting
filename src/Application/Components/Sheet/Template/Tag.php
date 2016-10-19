@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
 final class Tag
 {
-    const GENERIC_TAGS_NUMBER = 60;
+    const GENERIC_TAGS_NUMBER = 99;
 
     // Getter
     const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
@@ -63,6 +63,17 @@ final class Tag
             Tag::getBillingTags(),
             Tag::getSheetTags()
         );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSetters()
+    {
+        return [
+            Tag::PARTICIPANT_DATA,
+            Tag::SHEET_DATA,
+        ];
     }
 
     /**
