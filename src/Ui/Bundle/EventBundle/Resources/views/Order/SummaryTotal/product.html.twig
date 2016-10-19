@@ -1,15 +1,10 @@
 {% if null != product %}
     <tr {% if stripped is defined and stripped %}class="even"{% endif %}>
         <td class="col-md-6">
-            <span>{{ product.label }}</span>
-            {% if product.buyableUntil is not empty %}
-                <p class="label label-warning">{{ 'package.product.buyableUntil'|trans({'%date%': product.buyableUntil|date('d/m/Y')}) }}</p>
-            {% endif %}
+            <p>{{ product.label }}</p>
             {% if product.deletableUntil is not empty %}
-                {% if product.isDeletable %}
-                    <p class="label label-warning">{{ 'package.product.deletableUntil'|trans({'%date%': product.deletableUntil|date('d/m/Y') }) }}</p>
-                {% else %}
-                    <p class="label label-warning">{{ 'package.product.notDeletableSince'|trans({'%date%': product.deletableUntil|date('d/m/Y') }) }}</p>
+                {% if not product.isDeletable %}
+                    <span class="product-limite">{{ 'package.product.notDeletableSince'|trans({'%date%': product.deletableUntil|date('d/m/Y') }) }}</span>
                 {% endif %}
             {% endif %}
         </td>
