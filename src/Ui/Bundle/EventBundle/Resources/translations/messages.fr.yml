@@ -134,6 +134,7 @@ package.payment.total.toPay: '%total%'
 package.planning.label: 'Intitulé & descriptions'
 package.planning.quantity: Quantité
 package.planning.quantityMax: 'Quantité maximum atteinte'
+package.planning.quantityMax.forParticipation: 'Quantité totale supérieure au nombre total des participants'
 package.planning.quantityMin: 'Quantité minimum atteinte'
 package.planning.total: Total
 package.planning.unitPrice: 'Prix unitaire'
