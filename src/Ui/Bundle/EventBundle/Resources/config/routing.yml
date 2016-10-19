@@ -263,7 +263,7 @@ event_catalog_index:
 
 event_catalog_search_localization:
     path: /catalog/search-localization
-    methods:  [POST]
+    methods:  [GET, POST]
     defaults: { _controller: EventBundle:Catalog:searchLocalization }
 
 event_catalog_complete_sheet:

@@ -1819,6 +1819,12 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery }
+    query.catalog.localization_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery }
     query.type.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler
         arguments:

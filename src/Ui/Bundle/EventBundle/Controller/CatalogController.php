@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
@@ -25,6 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -127,6 +129,16 @@ class CatalogController extends Controller
     public function searchLocalizationAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $localizationView = $this->get('tactician.commandbus.query')->handle(
+            new LocalizationViewQuery(
+                $eventDomain->getEvent(),
+                $request->get('query'),
+                $request->getLocale()
+            )
+        );
+
+        return new JsonResponse($localizationView);
     }
 
     /**

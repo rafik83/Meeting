@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
@@ -81,6 +82,49 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $result->getNbResults(),
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findLocalization(Event $event, $filter, $locale)
+    {
+        // city
+        $match = new Query\Match();
+        $match->setField('city_autocomplete', $filter);
+
+        $filterQuery = new \Elastica\Filter\Query();
+        $filterQuery->setQuery($match);
+
+        $citiesAggregations = new Terms('cities');
+        $citiesAggregations->setField('city_unanalyzed');
+        $citiesAggregations->setSize(10);
+
+        $cities = new Filter('cities_aggs');
+        $cities->addAggregation($citiesAggregations);
+        $cities->setFilter($filterQuery);
+
+        // zipcode
+        $matchZipcode = new Query\Match();
+        $matchZipcode->setField('zipcode_autocomplete', $filter);
+
+        $filterZipcodeQuery = new \Elastica\Filter\Query();
+        $filterZipcodeQuery->setQuery($matchZipcode);
+
+        $zipcodeAggregations = new Terms('zipcodes');
+        $zipcodeAggregations->setField('zipcode');
+        $zipcodeAggregations->setSize(10);
+
+        $zipcodes = new Filter('zipcode_aggs');
+        $zipcodes->addAggregation($zipcodeAggregations);
+        $zipcodes->setFilter($filterZipcodeQuery);
+
+        $query = new Query();
+        $query->addAggregation($cities)
+          ->addAggregation($zipcodes)
+          ->setSize(0);
+
+        return $this->searchable->search($query)->getAggregations();
     }
 
     /**
