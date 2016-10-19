@@ -1,5 +1,5 @@
 <div class="filter">
     <h3>{{ form.vars.label|trans({}, form.vars.translation_domain) }}</h3>
 
-    {{ form_widget(form) }}
+    {{ form_widget(form, {'attr': {'data-method': 'post', 'data-action': path('event_catalog_search_localization')}}) }}
 </div>

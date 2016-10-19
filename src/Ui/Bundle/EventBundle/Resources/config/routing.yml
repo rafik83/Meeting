@@ -263,7 +263,7 @@ event_catalog_index:
 
 event_catalog_search_localization:
     path: /catalog/search-localization
-    methods:  [GET]
+    methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchLocalization }
 
 event_catalog_complete_sheet:
@@ -279,7 +279,6 @@ event_catalog_sheet_meeting_request:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
-
 #
 # Schedule
 #

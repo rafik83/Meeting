@@ -4,6 +4,7 @@ var $                     = require('jquery'),
     ChoiceDescription     = require('./components/_ChoiceDescription'),
     ShowPaymentInfo       = require('./components/_ShowPaymentInfo'),
     AjaxForm              = require('./components/_AjaxForm'),
+    AjaxAutocomplete      = require('./components/_AjaxAutocomplete'),
     CheckAllButton        = require('./components/_CheckAllButton'),
     SelectParent          = require('./components/_SelectParent'),
     UploadPreview         = require('./components/_UploadPreview'),
@@ -122,6 +123,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) {
         new AjaxForm(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
+        new AjaxAutocomplete(element);
     });
 
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) {
