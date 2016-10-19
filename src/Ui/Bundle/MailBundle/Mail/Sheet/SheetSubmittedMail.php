@@ -52,7 +52,7 @@ class SheetSubmittedMail extends Mail
     /**
      * @var string
      */
-    private $sheetOrganization;
+    private $sheetName;
 
     /**
      * Firstname of the user who submitted the sheet
@@ -76,7 +76,7 @@ class SheetSubmittedMail extends Mail
      * @param Sheet             $sheet
      * @param Admin             $admin
      * @param DateTimeInterface $datetime
-     * @param string            $sheetOrganization
+     * @param string            $sheetName
      * @param string            $firstname
      * @param string            $lastname
      */
@@ -88,18 +88,18 @@ class SheetSubmittedMail extends Mail
         Sheet $sheet,
         Admin $admin,
         DateTimeInterface $datetime,
-        $sheetOrganization,
+        $sheetName,
         $firstname,
         $lastname
     ) {
         parent::__construct($sender, $receiver, $locale, null, null, $event);
 
-        $this->admin             = $admin;
-        $this->sheet             = $sheet;
-        $this->datetime          = $datetime;
-        $this->sheetOrganization = $sheetOrganization;
-        $this->firstname         = $firstname;
-        $this->lastname          = $lastname;
+        $this->admin     = $admin;
+        $this->sheet     = $sheet;
+        $this->datetime  = $datetime;
+        $this->sheetName = $sheetName;
+        $this->firstname = $firstname;
+        $this->lastname  = $lastname;
     }
 
     /**
@@ -108,7 +108,7 @@ class SheetSubmittedMail extends Mail
     public function getSubjectParameters()
     {
         return [
-            '%sheetOrganization%' => $this->sheetOrganization,
+            '%sheetName%' => $this->sheetName,
         ];
     }
 
@@ -153,10 +153,10 @@ class SheetSubmittedMail extends Mail
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSheetOrganization()
+    public function getSheetName()
     {
-        return $this->sheetOrganization;
+        return $this->sheetName;
     }
 }

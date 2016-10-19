@@ -22,11 +22,6 @@ class SheetSubmittedEvent extends Event
     private $sheet;
 
     /**
-     * @var string
-     */
-    private $locale;
-
-    /**
      * @var User
      */
     private $user;
@@ -34,18 +29,13 @@ class SheetSubmittedEvent extends Event
     /**
      * SheetSubmittedEvent constructor.
      *
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
+     * @param Sheet $sheet
+     * @param User  $user
      */
-    public function __construct(
-        Sheet $sheet,
-        User $user,
-        $locale
-    ) {
-        $this->sheet  = $sheet;
-        $this->locale = $locale;
-        $this->user   = $user;
+    public function __construct(Sheet $sheet, User $user)
+    {
+        $this->sheet = $sheet;
+        $this->user  = $user;
     }
 
     /**
@@ -54,14 +44,6 @@ class SheetSubmittedEvent extends Event
     public function getSheet()
     {
         return $this->sheet;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**

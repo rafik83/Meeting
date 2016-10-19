@@ -21,11 +21,6 @@ class SubmitValidation
     public $sheet;
 
     /**
-     * @var string
-     */
-    public $locale;
-
-    /**
      * @var User
      */
     public $user;
@@ -35,12 +30,10 @@ class SubmitValidation
      *
      * @param Sheet  $sheet
      * @param User   $user
-     * @param string $locale
      */
-    public function __construct(Sheet $sheet, User $user, $locale)
+    public function __construct(Sheet $sheet, User $user)
     {
         $this->sheet  = $sheet;
-        $this->locale = $locale;
         $this->user   = $user;
     }
 }

@@ -80,9 +80,9 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         $lastname  = null;
 
         $follower = $event->getSheet()->getFollower();
-        $locale   = $event->getSheet()->getEvent()->getAvailableLocale($event->getLocale());
+        $locale   = $event->getSheet()->getEvent()->getFallback();
 
-        $sheetOrganization = $this->sheetInfoGuesser->guessSheetName(
+        $sheetName = $this->sheetInfoGuesser->guessSheetName(
             $event->getSheet(),
             $locale
         );
@@ -121,7 +121,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
                 $event->getSheet(),
                 $admin,
                 new DateTime(),
-                $sheetOrganization,
+                $sheetName,
                 $firstname,
                 $lastname
             );

@@ -196,12 +196,9 @@ class AdminRepository implements AdminRepositoryInterface
             ->createQueryBuilder()
             ->select('admin')
             ->from(Admin::class, 'admin', 'admin.id')
-            ->join('admin.types', 'type', 'WITH', 'type = :type')
-            ->where('type.event = :event')
-            ->andWhere('admin.role IN (:roles)')
+            ->join('admin.types', 'type', 'WITH', 'admin.role = :role AND type = :type')
             ->setParameter('type', $type)
-            ->setParameter('event', $event)
-            ->setParameter('roles', [Admin::ROLE_PARTNER])
+            ->setParameter('role', Admin::ROLE_PARTNER)
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -217,10 +214,9 @@ class AdminRepository implements AdminRepositoryInterface
             ->createQueryBuilder()
             ->select('admin')
             ->from(Admin::class, 'admin', 'admin.id')
-            ->join('admin.events', 'event', 'WITH', 'event = :event')
-            ->where('admin.role IN (:roles)')
+            ->join('admin.events', 'event', 'WITH', 'event = :event AND admin.role = :role')
             ->setParameter('event', $event)
-            ->setParameter('roles', [Admin::ROLE_ORGANIZER]);
+            ->setParameter('role', Admin::ROLE_ORGANIZER);
 
         return $queryBuilder->getQuery()->getResult();
     }

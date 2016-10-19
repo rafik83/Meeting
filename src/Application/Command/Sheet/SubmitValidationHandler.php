@@ -53,11 +53,7 @@ class SubmitValidationHandler
         // notify sheet's follower
         $this->eventDispatcher->dispatch(
             Events::SHEET_VALIDATION_PENDING,
-            new SheetSubmittedEvent(
-                $command->sheet,
-                $command->user,
-                $command->locale
-            )
+            new SheetSubmittedEvent($command->sheet, $command->user)
         );
     }
 }
