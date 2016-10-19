@@ -94,6 +94,23 @@ class SheetController extends Controller
      */
     public function generatePdfAction(EventDomain $eventDomain, Sheet $sheet, $locale)
     {
+        $user      = $this->getUser();
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $eventDomain->getEvent(), $locale);
+
+        if ($userSheet !== $sheet) {
+            if (!$sheet->isInCatalog()) {
+                throw $this->createAccessDeniedException('Sheet not in catalog');
+            }
+
+            $rules = $this
+                ->get('repository.rule_repository')
+                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+
+            if (empty($rules)) {
+                throw $this->createNotFoundException('You do not have the right to see this sheet');
+            }
+        }
+
         $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($this->getUser(), $sheet, $locale);
 
         return new BinaryFileResponse($pathToPdf);
@@ -107,20 +124,43 @@ class SheetController extends Controller
      *
      * @return Response
      */
-    public function printAction(Request $request, EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
+    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
     {
-        $locale       = $eventDomain->getEvent()->getAvailableLocale($locale);
+        $event     = $eventDomain->getEvent();
+        $locale    = $event->getAvailableLocale($locale);
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $event, $locale);
+
+        $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
+
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
+            $event,
             $sheet,
             $user,
             $locale
         );
 
+        if ($userSheet !== $sheet) {
+            if (!$sheet->isInCatalog() || !$isCatalogAllowed) {
+                throw $this->createAccessDeniedException('Sheet not in catalog');
+            }
+
+            $rules = $this
+                ->get('repository.rule_repository')
+                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+
+            if (empty($rules)) {
+                throw $this->createNotFoundException('You do not have the right to see this sheet');
+            }
+
+            $ruleApplyer = $this->get('domain.rule.applyer');
+            $ruleApplyer->applyRuleForTemplate($templateData, $rules);
+            $ruleApplyer->applyRuleForCardList($participants, $rules);
+        }
+
         return $this->render('EventBundle:Sheet:print.html.twig', [
-            'event'         => $eventDomain->getEvent(),
+            'event'         => $event,
             'sheet'         => $sheet,
             'taggedData'    => $taggedData,
             'locale'        => $locale,
