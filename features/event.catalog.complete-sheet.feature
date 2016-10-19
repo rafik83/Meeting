@@ -22,9 +22,15 @@ Feature: Display complete sheet from catalog
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
     When I follow "navigation.links.catalog.available_date"
-    And I go to this page "/fr/catalog/sheet/1"
+    Then I should see "Onera"
+    When I go to this page "/fr/catalog/sheet/1"
     Then I should see "Onera"
     And I should not see "sheet.object.action.edit"
     And I should see "catalog.meeting_request.create"
-    When I go to "http://asddays-2016.vimeet.proximum.dev/fr/catalog/sheet/3"
-    Then the response status code should be 403
+
+  Scenario: I can not see a sheet that not allowed in rules
+    Given I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I follow "navigation.links.catalog.available_date"
+    Then I should not see "World Company Inc"
+    When I go to "/fr/catalog/sheet/3"
+    Then the response status code should be 404

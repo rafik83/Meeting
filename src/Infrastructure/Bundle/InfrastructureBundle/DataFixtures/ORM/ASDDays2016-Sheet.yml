@@ -78,7 +78,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - <dateTime()>
         completeness: 67
         registrationData:
-            3ad4b72f: { text: "Elao" }
+            3ad4b72f: { text: "Onera" }
             97ed778d: { items: ["category2"] }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
@@ -142,38 +142,41 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position98"] } # Consultant
     participant_asddays_2:
         __construct: false
         user: "@user_asddays_2"
         sheet: "@sheet_asddays_empty"
         active: true
         data:
-            541f84d4: { text: "John" }
-            838197c7: { text: "DOE" }
+            541f84d4: { text: "Maryse" }
+            838197c7: { text: "Dupond" }
             1efb9cbb: { telephone: "+33909090909" }
-            4b674gba: { gender: "man" }
+            4b674gba: { gender: "woman" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position50"] } # Community Manager
     participant_asddays_3:
         __construct: false
         user: "@user_asddays_3"
         sheet: "@sheet_asddays_empty_with_tag"
         active: true
         data:
-            541f84d4: { text: "John" }
-            838197c7: { text: "DOE" }
+            541f84d4: { text: "Julie" }
+            838197c7: { text: "Martin" }
             1efb9cbb: { telephone: "+33909090909" }
-            4b674gba: { gender: "man" }
+            4b674gba: { gender: "woman" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position50"] } # Community Manager
 
 Proximum\Vimeet\Domain\Model\User\Account (local):
     event_asddays_2016_account_user_1:
         __construct: false
-        firstName: "Martin"
-        lastName: "Dupont"
+        firstName: "John"
+        lastName: "Doe"
         phone: "+33668973246"
         mobile: "+33668973246"
         position: "Consultant"
-        company: "Elao"
+        company: "Onera"
         website: "http://www.monsite.fr"
         address: "10 rue des lilas"
         zipcode: "75002"
@@ -189,18 +192,18 @@ Proximum\Vimeet\Domain\Model\User\Account (local):
         companyWebsite: "http://www.elao.com"
     event_asddays_2016_account_user_2:
         __construct: false
-        firstName: "Jean"
-        lastName: "Durant"
+        firstName: "Maryse"
+        lastName: "Dupond"
         phone: "+33668973246"
         mobile: "+33668973246"
-        position: "Manager"
-        company: "Elao"
+        position: "Community Manager"
+        company: "Hello World Company"
         website: "http://www.monsite.fr"
         address: "10 rue des lilas"
         zipcode: "75002"
         city: "Paris"
         country: "FR"
-        gender: "man"
+        gender: "woman"
         avatar: 'assets/images/asddays-logo.png'
         companyAddress: "10 rue Saint Marc"
         companyPhone: "0668973246"
@@ -211,11 +214,11 @@ Proximum\Vimeet\Domain\Model\User\Account (local):
     event_asddays_2016_account_user_3:
         __construct: false
         firstName: "Julie"
-        lastName: "Pierini"
+        lastName: "Martin"
         phone: "+33668973246"
         mobile: "+33668973246"
-        position: "Chef de projet"
-        company: "Elao"
+        position: "Community Manager"
+        company: "World Company Inc"
         website: "http://www.monsite.fr"
         address: "10 rue des lilas"
         zipcode: "75002"
