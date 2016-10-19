@@ -10,11 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use DateTimeInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetSubmittedEvent;
-use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -26,46 +23,22 @@ class SubmitValidationHandler
     private $sheetRepository;
 
     /**
-     * @var AdminRepositoryInterface
-     */
-    private $adminRepository;
-
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
     /**
-     * @var DateTimeInterface
-     */
-    private $datetime;
-
-    /**
      * SubmitValidationHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param AdminRepositoryInterface $adminRepository
-     * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param DelayedEventDispatcher   $eventDispatcher
-     * @param DateTimeInterface        $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        AdminRepositoryInterface $adminRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
-        DelayedEventDispatcher $eventDispatcher,
-        DateTimeInterface $datetime
+        DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->sheetRepository  = $sheetRepository;
-        $this->adminRepository  = $adminRepository;
-        $this->eventDispatcher  = $eventDispatcher;
-        $this->datetime         = $datetime;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->sheetRepository = $sheetRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
