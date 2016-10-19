@@ -119,6 +119,15 @@
     height: auto !important;
   }
 
+  .object--participant .list--users .user__avatar .avatar {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .object--participant .list--users .user__avatar {
+    margin-right: 10px !important;
+  }
+
   .sheet-header, .header, .sub-header, .btn, .edit-link, .tabs a, .link-show-more {
     display: none !important;
   }
