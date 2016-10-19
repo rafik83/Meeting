@@ -10,9 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Event\Sheet;
 
-use DateTimeInterface;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher\Event;
 
 class SheetSubmittedEvent extends Event
@@ -23,62 +22,30 @@ class SheetSubmittedEvent extends Event
     private $sheet;
 
     /**
-     * @var Admin
-     */
-    private $admin;
-
-    /**
-     * @var DateTimeInterface
-     */
-    private $datetime;
-
-    /**
      * @var string
      */
     private $locale;
 
     /**
-     * @var string
+     * @var User
      */
-    private $sheetOrganization;
+    private $user;
 
     /**
      * SheetSubmittedEvent constructor.
      *
-     * @param Sheet             $sheet
-     * @param Admin             $admin
-     * @param DateTimeInterface $datetime
-     * @param string            $sheetOrganization
-     * @param string            $locale
+     * @param Sheet  $sheet
+     * @param User   $user
+     * @param string $locale
      */
     public function __construct(
         Sheet $sheet,
-        Admin $admin,
-        DateTimeInterface $datetime,
-        $sheetOrganization,
+        User $user,
         $locale
     ) {
-        $this->sheet             = $sheet;
-        $this->datetime          = $datetime;
-        $this->admin             = $admin;
-        $this->locale            = $locale;
-        $this->sheetOrganization = $sheetOrganization;
-    }
-
-    /**
-     * @return Admin
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
-
-    /**
-     * @return DateTimeInterface
-     */
-    public function getDatetime()
-    {
-        return $this->datetime;
+        $this->sheet  = $sheet;
+        $this->locale = $locale;
+        $this->user   = $user;
     }
 
     /**
@@ -98,10 +65,10 @@ class SheetSubmittedEvent extends Event
     }
 
     /**
-     * @return string
+     * @return User
      */
-    public function getSheetOrganization()
+    public function getUser()
     {
-        return $this->sheetOrganization;
+        return $this->user;
     }
 }

@@ -56,6 +56,13 @@ class SheetSubmittedMail extends Mail
     private $sheetOrganization;
 
     /**
+     * User who submitted the sheet
+     *
+     * @var User
+     */
+    private $user;
+
+    /**
      * @param Event             $event
      * @param string            $sender
      * @param string            $receiver
@@ -64,6 +71,7 @@ class SheetSubmittedMail extends Mail
      * @param Admin             $admin
      * @param DateTimeInterface $datetime
      * @param string            $sheetOrganization
+     * @param User              $user
      */
     public function __construct(
         Event $event,
@@ -73,7 +81,8 @@ class SheetSubmittedMail extends Mail
         Sheet $sheet,
         Admin $admin,
         DateTimeInterface $datetime,
-        $sheetOrganization
+        $sheetOrganization,
+        User $user
     ) {
         parent::__construct($sender, $receiver, $locale, null, null, $event);
 
@@ -81,9 +90,17 @@ class SheetSubmittedMail extends Mail
         $this->sheet             = $sheet;
         $this->datetime          = $datetime;
         $this->sheetOrganization = $sheetOrganization;
+        $this->user              = $user;
+    }
 
-        // set sheet organization for mail subject parameters
-        $this->subjectParameters['%sheetOrganization%'] = $sheetOrganization;
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubjectParameters()
+    {
+        return [
+            '%sheetOrganization%' => $this->sheetOrganization,
+        ];
     }
 
     /**
@@ -105,9 +122,9 @@ class SheetSubmittedMail extends Mail
     /**
      * @return User
      */
-    public function getOwner()
+    public function getUser()
     {
-        return $this->sheet->getOwner();
+        return $this->user;
     }
 
     /**

@@ -315,25 +315,6 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param SheetSubmittedEvent $event
-     */
-    public function onSheetSubmittedValidation(SheetSubmittedEvent $event)
-    {
-        $mail = new SheetSubmittedMail(
-            $event->getSheet()->getEvent(),
-            $this->sender,
-            $event->getAdmin()->getEmail(),
-            $event->getLocale(),
-            $event->getSheet(),
-            $event->getAdmin(),
-            $event->getDatetime(),
-            $event->getSheetOrganization()
-        );
-
-        $this->mailer->send($mail);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -353,7 +334,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
-            Events::SHEET_VALIDATION_PENDING           => 'onSheetSubmittedValidation',
         ];
     }
 }

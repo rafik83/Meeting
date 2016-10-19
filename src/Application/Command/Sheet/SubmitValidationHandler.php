@@ -77,40 +77,14 @@ class SubmitValidationHandler
         $command->sheet->submitToValidation();
         $this->sheetRepository->set($command->sheet);
 
-        $follower          = $command->sheet->getFollower();
-        $sheetOrganization = $this->sheetInfoGuesser->guessSheetName($command->sheet, $command->locale);
-
-        if ($follower !== null) {
-            // notify sheet's follower
-            $this->eventDispatcher->dispatch(
-                Events::SHEET_VALIDATION_PENDING,
-                new SheetSubmittedEvent(
-                    $command->sheet,
-                    $follower,
-                    $this->datetime,
-                    $sheetOrganization,
-                    $command->locale
-                )
-            );
-        } else {
-            // notify all organizer and partner allowed to manage this sheet
-            $admins = $this->adminRepository->getAllowedOrganiserAndPartner(
-                $command->sheet->getEvent(),
-                $command->sheet->getType()
-            );
-
-            foreach ($admins as $admin) {
-                $this->eventDispatcher->dispatch(
-                    Events::SHEET_VALIDATION_PENDING,
-                    new SheetSubmittedEvent(
-                        $command->sheet,
-                        $admin,
-                        $this->datetime,
-                        $sheetOrganization,
-                        $command->locale
-                    )
-                );
-            }
-        }
+        // notify sheet's follower
+        $this->eventDispatcher->dispatch(
+            Events::SHEET_VALIDATION_PENDING,
+            new SheetSubmittedEvent(
+                $command->sheet,
+                $command->user,
+                $command->locale
+            )
+        );
     }
 }

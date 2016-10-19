@@ -560,7 +560,7 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $submitValidation = new SubmitValidation($sheet, $request->getLocale());
+        $submitValidation = new SubmitValidation($sheet, $this->getUser(), $request->getLocale());
 
         $this->get('tactician.commandbus')->handle($submitValidation);
 

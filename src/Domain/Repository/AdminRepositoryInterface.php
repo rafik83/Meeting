@@ -78,5 +78,12 @@ interface AdminRepositoryInterface
      *
      * @return Admin[]
      */
-    public function getAllowedOrganiserAndPartner(Event $event, Type $type);
+    public function getAllowedPartner(Event $event, Type $type);
+
+    /**
+     * @param Event $event
+     *
+     * @return Admin[]
+     */
+    public function getAllowedOrganizer(Event $event);
 }

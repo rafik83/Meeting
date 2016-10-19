@@ -189,7 +189,7 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllowedOrganiserAndPartner(Event $event, Type $type)
+    public function getAllowedPartner(Event $event, Type $type)
     {
         $queryBuilder = $this
             ->entityManager
@@ -201,8 +201,26 @@ class AdminRepository implements AdminRepositoryInterface
             ->andWhere('admin.role IN (:roles)')
             ->setParameter('type', $type)
             ->setParameter('event', $event)
-            ->setParameter('roles', [Admin::ROLE_OPERATOR, Admin::ROLE_PARTNER])
+            ->setParameter('roles', [Admin::ROLE_PARTNER])
         ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllowedOrganizer(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin', 'admin.id')
+            ->join('admin.events', 'event', 'WITH', 'event = :event')
+            ->where('admin.role IN (:roles)')
+            ->setParameter('event', $event)
+            ->setParameter('roles', [Admin::ROLE_ORGANIZER]);
 
         return $queryBuilder->getQuery()->getResult();
     }

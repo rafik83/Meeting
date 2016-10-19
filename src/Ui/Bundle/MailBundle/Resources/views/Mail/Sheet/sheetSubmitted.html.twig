@@ -5,8 +5,8 @@
 {% block body %}
     {{ 'mail.sheet.submitted.body'|trans({
         '%sheetOrganization%': mail.sheetOrganization,
-        '%firstname%': mail.owner.account.firstname|capitalize,
-        '%lastname%': mail.owner.account.lastname|upper,
+        '%firstname%': mail.user.account.firstname|capitalize,
+        '%lastname%': mail.user.account.lastname|upper,
         '%date%': mail.datetime|localizeddate('medium', 'none', mail.locale)
     }, 'mail', mail.locale)|html|nl2br }}
 
