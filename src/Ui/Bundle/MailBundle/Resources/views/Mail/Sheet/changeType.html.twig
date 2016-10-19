@@ -1,5 +1,7 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
 {% block body %}
     {{ 'mail.sheet.change_type.body'|trans({
         '%event%': mail.event.title,
@@ -8,4 +10,16 @@
         '%firstname%': mail.user.account.firstname|capitalize,
         '%lastname%': mail.user.account.lastname|upper
     }, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+
+    {{ macros.button(
+        'mail.participant.profile.link'|trans({}, 'mail', mail.locale),
+        'https://' ~ mail.event.domain ~ path('event_sheet_locale', { 'locale': mail.locale })
+    ) }}
+
+    <br>
+
+    {{ 'mail.sheet.change_type.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

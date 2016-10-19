@@ -261,7 +261,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Send email when user finish step 3 of event registration funnel
+     * Send email when user finish last step of event registration funnel
      *
      * @param PreRegisterEvent $event
      */
