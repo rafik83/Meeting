@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 
 class SheetSubmittedMail extends Mail
 {
@@ -56,11 +55,18 @@ class SheetSubmittedMail extends Mail
     private $sheetOrganization;
 
     /**
-     * User who submitted the sheet
+     * Firstname of the user who submitted the sheet
      *
-     * @var User
+     * @var string
      */
-    private $user;
+    private $firstname;
+
+    /**
+     * Lastname of the user who submitted the sheet
+     *
+     * @var string
+     */
+    private $lastname;
 
     /**
      * @param Event             $event
@@ -71,7 +77,8 @@ class SheetSubmittedMail extends Mail
      * @param Admin             $admin
      * @param DateTimeInterface $datetime
      * @param string            $sheetOrganization
-     * @param User              $user
+     * @param string            $firstname
+     * @param string            $lastname
      */
     public function __construct(
         Event $event,
@@ -82,7 +89,8 @@ class SheetSubmittedMail extends Mail
         Admin $admin,
         DateTimeInterface $datetime,
         $sheetOrganization,
-        User $user
+        $firstname,
+        $lastname
     ) {
         parent::__construct($sender, $receiver, $locale, null, null, $event);
 
@@ -90,7 +98,8 @@ class SheetSubmittedMail extends Mail
         $this->sheet             = $sheet;
         $this->datetime          = $datetime;
         $this->sheetOrganization = $sheetOrganization;
-        $this->user              = $user;
+        $this->firstname         = $firstname;
+        $this->lastname          = $lastname;
     }
 
     /**
@@ -120,11 +129,19 @@ class SheetSubmittedMail extends Mail
     }
 
     /**
-     * @return User
+     * @return string
      */
-    public function getUser()
+    public function getFirstname()
     {
-        return $this->user;
+        return $this->firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
     }
 
     /**

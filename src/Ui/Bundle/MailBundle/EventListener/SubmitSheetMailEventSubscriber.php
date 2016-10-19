@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetSubmittedEvent;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetSubmittedMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -42,23 +43,31 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
     private $adminRepository;
 
     /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
      * MailEventSubscriber constructor.
      *
      * @param SheetInfoGuesser         $sheetInfoGuesser
+     * @param ParticipantInfoGuesser   $participantInfoGuesser
      * @param AdminRepositoryInterface $adminRepository
      * @param MailerInterface          $mailer
      * @param string                   $sender
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser,
         AdminRepositoryInterface $adminRepository,
         MailerInterface $mailer,
         $sender
     ) {
-        $this->mailer           = $mailer;
-        $this->sender           = $sender;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
-        $this->adminRepository  = $adminRepository;
+        $this->mailer                 = $mailer;
+        $this->sender                 = $sender;
+        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->adminRepository        = $adminRepository;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
@@ -66,10 +75,27 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetSubmittedValidation(SheetSubmittedEvent $event)
     {
-        $admins            = [];
-        $follower          = $event->getSheet()->getFollower();
-        $sheetOrganization = $this->sheetInfoGuesser->guessSheetName($event->getSheet(),
-            $event->getSheet()->getEvent()->getAvailableLocale($event->getLocale()));
+        $admins    = [];
+        $firstname = null;
+        $lastname  = null;
+
+        $follower = $event->getSheet()->getFollower();
+        $locale   = $event->getSheet()->getEvent()->getAvailableLocale($event->getLocale());
+
+        $sheetOrganization = $this->sheetInfoGuesser->guessSheetName(
+            $event->getSheet(),
+            $locale
+        );
+
+        $participant = $event->getSheet()->getUserParticipant($event->getUser());
+
+        if ($participant === null) {
+            $firstname = $event->getUser()->getAccount()->getFirstName();
+            $lastname  = $event->getUser()->getAccount()->getLastName();
+        } else {
+            $firstname = $this->participantInfoGuesser->guessParticipantFirstName($participant, $locale);
+            $lastname  = $this->participantInfoGuesser->guessParticipantLastName($participant, $locale);
+        }
 
         if ($follower !== null) {
             $admins[] = $follower;
@@ -91,12 +117,13 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
                 $event->getSheet()->getEvent(),
                 $this->sender,
                 $admin->getEmail(),
-                $event->getLocale(),
+                $locale,
                 $event->getSheet(),
                 $admin,
                 new DateTime(),
                 $sheetOrganization,
-                $event->getUser()
+                $firstname,
+                $lastname
             );
 
             $this->mailer->send($mail);
