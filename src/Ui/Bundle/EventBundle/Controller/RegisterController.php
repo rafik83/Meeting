@@ -207,15 +207,21 @@ class RegisterController extends Controller
         $form = $this->createForm(BlockType::class, $participantBlock, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data            = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
-            $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
-            $this->get('tactician.commandbus')->handle($participantStep);
+            $data = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
 
-            $nextStep = $registrationTemplate->getNextBlockPosition($step);
+            if ($form->isValid()) {
+                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                $this->get('tactician.commandbus')->handle($participantStep);
 
-            return $nextStep
-                ? $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participant->getId()])
-                : $this->redirectToRoute('event_sheet');
+                $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+                return $nextStep
+                    ? $this->redirectToRoute(
+                        'event_participant_step',
+                        ['step' => $nextStep, 'participant' => $participant->getId()]
+                    )
+                    : $this->redirectToRoute('event_sheet');
+            }
         }
 
         $participantCard = $this->get('tactician.commandbus.query')->handle(new CardViewQuery($participant, $locale));
@@ -267,7 +273,13 @@ class RegisterController extends Controller
                 $file = $form->get($key)->get('file')->getData();
 
                 if ($file instanceof UploadedFile) {
-                    $data[$key]['image'] = $fileStorage->remove($object->getContentValue())->upload($file);
+                    try {
+                        $data[$key]['image'] = $fileStorage->upload($file);
+                        $fileStorage->remove($object->getContentValue());
+                    } catch (\Exception $exception) {
+                        $form->get($key)->get('file')->addError(new FormError('account.profile.updateAvatar.error'));
+                    }
+
                 } else {
                     $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
                 }

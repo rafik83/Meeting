@@ -24,6 +24,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -175,29 +176,28 @@ class ParticipantController extends Controller
         );
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($image instanceof Template\TemplateObject\Image) {
-                $file = $form->get($key)->get('file')->getData();
+            $file = $form->get($key)->get('file')->getData();
 
-                if ($file instanceof UploadedFile) {
-                    $imagePath    = $image->getImage();
-                    $fileStorage  = $this->get('adapter.local_file_storage');
+            try {
+                $imagePath   = $image->getImage();
+                $fileStorage = $this->get('adapter.local_file_storage');
+                $newImage    = $fileStorage->upload($file);
+                $image->setImage($newImage);
 
-                    if (null !== $imagePath) {
-                        $fileStorage->remove($imagePath);
-                    }
+                $updateAvatar = new UpdateAvatar($profileTemplate, $participant, $locale, $user);
+                $this->get('tactician.commandbus')->handle($updateAvatar);
 
-                    $newImage = $fileStorage->upload($file);
-                    $image->setImage($newImage);
+                if (null !== $imagePath) {
+                    $fileStorage->remove($imagePath);
                 }
+
+                return $this->redirectToRoute('event_account_participant', [
+                    'participant' => $participant->getId(),
+                    'sheet'       => $sheet->getId(),
+                ]);
+            } catch (\Exception $exception) {
+                $form->addError(new FormError('account.profile.updateAvatar.error'));
             }
-
-            $updateAvatar = new UpdateAvatar($profileTemplate, $participant, $locale, $user);
-            $this->get('tactician.commandbus')->handle($updateAvatar);
-
-            return $this->redirectToRoute('event_account_participant', [
-                'participant' => $participant->getId(),
-                'sheet'       => $sheet->getId(),
-            ]);
         }
 
         return $this->render('EventBundle:Participant:updateAvatar.html.twig', [
