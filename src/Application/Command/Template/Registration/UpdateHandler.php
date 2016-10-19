@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Application\Command\Template\Registration;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
+use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateHandler
 {
@@ -23,30 +25,42 @@ class UpdateHandler
     private $registrationTemplateRepository;
 
     /**
-     * @var EventDispatcherInterface
+     * @var DelayedEventDispatcher
      */
     private $eventDispatcher;
 
     /**
      * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
-     * @param EventDispatcherInterface                $eventDispatcher
+     * @param TemplateDataFactory                     $templateDataFactory
+     * @param DelayedEventDispatcher                  $eventDispatcher
      */
     public function __construct(
         RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
-        EventDispatcherInterface $eventDispatcher
+        TemplateDataFactory $templateDataFactory,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->registrationTemplateRepository = $registrationTemplateRepository;
+        $this->templateDataFactory            = $templateDataFactory;
         $this->eventDispatcher                = $eventDispatcher;
     }
 
     /**
      * @param Update $update
+     *
+     * @throws NomenclatureNotFoundException
      */
     public function handle(Update $update)
     {
         $registrationTemplate = $update->registrationTemplate;
+
         $registrationTemplate->setTitle($update->title);
         $registrationTemplate->setValue($update->value);
+
+        try {
+            $this->templateDataFactory->createFromTemplate($registrationTemplate);
+        } catch (\RuntimeException $exception) {
+            throw new NomenclatureNotFoundException($exception->getMessage());
+        }
 
         $this->registrationTemplateRepository->set($registrationTemplate);
 

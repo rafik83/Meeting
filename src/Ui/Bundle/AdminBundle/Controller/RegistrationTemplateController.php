@@ -12,10 +12,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Template\Registration\AddLocale;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
+use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,13 +72,22 @@ class RegistrationTemplateController extends Controller
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
 
         if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.template.registration.update.success');
+            try {
+                $this->get('tactician.commandbus')->handle($update);
+                $this->addFlash('success', 'flash.admin.template.registration.update.success');
 
-            return $this->redirectToRoute('admin_template_registration_builder', [
-                'template' => $template->getId(),
-                'locale'   => $locale,
-            ]);
+                return $this->redirectToRoute('admin_template_registration_builder', [
+                    'template' => $template->getId(),
+                    'locale'   => $locale,
+                ]);
+            } catch (NomenclatureNotFoundException $exception) {
+                $this->addFlash('error', 'flash.admin.template.registration.update.error.nomenclatureNotFound');
+                $updateForm->get('value')->addError(
+                    new FormError(
+                        $this->get('translator')->trans('validators.admin.template.registration.update.error.nomenclatureNotFound', [], 'validators')
+                    )
+                );
+            }
         }
 
         // Add warning if some locales translations are incompletes

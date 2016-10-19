@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -287,6 +288,8 @@ class TemplateDataFactory
      * @param string $fallback
      *
      * @return mixed
+     *
+     * @throws NomenclatureNotFoundException
      */
     private function buildObject(array $config, $locale, $fallback)
     {
@@ -296,6 +299,10 @@ class TemplateDataFactory
         if ($object instanceof TemplateObject\Nomenclature) {
             if ($object->getNomenclatureId()) {
                 $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+            }
+
+            if ($object->getNomenclatureId() === '') {
+                throw new NomenclatureNotFoundException();
             }
         }
 
