@@ -1775,6 +1775,7 @@ services:
         arguments:
             - '@query.order.summary.groups_view_query_handler'
             - '@query.order.summary.promotion_codes_view_query_handler'
+            - '@order.balance'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
     query.order.pro_forma_query_handler:
