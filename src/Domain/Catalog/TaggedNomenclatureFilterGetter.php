@@ -81,6 +81,10 @@ class TaggedNomenclatureFilterGetter
             $tag
         );
 
+        if ($taggedNomenclatureFilter === null) {
+            return [];
+        }
+
         $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
             $event,
             $taggedNomenclatureFilter->getNomenclaturesId()

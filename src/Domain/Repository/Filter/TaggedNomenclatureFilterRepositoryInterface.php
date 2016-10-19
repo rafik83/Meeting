@@ -29,7 +29,7 @@ interface TaggedNomenclatureFilterRepositoryInterface
      * @param Event  $event
      * @param string $tag
      * 
-     * @return TaggedNomenclatureFilter
+     * @return TaggedNomenclatureFilter|null
      */
     public function getByEventAndTag(Event $event, $tag);
 }

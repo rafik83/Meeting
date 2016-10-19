@@ -322,7 +322,7 @@ class Block extends AbstractChild
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
-                    $tagged[$tag][] = $object->getKeyForLabel($object->getNomenclatureLabel());
+                    $tagged[$tag][] = $object->getNomenclatureLabel();
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
                 }
