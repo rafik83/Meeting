@@ -12,16 +12,30 @@
                     {% set value = taggedData[tag.tag]|default([])|join(', ') %}
                     {% if tag.tag in ["sheet_country", "participant_country"] %}
                         {% for taggedInfo in taggedData[tag.tag]|default([]) %}
-                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
-                                {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
-                            </a>
+                            {% if not isCatalog %}
+                                <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
+                            {% endif %}
+
+                            {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+
+                            {% if not isCatalog %}
+                                </a>
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         {% if value is url %}
                             <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
                             </a>
                         {% else %}
-                            <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">{{ value }}</a>
+                            {% if not isCatalog %}
+                                <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
+                            {% endif %}
+
+                            {{ value }}
+
+                            {% if not isCatalog %}
+                                </a>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </li>
