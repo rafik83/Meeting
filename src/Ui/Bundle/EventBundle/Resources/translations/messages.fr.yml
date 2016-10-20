@@ -63,14 +63,6 @@ navigation.links.meetingRequest.proposal: 'Propositions de RDV'
 navigation.links.meetingRequest.approved: 'Acceptées'
 navigation.links.meetingRequest.refused: 'Refusées'
 navigation.links.meetingRequest.sent: 'Demandes en attente'
-navigation.links.happening.accept: Acceptées
-navigation.links.happening.approved: Acceptées
-navigation.links.happening.decline: Refusées
-navigation.links.happening.open_date: 'Disponible le'
-navigation.links.happening.proposal: 'Propositions de RDV'
-navigation.links.happening.refused: Refusées
-navigation.links.happening.sent: 'Demandes en attente'
-navigation.links.happening.waiting: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
