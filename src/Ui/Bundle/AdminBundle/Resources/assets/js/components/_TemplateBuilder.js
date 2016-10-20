@@ -725,8 +725,7 @@ TagObject.prototype.save = function ()
 
         if (this.config.tags[index] === undefined) {
             this.config.tags[index] = {
-                tag: null,
-                label: {}
+                tag: null
             }
         }
 
