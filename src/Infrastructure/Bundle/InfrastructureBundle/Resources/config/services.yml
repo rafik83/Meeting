@@ -835,6 +835,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler
         arguments:
             - '@repository.template.registration_template_repository'
+            - '@template.template_data_factory'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }

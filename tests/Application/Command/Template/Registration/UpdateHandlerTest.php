@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,9 +58,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // mock
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
 
-        $handler = new UpdateHandler($registrationTemplateRepository->reveal(), $eventDispatcher->reveal());
+        $handler = new UpdateHandler(
+            $registrationTemplateRepository->reveal(),
+            $templateDataFactory->reveal(),
+            $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 
@@ -103,14 +109,16 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // mock
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $registrationTemplateUpdated = new RegistrationTemplateUpdatedEvent($event);
         $eventDispatcher
             ->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated
             )->shouldBeCalled();
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
+            $templateDataFactory->reveal(),
             $eventDispatcher->reveal()
         );
         $handler->handle($update);

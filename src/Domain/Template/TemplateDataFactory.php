@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -17,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 
 class TemplateDataFactory
@@ -236,7 +238,7 @@ class TemplateDataFactory
             return $this->buildObject($config, $locale, $fallback);
         }
 
-        throw new \Exception();
+        throw new BuildNotImplementedException('config given is not a block nor an object');
     }
 
     /**
@@ -287,6 +289,8 @@ class TemplateDataFactory
      * @param string $fallback
      *
      * @return mixed
+     *
+     * @throws NomenclatureNotFoundException
      */
     private function buildObject(array $config, $locale, $fallback)
     {
@@ -294,6 +298,10 @@ class TemplateDataFactory
         $object = new $class($config['key'], $config['type'], $config['config'], $locale, $fallback);
 
         if ($object instanceof TemplateObject\Nomenclature) {
+            if ($object->getNomenclatureId() === '') {
+                throw new NomenclatureNotFoundException();
+            }
+
             if ($object->getNomenclatureId()) {
                 $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
             }
@@ -306,11 +314,13 @@ class TemplateDataFactory
      * @param int $id
      *
      * @return Nomenclature
+     *
+     * @throws NomenclatureNotFoundException
      */
     private function getNomenclature($id)
     {
         if (!isset($this->nomenclatures[$id])) {
-            throw new \RuntimeException(
+            throw new NomenclatureNotFoundException(
                 sprintf(
                     'Nomenclature "%s" not found. Available nomenclatures are "%s"',
                     $id,
