@@ -8,6 +8,10 @@ function AjaxAutocomplete(element) {
 
     this.initSelect(function (select2) {
         this.autocompleteElement = select2;
+
+        this.prefill();
+
+        // Select2 Event Listener
         this.autocompleteElement.on('select2:select', this.selectTag.bind(this));
         this.autocompleteElement.on('select2:unselect', this.unselectTag.bind(this));
     }.bind(this));
@@ -55,6 +59,18 @@ AjaxAutocomplete.prototype.updateParentInput = function () {
     ).join(',');
 
     this.parentInput.value = localizations.toString();
+};
+
+AjaxAutocomplete.prototype.prefill = function () {
+    var requestLocalizations = this.parentInput.value.split(',');
+
+    requestLocalizations.forEach(function (localization) {
+        var option = '<option selected="selected" value="' + localization + '">' + localization + '</option>';
+
+        this.autocompleteElement.append(option);
+    }.bind(this));
+
+    this.autocompleteElement.trigger('change');
 };
 
 AjaxAutocomplete.prototype.onSuccess = function (data) {
