@@ -3,7 +3,7 @@
 <div class="catalog__research">
     <div class="filter">
         <h3>{{ searchForm.state.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
-        <ul class="radio" data-message-at-least-one-checked="{{ ('form.search.' ~ searchForm.state.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
+        <ul class="radio">
             {% for state in searchForm.children.state %}
                 <li class="filter__item">
                     <label class="checkbox-inline">
@@ -25,7 +25,17 @@
     {% if searchForm.type is defined %}
         <div class="filter">
             <h3>{{ searchForm.type.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
-            {{ form_widget(searchForm.type) }}
+
+            <ul data-message-at-least-one-checked="{{ ('form.search.' ~ searchForm.type.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
+                {% for child in searchForm.type.children %}
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label">{{ form_widget(child) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+
         </div>
     {% endif %}
 </div>
