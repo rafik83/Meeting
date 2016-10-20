@@ -108,12 +108,12 @@ interface RequestRepositoryInterface
     public function getRequestsByEventAndUser(Event $event, User $user);
 
     /**
-     * @param Sheet  $sheet
-     * @param string $state
+     * @param Sheet $sheet
+     * @param array $filters
      *
      * @return int
      */
-    public function countSheetState(Sheet $sheet, $state);
+    public function countSheetState(Sheet $sheet, array $filters = []);
 
     /**
      * @param Sheet $sheet

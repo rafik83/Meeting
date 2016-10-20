@@ -27,8 +27,8 @@ final class Category
     const CATALOG      = 'navigation.category.catalog';
     const CATALOG_ICON = 'icon-Contact_1';
 
-    const HAPPENING      = 'navigation.category.happening';
-    const HAPPENING_ICON = 'icon-RDV';
+    const MEETING      = 'navigation.category.meeting';
+    const MEETING_ICON = 'icon-RDV';
 
     const PLANNING      = 'navigation.category.planning';
     const PLANNING_ICON = 'icon-Calendrier';
@@ -39,7 +39,7 @@ final class Category
         self::SHEET,
         self::PACKAGE,
         self::CATALOG,
-        self::HAPPENING,
+        self::MEETING,
         self::PLANNING,
     ];
 }
