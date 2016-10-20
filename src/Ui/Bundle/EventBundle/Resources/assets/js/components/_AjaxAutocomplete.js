@@ -1,6 +1,6 @@
-require('select2');
-
 var $ = require('jquery');
+
+require('select2');
 
 function AjaxAutocomplete(element) {
     this.element = element;
@@ -20,12 +20,14 @@ function AjaxAutocomplete(element) {
 AjaxAutocomplete.prototype.initSelect = function (callback) {
     var select2 = $(this.element).select2({
         tags: false,
+        data: [],
         minimumInputLength: 3,
         maximumInputLength: 50,
         placeholder: this.element.dataset.placeholder,
         tokenSeparators: [','],
         language: {
-            noResults: ''
+            noResults: '',
+            errorLoading: ''
         },
         ajax: {
             url: this.element.dataset.action,
@@ -54,18 +56,25 @@ AjaxAutocomplete.prototype.unselectTag = function () {
 AjaxAutocomplete.prototype.updateParentInput = function () {
     var localizations = $.map(this.autocompleteElement.select2('data'),
         function (localization) {
-            return localization.text;
+            if (localization.text != "") {
+                return localization.text;
+            }
         }
     ).join(',');
 
     this.parentInput.value = localizations.toString();
+    this.parentInput.dispatchEvent(new Event('change'));
 };
 
 AjaxAutocomplete.prototype.prefill = function () {
+    if (this.parentInput.value == '') {
+        return;
+    }
+
     var requestLocalizations = this.parentInput.value.split(',');
 
-    requestLocalizations.forEach(function (localization) {
-        var option = '<option selected="selected" value="' + localization + '">' + localization + '</option>';
+    requestLocalizations.forEach(function (localization, index) {
+        var option = '<option selected="selected" value="' + index + '">' + localization + '</option>';
 
         this.autocompleteElement.append(option);
     }.bind(this));
@@ -74,14 +83,16 @@ AjaxAutocomplete.prototype.prefill = function () {
 };
 
 AjaxAutocomplete.prototype.onSuccess = function (data) {
-    return {
-        results: $.map(data, function (localization) {
-            return {
-                id: localization.id,
-                text: localization.name
-            }
-        })
-    };
+    var results = [];
+
+    $.map(data, function (localization) {
+        results.push({
+            id: localization.id,
+            text: localization.name
+        });
+    });
+
+    return { results: results };
 };
 
 module.exports = AjaxAutocomplete;

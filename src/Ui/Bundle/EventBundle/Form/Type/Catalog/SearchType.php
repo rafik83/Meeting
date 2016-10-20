@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -92,7 +93,7 @@ class SearchType extends AbstractType
             ],
         ]);
 
-        $builder->add(self::FILTER_LOCALIZATION, TextType::class, [
+        $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
             'label'    => 'form.search.localization.label',
             'required' => false
         ]);

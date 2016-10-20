@@ -366,7 +366,7 @@ class SheetSearchQueryBuilder
     protected function filterByLocalization(array &$filters)
     {
         if (isset($filters['localization'])) {
-            $localizations = explode(' ', $filters['localization']);
+            $localizations = explode(',', $filters['localization']);
 
             $boolQuery = new BoolQuery();
 
