@@ -92,16 +92,14 @@ class SearchType extends AbstractType
             ],
         ]);
 
-        if (count($positionViews) > 1) {
-            $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
-                'label'   => 'form.search.position.label',
-                'choices' => $positionViews,
-            ]);
-        }
-        $builder
-            ->add('content', TextType::class, [
-                'label' => 'form.search.content.label',
-            ]);
+        $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
+            'label'   => 'form.search.position.label',
+            'choices' => $positionViews,
+        ]);
+
+        $builder->add('content', TextType::class, [
+            'label' => 'form.search.content.label',
+        ]);
     }
 
     /**
