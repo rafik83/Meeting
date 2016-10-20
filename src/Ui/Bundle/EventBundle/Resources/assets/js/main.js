@@ -54,9 +54,6 @@ function init (target) {
         });
     });
 
-
-
-
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
         $(element).intlTelInput({
             initialCountry: $(element).data('initial-country'),
@@ -69,7 +66,7 @@ function init (target) {
         event.preventDefault();
     });
 
-    $('.catalog form input, .catalog form select', target).on('change', function () {
+    $('.catalog form input, .catalog form select:not([data-disable-auto-submit])', target).on('change', function () {
         var result = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
 
         if ('checkbox' === $(this).attr('type')) {

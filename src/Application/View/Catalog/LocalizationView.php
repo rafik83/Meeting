@@ -15,6 +15,11 @@ class LocalizationView
     /**
      * @var string
      */
+    public $id;
+
+    /**
+     * @var string
+     */
     public $name;
 
     /**
@@ -24,6 +29,7 @@ class LocalizationView
      */
     public function __construct($name)
     {
+        $this->id   = uniqid();
         $this->name = $name;
     }
 }

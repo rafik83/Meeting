@@ -11,6 +11,17 @@
 
     {% if searchForm.localization is defined %}
         {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.localization }, false) }}
+
+        <select multiple name=""
+                id="localization-autocomplete"
+                data-parent-input="{{ searchForm.localization.vars.id }}"
+                data-disable-auto-submit
+                data-ajax-autocomplete
+                data-method="post"
+                data-action="{{ path('event_catalog_search_localization') }}"
+                data-placeholder="Paris, 75, France"
+                class="form-control">
+        </select>
     {% endif %}
 
     {% if searchForm.content is defined %}

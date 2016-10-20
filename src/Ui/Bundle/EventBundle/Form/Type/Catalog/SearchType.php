@@ -94,10 +94,7 @@ class SearchType extends AbstractType
 
         $builder->add(self::FILTER_LOCALIZATION, TextType::class, [
             'label'    => 'form.search.localization.label',
-            'required' => false,
-            'attr'     => [
-                'data-ajax-autocomplete' => null,
-            ],
+            'required' => false
         ]);
 
         $builder
