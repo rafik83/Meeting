@@ -1,6 +1,7 @@
 {{ include('EventBundle:MeetingRequest/Partials:search.html.twig', {
     'searchForm': searchForm,
-    'stateListsView': stateListsView
+    'stateListsView': stateListsView,
+    'hasResults': meetingRequestView.meetingRequestsView|length > 0
 }) }}
 
 <div class="catalog__list catalog__list--block">

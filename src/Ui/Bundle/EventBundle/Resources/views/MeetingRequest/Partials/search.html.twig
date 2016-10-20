@@ -40,26 +40,29 @@
     {% endif %}
 </div>
 
-<div class="catalog__filters">
-
-    <div class="select-all">
-    </div>
-
-    <div class="sort">
-        <div class="orderBy">
-            <strong>{{ form_label(searchForm.orderBy) }}</strong>
-
-            <div class="sort-inputs">
-                {% for orderBy in searchForm.orderBy %}
-                    <label class="radio-inline">
-                        {{ form_widget(orderBy) }}
-                        {{ orderBy.vars.label|trans({}, orderBy.vars.translation_domain) }}
-                    </label>
-                {% endfor %}
-            </div>
+{% if hasResults %}
+    <div class="catalog__filters">
+        <div class="select-all">
         </div>
 
+        <div class="sort">
+            <div class="orderBy">
+                <strong>{{ form_label(searchForm.orderBy) }}</strong>
+
+                <div class="sort-inputs">
+                    {% for orderBy in searchForm.orderBy %}
+                        <label class="radio-inline">
+                            {{ form_widget(orderBy) }}
+                            {{ orderBy.vars.label|trans({}, orderBy.vars.translation_domain) }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+{% else %}
+    {{ form_widget(searchForm.orderBy, { attr: { class: 'hide' } }) }}
+{% endif %}
 
 {{ form_end(searchForm) }}
