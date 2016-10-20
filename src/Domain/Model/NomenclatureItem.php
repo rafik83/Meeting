@@ -18,7 +18,7 @@ class NomenclatureItem
     private $key;
 
     /**
-     * @var string
+     * @var array label indexed by locale
      */
     private $label;
 
@@ -156,11 +156,15 @@ class NomenclatureItem
      */
     public function getLocales()
     {
+        if (!is_array($this->label)) {
+            return [];
+        }
+
         return array_unique(array_merge(
             array_keys($this->label),
             array_reduce($this->getChildren(), function (array $carry, NomenclatureItem $item) {
                 return array_merge($carry, $item->getLocales());
-            }, []))
-        );
+            }, [])
+        ));
     }
 }
