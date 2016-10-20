@@ -78,14 +78,19 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
         }
 
         $this->generateBooleanFilter($event->getEvent(), $templatesData);
-        $this->saveNomenclaturesOfSheetOrganizationCategories($event->getEvent(), $templatesData);
+
+        $this->taggedNomenclatureFilterRepository->deleteForEvent($event->getEvent());
+
+        foreach ([Tag::SHEET_ORGANIZATION_CATEGORY, Tag::PARTICIPANT_POSITION] as $tag) {
+            $this->saveNomenclaturesForGivenTag($event->getEvent(), $templatesData, $tag);
+        }
     }
 
     /**
      * @param Event          $event
      * @param TemplateData[] $templatesData
      */
-    private function generateBooleanFilter(Event $event, array $templatesData)
+    private function generateBooleanFilter(Event $event, array &$templatesData)
     {
         $this->booleanTemplateFilterRepository->deleteForEvent($event);
 
@@ -111,15 +116,16 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
     /**
      * @param Event          $event
      * @param TemplateData[] $templatesData
+     * @param string         $tag
      */
-    private function saveNomenclaturesOfSheetOrganizationCategories(Event $event, array $templatesData)
+    private function saveNomenclaturesForGivenTag(Event $event, array &$templatesData, $tag)
     {
         $nomenclaturesAdded = [];
 
         foreach ($templatesData as $templateData) {
             foreach ($templateData->getObjects() as $templateObject) {
                 if ($templateObject instanceof Nomenclature
-                    && $templateObject->hasTag(Tag::SHEET_ORGANIZATION_CATEGORY)
+                    && $templateObject->hasTag($tag)
                 ) {
                     $nomenclatureId = $templateObject->getNomenclatureId();
 
@@ -130,11 +136,9 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
             }
         }
 
-        $this->taggedNomenclatureFilterRepository->deleteForEvent($event);
-
         if (count($nomenclaturesAdded)) {
             $this->taggedNomenclatureFilterRepository->add(
-                new TaggedNomenclatureFilter($event, Tag::SHEET_ORGANIZATION_CATEGORY, $nomenclaturesAdded)
+                new TaggedNomenclatureFilter($event, $tag, $nomenclaturesAdded)
             );
         }
     }
