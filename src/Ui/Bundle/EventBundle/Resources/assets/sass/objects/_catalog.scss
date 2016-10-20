@@ -63,6 +63,7 @@
     align-items: flex-start;
     margin: 15px 0;
     padding: 20px;
+    width: 100%;
 
     > header {
       input[type='checkbox'] {
@@ -192,7 +193,7 @@
   position: relative;
   display: flex;
   background: #FFFFFF;
-  cursor: pointer;
+  width: 100%;
 }
 
 .catalog__item--checked {
