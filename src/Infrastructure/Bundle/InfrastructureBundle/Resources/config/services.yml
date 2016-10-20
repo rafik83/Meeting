@@ -658,6 +658,22 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
+    command.sheet.batch_draft_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchDraftHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchDraft }
+    command.sheet.batch_validation_validate_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidate }
     command.sheet.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\RemoveImageHandler
         arguments:
@@ -665,6 +681,12 @@ services:
             - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
+    command.sheet.submit_validation_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\SubmitValidationHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SubmitValidation }
     command.admin.create_handler:
         class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
         arguments:
@@ -743,6 +765,8 @@ services:
             - '@command.sheet.batch_accept_handler'
             - '@command.sheet.batch_enable_disable_handler'
             - '@command.sheet.batch_catalog_handler'
+            - '@command.sheet.batch_draft_handler'
+            - '@command.sheet.batch_validation_validate_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
     command.sheet.accept_handler:
