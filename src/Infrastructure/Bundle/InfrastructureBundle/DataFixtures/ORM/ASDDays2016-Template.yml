@@ -58,6 +58,8 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             required: false
                                             style: ''
                                             products:
+                                                - "@product_option_1_asddays->id"
+                                                - "@product_option_2_asddays->id"
                                                 - "@product_option_3_asddays->id"
                                             length:
                                             type:
@@ -183,7 +185,10 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                             max: 3
                                             default: 3
                                             products:
-                                                -  "@product_option_4_asddays->id"
+                                                -  "@product_option_8_asddays->id"
+                                                -  "@product_option_7_asddays->id"
+                                                -  "@product_option_6_asddays->id"
+                                                -  "@product_option_5_asddays->id"
                                             style: style-1
                                             help:
                                                 en: ''
