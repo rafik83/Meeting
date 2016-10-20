@@ -1,6 +1,5 @@
 .catalog {
   margin-top: 15px;
-  transition: padding 0.5s ease-in-out;
 }
 
 .catalog--advanced {
@@ -56,14 +55,12 @@
 
     > [class*='col-'] {
       display: flex;
-      flex-direction: column;
     }
   }
 
   .catalog__item {
     flex-direction: column;
     align-items: flex-start;
-    height: 100%;
     margin: 15px 0;
     padding: 20px;
 
@@ -213,14 +210,10 @@
 .catalog__research {
   background: #fff;
   position: absolute;
-  left: -300px;
   top: 0;
   width: 300px;
-  min-height: 400px;
-  height: 100%;
   padding: 25px;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, .3);
-  transition: left 0.5s ease-in-out;
   margin-left: -20px;
 
   .btn {
