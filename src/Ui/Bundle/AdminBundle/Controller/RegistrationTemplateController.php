@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Template\Registration\AddLocale;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -85,6 +86,13 @@ class RegistrationTemplateController extends Controller
                 $updateForm->get('value')->addError(
                     new FormError(
                         $this->get('translator')->trans('validators.admin.template.registration.update.error.nomenclatureNotFound', [], 'validators')
+                    )
+                );
+            } catch (TemplateException $exception) {
+                $this->addFlash('error', 'flash.admin.template.registration.update.error.template');
+                $updateForm->get('value')->addError(
+                    new FormError(
+                        $this->get('translator')->trans('validators.admin.template.registration.update.error.template', [], 'validators')
                     )
                 );
             }

@@ -54,6 +54,7 @@ flash.admin.spot.create.success: 'Le lieu a bien été créé'
 flash.admin.template.package.duplicate.success: 'Template de forfait dupliqué avec succès'
 flash.admin.template.package.update.success: 'Template de forfait modifié avec succès'
 flash.admin.template.registration.update.error.nomenclatureNotFound: "Un objet nomenclature de ce template n'est pas correctement rempli"
+flash.admin.template.registration.update.error.template: "Il y a un problème avec votre template"
 flash.admin.template.registration.update.success: 'Template d''Inscription modifié avec succès'
 flash.admin.transaction.create.success: 'La transaction a été créée'
 flash.admin.transaction.remove.success: 'La transaction a été supprimée'

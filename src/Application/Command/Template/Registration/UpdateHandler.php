@@ -14,8 +14,10 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Symfony\Component\Debug\Exception\ContextErrorException;
 
 class UpdateHandler
 {
@@ -58,8 +60,8 @@ class UpdateHandler
 
         try {
             $this->templateDataFactory->createFromTemplate($registrationTemplate);
-        } catch (\RuntimeException $exception) {
-            throw new NomenclatureNotFoundException($exception->getMessage());
+        } catch (ContextErrorException $exception) {
+            throw new TemplateException($exception->getMessage());
         }
 
         $this->registrationTemplateRepository->set($registrationTemplate);
