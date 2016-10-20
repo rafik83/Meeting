@@ -1858,7 +1858,7 @@ services:
             - '@query.navigation.category_member_space_view_query_handler'
             - '@query.navigation.category_billing_view_query_handler'
             - '@query.navigation.category_catalog_view_query_handler'
-            - '@query.navigation.category_happening_view_query_handler'
+            - '@query.navigation.category_meeting_view_query_handler'
             - '@query.navigation.category_planning_view_query_handler'
             - '@query.navigation.category_sheet_view_query_handler'
             - '@query.navigation.category_package_view_query_handler'
@@ -1871,7 +1871,7 @@ services:
         arguments:
             - '@datetime'
             - '@navigation.navigation_builder'
-    query.navigation.category_happening_view_query_handler:
+    query.navigation.category_meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler
         arguments:
             - '@datetime'
