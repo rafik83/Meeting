@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotHandler;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
@@ -55,8 +56,7 @@ class AssignSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
         $handler = new AssignSpotHandler($sheetRepository->reveal(), $spotRepository->reveal());
-
-        $result = $handler->handle($command);
+        $result  = $handler->handle($command);
 
         $expectedResult = new AssignSpotResult(2);
 
@@ -84,14 +84,17 @@ class AssignSpotHandlerTest extends \PHPUnit_Framework_TestCase
         $spotRepository->findByReference($event, '')->shouldNotBeCalled();
 
         $handler = new AssignSpotHandler($sheetRepository->reveal(), $spotRepository->reveal());
-        $result = $handler->handle($command);
+        $result  = $handler->handle($command);
 
         $expectedResult = new AssignSpotResult(0);
 
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testHandleException()
+    /**
+     * @throws SpotNotFoundException
+     */
+    public function testHandleSpotNotFoundException()
     {
         $this->expectException(SpotNotFoundException::class);
 
@@ -107,6 +110,32 @@ class AssignSpotHandlerTest extends \PHPUnit_Framework_TestCase
         // mock
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $spotRepository->findByReference($event, 'A02')->shouldBeCalled()->willReturn(null);
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->set($sheet)->shouldNotBeCalled();
+
+        $handler = new AssignSpotHandler($sheetRepository->reveal(), $spotRepository->reveal());
+        $handler->handle($command);
+    }
+
+    /**
+     * @throws SpotNotActiveException
+     */
+    public function testHandleSpotNotActiveException()
+    {
+        $this->expectException(SpotNotActiveException::class);
+
+        $event = EventFactory::createEvent();
+        $type  = new Type($event);
+        $spot  = new Spot('A01', $event, 3, 3, 3, false);
+        $user  = new User('test@test.com', 'salt', 'password', 'fr');
+        $date  = new \DateTime();
+        $sheet = new Sheet($event, $type, [], $user, $date);
+
+        $command = new AssignSpot($event, $sheet, 'A02');
+
+        // mock
+        $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $spotRepository->findByReference($event, 'A02')->shouldBeCalled()->willReturn($spot);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->set($sheet)->shouldNotBeCalled();
 
