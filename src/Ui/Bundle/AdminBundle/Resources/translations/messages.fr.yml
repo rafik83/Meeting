@@ -254,6 +254,7 @@ admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
 admin.sheet.assign.spot.exception: Une erreur est survenu
 admin.sheet.assign.spot.notFound: "Ce lieu n'existe pas"
+admin.sheet.assign.spot.notActive: "Ce lieu n'est pas actif"
 admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.category: Catégorie

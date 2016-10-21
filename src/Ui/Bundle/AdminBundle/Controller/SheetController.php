@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
@@ -253,6 +254,8 @@ class SheetController extends Controller
             $result = $this->get('tactician.commandbus')->handle($command);
         } catch (SpotNotFoundException $exception) {
             return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.notFound')], 404);
+        } catch (SpotNotActiveException $exception) {
+            return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.notActive')], 404);
         } catch (\Exception $exception) {
             return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.exception')], 500);
         }

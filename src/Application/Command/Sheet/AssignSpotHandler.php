@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
@@ -41,6 +42,7 @@ class AssignSpotHandler
      *
      * @return AssignSpotResult
      *
+     * @throws SpotNotActiveException
      * @throws SpotNotFoundException
      */
     public function handle(AssignSpot $assignSpot)
@@ -53,6 +55,10 @@ class AssignSpotHandler
 
             if (null === $spot) {
                 throw new SpotNotFoundException();
+            }
+
+            if (!$spot->isActive()) {
+                throw new SpotNotActiveException();
             }
 
             $assignSpot->sheet->setSpot($spot);
