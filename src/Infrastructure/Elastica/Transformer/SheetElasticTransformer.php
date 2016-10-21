@@ -159,6 +159,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'              => implode(' ', $content),
                 'country'              => $this->getCountryNames($templateData, $sheet->getEvent()->getLocales()),
+                'country_autocomplete' => $this->getCountryNames($templateData, $sheet->getEvent()->getLocales()),
                 'city'                 => $this->getCity($templateData),
                 'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($templateData),
             ],

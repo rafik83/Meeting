@@ -29,7 +29,7 @@ class LocalizationView
      */
     public function __construct($name)
     {
-        $this->id   = uniqid();
+        $this->id   = strtolower(str_replace(' ', '-', $name));
         $this->name = $name;
     }
 }

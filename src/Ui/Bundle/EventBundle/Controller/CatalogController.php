@@ -121,6 +121,8 @@ class CatalogController extends Controller
     }
 
     /**
+     * Get localization asynchronously
+     *
      * @param Request     $request
      * @param EventDomain $eventDomain
      *
@@ -128,6 +130,10 @@ class CatalogController extends Controller
      */
     public function searchLocalizationAction(Request $request, EventDomain $eventDomain)
     {
+        if (!$request->isXmlHttpRequest()) {
+            $this->createAccessDeniedException();
+        }
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $localizationView = $this->get('tactician.commandbus.query')->handle(

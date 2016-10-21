@@ -19,15 +19,23 @@ function AjaxAutocomplete(element) {
 
 AjaxAutocomplete.prototype.initSelect = function (callback) {
     var select2 = $(this.element).select2({
-        tags: false,
+        tags: true,
+        multiple: true,
         data: [],
-        minimumInputLength: 3,
+        delay: 250,
+        minimumInputLength: 2,
         maximumInputLength: 50,
         placeholder: this.element.dataset.placeholder,
         tokenSeparators: [','],
         language: {
             noResults: '',
-            errorLoading: ''
+            errorLoading: '',
+            inputTooShort: function () {
+                return '';
+            },
+            searching: function () {
+                return 'Recherche ...';
+            }
         },
         ajax: {
             url: this.element.dataset.action,
@@ -73,10 +81,10 @@ AjaxAutocomplete.prototype.prefill = function () {
 
     var requestLocalizations = this.parentInput.value.split(',');
 
-    requestLocalizations.forEach(function (localization, index) {
-        var option = '<option selected="selected" value="' + index + '">' + localization + '</option>';
+    requestLocalizations.forEach(function (localization) {
+        var option = '<option selected="selected" value="' + localization + '">' + localization + '</option>';
 
-        this.autocompleteElement.append(option);
+        this.autocompleteElement.append(option)
     }.bind(this));
 
     this.autocompleteElement.trigger('change');
@@ -92,7 +100,7 @@ AjaxAutocomplete.prototype.onSuccess = function (data) {
         });
     });
 
-    return { results: results };
+    return {results: results};
 };
 
 module.exports = AjaxAutocomplete;

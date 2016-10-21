@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Terms;
+use Elastica\Filter\Nested;
 use Elastica\Query;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
@@ -119,9 +120,32 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $zipcodes->addAggregation($zipcodeAggregations);
         $zipcodes->setFilter($filterZipcodeQuery);
 
+        // country
+        $matchCountry = new Query\Match();
+        $matchCountry->setField('country_autocomplete.' . $locale, $filter);
+
+        $nestedQuery = new Query\Nested();
+        $nestedQuery->setQuery($matchCountry);
+        $nestedQuery->setPath('country_autocomplete');
+
+        $filterCountryQuery = new \Elastica\Filter\Query();
+        $filterCountryQuery->setQuery($nestedQuery);
+
+        $countryAggregations = new Terms('countries');
+        $countryAggregations->setField('country.fr');
+        $countryAggregations->setSize(10);
+
+        $nestedCountryAggregations = new \Elastica\Aggregation\Nested('country_aggs', 'country');
+        $nestedCountryAggregations->addAggregation($countryAggregations);
+
+        $countries = new Filter('countries_aggs');
+        $countries->addAggregation($nestedCountryAggregations);
+        $countries->setFilter($filterCountryQuery);
+
         $query = new Query();
         $query->addAggregation($cities)
           ->addAggregation($zipcodes)
+          ->addAggregation($countries)
           ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();

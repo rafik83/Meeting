@@ -225,6 +225,15 @@ fos_elastica:
                         country:
                             type: nested
                             index: "not_analyzed"
+                        country_autocomplete:
+                            type: nested
+                            properties:
+                                fr:
+                                    type: string
+                                    analyzer: "autocomplete"
+                                en:
+                                    type: string
+                                    analyzer: "autocomplete"
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer

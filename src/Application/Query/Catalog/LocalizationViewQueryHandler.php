@@ -45,15 +45,24 @@ class LocalizationViewQueryHandler
 
         $localizationViews = [];
 
+        // handle city
         if (!empty($localizations['cities_aggs']['cities'])) {
             foreach ($localizations['cities_aggs']['cities']['buckets'] as $city) {
                 $localizationViews[] = new LocalizationView($city['key']);
             }
         }
 
+        // handle zipcode
         if (!empty($localizations['zipcode_aggs']['zipcodes'])) {
             foreach ($localizations['zipcode_aggs']['zipcodes']['buckets'] as $zipcode) {
                 $localizationViews[] = new LocalizationView($zipcode['key']);
+            }
+        }
+
+        // handle country
+        if (!empty($localizations['countries_aggs']['country_aggs']['countries'])) {
+            foreach ($localizations['countries_aggs']['country_aggs']['countries']['buckets'] as $country) {
+                $localizationViews[] = new LocalizationView($country['key']);
             }
         }
 
