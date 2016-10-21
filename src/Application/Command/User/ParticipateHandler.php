@@ -94,16 +94,24 @@ class ParticipateHandler
         $participantData = [];
         $templateData    = $participate->templateData;
 
-        foreach ($participate->data as $key => $value) {
-            if ($templateData->getBlock(intval(1))->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
-                $participantData = array_merge($participantData, [$key => $value]);
-            }
+        $block = $templateData->getBlock(1);
 
-            if ($templateData->getBlock(intval(1))->getObject($key)->hasTag(Tag::SHEET_DATA)) {
-                $sheetData = array_merge($sheetData, [$key => $value]);
-            }
+        if (null !== $block) {
+            foreach ($participate->data as $key => $value) {
+                $object = $block->getObject($key);
 
-            $templateData->getBlock(intval(1))->getObject($key)->setData($value);
+                if (null !== $object) {
+                    if ($object->hasTag(Tag::PARTICIPANT_DATA)) {
+                        $participantData = array_merge($participantData, [$key => $value]);
+                    }
+
+                    if ($object->hasTag(Tag::SHEET_DATA)) {
+                        $sheetData = array_merge($sheetData, [$key => $value]);
+                    }
+
+                    $object->setData($value);
+                }
+            }
         }
 
         $sheet->setRegistrationData($sheetData);
