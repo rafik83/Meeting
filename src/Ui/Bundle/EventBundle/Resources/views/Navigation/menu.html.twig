@@ -19,9 +19,10 @@
 
             <li>
                 {% set classMeeting = (isMeeting is defined) ? '' : 'btn-inactive' %}
-                <a href="{{ path('event_meeting_list_request', {'sheet': sheet.id }) }}" class="btn btn-primary {{ classMeeting }} btn-lg">
+                {% set sheetId = (userSheet is defined) ? userSheet.id : sheet.id %}
+                <a href="{{ path('event_meeting_list_request', {'sheet': sheetId }) }}" class="btn btn-primary {{ classMeeting }} btn-lg">
                     <i class="icon-RDV"></i>
-                    <span class="name">{{ 'navigation.category.happening'|trans }}</span>
+                    <span class="name">{{ 'navigation.category.meeting'|trans }}</span>
                 </a>
             </li>
         {% else %}
@@ -40,15 +41,6 @@
                     </a>
                 </li>
             {% endif %}
-        {% endif %}
-
-        {% if isMeeting is defined and sheet is defined %}
-            <li>
-                <a href="{{ path('event_meeting_list_request', {'sheet': sheet.id }) }}" class="btn btn-primary btn-lg">
-                    <i class="icon-RDV"></i>
-                    <span class="name">{{ 'navigation.category.happening'|trans }}</span>
-                </a>
-            </li>
         {% endif %}
     </ul>
 </div>

@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
+use Proximum\Vimeet\Domain\Model\Meeting\Constant;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MeetingRequestViewQueryHandler
@@ -52,12 +54,34 @@ class MeetingRequestViewQueryHandler
         return new MeetingRequestView(
             $sheet,
             $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
-            $query->meetingRequest->getState(),
-            $sheet->getType()->getTitle($sheet->getEvent()->getAvailableLocale($query->locale)),
+            $this->getFilterState($query),
+            $sheet->getType()->getTitle($query->locale),
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
             $previews
         );
+    }
+
+    /**
+     * Guess meeting request state
+     *
+     * @param MeetingRequestViewQuery $query
+     *
+     * @return string
+     */
+    private function getFilterState(MeetingRequestViewQuery $query)
+    {
+        if ($query->meetingRequest->getState() === Request::STATE_SENT) {
+            if ($query->meetingRequest->getFromSheet() === $query->sheet) {
+                return Constant::FILTER_STATE_SENT;
+            }
+
+            if ($query->meetingRequest->getToSheet() === $query->sheet) {
+                return Constant::FILTER_STATE_RECEIVE;
+            }
+        }
+
+        return $query->meetingRequest->getState();
     }
 
     /**

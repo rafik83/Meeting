@@ -70,6 +70,18 @@ class Batch extends AbstractBatch
     public $removeCatalog;
 
     /**
+     * @var bool
+     */
+    public $draft;
+
+    /**
+     * "L'utilisateur a bien completé sa fiche"
+     *
+     * @var bool
+     */
+    public $validationValidate;
+
+    /**
      * @param Admin $admin
      */
     public function __construct(Admin $admin)

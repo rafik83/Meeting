@@ -1,0 +1,70 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Event\Sheet;
+
+use DateTimeInterface;
+use Proximum\Vimeet\Domain\Model\AbstractUser;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\EventDispatcher;
+
+class SheetValidationValidateEvent extends EventDispatcher\Event
+{
+    /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
+     * @var AbstractUser
+     */
+    private $user;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $date;
+
+    /**
+     * @param Sheet             $sheet
+     * @param AbstractUser      $user
+     * @param DateTimeInterface $date
+     */
+    public function __construct(Sheet $sheet, AbstractUser $user, DateTimeInterface $date)
+    {
+        $this->sheet = $sheet;
+        $this->user  = $user;
+        $this->date  = $date;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
+    }
+
+    /**
+     * @return AbstractUser
+     */
+    public function getAuthor()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+}

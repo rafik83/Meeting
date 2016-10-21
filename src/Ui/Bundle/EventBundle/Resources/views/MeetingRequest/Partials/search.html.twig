@@ -2,48 +2,67 @@
 
 <div class="catalog__research">
     <div class="filter">
-        <h3>{{ form_label(searchForm.state) }}</h3>
-
-        {% for state in searchForm.children.state %}
-            <div class="radio">
-                <label class="control-label checkbox-inline">
-                    <span class="filter-label">
-                        {{ form_widget(state) }}
-                        {{ state.vars.label|trans({}, state.vars.translation_domain) }}
-                    </span>
-                    <span class="details">
-                        {% if stateListsView.byState(state.vars.value) is not null %}
-                            {{ stateListsView.byState(state.vars.value).count }}
-                        {% endif %}
-                    </span>
-                </label>
-            </div>
-        {% endfor %}
-
+        <h3>{{ searchForm.state.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+        <ul class="radio">
+            {% for state in searchForm.children.state %}
+                <li class="filter__item">
+                    <label class="checkbox-inline">
+                        <span class="filter-label">
+                            {{ form_widget(state) }}
+                            {{ state.vars.label|trans({}, state.vars.translation_domain) }}
+                        </span>
+                        <span class="details">
+                            {% if stateListsView.byState(state.vars.value) is not null %}
+                                {{ stateListsView.byState(state.vars.value).count }}
+                            {% endif %}
+                        </span>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 
+    {% if searchForm.type is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.type.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+
+            <ul data-message-at-least-one-checked="{{ ('form.search.' ~ searchForm.type.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
+                {% for child in searchForm.type.children %}
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label">{{ form_widget(child) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    {% endif %}
 </div>
 
-<div class="catalog__filters">
-
-    <div class="select-all">
-    </div>
-
-    <div class="sort">
-        <div class="orderBy">
-            <strong>{{ form_label(searchForm.orderBy) }}</strong>
-
-            <div class="sort-inputs">
-                {% for orderBy in searchForm.orderBy %}
-                    <label class="radio-inline">
-                        {{ form_widget(orderBy) }}
-                        {{ orderBy.vars.label|trans({}, orderBy.vars.translation_domain) }}
-                    </label>
-                {% endfor %}
-            </div>
+{% if hasResults %}
+    <div class="catalog__filters">
+        <div class="select-all">
         </div>
 
+        <div class="sort">
+            <div class="orderBy">
+                <strong>{{ form_label(searchForm.orderBy) }}</strong>
+
+                <div class="sort-inputs">
+                    {% for orderBy in searchForm.orderBy %}
+                        <label class="radio-inline">
+                            {{ form_widget(orderBy) }}
+                            {{ orderBy.vars.label|trans({}, orderBy.vars.translation_domain) }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+{% else %}
+    {{ form_widget(searchForm.orderBy, { attr: { class: 'hide' } }) }}
+{% endif %}
 
 {{ form_end(searchForm) }}

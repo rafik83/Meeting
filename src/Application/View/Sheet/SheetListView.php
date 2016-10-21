@@ -34,6 +34,11 @@ class SheetListView
     public $state;
 
     /**
+     * @var string
+     */
+    public $validationState;
+
+    /**
      * "Catégorie"
      *
      * @var array
@@ -121,6 +126,7 @@ class SheetListView
      * @param int                  $id
      * @param string               $title
      * @param string               $state
+     * @param string               $validationState
      * @param int                  $completeness
      * @param bool                 $enabled
      * @param bool                 $inCatalog
@@ -138,6 +144,7 @@ class SheetListView
         $id,
         $title,
         $state,
+        $validationState,
         $completeness,
         $enabled,
         $inCatalog,
@@ -154,6 +161,7 @@ class SheetListView
         $this->id                 = $id;
         $this->title              = $title;
         $this->state              = $state;
+        $this->validationState    = $validationState;
         $this->completeness       = $completeness;
         $this->enabled            = $enabled;
         $this->inCatalog          = $inCatalog;

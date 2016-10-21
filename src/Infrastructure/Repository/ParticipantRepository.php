@@ -222,22 +222,4 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isParticipantForAnotherEvent(Event $currentEvent, User $user)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('participant.id')
-            ->from(Participant::class, 'participant')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event != :event AND participant.user = :user')
-            ->setParameter('event', $currentEvent)
-            ->setParameter('user', $user)
-            ->setMaxResults(1);
-
-        return !empty($queryBuilder->getQuery()->getOneOrNullResult());
-    }
 }

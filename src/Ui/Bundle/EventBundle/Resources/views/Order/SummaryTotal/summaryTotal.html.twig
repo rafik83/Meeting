@@ -10,10 +10,17 @@
                 <div class="content-header clearfix">
                     <h2 class="pull-left">{{ 'package.summary.title'|trans }}</h2>
                     <div class="pull-right">
+                        <a class="btn btn-primary" href="{{ path('event_order_list', {
+                            'sheet': view.sheet.id
+                        }) }}">
+                            {{ 'package.summary.order-list'|trans }}
+                        </a>
                         <a class="btn btn-primary" href="{{ path('event_package_step', {
                             'sheet': view.sheet.id,
                             'step': 1
-                        }) }}">{{ 'package.summary.edit'|trans }}</a>
+                        }) }}">
+                            {{ 'package.summary.edit'|trans }}
+                        </a>
                     </div>
                 </div>
 
@@ -59,6 +66,12 @@
                                 </ul>
                             </div>
                         </div>
+                        
+                        {% if 0 < view.remainingToPay %}
+                            <div class="text-right">
+                                <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'order.list.pay_remaining'|trans }}</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </section>
             </div>

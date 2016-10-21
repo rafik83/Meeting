@@ -31,6 +31,10 @@ class ItemToSinglesTransformer extends AbstractTransformer
         $item  = self::findByKey($this->nomenclature->getLastLevel(), $value);
         $depth = $this->nomenclature->getDepth();
 
+        if (null === $item) {
+            throw new TransformationFailedException(sprintf('Item is null for this value %s', $value));
+        }
+
         if ($depth === 1) {
             return [
                 'first' => $item,
@@ -46,9 +50,9 @@ class ItemToSinglesTransformer extends AbstractTransformer
                 'second' => $item->getParent(),
                 'third'  => $item,
             ];
-        } else {
-            throw new TransformationFailedException(sprintf('Unable to handle depth of %s', $depth));
         }
+
+        throw new TransformationFailedException(sprintf('Unable to handle depth of %s', $depth));
     }
 
     /**

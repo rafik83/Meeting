@@ -306,6 +306,8 @@ admin.sheet.state: Etat
 admin.sheet.title: Participations
 admin.sheet.title.count: '{0} Aucun participation|{1} 1 Participation|]1,Inf[ %count% Participations'
 admin.sheet.trace.accept: 'Acceptée le %at%'
+admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
+admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
 admin.sheet.trace.author: 'par %by%'
 admin.sheet.trace.auto: automatiquement
 admin.sheet.trace.changed_type: 'Le type de participation a été changé'
@@ -526,6 +528,9 @@ event.sheet.payment.title: 'Mode de paiement'
 event.sheet.state.accepted: Acceptée
 event.sheet.state.pending: 'En attente'
 event.sheet.state.validated: Validée
+event.sheet.validationState.draft: Brouillon
+event.sheet.validationState.pending: 'Soumise à validation'
+event.sheet.validationState.validated: 'Validée'
 event.sheet.summary.action: Action
 event.sheet.summary.product: Produit
 event.sheet.summary.quantity: Quantité

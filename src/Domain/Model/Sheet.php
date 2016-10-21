@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
-use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
  * "Fiche de participation".
@@ -23,6 +23,13 @@ class Sheet implements TraceableInterface
     const STATE_PENDING   = 'pending';
     const STATE_VALIDATED = 'validated';
     const STATE_ACCEPTED  = 'accepted';
+
+    /**
+     * "Etat de validation de la fiche"
+     */
+    const STATE_VALIDATION_DRAFT     = 'draft';
+    const STATE_VALIDATION_PENDING   = 'pending';
+    const STATE_VALIDATION_VALIDATED = 'validated';
 
     /**
      * @var int
@@ -75,6 +82,13 @@ class Sheet implements TraceableInterface
      * @var string
      */
     private $state = self::STATE_PENDING;
+
+    /**
+     * "Etat de la validation de la fiche par l'utilisateur"
+     *
+     * @var string
+     */
+    private $validationState = self::STATE_VALIDATION_DRAFT;
 
     /**
      * @var int
@@ -145,6 +159,19 @@ class Sheet implements TraceableInterface
             self::STATE_ACCEPTED,
             self::STATE_PENDING,
             self::STATE_VALIDATED,
+            self::STATE_VALIDATION_PENDING
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAllValidationStates()
+    {
+        return [
+            self::STATE_VALIDATION_DRAFT,
+            self::STATE_VALIDATION_PENDING,
+            self::STATE_VALIDATION_VALIDATED,
         ];
     }
 
@@ -302,6 +329,14 @@ class Sheet implements TraceableInterface
     public function getPackageData()
     {
         return [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getValidationState()
+    {
+        return $this->validationState;
     }
 
     /**
@@ -543,6 +578,20 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @param string $validationState
+     *
+     * @return Sheet
+     */
+    public function setValidationState($validationState)
+    {
+        if (in_array($validationState, self::getAllValidationStates())) {
+            $this->validationState = $validationState;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isAccepted()
@@ -572,6 +621,23 @@ class Sheet implements TraceableInterface
     public function isEnabled()
     {
         return true === $this->enable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidationPending()
+    {
+        return $this->validationState === self::STATE_VALIDATION_PENDING;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidationDraft()
+    {
+        return $this->validationState === self::STATE_VALIDATION_DRAFT;
     }
 
     /**
@@ -709,5 +775,15 @@ class Sheet implements TraceableInterface
     public function removeSpot()
     {
         $this->spot = null;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function submitToValidation()
+    {
+        $this->validationState = self::STATE_VALIDATION_PENDING;
+
+        return $this;
     }
 }
