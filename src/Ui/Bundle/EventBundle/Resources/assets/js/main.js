@@ -34,7 +34,7 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: true
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
 
@@ -54,7 +54,7 @@ function init (target) {
             nationalMode: false
         });
     });
-
+    
     $('.catalog form', target).on('submit', function (event) {
         event.preventDefault();
     });

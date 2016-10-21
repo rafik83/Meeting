@@ -382,6 +382,14 @@ class Product
     }
 
     /**
+     * @return int|null
+     */
+    public function getRawQuantityMax()
+    {
+        return $this->quantityMax;
+    }
+
+    /**
      * @return int
      */
     public function getAvailabilityCurrent()

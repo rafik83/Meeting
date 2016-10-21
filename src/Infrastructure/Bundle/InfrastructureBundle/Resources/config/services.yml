@@ -860,6 +860,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler
         arguments:
             - '@repository.template.registration_template_repository'
+            - '@template.template_data_factory'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
@@ -1800,6 +1801,7 @@ services:
         arguments:
             - '@query.order.summary.groups_view_query_handler'
             - '@query.order.summary.promotion_codes_view_query_handler'
+            - '@order.balance'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\SummaryQuery }
     query.order.pro_forma_query_handler:
@@ -1852,6 +1854,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypeViewQuery }
 
+    query.type.meeting_type_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQueryHandler
+        arguments:
+            - '@catalog.visible_participation_types'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
+
     ##
     # Navigation builder
     ##
@@ -1876,7 +1885,7 @@ services:
             - '@query.navigation.category_member_space_view_query_handler'
             - '@query.navigation.category_billing_view_query_handler'
             - '@query.navigation.category_catalog_view_query_handler'
-            - '@query.navigation.category_happening_view_query_handler'
+            - '@query.navigation.category_meeting_view_query_handler'
             - '@query.navigation.category_planning_view_query_handler'
             - '@query.navigation.category_sheet_view_query_handler'
             - '@query.navigation.category_package_view_query_handler'
@@ -1889,8 +1898,8 @@ services:
         arguments:
             - '@datetime'
             - '@navigation.navigation_builder'
-    query.navigation.category_happening_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Navigation\Category\HappeningViewQueryHandler
+    query.navigation.category_meeting_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler
         arguments:
             - '@datetime'
             - '@navigation.navigation_builder'

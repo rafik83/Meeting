@@ -40,14 +40,14 @@ class MeetingRequestListViewQueryHandler
     }
 
     /**
-     * @param MeetingRequestListViewQuery $meetingRequestListViewQuery
+     * @param MeetingRequestListViewQuery $query
      *
      * @return MeetingRequestListView
      */
-    public function handle(MeetingRequestListViewQuery $meetingRequestListViewQuery)
+    public function handle(MeetingRequestListViewQuery $query)
     {
         $meetingRequests = $this->meetingRequestRepository
-            ->getAllRequestBySheet($meetingRequestListViewQuery->sheet, $meetingRequestListViewQuery->filters);
+            ->getAllRequestBySheet($query->sheet, $query->filters);
 
         $meetingRequestListView = new MeetingRequestListView();
 
@@ -55,16 +55,16 @@ class MeetingRequestListViewQueryHandler
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
                 new MeetingRequestViewQuery(
                     $meetingRequest,
-                    $meetingRequestListViewQuery->sheet,
-                    $meetingRequestListViewQuery->locale
+                    $query->sheet,
+                    $query->locale
                 )
             );
 
             $meetingRequestListView->addRequestView($meetingRequestView);
         }
 
-        if (!empty($meetingRequestListViewQuery->filters['orderBy'])) {
-            $order = $meetingRequestListViewQuery->filters['orderBy'];
+        if (!empty($query->filters['orderBy'])) {
+            $order = $query->filters['orderBy'];
             $meetingRequestListView->sortBy($order);
         }
 

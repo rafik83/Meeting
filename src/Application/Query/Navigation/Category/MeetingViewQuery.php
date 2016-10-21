@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class HappeningViewQuery extends AbstractCategoryViewQuery
+class MeetingViewQuery extends AbstractCategoryViewQuery
 {
     /**
      * HappeningViewQuery constructor.

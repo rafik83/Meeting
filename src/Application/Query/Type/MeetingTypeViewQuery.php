@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Meeting;
+namespace Proximum\Vimeet\Application\Query\Type;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class StateListViewQuery
+class MeetingTypeViewQuery
 {
     /**
      * @var Sheet
@@ -20,19 +20,19 @@ class StateListViewQuery
     public $sheet;
 
     /**
-     * @var array
+     * @var string
      */
-    public $filters;
+    public $locale;
 
     /**
-     * StateListViewQuery constructor.
+     * MeetingTypeViewQuery constructor.
      *
-     * @param Sheet $sheet
-     * @param array $filters
+     * @param Sheet  $sheet
+     * @param string $locale
      */
-    public function __construct(Sheet $sheet, array $filters = [])
+    public function __construct(Sheet $sheet, $locale)
     {
+        $this->locale  = $locale;
         $this->sheet   = $sheet;
-        $this->filters = $filters;
     }
 }

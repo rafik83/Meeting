@@ -56,7 +56,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
     proximum_sheet_exposant:
         __construct:
             - '@event_rdv_carnot_2016'
-            - '@type_exposant'
+            - '@type_institute_carnot'
             -
             # Titre de la fiche
                 dcc42d3d: { text: { fr: "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense." } }
@@ -100,7 +100,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
     proximum_sheet_admin:
         __construct:
             - '@event_rdv_carnot_2016'
-            - '@type_exposant'
+            - '@type_investisseur'
             - []
             - '@proximum_user_admin'
             - <dateTime()>
@@ -183,7 +183,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
     sheet_exposant3:
         __construct:
             - '@event_rdv_carnot_2016'
-            - '@type_exposant'
+            - '@type_investisseur'
             - []
             - '@user_random_3'
             - <dateTime()>
@@ -213,7 +213,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
     sheet_exposant6:
         __construct:
             - '@event_rdv_carnot_2016'
-            - '@type_exposant'
+            - '@type_visiteur'
             - []
             - '@user_random_6'
             - <dateTime()>
@@ -223,7 +223,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
     sheet_exposant7:
         __construct:
             - '@event_rdv_carnot_2016'
-            - '@type_exposant'
+            - '@type_investisseur'
             - []
             - '@user_random_13'
             - <dateTime()>

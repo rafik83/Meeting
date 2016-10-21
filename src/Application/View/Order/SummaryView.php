@@ -80,6 +80,11 @@ class SummaryView
     public $totalPlusVat;
 
     /**
+     * @var float
+     */
+    public $remainingToPay;
+
+    /**
      * @param GroupsView         $groups
      * @param PromotionCodesView $promotionCodes
      * @param bool               $vatApplicable
@@ -90,6 +95,7 @@ class SummaryView
      * @param float              $totalWithoutVat
      * @param float              $totalWithVat
      * @param string             $currency
+     * @param float              $remainingToPay
      * @param Sheet              $sheet
      */
     public function __construct(
@@ -103,6 +109,7 @@ class SummaryView
         $totalWithoutVat,
         $totalWithVat,
         $currency,
+        $remainingToPay,
         Sheet $sheet
     ) {
         $this->groups          = $groups;
@@ -116,5 +123,6 @@ class SummaryView
         $this->totalWithVat    = $totalWithVat;
         $this->currency        = $currency;
         $this->sheet           = $sheet;
+        $this->remainingToPay  = $remainingToPay;
     }
 }
