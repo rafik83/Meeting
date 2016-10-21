@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Terms;
-use Elastica\Filter\Nested;
 use Elastica\Query;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;

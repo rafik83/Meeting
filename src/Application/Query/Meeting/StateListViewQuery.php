@@ -20,12 +20,19 @@ class StateListViewQuery
     public $sheet;
 
     /**
+     * @var array
+     */
+    public $filters;
+
+    /**
      * StateListViewQuery constructor.
      *
      * @param Sheet $sheet
+     * @param array $filters
      */
-    public function __construct(Sheet $sheet)
+    public function __construct(Sheet $sheet, array $filters = [])
     {
-        $this->sheet = $sheet;
+        $this->sheet   = $sheet;
+        $this->filters = $filters;
     }
 }

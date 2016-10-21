@@ -14,6 +14,7 @@ var $                     = require('jquery'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
+    AnchorFocuser         = require('./components/_AnchorFocuser'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
@@ -34,11 +35,9 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: true
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
-
-
 
     var data = [{ id: 0, text: 'enhancement' }, { id: 1, text: 'bug' }, { id: 2, text: 'duplicate' }, { id: 3, text: 'invalid' }, { id: 4, text: 'wontfix' }];
 
@@ -51,7 +50,16 @@ function init (target) {
                 }
             },
             allowClear: false
-        });
+        })
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
+        var anchor         = window.location.hash.substring(1);
+        var anchorElements = target.getElementsByName(anchor);
+
+        if (anchor !== '' && anchor !== null && anchorElements.length > 0) {
+            new AnchorFocuser(anchorElements[0], anchor);
+        }
     });
 
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {

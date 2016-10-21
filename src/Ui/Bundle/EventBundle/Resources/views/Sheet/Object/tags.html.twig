@@ -7,7 +7,7 @@
             {% for tag in item.tags %}
                 <li>
                     {% if not isCatalog %}
-                        <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) }}" >
+                        <a href="{{ path('event_account_participant_company', {'sheet': sheet.id}) ~ '#field_' ~ tag.tag }}" >
                     {% endif %}
 
                     {{ tag['label']|localize(locale, fallback) }} :

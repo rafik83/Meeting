@@ -51,6 +51,10 @@ class CsvExporter implements ExporterInterface
     private function append($data, $depth, array &$rows, array &$locales)
     {
         foreach ($data as $id => $child) {
+            if (!isset($child['label']) || !is_array($child['label'])) {
+                continue;
+            }
+
             $row = array_pad([$id], $depth, '');
 
             foreach ($child['label'] as $locale => $label) {

@@ -158,6 +158,9 @@ fos_elastica:
                         state:
                             type: string
                             index: "not_analyzed"
+                        validationState:
+                            type: string
+                            index: "not_analyzed"
                         enabled:
                             type: boolean
                         completed:

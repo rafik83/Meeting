@@ -47,7 +47,7 @@ login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
 navigation.category.billing: Facturation
 navigation.category.catalog: 'Catalogue des participants'
-navigation.category.happening: 'Gestion de rdv'
+navigation.category.meeting: 'Gestion de rdv'
 navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: 'Agenda provisoire'
@@ -58,14 +58,11 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
-navigation.links.happening.accept: Acceptées
-navigation.links.happening.approved: Acceptées
-navigation.links.happening.decline: Refusées
-navigation.links.happening.open_date: 'Disponible le'
-navigation.links.happening.proposal: 'Propositions de RDV'
-navigation.links.happening.refused: Refusées
-navigation.links.happening.sent: 'Demandes en attente'
-navigation.links.happening.waiting: 'Demandes en attente'
+navigation.links.meetingRequest.open_date: 'Disponible le'
+navigation.links.meetingRequest.proposal: 'Propositions de RDV'
+navigation.links.meetingRequest.approved: 'Acceptées'
+navigation.links.meetingRequest.refused: 'Refusées'
+navigation.links.meetingRequest.sent: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
@@ -134,6 +131,7 @@ package.payment.total.toPay: '%total%'
 package.planning.label: 'Intitulé & descriptions'
 package.planning.quantity: Quantité
 package.planning.quantityMax: 'Quantité maximum atteinte'
+package.planning.quantityMax.forParticipation: 'Quantité totale supérieure au nombre total des participants'
 package.planning.quantityMin: 'Quantité minimum atteinte'
 package.planning.total: Total
 package.planning.unitPrice: 'Prix unitaire'
@@ -166,6 +164,7 @@ package.summary.columns.title: Intitulé
 package.summary.columns.total: Total
 package.summary.columns.unitPrice: 'Prix unitaire'
 package.summary.edit: 'Modifier ma participation'
+package.summary.order-list: 'Liste des commandes'
 package.summary.empty: 'Votre panier est vide'
 package.summary.option: Option
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
@@ -209,6 +208,9 @@ sheet.object.showMore.title: 'Voir moins'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander en RDV'
+sheet.submit.validation: 'Soumettre pour validation'
+sheet.submit.validation.pending: 'En attente de validation'
+sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.title: 'Fiche de présentation'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé

@@ -2,21 +2,7 @@
     <div class="catalog__item {#catalog__item--checked#}">
         <header></header>
         <div class="content">
-            {% for object in catalogSheetPreviewView.preview %}
-                {% if object.isImage %}
-                    {% if object.content is not empty %}
-                        <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
-                    {% else %}
-                        <h3>{{ catalogSheetPreviewView.title }}</h3>
-                    {% endif %}
-                {% else %}
-                    {% if object.isStrong %}
-                        <p><strong>{{ object.content }}</strong></p>
-                    {% else %}
-                        <p>{{ object.content }}</p>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview }, false) }}
         </div>
         <footer>
             <div class="actions">

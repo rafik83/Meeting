@@ -112,6 +112,7 @@ class SheetSearchQueryBuilder
 
         $this->filterByText($filters);
         $this->filterByState($filters);
+        $this->filterByValidationState($filters);
         $this->filterByEnabled($filters);
         $this->filterByCompleted($filters);
         $this->filterByType($filters);
@@ -224,6 +225,16 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['state']) && in_array($filters['state'], Sheet::getAllStates())) {
             $this->query->addMust(new Match('state', $filters['state']));
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByValidationState(array &$filters)
+    {
+        if (isset($filters['validationState']) && in_array($filters['validationState'], Sheet::getAllValidationStates())) {
+            $this->query->addMust(new Match('validationState', $filters['validationState']));
         }
     }
 
