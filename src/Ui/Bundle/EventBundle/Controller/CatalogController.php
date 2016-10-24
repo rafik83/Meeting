@@ -139,10 +139,16 @@ class CatalogController extends Controller
     public function searchLocalizationAction(Request $request, EventDomain $eventDomain)
     {
         if (!$request->isXmlHttpRequest()) {
-            $this->createAccessDeniedException();
+            throw $this->createNotFoundException();
         }
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
+
+        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
 
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(

@@ -130,16 +130,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'completed'            => $sheet->isCompleted(),
                 'type'                 => $sheet->getType()->getId(),
                 'categories'           => $categories,
-                'followUp'             => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()
-                                                                                         ->getId() : null,
+                'followUp'             => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
                 'participantNumber'    => count($sheet->getParticipants()),
                 'participants'         => $participants,
                 'event'                => $sheet->getEvent()->getId(),
                 'owner'                => $owner,
                 'createdAt'            => $sheet->getCreatedAt()->format('c'),
                 'inCatalog'            => $sheet->isInCatalog(),
-                'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()
-                                                                                    ->format('c') : null,
+                'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                 'booleanFilter'        => $filtersValue,
                 'hasOrder'             => $sheet->hasNotCancelledOrders(),
                 'hasCart'              => $hasCart,

@@ -38,21 +38,7 @@ function init (target) {
             allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
-
-    var data = [{ id: 0, text: 'enhancement' }, { id: 1, text: 'bug' }, { id: 2, text: 'duplicate' }, { id: 3, text: 'invalid' }, { id: 4, text: 'wontfix' }];
-
-    [].forEach.call(target.querySelectorAll('.filter-localization'), function (element) {
-        $(element).select2({
-            data: data,
-            language: {
-                noResults: function () {
-                    return $(element).data('no-results-label');
-                }
-            },
-            allowClear: false
-        })
-    });
-
+    
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
         var anchor         = window.location.hash.substring(1);
         var anchorElements = target.getElementsByName(anchor);
