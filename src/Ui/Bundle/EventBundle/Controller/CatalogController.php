@@ -14,14 +14,17 @@ use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
+use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -70,9 +73,13 @@ class CatalogController extends Controller
             new OrganizationCategoryViewQuery($event, $locale)
         );
 
+        $positionViews = $this->get('tactician.commandbus.query')->handle(
+            new PositionViewQuery($event, $locale)
+        );
+
         $filters = $this->getDefaultFilters($typeViews);
 
-        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews);
+        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews);
 
         if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
             $filters = $searchForm->getData();
@@ -101,7 +108,8 @@ class CatalogController extends Controller
             $filters,
             $paginatedResult->aggregations,
             $typeViews,
-            $organizationCategoryViews
+            $organizationCategoryViews,
+            $positionViews
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -320,29 +328,70 @@ class CatalogController extends Controller
     }
 
     /**
+     * @param PositionView[] $positionViews
+     * @param array|null     $aggregations
+     *
+     * @return array
+     */
+    private function filterPositionViews(array $positionViews, array $aggregations = null)
+    {
+        $positionField = SheetSearchAdapterInterface::ES_FIELD_POSITION;
+
+        if (null === $aggregations
+            || !isset($aggregations[$positionField])
+            || !isset($aggregations[$positionField][$positionField]['buckets'])
+        ) {
+            return [];
+        }
+
+        $aggregationsIndexedByKey = [];
+
+        foreach ($aggregations[$positionField][$positionField]['buckets'] as $item) {
+            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
+        }
+
+        foreach ($positionViews as $index => $positionView) {
+            // Show only filter which have result
+            if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
+                || $aggregationsIndexedByKey[$positionView->getKey()] === 0
+            ) {
+                unset($positionViews[$index]);
+            }
+        }
+
+        return $positionViews;
+    }
+
+    /**
      * @param array                      $filters
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
+     * @param PositionView[]             $positionViews
      *
      * @return FormInterface
      */
-    private function getSearchForm(array $filters, array $typeViews, array $organizationCategoryViews)
-    {
+    private function getSearchForm(
+        array $filters,
+        array $typeViews,
+        array $organizationCategoryViews,
+        array $positionViews
+    ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index'),
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
+            'positionViews'             => $positionViews,
         ]);
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $visibleTypes
-     * @param array  $filters
-     * @param array  $currentAggregations
-     * @param array  $typeViews
-     * @param array  $organizationCategoryViews
+     * @param Event          $event
+     * @param array          $visibleTypes
+     * @param array          $filters
+     * @param array          $currentAggregations
+     * @param TypeView[]     $typeViews
+     * @param CategoryView[] $organizationCategoryViews
+     * @param PositionView[] $positionViews
      *
      * @return FormInterface
      */
@@ -353,18 +402,14 @@ class CatalogController extends Controller
         array $filters,
         array $currentAggregations,
         array $typeViews,
-        array $organizationCategoryViews
+        array $organizationCategoryViews,
+        array $positionViews
     ) {
         $searchAdapter = $this->get('adapter.sheet_search_adapter');
 
-        if (isset($filters[SearchType::FILTER_TYPE])
-            && count($filters[SearchType::FILTER_TYPE]) === count($visibleTypes)
+        if (!isset($filters[SearchType::FILTER_TYPE])
+            || count($filters[SearchType::FILTER_TYPE]) !== count($visibleTypes)
         ) {
-            $filteredTypeViews = $this->filterTypeViews(
-                $typeViews,
-                $currentAggregations
-            );
-        } else {
             // if type filter is used, type aggs need to be done with a ES query without type filter
             $typeAggregations = $searchAdapter->getTypeAggregations(
                 $event,
@@ -372,34 +417,48 @@ class CatalogController extends Controller
                 $filters,
                 SearchType::FILTER_TYPE
             );
-
-            $filteredTypeViews = $this->filterTypeViews(
-                $typeViews,
-                $typeAggregations
-            );
         }
 
-        if (!isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
-            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-                $organizationCategoryViews,
-                $currentAggregations
-            );
-        } else {
+        if (isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
             // if organizationCategory filter is used,
             // organizationCategory aggs need to be done with a ES query without organizationCategory filter
-            $organizationCategoryAggregations = $searchAdapter->getOrganizationCategoryAggregations(
+            $categoryOrganisationAggregations = $searchAdapter->getOrganizationCategoryAggregations(
                 $event,
                 $locale,
                 $filters,
                 SearchType::FILTER_ORGANIZATION_CATEGORY
             );
+        }
 
-            $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-                $organizationCategoryViews,
-                $organizationCategoryAggregations
+        if (isset($filters[SearchType::FILTER_POSITION])) {
+            $positionAggregations = $searchAdapter->getPositionAggregations(
+                $event,
+                $locale,
+                $filters,
+                SearchType::FILTER_POSITION
             );
         }
 
-        return $this->getSearchForm($filters, $filteredTypeViews, $filteredOrganizationCategoryViews);
+        $filteredTypeViews = $this->filterTypeViews(
+            $typeViews,
+            isset($typeAggregations) ? $typeAggregations : $currentAggregations
+        );
+
+        $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
+            $organizationCategoryViews,
+            isset($categoryOrganisationAggregations) ? $categoryOrganisationAggregations : $currentAggregations
+        );
+
+        $filteredPositionViews = $this->filterPositionViews(
+            $positionViews,
+            isset($positionAggregations) ? $positionAggregations : $currentAggregations
+        );
+
+        return $this->getSearchForm(
+            $filters,
+            $filteredTypeViews,
+            $filteredOrganizationCategoryViews,
+            $filteredPositionViews
+        );
     }
 }

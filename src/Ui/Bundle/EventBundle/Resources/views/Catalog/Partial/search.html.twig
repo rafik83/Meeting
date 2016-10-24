@@ -9,6 +9,10 @@
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
 
+    {% if searchForm.position is defined %}
+        {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.position }, false) }}
+    {% endif %}
+
     {% if searchForm.localization is defined %}
         <div class="filter">
             <h3>{{ searchForm.localization.vars.label|trans({}, searchForm.localization.vars.translation_domain) }}</h3>

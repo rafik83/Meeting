@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Aggregation\Filter;
+use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
@@ -64,6 +65,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
             $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
+            $query->addAggregation($this->getNestedAggregation(self::ES_FIELD_POSITION));
         }
 
         try {
@@ -173,6 +175,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getPositionAggregations(Event $event, $locale, array $filters, $filterToRemove)
+    {
+        return $this->searchAggregations(
+            $event,
+            $locale,
+            $filters,
+            $filterToRemove,
+            self::ES_FIELD_POSITION
+        );
+    }
+
+    /**
      * @param Event  $event
      * @param string $locale
      * @param array  $filters
@@ -191,7 +207,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());
-        $query->addAggregation($this->getAggregation($elasticField));
+
+        if($elasticField === self::ES_FIELD_POSITION) {
+            $query->addAggregation($this->getNestedAggregation($elasticField));
+        } else {
+            $query->addAggregation($this->getAggregation($elasticField));
+        }
+
         $query->setSize(0);
 
         $result = $this->searchable->search($query);
@@ -210,5 +232,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $aggregation->setField($field);
 
         return $aggregation;
+    }
+
+    private function getNestedAggregation($field)
+    {
+        $nested = new Nested($field, 'participants');
+        $nested->addAggregation($this->getAggregation($field));
+
+        return $nested;
     }
 }

@@ -24,17 +24,19 @@ class SearchType extends AbstractType
 {
     const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
     const FILTER_LOCALIZATION          = 'localization';
+    const FILTER_POSITION              = 'position';
     const FILTER_TYPE                  = 'type';
     const FILTER_CONTENT               = 'content';
     const ORDER_BY                     = 'orderBy';
 
     /**
-     * {@inheridoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $typeViews                 = $options['typeViews'];
         $organizationCategoryViews = $options['organizationCategoryViews'];
+        $positionViews             = $options['positionViews'];
 
         $builder
             ->add(self::ORDER_BY, ChoiceType::class, [
@@ -102,14 +104,19 @@ class SearchType extends AbstractType
             ->add(self::FILTER_CONTENT, TextType::class, [
                 'label' => 'form.search.content.label',
             ]);
+
+        $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
+            'label'   => 'form.search.position.label',
+            'choices' => $positionViews,
+        ]);
     }
 
     /**
-     * {@inheridoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['typeViews', 'organizationCategoryViews']);
+        $resolver->setRequired(['typeViews', 'organizationCategoryViews', 'positionViews']);
         $resolver->setDefaults([
             'required'        => false,
             'method'          => 'GET',

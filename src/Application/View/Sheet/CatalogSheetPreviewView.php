@@ -64,8 +64,14 @@ class CatalogSheetPreviewView
      * @param Meeting\Request $meetingRequest
      * @param bool            $isItMySheet
      */
-    public function __construct($id, Sheet $sheet, $title, $type, array $preview, Meeting\Request $meetingRequest = null, $isItMySheet)
-    {
+    public function __construct(
+        $id,
+        Sheet $sheet,
+        $title, $type,
+        array $preview,
+        Meeting\Request $meetingRequest = null,
+        $isItMySheet
+    ) {
         $this->id             = $id;
         $this->sheet          = $sheet;
         $this->title          = $title;

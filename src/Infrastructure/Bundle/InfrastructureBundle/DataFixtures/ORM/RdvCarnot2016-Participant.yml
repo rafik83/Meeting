@@ -11,6 +11,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position34"] }
 
     # Proximum participants
     proximum_participant_visiteur:
@@ -24,6 +25,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position34"] }
     proximum_participant_exposant:
         __construct: false
         user: '@proximum_user_exposant'
@@ -35,6 +37,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position36"] }
     proximum_participant_carnot:
         __construct: false
         user: '@proximum_user_carnot'
@@ -46,6 +49,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position37"] }
     proximum_participant_carnot2:
         __construct: false
         user: '@proximum_user_carnot2'
@@ -57,6 +61,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position38"] }
     proximum_participant_admin:
         __construct: false
         user: '@proximum_user_admin'
@@ -68,6 +73,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position39"] }
     proximum_participant_test:
         __construct: false
         user: '@proximum_user_test'
@@ -76,6 +82,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position25"] }
     proximum_participant_ui:
         __construct: false
         user: '@proximum_user_ui'
@@ -84,6 +91,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position26"] }
 
     # Random
     participant_random_1:
@@ -94,6 +102,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position27"] }
     participant_random_2:
         __construct: false
         user: '@user_random_2'
@@ -102,6 +111,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_3:
         __construct: false
         user: '@user_random_3'
@@ -110,6 +120,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_4:
         __construct: false
         user: '@user_random_4'
@@ -118,6 +129,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_5:
         __construct: false
         user: '@user_random_5'
@@ -126,6 +138,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_6:
         __construct: false
         user: '@user_random_6'
@@ -134,6 +147,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_13:
         __construct: false
         user: '@user_random_13'
@@ -142,6 +156,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
 
     participant_random_7:
         __construct: false
@@ -151,6 +166,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_8:
         __construct: false
         user: '@user_random_8'
@@ -159,6 +175,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_9:
         __construct: false
         user: '@user_random_9'
@@ -167,6 +184,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_10:
         __construct: false
         user: '@user_random_10'
@@ -175,6 +193,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_11:
         __construct: false
         user: '@user_random_11'
@@ -183,6 +202,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
     participant_random_12:
         __construct: false
         user: '@user_random_12'
@@ -191,3 +211,4 @@ Proximum\Vimeet\Domain\Model\Participant:
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
+            6c4a3a4f: { items: ["position28"] }
