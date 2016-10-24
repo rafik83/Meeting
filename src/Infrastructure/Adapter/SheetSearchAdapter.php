@@ -99,7 +99,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterQuery->setQuery($match);
 
         $citiesAggregations = new Terms('cities');
-        $citiesAggregations->setField('city_unanalyzed');
+        $citiesAggregations->setField('city');
         $citiesAggregations->setSize(10);
 
         $cities = new Filter('cities_aggs');
