@@ -122,18 +122,22 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $zipcodes->setFilter($filterZipcodeQuery);
 
         // country
-        $matchCountry = new Query\Match();
-        $matchCountry->setField('country_autocomplete.' . $locale, $filter);
+        $matchCountry = new Query\Match('country.label_autocomplete', $filter);
+        $matchLocale  = new Query\Match('country.locale', $locale);
+
+        $boolQuery = new Query\Bool();
+        $boolQuery->addMust($matchCountry);
+        $boolQuery->addMust($matchLocale);
 
         $nestedQuery = new Query\Nested();
         $nestedQuery->setQuery($matchCountry);
-        $nestedQuery->setPath('country_autocomplete');
+        $nestedQuery->setPath('country');
 
         $filterCountryQuery = new \Elastica\Filter\Query();
         $filterCountryQuery->setQuery($nestedQuery);
 
         $countryAggregations = new Terms('countries');
-        $countryAggregations->setField('country.fr');
+        $countryAggregations->setField('country.label');
         $countryAggregations->setSize(10);
 
         $nestedCountryAggregations = new \Elastica\Aggregation\Nested('country_aggs', 'country');

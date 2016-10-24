@@ -145,10 +145,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasCart'              => $hasCart,
                 'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'              => implode(' ', $content),
-                'country'              => $this->getCountryNames($templateData, $sheet->getEvent()->getLocales()),
-                'country_autocomplete' => $this->getCountryNames($templateData, $sheet->getEvent()->getLocales()),
                 'city'                 => $this->getCity($templateData),
                 'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($templateData),
+                'country'              => $this->buildCountry($templateData, $sheet->getEvent()->getLocales()),
             ],
             $contentByLocale
         ));
@@ -183,7 +182,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /**
      * @param TemplateData $templateData
      *
-     * @return mixed
+     * @return null|string
      */
     private function getCountryCode(TemplateData $templateData)
     {
@@ -196,20 +195,22 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
      *
      * @return array
      */
-    private function getCountryNames(TemplateData $templateData, array $locales)
+    private function buildCountry(TemplateData $templateData, array $locales)
     {
-        $countryNames = [];
-        $countryCode  = $this->getCountryCode($templateData);
+        $country     = [];
+        $countryCode = $this->getCountryCode($templateData);
 
         if ($countryCode) {
             $regionBundle = Intl::getRegionBundle();
 
-            foreach ($locales as $locale) {
-                $countryNames[$locale] = $regionBundle->getCountryName($countryCode, $locale);
+            foreach ($locales as $key => $locale) {
+                $country[$key]['locale']             = $locale;
+                $country[$key]['label']              = $regionBundle->getCountryName($countryCode, $locale);
+                $country[$key]['label_autocomplete'] = $regionBundle->getCountryName($countryCode, $locale);
             }
         }
 
-        return $countryNames;
+        return $country;
     }
 
     /**
