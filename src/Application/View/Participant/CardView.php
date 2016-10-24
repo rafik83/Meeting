@@ -77,6 +77,10 @@ class CardView
         $this->avatar    = $avatar;
         $this->owner     = $owner;
         $this->sheetId   = $sheetId;
-        $this->initials  = sprintf('%s%s', strtoupper(substr($firstname, 0, 1)), strtoupper(substr($lastname, 0, 1)));
+        $this->initials = sprintf(
+            '%s%s',
+            strtoupper(mb_substr($firstname, 0, 1)),
+            strtoupper(mb_substr($lastname, 0, 1))
+        );
     }
 }

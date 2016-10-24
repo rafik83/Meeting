@@ -170,6 +170,9 @@ fos_elastica:
                                 email:
                                     type: string
                                     analyzer: "emailAnalyzer"
+                                position:
+                                    type: string
+                                    index: "not_analyzed"
                         event:
                             type: integer
                         owner:

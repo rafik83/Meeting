@@ -142,6 +142,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position35"] }
     participant_asddays_2:
         __construct: false
         user: "@user_asddays_2"
@@ -153,6 +154,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position36"] }
     participant_asddays_3:
         __construct: false
         user: "@user_asddays_3"
@@ -164,6 +166,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             1efb9cbb: { telephone: "+33909090909" }
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
+            6c4a3a4f: { items: ["position37"] }
 
 Proximum\Vimeet\Domain\Model\User\Account (local):
     event_asddays_2016_account_user_1:

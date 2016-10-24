@@ -165,4 +165,17 @@ class ParticipantInfoGuesser
 
         return $mailBuildedInfo;
     }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return null|string
+     */
+    public function guessParticipantPosition(Participant $participant, $locale)
+    {
+        $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+
+        return $templateData->getTaggedContentValue(Tag::PARTICIPANT_POSITION);
+    }
 }
