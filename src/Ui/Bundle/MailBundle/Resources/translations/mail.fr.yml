@@ -48,6 +48,6 @@ mail.sheet.validated.subject: 'Votre inscription en tant que %participationType%
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
 mail.sheet.submitted.subject: 'Fiche %sheetName% finalisée'
-mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détails de la fiche, merci de cliquer sur le lien suivant"
+mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
 mail.sheet.submitted.link: 'Voir la fiche'

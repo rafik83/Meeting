@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 
-use DateTime;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
@@ -48,6 +47,11 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
     private $participantInfoGuesser;
 
     /**
+     * @var \DateTimeInterface
+     */
+    private $datetime;
+
+    /**
      * MailEventSubscriber constructor.
      *
      * @param SheetInfoGuesser         $sheetInfoGuesser
@@ -55,19 +59,22 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
      * @param AdminRepositoryInterface $adminRepository
      * @param MailerInterface          $mailer
      * @param string                   $sender
+     * @param \DateTimeInterface       $datetime
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         AdminRepositoryInterface $adminRepository,
         MailerInterface $mailer,
-        $sender
+        $sender,
+        \DateTimeInterface $datetime
     ) {
         $this->mailer                 = $mailer;
         $this->sender                 = $sender;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->adminRepository        = $adminRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->datetime               = $datetime;
     }
 
     /**
@@ -120,7 +127,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
                 $locale,
                 $event->getSheet(),
                 $admin,
-                new DateTime(),
+                $this->datetime,
                 $sheetName,
                 $firstname,
                 $lastname

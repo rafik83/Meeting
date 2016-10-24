@@ -230,6 +230,7 @@ services:
             - '@repository.admin_repository'
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
+            - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.trace_event_subscriber:
