@@ -389,12 +389,15 @@ class SheetSearchQueryBuilder
                 } else {
                     $boolQuery->addShould(new Match('city', $localization));
 
-                    $nested     = new Nested();
+                    $nested           = new Nested();
                     $nestedBoolQuery  = new BoolQuery();
-                    $matchQuery = new Match();
-                    $matchQuery->setField('country.' . $this->locale, $localization);
+                    $matchQuery       = new Match('country.label', $localization);
+                    $matchLocaleQuery = new Match('country.locale', $this->locale);
 
-                    $nested->setQuery($nestedBoolQuery->addMust($matchQuery))->setPath('country');
+                    $nestedBoolQuery->addMust($matchQuery);
+                    $nestedBoolQuery->addMust($matchLocaleQuery);
+
+                    $nested->setQuery($nestedBoolQuery)->setPath('country');
                     $boolQuery->addShould($nested);
                 }
             }
