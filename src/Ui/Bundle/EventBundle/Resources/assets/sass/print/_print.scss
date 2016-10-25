@@ -50,6 +50,10 @@
     page-break-after: avoid;
   }
 
+  footer a {
+    display: none;
+  }
+
   .section__content {
     .show-less {
       max-height: none !important;;
