@@ -202,9 +202,11 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $regionBundle = Intl::getRegionBundle();
 
             foreach ($locales as $key => $locale) {
+                $countryName = $regionBundle->getCountryName($countryCode, $locale);
+
                 $country[$key]['locale']             = $locale;
-                $country[$key]['label']              = $regionBundle->getCountryName($countryCode, $locale);
-                $country[$key]['label_autocomplete'] = $regionBundle->getCountryName($countryCode, $locale);
+                $country[$key]['label']              = $countryName;
+                $country[$key]['label_autocomplete'] = $countryName;
             }
         }
 

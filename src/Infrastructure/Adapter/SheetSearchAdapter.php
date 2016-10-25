@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
+use Elastica\Filter\Query as FilterQuery;
 use Elastica\Query;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
@@ -95,7 +96,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $match = new Query\Match();
         $match->setField('city_autocomplete', $filter);
 
-        $filterQuery = new \Elastica\Filter\Query();
+        $filterQuery = new FilterQuery();
         $filterQuery->setQuery($match);
 
         $citiesAggregations = new Terms('cities');
@@ -110,7 +111,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchZipcode = new Query\Match();
         $matchZipcode->setField('zipcode_autocomplete', $filter);
 
-        $filterZipcodeQuery = new \Elastica\Filter\Query();
+        $filterZipcodeQuery = new FilterQuery();
         $filterZipcodeQuery->setQuery($matchZipcode);
 
         $zipcodeAggregations = new Terms('zipcodes');
@@ -129,7 +130,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
 
-        $filterCountryQuery = new \Elastica\Filter\Query();
+        $filterCountryQuery = new FilterQuery();
         $filterCountryQuery->setQuery($boolQuery);
 
         $countryAggregations = new Terms('countries');
@@ -140,7 +141,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterCountries->addAggregation($countryAggregations);
         $filterCountries->setFilter($filterCountryQuery);
 
-        $nestedCountryAggregations = new \Elastica\Aggregation\Nested('countries_aggs', 'country');
+        $nestedCountryAggregations = new Nested('countries_aggs', 'country');
         $nestedCountryAggregations->addAggregation($filterCountries);
 
         $query = new Query();
