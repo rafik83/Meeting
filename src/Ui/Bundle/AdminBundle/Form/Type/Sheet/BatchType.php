@@ -62,15 +62,22 @@ class BatchType extends AbstractType
             ])
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
-            ->add('accept', SubmitType::class);
+            ->add('accept', SubmitType::class)
+        ;
 
         if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
             $builder
                 ->add('enable', SubmitType::class)
                 ->add('disable', SubmitType::class)
                 ->add('addCatalog', SubmitType::class)
-                ->add('removeCatalog', SubmitType::class);
+                ->add('removeCatalog', SubmitType::class)
+            ;
         }
+
+        $builder
+            ->add('validationStateDraft', SubmitType::class)
+            ->add('validationStateValidate', SubmitType::class)
+        ;
     }
 
     /**

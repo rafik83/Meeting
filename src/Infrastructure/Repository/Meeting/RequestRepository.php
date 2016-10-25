@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -184,19 +186,10 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
-            ->where('request.to = :sheet')
-            ->orWhere('request.from = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->where('request.state != :cancelState')
+            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
 
-        if (!empty($filters['state']) && $filters['state'] != Request::STATE_ALL) {
-            $queryBuilder
-                ->andWhere('request.state = :state')
-                ->setParameter('state', $filters['state']);
-        }
-
-        if (empty($filters['orderBy']) || $filters['orderBy'] === Sheet\Constant::ORDER_BY_CREATED_AT) {
-            $queryBuilder->orderBy('request.createdAt', 'DESC');
-        }
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -309,6 +302,24 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countSheetState(Sheet $sheet, array $filters = [])
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('request.state != :cancelState')
+            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
+
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
+
+        return count($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestBetweenSheets(Sheet $one, Sheet $another)
     {
         $queryBuilder = $this
@@ -331,27 +342,51 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param QueryBuilder $queryBuilder
+     * @param Sheet        $sheet
+     * @param array        $filters
      */
-    public function countSheetState(Sheet $sheet, $state)
+    private function filterQueryBuilder(QueryBuilder &$queryBuilder, Sheet $sheet, array $filters)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request')
-            ->where('request.from = :sheet')
-            ->orWhere('request.to = :sheet')
-            ->andWhere('request.state != :cancelState')
-            ->setParameter('cancelState', Request::STATE_CANCEL)
-            ->setParameter('sheet', $sheet);
-
-        if ($state !== Request::STATE_ALL) {
+        if (!empty($filters['state']) && !Meeting\Constant::isSentOrReceiveFilter($filters['state'])) {
             $queryBuilder
-                ->andWhere('request.state = :state')
-                ->setParameter('state', $state);
+                ->andWhere('request.to = :sheet OR request.from = :sheet');
         }
 
-        return count($queryBuilder->getQuery()->getResult());
+        // Filter by state
+        if (!empty($filters['state']) && $filters['state'] != Meeting\Constant::FILTER_STATE_ALL) {
+            if ($filters['state'] === Meeting\Constant::FILTER_STATE_RECEIVE) {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->andWhere('request.to = :sheet')
+                    ->setParameter('state', Meeting\Request::STATE_SENT);
+            } elseif ($filters['state'] === Meeting\Constant::FILTER_STATE_SENT) {
+                $queryBuilder
+                    ->andWhere('request.from = :sheet')
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', Meeting\Request::STATE_SENT);
+            } else {
+                $queryBuilder
+                    ->andWhere('request.state = :state')
+                    ->setParameter('state', Meeting\Constant::getMappedRequestState($filters['state']));
+            }
+        }
+
+        // order by
+        if (empty($filters['orderBy']) || $filters['orderBy'] === Sheet\Constant::ORDER_BY_CREATED_AT) {
+            $queryBuilder->orderBy('request.createdAt', 'DESC');
+        }
+
+        // filter by participant type
+        if (!empty($filters['type'])) {
+            $queryBuilder
+                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
+                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
+                ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
+                ->setParameter('types', $filters['type']);
+        }
+
+        // set sheet
+        $queryBuilder->setParameter('sheet', $sheet);
     }
 }

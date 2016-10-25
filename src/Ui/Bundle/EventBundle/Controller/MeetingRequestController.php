@@ -19,9 +19,10 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
 use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
-use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
+use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
+use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -61,24 +62,27 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('You can not update this data');
         }
 
-        // pre fill filters
-        $filters = SearchType::getDefaultFilters();
+        $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
+            $sheet, $request->getLocale()
+        ));
 
-        $searchForm = $this->createForm(SearchType::class, $filters, [
-            'label' => null,
-            'action'=> $this->generateUrl('event_meeting_list_request', [
-                'sheet' => $sheet->getId()
-            ]),
-        ]);
+        $defaults   = SearchType::getDefaultFilters($typeViews);
+        $searchForm = $this->createSearchForm($sheet, $defaults, SearchType::transformTypeViews($typeViews));
 
-        $searchForm->handleRequest($request);
+        if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
+            $filters = array_merge($defaults, array_filter(
+                $searchForm->getData(), function ($data) {
+                    return !empty($data);
+                })
+            );
 
-        if ($searchForm->isValid()) {
-            $filters = $searchForm->getData();
+            $searchForm = $this->createSearchForm($sheet, $filters, SearchType::transformTypeViews($typeViews));
+        } else {
+            $filters = $defaults;
         }
 
         $query       = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
-        $statusQuery = new StateListViewQuery($sheet);
+        $statusQuery = new StateListViewQuery($sheet, $filters);
 
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
@@ -552,6 +556,24 @@ class MeetingRequestController extends Controller
             'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
             'form'     => $form->createView(),
             'sheet'    => $sheet,
+        ]);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $filters
+     * @param array $typeViews
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    private function createSearchForm(Sheet $sheet, array $filters, array $typeViews)
+    {
+        return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
+            'label'     => null,
+            'typeViews' => $typeViews,
+            'action'    => $this->generateUrl('event_meeting_list_request', [
+                'sheet' => $sheet->getId(),
+            ]),
         ]);
     }
 }

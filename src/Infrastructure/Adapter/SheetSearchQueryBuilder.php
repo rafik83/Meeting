@@ -15,6 +15,7 @@ use Elastica\Query\Match;
 use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
+use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -112,6 +113,7 @@ class SheetSearchQueryBuilder
 
         $this->filterByText($filters);
         $this->filterByState($filters);
+        $this->filterByValidationState($filters);
         $this->filterByEnabled($filters);
         $this->filterByCompleted($filters);
         $this->filterByType($filters);
@@ -120,6 +122,7 @@ class SheetSearchQueryBuilder
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
+        $this->filterByPosition($filters);
         $this->filterByContent($filters);
     }
 
@@ -223,6 +226,16 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['state']) && in_array($filters['state'], Sheet::getAllStates())) {
             $this->query->addMust(new Match('state', $filters['state']));
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByValidationState(array &$filters)
+    {
+        if (isset($filters['validationState']) && in_array($filters['validationState'], Sheet::getAllValidationStates())) {
+            $this->query->addMust(new Match('validationState', $filters['validationState']));
         }
     }
 
@@ -435,5 +448,29 @@ class SheetSearchQueryBuilder
 
         $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
         $this->query->addMust($nested);
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByPosition(array &$filters)
+    {
+        if (isset($filters['position']) && is_array($filters['position'])) {
+            $nested = new Nested();
+            $nested->setPath('participants');
+
+            $matchPosition = new BoolQuery();
+
+            foreach ($filters['position'] as $position) {
+                if ($position instanceof PositionView) {
+                    $matchPosition->addShould(
+                        new Match('participants.position', $position->getKey())
+                    );
+                }
+            }
+
+            $nested->setQuery($matchPosition);
+            $this->query->addMust($nested);
+        }
     }
 }

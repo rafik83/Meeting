@@ -6,7 +6,7 @@ button, a {
 }
 
 .btn {
-    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-no-style, &.btn-lg {
+    &.btn-primary, &.btn-gray, &.btn-inactive, &.btn-no-style, &.btn-lg, &.btn-black {
         position: relative;
         font-size: 15px;
         line-height: 22px;
@@ -49,6 +49,16 @@ button, a {
     }
     &.reject {
       background: #FF4902 !important;
+    }
+}
+
+.btn-black {
+    color: white;
+    background: $color-primary !important;
+    i.icon-Retard {
+        font-size: 1.5em;
+        margin-right: 5px;
+        vertical-align: middle;
     }
 }
 

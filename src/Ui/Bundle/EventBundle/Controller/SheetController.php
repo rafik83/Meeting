@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
+use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
@@ -640,6 +641,25 @@ class SheetController extends Controller
             'label'         => $label,
             'uid'           => $key,
             'participants'  => $participants,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return RedirectResponse
+     */
+    public function submitValidationAction(Request $request, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $submitValidation = new SubmitValidation($sheet);
+
+        $this->get('tactician.commandbus')->handle($submitValidation);
+
+        return $this->redirectToRoute('event_sheet_locale', [
+            'locale' => $request->getLocale(),
         ]);
     }
 

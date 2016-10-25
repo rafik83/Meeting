@@ -1,0 +1,72 @@
+Proximum\Vimeet\Domain\Model\User:
+    user_asddays_many_{1..100}:
+        __construct: false
+        email: 'user_asddays_many_<current()>@example.net'
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+    user_asddays_many_other_participant_{1..30}:
+        __construct: false
+        email: 'user_asddays_many_other_participant_<current()>@example.net'
+        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
+        locale: "fr"
+
+Proximum\Vimeet\Domain\Model\Sheet:
+    sheet_asddays_many_{1..100}:
+        __construct:
+            - '@event_asddays_2016'
+            - '<randomElement(["@event_asddays_2016_type_fournisseur", "@event_asddays_2016_type_investisseur"])>'
+            -
+                # Titre de la fiche
+                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                # Description d'activité
+                d691d21c: { text: { fr: "<sentence()>" } }
+                # Compétence
+                e438c993: { items: '<randomElements(["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"], 3)>' }
+                # Offre
+                03b394ac: { items: '<randomElements(["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"], 3)>' }
+                # Besoins
+                63ccc105: { items: '<randomElements(["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"], 3)>' }
+            - '@user_asddays_many_<current()>'
+            - <dateTime()>
+        completeness: '<numberBetween(50, 100)>'
+        registrationData:
+            3ad4b72f: { text: "<company()>" }
+            97ed778d: { items: ['<randomElement(["category1", "category2", "category3", "category4"])>'] }
+            93de093f: { text: "<streetAddress()>" }
+            de66af5d: { text: '<numberBetween(1000, 95000)>' }
+            d224f0e7: { text: "<city()>" }
+            e801edd4: { country: '<randomElement(["fr", "es", "de"])>' }
+            57da9df7ced30: { boolean: '<boolean()>' }
+            57da8f210fbf2: { text: "<sentence()>" }
+        createdAt: <dateTime()>
+        lastLoginAt: <dateTime()>
+        inCatalog: true
+        inCatalogAt: <dateTimeBetween("-50 days", "now")>
+
+Proximum\Vimeet\Domain\Model\Participant:
+    participant_asddays_many_{1..100}:
+        __construct: false
+        user: "@user_asddays_many_<current()>"
+        sheet: "@sheet_asddays_many_<current()>"
+        active: true
+        data:
+            541f84d4: { text: "<firstName()>" }
+            838197c7: { text: "<lastName()>" }
+            1efb9cbb: { telephone: "<e164PhoneNumber()>" }
+            4b674gba: { gender: '<randomElement(["man", "woman"])>' }
+            3b759fbb: { telephone: "<e164PhoneNumber()>" }
+            6c4a3a4f: { items: ['<randomElement(["position1", "position2", "position3", "position4", "position5", "position6", "position7", "position8", "position9", "position10"])>'] }
+    participant_asddays_many_other_participant_{1..30}:
+        __construct: false
+        user: "@user_asddays_many_other_participant_<current()>"
+        sheet: "@sheet_asddays_many_<current()>"
+        active: true
+        data:
+            541f84d4: { text: "<firstName()>" }
+            838197c7: { text: "<lastName()>" }
+            1efb9cbb: { telephone: "<e164PhoneNumber()>" }
+            4b674gba: { gender: '<randomElement(["man", "woman"])>' }
+            3b759fbb: { telephone: "<e164PhoneNumber()>" }
+            6c4a3a4f: { items: ['<randomElement(["position1", "position2", "position3", "position4", "position5", "position6", "position7", "position8", "position9", "position10"])>'] }

@@ -480,6 +480,8 @@ form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
+form.sheet_batch.children.validationStateDraft.label: 'Remettre la fiche en brouillon'
+form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de la fiche'
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie
@@ -487,6 +489,7 @@ form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.state.label: Etat
+form.sheet_filter.children.validationState.label: 'Statut fiche'
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
 form.sheet_template_add_locale.children.locale.label: Langue

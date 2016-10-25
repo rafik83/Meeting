@@ -9,6 +9,9 @@
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
 
+    {% if searchForm.position is defined %}
+        {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.position }, false) }}
+    {% endif %}
     {% if searchForm.content is defined %}
         {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.content }, false) }}
     {% endif %}

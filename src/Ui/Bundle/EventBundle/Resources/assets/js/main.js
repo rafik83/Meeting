@@ -13,6 +13,7 @@ var $                     = require('jquery'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
+    AnchorFocuser         = require('./components/_AnchorFocuser'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
@@ -33,8 +34,17 @@ function init (target) {
                     return $(element).data('no-results-label');
                 }
             },
-            allowClear: true
+            allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
+        var anchor         = window.location.hash.substring(1);
+        var anchorElements = target.getElementsByName(anchor);
+
+        if (anchor !== '' && anchor !== null && anchorElements.length > 0) {
+            new AnchorFocuser(anchorElements[0], anchor);
+        }
     });
 
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
@@ -44,7 +54,7 @@ function init (target) {
             nationalMode: false
         });
     });
-
+    
     $('.catalog form', target).on('submit', function (event) {
         event.preventDefault();
     });

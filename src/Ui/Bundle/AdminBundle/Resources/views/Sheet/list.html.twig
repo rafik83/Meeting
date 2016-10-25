@@ -31,22 +31,47 @@
                                 {{ 'admin.sheet.validate'|trans }}
                             </a>
                         </li>
+                        <li role="separator" class="divider"></li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
                                 {{ 'admin.sheet.commercialFollowUp'|trans }}
                             </a>
                         </li>
+
+                        {% if batch_form.enable is defined or batch_form.disable is defined %}
+                            <li role="separator" class="divider"></li>
+                        {% endif %}
+
                         {% if batch_form.enable is defined %}
                             <li>{{ form_widget(batch_form.enable) }}</li>
                         {% endif %}
+
                         {% if batch_form.disable is defined %}
                             <li>{{ form_widget(batch_form.disable) }}</li>
                         {% endif %}
+
+                        {% if batch_form.addCatalog is defined or batch_form.removeCatalog is defined %}
+                            <li role="separator" class="divider"></li>
+                        {% endif %}
+
                         {% if batch_form.addCatalog is defined %}
                             <li>{{ form_widget(batch_form.addCatalog) }}</li>
                         {% endif %}
+
                         {% if batch_form.removeCatalog is defined %}
                             <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                        {% endif %}
+
+                        {% if batch_form.validationStateDraft is defined or batch_form.validationStateValidate is defined %}
+                            <li role="separator" class="divider"></li>
+                        {% endif %}
+
+                        {% if batch_form.validationStateDraft is defined %}
+                            <li>{{ form_widget(batch_form.validationStateDraft) }}</li>
+                        {% endif %}
+
+                        {% if batch_form.validationStateValidate is defined %}
+                            <li>{{ form_widget(batch_form.validationStateValidate) }}</li>
                         {% endif %}
                     {% endblock actions %}
                 {% endembed %}
@@ -59,6 +84,8 @@
             </div>
         </div>
 
+        {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
+
         <table class="table table-hover selectable-row filterable">
             <thead>
             <tr>
@@ -68,19 +95,26 @@
                 <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.enabled) }}
                 </th>
+
+                {% if hasCategories %}
+                    <th nowrap="nowrap">
+                        {{ macro.choice_as_dropdown(filter_form.category) }}
+                    </th>
+                {% endif %}
+
                 <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.state) }}
+                    {{ macro.choice_as_dropdown(filter_form.type) }}
+                </th>
+                <th nowrap="nowrap">
+                    {{ macro.choice_as_dropdown(filter_form.validationState) }}
                 </th>
                 <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.completed) }}
                 </th>
+                <th nowrap="nowrap">
+                    {{ macro.choice_as_dropdown(filter_form.state) }}
+                </th>
                 <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.category) }}
-                </th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.type) }}
-                </th>
                 <th>{{ 'admin.sheet.createdAt'|trans }}</th>
                 <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
                 <th nowrap="nowrap">
@@ -107,12 +141,22 @@
                             {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }} <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
                         </small>
                     </td>
+
+                    {% if hasCategories %}
+                        <td>{{ sheet.categories|join(', ') }}</td>
+                    {% endif %}
+
+                    <td>{{ sheet.type }}</td>
                     <td>
-                        <span class="label label-default"
-                            {% if sheet.state == 'accepted' or sheet.state == 'validated' %}
-                                data-toggle="tooltip" data-placement="bottom" title="{{ ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) }} {% if sheet.traceBy != null %}{{ 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) }}{% else %}{{ 'admin.sheet.trace.auto'|trans }}{% endif %}"
-                            {% endif %}
-                        >{{ ('event.sheet.state.' ~ sheet.state)|trans }}</span>
+                        {{ macro.state_label(
+                            ('event.sheet.validationState.' ~ sheet.validationState)|trans,
+                            sheet.validationState,
+                            {
+                                'draft': 'default',
+                                'pending': 'warning',
+                                'validated': 'success'
+                            }
+                        ) }}
                     </td>
                     <td>
                         <div class="progress">
@@ -121,9 +165,19 @@
                             </div>
                         </div>
                     </td>
+                    <td>
+                        {{ macro.state_label(
+                            ('event.sheet.state.' ~ sheet.state)|trans,
+                            sheet.state,
+                            {
+                                'pending': 'default',
+                                'accepted': 'warning',
+                                'validated': 'success'
+                            },
+                            sheet.state == 'accepted' or sheet.state == 'validated' ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                        ) }}
+                    </td>
                     <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
-                    <td>{{ sheet.categories|join(', ') }}</td>
-                    <td>{{ sheet.type }}</td>
                     <td><small>{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</small></td>
                     <td>
                         <small>
@@ -142,7 +196,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                    <td colspan="{{ hasCategories ? 11 : 12 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>

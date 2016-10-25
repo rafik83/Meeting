@@ -62,6 +62,10 @@ class FilterFullType extends AbstractType
                 'placeholder' => '',
                 'event'       => $options['event'],
             ])
+            ->add('validationState', ValidationStateChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.validationState.label',
+                'placeholder' => '',
+            ])
         ;
     }
 

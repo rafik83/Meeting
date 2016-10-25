@@ -79,18 +79,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $participants = [];
 
         if (null !== $sheet->getParticipants()) {
-            $participants = array_map(
-                function (Participant $participant) use ($locale) {
-                    return [
-                        'email'    => $participant->getUser()->getEmail(),
-                        'lastname' => $this->participantInfoGuesser->guessParticipantLastName(
-                            $participant,
-                            $locale
-                        ),
-                    ];
-                },
-                $sheet->getParticipants()->toArray()
-            );
+            $participants = $this->buildParticipants($sheet, $locale);
 
             if ($sheet->hasUserParticipant($sheet->getOwner())) {
                 $participants[] = [
@@ -106,12 +95,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $owner = null;
         }
 
-        $categories = array_map(
-            function (Category $category) {
-                return ['id' => $category->getId()];
-            },
-            $sheet->getType()->getCategories()->toArray()
-        );
+        $categories = $this->buildCategories($sheet);
 
         $hasCart              = count($this->cartRowRepository->findBySheet($sheet)) > 0;
         $templateData         = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
@@ -139,6 +123,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'id'                   => $sheet->getId(),
                 'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
                 'state'                => $sheet->getState(),
+                'validationState'      => $sheet->getValidationState(),
                 'enabled'              => $sheet->isEnabled(),
                 'completed'            => $sheet->isCompleted(),
                 'type'                 => $sheet->getType()->getId(),
@@ -185,5 +170,50 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return implode(' ', $searchableContent);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param $locale
+     *
+     * @return array
+     */
+    private function buildParticipants(Sheet $sheet, $locale)
+    {
+        $participants = array_map(
+            function (Participant $participant) use ($locale) {
+                return [
+                    'email'    => $participant->getUser()->getEmail(),
+                    'lastname' => $this->participantInfoGuesser->guessParticipantLastName(
+                        $participant,
+                        $locale
+                    ),
+                    'position' => $this->participantInfoGuesser->guessParticipantPosition(
+                        $participant,
+                        $locale
+                    )
+                ];
+            },
+            $sheet->getParticipants()->toArray()
+        );
+
+        return $participants;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    private function buildCategories(Sheet $sheet)
+    {
+        $categories = array_map(
+            function (Category $category) {
+                return ['id' => $category->getId()];
+            },
+            $sheet->getType()->getCategories()->toArray()
+        );
+
+        return $categories;
     }
 }

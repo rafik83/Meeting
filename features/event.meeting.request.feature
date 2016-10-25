@@ -14,6 +14,8 @@ Feature: Meeting Request / Proposition
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Category.yml        |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Rule.yml            |
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
@@ -30,6 +32,22 @@ Feature: Meeting Request / Proposition
     And I should see "form.search.orderBy.label"
     And I should see "form.search.orderBy.alphabetical"
     And I should see "form.search.orderBy.createdAt"
+    And I should see "form.search.type.label"
+    And the "type_0" checkbox should be checked
+    And the "type_1" checkbox should be checked
+    And the "type_2" checkbox should be checked
+    And the "type_3" checkbox should be checked
+    And the "type_4" checkbox should be checked
+    And I should see "Exposant"
+    And I should see "Investisseur"
     And I should see "L'ONERA est le centre français de la recherche aéronautique, spaciale et de défense."
     And I should see "catalog.complete_sheet"
     And I should see "Exposant"
+
+  Scenario: I can filter by participant type (not see Exposant type)
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I go to this page "/fr"
+    When I go to this page "/fr/sheet/1/meeting/request"
+    Then I uncheck "type_2"
+    And I go to this page "/fr/sheet/1/meeting/request?type%5B%5D=3&type%5B%5D=4&type%5B%5D=2&type%5B%5D=5"
+    And I should not see "Exposant" in the "footer" element

@@ -18,6 +18,7 @@ interface SheetSearchAdapterInterface
     const ES_FIELD_TYPE                  = 'type';
     const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
     const ES_FIELD_IN_CATALOG            = 'inCatalog';
+    const ES_FIELD_POSITION              = 'position';
 
     /**
      * @param Event       $event
