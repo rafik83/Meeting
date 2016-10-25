@@ -14,7 +14,6 @@ use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
-use Elastica\QueryBuilder\DSL\Aggregation;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
