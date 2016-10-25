@@ -31,7 +31,7 @@ Feature: Upload and remove image
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
     And I should not see "Ajouter un logo"
-    When I follow "object-image-edit"
+    When I follow "Ajouter un logo"
     Then the response status code should be 200
     And I press "sheet.object.image.remove"
     Then I should be on this page "/fr/sheet"
