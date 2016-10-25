@@ -60,8 +60,8 @@ class LocalizationViewQueryHandler
         }
 
         // handle country
-        if (!empty($localizations['countries_aggs']['country_aggs']['countries'])) {
-            foreach ($localizations['countries_aggs']['country_aggs']['countries']['buckets'] as $country) {
+        if (!empty($localizations['countries_aggs']['countries_filter']['countries'])) {
+            foreach ($localizations['countries_aggs']['countries_filter']['countries']['buckets'] as $country) {
                 $localizationViews[] = new LocalizationView($country['key']);
             }
         }
