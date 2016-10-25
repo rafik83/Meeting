@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
-class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface
+class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface
 {
     /**
      * @var NomenclatureModel
