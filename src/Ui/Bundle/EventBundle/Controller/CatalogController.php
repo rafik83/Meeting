@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
@@ -28,6 +29,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -124,6 +126,39 @@ class CatalogController extends Controller
             'paginatedResult' => $paginatedResult,
             'searchForm'      => $searchForm->createView(),
         ]);
+    }
+
+    /**
+     * Get localization asynchronously
+     *
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function searchLocalizationAction(Request $request, EventDomain $eventDomain)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
+
+        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
+
+        $localizationView = $this->get('tactician.commandbus.query')->handle(
+            new LocalizationViewQuery(
+                $eventDomain->getEvent(),
+                $request->get('query'),
+                $request->getLocale()
+            )
+        );
+
+        return new JsonResponse($localizationView);
     }
 
     /**

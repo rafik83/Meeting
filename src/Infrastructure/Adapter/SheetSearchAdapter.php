@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
@@ -83,6 +84,76 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $result->getNbResults(),
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findLocalization(Event $event, $filter, $locale)
+    {
+        // city
+        $match = new Query\Match();
+        $match->setField('city_autocomplete', $filter);
+
+        $filterQuery = new \Elastica\Filter\Query();
+        $filterQuery->setQuery($match);
+
+        $citiesAggregations = new Terms('cities');
+        $citiesAggregations->setField('city');
+        $citiesAggregations->setSize(10);
+
+        $cities = new Filter('cities_aggs');
+        $cities->addAggregation($citiesAggregations);
+        $cities->setFilter($filterQuery);
+
+        // zipcode
+        $matchZipcode = new Query\Match();
+        $matchZipcode->setField('zipcode_autocomplete', $filter);
+
+        $filterZipcodeQuery = new \Elastica\Filter\Query();
+        $filterZipcodeQuery->setQuery($matchZipcode);
+
+        $zipcodeAggregations = new Terms('zipcodes');
+        $zipcodeAggregations->setField('zipcode');
+        $zipcodeAggregations->setSize(10);
+
+        $zipcodes = new Filter('zipcode_aggs');
+        $zipcodes->addAggregation($zipcodeAggregations);
+        $zipcodes->setFilter($filterZipcodeQuery);
+
+        // country
+        $matchCountry = new Query\Match('country.label_autocomplete', $filter);
+        $matchLocale  = new Query\Match('country.locale', $locale);
+
+        $boolQuery = new Query\Bool();
+        $boolQuery->addMust($matchCountry);
+        $boolQuery->addMust($matchLocale);
+
+        $nestedQuery = new Query\Nested();
+        $nestedQuery->setQuery($matchCountry);
+        $nestedQuery->setPath('country');
+
+        $filterCountryQuery = new \Elastica\Filter\Query();
+        $filterCountryQuery->setQuery($nestedQuery);
+
+        $countryAggregations = new Terms('countries');
+        $countryAggregations->setField('country.label');
+        $countryAggregations->setSize(10);
+
+        $nestedCountryAggregations = new \Elastica\Aggregation\Nested('country_aggs', 'country');
+        $nestedCountryAggregations->addAggregation($countryAggregations);
+
+        $countries = new Filter('countries_aggs');
+        $countries->addAggregation($nestedCountryAggregations);
+        $countries->setFilter($filterCountryQuery);
+
+        $query = new Query();
+        $query->addAggregation($cities)
+          ->addAggregation($zipcodes)
+          ->addAggregation($countries)
+          ->setSize(0);
+
+        return $this->searchable->search($query)->getAggregations();
     }
 
     /**

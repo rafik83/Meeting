@@ -117,6 +117,23 @@ fos_elastica:
                                 filter: ["standard", "lowercase"]
                             emailAnalyzer:
                                 tokenizer: "uax_url_email"
+                            autocomplete:
+                                type: custom
+                                tokenizer: "standard"
+                                filter: ["standard", "lowercase", "autocomplete_filter"]
+                            zipcode_autocomplete:
+                                type: custom
+                                tokenizer: "standard"
+                                filter: ["standard", "zipcode_autocomplete_filter"]
+                        filter:
+                            autocomplete_filter:
+                                type: edge_ngram
+                                min_gram: 3
+                                max_gram: 50
+                            zipcode_autocomplete_filter:
+                                type: edge_ngram
+                                min_gram: 2
+                                max_gram: 2
             types:
                 sheet:
                     mappings:
@@ -190,6 +207,37 @@ fos_elastica:
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
+                        zipcode:
+                            type: multi_field
+                            fields:
+                                zipcode:
+                                    type: string
+                                    index: "not_analyzed"
+                                zipcode_autocomplete:
+                                    type: string
+                                    analyzer: "zipcode_autocomplete"
+                        city:
+                            type: multi_field
+                            fields:
+                                city:
+                                    type: string
+                                    index: "not_analyzed"
+                                city_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                        country:
+                            type: nested
+                            index: "not_analyzed"
+                            properties:
+                                label:
+                                    type: string
+                                    index: "not_analyzed"
+                                label_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                                locale:
+                                    type: string
+                                    index: "not_analyzed"
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer
