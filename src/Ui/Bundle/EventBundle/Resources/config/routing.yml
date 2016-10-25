@@ -272,6 +272,11 @@ event_catalog_search_localization:
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchLocalization }
 
+event_catalog_search_keywords:
+    path: /catalog/search-keywords
+    methods:  [POST]
+    defaults: { _controller: EventBundle:Catalog:searchKeywords }
+
 event_catalog_complete_sheet:
     path: /catalog/sheet/{sheet}
     requirements:

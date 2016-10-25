@@ -101,7 +101,7 @@ class SearchType extends AbstractType
         ]);
 
         $builder
-            ->add(self::FILTER_CONTENT, TextType::class, [
+            ->add(self::FILTER_CONTENT, HiddenType::class, [
                 'label' => 'form.search.content.label',
             ]);
 
