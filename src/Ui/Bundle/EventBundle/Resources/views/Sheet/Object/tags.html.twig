@@ -1,7 +1,10 @@
 <section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
-    <header>
-        <h2>{{ item.label(locale, fallback) }}{% if item.required|default(false) %}*{% endif %}</h2>
-    </header>
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+        </header>
+    {% endif %}
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}

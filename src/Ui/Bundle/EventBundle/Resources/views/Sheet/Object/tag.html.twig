@@ -1,10 +1,10 @@
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
-    {% set label = item.label(locale, fallback) %}
-    <header>
-        {% if not item.hasOnlyTagUrl %}
+    {% if not item.hasOnlyTagUrl %}
+        {% set label = item.label(locale, fallback) %}
+        <header>
             <h2>{{ label }}</h2>
-        {% endif %}
-    </header>
+        </header>
+    {% endif %}
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}

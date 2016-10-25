@@ -1,7 +1,11 @@
 <section id="object-{{ uid }}" class="object object--participant {{ 'style--' ~ item.style }} section section--list">
-    <header>
-        <h2>{{ item.label(locale, fallback) }}</h2>
-    </header>
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+
     <div class="section__content">
         <div class="list list--users">
             {% if not isCatalog %}
@@ -15,7 +19,6 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-
         </div>
     </div>
 

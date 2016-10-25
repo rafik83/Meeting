@@ -6,11 +6,13 @@
 {% if nomenclature %}
 
     {% if nomenclature.depth == 1 %}
-
         <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
-            <header>
-                <h2>{{ item.label(locale, fallback) }}</h2>
-            </header>
+            {% set label = item.label(locale, fallback) %}
+            {% if label %}
+                <header>
+                    <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+                </header>
+            {% endif %}
             <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 {% if nomenclature.any(item.items) %}
                     <ul>
@@ -30,11 +32,13 @@
         </section>
 
     {% elseif nomenclature.depth == 2 %}
-
         <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
-            <header>
-                <h2>{{ item.label(locale, fallback) }}</h2>
-            </header>
+            {% set label = item.label(locale, fallback) %}
+            {% if label %}
+                <header>
+                    <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+                </header>
+            {% endif %}
             <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                 <ul>
                     {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
@@ -53,13 +57,13 @@
         </section>
 
     {% elseif nomenclature.depth == 3 %}
-
         {% if nomenclature.any(item.items) %}
             {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
                 <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
                     <header>
                         <h2>{{ item.label(locale, fallback) }} <span class="badge badge-skill">{{ child.label(locale, fallback) }}</span></h2>
                     </header>
+
                     <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                         <ul>
                             {% for grandchild in child.childrenSorted(locale) if grandchild.any(item.items) %}
@@ -70,6 +74,7 @@
                             {% endfor %}
                         </ul>
                     </div>
+
                     {% if not isCatalog %}
                         <footer>
                             <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>
@@ -79,12 +84,17 @@
             {% endfor %}
         {% else %}
             <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
-                <header>
-                    <h2>{{ item.label(locale, fallback) }}</h2>
-                </header>
+                {% set label = item.label(locale, fallback) %}
+                {% if label %}
+                    <header>
+                        <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+                    </header>
+                {% endif %}
+
                 <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
                     <p class="help">{{ item.help|localize(locale, fallback) }}</p>
                 </div>
+
                 {% if not isCatalog %}
                     <footer>
                         <a class="edit-link" href="{{ path('event_sheet_update', { 'locale': locale, 'key': uid }) }}"><i class="icon-Note_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}</a>

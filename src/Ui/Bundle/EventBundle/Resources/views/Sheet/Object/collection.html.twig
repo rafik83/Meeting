@@ -1,7 +1,10 @@
 <section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
-    <header>
-        <h2>{{ item.label(locale, fallback) }}{% if item.required|default(false) %}*{% endif %}</h2>
-    </header>
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+        </header>
+    {% endif %}
     <div class="section__content" data-show-more="{{ 'sheet.object.showMore.title'|trans }}" data-show-less="{{ 'sheet.object.showLess.title'|trans }}">
         <ul>
             {% for list_item in item.data['items']|default([]) %}
