@@ -120,7 +120,7 @@ fos_elastica:
                             autocomplete:
                                 type: custom
                                 tokenizer: "standard"
-                                filter: ["standard", "lowercase", "autocomplete_filter"]
+                                filter: ["standard", "lowercase", "autocomplete_filter", "asciifolding"]
                             zipcode_autocomplete:
                                 type: custom
                                 tokenizer: "standard"
