@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Symfony\Component\Intl\Intl;
@@ -228,7 +229,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             $templateData  = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
             foreach ($templateData->getObjects() as $object) {
-                if ($object instanceof SearchableObjectInterface) {
+                if ($object instanceof IndexableObjectInterface) {
                     $content = $object->getSearchableContent();
 
                     if (is_array($content)) {
