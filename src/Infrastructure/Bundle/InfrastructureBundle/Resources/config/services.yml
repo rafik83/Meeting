@@ -1853,6 +1853,12 @@ services:
             - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery }
+    query.catalog.keyword_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\KeywordViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery }
     query.catalog.position_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\PositionViewQueryHandler
         arguments:

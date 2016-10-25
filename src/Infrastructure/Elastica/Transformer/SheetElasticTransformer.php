@@ -146,6 +146,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'city'                 => $this->getCity($templateData),
                 'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($templateData),
                 'country'              => $this->buildCountry($templateData, $sheet->getEvent()->getLocales()),
+                'keywords'             => $this->buildKeywords($sheet)
             ],
             $contentByLocale
         ));
@@ -211,6 +212,43 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return $country;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    private function buildKeywords(Sheet $sheet)
+    {
+        $keywords     = [];
+        $keywordIndex = 0;
+
+        foreach ($sheet->getEvent()->getLocales() as $locale) {
+            $templateData  = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+            foreach ($templateData->getObjects() as $object) {
+                if ($object instanceof SearchableObjectInterface) {
+                    $content = $object->getSearchableContent();
+
+                    if (is_array($content)) {
+                        foreach ($content as $item) {
+                            $keywords[$keywordIndex]['label']              = $item;
+                            $keywords[$keywordIndex]['label_autocomplete'] = $item;
+                            $keywords[$keywordIndex]['locale']             = $locale;
+                            $keywordIndex++;
+                        }
+                    } elseif (null !== $content && !empty($content)) {
+                        $keywords[$keywordIndex]['label']              = $content;
+                        $keywords[$keywordIndex]['label_autocomplete'] = $content;
+                        $keywords[$keywordIndex]['locale']             = $locale;
+                        $keywordIndex++;
+                    }
+                }
+            }
+        }
+
+        return $keywords;
     }
 
     /**

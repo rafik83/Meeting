@@ -156,6 +156,45 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function findKeyword(Event $event, $filter, $locale)
+    {
+        $matchKeyword = new Query\Match('keywords.label_autocomplete', $filter);
+        $matchLocale  = new Query\Match('keywords.locale', $locale);
+
+        $boolQuery = new Query\Bool();
+        $boolQuery->addMust($matchKeyword);
+        $boolQuery->addMust($matchLocale);
+
+        $filterKeywordQuery = new FilterQuery();
+        $filterKeywordQuery->setQuery($boolQuery);
+
+        $filterEventQuery = new FilterQuery();
+        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+
+        $keywordAggregations = new Terms('keyword');
+        $keywordAggregations->setField('keywords.label');
+        $keywordAggregations->setSize(10);
+
+        $filterKeywords = new Filter('keywords_filter');
+        $filterKeywords->addAggregation($keywordAggregations);
+        $filterKeywords->setFilter($filterKeywordQuery);
+
+        $nestedKeywordsAggregations = new Nested('keywords_aggs', 'keywords');
+        $nestedKeywordsAggregations->addAggregation($filterKeywords);
+
+        $filterKeywordsEvent = new Filter('keywords', $filterEventQuery);
+        $filterKeywordsEvent->addAggregation($nestedKeywordsAggregations);
+
+        $query = new Query();
+        $query->addAggregation($filterKeywordsEvent)
+            ->setSize(0);
+
+        return $this->searchable->search($query)->getAggregations();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeAggregations(Event $event, $locale, array $filters, $filterToRemove)
     {
         return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_TYPE);

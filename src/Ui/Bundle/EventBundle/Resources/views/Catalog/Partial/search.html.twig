@@ -32,7 +32,22 @@
     {% endif %}
 
     {% if searchForm.content is defined %}
-        {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.content }, false) }}
+        <div class="filter">
+            <h3>{{ searchForm.content.vars.label|trans({}, searchForm.content.vars.translation_domain) }}</h3>
+
+            {{ form_widget(searchForm.content) }}
+
+            <select multiple
+                    id="keyword-autocomplete"
+                    data-parent-input="{{ searchForm.content.vars.id }}"
+                    data-disable-auto-submit
+                    data-ajax-autocomplete
+                    data-method="post"
+                    data-action="{{ path('event_catalog_search_keywords') }}"
+                    data-placeholder="{{ 'form.search.keywords.search.placeholder'|trans({}, searchForm.vars.translation_domain) }}"
+                    class="form-control">
+            </select>
+        </div>
     {% endif %}
 
     {#

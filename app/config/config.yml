@@ -244,6 +244,19 @@ fos_elastica:
                                 locale:
                                     type: string
                                     index: "not_analyzed"
+                        keywords:
+                            type: nested
+                            index: "not_analyzed"
+                            properties:
+                                label:
+                                    type: string
+                                    index: "not_analyzed"
+                                label_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                                locale:
+                                    type: string
+                                    index: "not_analyzed"
                     persistence:
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer
