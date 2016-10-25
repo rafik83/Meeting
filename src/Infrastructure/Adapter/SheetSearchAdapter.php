@@ -14,6 +14,7 @@ use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
+use Elastica\QueryBuilder\DSL\Aggregation;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
@@ -129,28 +130,24 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
 
-        $nestedQuery = new Query\Nested();
-        $nestedQuery->setQuery($matchCountry);
-        $nestedQuery->setPath('country');
-
         $filterCountryQuery = new \Elastica\Filter\Query();
-        $filterCountryQuery->setQuery($nestedQuery);
+        $filterCountryQuery->setQuery($boolQuery);
 
         $countryAggregations = new Terms('countries');
         $countryAggregations->setField('country.label');
         $countryAggregations->setSize(10);
 
-        $nestedCountryAggregations = new \Elastica\Aggregation\Nested('country_aggs', 'country');
-        $nestedCountryAggregations->addAggregation($countryAggregations);
+        $filterCountries = new Filter('countries_filter');
+        $filterCountries->addAggregation($countryAggregations);
+        $filterCountries->setFilter($filterCountryQuery);
 
-        $countries = new Filter('countries_aggs');
-        $countries->addAggregation($nestedCountryAggregations);
-        $countries->setFilter($filterCountryQuery);
+        $nestedCountryAggregations = new \Elastica\Aggregation\Nested('countries_aggs', 'country');
+        $nestedCountryAggregations->addAggregation($filterCountries);
 
         $query = new Query();
         $query->addAggregation($cities)
           ->addAggregation($zipcodes)
-          ->addAggregation($countries)
+          ->addAggregation($nestedCountryAggregations)
           ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();
