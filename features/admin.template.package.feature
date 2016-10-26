@@ -9,6 +9,7 @@ Feature: Manage products selection templates
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml   |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml       |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |
@@ -22,7 +23,7 @@ Feature: Manage products selection templates
     When I fill in "form.package_create.children.title.label" with "My template"
      And I select "ASD Days" from "form.package_create.children.event.label"
      And I press "form.package_create.children.submit.label"
-    Then I should be on this page "/admin/fr/template/package/2/update"
+    Then I should be on this page "/admin/fr/template/package/3/update"
      And the "form.package_update.children.title.label" field should contain "My template"
 
   Scenario: Update a package template
@@ -31,6 +32,7 @@ Feature: Manage products selection templates
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml   |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml       |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml |

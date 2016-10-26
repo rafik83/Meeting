@@ -260,13 +260,15 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element->getTagName() === 'input') {
-            $this->fillField(
-                $element->getAttribute('name'),
-                true
-            );
+        if ($element !== null) {
+            if ($element->getTagName() === 'input') {
+                $this->fillField(
+                    $element->getAttribute('name'),
+                    true
+                );
 
-            return;
+                return;
+            }
         }
 
         throw new \Exception('Radio button not found');
@@ -281,13 +283,15 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element->getTagName() === 'input') {
-            // Behat return 1 instead of true for the value of a radio
-            if ((bool) $element->getValue() !== true) {
-                throw new \Exception('The radio button is not checked');
-            }
+        if ($element !== null ) {
+            if ($element->getTagName() === 'input') {
+                // Behat return 1 instead of true for the value of a radio
+                if ((bool) $element->getValue() !== true) {
+                    throw new \Exception('The radio button is not checked');
+                }
 
-            return;
+                return;
+            }
         }
 
         throw new \Exception('Radio button not found');
@@ -302,13 +306,15 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element->getTagName() === 'input') {
-            // Behat return 1 instead of true for the value of a radio
-            if ((bool) $element->getValue() === true) {
-                throw new \Exception('The radio button is checked');
-            }
+        if ($element !== null) {
+            if ($element->getTagName() === 'input') {
+                // Behat return 1 instead of true for the value of a radio
+                if ((bool) $element->getValue() === true) {
+                    throw new \Exception('The radio button is checked');
+                }
 
-            return;
+                return;
+            }
         }
 
         throw new \Exception('Radio button not found');
