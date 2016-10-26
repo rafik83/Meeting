@@ -1,26 +1,20 @@
-
 function ShowMore(element, buttonContainer)
 {
     this.element   = element;
-    this.maxHeight = 86;
     this.showState = false;
-
-    // create show/hide link
-    this.icon = document.createElement('i');
-    this.icon.className = 'icon-Voir_1';
-    this.icon.style.marginLeft = '10px';
+    this.maxHeight = 86;
 
     this.link = document.createElement('a');
     this.link.setAttribute('href', '#');
+    this.link.classList.add('link-show-more');
 
     if (buttonContainer.querySelector('.edit-link') != null) {
         this.link.style.float = 'right';
     }
 
     if (this.element.clientHeight > this.maxHeight) {
-        this.hide();
-        buttonContainer.appendChild(this.icon);
         buttonContainer.appendChild(this.link);
+        this.hide();
     }
 
     this.link.addEventListener('click', this.toggle.bind(this), false);
@@ -28,18 +22,21 @@ function ShowMore(element, buttonContainer)
 
 ShowMore.prototype.hide = function()
 {
-    this.element.style.maxHeight = '' + this.maxHeight + 'px';
-    this.element.style.overflow  = "hidden";
-    this.link.innerHTML          = this.element.getAttribute('data-show-less');
-    this.showState               = false;
+    this.element.classList.add("show-less");
+    this.link.innerHTML = this.getIcon() + this.element.getAttribute('data-show-less');
+    this.showState      = false;
 };
 
 ShowMore.prototype.show = function()
 {
-    this.element.style.maxHeight = 'none';
-    this.element.style.overflow  = "visible";
-    this.link.innerHTML          = this.element.getAttribute('data-show-more');
-    this.showState               = true;
+    this.element.classList.remove("show-less");
+    this.link.innerHTML = this.getIcon() + this.element.getAttribute('data-show-more');
+    this.showState      = true;
+};
+
+ShowMore.prototype.getIcon = function()
+{
+    return '<i class="icon-Voir_1"></i> ';
 };
 
 ShowMore.prototype.toggle = function(event)

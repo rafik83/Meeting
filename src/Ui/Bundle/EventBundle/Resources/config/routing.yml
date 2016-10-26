@@ -209,6 +209,24 @@ event_sheet_submit_validation:
         sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Sheet:submitValidation }
+
+event_sheet_generate_pdf:
+    path:     /sheet/print/sheet-{sheet}-{locale}.pdf
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:generatePdf }
+
+event_sheet_internal_print:
+    path:     /_internal/{user}/sheet/{sheet}/{locale}/print
+    requirements:
+        user: \d+
+        sheet: \d+
+        locale: '[a-z]{2}'
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Sheet:print }
+
 #
 # Sheet Billing
 #

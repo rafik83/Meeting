@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Admin:
+    user_partner:
+        __construct:
+            - "partenaire@proximumgroup.com"
+            - "hOcoU9/L7niTCDDLQOhqTzbrrEMO0/HWlbSQ6DNh"
+            - "O9CLi6YZtHirpgd3fF/r2M2LMFs=" #vimeet_partenaire
+            - 'fr'
+            - "Julien"
+            - "Partenaire"
+            - 'ROLE_PARTNER'
+            - <dateTime()>
+        events:
+            - '@event_asddays_2016'
+        types:
+            - '@event_asddays_2016_type_fournisseur'
+            - '@event_asddays_2016_type_investisseur'
+            - '@event_asddays_2016_type_donneur_ordre'
+            - '@event_asddays_2016_type_structure_de_recherche'
+            - '@event_asddays_2016_type_delegation'
+        lastLoginAt: <dateTime()>

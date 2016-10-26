@@ -16,36 +16,24 @@ use Proximum\Vimeet\Domain\Model\Order;
 class Merger
 {
     /**
-     * @var Order[]
-     */
-    private $orders;
-
-    /**
-     * @var Order
-     */
-    private $orderMerged;
-
-    /**
      * @param array $orders
      *
      * @return Order
      */
     public function merge(array $orders)
     {
-        $this->orders = $orders;
-
-        if (count($this->orders) === 0) {
+        if (count($orders) === 0) {
             throw new OrderMergerException();
         }
 
-        if (count($this->orders) === 1) {
-            return reset($this->orders);
+        if (count($orders) === 1) {
+            return reset($orders);
         }
 
         /** @var Order $orderPattern */
-        $orderPattern = reset($this->orders);
+        $orderPattern = reset($orders);
 
-        $this->orderMerged = new Order(
+        $orderMerged = new Order(
             $orderPattern->getSheet(),
             $orderPattern->isVatApplicable(),
             $orderPattern->getBillingInfo(),
@@ -53,38 +41,40 @@ class Merger
             $orderPattern->getCreatedAt()
         );
 
-        foreach ($this->orders as $order) {
-            $this->mergeProduct($order);
-            $this->mergePromotionCode($order);
+        foreach ($orders as $order) {
+            $this->mergeProduct($orderMerged, $order);
+            $this->mergePromotionCode($orderMerged, $order);
         }
 
-        return $this->orderMerged;
+        return $orderMerged;
     }
 
     /**
+     * @param Order $orderMerged
      * @param Order $order
      */
-    private function mergeProduct(Order $order)
+    private function mergeProduct(Order $orderMerged, Order $order)
     {
         foreach ($order->getRows() as $row) {
-            if (null !== ($orderMergedRow = $this->orderMerged->getRowForProduct($row->getProduct()))) {
+            if (null !== ($orderMergedRow = $orderMerged->getRowForProduct($row->getProduct()))) {
                 $orderMergedRow->setQuantity($orderMergedRow->getQuantity() + $row->getQuantity());
             } else {
                 $cloneRow = clone $row;
-                $this->orderMerged->addRow($cloneRow->setOrder($this->orderMerged));
+                $orderMerged->addRow($cloneRow->setOrder($orderMerged));
             }
         }
     }
 
     /**
+     * @param Order $orderMerged
      * @param Order $order
      */
-    private function mergePromotionCode(Order $order)
+    private function mergePromotionCode(Order $orderMerged, Order $order)
     {
         foreach ($order->getPromotionCodes() as $promotionCode) {
-            if (!$this->orderMerged->hasPromotionCode($promotionCode)) {
+            if (!$orderMerged->hasPromotionCode($promotionCode)) {
                 $promotionCodeClone = clone $promotionCode;
-                $this->orderMerged->addPromotionCode($promotionCodeClone->setOrder($this->orderMerged));
+                $orderMerged->addPromotionCode($promotionCodeClone->setOrder($orderMerged));
             }
         }
     }

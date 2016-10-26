@@ -324,7 +324,10 @@ liip_imagine:
         user_avatar:
             quality: 100
             filters:
-                thumbnail: { size: [400, 150], mode: inset }
+                # Use the "outbound" mode to crop the image when the size ratio of the input differs
+                thumbnail: { size: [160, 160], mode: outbound }
+                # fix orientation issue for example for iOS photo
+                auto_rotate: ~
 
 # Doctrine migrations configuration
 doctrine_migrations:

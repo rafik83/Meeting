@@ -12,350 +12,623 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
         preview: ['1b9a00b3', 'dcc42d3d', 'd691d21c']
         value:
             69b3cde3:
-                component: "block"
-                type: "8-4"
-                config:
-                    style: "style-1"
+                component: block
+                type: 8-4
                 children:
                     -
                         dcc42d3d:
-                            component: "object"
-                            type: "editable-text"
+                            component: object
+                            type: editable-text
                             config:
-                                style: "style-1"
                                 label:
-                                    fr: "Titre de votre fiche"
-                                    en: "Title of your sheet"
+                                    en: Title of your sheet
+                                    fr: Titre de votre fiche
                                 placeholder:
-                                    fr: "Société en une phrase"
-                                    en: "Your company in a sentence"
+                                    en: Your company in a sentence
+                                    fr: Société en une phrase
+                                hideLabel: false
                                 help:
-                                    fr: ""
-                                    en: ""
-                                length: 200
-                                type: "title"
+                                    en: ''
+                                    fr: ''
+                                maxLength: ''
                                 required: true
+                                type: title
+                                style: ''
                                 translatable: true
+                                tag: sheet_organization
+                                length: 200
                         291c7190:
-                            component: "block"
-                            type: "6-6"
-                            config:
-                                style: "style-1"
+                            component: block
+                            type: 6-6
                             children:
                                 -
                                     1b9a00b3:
-                                        component: "object"
-                                        type: "image"
+                                        component: object
+                                        type: image
                                         config:
-                                            style: "style-1"
                                             label:
-                                                fr: "Logo"
-                                                en: "Logo"
+                                                en: Logo
+                                                fr: Logo
                                             placeholder:
-                                                fr: "Ajouter un logo"
-                                                en: "Add a logo"
+                                                en: Add a logo
+                                                fr: Ajouter un logo
                                             help:
-                                                fr: "Télécharger un logo pour améliorer votre visibilité"
-                                                en: "Upload a logo to improve your impact"
-                                            length: null
-                                            type: null
+                                                en: Upload a logo to improve your impact
+                                                fr: Télécharger un logo pour améliorer votre visibilité
                                             required: false
-                                            products: ["5", "6", "7"]
-                                    6fe62a03:
-                                        component: "block"
-                                        type: "6-6"
+                                            style: ''
+                                            products:
+                                                - "@product_option_1_asddays->id"
+                                                - "@product_option_2_asddays->id"
+                                                - "@product_option_3_asddays->id"
+                                            length:
+                                            type:
+                                    Mb0a4Mb584:
+                                        component: object
+                                        type: tag
                                         config:
-                                            style: "style-1"
-                                        children:
-                                            -
-                                                fb030569:
-                                                    component: "object"
-                                                    type: "tag"
-                                                    config:
-                                                        style: "default"
-                                                        label:
-                                                            fr: "Catégorie"
-                                                            en: "Catégory"
-                                                        tags:
-                                                            - tag: "sheet_organization_category"
-                                            -
-                                                90713a3d:
-                                                    component: "object"
-                                                    type: "tag"
-                                                    config:
-                                                        style: "default"
-                                                        label:
-                                                            fr: "Site internet"
-                                                            en: "Website"
-                                                        help:
-                                                            fr: ""
-                                                            en: ""
-                                                        tags:
-                                                            - tag: "sheet_website"
+                                            label:
+                                                en:
+                                                fr: Coordonnées
+                                            tag: ''
+                                            style: default
+                                            tags:
+                                                - tag: sheet_address
+                                                - tag: sheet_zipcode
+                                                - tag: sheet_city
+                                    Mbf9aM0ecc:
+                                        component: object
+                                        type: tag
+                                        config:
+                                            label:
+                                                en:
+                                                fr: Notre site
+                                            tag: ''
+                                            style: default
+                                            tags:
+                                                - tag: sheet_website
                                 -
                                     d691d21c:
-                                        component: "object"
-                                        type: "editable-text"
+                                        component: object
+                                        type: editable-text
                                         config:
-                                            style: "style-1"
                                             label:
-                                                fr: "Description d'activité"
-                                                en: "Description of activity"
+                                                en: Description of activity
+                                                fr: Description d'activité
                                             placeholder:
-                                                fr: ""
-                                                en: ""
+                                                en: ''
+                                                fr: ''
+                                            hideLabel: false
                                             help:
-                                                fr: ""
-                                                en: ""
-                                            type: "text"
-                                            required: true
-                                            translatable: true
+                                                en: ''
+                                                fr: ''
                                             maxLength: 300
+                                            required: true
+                                            type: text
+                                            style: style-1
+                                            translatable: true
+                                            tag:
+                            config:
+                                style: style-1
                         e438c993:
-                            component: "object"
-                            type: "nomenclature"
+                            component: object
+                            type: nomenclature
                             config:
-                                style: "style-3"
                                 label:
-                                    fr: "Compétences"
-                                    en: "Competency"
-                                placeholder:
-                                    fr: ""
-                                    en: ""
+                                    en: Competency
+                                    fr: Compétences
                                 help:
-                                    fr: "Ces informations sont utilisées par le moteur de recherche : il propose des résultats conforme aux compétences des exposants avec les besoins des donneurs d'ordres."
-                                    en: ""
-                                required: false
-                                mode: "checkboxes"
-                                default: 1
+                                    en: ''
+                                    fr: 'Ces informations sont utilisées par le moteur de recherche : il propose des résultats conforme aux compétences des exposants avec les besoins des donneurs d''ordres.'
                                 nomenclature: "@nomenclature_competences_asddays2016->id"
+                                mode: checkboxes
+                                style: style-3
+                                placeholder:
+                                    en: ''
+                                    fr: ''
+                                required: false
+                                default: 1
                         75adad94:
-                            component: "block"
-                            type: "6-6"
-                            config:
-                                style: "style-1"
+                            component: block
+                            type: 6-6
                             children:
                                 -
-                                    1adc1873:
-                                        component: "object"
-                                        type: "collection"
-                                        config:
-                                            style: "style-3"
-                                            label:
-                                                fr: "Clients de référence"
-                                                en: "References"
-                                            placeholder:
-                                                fr: "Vos clients de référence"
-                                                en: "Your references"
-                                            help:
-                                                fr: ""
-                                                en: ""
-                                            required: true
-                                            default: 1
-                                            translatable: true
-                                -
                                     46663c1d:
-                                        component: "object"
-                                        type: "collection"
+                                        component: object
+                                        type: collection
                                         config:
-                                            style: "style-3"
                                             label:
-                                                fr: "Projets innovant"
-                                                en: "Innovative projects"
+                                                en: Innovative projects
+                                                fr: Projets innovant
                                             placeholder:
-                                                fr: "Vos projets innovant"
-                                                en: "Your innovative projects"
+                                                en: Your innovative projects
+                                                fr: Vos projets innovant
                                             help:
-                                                fr: ""
-                                                en: ""
-                                            required: false
+                                                en: ''
+                                                fr: ''
                                             default: 3
+                                            required: false
                                             translatable: true
-                        097ab5e8:
-                            component: "object"
-                            type: "collection"
+                                            style: style-3
+                                    1adc1873:
+                                        component: object
+                                        type: collection
+                                        config:
+                                            label:
+                                                en: References
+                                                fr: Clients de référence
+                                            placeholder:
+                                                en: Your references
+                                                fr: Vos clients de référence
+                                            help:
+                                                en: ''
+                                                fr: ''
+                                            default: 1
+                                            required: true
+                                            translatable: true
+                                            style: style-3
+                                -
+                                    211efd1f:
+                                        component: object
+                                        type: media
+                                        config:
+                                            label:
+                                                en: Medias
+                                                fr: Médias
+                                            titlePlaceholder:
+                                                en: Title of your medias
+                                                fr: Titre de votre média
+                                            linkPlaceholder:
+                                                en: Link of your medias
+                                                fr: Lien de votre média
+                                            translatable: true
+                                            max: 3
+                                            default: 3
+                                            products:
+                                                -  "@product_option_8_asddays->id"
+                                                -  "@product_option_7_asddays->id"
+                                                -  "@product_option_6_asddays->id"
+                                                -  "@product_option_5_asddays->id"
+                                            style: style-1
+                                            help:
+                                                en: ''
+                                                fr: ''
+                                            required: false
                             config:
-                                style: "style-3"
+                                style: style-1
+                        097ab5e8:
+                            component: object
+                            type: collection
+                            config:
                                 label:
-                                    fr: "Equipements, technologies et process"
-                                    en: "Equipements, technologies et process"
+                                    en: Equipements, technologies et process
+                                    fr: Equipements, technologies et process
                                 placeholder:
-                                    fr: "Equipements, technologies, process, ..."
-                                    en: "Equipements, technologies, process, ..."
+                                    en: Equipements, technologies, process, ...
+                                    fr: Equipements, technologies, process, ...
                                 help:
-                                    fr: "Vos equipements, technologies et process"
-                                    en: "Vos equipements, technologies et process"
-                                required: false
+                                    en: Vos equipements, technologies et process
+                                    fr: Vos equipements, technologies et process
                                 default: 3
+                                required: false
+                                translatable: false
+                                style: style-3
                     -
                         d6fa1ac7:
-                            component: "object"
-                            type: "tags"
+                            component: object
+                            type: tags
                             config:
-                                style: "style-1"
                                 label:
-                                    fr: "Repères"
-                                    en: "Landmarks"
+                                    en: Landmarks
+                                    fr: Repères
                                 placeholder:
-                                    fr: "Saisissez un repère"
-                                    en: ""
+                                    en: ''
+                                    fr: Saisissez un repère
                                 help:
-                                    fr: "Vos repères"
-                                    en: ""
+                                    en: ''
+                                    fr: Vos repères
+                                default: '2'
+                                collection: true
+                                required: true
+                                translatable: true
+                                style: style-1
                                 tags:
                                     -
-                                        tag: "sheet_organization_turnover"
+                                        tag: sheet_organization_turnover
                                         label:
-                                            fr: "Chiffre d'affaires"
-                                            en: "Turnover"
+                                            fr: Chiffre d'affaires
+                                            en: Turnover
                                     -
-                                        tag: "sheet_organization_staff"
+                                        tag: sheet_organization_staff
                                         label:
-                                            fr: "Effectifs"
-                                            en: "Staff"
-                                required: false
-                                collection: true
-                                default: 3
-                                translatable: true
+                                            fr: Effectifs
+                                            en: Staff
                         a9271999:
-                            component: "object"
-                            type: "collection"
+                            component: object
+                            type: collection
                             config:
-                                style: "style-1"
                                 label:
-                                    fr: "Groupe / Membre"
-                                    en: "Group / Member of"
+                                    en: Group / Member of
+                                    fr: Groupe / Membre
                                 placeholder:
-                                    fr: ""
-                                    en: ""
+                                    en: ''
+                                    fr: ''
                                 help:
-                                    fr: ""
-                                    en: ""
-                                required: false
+                                    en: ''
+                                    fr: ''
                                 default: 3
+                                required: false
                                 translatable: true
+                                style: style-1
                         a23a2f5d:
-                            component: "object"
-                            type: "collection"
+                            component: object
+                            type: collection
                             config:
-                                style: "style-2"
                                 label:
-                                    fr: "Certifications"
-                                    en: "Certifications"
+                                    en: Certifications
+                                    fr: Certifications
                                 placeholder:
-                                    fr: "vos certifications"
-                                    fr: "Your certifications"
+                                    en:
+                                    fr: vos certifications
                                 help:
-                                    fr: ""
-                                    en: ""
-                                required: false
+                                    en: ''
+                                    fr: ''
                                 default: 3
+                                required: false
                                 translatable: true
+                                style: style-2
                         bef61d39:
-                            component: "object"
-                            type: "participant"
+                            component: object
+                            type: participant
                             config:
-                                style: "style-1"
                                 label:
-                                    fr: "Participants"
-                                    en: "Participants"
+                                    en: Participants
+                                    fr: Participants
                                 numberOfParticipantShown: 3
-                        211efd1f:
-                            component: "object"
-                            type: "media"
-                            config:
-                                style: "style-1"
-                                label:
-                                    fr: "Médias"
-                                    en: "Medias"
-                                titlePlaceholder:
-                                    fr: "Titre de votre média"
-                                    en: "Title of your medias"
-                                linkPlaceholder:
-                                    fr: "Lien de votre média"
-                                    en: "Link of your medias"
-                                help:
-                                    fr: ""
-                                    en: ""
-                                required: false
-                                default: 3
-                                max: 3
-                                translatable: true
-                                products: ["12", "11", "10", "9"]
-            69962d34:
-                component: "block"
-                type: "12"
+                                style: style-1
                 config:
-                    style: "style-1"
+                    style: style-1
+            Me451M6732:
+                component: block
+                type: '12'
+                children:
+                -
+                    Mfe95M7b31:
+                        component: object
+                        type: text
+                        config:
+                            content:
+                                en:
+                                fr: 'Compte de résultat prévisionnel '
+                            type: title
+                            style: style-2
+                    M0cbaM95ab:
+                        component: object
+                        type: text
+                        config:
+                            content:
+                                en:
+                                fr: A remplir si votre candidature est retenue
+                            type: text
+                            style: style-1
+                    M1c04Me5b3:
+                        component: block
+                        type: 6-6
+                        children:
+                            -
+                                M150fMe474:
+                                    component: block
+                                    type: 8-4
+                                    children:
+                                        -
+                                            Mb5b4Meb7a:
+                                                component: block
+                                                type: 6-6
+                                                children:
+                                                    -
+                                                        M4f01M4e25:
+                                                            component: object
+                                                            type: text
+                                                            config:
+                                                                content:
+                                                                    en:
+                                                                    fr: '2016'
+                                                                type: title
+                                                                style: style-1
+                                                        Ma743Ma2a4:
+                                                            component: object
+                                                            type: tags
+                                                            config:
+                                                                label:
+                                                                    en:
+                                                                    fr: ''
+                                                                placeholder:
+                                                                    en:
+                                                                    fr: ''
+                                                                help:
+                                                                    en:
+                                                                    fr: ''
+                                                                default: '1'
+                                                                collection: false
+                                                                required: false
+                                                                translatable: false
+                                                                style: style-1
+                                                                tags:
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Chiffres d'affaires
+                                                                    -
+                                                                        tag: sheet_organization_staff
+                                                                        label:
+                                                                            fr: EBE
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Résultat NET
+                                                    -
+                                                        M1483M554b:
+                                                            component: object
+                                                            type: text
+                                                            config:
+                                                                content:
+                                                                    en:
+                                                                    fr: '2017'
+                                                                type: title
+                                                                style: style-1
+                                                        M0ebaMcd84:
+                                                            component: object
+                                                            type: tags
+                                                            config:
+                                                                label:
+                                                                    en:
+                                                                    fr: ''
+                                                                placeholder:
+                                                                    en:
+                                                                    fr: ''
+                                                                help:
+                                                                    en:
+                                                                    fr: ''
+                                                                default: '1'
+                                                                collection: false
+                                                                required: false
+                                                                translatable: false
+                                                                style: style-1
+                                                                tags:
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Chiffre d'affaires
+                                                                    -
+                                                                        tag: sheet_organization_staff
+                                                                        label:
+                                                                            fr: EBE
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Résultat NET
+                                                config:
+                                                    style:
+                                        -
+                                            M69e0M81ad:
+                                                component: object
+                                                type: text
+                                                config:
+                                                    content:
+                                                        en:
+                                                        fr: '2018'
+                                                    type: title
+                                                    style: style-1
+                                            M562dM338c:
+                                                component: object
+                                                type: tags
+                                                config:
+                                                    label:
+                                                        en:
+                                                        fr: ''
+                                                    placeholder:
+                                                        en:
+                                                        fr: ''
+                                                    help:
+                                                        en:
+                                                        fr: ''
+                                                    default: '1'
+                                                    collection: false
+                                                    required: false
+                                                    translatable: false
+                                                    style: style-1
+                                                    tags:
+                                                    -
+                                                        tag: sheet_organization_turnover
+                                                        label:
+                                                            fr: Chiffres d'affaires
+                                                    -
+                                                        tag: sheet_organization_staff
+                                                        label:
+                                                            fr: EBE
+                                                    -
+                                                        tag: sheet_organization_turnover
+                                                        label:
+                                                            fr: Résultat NET
+                                    config:
+                                        style:
+                            -
+                                5808afa65fc94:
+                                    component: block
+                                    type: 8-4
+                                    children:
+                                        -
+                                            5808afacc5da0:
+                                                component: block
+                                                type: 6-6
+                                                children:
+                                                    -
+                                                        Me8a6M9318:
+                                                            component: object
+                                                            type: text
+                                                            config:
+                                                                content:
+                                                                    en:
+                                                                    fr: '2019'
+                                                                type: title
+                                                                style: style-1
+                                                        Md0e7Me045:
+                                                            component: object
+                                                            type: tags
+                                                            config:
+                                                                label:
+                                                                    en:
+                                                                    fr: ''
+                                                                placeholder:
+                                                                    en:
+                                                                    fr: ''
+                                                                help:
+                                                                    en:
+                                                                    fr: ''
+                                                                default: '1'
+                                                                collection: false
+                                                                required: false
+                                                                translatable: false
+                                                                style: style-1
+                                                                tags:
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Chiffre d'affaires
+                                                                    -
+                                                                        tag: sheet_organization_staff
+                                                                        label:
+                                                                            fr: EBE
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Résultat NET
+                                                    -
+                                                        M6735M3274:
+                                                            component: object
+                                                            type: text
+                                                            config:
+                                                                content:
+                                                                    en:
+                                                                    fr: '2020'
+                                                                type: title
+                                                                style: style-1
+                                                        Me518M64f9:
+                                                            component: object
+                                                            type: tags
+                                                            config:
+                                                                label:
+                                                                    en:
+                                                                    fr: ''
+                                                                placeholder:
+                                                                    en:
+                                                                    fr: ''
+                                                                help:
+                                                                    en:
+                                                                    fr: ''
+                                                                default: '1'
+                                                                collection: false
+                                                                required: false
+                                                                translatable: false
+                                                                style: style-1
+                                                                tags:
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Chiffre d'affaires
+                                                                    -
+                                                                        tag: sheet_organization_staff
+                                                                        label:
+                                                                            fr: EBE
+                                                                    -
+                                                                        tag: sheet_organization_turnover
+                                                                        label:
+                                                                            fr: Résultat NET
+                                                config:
+                                                    style:
+                                        - []
+                                    config:
+                                        style:
+                        config:
+                            style:
+                config:
+                    style:
+            69962d34:
+                component: block
+                type: '12'
                 children:
                     -
                         27db4a35:
-                            component: "object"
-                            type: "text"
+                            component: object
+                            type: text
                             config:
-                                style: "style-2"
                                 content:
-                                    fr: "Objectifs de participation"
-                                    en: "Objectives"
-                                type: "title"
+                                    en: Objectives
+                                    fr: Objectifs de participation
+                                type: title
+                                style: style-2
                         37db4a33:
-                            component: "block"
-                            type: "4-8"
-                            config:
-                                style: "style-2"
+                            component: block
+                            type: 4-8
                             children:
                                 -
                                     d927a04b:
-                                        component: "object"
-                                        type: "editable-text"
+                                        component: object
+                                        type: editable-text
                                         config:
-                                            style: "style-1"
                                             label:
-                                                fr: "Description"
-                                                en: "Description"
+                                                en: Description
+                                                fr: Description
                                             placeholder:
-                                                fr: "Description"
-                                                en: "Description"
+                                                en: Description
+                                                fr: Description
+                                            hideLabel: false
                                             help:
-                                                fr: "Description"
-                                                en: "Description"
+                                                en: Description
+                                                fr: Description
                                             maxLength: 500
-                                            type: "text"
                                             required: false
+                                            type: text
+                                            style: style-1
                                             translatable: true
+                                            tag:
                                 -
                                     03b394ac:
-                                        component: "object"
-                                        type: "nomenclature"
+                                        component: object
+                                        type: nomenclature
                                         config:
-                                            style: "style-1"
                                             label:
-                                                fr: "Offres"
-                                                fr: "Offer"
-                                            placeholder:
-                                                fr: "Vos offres"
-                                                en: "Your offers"
+                                                en:
+                                                fr: Offres
                                             help:
-                                                fr: "Vos offres"
-                                                en: "Your offers"
-                                            mode: "checkboxes"
+                                                en: Your offers
+                                                fr: Vos offres
                                             nomenclature: "@nomenclature_offre_besoins_asddays2016->id"
+                                            mode: checkboxes
+                                            style: style-1
+                                            placeholder:
+                                                en: Your offers
+                                                fr: Vos offres
                                     63ccc105:
-                                        component: "object"
-                                        type: "nomenclature"
+                                        component: object
+                                        type: nomenclature
                                         config:
-                                            style: "style-1"
                                             label:
-                                                fr: "Besoins"
-                                                en: "Needs"
-                                            placeholder:
-                                                fr: "Vos besoins"
-                                                en: "Your needs"
+                                                en: Needs
+                                                fr: Besoins
                                             help:
-                                                fr: "Vos besoins"
-                                                en: "Your needs"
-                                            mode: "checkboxes"
+                                                en: Your needs
+                                                fr: Vos besoins
                                             nomenclature: "@nomenclature_offre_besoins_asddays2016->id"
+                                            mode: checkboxes
+                                            style: style-1
+                                            placeholder:
+                                                en: Your needs
+                                                fr: Vos besoins
+                            config:
+                                style: style-2
+                config:
+                    style: style-1
     sheet_template_investisseur_asddays:
         __construct: false
         event: '@event_asddays_2016'

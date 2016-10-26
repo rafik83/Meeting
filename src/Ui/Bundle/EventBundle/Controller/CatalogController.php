@@ -218,14 +218,7 @@ class CatalogController extends Controller
 
         $locale = $request->getLocale();
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
-            $sheet,
-            $locale
-        );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $request->getLocale());
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
 
         $rules = $this
             ->get('repository.rule_repository')
@@ -235,6 +228,13 @@ class CatalogController extends Controller
         if (empty($rules)) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
+
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $eventDomain->getEvent(),
+            $sheet,
+            $locale
+        );
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
         $ruleApplyer = $this->get('domain.rule.applyer');
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);

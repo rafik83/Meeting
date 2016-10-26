@@ -19,6 +19,8 @@ function Update(element)
     this.input.addEventListener('blur', this.blured.bind(this));
     this.input.addEventListener('keypress', this.keyupped.bind(this));
     this.input.addEventListener('keyup', this.keyupped.bind(this));
+
+    this.placeholder();
 }
 
 Update.prototype.clicked = function (event)
@@ -41,10 +43,20 @@ Update.prototype.blured = function (event)
     this.save();
 };
 
+Update.prototype.placeholder = function ()
+{
+    if (this.data.value === null || this.data.value === '') {
+        this.element.innerHTML = '<span class="glyphicon glyphicon-edit"></span>';
+    } else {
+        this.element.innerHTML = this.data.value;
+    }
+};
+
 Update.prototype.close = function ()
 {
-    this.editing           = false;
-    this.element.innerHTML = this.data.value;
+    this.editing = false;
+
+    this.placeholder();
 };
 
 Update.prototype.getInputValue = function ()
@@ -79,9 +91,23 @@ Update.prototype.save = function ()
         var xhr = new XMLHttpRequest();
         xhr.open('POST', this.url);
         xhr.onload = function (event) {
+            var updatetableInfo = document.getElementById('updatetable-info');
+            if (updatetableInfo !== null) {
+                updatetableInfo.parentNode.removeChild(updatetableInfo);
+            }
             if (event.target.status !== 200) {
                 alert(JSON.parse(event.target.response).error);
                 this.revert();
+            } else {
+                var response = JSON.parse(event.target.response);
+
+                if (response.info !== undefined) {
+                    var span = document.createElement('span');
+                    span.setAttribute('id', 'updatetable-info');
+                    span.setAttribute('class', 'label label-warning');
+                    span.innerHTML = response.info;
+                    this.element.parentNode.appendChild(span);
+                }
             }
         }.bind(this);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');

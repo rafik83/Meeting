@@ -55,6 +55,6 @@ Feature:
     And I should see "user_asddays_3@proximum.com"
     When I follow "admin.users.details"
     Then I should see "gender.woman"
-    And I should see "Julie Pierini"
-    And I should see "Chef de projet"
+    And I should see "Julie Martin"
+    And I should see "Community Manager"
     And I should see "user_asddays_3@proximum.com"

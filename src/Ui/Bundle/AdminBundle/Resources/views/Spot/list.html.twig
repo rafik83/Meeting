@@ -5,7 +5,7 @@
 {% block content %}
     <h1 class="page-header">{{ 'admin.spot.title'|trans }}</h1>
 
-    {% if filtered or spots|length > 0 %}
+    {% if filtered or spotsList.hasSpot %}
         <div class="row">
             {{ form_start(filter_form) }}
                 <div class="col-md-2 text-right">
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        {% if spots|length %}
+        {% if spotsList.hasSpot %}
         <table class="table table-hover selectable-row filterable">
             <thead>
                 <tr>
@@ -77,19 +77,29 @@
                     <th>
                         {{ 'admin.spot.listSpot.seatCapacity'|trans }}
                     </th>
+                    <th>{{ 'admin.spot.listSpot.sheet'|trans }}</th>
                     <th>
                         {{ list_macros.choice_as_dropdown(filter_form.active, false, true) }}
                     </th>
                 </tr>
             </thead>
             <tbody>
-                {% for spot in spots %}
+                {% for spot in spotsList.spots %}
                     <tr>
                         <td><input type="checkbox" id="batch_checkbox_{{ spot.id }}" name="ids[]" value="{{ spot.id }}" /></td>
                         <td class="updatable" data-type="string" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'reference', 'value': spot.reference }|json_encode }}">{{ spot.reference }}</td>
                         <td class="updatable" data-type="float" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'size', 'value': spot.size }|json_encode }}">{{ spot.size }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'meetingCapacity', 'value': spot.meetingCapacity }|json_encode }}">{{ spot.meetingCapacity }}</td>
                         <td class="updatable" data-type="int" data-url="{{ update_url }}" data-update="{{ { 'id': spot.id, 'property': 'seatCapacity', 'value': spot.seatCapacity }|json_encode }}">{{ spot.seatCapacity }}</td>
+                        <td>
+                            <ul>
+                            {% for sheet in spot.sheets %}
+                                <li>
+                                    <a href="{{ path('admin_sheet_details', {event: event.id, sheet: sheet.id}) }}">{{ sheet.name }}</a>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </td>
                         <td>{{ spot.active ? 'admin.spot.active.yes'|trans : 'admin.spot.active.no'|trans }}</td>
                     </tr>
                 {% endfor %}

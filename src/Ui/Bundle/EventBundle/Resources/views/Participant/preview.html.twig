@@ -1,25 +1,24 @@
 {% set isCatalog = isCatalog|default(false) %}
+{% set isAccountParticipantLinkEnabled = not isCatalog and participant.editable and null != participant.sheetId %}
+
 <div class="user clearfix">
     <div class="user__avatar">
         <span class="bullet"></span>
-        {% if not isCatalog and participant.editable and null != participant.sheetId %}
+
+        {% if isAccountParticipantLinkEnabled %}
             <a href="{{ path('event_account_participant', {sheet: participant.sheetId, participant: participant.id}) }}">
-                <div class="avatar">
-                    {% if participant.avatar != null %}
-                        <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
-                    {% else %}
-                        <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
-                    {% endif %}
-                </div>
+        {% endif %}
+
+        <div class="avatar">
+            {% if participant.avatar != null %}
+                <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ participant.avatar|imagine_filter('user_avatar') }}">
+            {% else %}
+                <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
+            {% endif %}
+        </div>
+
+        {% if isAccountParticipantLinkEnabled %}
             </a>
-        {% else %}
-            <div class="avatar">
-                {% if participant.avatar != null %}
-                    <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ asset(participant.avatar) }}">
-                {% else %}
-                    <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
-                {% endif %}
-            </div>
         {% endif %}
     </div>
     <div class="user__infos">

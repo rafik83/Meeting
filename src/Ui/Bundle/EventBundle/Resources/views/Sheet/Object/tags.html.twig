@@ -1,7 +1,10 @@
 <section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
-    <header>
-        <h2>{{ item.label(locale, fallback) }}{% if item.required|default(false) %}*{% endif %}</h2>
-    </header>
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+        </header>
+    {% endif %}
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}
@@ -34,7 +37,7 @@
     </div>
     {% if item.collectionEnabled and not isCatalog %}
         <footer>
-            <i class="icon-Note_2"></i> <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">{{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
+            <a href="{{ path('event_sheet_form', { 'locale': locale, 'key': uid }) }}" class="edit-link" data-toggle="modal" data-target="#edit-modal"><i class="icon-Note_2"></i> {{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
         </footer>
     {% endif %}
 </section>

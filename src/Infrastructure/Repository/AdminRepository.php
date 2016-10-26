@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class AdminRepository implements AdminRepositoryInterface
@@ -183,5 +184,40 @@ class AdminRepository implements AdminRepositoryInterface
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'admin', 'id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllowedPartner(Event $event, Type $type)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin', 'admin.id')
+            ->join('admin.types', 'type', 'WITH', 'admin.role = :role AND type = :type')
+            ->setParameter('type', $type)
+            ->setParameter('role', Admin::ROLE_PARTNER)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllowedOrganizer(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin')
+            ->from(Admin::class, 'admin', 'admin.id')
+            ->join('admin.events', 'event', 'WITH', 'event = :event AND admin.role = :role')
+            ->setParameter('event', $event)
+            ->setParameter('role', Admin::ROLE_ORGANIZER);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

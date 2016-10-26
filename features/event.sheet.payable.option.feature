@@ -24,7 +24,7 @@ Feature: Select payable option in sheet
     And I press "sheet_image_data_submit"
     Then I should be on this page "/fr/sheet/fr"
     And I should not see "Ajouter un logo"
-    When I follow "object-image-edit"
+    When I follow "Ajouter un logo"
     And I should see "sheet.object.image.remove"
     And The radio "sheet_image_data_selectedProduct_6" should be checked
 
@@ -70,13 +70,13 @@ Feature: Select payable option in sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
-    When I follow "object-image-edit"
+    When I follow "Ajouter un logo"
     Then the response status code should be 200
     And I should see "sheet.object.option.buyable.label"
     And I check radio "sheet_image_data_selectedProduct_5"
     And I press "form.sheet_image_data.children.submit.label"
     Then I should be on this page "/fr/sheet/fr"
-    When I follow "object-image-edit"
+    When I follow "Ajouter un logo"
     Then The radio "sheet_image_data_selectedProduct_5" should be checked
 
   Scenario: I can change my media payable option to "Option F" that are included on the plan
@@ -105,7 +105,7 @@ Feature: Select payable option in sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
-    When I follow "object-image-edit"
+    When I follow "Ajouter un logo"
     Then the response status code should be 200
     And I press "sheet.object.image.remove"
     Then I should be on this page "/fr/sheet"

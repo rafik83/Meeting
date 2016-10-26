@@ -47,11 +47,11 @@ class ParticipantAndPlanning
      */
     public function __construct(array $labels, $enabled, Product $participant = null, Product $planning = null)
     {
-        if ($participant && !$participant->isParticipant()) {
+        if (null !== $participant && !$participant->isParticipant()) {
             throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
         }
 
-        if ($planning && !$planning->isPlanning()) {
+        if (null !== $planning && !$planning->isPlanning()) {
             throw new WrongTypeException($planning, Product::TYPE_PLANNING);
         }
 
