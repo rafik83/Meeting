@@ -418,6 +418,7 @@ class SheetController extends Controller
         return $this->render('EventBundle:Participant:add.html.twig', [
             'uid'   => $key,
             'form'  => $form->createView(),
+            'sheet' => $sheet,
             'label' => $label,
         ]);
     }

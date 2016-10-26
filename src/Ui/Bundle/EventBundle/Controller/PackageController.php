@@ -295,6 +295,7 @@ class PackageController extends Controller
         return $this->render('EventBundle:Participant:addFromPackage.html.twig', [
             'label' => $label,
             'form'  => $form->createView(),
+            'sheet' => $sheet
         ]);
     }
 
