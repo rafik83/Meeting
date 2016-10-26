@@ -112,6 +112,9 @@ fos_elastica:
                 index:
                     analysis:
                         analyzer:
+                            lowercaseAnalyzer:
+                                tokenizer: "keyword"
+                                filter: "lowercase"
                             sheetAnalyzer:
                                 tokenizer: "standard"
                                 filter: ["standard", "lowercase"]
@@ -221,7 +224,7 @@ fos_elastica:
                             fields:
                                 city:
                                     type: string
-                                    index: "not_analyzed"
+                                    analyzer: "lowercaseAnalyzer"
                                 city_autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
@@ -231,7 +234,7 @@ fos_elastica:
                             properties:
                                 label:
                                     type: string
-                                    index: "not_analyzed"
+                                    analyzer: "lowercaseAnalyzer"
                                 label_autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
