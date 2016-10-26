@@ -116,6 +116,11 @@ class SheetListView
     public $inCatalog;
 
     /**
+     * @var string
+     */
+    public $spotReference;
+
+    /**
      * SheetListView constructor.
      *
      * @param int                  $id
@@ -132,6 +137,7 @@ class SheetListView
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
+     * @param string|null          $spotReference
      * @param Trace|null           $trace
      */
     public function __construct(
@@ -149,6 +155,7 @@ class SheetListView
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt,
         $impersonationToken,
+        $spotReference = null,
         Trace $trace = null
     ) {
         $this->id                 = $id;
@@ -165,6 +172,7 @@ class SheetListView
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
+        $this->spotReference      = $spotReference;
 
         if (null !== $trace) {
             $this->traceAction = $trace->getAction();

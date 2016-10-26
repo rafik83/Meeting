@@ -17,6 +17,10 @@ Proximum\Vimeet\Domain\Model\Spot:
             type: integer
         active:
             type: boolean
+    oneToMany:
+        sheets:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            mappedBy: spot
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

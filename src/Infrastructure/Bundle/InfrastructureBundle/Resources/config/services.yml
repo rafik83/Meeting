@@ -1247,6 +1247,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Import\Import }
+    command.sheet.assign_spot_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\AssignSpotHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AssignSpot }
 
     #
     # Security
@@ -1955,7 +1962,21 @@ services:
             - '@query.meeting.message.message_meeting_request_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery }
-
+    query.spot.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\SheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    query.spot.spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\SpotViewQueryHandler
+        arguments:
+            - '@query.spot.sheet_view_query_handler'
+    query.spot.list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\ListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@query.spot.spot_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
     #
     # Elastic Transformer
     #

@@ -1,0 +1,43 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Spot;
+
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\View\Spot\SheetView;
+
+class SheetViewQueryHandler
+{
+    /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
+     * @param SheetInfoGuesser $sheetInfoGuesser
+     */
+    public function __construct(SheetInfoGuesser $sheetInfoGuesser)
+    {
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    }
+
+    /**
+     * @param SheetViewQuery $query
+     *
+     * @return SheetView
+     */
+    public function handle(SheetViewQuery $query)
+    {
+        return new SheetView(
+            $query->sheet->getId(),
+            $this->sheetInfoGuesser->guessSheetName($query->sheet, $query->locale)
+        );
+    }
+}

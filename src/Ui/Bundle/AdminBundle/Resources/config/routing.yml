@@ -384,6 +384,13 @@ admin_sheet_batch:
         event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:batch }
+admin_sheet_assign_spot:
+    path: /event/{event}/sheet/{sheet}/assign-spot
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Sheet:assignSpot }
 
 #
 # Order

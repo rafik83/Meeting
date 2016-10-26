@@ -25,8 +25,10 @@ class FilteredQueryBuilder extends QueryBuilder
         parent::__construct($em);
 
         $this
-            ->select('spot')
-            ->from(Spot::class, 'spot');
+            ->select('spot, sheets')
+            ->from(Spot::class, 'spot')
+            ->leftJoin('spot.sheets', 'sheets')
+            ->orderBy('spot.reference');
     }
 
     /**

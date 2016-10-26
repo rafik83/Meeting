@@ -25,7 +25,7 @@ CatalogSheetCardRequestCheckbox.prototype.displayNoPreference = function ()
     var count            = this.count();
     var toCheck          = count === 0 ? 'checked' : '';
     var toDisable        = count === 0 ? 'disabled' : '';
-    var noPreferenceHtml = '<div class="checkbox noPreferenceCheckbox"><label class="control-label"><input type="checkbox" disabled ' + toCheck + '>' + this.placeholder + '</label></div>';
+    var noPreferenceHtml = '<div class="checkbox noPreferenceCheckbox"><label class="control-label"><input type="checkbox" ' + toDisable + ' ' + toCheck + '>' + this.placeholder + '</label></div>';
 
     var node = document.createElement("div");
     node.innerHTML = noPreferenceHtml;

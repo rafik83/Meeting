@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
@@ -120,6 +121,11 @@ class Sheet implements TraceableInterface
      * @var \DateTimeInterface
      */
     private $inCatalogAt;
+
+    /**
+     * @var Spot
+     */
+    private $spot;
 
     /**
      * Sheet constructor.
@@ -745,6 +751,30 @@ class Sheet implements TraceableInterface
 
         // Remove from catalog
         $this->setInCatalog(false);
+    }
+
+    /**
+     * @return Spot
+     */
+    public function getSpot()
+    {
+        return $this->spot;
+    }
+
+    /**
+     * @param Spot $spot
+     */
+    public function setSpot(Spot $spot)
+    {
+        $this->spot = $spot;
+    }
+
+    /**
+     * Unassign spot
+     */
+    public function removeSpot()
+    {
+        $this->spot = null;
     }
 
     /**

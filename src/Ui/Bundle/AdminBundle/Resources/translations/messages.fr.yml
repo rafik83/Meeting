@@ -252,6 +252,10 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
+admin.sheet.assign.spot.exception: Une erreur est survenu
+admin.sheet.assign.spot.notFound: "Ce lieu n'existe pas"
+admin.sheet.assign.spot.notActive: "Ce lieu n'est pas actif"
+admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.link: Changer
@@ -298,6 +302,7 @@ admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.read: Voir
+admin.sheet.spot: Lieu
 admin.sheet.state: Etat
 admin.sheet.title: Participations
 admin.sheet.title.count: '{0} Aucun participation|{1} 1 Participation|]1,Inf[ %count% Participations'
@@ -332,6 +337,7 @@ admin.spot.listSpot.meetingCapacity: 'Nombre de rendez-vous en simultané'
 admin.spot.listSpot.no: Non
 admin.spot.listSpot.reference: Identifiant
 admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
+admin.spot.listSpot.sheet: 'Fiche(s) assignée(s)'
 admin.spot.listSpot.size: 'Taille (en m²)'
 admin.spot.listSpot.yes: Oui
 admin.spot.search_facets.link: 'Filtres catalogue'

@@ -42,6 +42,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
         follower:
             targetEntity: Proximum\Vimeet\Domain\Model\Admin
+        spot:
+            targetEntity: Proximum\Vimeet\Domain\Model\Spot
+            inversedBy: sheets
+            joinColumn:
+                onDelete: SET NULL
     oneToMany:
         participants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
