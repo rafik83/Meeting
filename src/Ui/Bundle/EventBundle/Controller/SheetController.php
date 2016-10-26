@@ -551,22 +551,19 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Sheet   $sheet
+     * @param Sheet $sheet
      *
      * @return RedirectResponse
      */
-    public function submitValidationAction(Request $request, Sheet $sheet)
+    public function submitValidationAction(Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $submitValidation = new SubmitValidation($sheet);
+        $submitValidation = new SubmitValidation($sheet, $this->getUser());
 
         $this->get('tactician.commandbus')->handle($submitValidation);
 
-        return $this->redirectToRoute('event_sheet_locale', [
-            'locale' => $request->getLocale(),
-        ]);
+        return $this->redirectToRoute('event_sheet');
     }
 
     /**

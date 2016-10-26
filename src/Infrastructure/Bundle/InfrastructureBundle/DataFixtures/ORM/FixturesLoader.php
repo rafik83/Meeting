@@ -64,6 +64,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/Meeting/RdvCarnot2016-Message.yml',
             __DIR__ . '/Meeting/RdvCarnot2016-CanceledRequestNotification.yml',
             __DIR__ . '/Admin.yml',
+            __DIR__ . '/AdminWithType.yml',
         ];
 
         $options = [

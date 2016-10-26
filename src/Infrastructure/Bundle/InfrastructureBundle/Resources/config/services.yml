@@ -685,6 +685,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\SubmitValidationHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SubmitValidation }
     command.admin.create_handler:
