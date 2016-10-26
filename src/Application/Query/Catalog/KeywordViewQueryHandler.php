@@ -52,6 +52,13 @@ class KeywordViewQueryHandler
             }
         }
 
+        // handle sheetname
+        if (!empty($keywords['sheet']['sheetname'])) {
+            foreach ($keywords['sheet']['sheetname']['buckets'] as $keyword) {
+                $keywordViews[] = new KeywordView($keyword['key']);
+            }
+        }
+
         return $keywordViews;
     }
 }

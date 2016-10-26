@@ -150,6 +150,9 @@ fos_elastica:
                                 raw:
                                     type: string
                                     index: "not_analyzed"
+                                autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
                         content:
                             type: string
                         content_en:
