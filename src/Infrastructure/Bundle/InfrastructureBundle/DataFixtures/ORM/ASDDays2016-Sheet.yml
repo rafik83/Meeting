@@ -121,7 +121,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             97ed778d: { items: ["category2"] }
             93de093f: { text: "10 rue saint marc" }
             de66af5d: { text: "75002" }
-            d224f0e7: { text: "Paris" }
+            d224f0e7: { text: "Lyon" }
             e801edd4: { country: "FR" }
             57da9df7ced30: { boolean: true }
             57da8f210fbf2: { text: "Mon activité" }
