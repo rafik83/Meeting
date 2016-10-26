@@ -1,10 +1,10 @@
 <div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
     {% set label = item.label(locale, fallback) %}
-    <header>
-        {% if not item.hasOnlyTagUrl %}
+    {% if not item.hasOnlyTagUrl %}
+        <header>
             <h2>{{ label }}</h2>
-        {% endif %}
-    </header>
+        </header>
+    {% endif %}
     <div class="section__content">
         <ul>
             {% for tag in item.tags %}
@@ -24,8 +24,7 @@
                         {% endfor %}
                     {% else %}
                         {% if value is url %}
-                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
-                            </a>
+                            <a href="{{ value }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}</a>
                         {% else %}
                             {% if not isCatalog %}
                                 <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">

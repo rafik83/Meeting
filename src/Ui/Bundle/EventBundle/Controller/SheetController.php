@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
@@ -30,6 +31,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,6 +70,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -84,16 +87,102 @@ class SheetController extends Controller
     }
 
     /**
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param string      $locale
+     *
+     * @return BinaryFileResponse
+     */
+    public function generatePdfAction(EventDomain $eventDomain, Sheet $sheet, $locale)
+    {
+        $user      = $this->getUser();
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $eventDomain->getEvent(), $locale);
+
+        if ($userSheet !== $sheet) {
+            if (!$sheet->isInCatalog()) {
+                throw $this->createAccessDeniedException('Sheet not in catalog');
+            }
+
+            $rules = $this
+                ->get('repository.rule_repository')
+                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+
+            if (empty($rules)) {
+                throw $this->createNotFoundException('You do not have the right to see this sheet');
+            }
+        }
+
+        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($this->getUser(), $sheet, $locale);
+
+        return new BinaryFileResponse($pathToPdf);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param User        $user
+     * @param string      $locale
+     *
+     * @return Response
+     */
+    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $locale)
+    {
+        $event     = $eventDomain->getEvent();
+        $locale    = $event->getAvailableLocale($locale);
+        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $event, $locale);
+
+        $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
+
+        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+
+        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
+            $event,
+            $sheet,
+            $user,
+            $locale
+        );
+
+        if ($userSheet !== $sheet) {
+            if (!$sheet->isInCatalog() || !$isCatalogAllowed) {
+                throw $this->createAccessDeniedException('Sheet not in catalog');
+            }
+
+            $rules = $this
+                ->get('repository.rule_repository')
+                ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+
+            if (empty($rules)) {
+                throw $this->createNotFoundException('You do not have the right to see this sheet');
+            }
+
+            $ruleApplyer = $this->get('domain.rule.applyer');
+            $ruleApplyer->applyRuleForTemplate($templateData, $rules);
+            $ruleApplyer->applyRuleForCardList($participants, $rules);
+        }
+
+        return $this->render('EventBundle:Sheet:print.html.twig', [
+            'event'         => $event,
+            'sheet'         => $sheet,
+            'taggedData'    => $taggedData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
+            'templateData'  => $templateData,
+        ]);
+    }
+
+    /**
      * @param Event  $event
      * @param Sheet  $sheet
+     * @param User   $fromUser
      * @param string $locale
      *
      * @return array
      */
-    private function sheetInfos(Event $event, Sheet $sheet, $locale)
+    private function sheetInfos(Event $event, Sheet $sheet, User $fromUser, $locale)
     {
         $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale);
+        $cardListViewQuery = new CardListViewQuery($sheet, $fromUser, $locale);
         $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
 
         $registrationTemplateData = $this
@@ -256,6 +345,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
@@ -382,6 +472,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
@@ -424,8 +515,10 @@ class SheetController extends Controller
 
         $remove = new Remove($sheet);
         $form   = $this->createForm(RemoveType::class, $remove, [
-            'action'       => $this->generateUrl('event_sheet_handle_remove_participant',
-                ['locale' => $locale, 'key' => $key,]),
+            'action' => $this->generateUrl(
+                'event_sheet_handle_remove_participant',
+                ['locale' => $locale, 'key' => $key]
+            ),
             'participants' => $sheet->getParticipants(),
         ]);
 
@@ -530,6 +623,7 @@ class SheetController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
+            $this->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);

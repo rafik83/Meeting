@@ -26,11 +26,11 @@ Feature: List and filter orders
   Scenario: Filter event orders
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/order"
-    And I should see "Elao"
+    And I should see "Onera"
     And I should see "Hello World Company"
     When I select "3" from "product"
     And I press "admin.filter"
-    Then I should see "Elao"
+    Then I should see "Onera"
     And I should not see "Hello World Company"
 
 

@@ -58,6 +58,16 @@ Mot de passe: `vimeet360`
 
 User exhibitor: test@elao.com / p@ssw0rd
 
+### NPM
+
+Install a package:
+
+    ⇒ npm install <package> --save
+
+Regenerate manually npm-shrinkwrap.json:
+
+    ⇒ npm shrinkwrap
+
 ### Localization
 
 Create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).

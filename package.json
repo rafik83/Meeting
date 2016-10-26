@@ -6,15 +6,16 @@
   },
   "private": true,
   "dependencies": {
-    "jquery": "2.1.1",
     "bootstrap-sass": "3.3.6",
     "elao-form.js": "0.1.*",
-    "tablesort": "4.0.1",
-    "select2": "4.0.2",
-    "intl-tel-input": "8.5.2",
-    "moment": ">=2.8",
     "eonasdan-bootstrap-datetimepicker": "4.15.35",
-    "pubsub-js": "1.5.3"
+    "intl-tel-input": "8.5.2",
+    "jquery": "2.1.1",
+    "moment": ">=2.8",
+    "phantomjs-prebuilt": "^2.1.13",
+    "pubsub-js": "1.5.3",
+    "select2": "4.0.2",
+    "tablesort": "4.0.1"
   },
   "napa": {},
   "scripts": {

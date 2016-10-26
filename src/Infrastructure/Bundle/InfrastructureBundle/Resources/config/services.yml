@@ -2224,3 +2224,11 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    printer.sheet_pdf_printer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter
+        arguments:
+            - '@router'
+            - '%phantomjs_path%'
+            - '%phantomjs_script%'
+            - '%phantomjs_http_password%'
