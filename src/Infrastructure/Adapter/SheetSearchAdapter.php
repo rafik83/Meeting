@@ -94,9 +94,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $query = new Query();
         $query->addAggregation($this->findCityQuery($event, $filter))
-          ->addAggregation($this->findZipcodeQuery($event, $filter))
-          ->addAggregation($this->findCountryQuery($event, $filter, $locale))
-          ->setSize(0);
+            ->addAggregation($this->findZipcodeQuery($event, $filter))
+            ->addAggregation($this->findCountryQuery($event, $filter, $locale))
+            ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -135,6 +135,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query = new Query();
         $query->addAggregation($filterKeywordsEvent)
+            ->addAggregation($this->findSheetnameQuery($event, $filter))
             ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();
@@ -320,5 +321,27 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterCountryEvent->addAggregation($nestedCountryAggregations);
 
         return $filterCountryEvent;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $filter
+     *
+     * @return Filter
+     */
+    private function findSheetnameQuery(Event $event, $filter)
+    {
+        $boolQuery = new Query\BoolQuery();
+        $boolQuery->addMust(new Query\Match('sheetName.autocomplete', $filter));
+        $boolQuery->addMust(new Query\Match('event', $event->getId()));
+
+        $sheetAggregation = new Terms('sheetname');
+        $sheetAggregation->setField('sheetName.raw');
+
+        $filterQuery     = new FilterQuery($boolQuery);
+        $filterSheetname = new Filter('sheet', $filterQuery);
+        $filterSheetname->addAggregation($sheetAggregation);
+
+        return $filterSheetname;
     }
 }

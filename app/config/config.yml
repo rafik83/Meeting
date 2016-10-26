@@ -151,6 +151,9 @@ fos_elastica:
                                 raw:
                                     type: string
                                     analyzer: "lowercaseAnalyzer"
+                                autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
                         content:
                             type: string
                         content_en:
