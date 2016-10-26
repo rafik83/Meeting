@@ -55,10 +55,10 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query->addSort(['inCatalogAt' => 'desc']);
-        } elseif (Constant::ORDER_BY_ALPHABETICAL === $orderBy) {
-            $query->addSort(['sheetName.raw' => 'asc']);
-        } else {
+        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
             $query->addSort(['_score' => 'desc']);
+        } else {
+            $query->addSort(['sheetName.raw' => 'asc']);
         }
 
         if (true === $getAggregations) {
