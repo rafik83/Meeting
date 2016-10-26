@@ -40,3 +40,17 @@ Feature: Search sheet in catalog
     Then I should see "World Company Inc"
     But I should not see "Onera"
     And I should not see "Hello World Company"
+
+  Scenario: I can search and filter sheet by keyword
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr"
+    And I go to this page "/fr/catalog"
+    Then I should see "Onera"
+    And I should see "World Company Inc"
+    And I should see "Hello World Company"
+    When I go to this page "/fr/catalog?content=onera"
+    Then I should see "Onera"
+    But I should not see "World Company Inc"
+    And I should not see "Hello World Company"
+    When I go to this page "/fr/catalog?content=unknowsheet"
+    Then I should see "catalog.noResult"
