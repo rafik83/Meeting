@@ -70,7 +70,10 @@ class SelectParticipantAndPlanningHandler
         // Update participant cart row
         if (count($orders) > 0) {
             $order = $this->merger->merge($orders);
-            $cart->resolveParticipantsQuantity($order);
+
+            if (null !== $order) {
+                $cart->resolveParticipantsQuantity($order);
+            }
         } else {
             $cart->resolveParticipantsQuantity();
         }
@@ -85,8 +88,10 @@ class SelectParticipantAndPlanningHandler
         if (count($orders) > 0) {
             $merged = $this->merger->merge($orders);
 
-            if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
-                $orderPlanningQuantity = $orderRow->getQuantity();
+            if ($merged !== null ) {
+                if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
+                    $orderPlanningQuantity = $orderRow->getQuantity();
+                }
             }
         }
 

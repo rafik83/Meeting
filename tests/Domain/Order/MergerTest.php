@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Order;
 
+use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Order\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -67,5 +67,13 @@ class MergerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $order->getRowForProduct($plan)->getQuantity());
         $this->assertEquals(1, $order->getRowForProduct($participant)->getQuantity());
         $this->assertEquals(4, $order->getRowForProduct($option)->getQuantity());
+    }
+
+    public function testOrderMergerException()
+    {
+        $this->expectException(OrderMergerException::class);
+
+        $orderMerger = new Merger();
+        $order       = $orderMerger->merge([]);
     }
 }
