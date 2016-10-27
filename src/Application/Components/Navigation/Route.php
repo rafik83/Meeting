@@ -45,7 +45,7 @@ final class Route
     ];
 
     /**
-     * @param $route
+     * @param string $route
      *
      * @return bool
      */
@@ -55,7 +55,7 @@ final class Route
     }
 
     /**
-     * @param $route
+     * @param string $route
      *
      * @return bool
      */
@@ -65,7 +65,7 @@ final class Route
     }
 
     /**
-     * @param $route
+     * @param string $route
      *
      * @return bool
      */
