@@ -57,7 +57,7 @@ class SheetSubmenuViewQueryHandler
             !Route::isPackage($query->route)
         );
 
-        if ($query->sheet->getPackage()->isPassable() === true) {
+        if ($query->sheet->getPackage() !== null && $query->sheet->getPackage()->isPassable() === true) {
             $hasProductsInCartRow = $this->cartRowRepository->hasProducts($query->sheet);
 
             $buttonViews[] = new SubmenuButtonView(
