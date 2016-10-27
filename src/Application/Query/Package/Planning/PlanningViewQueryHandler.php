@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Package\Planning;
 
 use Proximum\Vimeet\Application\View\Package\ProductView;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Order\Merger;
 
 class PlanningViewQueryHandler
 {
@@ -21,11 +22,18 @@ class PlanningViewQueryHandler
     private $cartManager;
 
     /**
-     * @param CartManager $cartManager
+     * @var Merger
      */
-    public function __construct(CartManager $cartManager)
+    private $orderMerger;
+
+    /**
+     * @param CartManager $cartManager
+     * @param Merger      $orderMerger
+     */
+    public function __construct(CartManager $cartManager, Merger $orderMerger)
     {
         $this->cartManager = $cartManager;
+        $this->orderMerger = $orderMerger;
     }
 
     /**
@@ -38,11 +46,16 @@ class PlanningViewQueryHandler
         $cart            = $this->cartManager->getCart($planningViewQuery->sheet);
         $locale          = $planningViewQuery->locale;
         $planningProduct = $planningViewQuery->sheet->getPackage()->getPlanning();
-        $selectedPlan    = $cart->getPlanRow();
+        $selectedPlan    = ($cart->getPlanRow() !== null) ? $cart->getPlanRow()->getProduct() : null;
         $included        = 0;
 
+        if ($planningViewQuery->sheet->hasOrders()) {
+            $order        = $this->orderMerger->merge($planningViewQuery->sheet->getOrders());
+            $selectedPlan = $order->getPlan();
+        }
+
         if ($selectedPlan) {
-            $planningProductIncluded = $selectedPlan->getProduct()->getIncludedPlanningProduct();
+            $planningProductIncluded = $selectedPlan->getIncludedPlanningProduct();
 
             if ($planningProductIncluded) {
                 $included = $planningProductIncluded->getQuantity();
