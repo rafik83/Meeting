@@ -1,0 +1,10 @@
+<ul class="sub-header__item">
+    {% for button in submenuView.submenuButtonViews %}
+        <li>
+            <a href="{{ button.link }}" class="btn btn-primary btn-lg {{ (button.state == false) ? 'btn-inactive': '' }}">
+                <i class="{{ button.icon }}"></i>
+                <span class="name">{{ button.label|trans }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

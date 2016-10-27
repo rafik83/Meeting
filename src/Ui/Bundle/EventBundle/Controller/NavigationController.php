@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,33 @@ class NavigationController extends Controller
 
         return $this->render('EventBundle::Navigation/dropdownMenu.html.twig', [
             'menuView' => $menuView,
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function subMenuAction(Request $request, EventDomain $eventDomain)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $requestStack = $this->get('request_stack');
+        $route        = $requestStack->getMasterRequest()->get('_route');
+
+        $submenuView = $this->get('tactician.commandbus.query')->handle(
+            new SubmenuViewQuery(
+                $eventDomain->getEvent(),
+                $this->getUser(),
+                $request->getLocale(),
+                $route
+            )
+        );
+
+        return $this->render('EventBundle::Navigation/submenu.html.twig', [
+            'submenuView' => $submenuView,
         ]);
     }
 }

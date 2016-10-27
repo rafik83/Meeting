@@ -1881,6 +1881,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
         arguments:
             - '@adapter.router'
+    navigation.session_flashbag:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\SessionFlashbag
+        arguments:
+            - '@session.flash_bag'
 
     ##
     # Navigation query handler
@@ -1892,6 +1896,13 @@ services:
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
+    query.navigation.submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery }
     query.navigation.category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\CategoryViewQueryHandler
         arguments:
