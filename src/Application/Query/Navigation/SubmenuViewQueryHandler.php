@@ -10,37 +10,46 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
-use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
-use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
-use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class SubmenuViewQueryHandler
 {
-    /**
-     * @var NavigationBuilderInterface
-     */
-    private $navigationBuilder;
-
     /**
      * @var SheetGuesser
      */
     private $sheetGuesser;
 
     /**
+     * @var SheetSubmenuViewQueryHandler
+     */
+    private $sheetSubmenuViewQueryHandler;
+
+    /**
+     * @var CatalogSubmenuViewQueryHandler
+     */
+    private $catalogSubmenuViewQueryHandler;
+
+    /**
      * SubmenuViewQueryHandler constructor.
      *
-     * @param SheetGuesser               $sheetGuesser
-     * @param NavigationBuilderInterface $navigationBuilder
+     * @param SheetGuesser                   $sheetGuesser
+     * @param SheetSubmenuViewQueryHandler   $sheetSubmenuViewQueryHandler
+     * @param CatalogSubmenuViewQueryHandler $catalogSubmenuViewQueryHandler
      */
     public function __construct(
         SheetGuesser $sheetGuesser,
-        NavigationBuilderInterface $navigationBuilder
+        SheetSubmenuViewQueryHandler $sheetSubmenuViewQueryHandler,
+        CatalogSubmenuViewQueryHandler $catalogSubmenuViewQueryHandler
     ) {
-        $this->navigationBuilder = $navigationBuilder;
-        $this->sheetGuesser      = $sheetGuesser;
+        $this->sheetGuesser                   = $sheetGuesser;
+        $this->sheetSubmenuViewQueryHandler   = $sheetSubmenuViewQueryHandler;
+        $this->catalogSubmenuViewQueryHandler = $catalogSubmenuViewQueryHandler;
     }
 
     /**
@@ -56,41 +65,29 @@ class SubmenuViewQueryHandler
             $query->locale
         );
 
-        $buttonViews = [];
-
         if (Route::isCatalog($query->route) === true || Route::isMeetingRequest($query->route) === true) {
-            $buttonViews[] = new SubmenuButtonView(
-                Category::CATALOG_ICON,
-                'navigation.category.catalog',
-                $this->navigationBuilder->getRoute('event_catalog_index'),
-                Route::isCatalog($query->route)
+            $buttonViews = $this->catalogSubmenuViewQueryHandler->handle(
+                new CatalogSubmenuViewQuery(
+                    $query->user,
+                    $query->event,
+                    $query->locale,
+                    $sheet,
+                    $query->route
+                )
             );
 
-            $buttonViews[] = new SubmenuButtonView(
-                Category::MEETING_ICON,
-                'navigation.category.meeting',
-                $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $sheet->getId(),
-                ]),
-                Route::isMeetingRequest($query->route)
-            );
-        } else {
-            $buttonViews[] = new SubmenuButtonView(
-                Category::SHEET_ICON,
-                'sheet.title',
-                $this->navigationBuilder->getRoute('event_sheet'),
-                !Route::isPackage($query->route)
-            );
-
-            if ($sheet->getPackage()->isPassable() === true) {
-                $buttonViews[] = new SubmenuButtonView(
-                    Category::PACKAGE_ICON,
-                    'package.title',
-                    $this->navigationBuilder->getRoute('event_package'),
-                    Route::isPackage($query->route)
-                );
-            }
+            return new SubmenuView($buttonViews);
         }
+
+        $buttonViews = $this->sheetSubmenuViewQueryHandler->handle(
+            new SheetSubmenuViewQuery(
+                $query->user,
+                $query->event,
+                $query->locale,
+                $sheet,
+                $query->route
+            )
+        );
 
         return new SubmenuView($buttonViews);
     }
