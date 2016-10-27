@@ -292,10 +292,14 @@ class PackageController extends Controller
             ]),
         ]);
 
-        return $this->render('EventBundle:Participant:addFromPackage.html.twig', [
-            'label' => $label,
-            'form'  => $form->createView(),
-            'sheet' => $sheet
+        $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
+
+        return $this->render('EventBundle:Participant:add.html.twig', [
+            'label'              => $label,
+            'form'               => $form->createView(),
+            'sheet'              => $sheet,
+            'participantProduct' => $participantProduct,
+            'backRoute'          => 'backToPackage'
         ]);
     }
 
