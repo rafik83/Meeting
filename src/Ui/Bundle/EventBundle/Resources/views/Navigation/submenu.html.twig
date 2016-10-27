@@ -4,6 +4,10 @@
             <a href="{{ button.link }}" class="btn btn-primary btn-lg {{ (button.state == false) ? 'btn-inactive': '' }}">
                 <i class="{{ button.icon }}"></i>
                 <span class="name">{{ button.label|trans }}</span>
+
+                {% if button.alertIcon is not null %}
+                    <span class="icon-alert {{ button.alertIcon }}"></span>
+                {% endif %}
             </a>
         </li>
     {% endfor %}

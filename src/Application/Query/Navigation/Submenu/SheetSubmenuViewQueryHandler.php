@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class SheetSubmenuViewQueryHandler
 {
@@ -21,15 +22,23 @@ class SheetSubmenuViewQueryHandler
      * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
+    /**
+     * @var CartRowRepositoryInterface
+     */
+    private $cartRowRepository;
 
     /**
      * SheetSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
+     * @param CartRowRepositoryInterface $cartRowRepository
      */
-    public function __construct(NavigationBuilderInterface $navigationBuilder)
-    {
+    public function __construct(
+        NavigationBuilderInterface $navigationBuilder,
+        CartRowRepositoryInterface $cartRowRepository
+    ) {
         $this->navigationBuilder = $navigationBuilder;
+        $this->cartRowRepository = $cartRowRepository;
     }
 
     /**
@@ -49,11 +58,14 @@ class SheetSubmenuViewQueryHandler
         );
 
         if ($query->sheet->getPackage()->isPassable() === true) {
+            $hasProductsInCartRow = $this->cartRowRepository->hasProducts($query->sheet);
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::PACKAGE_ICON,
                 'package.title',
                 $this->navigationBuilder->getRoute('event_package'),
-                Route::isPackage($query->route)
+                Route::isPackage($query->route),
+                ($hasProductsInCartRow === true) ? 'icon-Alerter_1' : null
             );
         }
 

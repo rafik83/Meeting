@@ -18,6 +18,11 @@ class SubmenuButtonView
     public $icon;
 
     /**
+     * @var string
+     */
+    public $alertIcon;
+
+    /**
      * @var bool
      */
     public $state;
@@ -36,15 +41,17 @@ class SubmenuButtonView
      * SubmenuButtonView constructor.
      *
      * @param string $icon
-     * @param bool   $state
      * @param string $label
      * @param string $link
+     * @param bool   $state
+     * @param string $alertIcon
      */
-    public function __construct($icon, $label, $link, $state = true)
+    public function __construct($icon, $label, $link, $state = true, $alertIcon = null)
     {
-        $this->icon  = $icon;
-        $this->state = $state;
-        $this->label = $label;
-        $this->link  = $link;
+        $this->icon      = $icon;
+        $this->state     = $state;
+        $this->label     = $label;
+        $this->link      = $link;
+        $this->alertIcon = $alertIcon;
     }
 }

@@ -1956,6 +1956,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+            - '@repository.cart_row_repository'
 
     query.meeting_request.meeting_request_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler

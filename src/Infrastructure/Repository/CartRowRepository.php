@@ -125,4 +125,14 @@ class CartRowRepository implements CartRowRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasProducts(Sheet $sheet)
+    {
+        return count($this->findBySheet($sheet)) > 0 ? true : false;
+    }
 }
