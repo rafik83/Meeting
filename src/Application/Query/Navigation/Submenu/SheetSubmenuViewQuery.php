@@ -44,11 +44,11 @@ class SheetSubmenuViewQuery
     /**
      * SheetSubmenuViewQuery constructor.
      *
-     * @param User    $user
-     * @param Event   $event
-     * @param string  $locale
-     * @param Sheet   $sheet
-     * @param  string $route
+     * @param User   $user
+     * @param Event  $event
+     * @param string $locale
+     * @param Sheet  $sheet
+     * @param string $route
      */
     public function __construct(User $user, Event $event, $locale, Sheet $sheet, $route)
     {
