@@ -75,6 +75,7 @@ class Image extends EditableObject implements ContentObjectInterface
             "image/pjpeg",
             "image/png",
             "image/x-png",
+            'image/svg+xml',
         ];
     }
 }
