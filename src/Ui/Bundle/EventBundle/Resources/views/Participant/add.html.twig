@@ -14,15 +14,28 @@
             {{ form_row(form.lastName) }}
             {{ form_row(form.email) }}
 
-            {% if (sheet.package.isPassable == true) %}
-                <strong>
-                    {{ sheet.package.participant.title(app.request.locale) }} :
-                    {{ 'package.product.unitPrice'|trans({
-                        '%price%': sheet.package.participant.unitPrice,
-                        '%currency%': sheet.package.participant.currency|currency_symbol,
-                        '%vatMode%': ('package.vatMode.' ~ sheet.package.participant.vatMode)|trans
-                    })|html }}
-                </strong>
+
+            {% if participantProduct is not null %}
+                <table>
+                    <tr>
+                        <td>
+                            <div class="buyable-product-row">
+                                {{ participantProduct.title(app.request.locale) }} :
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="buyable-product-row product-price">
+                                {{ 'package.product.unitPrice'|trans({
+                                    '%price%': participantProduct.unitPrice,
+                                    '%currency%': participantProduct.currency|currency_symbol,
+                                    '%vatMode%': ('package.vatMode.' ~ participantProduct.vatMode)|trans
+                                })|html }}
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
             {% endif %}
 
             <div class="validation">
@@ -35,6 +48,6 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
-        <i class="icon-Retour"></i>{{ 'common.backToSheet'|trans }}
+        <i class="icon-Retour"></i>{{ ('common.' ~ backRoute)|trans }}
     </button>
 </div>
