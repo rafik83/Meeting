@@ -14,7 +14,7 @@
             {{ form_row(form.lastName) }}
             {{ form_row(form.email) }}
 
-            {% if (sheet.package.isPassable == true) %}
+            {% if (sheet.package.isPassable is true) %}
                 <strong>
                     {{ sheet.package.participant.title(app.request.locale) }} :
                     {{ 'package.product.unitPrice'|trans({
