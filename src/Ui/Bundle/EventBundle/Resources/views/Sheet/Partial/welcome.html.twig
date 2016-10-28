@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h4 class="modal-title text-center" id="myModalLabel">
+        {{ popinWelcome.title|trans }}
+    </h4>
+</div>
+
+<div class="modal-body row relative-modal">
+    <div class="text-center col-md-{{ popinWelcome.packageContent is not null ? "6" : "12" }}">
+        {{ popinWelcome.sheetContent|trans }}
+    </div>
+
+    {% if popinWelcome.packageContent is not null %}
+    <div class="separator">
+
+    </div>
+    <div class="col-md-6 text-center">
+        {{ popinWelcome.packageContent|trans }}
+    </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ popinWelcome.backToSheetLink|trans }}
+    </button>
+
+    {% if popinWelcome.backToPackageLink is not null %}
+    <a type="button" class="btn btn-gray pull-right" href="{{ path('event_package') }}">
+        <i class="icon-Panier_2"></i>{{ popinWelcome.backToPackageLink|trans }}
+    </a>
+    {% endif %}
+</div>
