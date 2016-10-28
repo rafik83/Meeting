@@ -67,6 +67,15 @@ class SheetController extends Controller
             }
         }
 
+        if ($sheet->isValidationDraft()) {
+            $sheetValidationView = $this->get('tactician.commandbus.query')->handle(
+                new SheetValidationViewQuery(
+                    $sheet,
+                    $locale
+                )
+            );
+        }
+
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,

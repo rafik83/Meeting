@@ -1842,6 +1842,11 @@ services:
             - '@query.catalog.sheet_preview_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+    query.sheet.sheet_validation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQueryHandler
+        arguments:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery }
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:

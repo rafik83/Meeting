@@ -212,6 +212,8 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.title: 'Fiche de présentation'
+sheet.validation.complete.message: 'Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n Vous pourrez toujours la modifier ultérieurement'
+sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total
