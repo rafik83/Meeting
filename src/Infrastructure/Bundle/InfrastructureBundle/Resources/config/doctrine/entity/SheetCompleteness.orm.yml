@@ -1,5 +1,5 @@
 Proximum\Vimeet\Domain\Model\Sheet\SheetCompleteness:
-    type:  entity
+    type: entity
     table: sheet_completeness
     id:
         id:
