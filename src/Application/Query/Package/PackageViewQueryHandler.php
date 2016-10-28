@@ -72,9 +72,6 @@ class PackageViewQueryHandler
                     $packageViewQuery->locale
                 )
             );
-
-            dump($packageViewProducts);
-
         } else {
             $packageViewProducts = $this->groupsViewQueryHandler->handle(
                 new GroupsViewQuery(
