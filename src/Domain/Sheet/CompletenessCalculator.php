@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetCompletenessRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -32,16 +33,24 @@ class CompletenessCalculator
     private $sheetRepository;
 
     /**
-     * @param TemplateDataFactory      $templateDataFactory
-     * @param SheetRepositoryInterface $sheetRepository
+     * @var SheetCompletenessRepositoryInterface
+     */
+    private $sheetCompletenessRepository;
+
+    /**
+     * @param TemplateDataFactory                  $templateDataFactory
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetCompletenessRepositoryInterface $sheetCompletenessRepository
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        SheetCompletenessRepositoryInterface $sheetCompletenessRepository
     ) {
 
-        $this->templateDataFactory = $templateDataFactory;
-        $this->sheetRepository     = $sheetRepository;
+        $this->templateDataFactory         = $templateDataFactory;
+        $this->sheetRepository             = $sheetRepository;
+        $this->sheetCompletenessRepository = $sheetCompletenessRepository;
     }
 
     /**

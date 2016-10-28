@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Sheet\SheetCompleteness:
+Proximum\Vimeet\Domain\Model\SheetCompleteness:
     type: entity
     table: sheet_completeness
     id:

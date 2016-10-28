@@ -25,14 +25,28 @@ class SheetValidationView
     public $message;
 
     /**
+     * @var string
+     */
+    public $errorMessage;
+
+    /**
+     * @var int
+     */
+    public $completeness;
+
+    /**
      * SheetValidationView constructor.
      *
      * @param Sheet  $sheet
      * @param string $message
+     * @param string $errorMessage
+     * @param int    $completeness
      */
-    public function __construct(Sheet $sheet, $message)
+    public function __construct(Sheet $sheet, $message, $errorMessage, $completeness)
     {
-        $this->sheet   = $sheet;
-        $this->message = $message;
+        $this->sheet        = $sheet;
+        $this->message      = $message;
+        $this->completeness = $completeness;
+        $this->errorMessage = $errorMessage;
     }
 }
