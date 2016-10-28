@@ -49,4 +49,12 @@ class SheetValidationView
         $this->completeness = $completeness;
         $this->errorMessage = $errorMessage;
     }
+
+    /**
+     * @return bool
+     */
+    public function isComplete()
+    {
+        return $this->completeness === 100;
+    }
 }
