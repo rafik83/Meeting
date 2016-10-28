@@ -41,4 +41,9 @@ Feature: Register with participant step
       | Décrivez votre activité | Ceci est une description |
     When I press "register.finalize"
     Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com"
-    Then I should be on this page "/fr/sheet"
+    And I should be on this page "/fr/sheet"
+    And I should see "sheet.welcome.title"
+    And I should see "sheet.welcome.sheetContent"
+    And I should see "sheet.welcome.packageContent"
+    And I should see "sheet.welcome.backToSheetLink"
+    And I should see "sheet.welcome.backToPackageLink"
