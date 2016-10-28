@@ -9,6 +9,14 @@
         <div class="buttons-zone button request-meeting-sheet">
             {% if isRequestMeetingEnabled %}
                 {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
+            {% else %}
+                {% if sheet.isValidationDraft %}
+                    <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'sheet.submit.validation'|trans }}</a>
+                {% elseif sheet.isValidationPending %}
+                    <a class="btn btn-black" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
+                        <span><i class="icon-Retard"></i> {{ 'sheet.submit.validation.pending'|trans }}</span>
+                    </a>
+                {% endif %}
             {% endif %}
             <a href="{{ path('event_sheet_generate_pdf', { sheet: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
         </div>
