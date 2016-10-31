@@ -22,6 +22,7 @@ class MessageMeetingRequestViewQueryHandler
     public function handle(MessageMeetingRequestViewQuery $query)
     {
         return new MessageMeetingRequestView(
+            $query->message->getFrom()->getId(),
             $query->sheetName,
             $query->message->getContent(),
             $query->message->getCreatedAt(),

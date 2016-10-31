@@ -36,13 +36,20 @@ class MessageMeetingRequestView
     public $content;
 
     /**
+     * @var int
+     */
+    public $sheetId;
+
+    /**
+     * @param int                $sheetId
      * @param string             $sheetName
      * @param string             $content
      * @param \DateTimeInterface $createdAt
      * @param string             $side
      */
-    public function __construct($sheetName, $content, \DateTimeInterface $createdAt, $side)
+    public function __construct($sheetId, $sheetName, $content, \DateTimeInterface $createdAt, $side)
     {
+        $this->sheetId   = $sheetId;
         $this->sheetName = $sheetName;
         $this->content   = $content;
         $this->createdAt = $createdAt;
