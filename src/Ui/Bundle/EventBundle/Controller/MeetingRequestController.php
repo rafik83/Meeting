@@ -23,7 +23,6 @@ use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -532,7 +531,7 @@ class MeetingRequestController extends Controller
      * @param EventDomain    $eventDomain
      * @param MeetingRequest $meetingRequest
      *
-     * @return RedirectResponse|Response
+     * @return JsonResponse|Response
      */
     public function editRequestAction(Request $request, EventDomain $eventDomain, MeetingRequest $meetingRequest)
     {
