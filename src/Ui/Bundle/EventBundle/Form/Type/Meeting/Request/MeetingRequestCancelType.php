@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MeetingRequestCancelType extends AbstractType
@@ -21,22 +19,18 @@ class MeetingRequestCancelType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $builder
-            ->add('message', TextareaType::class, [
-                'required' => true,
-            ]);
+        $resolver->setDefaults([
+            'data_class' => CancelRequest::class,
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function getBlockPrefix()
     {
-        $resolver->setDefaults([
-            'data_class' => CancelRequest::class,
-            'submit'     => true,
-        ]);
+        return 'catalog_cancel_meeting_request';
     }
 }
