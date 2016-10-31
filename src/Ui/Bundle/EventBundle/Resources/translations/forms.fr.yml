@@ -22,6 +22,7 @@ form.catalog_refuse_meeting_request.children.message.label: 'Motiver votre refus
 form.catalog_refuse_meeting_request.children.message.placeholder: 'Ecrire une message'
 form.catalog_refuse_meeting_request.children.submit.label: 'Refuser la proposition'
 form.catalog_un_refuse_meeting_request.children.submit.label: 'Annuler votre refus'
+form.catalog_cancel_meeting_request.request.children.submit.label: 'Annuler la demande'
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
