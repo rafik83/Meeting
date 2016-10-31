@@ -47,22 +47,23 @@ CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
         new CatalogSheetCardRequestCheckbox(this.modal.querySelector('[data-participants-checkbox]'));
     }
 
-    $(this.modal.querySelector('form')).on('submit', function (event) {
-        this.handleRequestForm();
+    [].forEach.call(this.modal.querySelectorAll('form'), function (form) {
+        $(form).on('submit', function (event) {
+            this.handleRequestForm(form);
 
-        return false;
+            return false;
+        }.bind(this));
     }.bind(this));
 };
 
-CatalogSheetCard.prototype.handleRequestForm = function ()
+CatalogSheetCard.prototype.handleRequestForm = function (form)
 {
-    var action = $(this.modal.querySelector('form')).attr('action');
-    var data   = $(this.modal.querySelector('form')).serialize();
+    var action = $(form).attr('action');
+    var data   = $(form).serialize();
 
     // Put the placeholder during the ajax call to avoid mistake of the user
     var placeholder = this.modal.getAttribute('data-placeholder');
     $(this.modal).find(".modal-content").html(placeholder);
-
 
     // Update sheets list
     $.post(action, data, function(response) {
