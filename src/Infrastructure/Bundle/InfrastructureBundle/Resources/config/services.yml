@@ -507,9 +507,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
+            - '@meeting.request_permission_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CancelRequest }
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
