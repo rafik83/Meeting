@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateCompany;
 use Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -20,8 +23,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
@@ -193,7 +197,7 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
-        $sheet       = new Sheet($event, $type, [], $user, $now);
+        $sheet = new Sheet($event, $type, [], $user, $now);
         $sheet->setRegistrationData([
             "3ad4b72f" => ['text' => 'oldFoo'],
             "9ef18c06" => ['url' => 'http://www.oldfoo.com'],
@@ -209,11 +213,12 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-
         // Mock
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $accountSynchronizer = $this->prophesize(Synchronizer::class);
-        $expectedSheet       =  new Sheet($event, $type, [], $user, $now);
+        $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
+
+        $expectedSheet = new Sheet($event, $type, [], $user, $now);
         $expectedSheet->setRegistrationData([
             "3ad4b72f" => ['text' => 'foo'],
             "9ef18c06" => ['url' => 'http://www.foo.com'],
@@ -231,13 +236,20 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->set($expectedSheet)->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
+            function(SheetUpdatedEvent $sheetUpdatedEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
+
         $handler = new UpdateCompanyHandler(
             $sheetRepository->reveal(),
-            $accountSynchronizer->reveal()
+            $accountSynchronizer->reveal(),
+            $eventDispatcher->reveal()
         );
 
-        $templateData = new TemplateData('root', [], 'fr', 'fr');
-        $block = new Block('12', [], 'fr', 'fr');
+        $templateData  = new TemplateData('root', [], 'fr', 'fr');
+        $block         = new Block('12', [], 'fr', 'fr');
         $objectCompany = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ["sheet_organization", "sheet_title", "sheet_data"],
         ], 'fr', 'fr');
@@ -273,8 +285,7 @@ class UpdateCompanyHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
-        $expectedBlock = new Block('12', [], 'fr', 'fr');
-
+        $expectedBlock        = new Block('12', [], 'fr', 'fr');
 
         $exObjectCompany = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ["sheet_organization", "sheet_title", "sheet_data"],
