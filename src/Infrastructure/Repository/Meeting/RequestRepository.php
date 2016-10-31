@@ -200,9 +200,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-            ->where('request.state != :cancelState')
-            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
+            ->from(Request::class, 'request');
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -323,9 +321,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-            ->where('request.state != :cancelState')
-            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
+            ->from(Request::class, 'request');
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 

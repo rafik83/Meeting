@@ -78,7 +78,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($sheet === $request->getFromSheet() && !$request->isRefused() && !$request->isCancelled()) {
+        if ($sheet === $request->getFromSheet() && !$request->isRefused()) {
             return true;
         }
 

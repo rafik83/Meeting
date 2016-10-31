@@ -23,7 +23,6 @@ class Request implements MessageSubjectInterface
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
-    const STATE_CANCEL   = 'cancelled';
 
     /**
      * @var int
@@ -180,19 +179,6 @@ class Request implements MessageSubjectInterface
     public function refuse(\DateTimeInterface $date)
     {
         $this->state          = self::STATE_REFUSED;
-        $this->stateUpdatedAt = $date;
-
-        return $this;
-    }
-
-    /**
-     * @param \DateTimeInterface $date
-     *
-     * @return Request
-     */
-    public function cancel(\DateTimeInterface $date)
-    {
-        $this->state          = self::STATE_CANCEL;
         $this->stateUpdatedAt = $date;
 
         return $this;
@@ -395,14 +381,6 @@ class Request implements MessageSubjectInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isCancelled()
-    {
-        return self::STATE_CANCEL === $this->state;
-    }
-
-    /**
      * @return array
      */
     public static function getAllStates()
@@ -411,7 +389,6 @@ class Request implements MessageSubjectInterface
             self::STATE_SENT,
             self::STATE_APPROVED,
             self::STATE_REFUSED,
-            self::STATE_CANCEL
         ];
     }
 }

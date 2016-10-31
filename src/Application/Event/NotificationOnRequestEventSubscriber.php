@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Event;
 
 use Proximum\Vimeet\Application\Event\Meeting\RequestAcceptedEvent;
-use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent as MeetingRequestParticipantAddedEvent;
@@ -171,77 +170,6 @@ class NotificationOnRequestEventSubscriber extends AbstractNotificationEventSubs
     }
 
     /**
-     * Notify from participant and the from sheet owner.
-     * Notify to participant and the to sheet owner.
-     *
-     * @param RequestCanceledEvent $event
-     */
-    public function onRequestCanceled(RequestCanceledEvent $event)
-    {
-        // From : Get owner and request participants
-        foreach ($event->getRequest()->getFromSheet()->getUsers() as $user) {
-            // Don't send notification to user when he is the emitter
-            if ($user === $event->getEmitter()) {
-                continue;
-            }
-
-            $locale = $user->getLocale();
-
-            // Translate message
-            $message = $this->translator->trans(
-                'notification.meeting_request.canceled.from_message',
-                [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getToSheet(), $locale),
-                ],
-                'notifications',
-                $locale
-            );
-
-            // Send notification
-            $this->notificationRepository->add(new Notification(
-                $event->getRequest()->getFromSheet()->getEvent(),
-                $event->getEmitter(),
-                $user,
-                $event->getDate(),
-                'meeting_request.canceled',
-                $message,
-                $this->router->generateMeetingRequest($event->getRequest()->getFromSheet(), $event->getRequest())
-            ));
-        }
-
-        // To : Get sheet owner and request participants
-        foreach ($event->getRequest()->getToSheet()->getUsers() as $user) {
-            // Don't send notification to user when he is the emitter
-            if ($user === $event->getEmitter()) {
-                return;
-            }
-
-            $locale = $user->getLocale();
-
-            // Translate message
-            $message = $this->translator->trans(
-                'notification.meeting_request.canceled.to_message',
-                [
-                    '%sheet%' => $this->sheetInfoGuesser->guessSheetName($event->getRequest()->getFromSheet(), $locale),
-                ],
-                'notifications',
-                $locale
-            );
-
-            // Send notification
-            $this->notificationRepository->add(new Notification(
-                $event->getRequest()->getToSheet()->getEvent(),
-                $event->getEmitter(),
-                $user,
-                $event->getDate(),
-                'meeting_request.canceled',
-                $message,
-                $this->router->generateMeetingRequest($event->getRequest()->getToSheet(), $event->getRequest())
-            ));
-        }
-    }
-
-    /**
      * Notify the recipient sheet owner when new request is send
      *
      * @param RequestSentEvent $event
@@ -288,7 +216,6 @@ class NotificationOnRequestEventSubscriber extends AbstractNotificationEventSubs
             // in NotificationViewFactory depending on the request state
             //Event::REQUEST_SENT                => 'onRequestSent',
             Events::REQUEST_REFUSED             => 'onRequestRefused',
-            Events::REQUEST_CANCELED            => 'onRequestCanceled',
             Events::REQUEST_ACCEPTED            => 'onRequestAccepted',
             Events::REQUEST_PARTICIPANT_ADDED   => 'onParticipantAddedToMeetingRequest',
             Events::REQUEST_PARTICIPANT_REMOVED => 'onParticipantRemovedFromMeetingRequest',
