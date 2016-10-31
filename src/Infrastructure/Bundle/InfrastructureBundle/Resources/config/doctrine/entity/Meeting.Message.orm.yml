@@ -18,3 +18,5 @@ Proximum\Vimeet\Domain\Model\Meeting\Message:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
+            joinColumn:
+                onDelete: CASCADE
