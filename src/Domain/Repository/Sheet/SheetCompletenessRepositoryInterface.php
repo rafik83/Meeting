@@ -32,4 +32,9 @@ interface SheetCompletenessRepositoryInterface
      * @return SheetCompleteness|null
      */
     public function findCompleteness(Sheet $sheet, $locale);
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function removeForSheet(Sheet $sheet);
 }

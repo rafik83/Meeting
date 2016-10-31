@@ -57,4 +57,12 @@ class Country extends EditableObject implements ContentObjectInterface
     {
         $this->setCountry($value);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentValueLocalize($locale)
+    {
+        return $this->getContentValue();
+    }
 }

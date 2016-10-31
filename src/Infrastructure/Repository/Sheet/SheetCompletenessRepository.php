@@ -63,4 +63,19 @@ class SheetCompletenessRepository implements SheetCompletenessRepositoryInterfac
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeForSheet(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(SheetCompleteness::class, 'completeness')
+            ->where('completeness.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        $queryBuilder->getQuery()->execute();
+    }
 }

@@ -987,6 +987,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateProfile }
     command.participant.update_avatar_handler:
@@ -994,6 +995,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
     command.register.participant_step_handler:
@@ -1102,6 +1104,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
     command.nomenclature.create_handler:
@@ -2234,6 +2237,7 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.sheet.completeness_repository'
 
     printer.sheet_pdf_printer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter
