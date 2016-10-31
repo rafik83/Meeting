@@ -110,11 +110,9 @@ class RequestPermissionManager
         }
 
         //if ($request->getFromSheet() === $sheet && ($request->isSent() || $request->isApproved())) {
-        //    return true;
         //}
 
         // if ($request->getToSheet() === $sheet && $request->isApproved()) {
-        //     return true;
         // }
 
         return false;
