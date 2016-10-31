@@ -66,18 +66,24 @@ CatalogSheetCard.prototype.handleRequestForm = function ()
 
     // Update sheets list
     $.post(action, data, function(response) {
-      if (response.status === 'ok') {
-          [].forEach.call(this.buttonsZones, function (buttonZone) {
-              $(buttonZone).html(response.html)
-          });
-          $(this.modal).modal('hide');
-          this.identifyButtons();
-      }
+        if (response.close === true) {
+            if (response.status === 'ok') {
+                [].forEach.call(this.buttonsZones, function (buttonZone) {
+                    $(buttonZone).html(response.html)
+                });
+                $(this.modal).modal('hide');
+                this.identifyButtons();
+            }
+        } else {
+            if (response.status === 'ok') {
+                $(this.modal).find(".modal-content").html(response.html);
+            }
+        }
 
-      if (response.status === 'error') {
-          $(this.modal).find(".modal-content").html(response.html);
-          this.putListenerOnRequestForm();
-      }
+        if (response.status === 'error') {
+            $(this.modal).find(".modal-content").html(response.html);
+            this.putListenerOnRequestForm();
+        }
     }.bind(this));
 
     return false;
