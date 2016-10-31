@@ -1,0 +1,23 @@
+{% if allowedToCreate is defined and allowedToCreate == true %}
+    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': viewed}) }}
+{% else %}
+    {% if meetingRequest is defined and meetingRequest is not null %}
+        {% if meetingRequest.toSheet == viewer %}
+            {% if meetingRequest.isSent %}
+                {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': meetingRequest, 'sheet': viewer}) }}
+        {% elseif meetingRequest.isApproved %}
+            {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
+        {% elseif meetingRequest.isRefused %}
+            {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': meetingRequest}) }}
+        {% endif %}
+        {% else %}
+            {% if meetingRequest.isSent %}
+                {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {'meetingRequest': meetingRequest}) }}
+            {% elseif meetingRequest.isApproved %}
+                {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
+            {% elseif meetingRequest.isRefused %}
+                {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': meetingRequest}) }}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}

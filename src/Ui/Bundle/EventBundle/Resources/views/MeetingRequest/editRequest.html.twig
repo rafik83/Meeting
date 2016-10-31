@@ -1,15 +1,47 @@
-{% extends 'EventBundle::base.html.twig' %}
+{% set formIsNotNull = form is not null %}
+{% if formIsNotNull %}
+    {% form_theme form '@Ui/default.html.twig' %}
+{% endif %}
 
-{% form_theme form '@Ui/default.html.twig' %}
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        <i class="icon-RDV"></i>
+        {{ 'catalog.action.meeting.request.pending'|trans }}
+    </h4>
+</div>
 
-{% block title 'event.meeting.editRequest.title'|trans %}
+{% if formIsNotNull %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+{% endif %}
 
-{% block content %}
-    <h1>{{ 'event.meeting.editRequest.title'|trans }}</h1>
-    <h2>{{ 'event.meeting.editRequest.destination'|trans({'%toName%': toName, '%fromName%': fromName}) }}</h2>
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            {{ form(form) }}
-        </div>
+<div class="modal-body">
+    <div class="modal-content-request">
+        {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
+        {% if formIsNotNull %}
+            {% for key, child in form if key != 'submit'%}
+                {% if key == 'participants' %}
+                    {{ form_row(child, {'attr': { 'data-participants-checkbox': 'here', 'data-placeholder-preference': 'form.catalog_create_meeting_request.children.participants.default.no_preference'|trans({}, 'forms') }}) }}
+                {% else %}
+                    {{ form_row(child) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
-{% endblock %}
+    {% if formIsNotNull %}
+        <div class="validation button">
+            <button type="submit" class="btn btn-primary">
+                <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.children.submit.label'|trans({}, 'forms') }}
+            </button>
+        </div>
+    {% endif %}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
+    </button>
+</div>
+
+{% if formIsNotNull %}
+    {{ form_end(form) }}
+{% endif %}
