@@ -10,3 +10,6 @@ rules:
         enabled: true
         max_count: 8
         threshold: 10
+    # avoid having warning for method that do the redirect in a private method
+    symfony.controller.missing_redirect_after_post:
+        enabled: false
