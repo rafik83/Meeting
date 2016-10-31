@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,14 @@ class MeetingRequestUpdateFromType extends AbstractMeetingRequestType
 
         $resolver->setDefaults([
            'data_class' => UpdateRequestFrom::class,
-           'submit'     => true,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_edit_meeting_request';
     }
 }
