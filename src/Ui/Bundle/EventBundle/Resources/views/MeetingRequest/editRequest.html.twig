@@ -1,4 +1,5 @@
 {% set formIsNotNull = form is not null %}
+{% set cancelFormIsNotNull = cancelForm is not null %}
 {% if formIsNotNull %}
     {% form_theme form '@Ui/default.html.twig' %}
 {% endif %}
@@ -19,12 +20,12 @@
     </h4>
 </div>
 
-{% if formIsNotNull %}
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-{% endif %}
 
 <div class="modal-body">
+    {% if formIsNotNull %}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+    {% endif %}
     <div class="modal-content-request">
         {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
         {% if formIsNotNull %}
@@ -52,13 +53,22 @@
             </button>
         </div>
     {% endif %}
+    {% if formIsNotNull %}
+        {{ form_end(form) }}
+    {% endif %}
 </div>
 <div class="modal-footer">
+    {% if cancelFormIsNotNull %}
+        {{ form_start(cancelForm) }}
+        <div class="validation pull-left">
+            <button type="submit" class="btn btn-no-style text-underline">
+                <i class="icon-Fermer_4"></i> {{ 'form.catalog_cancel_meeting_request.request.children.submit.label'|trans({}, 'forms') }}
+            </button>
+        </div>
+        {{ form_end(cancelForm) }}
+    {% endif %}
     <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
     </button>
 </div>
 
-{% if formIsNotNull %}
-    {{ form_end(form) }}
-{% endif %}
