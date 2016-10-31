@@ -53,8 +53,13 @@ class UpdateRequest
     {
         $this->meetingRequest = $meetingRequest;
         $this->sheetEditor    = $sheetEditor;
-        $this->description    = null;
         $this->editor         = $editor;
-        $this->participants   = $meetingRequest->getFromParticipants()->toArray();
+        $this->description    = null;
+
+        if ($meetingRequest->getFromSheet() === $sheetEditor) {
+            $this->participants = $meetingRequest->getFromParticipants()->toArray();
+        } else {
+            $this->participants = $meetingRequest->getToParticipants()->toArray();
+        }
     }
 }

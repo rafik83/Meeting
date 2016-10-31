@@ -22,6 +22,7 @@ class MeetingRequestUpdateType extends AbstractMeetingRequestType
     {
         parent::configureOptions($resolver);
 
+        $resolver->setDefault('placeholder_description', 'form.catalog_edit_meeting_request.children.description.placeholder');
         $resolver->setDefaults([
            'data_class' => UpdateRequest::class,
         ]);

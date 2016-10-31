@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -32,20 +33,28 @@ class UpdateRequestHandler
     private $datetime;
 
     /**
+     * @var RequestPermissionManager
+     */
+    private $requestPermissionManager;
+
+    /**
      * EditRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
+     * @param RequestPermissionManager   $requestPermissionManager
      * @param \DateTimeInterface         $datetime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
+        RequestPermissionManager $requestPermissionManager,
         \DateTimeInterface $datetime
     ) {
-        $this->requestRepository = $requestRepository;
-        $this->messageRepository = $messageRepository;
-        $this->datetime          = $datetime;
+        $this->requestRepository        = $requestRepository;
+        $this->messageRepository        = $messageRepository;
+        $this->requestPermissionManager = $requestPermissionManager;
+        $this->datetime                 = $datetime;
     }
 
     /**
@@ -53,7 +62,23 @@ class UpdateRequestHandler
      */
     public function handle(UpdateRequest $updateRequest)
     {
-        if (!$updateRequest->meetingRequest->getFromSheet()->hasUser($updateRequest->editor)) {
+        $doNotThrowException = false;
+
+        if ($updateRequest->meetingRequest->isApproved()) {
+            $doNotThrowException = $this->requestPermissionManager->isAllowedToEditApproved(
+                $updateRequest->editor,
+                $updateRequest->meetingRequest,
+                $updateRequest->sheetEditor
+            );
+        } elseif ($updateRequest->meetingRequest->isSent()) {
+            $doNotThrowException = $this->requestPermissionManager->isAllowedToEdit(
+                $updateRequest->editor,
+                $updateRequest->meetingRequest,
+                $updateRequest->sheetEditor
+            );
+        }
+
+        if ($doNotThrowException === false) {
             throw new \RuntimeException('You are not allowed to update this request.');
         }
 
