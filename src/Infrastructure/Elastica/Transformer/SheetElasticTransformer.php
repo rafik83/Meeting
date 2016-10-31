@@ -271,11 +271,11 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             return null;
         }
 
-        if (4 === strlen($zipcode)) {
+        if (4 === mb_strlen($zipcode)) {
             return '0' . substr($zipcode, 0, 1);
         }
 
-        if (5 === strlen($zipcode)) {
+        if (5 === mb_strlen($zipcode)) {
             return substr($zipcode, 0, 2);
         }
 
@@ -290,7 +290,6 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private function getCity(TemplateData $templateData)
     {
         return $templateData->getTaggedContentValue(Tag::SHEET_CITY) ?: null;
-
     }
 
     /**
