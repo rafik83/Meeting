@@ -19,18 +19,6 @@ class ParticipantManager
     /**
      * @param Sheet $sheet
      *
-     * @return bool
-     *
-     * @deprecated to be rewritten
-     */
-    public function canAddParticipant(Sheet $sheet)
-    {
-        return true;
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
      * @return int
      */
     public function getRemainingPossibleParticipant(Sheet $sheet)

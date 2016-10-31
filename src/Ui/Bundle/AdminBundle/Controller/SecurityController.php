@@ -20,11 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
 class SecurityController extends Controller
 {
     /**
-     * @param Request $request
-     *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('admin_event_list');
