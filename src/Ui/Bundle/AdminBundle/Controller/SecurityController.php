@@ -14,7 +14,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityController extends Controller
