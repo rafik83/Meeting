@@ -303,7 +303,7 @@ class TemplateDataFactory
             }
 
             if ($object->getNomenclatureId()) {
-                $object->setNomenclature($this->getNomenclature($object->getNomenclatureId()));
+                $object->setNomenclature($this->getNomenclature(intval($object->getNomenclatureId())));
             }
         }
 

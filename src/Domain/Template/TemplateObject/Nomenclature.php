@@ -135,7 +135,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getNomenclatureId()
     {
