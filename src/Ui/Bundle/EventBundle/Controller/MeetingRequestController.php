@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequest;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
@@ -31,7 +31,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingReque
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestRefuseType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateFromType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -544,8 +544,17 @@ class MeetingRequestController extends Controller
             $request->getLocale()
         );
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)) {
-            throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
+        if (($meetingRequest->isApproved()
+            && !$this
+                ->get('meeting.request_permission_manager')
+                ->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet)
+        ) || ($meetingRequest->isSent()
+                && !$this
+                ->get('meeting.request_permission_manager')
+                ->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)
+            )
+        ) {
+            throw $this->createNotFoundException('You are not allowed to edit this meeting request.');
         }
 
         /** @var DiscussionMeetingRequestView $discussion */
@@ -554,12 +563,14 @@ class MeetingRequestController extends Controller
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
         $form = null;
 
-        if (!$discussion->hasMessages() || 1 < $sheet->countParticipant()) {
-            $command = new UpdateRequestFrom($meetingRequest, $this->getUser());
-            $form    = $this->createForm(MeetingRequestUpdateFromType::class, $command, [
+        $isProposition = $meetingRequest->getFromSheet() !== $sheet;
+
+        if (!$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant()) {
+            $command = new UpdateRequest($meetingRequest, $sheet, $this->getUser());
+            $form    = $this->createForm(MeetingRequestUpdateType::class, $command, [
                 'sheet'            => $sheet,
                 'locale'           => $request->getLocale(),
-                'show_description' => !$discussion->hasMessages(),
+                'show_description' => !$discussion->hasMessageOfSheet($sheet),
                 'action'           => $this->generateUrl('event_meeting_request_edit', [
                     'meetingRequest' => $meetingRequest->getId()
                 ]),
@@ -568,28 +579,43 @@ class MeetingRequestController extends Controller
             $isSubmitted = $form->handleRequest($request)->isSubmitted();
             if ($isSubmitted && $form->isValid()) {
                 $this->get('tactician.commandbus')->handle($command);
-                $this->addFlash('success', 'flash.meeting_request.edit.success');
+                if ($meetingRequest->isApproved()) {
+                    if ($isProposition) {
+                        $this->addFlash('success', 'flash.meeting_request.approved.proposition.edit.success');
+                    } else {
+                        $this->addFlash('success', 'flash.meeting_request.approved.request.edit.success');
+                    }
+                } else {
+                    $this->addFlash('success', 'flash.meeting_request.pending.request.edit.success');
+                }
 
                 return $this->createJsonResponse(
                     true,
                     false,
-                    $this->renderView('EventBundle:MeetingRequest:editRequestSuccess.html.twig')
+                    $this->renderView('EventBundle:MeetingRequest:editRequestSuccess.html.twig', [
+                        'isProposition'  => $isProposition,
+                        'meetingRequest' => $meetingRequest,
+                    ])
                 );
             } elseif ($isSubmitted && !$form->isValid()) {
                 return $this->createJsonResponse(
                     false,
                     false,
                     $this->renderView('EventBundle:MeetingRequest:editRequest.html.twig', [
-                        'discussion' => $discussion,
-                        'form'       => $form->createView(),
+                        'discussion'     => $discussion,
+                        'form'           => $form->createView(),
+                        'isProposition'  => $isProposition,
+                        'meetingRequest' => $meetingRequest,
                     ])
                 );
             }
         }
 
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
-            'discussion' => $discussion,
-            'form'       => $form !== null ? $form->createView() : $form,
+            'discussion'     => $discussion,
+            'form'           => $form !== null ? $form->createView() : $form,
+            'isProposition'  => $isProposition,
+            'meetingRequest' => $meetingRequest,
         ]);
     }
 
