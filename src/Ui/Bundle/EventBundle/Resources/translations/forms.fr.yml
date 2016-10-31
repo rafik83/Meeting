@@ -7,6 +7,10 @@ form.catalog_approve_meeting_request.children.description.label: 'Répondre à l
 form.catalog_approve_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
 form.catalog_approve_meeting_request.children.submit.label: 'Accepter la proposition'
+form.catalog_edit_meeting_request.children.description.label: 'Motiver votre demande de RDV'
+form.catalog_edit_meeting_request.children.description.placeholder: 'Ecrire un message'
+form.catalog_edit_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
+form.catalog_edit_meeting_request.children.submit.label: Modifier la demande de RDV
 form.catalog_create_meeting_request.children.description.label: 'Motiver votre demande de RDV ?'
 form.catalog_create_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
