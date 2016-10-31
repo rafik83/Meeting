@@ -15,9 +15,6 @@ use Proximum\Vimeet\Domain\Repository\Sheet\SheetCompletenessRepositoryInterface
 
 class SheetValidationViewQueryHandler
 {
-    const SHEET_COMPLETE_MESSAGE   = 'sheet.validation.complete.message';
-    const SHEET_UNCOMPLETE_MESSAGE = 'sheet.validation.uncomplete.message';
-
     /**
      * @var SheetCompletenessRepositoryInterface
      */
@@ -47,8 +44,6 @@ class SheetValidationViewQueryHandler
 
         return new SheetValidationView(
             $query->sheet,
-            self::SHEET_COMPLETE_MESSAGE,
-            self::SHEET_UNCOMPLETE_MESSAGE,
             ($sheetCompleteness !== null) ? $sheetCompleteness->getCompleteness() : 0
         );
     }

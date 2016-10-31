@@ -7,10 +7,9 @@
                 <h4 class="modal-title text-center" id="sheetSubmitModalLabel">{{ 'sheet.submit.validation'|trans }}</h4>
             </div>
             <div class="modal-body">
-                <p class="text-center">{{ view.message|trans|nl2br }}</p>
-
+                <p class="text-center">{{ 'sheet.validation.complete.message'|trans|nl2br }}</p>
                 {% if not view.isComplete %}
-                    <p class="text-center text-danger">{{ view.errorMessage|trans|nl2br }}</p>
+                    <p class="text-center text-danger">{{ 'sheet.validation.uncomplete.message'|trans|nl2br }}</p>
                 {% endif %}
             </div>
             <div class="modal-footer">
