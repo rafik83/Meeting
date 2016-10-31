@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,8 +38,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -49,13 +49,12 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom->addParticipant($participant2);
         $sheetFrom->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
 
         //Actual
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
 
         //Command
-        $command = new UpdateRequestFrom($request, $datetime, $user1);
+        $command = new UpdateRequestFrom($request, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -70,25 +69,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
-
         //Handler
         $handler = new UpdateRequestFromHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $datetime
         );
 
         $handler->handle($command, $sheetFrom);
@@ -103,8 +88,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -113,14 +99,13 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom->addParticipant($participant2);
         $sheetFrom->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
 
         //Actual
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateRequestFrom($request, $datetime, $user1);
+        $command = new UpdateRequestFrom($request, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -136,25 +121,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
-
         //Handler
         $handler = new UpdateRequestFromHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $datetime
         );
 
         $handler->handle($command, $sheetFrom);
@@ -169,8 +140,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -179,13 +151,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo->addParticipant($participant2);
         $sheetTo->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
-
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
 
         //Command
-        $command = new UpdateRequestTo($request, $datetime, $user1);
+        $command = new UpdateRequestTo($request, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -200,25 +170,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
-
         //Handler
         $handler = new UpdateRequestToHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $datetime
         );
 
         $handler->handle($command, $sheetFrom);
@@ -233,8 +189,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -243,14 +200,13 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo->addParticipant($participant2);
         $sheetTo->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
 
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateRequestTo($request, $datetime, $user1);
+        $command = new UpdateRequestTo($request, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -266,25 +222,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
-
         //Handler
         $handler = new UpdateRequestToHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $datetime
         );
 
         $handler->handle($command, $sheetFrom);
