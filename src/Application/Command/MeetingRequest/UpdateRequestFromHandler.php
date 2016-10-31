@@ -3,22 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateRequestFromHandler
 {
@@ -33,25 +27,25 @@ class UpdateRequestFromHandler
     private $messageRepository;
 
     /**
-     * @var EventDispatcherInterface
+     * @var \DateTimeInterface
      */
-    private $eventDispatcher;
+    private $datetime;
 
     /**
      * EditRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
-     * @param EventDispatcherInterface   $eventDispatcher
+     * @param \DateTimeInterface         $datetime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
-        EventDispatcherInterface $eventDispatcher
+        \DateTimeInterface $datetime
     ) {
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->datetime          = $datetime;
     }
 
     /**
@@ -63,14 +57,10 @@ class UpdateRequestFromHandler
             throw new \RuntimeException('You are not allowed to update this request.');
         }
 
-        // Event queue
-        $events = [];
-
         // Remove removed participants
         foreach ($updateRequestFrom->meetingRequest->getFromParticipants() as $participant) {
             if (!in_array($participant, $updateRequestFrom->participants)) {
                 $updateRequestFrom->meetingRequest->removeFromParticipant($participant);
-                $events[] = $this->createRemovedEvent($updateRequestFrom, $participant);
             }
         }
 
@@ -78,7 +68,6 @@ class UpdateRequestFromHandler
         foreach ($updateRequestFrom->participants as $participant) {
             if (!$updateRequestFrom->meetingRequest->hasFromParticipant($participant)) {
                 $updateRequestFrom->meetingRequest->addFromParticipant($participant);
-                $events[] = $this->createAddedEvent($updateRequestFrom, $participant);
             }
         }
 
@@ -91,57 +80,10 @@ class UpdateRequestFromHandler
                 $updateRequestFrom->meetingRequest,
                 $updateRequestFrom->meetingRequest->getFromSheet(),
                 $updateRequestFrom->description,
-                $updateRequestFrom->date
+                $this->datetime
             );
 
             $this->messageRepository->add($message);
-
-            $events[] = [Events::REQUEST_UPDATE_MESSAGE, new MessageEvent($message, $updateRequestFrom->editor)];
         }
-
-        // Dispatch events
-        while ($event = array_shift($events)) {
-            $this->eventDispatcher->dispatch($event[0], $event[1]);
-        }
-    }
-
-    /**
-     * @param UpdateRequestFrom $updateRequestFrom
-     * @param Participant       $participant
-     *
-     * @return array
-     */
-    private function createAddedEvent(UpdateRequestFrom $updateRequestFrom, Participant $participant)
-    {
-        return [
-            Events::REQUEST_PARTICIPANT_ADDED,
-            new ParticipantAddedEvent(
-                $updateRequestFrom->editor,
-                $participant,
-                $updateRequestFrom->meetingRequest,
-                $updateRequestFrom->description,
-                $updateRequestFrom->date
-            ),
-        ];
-    }
-
-    /**
-     * @param UpdateRequestFrom $updateRequestFrom
-     * @param Participant       $participant
-     *
-     * @return array
-     */
-    private function createRemovedEvent(UpdateRequestFrom $updateRequestFrom, Participant $participant)
-    {
-        return [
-            Events::REQUEST_PARTICIPANT_REMOVED,
-            new ParticipantRemovedEvent(
-                $updateRequestFrom->editor,
-                $participant,
-                $updateRequestFrom->meetingRequest,
-                $updateRequestFrom->description,
-                $updateRequestFrom->date
-            ),
-        ];
     }
 }
