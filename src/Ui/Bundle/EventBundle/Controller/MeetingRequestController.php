@@ -543,15 +543,12 @@ class MeetingRequestController extends Controller
             $eventDomain->getEvent(),
             $request->getLocale()
         );
+        $permissionManager = $this->get('meeting.request_permission_manager');
 
         if (($meetingRequest->isApproved()
-            && !$this
-                ->get('meeting.request_permission_manager')
-                ->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet)
+            && !$permissionManager->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet)
         ) || ($meetingRequest->isSent()
-                && !$this
-                ->get('meeting.request_permission_manager')
-                ->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)
+                && !$permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)
             )
         ) {
             throw $this->createNotFoundException('You are not allowed to edit this meeting request.');
@@ -564,6 +561,34 @@ class MeetingRequestController extends Controller
         $form = null;
 
         $isProposition = $meetingRequest->getFromSheet() !== $sheet;
+
+        $cancelForm = null;
+        if ($permissionManager->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet)) {
+            $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
+            $cancelForm = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
+                'action' => $this->generateUrl('event_meeting_request_edit', [
+                    'meetingRequest' => $meetingRequest->getId()
+                ]),
+            ]);
+
+            if ($cancelForm->handleRequest($request)->isSubmitted() && $cancelForm->isValid()) {
+                if ($isProposition) {
+                    $sheetLooked = $meetingRequest->getFromSheet();
+                } else {
+                    $sheetLooked = $meetingRequest->getToSheet();
+                }
+
+                $this->get('tactician.commandbus')->handle($cancelRequest);
+
+                return $this->createJsonResponse(
+                    true,
+                    true,
+                    $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
+                        'sheet' => $sheetLooked,
+                    ])
+                );
+            }
+        }
 
         if (!$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant()) {
             $command = new UpdateRequest($meetingRequest, $sheet, $this->getUser());
@@ -604,6 +629,7 @@ class MeetingRequestController extends Controller
                     $this->renderView('EventBundle:MeetingRequest:editRequest.html.twig', [
                         'discussion'     => $discussion,
                         'form'           => $form->createView(),
+                        'cancelForm'     => $cancelForm !== null ? $cancelForm->createView() : null,
                         'isProposition'  => $isProposition,
                         'meetingRequest' => $meetingRequest,
                     ])
@@ -614,6 +640,7 @@ class MeetingRequestController extends Controller
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
             'discussion'     => $discussion,
             'form'           => $form !== null ? $form->createView() : $form,
+            'cancelForm'     => $cancelForm !== null ? $cancelForm->createView() : null,
             'isProposition'  => $isProposition,
             'meetingRequest' => $meetingRequest,
         ]);
