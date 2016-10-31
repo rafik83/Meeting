@@ -407,9 +407,10 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param bool $ok
-     * @param bool $close
+     * @param bool   $ok
+     * @param bool   $close
      * @param string $html
+     *
      * @return JsonResponse
      */
     private function createJsonResponse($ok, $close, $html)
