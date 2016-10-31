@@ -193,18 +193,6 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function search($category, $user)
-    {
-        $queryBuilder = new SearchQueryBuilder($this->entityManager);
-        $queryBuilder->withCategory($category);
-        $queryBuilder->withTypes($this->typeRepository->getSeeableTypeIdsByUser($user));
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getUserSheetsByTypes(User $user, array $types)
     {
         $queryBuilder = $this

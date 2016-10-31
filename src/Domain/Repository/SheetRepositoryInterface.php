@@ -92,14 +92,6 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
-     * @param Category|int $category
-     * @param User|int     $user
-     *
-     * @return Sheet[]
-     */
-    public function search($category, $user);
-
-    /**
      * @param User  $user
      * @param array $types
      *
