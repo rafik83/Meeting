@@ -3,17 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
+use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MeetingRequestUpdateToType extends AbstractMeetingRequestType
+class MeetingRequestUpdateType extends AbstractMeetingRequestType
 {
     /**
      * {@inheritdoc}
@@ -23,8 +23,15 @@ class MeetingRequestUpdateToType extends AbstractMeetingRequestType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-           'data_class' => UpdateRequestTo::class,
-           'submit'     => true,
+           'data_class' => UpdateRequest::class,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'catalog_edit_meeting_request';
     }
 }

@@ -12,9 +12,10 @@ namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UpdateRequestFrom
+class UpdateRequest
 {
     /**
      * @var Request
@@ -37,14 +38,21 @@ class UpdateRequestFrom
     public $editor;
 
     /**
-     * UpdateRequestFrom constructor.
+     * @var Sheet
+     */
+    public $sheetEditor;
+
+    /**
+     * UpdateRequest constructor.
      *
      * @param Request $meetingRequest
+     * @param Sheet   $sheetEditor
      * @param User    $editor
      */
-    public function __construct(Request $meetingRequest, User $editor)
+    public function __construct(Request $meetingRequest, Sheet $sheetEditor, User $editor)
     {
         $this->meetingRequest = $meetingRequest;
+        $this->sheetEditor    = $sheetEditor;
         $this->description    = null;
         $this->editor         = $editor;
         $this->participants   = $meetingRequest->getFromParticipants()->toArray();
