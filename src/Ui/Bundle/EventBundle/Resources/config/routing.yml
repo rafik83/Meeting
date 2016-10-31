@@ -428,9 +428,8 @@ event_meeting_request_show:
     defaults: { _controller: EventBundle:MeetingRequest:showRequest }
 
 event_meeting_request_edit:
-    path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
+    path: /meeting/request/{meetingRequest}/edit
     requirements:
-        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:editRequest }
