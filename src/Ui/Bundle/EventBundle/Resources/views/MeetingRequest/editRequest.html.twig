@@ -5,8 +5,17 @@
 
 <div class="modal-header">
     <h4 class="modal-title" id="myModalLabel">
-        <i class="icon-RDV"></i>
-        {{ 'catalog.action.meeting.request.pending'|trans }}
+        {% if meetingRequest.isApproved %}
+            <i class="icon-Valider_4"></i>
+            {% if isProposition %}
+                {{ 'catalog.action.meeting.proposition.approved'|trans }}
+            {% else %}
+                {{ 'catalog.action.meeting.request.approved'|trans }}
+            {% endif %}
+        {% else %}
+            <i class="icon-RDV"></i>
+            {{ 'catalog.action.meeting.request.pending'|trans }}
+        {% endif %}
     </h4>
 </div>
 
@@ -31,7 +40,15 @@
     {% if formIsNotNull %}
         <div class="validation button">
             <button type="submit" class="btn btn-primary">
-                <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.children.submit.label'|trans({}, 'forms') }}
+                {% if meetingRequest.isApproved %}
+                    {% if isProposition %}
+                        <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.proposition.children.submit.label'|trans({}, 'forms') }}
+                    {% else %}
+                        <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.request.children.submit.label'|trans({}, 'forms') }}
+                    {% endif %}
+                {% else %}
+                    <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.pending.request.children.submit.label'|trans({}, 'forms') }}
+                {% endif %}
             </button>
         </div>
     {% endif %}

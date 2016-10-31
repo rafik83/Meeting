@@ -1,7 +1,16 @@
 <div class="modal-header">
     <h4 class="modal-title" id="myModalLabel">
-        <i class="icon-RDV"></i>
-        {{ 'catalog.action.meeting.request.pending'|trans }}
+        {% if meetingRequest.isApproved %}
+            <i class="icon-Valider_4"></i>
+            {% if isProposition %}
+                {{ 'catalog.action.meeting.proposition.approved'|trans }}
+            {% else %}
+                {{ 'catalog.action.meeting.request.approved'|trans }}
+            {% endif %}
+        {% else %}
+            <i class="icon-RDV"></i>
+            {{ 'catalog.action.meeting.request.pending'|trans }}
+        {% endif %}
     </h4>
 </div>
 
