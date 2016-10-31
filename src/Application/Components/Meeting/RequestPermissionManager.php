@@ -55,6 +55,29 @@ class RequestPermissionManager
             return false;
         }
 
+        if ($sheet === $request->getFromSheet() && $request->isSent()) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Is a user allowed to edit an approved meeting request
+     *
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToEditApproved(User $user, Request $request, Sheet $sheet)
+    {
+        if (!$sheet->hasUser($user)) {
+            return false;
+        }
+
         if ($sheet === $request->getFromSheet() && !$request->isRefused() && !$request->isCancelled()) {
             return true;
         }
