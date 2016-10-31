@@ -75,6 +75,21 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Request $request)
+    {
+        $this->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(Request::class, 'request')
+            ->where('request.id = :requestId')
+            ->setParameter('requestId', $request)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
