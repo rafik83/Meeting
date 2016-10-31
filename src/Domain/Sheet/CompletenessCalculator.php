@@ -87,7 +87,6 @@ class CompletenessCalculator
 
         $this->sheetCompletenessRepository->removeForSheet($sheet);
 
-        $localizedCompleteness = [];
         $averageCompleteness   = 0;
         foreach ($locales as $locale) {
             $localeCompleteness        = floor($completed[$locale] / $total[$locale] * 100);
@@ -97,7 +96,6 @@ class CompletenessCalculator
                 $localeCompleteness
             );
 
-            $localizedCompleteness[] = $unitLocalizedCompleteness;
             $this->sheetCompletenessRepository->add($unitLocalizedCompleteness);
             $averageCompleteness += $localeCompleteness;
         }
