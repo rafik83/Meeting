@@ -4,7 +4,7 @@ Feature: Manage templates
   As an Admin, I need to be able to add, update, duplicate, see templates
 
   Scenario: See list of templates
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |

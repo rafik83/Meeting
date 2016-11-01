@@ -4,7 +4,7 @@ Feature: Forgot Password Admin
   I need to be able to change my password if I forgot it as an Admin
 
   Background: Re-init the database and load the fixtures
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

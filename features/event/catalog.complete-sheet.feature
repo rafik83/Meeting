@@ -5,7 +5,7 @@ Feature: Display complete sheet from catalog
   As a participant, I can see a complete sheet from the catalog and request a meeting
 
   Scenario: I can see a complete sheet from the catalog
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

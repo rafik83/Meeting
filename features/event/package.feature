@@ -5,7 +5,7 @@ Feature: Complete my package
   I need to be able to buy plan, participants, planning and options
 
   Scenario: I can buy plan
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

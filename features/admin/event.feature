@@ -4,7 +4,7 @@ Feature: See, create and update event
   I need to be able to see, create and update an event
 
   Scenario: See event
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

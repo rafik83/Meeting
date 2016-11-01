@@ -4,7 +4,7 @@ Feature: Edit participant status
   As an admin, I can edit participant status
 
   Scenario: I can validate participant registration
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

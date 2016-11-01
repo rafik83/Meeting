@@ -5,7 +5,7 @@ Feature: Register with participant step
   I need to be able to register and fill information during the registration
 
   Scenario: Register an user in 3 steps
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

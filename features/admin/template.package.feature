@@ -4,7 +4,7 @@ Feature: Manage products selection templates
   As an Admin, I need to be able to add, update and list products selection templates
 
   Scenario: Create a package template
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml          |
@@ -27,7 +27,7 @@ Feature: Manage products selection templates
      And the "form.package_update.children.title.label" field should contain "My template"
 
   Scenario: Update a package template
-    Given the database is empty
+    Given the database is purged
       And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml          |

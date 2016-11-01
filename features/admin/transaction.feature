@@ -4,7 +4,7 @@ Feature: Admin Transaction
   I need to be able to manage the transaction for a participant
 
   Scenario: I can see a list of transactions
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

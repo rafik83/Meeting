@@ -5,7 +5,7 @@ Feature: Handle Product
   I need to be able to create and list products of an event
 
   Scenario: I can create a product linked to an event
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

@@ -4,7 +4,7 @@ Feature: Update spanish event
   I need to be able to update spanish event configuration
 
   Scenario: I can see the event
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/Spanish-Event.yml        |

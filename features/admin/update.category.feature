@@ -4,7 +4,7 @@ Feature: Update a participation category
   I need to be able to update category title and types
 
   Scenario: I can list event categories
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

@@ -2,7 +2,7 @@
 Feature: Select payable option in sheet
 
   Scenario: I can pay my package with payable option "Option Chaise"
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
     | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
     | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

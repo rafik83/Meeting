@@ -4,7 +4,7 @@ Feature: Sheet validation workflow
   I can send my sheet to validation when I think I'm done
 
   Scenario: I can send my sheet to validation
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

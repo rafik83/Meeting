@@ -4,7 +4,7 @@ Feature: Change password
 When I am logged, I need to be able to change my password
 
   Scenario: Change the password successfully
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

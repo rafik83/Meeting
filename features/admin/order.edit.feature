@@ -6,7 +6,7 @@ Feature: Edit an order
   As an Admin, I need to be able to edit an order, add custom rows, edit them and remove them
 
   Scenario: Add custom row
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
