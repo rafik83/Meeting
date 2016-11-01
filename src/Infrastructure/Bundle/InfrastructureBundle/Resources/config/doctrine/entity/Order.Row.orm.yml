@@ -29,9 +29,8 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         parentRow:
             targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
             joinColumn:
-                nullable: true
                 onDelete: CASCADE
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             joinColumn:
-                nullable: true
+                onDelete: SET NULL

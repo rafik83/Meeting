@@ -25,5 +25,9 @@ Proximum\Vimeet\Domain\Model\Happening:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
         category:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Category
+            joinColumn:
+                onDelete: CASCADE

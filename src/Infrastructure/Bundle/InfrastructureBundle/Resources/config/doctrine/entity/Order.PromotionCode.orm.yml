@@ -19,3 +19,5 @@ Proximum\Vimeet\Domain\Model\Order\PromotionCode:
                 onDelete: CASCADE
         promotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
+            joinColumn:
+                onDelete: SET NULL
