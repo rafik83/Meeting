@@ -25,12 +25,12 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             inversedBy: rows
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE
         parentRow:
             targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
             joinColumn:
                 nullable: true
-                onDelete: "cascade"
+                onDelete: CASCADE
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             joinColumn:
