@@ -285,7 +285,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element !== null ) {
+        if ($element !== null) {
             if ($element->getTagName() === 'input') {
                 // Behat return 1 instead of true for the value of a radio
                 if ((bool) $element->getValue() !== true) {
