@@ -4,7 +4,7 @@
 #  I need to be able update my meeting request and proposition when they are sent or approved
 #
 #  Scenario: I can update my meeting request
-#    Given the database is empty
+#    Given the database is purged
 #    Given the following fixtures files are loaded:
 #      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
 #      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

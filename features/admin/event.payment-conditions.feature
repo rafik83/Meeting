@@ -4,7 +4,7 @@ Feature: See and update payment conditions
   I need to be able to see and init payment conditions for an event
 
   Scenario: Set payment conditions
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

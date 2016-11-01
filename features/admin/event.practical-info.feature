@@ -4,7 +4,7 @@ Feature: See and update practical information
   I need to be able to see and init practical information for an event
 
   Scenario: Set practical information
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

@@ -4,7 +4,7 @@ Feature: Spot feature
   I need to be able to create, list, filter, a spot and disable and remove them in batch
 
   Scenario: I can list spot
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
