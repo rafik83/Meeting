@@ -24,6 +24,8 @@ Proximum\Vimeet\Domain\Model\Spot:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
     uniqueConstraints:
         unique_reference_idx:
             columns: [reference, event_id]

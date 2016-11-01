@@ -15,3 +15,5 @@ Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
         content:
             targetEntity: Proximum\Vimeet\Domain\Model\Event\Content
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

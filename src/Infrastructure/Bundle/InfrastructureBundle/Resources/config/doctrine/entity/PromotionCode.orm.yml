@@ -22,7 +22,6 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
-                nullable: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeTranslation
