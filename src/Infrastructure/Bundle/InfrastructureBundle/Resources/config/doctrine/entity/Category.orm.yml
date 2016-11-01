@@ -20,6 +20,8 @@ Proximum\Vimeet\Domain\Model\Category:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
             inversedBy: categories
             cascade: ["persist"]
+            joinColumn:
+                onDelete: CASCADE
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

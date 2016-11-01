@@ -29,9 +29,13 @@ Proximum\Vimeet\Domain\Model\Type:
         categories:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
             mappedBy: types
+            joinColumn:
+                onDelete: SET NULL
         admins:
             targetEntity: Proximum\Vimeet\Domain\Model\Admin
             mappedBy: types
+            joinColumn:
+                onDelete: SET NULL
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
