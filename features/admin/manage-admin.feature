@@ -4,7 +4,7 @@ Feature: Manage Admin
   I need to be able to manage Admin and Organizer
 
   Scenario: I can create an Organizer link to an event
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

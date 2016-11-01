@@ -3,7 +3,7 @@ Feature: Import products and package from an event
   As an Admin, I need to be able to import the products and the packages of an event to an other
 
   Scenario: Import products
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

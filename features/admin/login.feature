@@ -4,7 +4,7 @@ Feature: Login admin
   I need to be able to login to my admin account
 
   Scenario: Login successful
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

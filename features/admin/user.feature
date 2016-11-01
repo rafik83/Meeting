@@ -4,7 +4,7 @@ Feature:
   I need to be able to see the users by events and their details information
 
   Scenario: I can see a list of users
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

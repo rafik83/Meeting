@@ -4,7 +4,7 @@ Feature: Upload and remove image
   As a participant, I need to be able to upload and remove the image of my sheet
 
   Scenario: I can upload my image on the sheet
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

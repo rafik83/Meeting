@@ -4,7 +4,7 @@ Feature: Operator Activate Account
   I need to be able to activate my account
 
   Scenario: I can activate my account
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

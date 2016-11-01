@@ -4,7 +4,7 @@ Feature: See sheet details
   As an admin, I can see the details of a sheet
 
   Scenario: I can see the details of a sheet
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

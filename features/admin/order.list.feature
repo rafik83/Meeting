@@ -6,7 +6,7 @@ Feature: List and filter orders
   As an Admin, I need to be able to list and filter orders
 
   Scenario: List event orders
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

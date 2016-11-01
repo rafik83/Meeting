@@ -4,7 +4,7 @@ Feature: Forgot Password
   I need to be able to change my password if I forgot it
 
   Scenario: I can not request a token for a non-existent account
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml               |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml        |

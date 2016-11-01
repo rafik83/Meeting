@@ -4,7 +4,7 @@ Feature: Register and login user
   I need to be able to register to an event and login to my account
 
   Scenario: Register an user in 3 steps
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

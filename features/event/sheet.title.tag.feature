@@ -4,7 +4,7 @@ Feature: Sheet with a tag in editable text title
     I see the organization name in the sheet title
 
     Scenario: I can see the organization name in the sheet title
-        Given the database is empty
+        Given the database is purged
         And the following fixtures files are loaded:
             | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
             | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

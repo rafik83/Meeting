@@ -4,7 +4,7 @@ Feature: Admin Account
   I need to be able to manage the Admin account
 
   Scenario: I can change my password
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | Admin.yml        |
     And I am logged with "test@test.com" on admin

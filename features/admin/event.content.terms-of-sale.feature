@@ -4,7 +4,7 @@ Feature: Update terms of sale
   I need to be able to update the terms of sale of my event
 
   Scenario: Update terms of sale
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

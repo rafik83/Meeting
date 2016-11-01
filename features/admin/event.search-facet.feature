@@ -4,7 +4,7 @@ Feature: See and update search facet
   I need to be able to see and update search facet for an event catalog
 
   Scenario: See and update search facet
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

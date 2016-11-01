@@ -4,7 +4,7 @@ Feature: Edit event billing configuration
   As an Admin, I need to be able to edit event billing configuration
 
   Scenario: go to edit billing configuration page
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
