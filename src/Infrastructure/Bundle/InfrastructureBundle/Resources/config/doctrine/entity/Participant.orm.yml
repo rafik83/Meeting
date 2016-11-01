@@ -20,7 +20,13 @@ Proximum\Vimeet\Domain\Model\Participant:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             inversedBy: participants
+            joinColumn:
+                onDelete: CASCADE
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
         order:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
+            joinColumn:
+                onDelete: SET NULL

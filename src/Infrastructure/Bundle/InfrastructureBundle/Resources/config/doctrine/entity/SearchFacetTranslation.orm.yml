@@ -19,3 +19,5 @@ Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
         searchFacet:
             targetEntity: Proximum\Vimeet\Domain\Model\SearchFacet
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
