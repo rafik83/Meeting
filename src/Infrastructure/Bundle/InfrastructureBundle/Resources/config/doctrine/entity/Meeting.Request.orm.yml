@@ -35,7 +35,11 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
             joinTable:
                 name: meeting_request_from_participants
+            joinColumn:
+                onDelete: CASCADE
         toParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
             joinTable:
                 name: meeting_request_to_participants
+            joinColumn:
+                onDelete: CASCADE
