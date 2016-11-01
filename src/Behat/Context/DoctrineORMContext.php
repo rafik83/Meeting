@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -27,6 +28,16 @@ class DoctrineORMContext implements Context, KernelAwareContext
     public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
+    }
+
+    /**
+     * @BeforeSuite
+     *
+     * @param BeforeSuiteScope $scope
+     */
+    public static function prepare(BeforeSuiteScope $scope)
+    {
+        exec("bin/console doctrine:schema:update --force --env=test");
     }
 
     /**
