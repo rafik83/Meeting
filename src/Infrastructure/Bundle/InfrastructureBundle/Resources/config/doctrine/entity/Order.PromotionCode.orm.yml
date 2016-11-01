@@ -16,6 +16,6 @@ Proximum\Vimeet\Domain\Model\Order\PromotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             inversedBy: promotionCodes
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE
         promotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
