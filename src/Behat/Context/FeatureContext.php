@@ -1,5 +1,7 @@
 <?php
 
+namespace Proximum\Vimeet\Behat\Context;
+
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
