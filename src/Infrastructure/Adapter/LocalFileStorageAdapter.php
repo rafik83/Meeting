@@ -27,6 +27,11 @@ class LocalFileStorageAdapter implements FileStorageInterface
     private $dateTime;
 
     /**
+     * @var string
+     */
+    private $fileExtension;
+
+    /**
      * LocalFileStorageAdapter constructor.
      *
      * @param string             $publicDir
@@ -51,6 +56,8 @@ class LocalFileStorageAdapter implements FileStorageInterface
             throw new \Exception(sprintf('"%s" expected, "%s" given.', UploadedFile::class, is_object($file) ? get_class($file) : gettype($file)));
         }
 
+        $this->fileExtension = $file->guessExtension();
+
         $path      = sprintf('/uploads/%s/%s', $this->dateTime->format('Y'), $this->dateTime->format('m'));
         $directory = $this->publicDir . $path;
         $extension = '.' . $file->getClientOriginalExtension();
@@ -60,6 +67,16 @@ class LocalFileStorageAdapter implements FileStorageInterface
         $file->move($directory, $filename);
 
         return $path . '/' . $filename;
+    }
+
+    /**
+     * @param UploadedFile $file
+     *
+     * @return null|string
+     */
+    public function getExtension(UploadedFile $file)
+    {
+        return $this->fileExtension;
     }
 
     /**

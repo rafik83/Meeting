@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Components\File\FileExtensionGuesser;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
 use Proximum\Vimeet\Application\Event\Events;
@@ -45,11 +44,6 @@ class UpdateHandler
     private $eventDispatcher;
 
     /**
-     * @var FileExtensionGuesser
-     */
-    private $fileExtensionGuesser;
-
-    /**
      * @param EventRepositoryInterface $eventRepository
      * @param Generator                $guidelinesGenerator
      * @param FileStorageInterface     $fileStorage
@@ -60,14 +54,12 @@ class UpdateHandler
         EventRepositoryInterface $eventRepository,
         Generator $guidelinesGenerator,
         FileStorageInterface $fileStorage,
-        EventDispatcherInterface $eventDispatcher,
-        FileExtensionGuesser $fileExtensionGuesser
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->eventRepository      = $eventRepository;
         $this->guidelinesGenerator  = $guidelinesGenerator;
         $this->fileStorage          = $fileStorage;
         $this->eventDispatcher      = $eventDispatcher;
-        $this->fileExtensionGuesser = $fileExtensionGuesser;
     }
 
     /**
@@ -106,7 +98,7 @@ class UpdateHandler
             $toRemove = $event->getLogo();
             $logoPath = $this->fileStorage->upload($update->logo);
             $event->setLogo($logoPath);
-            $event->setLogoExtension($this->fileExtensionGuesser->guess($logoPath));
+            $event->setLogoExtension($this->fileStorage->getExtension($update->logo));
             $this->fileStorage->remove($toRemove);
         }
 

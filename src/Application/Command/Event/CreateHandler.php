@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Components\File\FileExtensionGuesser;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -49,34 +48,25 @@ class CreateHandler
     private $fileStorage;
 
     /**
-     * @var FileExtensionGuesser
-     */
-    private $fileExtensionGuesser;
-
-    /**
      * @param AdminRepositoryInterface   $adminRepository
      * @param EventRepositoryInterface   $eventRepository
      * @param ContentRepositoryInterface $contentRepository
      * @param Generator                  $guidelinesGenerator
      * @param FileStorageInterface       $fileStorage
-     * @param FileExtensionGuesser       $fileExtensionGuesser
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         EventRepositoryInterface $eventRepository,
         ContentRepositoryInterface $contentRepository,
         Generator $guidelinesGenerator,
-        FileStorageInterface $fileStorage,
-        FileExtensionGuesser $fileExtensionGuesser
+        FileStorageInterface $fileStorage
     ) {
         $this->adminRepository      = $adminRepository;
         $this->eventRepository      = $eventRepository;
         $this->contentRepository    = $contentRepository;
         $this->guidelinesGenerator  = $guidelinesGenerator;
         $this->fileStorage          = $fileStorage;
-        $this->fileExtensionGuesser = $fileExtensionGuesser;
     }
-
 
     public function handle(Create $create)
     {
@@ -102,7 +92,7 @@ class CreateHandler
         if (null !== $create->logo) {
             $logoPath = $this->fileStorage->upload($create->logo);
             $event->setLogo($logoPath);
-            $event->setLogoExtension($this->fileExtensionGuesser->guess($logoPath));
+            $event->setLogoExtension($this->fileStorage->getExtension($create->logo));
         }
 
         foreach ($event->getLocales() as $locale) {

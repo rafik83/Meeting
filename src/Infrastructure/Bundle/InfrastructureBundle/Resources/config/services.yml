@@ -302,7 +302,6 @@ services:
             - '@guideline.generator'
             - '@adapter.local_file_storage'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@file.extension.guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
     vimeet_infrastructure.vimeet.application.command.type.update_handler:
@@ -1141,7 +1140,6 @@ services:
             - '@repository.event.content_repository'
             - '@guideline.generator'
             - '@adapter.local_file_storage'
-            - '@file.extension.guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
     command.event.billing_configuration_handler:
@@ -1451,12 +1449,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
     components.security.admin_sheet_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
-
-    #
-    # File Component
-    #
-    file.extension.guesser:
-        class: Proximum\Vimeet\Application\Components\File\FileExtensionGuesser
 
     #
     # Guideline Component
