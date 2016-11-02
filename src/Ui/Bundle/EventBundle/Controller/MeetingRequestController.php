@@ -340,12 +340,16 @@ class MeetingRequestController extends Controller
 
     /**
      * @param Request        $request
+     * @param EventDomain    $eventDomain
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
      */
-    public function showConversationOfRefuseRequestAction(Request $request, MeetingRequest $meetingRequest)
-    {
+    public function showConversationOfRefuseRequestAction(
+        Request $request,
+        EventDomain $eventDomain,
+        MeetingRequest $meetingRequest
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         if (!$meetingRequest->getFromSheet()->hasUser($this->getUser())
@@ -358,7 +362,11 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $isItRequest = $meetingRequest->getFromSheet()->hasUser($this->getUser());
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
+            $this->getUser(),
+            $eventDomain->getEvent(),
+            $request->getLocale()
+        );
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
@@ -367,8 +375,14 @@ class MeetingRequestController extends Controller
 
         $form = null;
 
-        if (!$isItRequest) {
-            $unRefuse = new UnRefuseMeetingRequest($meetingRequest);
+        $isItRequest = $this->get('meeting.request_permission_manager')->isAllowedToUnRefuse(
+            $this->getUser(),
+            $meetingRequest,
+            $sheet
+        );
+
+        if ($isItRequest) {
+            $unRefuse = new UnRefuseMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
                     'meetingRequest' => $meetingRequest->getId()
