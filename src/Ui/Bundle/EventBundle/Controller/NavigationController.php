@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
+use Proximum\Vimeet\Application\View\Navigation\MenuView;
+use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,38 +32,48 @@ class NavigationController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $menuView = new MenuViewQuery($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
-        $menuView = $this->get('tactician.commandbus.query')->handle($menuView);
+        $menuView    = $this->mainMenu($eventDomain->getEvent(), $request->getLocale());
+        $submenuView = $this->subMenu($eventDomain->getEvent(), $request->getLocale());
 
         return $this->render('EventBundle::Navigation/dropdownMenu.html.twig', [
-            'menuView' => $menuView,
+            'menuView'    => $menuView,
+            'submenuView' => $submenuView,
         ]);
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
+     * @param Event  $event
+     * @param string $locale
      *
-     * @return Response
+     * @return MenuView
      */
-    public function subMenuAction(Request $request, EventDomain $eventDomain)
+    private function mainMenu(Event $event, $locale)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $menuView = new MenuViewQuery($event, $this->getUser(), $locale);
 
+        return $this->get('tactician.commandbus.query')->handle($menuView);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return SubmenuView
+     */
+    private function subMenu(Event $event, $locale)
+    {
         $requestStack = $this->get('request_stack');
         $route        = $requestStack->getMasterRequest()->get('_route');
 
         $submenuView = $this->get('tactician.commandbus.query')->handle(
             new SubmenuViewQuery(
-                $eventDomain->getEvent(),
+                $event,
                 $this->getUser(),
-                $request->getLocale(),
+                $locale,
                 $route
             )
         );
 
-        return $this->render('EventBundle::Navigation/submenu.html.twig', [
-            'submenuView' => $submenuView,
-        ]);
+        return $submenuView;
     }
 }
