@@ -27,11 +27,6 @@ class LocalFileStorageAdapter implements FileStorageInterface
     private $dateTime;
 
     /**
-     * @var string
-     */
-    private $fileExtension;
-
-    /**
      * LocalFileStorageAdapter constructor.
      *
      * @param string             $publicDir
