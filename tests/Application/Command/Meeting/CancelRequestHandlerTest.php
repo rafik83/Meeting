@@ -87,4 +87,36 @@ class CancelRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $handler->handle($cancelRequest);
     }
+
+    public function testHandleApproved()
+    {
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user      = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2     = new User('test2@test.fr', 'test', 'test', 'fr');
+        $dateTime  = new DateTime();
+        $sheetTo   = new Sheet($event, $type, [], $user, $dateTime);
+        $sheetFrom = new Sheet($event, $type, [], $user2, $dateTime);
+
+        // Request to cancel
+        $request       = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user);
+        $request->approve($dateTime);
+        $cancelRequest = new CancelRequest($request, $user, $sheetFrom);
+
+        // Dependencies
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->remove($request)->shouldBeCalled();
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToCancel($user, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+
+        // Handle
+
+        $handler = new CancelRequestHandler(
+            $requestRepository->reveal(),
+            $permissionManager->reveal(),
+            $dateTime
+        );
+        $handler->handle($cancelRequest);
+    }
 }

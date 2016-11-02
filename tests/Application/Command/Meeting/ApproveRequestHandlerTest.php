@@ -33,9 +33,9 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');
         $user3        = new User('test3@test.fr', 'test', 'test', 'fr');
         $user4        = new User('test4@test.fr', 'test', 'test', 'fr');
-        $sheetTo      = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom    = new Sheet($event, $type, [], $user3, new \DateTime());
-        $dateTime     = new DateTime;
+        $dateTime     = new DateTime();
+        $sheetTo      = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom    = new Sheet($event, $type, [], $user3, $dateTime);
         $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3);
         $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4);
 
