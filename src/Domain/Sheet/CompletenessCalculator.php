@@ -100,7 +100,7 @@ class CompletenessCalculator
             $averageCompleteness += $localeCompleteness;
         }
 
-        $sheet->setCompleteness(floor($averageCompleteness / count($locales)));
+        $sheet->setCompleteness(intval(floor($averageCompleteness / count($locales))));
 
         $this->sheetRepository->set($sheet);
     }
@@ -129,7 +129,7 @@ class CompletenessCalculator
                 foreach ($participants as $participant) {
                     $data = $participant->getData();
 
-                    if (isset($data[$object->getKey()]) && null !== $data[$object->getKey()]) {
+                    if (!empty($data[$object->getKey()])) {
                         $countCompleted++;
                     }
                 }
@@ -161,7 +161,7 @@ class CompletenessCalculator
             if ($object->isEditable() && true === $object->getRequired()) {
                 $countTotal++;
 
-                if ($object->getContentValue() !== null) {
+                if (!empty($object->getContentValue())) {
                     $countCompleted++;
                 }
             }
@@ -191,10 +191,9 @@ class CompletenessCalculator
                     if ($object->isTranslatable()) {
                         foreach ($locales as $locale) {
                             $total[$locale]++;
-
                             $data = $object->getContentValueLocalize($locale);
 
-                            if ($data !== null) {
+                            if (!empty($data)) {
                                 $completed[$locale]++;
                             }
                         }
@@ -203,7 +202,7 @@ class CompletenessCalculator
 
                         foreach ($locales as $locale) {
                             $total[$locale]++;
-                            if (null !== $data) {
+                            if (!empty($data)) {
                                 $completed[$locale]++;
                             }
                         }
