@@ -91,7 +91,7 @@ class CreateHandler
 
         if (null !== $create->logo) {
             $logoExtension = $this->fileStorage->getExtension($create->logo);
-            $logoPath = $this->fileStorage->upload($create->logo);
+            $logoPath      = $this->fileStorage->upload($create->logo);
             $event->setLogo($logoPath);
             $event->setLogoExtension($logoExtension);
         }
