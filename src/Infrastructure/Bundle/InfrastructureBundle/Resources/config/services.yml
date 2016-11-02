@@ -511,6 +511,14 @@ services:
             - '@meeting.request_permission_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CancelRequest }
+    command.meeting.un_approve_meeting_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@meeting.request_permission_manager'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
