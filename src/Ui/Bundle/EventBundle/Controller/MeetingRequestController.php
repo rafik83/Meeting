@@ -237,7 +237,7 @@ class MeetingRequestController extends Controller
             ->get('tactician.commandbus.query')
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
-        $approveRequest = new ApproveRequest($meetingRequest);
+        $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet);
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
                 'sheet'          => $sheet->getId(),
