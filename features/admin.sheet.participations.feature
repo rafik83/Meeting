@@ -35,36 +35,36 @@ Feature: Edit participant status
     And I check "sheet_batch_ids_4"
     When I press "form.sheet_batch.children.disable.label"
     Then I should be on this page "/admin/fr/event/1/sheet"
-    And I should see "admin.sheet.disable"
+    And I should see "flash.admin.sheet_batch.disable.success"
 
   Scenario: I can add or remove a sheet from the catalog
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to "/admin/fr/event/1/sheet"
     Then I should see "admin.sheet.title.count"
-    And I check "sheet_batch_ids_4"
+    And I check "sheet_batch_ids_7"
     When I press "form.sheet_batch.children.addCatalog.label"
     Then I should be on this page "/admin/fr/event/1/sheet"
-    And I should see "✓" in the "#sheet-4" element
+    And I should see "✓" in the "#sheet-7" element
 
   Scenario: I can put sheet participation to draft
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to "/admin/fr/event/1/sheet"
     Then I should see "admin.sheet.title.count"
-    And I check "sheet_batch_ids_4"
+    And I check "sheet_batch_ids_7"
     When I press "form.sheet_batch.children.validationStateDraft"
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.draft.success"
-    And I should see "event.sheet.validationState.draft" in the "#sheet-4" element
+    And I should see "event.sheet.validationState.draft" in the "#sheet-7" element
 
   Scenario: I can put sheet participation content to validated
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
     When I go to "/admin/fr/event/1/sheet"
     Then I should see "admin.sheet.title.count"
-    And I check "sheet_batch_ids_4"
+    And I check "sheet_batch_ids_7"
     When I press "form.sheet_batch.children.validationStateValidate.label"
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.validation.validate.success"
-    And I should see "event.sheet.validationState.validated" in the "#sheet-4" element
+    And I should see "event.sheet.validationState.validated" in the "#sheet-7" element
