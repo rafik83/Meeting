@@ -52,4 +52,14 @@ class FilterPartType extends AbstractType
     {
         return 'sheet_part_filter';
     }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return [
+            'enabled' => true,
+        ];
+    }
 }

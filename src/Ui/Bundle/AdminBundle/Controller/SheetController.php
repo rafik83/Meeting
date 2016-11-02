@@ -50,7 +50,7 @@ class SheetController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filters = [];
+        $filters = FilterPartType::getDefaultFilters();
 
         $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
             'event'  => $event,
