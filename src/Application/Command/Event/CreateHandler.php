@@ -23,6 +23,11 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 class CreateHandler
 {
     /**
+     * Only format that isn't supported by imagine_filter
+     */
+    const SVG_FORMAT = 'svg';
+
+    /**
      * @var EventRepositoryInterface
      */
     private $eventRepository;
@@ -91,7 +96,9 @@ class CreateHandler
         $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
 
         if (null !== $create->logo) {
-            $event->setLogo($this->fileStorage->upload($create->logo));
+            $logoPath = $this->fileStorage->upload($create->logo);
+            $event->setLogo($logoPath);
+            $event->setSvgLogoFormat($this->isSvgLogoFormat($logoPath));
         }
 
         foreach ($event->getLocales() as $locale) {
@@ -125,5 +132,17 @@ class CreateHandler
     {
         $termsOfSale = new Event\Content($event, Event\Content::TYPE_TERMS_OF_SALE);
         $this->contentRepository->add($termsOfSale);
+    }
+
+    /**
+     * @param string $logoPath
+     *
+     * @return bool
+     */
+    private function isSvgLogoFormat($logoPath)
+    {
+        $splInfo = new \SplFileInfo($logoPath);
+
+        return $splInfo->getExtension() === self::SVG_FORMAT;
     }
 }

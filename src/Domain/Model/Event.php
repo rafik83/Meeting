@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
-use SplFileInfo;
 
 /**
  * "Evènement".
@@ -28,11 +27,6 @@ class Event implements EventInterface
      * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
      */
     const VAT_MODE_ET  = 'et';
-
-    /**
-     * Only format that isn't supported by imagine_filter
-     */
-    const SVG_FORMAT = 'svg';
 
     /**
      * @var int
@@ -132,6 +126,11 @@ class Event implements EventInterface
      * @var string
      */
     private $currency;
+
+    /**
+     * @var bool
+     */
+    private $svgLogoFormat = false;
 
     /**
      * Constructor.
@@ -388,8 +387,18 @@ class Event implements EventInterface
      * @param string $domain
      * @param string $organiserName
      */
-    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency, $timeZone, $domain, $organiserName)
-    {
+    public function update(
+        $title,
+        array $locales,
+        $fallback,
+        $mode,
+        $vat,
+        $country,
+        $currency,
+        $timeZone,
+        $domain,
+        $organiserName
+    ) {
         $this->title         = $title;
         $this->locales       = $locales;
         $this->fallback      = $fallback;
@@ -519,16 +528,18 @@ class Event implements EventInterface
     }
 
     /**
+     * @param bool $svgLogoFormat
+     */
+    public function setSvgLogoFormat($svgLogoFormat)
+    {
+        $this->svgLogoFormat = $svgLogoFormat;
+    }
+
+    /**
      * @return bool
      */
-    public function isSvgLogo()
+    public function isSvgLogoFormat()
     {
-        if (empty($this->logo)) {
-            return false;
-        }
-
-        $splInfo = new SplFileInfo($this->logo);
-
-        return $splInfo->getExtension() === self::SVG_FORMAT;
+        return $this->svgLogoFormat;
     }
 }

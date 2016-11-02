@@ -24,6 +24,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class UpdateHandler
 {
     /**
+     * Only format that isn't supported by imagine_filter
+     */
+    const SVG_FORMAT = 'svg';
+
+    /**
      * @var EventRepositoryInterface
      */
     private $eventRepository;
@@ -95,10 +100,11 @@ class UpdateHandler
 
         if (null !== $update->logo) {
             $toRemove = $event->getLogo();
-            $event->setLogo($this->fileStorage->upload($update->logo));
+            $logoPath = $this->fileStorage->upload($update->logo);
+            $event->setLogo($logoPath);
+            $event->setSvgLogoFormat($this->isSvgLogoFormat($logoPath));
             $this->fileStorage->remove($toRemove);
         }
-
 
         $this->updateTranslatons($update);
 
@@ -151,5 +157,17 @@ class UpdateHandler
         } catch (GuidelineAssetBuildFailedException $exception) {
             throw new GuidelineAssetBuildFailedException($exception->getMessage());
         }
+    }
+
+    /**
+     * @param string $logoPath
+     *
+     * @return bool
+     */
+    private function isSvgLogoFormat($logoPath)
+    {
+        $splInfo = new \SplFileInfo($logoPath);
+
+        return $splInfo->getExtension() === self::SVG_FORMAT;
     }
 }
