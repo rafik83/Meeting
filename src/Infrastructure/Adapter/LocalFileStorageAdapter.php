@@ -51,8 +51,6 @@ class LocalFileStorageAdapter implements FileStorageInterface
             throw new \Exception(sprintf('"%s" expected, "%s" given.', UploadedFile::class, is_object($file) ? get_class($file) : gettype($file)));
         }
 
-        $this->fileExtension = $file->guessExtension();
-
         $path      = sprintf('/uploads/%s/%s', $this->dateTime->format('Y'), $this->dateTime->format('m'));
         $directory = $this->publicDir . $path;
         $extension = '.' . $file->getClientOriginalExtension();
