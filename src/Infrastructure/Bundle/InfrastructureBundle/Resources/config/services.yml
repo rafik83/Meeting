@@ -492,6 +492,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@meeting.request_permission_manager'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
