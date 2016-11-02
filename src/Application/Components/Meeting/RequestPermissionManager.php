@@ -78,11 +78,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($sheet === $request->getFromSheet() && !$request->isRefused()) {
-            return true;
-        }
-
-        if ($sheet === $request->getToSheet() && $request->isApproved()) {
+        if (($sheet === $request->getFromSheet() || $sheet === $request->getToSheet()) && $request->isApproved()) {
             return true;
         }
 
@@ -104,16 +100,9 @@ class RequestPermissionManager
             return false;
         }
 
-
-        if ($request->getFromSheet() === $sheet && $request->isSent()) {
+        if ($request->getFromSheet() === $sheet && ($request->isSent() || $request->isApproved())) {
             return true;
         }
-
-        //if ($request->getFromSheet() === $sheet && ($request->isSent() || $request->isApproved())) {
-        //}
-
-        // if ($request->getToSheet() === $sheet && $request->isApproved()) {
-        // }
 
         return false;
     }
@@ -177,6 +166,29 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to unrefuse a refused meeting request
+     *
+     *
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToUnRefuse(User $user, Request $request, Sheet $sheet)
+    {
+        if (!$sheet->hasUser($user)) {
+            return false;
+        }
+
+        if ($request->isRefused() && $request->getToSheet() === $sheet) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Is a user allowed to create a meeting request between these two sheets
      *
      * @param User  $user
@@ -205,6 +217,7 @@ class RequestPermissionManager
     {
         return empty($this->requestRepository->getRequestBetweenSheetsWithStates($from, $to, [
             Request::STATE_APPROVED,
+            Request::STATE_REFUSED,
             Request::STATE_SENT,
         ]));
     }
