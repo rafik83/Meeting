@@ -2,7 +2,7 @@
     {% if event is defined %}
         {% if event.logo != null %}
             <a href="{{ path('event') }}">
-                {% if event.isSvgLogoExtension %}
+                {% if event.isSvgLogo %}
                     <img src="{{ event.logo }}" class="logo">
                 {% else %}
                     <img src="{{ event.logo|imagine_filter('event_header_logo') }}" class="logo">
