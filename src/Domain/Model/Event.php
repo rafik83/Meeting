@@ -29,6 +29,11 @@ class Event implements EventInterface
     const VAT_MODE_ET  = 'et';
 
     /**
+     * Only extension that isn't supported by imagine_filter
+     */
+    const SVG_EXTENSION = 'svg';
+
+    /**
      * @var int
      */
     private $id;
@@ -128,9 +133,9 @@ class Event implements EventInterface
     private $currency;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $svgLogoFormat = false;
+    private $logoExtension;
 
     /**
      * Constructor.
@@ -528,18 +533,18 @@ class Event implements EventInterface
     }
 
     /**
-     * @param bool $svgLogoFormat
+     * @param string $logoExtension
      */
-    public function setSvgLogoFormat($svgLogoFormat)
+    public function setLogoExtension($logoExtension)
     {
-        $this->svgLogoFormat = $svgLogoFormat;
+        $this->logoExtension = $logoExtension;
     }
 
     /**
      * @return bool
      */
-    public function isSvgLogoFormat()
+    public function isSvgLogoExtension()
     {
-        return $this->svgLogoFormat;
+        return $this->logoExtension == self::SVG_EXTENSION;
     }
 }

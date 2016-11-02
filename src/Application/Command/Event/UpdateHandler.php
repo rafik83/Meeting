@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Components\File\FileExtensionGuesser;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
 use Proximum\Vimeet\Application\Event\Events;
@@ -23,11 +24,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandler
 {
-    /**
-     * Only format that isn't supported by imagine_filter
-     */
-    const SVG_FORMAT = 'svg';
-
     /**
      * @var EventRepositoryInterface
      */
@@ -49,21 +45,29 @@ class UpdateHandler
     private $eventDispatcher;
 
     /**
+     * @var FileExtensionGuesser
+     */
+    private $fileExtensionGuesser;
+
+    /**
      * @param EventRepositoryInterface $eventRepository
      * @param Generator                $guidelinesGenerator
      * @param FileStorageInterface     $fileStorage
      * @param EventDispatcherInterface $eventDispatcher
+     * @param FileExtensionGuesser     $fileExtensionGuesser
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         Generator $guidelinesGenerator,
         FileStorageInterface $fileStorage,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        FileExtensionGuesser $fileExtensionGuesser
     ) {
-        $this->eventRepository     = $eventRepository;
-        $this->guidelinesGenerator = $guidelinesGenerator;
-        $this->fileStorage         = $fileStorage;
-        $this->eventDispatcher     = $eventDispatcher;
+        $this->eventRepository      = $eventRepository;
+        $this->guidelinesGenerator  = $guidelinesGenerator;
+        $this->fileStorage          = $fileStorage;
+        $this->eventDispatcher      = $eventDispatcher;
+        $this->fileExtensionGuesser = $fileExtensionGuesser;
     }
 
     /**
@@ -102,7 +106,7 @@ class UpdateHandler
             $toRemove = $event->getLogo();
             $logoPath = $this->fileStorage->upload($update->logo);
             $event->setLogo($logoPath);
-            $event->setSvgLogoFormat($this->isSvgLogoFormat($logoPath));
+            $event->setLogoExtension($this->fileExtensionGuesser->guess($logoPath));
             $this->fileStorage->remove($toRemove);
         }
 
@@ -157,17 +161,5 @@ class UpdateHandler
         } catch (GuidelineAssetBuildFailedException $exception) {
             throw new GuidelineAssetBuildFailedException($exception->getMessage());
         }
-    }
-
-    /**
-     * @param string $logoPath
-     *
-     * @return bool
-     */
-    private function isSvgLogoFormat($logoPath)
-    {
-        $splInfo = new \SplFileInfo($logoPath);
-
-        return $splInfo->getExtension() === self::SVG_FORMAT;
     }
 }

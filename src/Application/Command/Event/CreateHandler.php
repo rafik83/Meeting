@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Components\File\FileExtensionGuesser;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -22,11 +23,6 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class CreateHandler
 {
-    /**
-     * Only format that isn't supported by imagine_filter
-     */
-    const SVG_FORMAT = 'svg';
-
     /**
      * @var EventRepositoryInterface
      */
@@ -53,24 +49,32 @@ class CreateHandler
     private $fileStorage;
 
     /**
+     * @var FileExtensionGuesser
+     */
+    private $fileExtensionGuesser;
+
+    /**
      * @param AdminRepositoryInterface   $adminRepository
      * @param EventRepositoryInterface   $eventRepository
      * @param ContentRepositoryInterface $contentRepository
      * @param Generator                  $guidelinesGenerator
      * @param FileStorageInterface       $fileStorage
+     * @param FileExtensionGuesser       $fileExtensionGuesser
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         EventRepositoryInterface $eventRepository,
         ContentRepositoryInterface $contentRepository,
         Generator $guidelinesGenerator,
-        FileStorageInterface $fileStorage
+        FileStorageInterface $fileStorage,
+        FileExtensionGuesser $fileExtensionGuesser
     ) {
-        $this->adminRepository     = $adminRepository;
-        $this->eventRepository     = $eventRepository;
-        $this->contentRepository   = $contentRepository;
-        $this->guidelinesGenerator = $guidelinesGenerator;
-        $this->fileStorage         = $fileStorage;
+        $this->adminRepository      = $adminRepository;
+        $this->eventRepository      = $eventRepository;
+        $this->contentRepository    = $contentRepository;
+        $this->guidelinesGenerator  = $guidelinesGenerator;
+        $this->fileStorage          = $fileStorage;
+        $this->fileExtensionGuesser = $fileExtensionGuesser;
     }
 
 
@@ -98,7 +102,7 @@ class CreateHandler
         if (null !== $create->logo) {
             $logoPath = $this->fileStorage->upload($create->logo);
             $event->setLogo($logoPath);
-            $event->setSvgLogoFormat($this->isSvgLogoFormat($logoPath));
+            $event->setLogoExtension($this->fileExtensionGuesser->guess($logoPath));
         }
 
         foreach ($event->getLocales() as $locale) {
@@ -132,17 +136,5 @@ class CreateHandler
     {
         $termsOfSale = new Event\Content($event, Event\Content::TYPE_TERMS_OF_SALE);
         $this->contentRepository->add($termsOfSale);
-    }
-
-    /**
-     * @param string $logoPath
-     *
-     * @return bool
-     */
-    private function isSvgLogoFormat($logoPath)
-    {
-        $splInfo = new \SplFileInfo($logoPath);
-
-        return $splInfo->getExtension() === self::SVG_FORMAT;
     }
 }

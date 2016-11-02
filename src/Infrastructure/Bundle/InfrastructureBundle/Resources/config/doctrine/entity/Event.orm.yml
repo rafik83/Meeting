@@ -42,8 +42,9 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         currency:
             type: string
-        svgLogoFormat:
-            type: boolean
+        logoExtension:
+            type: string
+            nullable: true
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address
