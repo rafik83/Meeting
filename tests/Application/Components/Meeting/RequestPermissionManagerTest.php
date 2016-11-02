@@ -729,4 +729,77 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $sheet
         ));
     }
+
+    public function testIsAllowedToUnApproveFalseAsItIsDoneBySheetFrom()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToUnApproveFalseAsSheetDoesNotHaveUser()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user2,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToUnApproveFalseAsRequestIsNotApproved()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user2,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToUnApproveTrueAsRequestIsApprovedAndSheetToIsTryingToUnApproveIt()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+
+        $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnApprove(
+            $user2,
+            $request,
+            $sheet2
+        ));
+    }
 }
