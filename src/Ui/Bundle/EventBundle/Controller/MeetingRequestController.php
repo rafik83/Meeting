@@ -251,7 +251,9 @@ class MeetingRequestController extends Controller
             return $this->createJsonResponse(
                 true,
                 true,
-                $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig')
+                $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
+                    'meetingRequest' => $meetingRequest
+                ])
             );
         } elseif ($isSubmitted && !$form->isValid()) {
             return $this->createJsonResponse(
