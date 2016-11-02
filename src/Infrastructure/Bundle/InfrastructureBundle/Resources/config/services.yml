@@ -476,6 +476,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@meeting.request_permission_manager'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }
