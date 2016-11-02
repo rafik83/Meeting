@@ -133,6 +133,6 @@ class CartRowRepository implements CartRowRepositoryInterface
      */
     public function hasProducts(Sheet $sheet)
     {
-        return count($this->findBySheet($sheet)) > 0 ? true : false;
+        return count($this->findBySheet($sheet)) > 0;
     }
 }
