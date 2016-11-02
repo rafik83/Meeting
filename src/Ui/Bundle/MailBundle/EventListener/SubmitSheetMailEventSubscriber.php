@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetSubmittedEvent;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetSubmittedMail;
@@ -83,7 +84,6 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
     public function onSheetSubmittedValidation(SheetSubmittedEvent $event)
     {
         $admins    = [];
-
         $follower = $event->getSheet()->getFollower();
         $locale   = $event->getSheet()->getEvent()->getFallback();
 
@@ -95,11 +95,11 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         $participant = $event->getSheet()->getUserParticipant($event->getUser());
 
         if ($participant === null) {
-            $firstname = $event->getUser()->getAccount()->getFirstName();
-            $lastname  = $event->getUser()->getAccount()->getLastName();
+            $firstName = $event->getUser()->getAccount()->getFirstName();
+            $lastName  = $event->getUser()->getAccount()->getLastName();
         } else {
-            $firstname = $this->participantInfoGuesser->guessParticipantFirstName($participant, $locale);
-            $lastname  = $this->participantInfoGuesser->guessParticipantLastName($participant, $locale);
+            $firstName = $this->participantInfoGuesser->guessParticipantFirstName($participant, $locale);
+            $lastName  = $this->participantInfoGuesser->guessParticipantLastName($participant, $locale);
         }
 
         if ($follower !== null) {
@@ -117,6 +117,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
             );
         }
 
+        /** @var Admin $admin */
         foreach ($admins as $admin) {
             $mail = new SheetSubmittedMail(
                 $event->getSheet()->getEvent(),
@@ -127,8 +128,8 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
                 $admin,
                 $this->datetime,
                 $sheetName,
-                $firstname,
-                $lastname
+                $firstName,
+                $lastName
             );
 
             $this->mailer->send($mail);
