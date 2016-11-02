@@ -227,7 +227,7 @@ fos_elastica:
                             fields:
                                 city:
                                     type: string
-                                    index_analyzer: "lowercaseAnalyzer"
+                                    analyzer: "lowercaseAnalyzer"
                                 city_autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
