@@ -21,15 +21,10 @@ class WelcomeViewQueryHandler
      */
     public function handle(WelcomeViewQuery $welcomeViewQuery)
     {
-        $welcomeView = new WelcomeView(
-            'sheet.welcome.title',
-            'sheet.welcome.sheetContent',
-            'sheet.welcome.backToSheetLink'
-        );
+        $welcomeView = new WelcomeView();
 
         if ($welcomeViewQuery->sheet->getPackage()->isPassable()) {
-            $welcomeView->packageContent    = 'sheet.welcome.packageContent';
-            $welcomeView->backToPackageLink = 'sheet.welcome.backToPackageLink';
+            $welcomeView->hasPackage = true;
         }
 
         return $welcomeView;

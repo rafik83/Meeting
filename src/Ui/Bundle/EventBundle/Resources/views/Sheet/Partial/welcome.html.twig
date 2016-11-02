@@ -1,32 +1,35 @@
 <div class="modal-header">
-    <h4 class="modal-title text-center" id="myModalLabel">
-        {{ popinWelcome.title|trans }}
+    <h4 class="modal-title" id="myModalLabel">
+        {{ 'sheet.welcome.title'|trans }}
     </h4>
+    <div class="modal-subtitle">
+        {{ 'sheet.welcome.subtitle'|trans }}
+    </div>
 </div>
 
 <div class="modal-body row relative-modal">
-    <div class="text-center col-md-{{ popinWelcome.packageContent is not null ? "6" : "12" }}">
-        {{ popinWelcome.sheetContent|trans }}
+    <div class="text-center col-md-{{ popinWelcome.hasPackage == true ? "6" : "12" }}">
+        {{ 'sheet.welcome.sheetContent'|trans }}
     </div>
 
-    {% if popinWelcome.packageContent is not null %}
+    {% if popinWelcome.hasPackage == true %}
     <div class="separator">
 
     </div>
     <div class="col-md-6 text-center">
-        {{ popinWelcome.packageContent|trans }}
+        {{ 'sheet.welcome.packageContent'|trans }}
     </div>
     {% endif %}
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
-        <i class="icon-Retour"></i>{{ popinWelcome.backToSheetLink|trans }}
+    <button type="button" class="btn btn btn-primary btn-lg pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'navigation.category.sheet'|trans }}
     </button>
 
-    {% if popinWelcome.backToPackageLink is not null %}
-    <a type="button" class="btn btn-gray pull-right" href="{{ path('event_package') }}">
-        <i class="icon-Panier_2"></i>{{ popinWelcome.backToPackageLink|trans }}
+    {% if popinWelcome.hasPackage == true %}
+    <a type="button" class="btn btn-gray btn-lg pull-right" href="{{ path('event_package') }}">
+        <i class="icon-Panier_2"></i>{{ 'navigation.category.package'|trans }}
     </a>
     {% endif %}
 </div>
