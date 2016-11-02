@@ -48,7 +48,6 @@ class UpdateHandler
      * @param Generator                $guidelinesGenerator
      * @param FileStorageInterface     $fileStorage
      * @param EventDispatcherInterface $eventDispatcher
-     * @param FileExtensionGuesser     $fileExtensionGuesser
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
@@ -56,10 +55,10 @@ class UpdateHandler
         FileStorageInterface $fileStorage,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->eventRepository      = $eventRepository;
-        $this->guidelinesGenerator  = $guidelinesGenerator;
-        $this->fileStorage          = $fileStorage;
-        $this->eventDispatcher      = $eventDispatcher;
+        $this->eventRepository     = $eventRepository;
+        $this->guidelinesGenerator = $guidelinesGenerator;
+        $this->fileStorage         = $fileStorage;
+        $this->eventDispatcher     = $eventDispatcher;
     }
 
     /**
@@ -98,8 +97,7 @@ class UpdateHandler
             $toRemove      = $event->getLogo();
             $logoExtension = $this->fileStorage->getExtension($update->logo);
             $logoPath      = $this->fileStorage->upload($update->logo);
-            $event->setLogo($logoPath);
-            $event->setLogoExtension($logoExtension);
+            $event->setLogo($logoPath, $logoExtension);
             $this->fileStorage->remove($toRemove);
         }
 

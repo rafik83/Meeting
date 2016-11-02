@@ -61,11 +61,11 @@ class CreateHandler
         Generator $guidelinesGenerator,
         FileStorageInterface $fileStorage
     ) {
-        $this->adminRepository      = $adminRepository;
-        $this->eventRepository      = $eventRepository;
-        $this->contentRepository    = $contentRepository;
-        $this->guidelinesGenerator  = $guidelinesGenerator;
-        $this->fileStorage          = $fileStorage;
+        $this->adminRepository     = $adminRepository;
+        $this->eventRepository     = $eventRepository;
+        $this->contentRepository   = $contentRepository;
+        $this->guidelinesGenerator = $guidelinesGenerator;
+        $this->fileStorage         = $fileStorage;
     }
 
     public function handle(Create $create)
@@ -92,8 +92,7 @@ class CreateHandler
         if (null !== $create->logo) {
             $logoExtension = $this->fileStorage->getExtension($create->logo);
             $logoPath      = $this->fileStorage->upload($create->logo);
-            $event->setLogo($logoPath);
-            $event->setLogoExtension($logoExtension);
+            $event->setLogo($logoPath, $logoExtension);
         }
 
         foreach ($event->getLocales() as $locale) {

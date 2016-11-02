@@ -369,10 +369,12 @@ class Event implements EventInterface
 
     /**
      * @param string $logo
+     * @param string $logoExtension
      */
-    public function setLogo($logo)
+    public function setLogo($logo, $logoExtension)
     {
-        $this->logo = $logo;
+        $this->logo          = $logo;
+        $this->logoExtension = $logoExtension;
     }
 
     /**
@@ -528,18 +530,10 @@ class Event implements EventInterface
     }
 
     /**
-     * @param string $logoExtension
-     */
-    public function setLogoExtension($logoExtension)
-    {
-        $this->logoExtension = $logoExtension;
-    }
-
-    /**
      * @return bool
      */
-    public function isSvgLogoExtension()
+    public function isSvgLogo()
     {
-        return $this->logoExtension == 'svg';
+        return $this->logoExtension === 'svg';
     }
 }
