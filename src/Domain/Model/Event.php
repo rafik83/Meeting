@@ -29,11 +29,6 @@ class Event implements EventInterface
     const VAT_MODE_ET  = 'et';
 
     /**
-     * Only extension that isn't supported by imagine_filter
-     */
-    const SVG_EXTENSION = 'svg';
-
-    /**
      * @var int
      */
     private $id;
@@ -545,6 +540,6 @@ class Event implements EventInterface
      */
     public function isSvgLogoExtension()
     {
-        return $this->logoExtension == self::SVG_EXTENSION;
+        return $this->logoExtension == 'svg';
     }
 }

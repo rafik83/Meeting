@@ -90,9 +90,10 @@ class CreateHandler
         $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
 
         if (null !== $create->logo) {
+            $logoExtension = $this->fileStorage->getExtension($create->logo);
             $logoPath = $this->fileStorage->upload($create->logo);
             $event->setLogo($logoPath);
-            $event->setLogoExtension($this->fileStorage->getExtension($create->logo));
+            $event->setLogoExtension($logoExtension);
         }
 
         foreach ($event->getLocales() as $locale) {

@@ -76,7 +76,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
      */
     public function getExtension(UploadedFile $file)
     {
-        return $this->fileExtension;
+        return $file->guessExtension();
     }
 
     /**

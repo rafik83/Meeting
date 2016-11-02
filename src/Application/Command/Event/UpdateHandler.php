@@ -95,10 +95,12 @@ class UpdateHandler
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 
         if (null !== $update->logo) {
+
             $toRemove = $event->getLogo();
+            $logoExtension = $this->fileStorage->getExtension($update->logo);
             $logoPath = $this->fileStorage->upload($update->logo);
             $event->setLogo($logoPath);
-            $event->setLogoExtension($this->fileStorage->getExtension($update->logo));
+            $event->setLogoExtension($logoExtension);
             $this->fileStorage->remove($toRemove);
         }
 
