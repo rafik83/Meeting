@@ -17,8 +17,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\QueryBuilder\Sheet\SearchQueryBuilder;
 
 class SheetRepository implements SheetRepositoryInterface
 {
@@ -28,22 +26,12 @@ class SheetRepository implements SheetRepositoryInterface
     private $entityManager;
 
     /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
      * SheetRepository constructor.
      *
-     * @param EntityManager           $entityManager
-     * @param TypeRepositoryInterface $typeRepository
+     * @param EntityManager $entityManager
      */
-    public function __construct(
-        EntityManager $entityManager,
-        TypeRepositoryInterface $typeRepository
-    ) {
+    public function __construct(EntityManager $entityManager) {
         $this->entityManager  = $entityManager;
-        $this->typeRepository = $typeRepository;
 
     }
 
@@ -186,18 +174,6 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet')
             ->where('sheet.id IN (:ids)')
             ->setParameter('ids', $ids);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function search($category, $user)
-    {
-        $queryBuilder = new SearchQueryBuilder($this->entityManager);
-        $queryBuilder->withCategory($category);
-        $queryBuilder->withTypes($this->typeRepository->getSeeableTypeIdsByUser($user));
 
         return $queryBuilder->getQuery()->getResult();
     }
