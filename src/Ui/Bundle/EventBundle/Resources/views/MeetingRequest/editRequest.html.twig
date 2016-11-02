@@ -1,5 +1,6 @@
 {% set formIsNotNull = form is not null %}
 {% set cancelFormIsNotNull = cancelForm is not null %}
+{% set unApprovedFormIsNotNull = unApprovedForm is not null %}
 {% if formIsNotNull %}
     {% form_theme form '@Ui/default.html.twig' %}
 {% endif %}
@@ -66,6 +67,15 @@
             </button>
         </div>
         {{ form_end(cancelForm) }}
+    {% endif %}
+    {% if unApprovedFormIsNotNull %}
+        {{ form_start(unApprovedForm) }}
+        <div class="validation pull-left">
+            <button type="submit" class="btn btn-no-style text-underline">
+                <i class="icon-Fermer_4"></i> {{ 'form.catalog_un_approve_meeting_request.proposition.children.submit.label'|trans({}, 'forms') }}
+            </button>
+        </div>
+        {{ form_end(unApprovedForm) }}
     {% endif %}
     <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
