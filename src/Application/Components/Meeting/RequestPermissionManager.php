@@ -189,6 +189,29 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to unapproved an approved meeting request
+     *
+     *
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToUnApprove(User $user, Request $request, Sheet $sheet)
+    {
+        if (!$sheet->hasUser($user)) {
+            return false;
+        }
+
+        if ($request->isApproved() && $request->getToSheet() === $sheet) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Is a user allowed to create a meeting request between these two sheets
      *
      * @param User  $user
