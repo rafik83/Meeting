@@ -8,28 +8,33 @@
 </div>
 
 <div class="modal-body row relative-modal">
-    <div class="text-center col-md-{{ popinWelcome.hasPackage == true ? "6" : "12" }}">
+    <div class="text-center col-md-{{ popinWelcome.hasPackage ? "6" : "12" }}">
         {{ 'sheet.welcome.sheetContent'|trans }}
     </div>
 
-    {% if popinWelcome.hasPackage == true %}
-    <div class="separator">
-
-    </div>
-    <div class="col-md-6 text-center">
-        {{ 'sheet.welcome.packageContent'|trans }}
-    </div>
+    {% if popinWelcome.hasPackage %}
+        <div class="separator"></div>
+        <div class="col-md-6 text-center">
+            {{ 'sheet.welcome.packageContent'|trans }}
+        </div>
     {% endif %}
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn btn-primary btn-lg pull-left" data-dismiss="modal">
-        <i class="icon-Retour"></i>{{ 'navigation.category.sheet'|trans }}
-    </button>
-
-    {% if popinWelcome.hasPackage == true %}
-    <a type="button" class="btn btn-gray btn-lg pull-right" href="{{ path('event_package') }}">
-        <i class="icon-Panier_2"></i>{{ 'navigation.category.package'|trans }}
-    </a>
-    {% endif %}
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <button type="button" class="btn btn btn-primary btn-lg pull-left" data-dismiss="modal">
+                <i class="icon-Retour"></i>
+                {{ 'navigation.category.sheet'|trans }}
+            </button>
+        </div>
+        {% if popinWelcome.hasPackage %}
+            <div class="col-md-6 text-center">
+                <a type="button" class="btn btn-gray btn-lg pull-right" href="{{ path('event_package') }}">
+                    <i class="icon-Panier_2"></i>
+                    {{ 'navigation.category.package'|trans }}
+                </a>
+            </div>
+        {% endif %}
+    </div>
 </div>

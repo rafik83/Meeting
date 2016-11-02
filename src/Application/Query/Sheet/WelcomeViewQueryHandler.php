@@ -23,9 +23,8 @@ class WelcomeViewQueryHandler
     {
         $welcomeView = new WelcomeView();
 
-        if ($welcomeViewQuery->sheet->getPackage()->isPassable()) {
-            $welcomeView->hasPackage = true;
-        }
+        $welcomeView->hasPackage = null !== $welcomeViewQuery->sheet->getPackage()
+            && $welcomeViewQuery->sheet->getPackage()->isPassable();
 
         return $welcomeView;
     }
