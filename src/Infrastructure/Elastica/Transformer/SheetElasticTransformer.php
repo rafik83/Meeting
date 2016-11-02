@@ -228,9 +228,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         foreach ($sheet->getEvent()->getLocales() as $locale) {
             $templateData  = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
-            foreach ($templateData->getObjects() as $object) {
-                if ($object instanceof IndexableObjectInterface) {
-                    $content = $object->getSearchableContent();
+            foreach ($templateData->getObjects() as $templateObject) {
+                if ($templateObject instanceof IndexableObjectInterface) {
+                    $content = $templateObject->getSearchableContent();
 
                     if (is_array($content)) {
                         foreach ($content as $item) {

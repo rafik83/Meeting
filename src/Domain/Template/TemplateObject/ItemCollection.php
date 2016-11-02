@@ -157,8 +157,16 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     {
         $this->buildItems($this->getData());
 
-        return array_map(function (Item $item) {
-            return $item->getTitle();
-        }, $this->items);
+        return array_filter(
+            array_map(
+                function (Item $item) {
+                    return $item->getTitle();
+                },
+                $this->items
+            ),
+            function ($title) {
+                return null !== $title;
+            }
+        );
     }
 }
