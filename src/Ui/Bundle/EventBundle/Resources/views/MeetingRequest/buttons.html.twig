@@ -14,7 +14,7 @@
             {% if meetingRequest.isSent %}
                 {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {'meetingRequest': meetingRequest}, false) }}
             {% elseif meetingRequest.isApproved %}
-                {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}, false) }}
+                {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {'meetingRequest': meetingRequest}, false) }}
             {% elseif meetingRequest.isRefused %}
                 {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': meetingRequest}, false) }}
             {% endif %}
