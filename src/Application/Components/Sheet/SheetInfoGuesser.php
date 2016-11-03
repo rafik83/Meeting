@@ -51,7 +51,7 @@ class SheetInfoGuesser
             $participant = $sheet->getParticipantOwner();
 
             if (null !== $participant) {
-                return $this->participantInfoGuesser->guessParticipantCompleteName($sheet->getParticipantOwner(), $locale);
+                return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
             } else {
                 return sprintf(
                     '%s %s',
