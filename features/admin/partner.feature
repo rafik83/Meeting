@@ -30,7 +30,8 @@ Feature: Partner available features
     And I should see "admin.sheet.link"
     When I follow "admin.sheet.link"
     And I should see "admin.sheet.title"
-    When I check radio "sheet_batch_ids_1"
+    # verify that I can check the checkbox
+    When I check "sheet_batch_ids_1"
     Then I should see "form.sheet_batch.children.accept.label"
     And I should see "admin.sheet.validate"
     And I should see "admin.sheet.commercialFollowUp"
