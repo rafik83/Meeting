@@ -32,6 +32,11 @@ class UpdateHandler
     private $eventDispatcher;
 
     /**
+     * @var TemplateDataFactory
+     */
+    private $templateDataFactory;
+
+    /**
      * @param RegistrationTemplateRepositoryInterface $registrationTemplateRepository
      * @param TemplateDataFactory                     $templateDataFactory
      * @param DelayedEventDispatcher                  $eventDispatcher

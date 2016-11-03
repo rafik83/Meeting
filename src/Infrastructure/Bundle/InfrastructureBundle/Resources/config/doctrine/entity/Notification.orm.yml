@@ -21,7 +21,13 @@ Proximum\Vimeet\Domain\Model\Notification:
     manyToOne:
         emitter:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
         recipient:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE

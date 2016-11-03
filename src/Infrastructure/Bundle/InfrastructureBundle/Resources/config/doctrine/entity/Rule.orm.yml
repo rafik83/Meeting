@@ -29,11 +29,21 @@ Proximum\Vimeet\Domain\Model\Rule:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
         seerType:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinColumn:
+                onDelete: CASCADE
         seerCategory:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
+            joinColumn:
+                onDelete: CASCADE
         seeableType:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinColumn:
+                onDelete: CASCADE
         seeableCategory:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
+            joinColumn:
+                onDelete: CASCADE
