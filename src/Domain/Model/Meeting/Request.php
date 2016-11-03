@@ -400,4 +400,32 @@ class Request implements MessageSubjectInterface
             self::STATE_REFUSED,
         ];
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function isSender(Sheet $sheet)
+    {
+        if ($this->from === $sheet) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function isReceiver(Sheet $sheet)
+    {
+        if ($this->to === $sheet) {
+            return true;
+        }
+
+        return false;
+    }
 }

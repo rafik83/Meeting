@@ -56,7 +56,7 @@ class UpdateRequest
         $this->editor         = $editor;
         $this->description    = null;
 
-        if ($meetingRequest->getFromSheet() === $sheetEditor) {
+        if ($meetingRequest->isSender($sheetEditor)) {
             $this->participants = $meetingRequest->getFromParticipants()->toArray();
         } else {
             $this->participants = $meetingRequest->getToParticipants()->toArray();

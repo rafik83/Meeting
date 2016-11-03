@@ -55,7 +55,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($sheet === $request->getFromSheet() && $request->isSent()) {
+        if ($request->isSender($sheet) && $request->isSent()) {
             return true;
         }
 
@@ -78,7 +78,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if (($sheet === $request->getFromSheet() || $sheet === $request->getToSheet()) && $request->isApproved()) {
+        if (($request->isSender($sheet) || $request->isReceiver($sheet)) && $request->isApproved()) {
             return true;
         }
 
@@ -100,7 +100,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($request->getFromSheet() === $sheet && ($request->isSent() || $request->isApproved())) {
+        if ($request->isSender($sheet) && ($request->isSent() || $request->isApproved())) {
             return true;
         }
 
@@ -122,7 +122,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($request->getToSheet() === $sheet && $request->isSent()) {
+        if ($request->isReceiver($sheet) && $request->isSent()) {
             return true;
         }
 
@@ -144,7 +144,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($request->getToSheet() === $sheet && $request->isSent()) {
+        if ($request->isReceiver($sheet) && $request->isSent()) {
             return true;
         }
 
@@ -162,12 +162,11 @@ class RequestPermissionManager
      */
     public function isAllowedToSee(User $user, Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user) && ($request->getFromSheet() === $sheet || $request->getToSheet() === $sheet);
+        return $sheet->hasUser($user) && ($request->isSender($sheet) || $request->isReceiver($sheet));
     }
 
     /**
      * Is a user allowed to unrefuse a refused meeting request
-     *
      *
      * @param User    $user
      * @param Request $request
@@ -181,7 +180,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($request->isRefused() && $request->getToSheet() === $sheet) {
+        if ($request->isRefused() && $request->isReceiver($sheet)) {
             return true;
         }
 
@@ -190,7 +189,6 @@ class RequestPermissionManager
 
     /**
      * Is a user allowed to unapproved an approved meeting request
-     *
      *
      * @param User    $user
      * @param Request $request
@@ -204,7 +202,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($request->isApproved() && $request->getToSheet() === $sheet) {
+        if ($request->isApproved() && $request->isReceiver($sheet)) {
             return true;
         }
 
