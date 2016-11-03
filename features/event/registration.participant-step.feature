@@ -45,5 +45,3 @@ Feature: Register with participant step
     And I should see "sheet.welcome.title"
     And I should see "sheet.welcome.sheetContent"
     And I should see "sheet.welcome.packageContent"
-    And I should see "sheet.welcome.backToSheetLink"
-    And I should see "sheet.welcome.backToPackageLink"
