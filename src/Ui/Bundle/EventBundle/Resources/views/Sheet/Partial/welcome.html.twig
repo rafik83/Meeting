@@ -23,14 +23,14 @@
 <div class="modal-footer">
     <div class="row">
         <div class="col-md-{{ popinWelcome.hasPackage ? "6" : "12" }} text-center">
-            <button type="button" class="btn btn btn-primary btn-lg pull-left" data-dismiss="modal">
-                <i class="icon-Retour"></i>
+            <button type="button" class="btn btn btn-primary btn-lg" data-dismiss="modal">
+                <i class="icon-Document_1"></i>
                 {{ 'navigation.category.sheet'|trans }}
             </button>
         </div>
         {% if popinWelcome.hasPackage %}
             <div class="col-md-6 text-center">
-                <a type="button" class="btn btn-gray btn-lg pull-right" href="{{ path('event_package') }}">
+                <a type="button" class="btn btn-gray btn-lg" href="{{ path('event_package') }}">
                     <i class="icon-Panier_2"></i>
                     {{ 'navigation.category.package'|trans }}
                 </a>
