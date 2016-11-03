@@ -227,6 +227,27 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to see conversation of a refuse meeting request
+     *
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function isAllowedToSeeConversationOfRefuseMeetingRequest(User $user, Request $request)
+    {
+        if (!$request->isRefused()) {
+            return false;
+        }
+
+        if ($request->getFromSheet()->hasUser($user) || $request->getToSheet()->hasUser($user)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Hasn't living meeting request between these two sheets
      *
      * @param Sheet $from

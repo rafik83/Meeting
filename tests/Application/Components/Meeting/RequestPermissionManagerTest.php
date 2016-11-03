@@ -58,7 +58,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         $type     = new Type($event);
         $datetime = new \DateTime();
         $user     = new User('test@test.fr', 'test', 'test', 'fr');
-        $user2    = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2    = new User('test2@test.fr', 'test2', 'test2', 'en');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $sheet2   = new Sheet($event, $type, [], $user2, $datetime);
         $request  = new Request($sheet, [], $sheet2, [], $datetime, $user);
@@ -792,6 +792,78 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $user2,
             $request,
             $sheet2
+        ));
+    }
+
+    public function testIsAllowedToSeeConversationOfRefuseMeetingRequestFalseAsRequestIsNotRefused()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
+            $user2,
+            $request
+        ));
+    }
+
+    public function testIsAllowedToSeeConversationOfRefuseMeetingRequestFalseAsItIsDoneByUnknownUser()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->refuse($datetime);
+        $user3 = new User('test3@test.fr', 'test3', 'test3', 'de');
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
+            $user3,
+            $request
+        ));
+    }
+
+    public function testIsAllowedToSeeConversationOfRefuseMeetingRequestTrueAsItIsDoneByUser()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->refuse($datetime);
+
+        $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
+            $user,
+            $request
+        ));
+    }
+
+    public function testIsAllowedToSeeConversationOfRefuseMeetingRequestTrueAsItIsDoneByUser2()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->refuse($datetime);
+
+        $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
+            $user2,
+            $request
         ));
     }
 }
