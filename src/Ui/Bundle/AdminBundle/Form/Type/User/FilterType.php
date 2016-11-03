@@ -31,8 +31,8 @@ class FilterType extends AbstractType
     {
         $builder
             ->add('text', TextType::class, [
-                'label'       => false,
-                'placeholder' => '',
+                'label'       => 'form.user_filter.children.text_search.label',
+                'placeholder' => false,
                 'required'    => false,
             ])
             ->add('type', TypeChoiceType::class, [

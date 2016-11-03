@@ -25,7 +25,7 @@ class FilterPartType extends AbstractType
         $builder
             ->add('text', TextType::class, [
                 'label'       => false,
-                'placeholder' => '',
+                'placeholder' => 'form.user_filter.children.text_search.label',
                 'required'    => false,
             ])
             ->add('predefined', HiddenType::class)

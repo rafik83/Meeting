@@ -18,6 +18,16 @@
         </div>
     </div>
 
+    <div class="row filters">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                filters:   filters_summary,
+                resetLink: path('admin_users', { 'event': event.id })
+            }) }}
+        </div>
+    </div>
+
     <table class="table table-hover">
         <thead>
         <tr>

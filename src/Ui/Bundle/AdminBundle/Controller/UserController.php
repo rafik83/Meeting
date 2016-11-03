@@ -68,11 +68,14 @@ class UserController extends Controller
                 $locale
             );
 
+        $filterFormView = $filterType->createView();
+
         return $this->render('AdminBundle:User:list.html.twig', [
-            'event'           => $event,
-            'paginatedResult' => $paginatedResult,
-            'filter_form'     => $filterType->createView(),
-            'filter_part_form' => $filterPartForm->createView()
+            'event'            => $event,
+            'paginatedResult'  => $paginatedResult,
+            'filter_form'      => $filterFormView,
+            'filter_part_form' => $filterPartForm->createView(),
+            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
         ]);
     }
 
