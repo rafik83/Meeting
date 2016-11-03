@@ -34,11 +34,21 @@ CatalogSheetCard.prototype.onButtonClick = function(button)
         $(this.modal).find(".modal-content").html(placeholder);
 
         // Load content from ajax and display the modal
-        $(this.modal).find(".modal-content").load(button.link, function () {
-            this.putListenerOnRequestForm();
+        $(this.modal).find(".modal-content").load(button.link, function (response, status) {
+            if (status === 'error') {
+                this.displayErrorLoading();
+            } else if (status === 'success') {
+                this.putListenerOnRequestForm();
+            }
         }.bind(this));
         $(this.modal).modal();
     }
+};
+
+CatalogSheetCard.prototype.displayErrorLoading = function ()
+{
+    var errorMessage = this.modal.getAttribute('data-loading-error');
+    $(this.modal).find(".modal-content").html(errorMessage);
 };
 
 CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
@@ -85,6 +95,8 @@ CatalogSheetCard.prototype.handleRequestForm = function (form)
             $(this.modal).find(".modal-content").html(response.html);
             this.putListenerOnRequestForm();
         }
+    }.bind(this)).fail(function () {
+        this.displayErrorLoading();
     }.bind(this));
 
     return false;
