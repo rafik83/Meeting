@@ -69,8 +69,21 @@ class SheetInfoGuesser
      * @param string $locale
      *
      * @return string
+     *
+     * @deprecated Use instead SheetInfoGuesser::guessSheetTitle()
      */
     public function guessSheetName(Sheet $sheet, $locale)
+    {
+        return $this->guessSheetTitle($sheet, $locale);
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function guessSheetTitle(Sheet $sheet, $locale)
     {
         $template = $sheet->getType()->getRegistrationTemplate();
 
@@ -79,9 +92,15 @@ class SheetInfoGuesser
         }
 
         $data = $sheet->getRegistrationData();
+        $info = $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_TITLE, $locale);
+
+        if (!empty($info)) {
+            return $info;
+        }
+
         $info = $this->taggedInfoGuesser->guessFirst($template, $data, Tag::SHEET_ORGANIZATION, $locale);
 
-        if (null !== $info) {
+        if (!empty($info)) {
             return $info;
         }
 
