@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
@@ -32,27 +33,29 @@ class UserController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $typeFilter = [];
-        $filterType = $this->createFilterForm(
-            FilterType::class,
-            $typeFilter,
-            ['event' => $event, 'locale' => $request->getLocale(), 'user' => $this->getUser()]
-        );
+        $filters = [];
 
+        $filterType = $this->createFilterForm(FilterType::class, $filters, [
+            'event'  => $event,
+            'locale' => $request->getLocale(),
+            'user'   => $this->getUser(),
+        ]);
+
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters);
+
+        $filterPartForm->handleRequest($request);
         $filtered = $filterType->handleRequest($request)->isSubmitted() && $filterType->isValid();
 
         if ($filtered) {
-            $typeFilter = $filterType->getData();
+            $filters = $filterType->getData();
         }
 
-        $filterFormView = $filterType->createView();
-
-        if (!isset($typeFilter['type'])) {
+        if (!isset($filters['type'])) {
             $filters['types'] = $this
                 ->get('vimeet_infrastructure.repository.type_repository')
                 ->getAllowedTypesByEvent($this->getUser(), $event);
         } else {
-            $filters['types'] = [$typeFilter['type']];
+            $filters['types'] = [$filters['type']];
         }
 
         $paginatedResult = $this
@@ -68,7 +71,8 @@ class UserController extends Controller
         return $this->render('AdminBundle:User:list.html.twig', [
             'event'           => $event,
             'paginatedResult' => $paginatedResult,
-            'filter_form'     => $filterFormView,
+            'filter_form'     => $filterType->createView(),
+            'filter_part_form' => $filterPartForm->createView()
         ]);
     }
 

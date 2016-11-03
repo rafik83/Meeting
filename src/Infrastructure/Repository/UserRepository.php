@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -127,12 +129,41 @@ class UserRepository implements UserRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
 
+        $this->filterQueryBuilder($queryBuilder, $filter);
+
+        return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');
+    }
+
+    /**
+     * Filter paginated user list query by types, name or email
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param array        $filter
+     */
+    private function filterQueryBuilder(QueryBuilder &$queryBuilder, array $filter)
+    {
         if (!empty($filter['types'])) {
             $queryBuilder
                 ->andWhere('sheet.type IS NOT NULL AND sheet.type IN (:types) OR sheet.type IS NULL AND userEvent.type IN (:types)')
                 ->setParameter('types', $filter['types']);
         }
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');
+        if (!empty($filter['text'])) {
+            switch ($filter['predefined']) {
+                case FilterType::FILTER_NAME:
+                    $queryBuilder->andWhere('LOWER(user.account.lastName) LIKE LOWER(:filter_text) OR LOWER(user.account.firstName) LIKE LOWER(:filter_text)');
+                    break;
+                case FilterType::FILTER_EMAIL:
+                    $queryBuilder->andWhere('LOWER(user.email) LIKE LOWER(:filter_text)');
+                    break;
+                default:
+                    $queryBuilder
+                        ->andWhere('LOWER(user.account.lastName) LIKE LOWER(:filter_text) OR LOWER(user.account.firstName) LIKE LOWER(:filter_text)')
+                        ->orWhere('LOWER(user.email) LIKE LOWER(:filter_text)');
+                    break;
+            }
+
+            $queryBuilder->setParameter('filter_text', '%' . $filter['text'] . '%');
+        }
     }
 }

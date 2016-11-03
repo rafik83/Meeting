@@ -5,6 +5,19 @@
 {% block content %}
     <h1 class="page-header">{{ paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
+    <div class="row filters">
+        <div class="col-md-offset-4 col-md-4">
+            {{ form_start(filter_part_form) }}
+
+            <div class="input-group">
+                {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
+                {{ form_widget(filter_part_form.text) }}
+            </div>
+
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
+
     <table class="table table-hover">
         <thead>
         <tr>
