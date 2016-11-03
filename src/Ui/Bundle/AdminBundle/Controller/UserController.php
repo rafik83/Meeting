@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\User\UserListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
@@ -58,15 +59,9 @@ class UserController extends Controller
             $filters['types'] = [$filters['type']];
         }
 
-        $paginatedResult = $this
-            ->get('vimeet_infrastructure.repository.user_repository')
-            ->paginate(
-                $request->query->get('page', 1),
-                20,
-                $event,
-                $filters,
-                $locale
-            );
+        $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+            new UserListViewQuery($event, $locale, $request->query->get('page', 1), $filters)
+        );
 
         $filterFormView = $filterType->createView();
 

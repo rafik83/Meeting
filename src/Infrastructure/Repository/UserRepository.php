@@ -115,23 +115,63 @@ class UserRepository implements UserRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\User\UserListView(user.id, user.email, user.account.lastName, user.account.firstName, typeTranslations.title, sheet.id, sheetType.id, sheetTypeTranslations.title)')
             ->from(User::class, 'user', 'user.id')
             ->join(UserEvent::class, 'userEvent', 'WITH', 'userEvent.user = user AND userEvent.event = :event')
             ->join('userEvent.type', 'type')
             ->join('type.translations', 'typeTranslations', 'WITH', 'typeTranslations.locale = :locale')
-            ->leftJoin(Participant::class, 'participant', 'WITH', 'participant.user = user')
-            ->leftJoin('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
-            ->leftJoin('sheet.type', 'sheetType')
-            ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH', 'sheetTypeTranslations.locale = :locale')
             ->addOrderBy('user.account.lastName', 'ASC')
             ->addOrderBy('user.email', 'ASC')
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
 
+        if (!empty($filter['participation'])) {
+            switch ($filter['participation']) {
+                case FilterType::FILTER_WITH_SHEET:
+                    $queryBuilder->select('user.id, user.email, user.account.lastName as lastname, user.account.firstName as firstname, typeTranslations.title as typeTitle, sheet.id as sheetId, sheetType.id as sheetTypeId, sheetTypeTranslations.title as sheetTypeTitle');
+                    $this->userWithSheetQueryBuilder($queryBuilder);
+                    break;
+                case FilterType::FILTER_WITHOUT_SHEET:
+                    $queryBuilder->select('user.id, user.email, user.account.lastName as lastname, user.account.firstName as firstname, typeTranslations.title as typeTitle');
+                    $this->userWithoutSheetQueryBuilder($queryBuilder);
+                    break;
+            }
+        } else {
+            $queryBuilder
+                ->select('user.id, user.email, user.account.lastName as lastname, user.account.firstName as firstname, typeTranslations.title as typeTitle, sheet.id as sheetId, sheetType.id as sheetTypeId, sheetTypeTranslations.title as sheetTypeTitle')
+                ->leftJoin(Participant::class, 'participant', 'WITH', 'participant.user = user')
+                ->leftJoin('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+                ->leftJoin('sheet.type', 'sheetType')
+                ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH',
+                    'sheetTypeTranslations.locale = :locale');
+        }
+
         $this->filterQueryBuilder($queryBuilder, $filter);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
+    private function userWithoutSheetQueryBuilder(QueryBuilder &$queryBuilder)
+    {
+        $queryBuilder->andWhere($queryBuilder->expr()->not(
+            $queryBuilder->expr()
+                ->exists(sprintf('SELECT p.id FROM %s p WHERE p.user = user', Participant::class))
+        ));
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
+    private function userWithSheetQueryBuilder(QueryBuilder &$queryBuilder)
+    {
+        $queryBuilder
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->join('sheet.type', 'sheetType')
+            ->join('sheetType.translations', 'sheetTypeTranslations', 'WITH',
+                'sheetTypeTranslations.locale = :locale');
     }
 
     /**

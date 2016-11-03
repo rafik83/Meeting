@@ -21,8 +21,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FilterType extends AbstractType
 {
-    const FILTER_NAME  = 'name';
-    const FILTER_EMAIL = 'email';
+    const FILTER_NAME          = 'name';
+    const FILTER_EMAIL         = 'email';
+    const FILTER_WITH_SHEET    = 'withSheet';
+    const FILTER_WITHOUT_SHEET = 'withoutSheet';
 
     /**
      * {@inheritdoc}
@@ -41,6 +43,13 @@ class FilterType extends AbstractType
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
                 'user'        => $options['user'],
+            ])
+            ->add('participation', ChoiceType::class, [
+                'label'   => 'form.user_filter.children.participation.label',
+                'choices' => [
+                    'admin.users.withSheet'    => self::FILTER_WITH_SHEET,
+                    'admin.users.withoutSheet' => self::FILTER_WITHOUT_SHEET,
+                ],
             ])
             ->add('predefined', ChoiceType::class, [
                 'label'       => 'form.filter.label',
