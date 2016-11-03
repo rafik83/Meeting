@@ -20,10 +20,16 @@ Proximum\Vimeet\Domain\Model\Package:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
         participant:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: SET NULL
         planning:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: SET NULL
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PackageTranslation

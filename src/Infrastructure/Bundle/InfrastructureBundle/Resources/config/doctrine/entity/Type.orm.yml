@@ -35,18 +35,26 @@ Proximum\Vimeet\Domain\Model\Type:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
         sheetTemplate:
             targetEntity: Proximum\Vimeet\Domain\Model\Template\SheetTemplate
             inversedBy: types
             cascade:
                 - persist
+            joinColumn:
+                onDelete: SET NULL
         registrationTemplate:
             targetEntity: Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate
             inversedBy: types
             cascade:
                 - persist
+            joinColumn:
+                onDelete: SET NULL
         package:
             targetEntity: Proximum\Vimeet\Domain\Model\Package
             inversedBy: types
             cascade:
                 - persist
+            joinColumn:
+                onDelete: SET NULL

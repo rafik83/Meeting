@@ -18,3 +18,5 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

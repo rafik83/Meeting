@@ -10,3 +10,11 @@ rules:
         enabled: true
         max_count: 8
         threshold: 10
+
+global_exclude_dirs:
+    - vendor
+    - tests
+    - features
+    - DataFixtures
+    - var
+    - src/Behat
