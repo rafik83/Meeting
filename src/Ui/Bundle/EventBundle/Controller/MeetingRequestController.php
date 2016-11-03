@@ -26,9 +26,7 @@ use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
@@ -39,7 +37,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMee
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,11 +45,11 @@ use Symfony\Component\HttpFoundation\Response;
 class MeetingRequestController extends Controller
 {
     /**
-     * List meeting requests the sheet sent
+     * List all meeting request of a sheet (sent and received)
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
+     * @param Sheet       $sheet
      *
      * @return Response
      */
@@ -155,6 +152,14 @@ class MeetingRequestController extends Controller
                 ->getRequestBetweenSheets($sheet, $from)
         ) {
             throw $this->createNotFoundException('You can not request a meeting as there is already one');
+        }
+
+        if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate(
+            $this->getUser(),
+            $from,
+            $sheet
+        )) {
+            throw $this->createNotFoundException('The viewer is not allowed to create a meeting request with this sheet');
         }
     }
 
@@ -355,10 +360,9 @@ class MeetingRequestController extends Controller
         MeetingRequest $meetingRequest
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $permissionManager = $this->get('meeting.request_permission_manager');
 
-        if (!$meetingRequest->getFromSheet()->hasUser($this->getUser())
-            && !$meetingRequest->getToSheet()->hasUser($this->getUser())
-        ) {
+        if (!$permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($this->getUser(), $meetingRequest)) {
             throw $this->createNotFoundException('You are not allowed to see this meeting request.');
         }
 
@@ -379,13 +383,7 @@ class MeetingRequestController extends Controller
 
         $form = null;
 
-        $isItRequest = $this->get('meeting.request_permission_manager')->isAllowedToUnRefuse(
-            $this->getUser(),
-            $meetingRequest,
-            $sheet
-        );
-
-        if ($isItRequest) {
+        if ($permissionManager->isAllowedToUnRefuse($this->getUser(), $meetingRequest, $sheet)) {
             $unRefuse = new UnRefuseMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
@@ -412,7 +410,7 @@ class MeetingRequestController extends Controller
                     false,
                     $this->renderView('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
                         'discussion'  => $discussion,
-                        'isItRequest' => $isItRequest,
+                        'isItRequest' => $meetingRequest->isSender($sheet),
                         'form'        => $form->createView(),
                     ])
                 ));
@@ -421,7 +419,7 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
             'discussion'  => $discussion,
-            'isItRequest' => $isItRequest,
+            'isItRequest' => $meetingRequest->isSender($sheet),
             'form'        => $form !== null ? $form->createView() : null,
         ]);
     }
@@ -561,7 +559,7 @@ class MeetingRequestController extends Controller
             ->get('tactician.commandbus.query')
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
-        $isProposition      = $meetingRequest->getFromSheet() !== $sheet;
+        $isProposition      = $meetingRequest->isReceiver($sheet);
         $form               = null;
         $cancelForm         = null;
         $unApprovedForm     = null;
