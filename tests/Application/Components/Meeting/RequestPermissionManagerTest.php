@@ -35,7 +35,7 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Init mock for the suite test
      */
-    private function initMock()
+    public function setUp()
     {
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $this->sheetManager      = $this->prophesize(SheetManager::class);
@@ -46,10 +46,6 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getRequestPermissionManager()
     {
-        if ($this->sheetManager === null || $this->requestRepository === null) {
-            $this->initMock();
-        }
-
         return new RequestPermissionManager(
             $this->requestRepository->reveal(),
             $this->sheetManager->reveal()
@@ -642,7 +638,6 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
 
-        $this->initMock();
         $this->sheetManager->isAllowedToSee($user, $sheet, $sheet2)->shouldBeCalled()->willReturn(false);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCreate(
@@ -663,7 +658,6 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
 
-        $this->initMock();
         $this->sheetManager->isAllowedToSee($user, $sheet, $sheet2)->shouldBeCalled()->willReturn(true);
         $this->requestRepository->getRequestBetweenSheetsWithStates($sheet, $sheet2, [
             Request::STATE_APPROVED,
@@ -689,7 +683,6 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
 
-        $this->initMock();
         $this->sheetManager->isAllowedToSee($user, $sheet, $sheet2)->shouldBeCalled()->willReturn(true);
         $this->requestRepository->getRequestBetweenSheetsWithStates($sheet, $sheet2, [
             Request::STATE_APPROVED,
@@ -715,7 +708,6 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
             $request
         ) = $this->getInitialsValue();
 
-        $this->initMock();
         $this->sheetManager->isAllowedToSee($user2, $sheet2, $sheet)->shouldBeCalled()->willReturn(true);
         $this->requestRepository->getRequestBetweenSheetsWithStates($sheet2, $sheet, [
             Request::STATE_APPROVED,
