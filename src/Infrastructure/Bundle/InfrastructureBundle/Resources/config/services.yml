@@ -1318,8 +1318,6 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.participant_info_guesser'
-    sheet.state_setter:
-        class: Proximum\Vimeet\Application\Components\Sheet\StateSetter
     sheet.sheet_details_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
         arguments:
