@@ -46,6 +46,11 @@ class UnApproveMeetingRequestHandler
         $this->dateTime          = $dateTime;
     }
 
+    /**
+     * @param UnApproveMeetingRequest $unApproveMeetingRequest
+     *
+     * @throws IsNotAllowedToUnApproveMeetingRequestException
+     */
     public function handle(UnApproveMeetingRequest $unApproveMeetingRequest)
     {
         if (!$this->permissionManager->isAllowedToUnApprove(
