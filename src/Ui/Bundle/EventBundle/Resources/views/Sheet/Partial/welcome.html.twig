@@ -22,7 +22,7 @@
 
 <div class="modal-footer">
     <div class="row">
-        <div class="col-md-6 text-center">
+        <div class="col-md-{{ popinWelcome.hasPackage ? "6" : "12" }} text-center">
             <button type="button" class="btn btn btn-primary btn-lg pull-left" data-dismiss="modal">
                 <i class="icon-Retour"></i>
                 {{ 'navigation.category.sheet'|trans }}
