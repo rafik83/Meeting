@@ -13,4 +13,4 @@ Proximum\Vimeet\Domain\Model\CartStep:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE

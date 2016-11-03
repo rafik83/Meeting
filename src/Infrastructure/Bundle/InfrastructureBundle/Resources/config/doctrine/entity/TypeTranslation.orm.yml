@@ -18,3 +18,5 @@ Proximum\Vimeet\Domain\Model\TypeTranslation:
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

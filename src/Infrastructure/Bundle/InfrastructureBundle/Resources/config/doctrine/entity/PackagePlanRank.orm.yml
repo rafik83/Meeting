@@ -17,3 +17,5 @@ Proximum\Vimeet\Domain\Model\PackagePlanRank:
                 onDelete: CASCADE
         plan:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: CASCADE
