@@ -1,6 +1,29 @@
 {% extends 'EventBundle::base.html.twig' %}
 
-{% block title event.title %}
+{% block title 'navigation.notification.list'|trans %}
 
 {% block content %}
+    <h2>{{ 'notification.list.title.label'|trans }}</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'notification.columns.createdAt'|trans }}</th>
+            <th>{{ 'notification.columns.category'|trans }}</th>
+            <th>{{ 'notification.columns.description'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for notification in notifications.notificationViews %}
+            <tr>
+                <td>{{ notification.createdAt|date }}</td>
+                <td><i class="{{ notification.icon }}"></i> {{ ('notification.category.' ~ notification.category ~ '.label')|trans }}</td>
+                <td>{{ notification.description|trans }}</td>
+                <td><a href="{{ notification.link }}"><i class="icon-Voir_1"></i> {{ 'notification.link.label'|trans }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}

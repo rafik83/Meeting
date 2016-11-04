@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Components\Notification;
 
+/**
+ * @deprecated
+ */
 class NotificationView
 {
     /**

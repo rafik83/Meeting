@@ -20,6 +20,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
+/**
+ * @deprecated
+ */
 class NotificationViewFactory
 {
     /**
