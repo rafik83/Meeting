@@ -51,17 +51,26 @@ class RequestPermissionManager
      */
     public function isAllowedToEdit(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
+        return $sheet->hasUser($user) && $request->isSender($sheet) && $request->isSent();
+    }
 
-        if ($request->isSender($sheet) && $request->isSent()) {
-            return true;
+    /**
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToEditSentOrApproved(User $user, Request $request, Sheet $sheet)
+    {
+        if ($request->isSent()) {
+            return $this->isAllowedToEdit($user, $request, $sheet);
+        } elseif ($request->isApproved()) {
+            return $this->isAllowedToEditApproved($user, $request, $sheet);
         }
 
         return false;
     }
-
 
     /**
      * Is a user allowed to edit an approved meeting request
@@ -74,15 +83,8 @@ class RequestPermissionManager
      */
     public function isAllowedToEditApproved(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if (($request->isSender($sheet) || $request->isReceiver($sheet)) && $request->isApproved()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user)
+            && ($request->isSender($sheet) || $request->isReceiver($sheet)) && $request->isApproved();
     }
 
     /**
@@ -96,15 +98,9 @@ class RequestPermissionManager
      */
     public function isAllowedToCancel(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->isSender($sheet) && ($request->isSent() || $request->isApproved())) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user)
+            && $request->isSender($sheet)
+            && ($request->isSent() || $request->isApproved());
     }
 
     /**
@@ -118,15 +114,7 @@ class RequestPermissionManager
      */
     public function isAllowedToRefuse(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->isReceiver($sheet) && $request->isSent()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user) && $request->isReceiver($sheet) && $request->isSent();
     }
 
     /**
@@ -140,15 +128,7 @@ class RequestPermissionManager
      */
     public function isAllowedToApprove(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->isReceiver($sheet) && $request->isSent()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user) && $request->isReceiver($sheet) && $request->isSent();
     }
 
     /**
@@ -176,15 +156,7 @@ class RequestPermissionManager
      */
     public function isAllowedToUnRefuse(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->isRefused() && $request->isReceiver($sheet)) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user) && $request->isRefused() && $request->isReceiver($sheet);
     }
 
     /**
@@ -198,15 +170,7 @@ class RequestPermissionManager
      */
     public function isAllowedToUnApprove(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->isApproved() && $request->isReceiver($sheet)) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user) && $request->isApproved() && $request->isReceiver($sheet);
     }
 
     /**
@@ -240,11 +204,7 @@ class RequestPermissionManager
             return false;
         }
 
-        if ($request->getFromSheet()->hasUser($user) || $request->getToSheet()->hasUser($user)) {
-            return true;
-        }
-
-        return false;
+        return $request->getFromSheet()->hasUser($user) || $request->getToSheet()->hasUser($user);
     }
 
     /**
