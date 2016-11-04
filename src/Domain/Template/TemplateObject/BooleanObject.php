@@ -81,6 +81,14 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
     /**
      * {@inheritdoc}
      */
+    public function getContentValueLocalize($locale)
+    {
+        return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getContentLabel()
     {
         return $this->getContentValue();

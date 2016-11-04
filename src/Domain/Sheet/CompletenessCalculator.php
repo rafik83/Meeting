@@ -12,11 +12,12 @@ namespace Proximum\Vimeet\Domain\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\SheetCompleteness;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetCompletenessRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
 
 class CompletenessCalculator
@@ -32,16 +33,24 @@ class CompletenessCalculator
     private $sheetRepository;
 
     /**
-     * @param TemplateDataFactory      $templateDataFactory
-     * @param SheetRepositoryInterface $sheetRepository
+     * @var SheetCompletenessRepositoryInterface
+     */
+    private $sheetCompletenessRepository;
+
+    /**
+     * @param TemplateDataFactory                  $templateDataFactory
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetCompletenessRepositoryInterface $sheetCompletenessRepository
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        SheetCompletenessRepositoryInterface $sheetCompletenessRepository
     ) {
 
-        $this->templateDataFactory = $templateDataFactory;
-        $this->sheetRepository     = $sheetRepository;
+        $this->templateDataFactory         = $templateDataFactory;
+        $this->sheetRepository             = $sheetRepository;
+        $this->sheetCompletenessRepository = $sheetCompletenessRepository;
     }
 
     /**
@@ -49,10 +58,16 @@ class CompletenessCalculator
      */
     public function calculateCompleteness(Sheet $sheet)
     {
-        $total     = 0;
-        $completed = 0;
-        $locales   = $sheet->getEvent()->getLocales();
-        $fallback  = $sheet->getEvent()->getFallback();
+        $locales  = $sheet->getEvent()->getLocales();
+        $fallback = $sheet->getEvent()->getFallback();
+
+        $total     = [];
+        $completed = [];
+
+        foreach ($locales as $locale) {
+            $total[$locale]     = 0;
+            $completed[$locale] = 0;
+        }
 
         // Build template for sheet
         $templateData = $this->templateDataFactory->createFromSheet($sheet, $fallback);
@@ -60,17 +75,32 @@ class CompletenessCalculator
 
         // Build template for company info
         $templateDataRegistration = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallback);
-        $this->calculateCompletenessOfCompanyInfo($templateDataRegistration, $total, $completed);
+        $this->calculateCompletenessOfCompanyInfo($templateDataRegistration, $total, $completed, $locales);
 
         $this->calculateCompletenessOfParticipantProfile(
             $templateDataRegistration,
             $sheet->getParticipants()->toArray(),
             $total,
-            $completed
+            $completed,
+            $locales
         );
 
-        $completeness = $completed / $total * 100;
-        $sheet->setCompleteness(floor($completeness));
+        $this->sheetCompletenessRepository->removeForSheet($sheet);
+
+        $averageCompleteness   = 0;
+        foreach ($locales as $locale) {
+            $localeCompleteness        = floor($completed[$locale] / $total[$locale] * 100);
+            $unitLocalizedCompleteness = new SheetCompleteness(
+                $sheet,
+                $locale,
+                $localeCompleteness
+            );
+
+            $this->sheetCompletenessRepository->add($unitLocalizedCompleteness);
+            $averageCompleteness += $localeCompleteness;
+        }
+
+        $sheet->setCompleteness(intval(floor($averageCompleteness / count($locales))));
 
         $this->sheetRepository->set($sheet);
     }
@@ -78,81 +108,103 @@ class CompletenessCalculator
     /**
      * @param TemplateData $templateData
      * @param array        $participants
-     * @param int          $total
-     * @param int          $completed
+     * @param array        $total
+     * @param array        $completed
+     * @param array        $locales
      */
     private function calculateCompletenessOfParticipantProfile(
         TemplateData $templateData,
         array $participants,
         &$total,
-        &$completed
+        &$completed,
+        array $locales
     ) {
+        $countCompleted = 0;
+        $countTotal     = 0;
         foreach ($templateData->getProfileObjects() as $object) {
             if ($object->isEditable() && true === $object->getRequired()) {
-                $total += count($participants);
+                $countTotal++;
 
                 /** @var Participant $participant */
                 foreach ($participants as $participant) {
                     $data = $participant->getData();
-                    if (isset($data[$object->getKey()]) && null !== $data[$object->getKey()]) {
-                        $completed++;
+
+                    if (!empty($data[$object->getKey()])) {
+                        $countCompleted++;
                     }
                 }
+
             }
+        }
+
+        foreach ($locales as $locale) {
+            $total[$locale] += $countTotal * count($participants);
+            $completed[$locale] += $countCompleted;
         }
     }
 
     /**
      * @param TemplateData $templateData
-     * @param int          $total
-     * @param int          $completed
+     * @param array        $total
+     * @param array        $completed
+     * @param array        $locales
      */
-    private function calculateCompletenessOfCompanyInfo(TemplateData $templateData, &$total, &$completed)
-    {
+    private function calculateCompletenessOfCompanyInfo(
+        TemplateData $templateData,
+        &$total,
+        &$completed,
+        array $locales
+    ) {
+        $countTotal     = 0;
+        $countCompleted = 0;
         foreach ($templateData->getCompanyObjects() as $object) {
             if ($object->isEditable() && true === $object->getRequired()) {
-                $total++;
+                $countTotal++;
 
-                if ($object->getContentValue() !== null) {
-                    $completed++;
+                if (!empty($object->getContentValue())) {
+                    $countCompleted++;
                 }
             }
+        }
+
+        foreach ($locales as $locale) {
+            $total[$locale] += $countTotal;
+            $completed[$locale] += $countCompleted;
         }
     }
 
     /**
      * @param TemplateData $templateData
      * @param array        $locales
-     * @param int          $total
-     * @param int          $completed
+     * @param array        $total
+     * @param array        $completed
      */
-    private function calculateCompletenessOfSheet(TemplateData $templateData, array $locales, &$total, &$completed)
-    {
-        $localesCount = count($locales);
-
+    private function calculateCompletenessOfSheet(
+        TemplateData $templateData,
+        array $locales,
+        &$total,
+        &$completed
+    ) {
         foreach ($templateData->getObjects() as $object) {
             if (true === $object->getRequired()) {
                 if ($object->isEditable() && $object instanceof ContentObjectInterface) {
                     if ($object->isTranslatable()) {
-                        $total += $localesCount;
-
                         foreach ($locales as $locale) {
-                            if ($object instanceof EditableText) {
-                                $data = $object->getContent($locale);
-                            } else {
-                                $data = $object->getData();
-                            }
+                            $total[$locale]++;
+                            $data = $object->getContentValueLocalize($locale);
 
-                            if (null !== $data) {
-                                $completed++;
+                            if (!empty($data)) {
+                                $completed[$locale]++;
                             }
                         }
                     } else {
-                        $total++;
                         $data = $object->getContentValue();
 
-                        if (null !== $data) {
-                            $completed++;
+                        foreach ($locales as $locale) {
+                            $total[$locale]++;
+                            if (!empty($data)) {
+                                $completed[$locale]++;
+                            }
                         }
                     }
                 } elseif ($object instanceof ItemCollection) {
@@ -163,22 +215,13 @@ class CompletenessCalculator
                         $count = 1;
                     }
 
-                    if ($object->isTranslatable()) {
-                        $total += $count * $localesCount;
-
-                        foreach ($locales as $locale) {
-                            foreach ($object->getItems() as $item) {
-                                if (isset($item->getRawTitle()[$locale]) && $item->getRawTitle()[$locale] !== null) {
-                                    $completed++;
-                                }
-                            }
-                        }
-                    } else {
-                        $total += $count * $localesCount;
-
+                    foreach ($locales as $locale) {
+                        $total[$locale] += $count;
                         foreach ($object->getItems() as $item) {
-                            if (null !== $item->getTitle()) {
-                                $completed++;
+                            if (isset($item->getRawTitle()[$locale])
+                                && $item->getRawTitle()[$locale] !== null
+                            ) {
+                                $completed[$locale]++;
                             }
                         }
                     }
