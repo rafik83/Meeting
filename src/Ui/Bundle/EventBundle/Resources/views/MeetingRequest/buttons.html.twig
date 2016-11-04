@@ -5,11 +5,11 @@
         {% if meetingRequest.toSheet == viewer %}
             {% if meetingRequest.isSent %}
                 {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': meetingRequest, 'sheet': viewer}, false) }}
-        {% elseif meetingRequest.isApproved %}
-            {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {'meetingRequest': meetingRequest}, false) }}
-        {% elseif meetingRequest.isRefused %}
-            {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': meetingRequest}, false) }}
-        {% endif %}
+            {% elseif meetingRequest.isApproved %}
+                {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {'meetingRequest': meetingRequest}, false) }}
+            {% elseif meetingRequest.isRefused %}
+                {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': meetingRequest}, false) }}
+            {% endif %}
         {% else %}
             {% if meetingRequest.isSent %}
                 {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {'meetingRequest': meetingRequest}, false) }}
