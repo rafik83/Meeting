@@ -408,11 +408,7 @@ class Request implements MessageSubjectInterface
      */
     public function isSender(Sheet $sheet)
     {
-        if ($this->from === $sheet) {
-            return true;
-        }
-
-        return false;
+        return $this->from === $sheet;
     }
 
     /**
@@ -422,10 +418,6 @@ class Request implements MessageSubjectInterface
      */
     public function isReceiver(Sheet $sheet)
     {
-        if ($this->to === $sheet) {
-            return true;
-        }
-
-        return false;
+        return $this->to === $sheet;
     }
 }
