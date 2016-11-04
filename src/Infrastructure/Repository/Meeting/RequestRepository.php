@@ -81,8 +81,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->delete()
             ->from(Request::class, 'request')
-            ->where('request.id = :requestId')
-            ->setParameter('requestId', $request)
+            ->where('request = :request')
+            ->setParameter('request', $request)
             ->getQuery()
             ->execute();
     }
