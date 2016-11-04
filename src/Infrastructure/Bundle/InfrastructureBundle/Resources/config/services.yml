@@ -10,38 +10,6 @@ services:
             - { name: kernel.event_listener, event: kernel.terminate, method: process }
 
     #
-    # Subscriber
-    #
-    notification_subscriber:
-        abstract:  true
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
-
-    vimeet_app.vimeet.application.event.notification_on_meeting_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnMeetingEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-    vimeet_app.vimeet.application.event.notification_on_message_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnMessageEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-    vimeet_app.vimeet.application.event.notification_on_request_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnRequestEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-    vimeet_app.vimeet.application.event.notification_on_sheet_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnSheetEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-
-    #
     # Repositories
     #
     vimeet_infrastructure.repository.event_repository:
@@ -2265,6 +2233,7 @@ services:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.sheet.completeness_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
 
     printer.sheet_pdf_printer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter

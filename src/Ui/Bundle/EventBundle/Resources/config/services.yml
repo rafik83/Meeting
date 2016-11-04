@@ -261,6 +261,12 @@ services:
             - '@fos_elastica.object_persister.app.sheet'
         tags:
             - { name: kernel.event_subscriber }
+    event_listener.notification_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Notification\NotificationEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+        tags:
+            - { name: kernel.event_subscriber }
 
     #
     # Twig extension

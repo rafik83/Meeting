@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
@@ -114,6 +115,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory         = $this->prophesize(TemplateDataFactory::class);
         $sheetRepository             = $this->prophesize(SheetRepositoryInterface::class);
         $sheetCompletenessRepository = $this->prophesize(SheetCompletenessRepositoryInterface::class);
+        $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
 
         $templateDataFactory->createFromSheet($sheet, 'fr')
             ->shouldBeCalled()
@@ -137,7 +139,8 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $completenessCalculator = new CompletenessCalculator(
             $templateDataFactory->reveal(),
             $sheetRepository->reveal(),
-            $sheetCompletenessRepository->reveal()
+            $sheetCompletenessRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $completenessCalculator->calculateCompleteness($sheet);
@@ -229,6 +232,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory         = $this->prophesize(TemplateDataFactory::class);
         $sheetRepository             = $this->prophesize(SheetRepositoryInterface::class);
         $sheetCompletenessRepository = $this->prophesize(SheetCompletenessRepositoryInterface::class);
+        $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
 
         $templateDataFactory->createFromSheet($sheet, 'fr')
             ->shouldBeCalled()
@@ -252,7 +256,8 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $completenessCalculator = new CompletenessCalculator(
             $templateDataFactory->reveal(),
             $sheetRepository->reveal(),
-            $sheetCompletenessRepository->reveal()
+            $sheetCompletenessRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $completenessCalculator->calculateCompleteness($sheet);
@@ -343,6 +348,7 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $templateDataFactory         = $this->prophesize(TemplateDataFactory::class);
         $sheetRepository             = $this->prophesize(SheetRepositoryInterface::class);
         $sheetCompletenessRepository = $this->prophesize(SheetCompletenessRepositoryInterface::class);
+        $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
 
         $templateDataFactory->createFromSheet($sheet, 'fr')
             ->shouldBeCalled()
@@ -366,7 +372,8 @@ class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
         $completenessCalculator = new CompletenessCalculator(
             $templateDataFactory->reveal(),
             $sheetRepository->reveal(),
-            $sheetCompletenessRepository->reveal()
+            $sheetCompletenessRepository->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $completenessCalculator->calculateCompleteness($sheet);
