@@ -55,7 +55,7 @@ class Url extends EditableObject implements ContentObjectInterface
      */
     public function getContentValueLocalize($locale)
     {
-        return $this->getUrl() ? $this->getUrl() : '';
+        return $this->getContentValue();
     }
 
     /**

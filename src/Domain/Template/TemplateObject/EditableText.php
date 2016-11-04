@@ -70,6 +70,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
     public function getContentValueLocalize($locale)
     {
         $data = $this->getContent($locale);
+
         return $data !== null ? $data : '';
     }
 

@@ -42,14 +42,6 @@ class SheetCompletenessRepository implements SheetCompletenessRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function set(SheetCompleteness $sheetCompleteness)
-    {
-        $this->entityManager->flush($sheetCompleteness);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findCompleteness(Sheet $sheet, $locale)
     {
         $queryBuilder = $this->entityManager
@@ -59,7 +51,8 @@ class SheetCompletenessRepository implements SheetCompletenessRepositoryInterfac
             ->where('completeness.sheet = :sheet')
             ->andWhere('completeness.locale = :locale')
             ->setParameter('sheet', $sheet)
-            ->setParameter('locale', $locale);
+            ->setParameter('locale', $locale)
+            ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

@@ -115,8 +115,8 @@ class CompletenessCalculator
     private function calculateCompletenessOfParticipantProfile(
         TemplateData $templateData,
         array $participants,
-        &$total,
-        &$completed,
+        array &$total,
+        array &$completed,
         array $locales
     ) {
         $countCompleted = 0;
@@ -151,8 +151,8 @@ class CompletenessCalculator
      */
     private function calculateCompletenessOfCompanyInfo(
         TemplateData $templateData,
-        &$total,
-        &$completed,
+        array &$total,
+        array &$completed,
         array $locales
     ) {
         $countTotal     = 0;
@@ -182,8 +182,8 @@ class CompletenessCalculator
     private function calculateCompletenessOfSheet(
         TemplateData $templateData,
         array $locales,
-        &$total,
-        &$completed
+        array &$total,
+        array &$completed
     ) {
         foreach ($templateData->getObjects() as $object) {
             if (true === $object->getRequired()) {
