@@ -8,14 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\MeetingRequest;
+namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
-class UpdateRequestHandler
+class UpdateMeetingRequestHandler
 {
     /**
      * @var RequestRepositoryInterface
@@ -58,28 +59,18 @@ class UpdateRequestHandler
     }
 
     /**
-     * @param UpdateRequest $updateRequest
+     * @param UpdateMeetingRequest $updateRequest
+     *
+     * @throws IsNotAllowedToUpdateMeetingRequestException
      */
-    public function handle(UpdateRequest $updateRequest)
+    public function handle(UpdateMeetingRequest $updateRequest)
     {
-        $doNotThrowException = false;
-
-        if ($updateRequest->meetingRequest->isApproved()) {
-            $doNotThrowException = $this->requestPermissionManager->isAllowedToEditApproved(
-                $updateRequest->editor,
-                $updateRequest->meetingRequest,
-                $updateRequest->sheetEditor
-            );
-        } elseif ($updateRequest->meetingRequest->isSent()) {
-            $doNotThrowException = $this->requestPermissionManager->isAllowedToEdit(
-                $updateRequest->editor,
-                $updateRequest->meetingRequest,
-                $updateRequest->sheetEditor
-            );
-        }
-
-        if ($doNotThrowException === false) {
-            throw new \RuntimeException('You are not allowed to update this request.');
+        if (!$this->requestPermissionManager->isAllowedToEditSentOrApproved(
+            $updateRequest->editor,
+            $updateRequest->meetingRequest,
+            $updateRequest->sheetEditor
+        )) {
+            throw new IsNotAllowedToUpdateMeetingRequestException('You are not allowed to update this request.');
         }
 
         $this->handleAddRemoveParticipant($updateRequest);
@@ -101,9 +92,9 @@ class UpdateRequestHandler
     }
 
     /**
-     * @param UpdateRequest $updateRequest
+     * @param UpdateMeetingRequest $updateRequest
      */
-    private function handleAddRemoveParticipant(UpdateRequest $updateRequest)
+    private function handleAddRemoveParticipant(UpdateMeetingRequest $updateRequest)
     {
         if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getFromSheet()) {
             // Remove removed participants

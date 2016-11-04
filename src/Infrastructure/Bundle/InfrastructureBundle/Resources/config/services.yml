@@ -454,14 +454,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CreateRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.update_request_from_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestHandler
+        class: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequest }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
         arguments:

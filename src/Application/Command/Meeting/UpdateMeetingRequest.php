@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\MeetingRequest;
+namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UpdateRequest
+class UpdateMeetingRequest
 {
     /**
      * @var Request
