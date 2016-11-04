@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Notification;
 
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler;
+use Proximum\Vimeet\Application\View\Notification\NotificationListView;
 
 class NotificationViewQueryHandler
 {
@@ -32,11 +33,15 @@ class NotificationViewQueryHandler
 
     /**
      * @param NotificationViewQuery $query
+     *
+     * @return NotificationListView
      */
     public function handle(NotificationViewQuery $query)
     {
         $notificationViews = $this->sheetNotificationViewQueryHandler->handle(
             new SheetNotificationViewQuery($query->sheet)
         );
+
+        return new NotificationListView($notificationViews);
     }
 }

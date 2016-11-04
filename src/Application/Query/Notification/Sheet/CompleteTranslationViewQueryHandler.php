@@ -10,8 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Query\Notification\Sheet;
 
+use Proximum\Vimeet\Application\View\Notification\NotificationView;
+
 class CompleteTranslationViewQueryHandler
 {
+    /**
+     * @param CompleteTranslationViewQuery $query
+     *
+     * @return NotificationView
+     */
     public function handle(CompleteTranslationViewQuery $query)
     {
 

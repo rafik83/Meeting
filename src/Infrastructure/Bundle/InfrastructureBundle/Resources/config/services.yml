@@ -1945,6 +1945,26 @@ services:
         arguments:
             - '@navigation.navigation_builder'
 
+    ##
+    # Notification query handler
+    ##
+    query.notification.notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
+        arguments:
+            - '@query.notification.sheet_notification_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
+    query.notification.sheet_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler
+        arguments:
+            - '@query.notification.sheet_complete_translation_view_query_handler'
+            - '@repository.sheet.completeness_repository'
+    query.notification.sheet_complete_translation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+
+    ##
+    # Meeting Request query handler
+    ##
     query.meeting_request.meeting_request_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler
         arguments:
