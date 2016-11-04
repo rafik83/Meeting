@@ -1,0 +1,17 @@
+.table--notification {
+  td {
+    height: 50px;
+    padding: 15px 5px 15px 5px !important;
+  }
+
+  .label {
+    display: inline-block;
+    padding: 8px;
+    &.label-required {
+      background-color: #000000;
+    }
+    &.label-important {
+      background-color: $color-highlighted;
+    }
+  }
+}

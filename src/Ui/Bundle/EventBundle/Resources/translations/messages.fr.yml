@@ -231,6 +231,9 @@ notification.columns.createdAt: 'Recu le'
 notification.columns.category: 'Rubrique'
 notification.columns.description: 'Description'
 notification.link.label: 'Voir'
-notification.sheet.completeTranslation: "La version %locale% n'est pas renseignée"
+notification.sheet.completeTranslation: "Compléter votre fiche de présentation en %locale%"
 notification.category.sheet.label: 'Fiche de présentation'
-
+notification.list.title.label: 'Notifications'
+notification.empty: 'Aucune notification en attente'
+notification.label.required: 'Obligatoire'
+notification.label.important: 'Important'

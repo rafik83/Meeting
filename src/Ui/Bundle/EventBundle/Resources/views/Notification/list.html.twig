@@ -3,9 +3,9 @@
 {% block title 'navigation.notification.list'|trans %}
 
 {% block content %}
-    <h2>{{ 'notification.list.title.label'|trans }}</h2>
+    <h3><i class="icon-Retard"></i> {{ 'notification.list.title.label'|trans }}</h3>
 
-    <table class="table">
+    <table class="table table-striped table--notification">
         <thead>
         <tr>
             <th>{{ 'notification.columns.createdAt'|trans }}</th>
@@ -17,11 +17,20 @@
         <tbody>
         {% for notification in notifications.notificationViews %}
             <tr>
-                <td>{{ notification.createdAt|date }}</td>
+                <td>{{ notification.createdAt|localizeddate('long', 'none', app.request.locale) }}</td>
                 <td><i class="{{ notification.icon }}"></i> {{ ('notification.category.' ~ notification.category ~ '.label')|trans }}</td>
-                <td>{{ notification.description|trans }}</td>
-                <td><a href="{{ notification.link }}"><i class="icon-Voir_1"></i> {{ 'notification.link.label'|trans }}</a></td>
+                <td>
+                    {{ notification.description|trans({'%locale%': notification.locale|locale(app.request.locale)|lower}) }}
+                    {% if notification.hasLabel %}
+                        <span class="label label-{{ notification.priority }}">{{ ('notification.label.' ~ notification.priority)|trans }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ notification.link }}"><i class="icon-Voir_1"></i> {{ 'notification.link.label'|trans }}</a>
+                </td>
             </tr>
+        {% else %}
+            <p>{{ 'notification.empty'|trans }}</p>
         {% endfor %}
         </tbody>
     </table>

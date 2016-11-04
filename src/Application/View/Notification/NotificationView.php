@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Notification;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Domain\Notification\Notification;
 
 class NotificationView
 {
@@ -45,9 +46,9 @@ class NotificationView
     public $priority;
 
     /**
-     * @var array
+     * @var string
      */
-    public $parameters;
+    public $locale;
 
     /**
      * NotificationView constructor.
@@ -58,7 +59,7 @@ class NotificationView
      * @param string            $description
      * @param string            $link
      * @param string            $priority
-     * @param array             $parameters
+     * @param string            $locale
      */
     public function __construct(
         DateTimeInterface $createdAt,
@@ -67,14 +68,22 @@ class NotificationView
         $description,
         $link,
         $priority,
-        $parameters = []
+        $locale
     ) {
         $this->createdAt   = $createdAt;
         $this->category    = $category;
         $this->description = $description;
         $this->link        = $link;
         $this->priority    = $priority;
-        $this->parameters  = $parameters;
         $this->icon        = $icon;
+        $this->locale      = $locale;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLabel()
+    {
+        return $this->priority !== Notification::PRIORITY_NONE;
     }
 }
