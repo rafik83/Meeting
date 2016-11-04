@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequest;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
@@ -545,12 +545,12 @@ class MeetingRequestController extends Controller
         );
         $permissionManager = $this->get('meeting.request_permission_manager');
 
-        if (($meetingRequest->isApproved()
-            && !$permissionManager->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet)
-        ) || ($meetingRequest->isSent()
-                && !$permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)
-            )
-        ) {
+        $isNotAllowedToEditApproved = $meetingRequest->isApproved() && !$permissionManager->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet);
+
+        $isNotAllowedToEdit = $meetingRequest->isSent() && !$permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet);
+
+
+        if ($isNotAllowedToEditApproved || $isNotAllowedToEdit) {
             throw $this->createNotFoundException('You are not allowed to edit this meeting request.');
         }
 
@@ -586,8 +586,8 @@ class MeetingRequestController extends Controller
             return $unapprovedResponse;
         }
 
-        if (!$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant()) {
-            $command = new UpdateRequest($meetingRequest, $sheet, $this->getUser());
+        if ($this->displayEditForm($discussion, $sheet)) {
+            $command = new UpdateMeetingRequest($meetingRequest, $sheet, $this->getUser());
             $form    = $this->createForm(MeetingRequestUpdateType::class, $command, [
                 'sheet'            => $sheet,
                 'locale'           => $request->getLocale(),
@@ -642,6 +642,20 @@ class MeetingRequestController extends Controller
             'isProposition'  => $isProposition,
             'meetingRequest' => $meetingRequest,
         ]);
+    }
+
+    /**
+     * The form should not be initiated and display if the current sheet has
+     * already sent a message and has only one participant
+     *
+     * @param DiscussionMeetingRequestView $discussion
+     * @param Sheet                        $sheet
+     *
+     * @return bool
+     */
+    private function displayEditForm(DiscussionMeetingRequestView $discussion, Sheet $sheet)
+    {
+        return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant();
     }
 
     /**
