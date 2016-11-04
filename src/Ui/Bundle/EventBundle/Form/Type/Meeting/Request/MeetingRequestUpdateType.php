@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequest;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MeetingRequestUpdateType extends AbstractMeetingRequestType
@@ -24,7 +24,7 @@ class MeetingRequestUpdateType extends AbstractMeetingRequestType
 
         $resolver->setDefault('placeholder_description', 'form.catalog_edit_meeting_request.children.description.placeholder');
         $resolver->setDefaults([
-           'data_class' => UpdateRequest::class,
+           'data_class' => UpdateMeetingRequest::class,
         ]);
     }
 
