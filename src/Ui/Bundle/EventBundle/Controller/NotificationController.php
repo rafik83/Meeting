@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery;
+use Proximum\Vimeet\Application\View\Notification\NotificationListView;
 use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class NotificationController extends Controller
@@ -22,26 +24,29 @@ class NotificationController extends Controller
     /**
      * List user notifications
      *
-     * @param Request   $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
      * @return Response
      */
-    public function listAction(Request $request, EventDomain $eventDomain)
+    public function listAction(EventDomain $eventDomain, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $notifications = $this
-            ->get('notification.notification_view_factory')
-            ->getNotificationsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
+        /** @var NotificationListView $notificationListView */
+        $notificationListView = $this->get('tactician.commandbus.query')->handle(
+            new NotificationViewQuery($sheet)
+        );
 
         return $this->render('EventBundle:Notification:list.html.twig', [
             'event'         => $eventDomain->getEvent(),
-            'notifications' => $notifications,
+            'notifications' => $notificationListView,
         ]);
     }
 
     /**
+     * @deprecated
+     *
      * @param EventDomain $eventDomain
      *
      * @return Response
@@ -61,6 +66,8 @@ class NotificationController extends Controller
 
     /**
      * Mark the notification as read and redirect to the embedded url
+     *
+     * @deprecated
      *
      * @param Notification $notification
      *

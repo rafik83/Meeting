@@ -55,7 +55,7 @@ class SheetNotificationViewQueryHandler
 
             if ($sheetCompleteness !== null && $sheetCompleteness->getCompleteness() !== 100) {
                 $notificationViews[] = $this->completeTranslationViewQueryHandler->handle(
-                    new CompleteTranslationViewQuery()
+                    new CompleteTranslationViewQuery($query->sheet, $locale)
                 );
             }
         }

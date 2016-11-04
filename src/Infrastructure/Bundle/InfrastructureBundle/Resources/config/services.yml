@@ -1848,6 +1848,7 @@ services:
             - '@query.catalog.sheet_preview_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+
     query.sheet.sheet_validation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQueryHandler
         arguments:
@@ -1948,6 +1949,12 @@ services:
     ##
     # Notification query handler
     ##
+    query.notification.abstract_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\AbstractNotificationQueryHandler
+        abstract: true
+        arguments:
+            - '@adapter.router'
+            - '@datetime'
     query.notification.notification_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
         arguments:
@@ -1961,6 +1968,7 @@ services:
             - '@repository.sheet.completeness_repository'
     query.notification.sheet_complete_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
 
     ##
     # Meeting Request query handler

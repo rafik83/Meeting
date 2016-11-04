@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\View\Notification;
 
-use DateTime;
+use DateTimeInterface;
 
 class NotificationView
 {
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
     public $createdAt;
 
@@ -42,13 +42,13 @@ class NotificationView
     /**
      * NotificationView constructor.
      *
-     * @param DateTime $createdAt
-     * @param string   $category
-     * @param string   $description
-     * @param string   $link
-     * @param string   $priority
+     * @param DateTimeInterface $createdAt
+     * @param string            $category
+     * @param string            $description
+     * @param string            $link
+     * @param string            $priority
      */
-    public function __construct(DateTime $createdAt, $category, $description, $link, $priority)
+    public function __construct(DateTimeInterface $createdAt, $category, $description, $link, $priority)
     {
         $this->createdAt   = $createdAt;
         $this->category    = $category;

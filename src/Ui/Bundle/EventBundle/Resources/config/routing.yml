@@ -439,7 +439,9 @@ event_meeting_request_edit:
 # Notification
 #
 event_notification_list:
-    path:     /notification
+    path: /sheet/{sheet}/notification
+    requirements:
+        sheet: \d+
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:list }
 
