@@ -22,11 +22,11 @@ class MessageMeetingRequestViewQueryHandler
     public function handle(MessageMeetingRequestViewQuery $query)
     {
         return new MessageMeetingRequestView(
-            $query->message->getFrom()->getId(),
+            $query->message->getFrom(),
             $query->sheetName,
             $query->message->getContent(),
             $query->message->getCreatedAt(),
-            $query->message->getFrom() === $query->meetingRequest->getFromSheet() ? MessageMeetingRequestView::LEFT : MessageMeetingRequestView::RIGHT
+            $query->meetingRequest->isSender($query->message->getFrom()) ? MessageMeetingRequestView::LEFT : MessageMeetingRequestView::RIGHT
         );
     }
 }

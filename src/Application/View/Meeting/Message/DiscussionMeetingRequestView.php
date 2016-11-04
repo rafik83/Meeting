@@ -43,7 +43,7 @@ class DiscussionMeetingRequestView
     public function hasMessageOfSheet(Sheet $sheet)
     {
         return !empty(array_filter($this->messages, function (MessageMeetingRequestView $message) use ($sheet) {
-            return $message->sheetId === $sheet->getId();
+            return $message->sheet === $sheet;
         }));
     }
 }
