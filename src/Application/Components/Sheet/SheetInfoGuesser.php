@@ -53,6 +53,10 @@ class SheetInfoGuesser
             if (null !== $participant) {
                 return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
             } else {
+                if (null === $sheet->getOwner() || null === $sheet->getOwner()->getAccount()) {
+                    return '';
+                }
+
                 return sprintf(
                     '%s %s',
                     $sheet->getOwner()->getAccount()->getFirstName(),
