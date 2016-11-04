@@ -14,3 +14,5 @@ Proximum\Vimeet\Domain\Model\SheetCompleteness:
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE

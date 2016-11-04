@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class SheetCompleteness
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -60,14 +60,6 @@ class SheetCompleteness
     public function getSheet()
     {
         return $this->sheet;
-    }
-
-    /**
-     * @param Sheet $sheet
-     */
-    public function setSheet($sheet)
-    {
-        $this->sheet = $sheet;
     }
 
     /**

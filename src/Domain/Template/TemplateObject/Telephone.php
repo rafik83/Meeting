@@ -45,7 +45,7 @@ class Telephone extends EditableObject implements ContentObjectInterface
      */
     public function getContentValueLocalize($locale)
     {
-        return $this->getTelephone() ? $this->getTelephone() : '';
+        return $this->getContentValue();
     }
 
     /**

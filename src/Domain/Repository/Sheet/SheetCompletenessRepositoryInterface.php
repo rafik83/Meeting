@@ -21,11 +21,6 @@ interface SheetCompletenessRepositoryInterface
     public function add(SheetCompleteness $sheetCompleteness);
 
     /**
-     * @param SheetCompleteness $sheetCompleteness
-     */
-    public function set(SheetCompleteness $sheetCompleteness);
-
-    /**
      * @param Sheet  $sheet
      * @param string $locale
      *
