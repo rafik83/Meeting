@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Add;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -24,6 +25,7 @@ class AddUnavailabilityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Event $event */
         $event = $options['sheet']->getEvent();
 
         $builder
