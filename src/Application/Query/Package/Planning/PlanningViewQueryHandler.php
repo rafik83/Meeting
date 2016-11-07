@@ -27,13 +27,20 @@ class PlanningViewQueryHandler
     private $orderMerger;
 
     /**
-     * @param CartManager $cartManager
-     * @param Merger      $orderMerger
+     * @var \DateTimeInterface
      */
-    public function __construct(CartManager $cartManager, Merger $orderMerger)
+    private $datetime;
+
+    /**
+     * @param CartManager        $cartManager
+     * @param Merger             $orderMerger
+     * @param \DateTimeInterface $datetime
+     */
+    public function __construct(CartManager $cartManager, Merger $orderMerger, \DateTimeInterface $datetime)
     {
         $this->cartManager = $cartManager;
         $this->orderMerger = $orderMerger;
+        $this->datetime    = $datetime;
     }
 
     /**
@@ -46,12 +53,14 @@ class PlanningViewQueryHandler
         $cart            = $this->cartManager->getCart($planningViewQuery->sheet);
         $locale          = $planningViewQuery->locale;
         $planningProduct = $planningViewQuery->sheet->getPackage()->getPlanning();
-        $selectedPlan    = ($cart->getPlanRow() !== null) ? $cart->getPlanRow()->getProduct() : null;
         $included        = 0;
+        $selectedPlan    = null;
 
         if ($planningViewQuery->sheet->hasOrders()) {
             $order        = $this->orderMerger->merge($planningViewQuery->sheet->getOrders());
             $selectedPlan = $order->getPlan();
+        } else {
+            $selectedPlan = $cart->getPlanRow() !== null ? $cart->getPlanRow()->getProduct() : null;
         }
 
         if ($selectedPlan) {
@@ -78,7 +87,7 @@ class PlanningViewQueryHandler
             $planningProduct->getSubjectedToValidationHelp($planningViewQuery->locale),
             $planningProduct->isSubjectedToValidation(),
             $included,
-            $planningProduct->isBuyable(new \DateTime())
+            $planningProduct->isBuyable($this->datetime)
         );
     }
 }

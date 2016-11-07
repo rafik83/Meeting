@@ -1705,6 +1705,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlanningViewQuery }
     query.package.participant_view_query_handler:
