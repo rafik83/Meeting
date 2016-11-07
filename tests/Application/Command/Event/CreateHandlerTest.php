@@ -42,7 +42,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $dateTime
         );
 
-        $uploadedFile = new UploadedFile('gulpfile.js', 'gulpfile');
+        // We need a 'real' file to test the upload and getExtension method
+        $uploadedFile = new UploadedFile(__FILE__, basename(__FILE__, '.php'));
 
         // Update command
         $create                = new Create($user);
@@ -103,7 +104,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         }))->shouldBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload($uploadedFile)->shouldBeCalled()->willReturn('toto.jpg');
-        $fileStorage->getExtension($uploadedFile )->shouldBeCalled()->willReturn('jpg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('jpg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -136,7 +139,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $dateTime
         );
 
-        $uploadedFile = new UploadedFile('gulpfile.js', 'gulpfile');
+        // We need a 'real' file to test the upload and getExtension method
+        $uploadedFile = new UploadedFile(__FILE__, basename(__FILE__, '.php'));
 
         // Update command
         $create             = new Create($user);
@@ -203,7 +207,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload($uploadedFile)->shouldBeCalled()->willReturn('toto.jpg');
-        $fileStorage->getExtension($uploadedFile)->shouldBeCalled()->willReturn('jpg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('jpg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -237,6 +243,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'ROLE_SUPER_ADMIN',
             $dateTime
         );
+        // We need a 'real' file to test the upload and getExtension method
+        $uploadedFile = new UploadedFile(__FILE__, basename(__FILE__, '.php'));
 
         // Update command
         $create                = new Create($user);
@@ -247,7 +255,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->leftColor     = '#FFFFFF';
         $create->rightColor    = '#000000';
         $create->textColor     = '#CCCCCC';
-        $create->logo          = 'shouldBeUploadFile';
+        $create->logo          = $uploadedFile;
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
@@ -294,8 +302,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled()->willReturn('toto.jpg');
-        $fileStorage->getExtension('shouldBeUploadFile')->shouldNotBeCalled()->willReturn('jpg');
+        $fileStorage->upload($uploadedFile)->shouldNotBeCalled()->willReturn('toto.jpg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldNotBeCalled()->willReturn('jpg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {

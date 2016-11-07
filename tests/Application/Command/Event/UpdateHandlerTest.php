@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
@@ -47,7 +48,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
         $event->setLogo('here.jpg', 'jpg');
 
-        $uploadedFile = new UploadedFile('gulpfile.js', 'gulpfile');
+        // We need a 'real' file to test the upload and getExtension method
+        $uploadedFile = new UploadedFile(__FILE__, basename(__FILE__, '.php'));
 
         // Update command
         $update               = new Update($event);
@@ -99,7 +101,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->remove('here.jpg')->shouldBeCalled();
         $fileStorage->upload($uploadedFile)->shouldBeCalled()->willReturn('toto.jpg');
-        $fileStorage->getExtension($uploadedFile)->shouldBeCalled()->willReturn('jpg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('jpg');
+
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
         // Handle
