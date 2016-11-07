@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
-use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 /**
@@ -159,7 +158,6 @@ class Sheet implements TraceableInterface
             self::STATE_ACCEPTED,
             self::STATE_PENDING,
             self::STATE_VALIDATED,
-            self::STATE_VALIDATION_PENDING
         ];
     }
 
