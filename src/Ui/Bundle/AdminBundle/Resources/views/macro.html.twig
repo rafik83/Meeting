@@ -62,13 +62,7 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu {{ dropdown_menu_right ? 'dropdown-menu-right' : '' }}" aria-labelledby="{{ choice.vars.id }}-dropdown">
-            {% set selectedValue = null %}
-
-            {% if app.request.query.get(choice.vars.id) != null %}
-                {% set selectedValue = app.request.query.get(choice.vars.id)  %}
-            {% elseif choice.vars.value != null %}
-                {% set selectedValue = choice.vars.value %}
-            {% endif %}
+            {% set selectedValue = choice.vars.value %}
 
             {% if selectedValue != null %}
                 <li>

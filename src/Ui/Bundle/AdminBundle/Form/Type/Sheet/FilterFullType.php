@@ -85,7 +85,6 @@ class FilterFullType extends AbstractType
         return 'sheet_filter';
     }
 
-
     /**
      * @return array
      */
