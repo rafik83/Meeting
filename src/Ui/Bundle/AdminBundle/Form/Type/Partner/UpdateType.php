@@ -35,7 +35,7 @@ class UpdateType extends PartnerType
             ])
             ->add('types', TypeChoiceType::class, [
                 'multiple' => true,
-                'choices'  => $this->buildChoices($options['events'], $options['user'], $options['locale']),
+                'choices'  => $this->buildChoices($options['events'], $options['locale']),
             ]);
     }
 

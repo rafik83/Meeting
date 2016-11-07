@@ -32,9 +32,9 @@ class JsonArrayTextareaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'invalid_message' => 'validators.json.invalid',
-        ));
+        ]);
     }
 
     /**
