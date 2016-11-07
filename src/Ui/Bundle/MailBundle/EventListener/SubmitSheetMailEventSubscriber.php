@@ -83,7 +83,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetSubmittedValidation(SheetSubmittedEvent $event)
     {
-        $admins    = [];
+        $admins   = [];
         $follower = $event->getSheet()->getFollower();
         $locale   = $event->getSheet()->getEvent()->getFallback();
 
