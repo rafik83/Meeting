@@ -153,14 +153,6 @@ class MeetingRequestController extends Controller
         ) {
             throw $this->createNotFoundException('You can not request a meeting as there is already one');
         }
-
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToCreate(
-            $this->getUser(),
-            $from,
-            $sheet
-        )) {
-            throw $this->createNotFoundException('The viewer is not allowed to create a meeting request with this sheet');
-        }
     }
 
     /**
