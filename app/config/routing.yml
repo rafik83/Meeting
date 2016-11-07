@@ -11,6 +11,22 @@ default_event:
     path: /
     methods: [GET]
 
+vimeet_event:
+    resource: '@EventBundle/Resources/config/routing.yml'
+    prefix:   /{_locale}
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
+payum_capture:
+    resource: "@PayumBundle/Resources/config/routing/capture.xml"
+
+payum_notify:
+    resource: "@PayumBundle/Resources/config/routing/notify.xml"
+
+payum_authorize:
+    resource: "@PayumBundle/Resources/config/routing/authorize.xml"
+
 #
 # Admin redirect
 #
@@ -40,19 +56,3 @@ vimeet_admin:
     defaults:
         _locale: '%locale%'
     host:     '%domain%'
-
-vimeet_event:
-    resource: '@EventBundle/Resources/config/routing.yml'
-    prefix:   /{_locale}
-
-_liip_imagine:
-    resource: "@LiipImagineBundle/Resources/config/routing.xml"
-
-payum_capture:
-    resource: "@PayumBundle/Resources/config/routing/capture.xml"
-
-payum_notify:
-    resource: "@PayumBundle/Resources/config/routing/notify.xml"
-
-payum_authorize:
-    resource: "@PayumBundle/Resources/config/routing/authorize.xml"
