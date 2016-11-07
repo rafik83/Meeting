@@ -76,6 +76,6 @@
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endif %}
 
-{% if sheetValidationView is not empty %}
+{% if sheetValidationView is defined and sheetValidationView is not empty %}
     {{ include('EventBundle:Sheet:modalSheetValidation.html.twig', {'view': sheetValidationView }) }}
 {% endif %}
