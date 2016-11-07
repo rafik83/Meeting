@@ -1,0 +1,89 @@
+<div class="header">
+    {% if menuHeader.event is defined %}
+        {% if menuHeader.event.logo != null %}
+            <a href="{{ path('event') }}">
+                <img src="{{ menuHeader.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+            </a>
+        {% endif %}
+        <div class="header__info">
+            <div>{{ menuHeader.event.description(app.request.locale)|nl2br }}</div>
+        </div>
+    {% endif %}
+
+    <ul class="header__navigation">
+        {% if is_granted('ROLE_USER') %}
+            <li class="notifs">
+                <a href="{{ path('event_notification_list') }}">
+                    <i class="icon-Retard"></i>
+                    <span class="name">{{ 'navigation.links.notification'|trans }}</span>
+                    {% if menuHeader.hasNotifications %}
+                        <span class="notif">1</span>
+                    {% endif %}
+                </a>
+            </li>
+        {% endif %}
+
+        {% if menuHeader.event is defined %}
+            {% for locale, path in menuHeader.localeRoutes %}
+                <li><a href="{{ path }}">{{ locale }}</a></li>
+            {% endfor %}
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+            <li>
+                <a href="{{ path('event_logout_confirmation') }}" title="{{ 'logout.link'|trans }}">
+                    <i class="icon-Disconnect"></i>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ path('event_login') }}" title="{{ 'login.link'|trans }}">
+                    <i class="icon-Disconnect"></i>
+                </a>
+            </li>
+        {% endif %}
+
+        <li>
+            <a href="#event-contact-modal" data-toggle="modal" data-target="#event-contact-modal">
+                <i class="icon-Appeler"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="modal fade" id="event-contact-modal" tabindex="-4" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="icon-Appeler"></i> {{ 'event.info.contact'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><strong class="highlight">{{ menuHeader.event.organiserName }}</strong></li>
+                    {% if menuHeader.event.configuration.contactFirstName or menuHeader.event.configuration.contactLastName %}
+                        <li>{{ menuHeader.event.configuration.contactFirstName|default('')|capitalize }} {{ event.configuration.contactLastName|default('')|upper }}</li>
+                    {% endif %}
+                    {% if menuHeader.event.configuration.organiserPhone %}
+                        <li><i class="icon-Appeler"></i> {{ menuHeader.event.configuration.organiserPhone }}</li>
+                    {% endif %}
+                    {% if menuHeader.event.organiserEmail %}
+                        <li><i class="icon-Message_1"></i>
+                            <a href="mailto:{{ menuHeader.event.organiserEmail }}">{{ menuHeader.event.organiserEmail }}</a>
+                        </li>
+                    {% endif %}
+                    {% if menuHeader.event.configuration.organiserWebsite %}
+                        <li>
+                            <a href="{{ menuHeader.event.configuration.organiserWebsite }}" target="_blank" rel="external">
+                                {{ menuHeader.event.configuration.organiserWebsite }}
+                            </a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+                    <i class="icon-Retour"></i>{{ 'event.info.close'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

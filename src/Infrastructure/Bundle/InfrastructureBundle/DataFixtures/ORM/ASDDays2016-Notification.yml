@@ -1,0 +1,5 @@
+Proximum\Vimeet\Domain\Model\Notification:
+    asddays_sheet_translation_completeness:
+        __construct:
+            - '@sheet_asddays_1'
+            - 'sheetTranslationCompleteness'

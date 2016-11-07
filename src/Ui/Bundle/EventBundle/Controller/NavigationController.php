@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,6 +34,25 @@ class NavigationController extends Controller
 
         return $this->render('EventBundle::Navigation/dropdownMenu.html.twig', [
             'menuView' => $menuView,
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function menuHeaderAction(Request $request, EventDomain $eventDomain)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
+            new MenuHeaderViewQuery($eventDomain->getEvent(), $this->getUser(), $request->getLocale())
+        );
+
+        return $this->render('EventBundle::Navigation/headerMenu.html.twig', [
+            'menuHeader' => $menuHeaderView,
         ]);
     }
 }
