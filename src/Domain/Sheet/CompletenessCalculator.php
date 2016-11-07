@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Repository\Sheet\SheetCompletenessRepositoryInterface
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\BooleanObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -141,6 +142,7 @@ class CompletenessCalculator
     ) {
         $countCompleted = 0;
         $countTotal     = 0;
+
         foreach ($templateData->getProfileObjects() as $object) {
             if ($object->isEditable() && true === $object->getRequired()) {
                 $countTotal++;
@@ -149,7 +151,10 @@ class CompletenessCalculator
                 foreach ($participants as $participant) {
                     $data = $participant->getData();
 
-                    if (!empty($data[$object->getKey()])) {
+                    // necessary when data is equal to false (!empty(false) = false)
+                    if ($object instanceof BooleanObject && $data[$object->getKey()] !== null) {
+                        $countCompleted++;
+                    } elseif (!empty($data[$object->getKey()])) {
                         $countCompleted++;
                     }
                 }
@@ -158,7 +163,7 @@ class CompletenessCalculator
         }
 
         foreach ($locales as $locale) {
-            $total[$locale] += $countTotal * count($participants);
+            $total[$locale]     += $countTotal * count($participants);
             $completed[$locale] += $countCompleted;
         }
     }
@@ -181,14 +186,17 @@ class CompletenessCalculator
             if ($object->isEditable() && true === $object->getRequired()) {
                 $countTotal++;
 
-                if (!empty($object->getContentValue())) {
+                // necessary when data is equal to false (!empty(false) = false)
+                if ($object instanceof BooleanObject && $object->getContentValue() !== null) {
+                    $countCompleted++;
+                } elseif (!empty($object->getContentValue())) {
                     $countCompleted++;
                 }
             }
         }
 
         foreach ($locales as $locale) {
-            $total[$locale] += $countTotal;
+            $total[$locale]     += $countTotal;
             $completed[$locale] += $countCompleted;
         }
     }
@@ -213,7 +221,10 @@ class CompletenessCalculator
                             $total[$locale]++;
                             $data = $object->getContentValueLocalize($locale);
 
-                            if (!empty($data)) {
+                            // necessary when data is equal to false (!empty(false) = false)
+                            if ($object instanceof BooleanObject && $data !== null) {
+                                $completed[$locale]++;
+                            } elseif (!empty($data)) {
                                 $completed[$locale]++;
                             }
                         }
