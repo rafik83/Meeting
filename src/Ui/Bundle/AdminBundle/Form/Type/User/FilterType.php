@@ -21,8 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FilterType extends AbstractType
 {
-    const FILTER_NAME          = 'name';
-    const FILTER_EMAIL         = 'email';
     const FILTER_WITH_SHEET    = 'withSheet';
     const FILTER_WITHOUT_SHEET = 'withoutSheet';
 
@@ -51,14 +49,7 @@ class FilterType extends AbstractType
                     'admin.users.withoutSheet' => self::FILTER_WITHOUT_SHEET,
                 ],
             ])
-            ->add('predefined', ChoiceType::class, [
-                'label'       => 'form.filter.label',
-                'placeholder' => '',
-                'choices'     => [
-                    'admin.users.lastName' => self::FILTER_NAME,
-                    'admin.users.email'    => self::FILTER_EMAIL,
-                ],
-            ]);
+        ;
     }
 
     /**

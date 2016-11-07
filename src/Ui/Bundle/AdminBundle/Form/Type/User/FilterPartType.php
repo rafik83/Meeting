@@ -28,7 +28,6 @@ class FilterPartType extends AbstractType
                 'placeholder' => 'form.user_filter.children.text_search.label',
                 'required'    => false,
             ])
-            ->add('predefined', HiddenType::class)
         ;
     }
 

@@ -189,21 +189,10 @@ class UserRepository implements UserRepositoryInterface
         }
 
         if (!empty($filter['text'])) {
-            switch ($filter['predefined']) {
-                case FilterType::FILTER_NAME:
-                    $queryBuilder->andWhere('LOWER(user.account.lastName) LIKE LOWER(:filter_text) OR LOWER(user.account.firstName) LIKE LOWER(:filter_text)');
-                    break;
-                case FilterType::FILTER_EMAIL:
-                    $queryBuilder->andWhere('LOWER(user.email) LIKE LOWER(:filter_text)');
-                    break;
-                default:
-                    $queryBuilder
-                        ->andWhere('LOWER(user.account.lastName) LIKE LOWER(:filter_text) OR LOWER(user.account.firstName) LIKE LOWER(:filter_text)')
-                        ->orWhere('LOWER(user.email) LIKE LOWER(:filter_text)');
-                    break;
-            }
-
-            $queryBuilder->setParameter('filter_text', '%' . $filter['text'] . '%');
+            $queryBuilder
+                ->andWhere('LOWER(user.account.lastName) LIKE LOWER(:filter_text) OR LOWER(user.account.firstName) LIKE LOWER(:filter_text)')
+                ->orWhere('LOWER(user.email) LIKE LOWER(:filter_text)')
+                ->setParameter('filter_text', '%' . $filter['text'] . '%');
         }
     }
 }
