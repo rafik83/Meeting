@@ -54,7 +54,7 @@ class NotificationView
      * NotificationView constructor.
      *
      * @param DateTimeInterface $createdAt
-     * @param                   $icon
+     * @param string            $icon
      * @param string            $category
      * @param string            $description
      * @param string            $link
