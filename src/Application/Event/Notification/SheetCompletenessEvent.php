@@ -48,6 +48,8 @@ class SheetCompletenessEvent extends Event
     }
 
     /**
+     * Return an array of locale => bool
+     *
      * @return array
      */
     public function getNotificationCompleteness()
