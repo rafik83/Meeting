@@ -53,22 +53,22 @@ class MenuHeaderViewQueryHandler
      * @param MenuHeaderViewQuery $query
      *
      * @return MenuHeaderView
+     * @throws \Exception
      */
     public function handle(MenuHeaderViewQuery $query)
     {
         $routes          = [];
         $hasNotification = false;
 
-        $sheet = $this->sheetGuesser->getUserSheet($query->user, $query->event, $query->locale);
-
-        if ($sheet !== null) {
-            $hasNotification = $this->notificationRepository->sheetHasNotification($sheet);
-        }
-
         foreach ($query->event->getLocales() as $locale) {
             if ($locale !== $query->locale) {
                 $routes[$locale] = $this->router->generate('event_sheet_locale', ['locale' => $locale]);
             }
+        }
+
+        if ($query->user !== null) {
+            $sheet           = $this->sheetGuesser->getUserSheet($query->user, $query->event, $query->locale);
+            $hasNotification = $this->notificationRepository->sheetHasNotification($sheet);
         }
 
         return new MenuHeaderView($query->event, $routes, $hasNotification);

@@ -45,10 +45,8 @@ class NavigationController extends Controller
      */
     public function menuHeaderAction(Request $request, EventDomain $eventDomain)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
-            new MenuHeaderViewQuery($eventDomain->getEvent(), $this->getUser(), $request->getLocale())
+            new MenuHeaderViewQuery($eventDomain->getEvent(), $request->getLocale(), $this->getUser())
         );
 
         return $this->render('EventBundle::Navigation/headerMenu.html.twig', [

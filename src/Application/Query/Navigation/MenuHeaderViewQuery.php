@@ -21,7 +21,7 @@ class MenuHeaderViewQuery
     public $event;
 
     /**
-     * @var User
+     * @var User|null
      */
     public $user;
 
@@ -33,11 +33,11 @@ class MenuHeaderViewQuery
     /**
      * MenuHeaderViewQuery constructor.
      *
-     * @param Event  $event
-     * @param User   $user
-     * @param string $locale
+     * @param Event     $event
+     * @param User|null $user
+     * @param string    $locale
      */
-    public function __construct(Event $event, User $user, $locale)
+    public function __construct(Event $event, $locale, User $user = null)
     {
         $this->event  = $event;
         $this->user   = $user;
