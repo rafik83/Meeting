@@ -25,6 +25,8 @@ Proximum\Vimeet\Domain\Model\Order:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             inversedBy: orders
+            joinColumn:
+                onDelete: CASCADE
     oneToMany:
         rows:
             targetEntity: Proximum\Vimeet\Domain\Model\Order\Row

@@ -17,3 +17,5 @@ Proximum\Vimeet\Domain\Model\ChangeMailToken:
     oneToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE

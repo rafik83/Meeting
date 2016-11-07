@@ -21,6 +21,8 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
     oneToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type

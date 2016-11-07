@@ -10,19 +10,13 @@ Proximum\Vimeet\Domain\Model\UserEvent:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
-                onDelete: "cascade"
-                name: user_id
-                referencedColumnName: id
+                onDelete: CASCADE
             cascade: ["persist"]
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
-                onDelete: "cascade"
-                name: event_id
-                referencedColumnName: id
+                onDelete: CASCADE
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
             joinColumn:
-                onDelete: "cascade"
-                name: type_id
-                referencedColumnName: id
+                onDelete: CASCADE

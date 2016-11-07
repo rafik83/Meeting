@@ -16,3 +16,5 @@ Proximum\Vimeet\Domain\Model\MeetingSlot:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE

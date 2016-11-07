@@ -30,6 +30,14 @@ class DomainEventListener
     private $eventRepository;
 
     /**
+     * @var array
+     */
+    private $ignoredRoutes = [
+        'liip_imagine_filter_runtime',
+        'liip_imagine_filter',
+    ];
+
+    /**
      * @param RouterInterface          $router
      * @param EventRepositoryInterface $eventRepository
      */
@@ -51,7 +59,13 @@ class DomainEventListener
         }
 
         $request = $getResponseEvent->getRequest();
-        $event   = $this->eventRepository->getEventByDomain($request->getHost());
+        $route   = $request->attributes->get('_route');
+
+        if (in_array($route, $this->ignoredRoutes)) {
+            return;
+        }
+
+        $event = $this->eventRepository->getEventByDomain($request->getHost());
 
         if (!$event) {
             return;
@@ -59,8 +73,6 @@ class DomainEventListener
 
         // If the locale is not in event locales, redirect to the fallback locale
         if (!$event->hasLocale($request->getLocale())) {
-            $route = $request->attributes->get('_route');
-
             if ($route === 'default_event') {
                 $route = 'event';
             }
@@ -71,7 +83,7 @@ class DomainEventListener
         }
 
         // If no locale in the url, redirect to the fallback locale
-        if ($request->attributes->get('_route') === 'default_event') {
+        if ($route === 'default_event') {
             $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, 'event'));
 
             return;

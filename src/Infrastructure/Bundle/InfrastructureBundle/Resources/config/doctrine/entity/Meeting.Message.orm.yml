@@ -14,7 +14,13 @@ Proximum\Vimeet\Domain\Model\Meeting\Message:
     manyToOne:
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
+            joinColumn:
+                onDelete: CASCADE
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
+            joinColumn:
+                onDelete: CASCADE

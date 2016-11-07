@@ -36,12 +36,20 @@ Proximum\Vimeet\Domain\Model\Sheet:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
         owner:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: SET NULL
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinColumn:
+                onDelete: SET NULL
         follower:
             targetEntity: Proximum\Vimeet\Domain\Model\Admin
+            joinColumn:
+                onDelete: SET NULL
         spot:
             targetEntity: Proximum\Vimeet\Domain\Model\Spot
             inversedBy: sheets
