@@ -13,5 +13,5 @@ Proximum\Vimeet\Domain\Model\Notification:
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
-           joinColumn:
+            joinColumn:
                 onDelete: CASCADE
