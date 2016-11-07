@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +45,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
-        $event->setLogo('here.jpg');
+        $event->setLogo('here.jpg', 'jpg');
+
+        $uploadedFile = new UploadedFile('gulpfile.js', 'gulpfile');
 
         // Update command
         $update               = new Update($event);
@@ -63,7 +66,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->leftColor     = '#FFFFFF';
         $update->rightColor    = '#000000';
         $update->textColor     = '#CCCCCC';
-        $update->logo          = 'shouldBeUploadFile';
+        $update->logo          = $uploadedFile;
         $update->domain        = 'hello.vimeet.proximum.dev';
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
@@ -85,7 +88,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
-        $expectedEvent->setLogo('toto.jpg');
+        $expectedEvent->setLogo('toto.jpg', 'jpg');
 
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
@@ -95,7 +98,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $guidelineGenerator->generate($event)->shouldBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->remove('here.jpg')->shouldBeCalled();
-        $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
+        $fileStorage->upload($uploadedFile)->shouldBeCalled()->willReturn('toto.jpg');
+        $fileStorage->getExtension($uploadedFile)->shouldBeCalled()->willReturn('jpg');
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
         // Handle
@@ -291,7 +295,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
-        $event->setLogo('here.jpg');
+        $event->setLogo('here.jpg', 'jpg');
 
         // Update command
         $update               = new Update($event);
@@ -332,7 +336,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
-        $expectedEvent->setLogo('toto.jpg');
+        $expectedEvent->setLogo('toto.jpg', 'jpg');
 
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
@@ -343,6 +347,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->remove('here.jpg')->shouldNotBeCalled();
         $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled();
+
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
 
