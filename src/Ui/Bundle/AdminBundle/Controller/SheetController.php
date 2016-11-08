@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
@@ -73,6 +74,7 @@ class SheetController extends Controller
         // Pagination
         try {
             $query  = new PaginatedSheetListViewQuery($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
             throw $this->createNotFoundException($ex->getMessage());

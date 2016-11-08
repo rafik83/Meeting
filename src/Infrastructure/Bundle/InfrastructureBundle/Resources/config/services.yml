@@ -80,7 +80,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.spot_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\SpotRepository
         arguments:
@@ -1854,6 +1853,12 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery }
+    query.catalog.localization_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery }
     query.catalog.position_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\PositionViewQueryHandler
         arguments:

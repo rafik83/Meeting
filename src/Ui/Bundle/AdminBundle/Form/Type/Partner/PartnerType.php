@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner;
 
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -32,12 +31,12 @@ abstract class PartnerType extends AbstractType
     }
 
     /**
-     * @param array $events
-     * @param Admin $admin
+     * @param array  $events
+     * @param string $locale
      *
      * @return array
      */
-    public function buildChoices(array $events, Admin $admin, $locale)
+    public function buildChoices(array $events, $locale)
     {
         $choices = [];
 

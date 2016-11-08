@@ -23,7 +23,7 @@ class CreateType extends PartnerType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choices = $this->buildChoices($options['events'], $options['user'], $options['locale']);
+        $choices = $this->buildChoices($options['events'], $options['locale']);
 
         $builder
             ->add('email', EmailType::class, [

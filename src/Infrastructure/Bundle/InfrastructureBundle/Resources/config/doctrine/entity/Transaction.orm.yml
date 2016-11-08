@@ -23,5 +23,9 @@ Proximum\Vimeet\Domain\Model\Transaction:
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: SET NULL

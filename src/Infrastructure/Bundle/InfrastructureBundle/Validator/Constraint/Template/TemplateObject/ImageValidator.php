@@ -40,7 +40,7 @@ class ImageValidator extends TemplateObjectValidator
     {
         if ($value instanceof TemplateObject\Image) {
             $this->checkRequired($value, $constraint);
-            $this->checkHasPayableOption($value, $constraint);
+            $this->checkHasPayableOption($value);
         }
     }
 
@@ -63,9 +63,8 @@ class ImageValidator extends TemplateObjectValidator
 
     /**
      * @param TemplateObject $object
-     * @param Constraint     $constraint
      */
-    protected function checkHasPayableOption(TemplateObject $object, Constraint $constraint)
+    protected function checkHasPayableOption(TemplateObject $object)
     {
          if ($this->templateProductGuesser->hasPayableOption($object)) {
             $this->context

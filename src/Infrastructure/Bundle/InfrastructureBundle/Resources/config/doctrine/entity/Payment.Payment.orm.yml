@@ -9,3 +9,5 @@ Proximum\Vimeet\Domain\Model\Payment\Payment:
     oneToOne:
         transaction:
             targetEntity: Proximum\Vimeet\Domain\Model\Transaction
+            joinColumn:
+                onDelete: SET NULL

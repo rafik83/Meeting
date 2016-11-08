@@ -23,3 +23,6 @@ Proximum\Vimeet\Domain\Model\Category:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+
