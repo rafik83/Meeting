@@ -13,5 +13,9 @@ Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             inversedBy: productIncluded
+            joinColumn:
+                onDelete: CASCADE
         included:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: CASCADE

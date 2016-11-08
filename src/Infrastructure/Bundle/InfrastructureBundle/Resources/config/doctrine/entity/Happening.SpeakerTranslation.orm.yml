@@ -15,3 +15,5 @@ Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation:
         speaker:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Speaker
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

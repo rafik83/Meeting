@@ -14,10 +14,16 @@ Proximum\Vimeet\Domain\Model\Meeting:
     manyToOne:
         slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+            joinColumn:
+                nullable: false
         fromSheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
         toSheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

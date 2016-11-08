@@ -15,3 +15,5 @@ Proximum\Vimeet\Domain\Model\CategoryTranslation:
         category:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
             inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

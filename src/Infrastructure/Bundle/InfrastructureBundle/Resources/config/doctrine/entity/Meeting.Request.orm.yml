@@ -16,12 +16,20 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
     manyToOne:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
+            joinColumn:
+                onDelete: SET NULL
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
         to:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
         creator:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

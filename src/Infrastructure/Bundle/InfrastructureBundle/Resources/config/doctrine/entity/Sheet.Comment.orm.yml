@@ -14,5 +14,9 @@ Proximum\Vimeet\Domain\Model\Sheet\Comment:
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
         author:
             targetEntity: Proximum\Vimeet\Domain\Model\Admin
+            joinColumn:
+                onDelete: CASCADE

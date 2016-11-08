@@ -14,5 +14,9 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            joinColumn:
+                onDelete: CASCADE
         participant:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinColumn:
+                onDelete: CASCADE

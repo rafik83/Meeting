@@ -1,23 +1,2 @@
-default:
-
-    extensions:
-        Behat\Symfony2Extension:
-            kernel:
-               env:   test
-        Behat\MinkExtension:
-            base_url:  'http://vimeet.proximum.dev/app_test.php'
-            sessions:
-                default:
-                    symfony2: ~
-                javascript:
-                    selenium2: ~
-            files_path: %paths.base%/features/files
-        Fidry\AliceBundleExtension\Extension:
-            fixtures_base_path: ~
-
-    suites:
-        default:
-            contexts:
-                - Fidry\AliceBundleExtension\Context\Doctrine\AliceORMContext:
-                    basePath: %paths.base%/features/fixtures
-                - FeatureContext: ~
+imports:
+    - src/Behat/Resources/config/default.yml

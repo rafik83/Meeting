@@ -19,5 +19,9 @@ Proximum\Vimeet\Domain\Model\Trace:
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: SET NULL
         admin:
             targetEntity: Proximum\Vimeet\Domain\Model\Admin
+            joinColumn:
+                onDelete: SET NULL
