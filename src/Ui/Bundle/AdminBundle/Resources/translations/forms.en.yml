@@ -10,6 +10,7 @@ form.admin_activate_account_password.children.password.children.second.label: 'C
 form.admin_activate_account_password.children.submit.label: Submit
 form.admin_lib_add.children.submit.label: Add
 form.admin_lib_choice.children.choices.label_add: 'Add item'
+form.admin_lib_choice.children.choices.label_delete: 'Delete item'
 form.admin_lib.children.submit.label: Save
 form.billing_info_update.children.city.label: City
 form.billing_info_update.children.company.label: Company
@@ -102,9 +103,11 @@ form.filter_admin.children.submit.label: Filter
 form.generate_slot.children.submit.label: Save
 form.happening_create.children.talkings.label: Speakers
 form.happening_create.children.talkings.label_add: Add
+form.happening_create.children.talkings.label_delete: Delete
 form.happening_create.children.talkings.prototype.children.speaker.label: Speaker
 form.happening_update.children.talkings.label: Speakers
 form.happening_update.children.talkings.label_add: Add
+form.happening_update.children.talkings.label_delete: Delete
 form.happening_update.children.talkings.prototype.children.speaker.label: Speaker
 form.login.children.password.label: Password
 form.login.children.rememberMe.label: 'Remember me 30 days'
@@ -146,19 +149,25 @@ form.product_create_option.children.submit.label: Save
 form.product_create_participant.children.submit.label: Save
 form.product_create_plan.children.availabilityCurrent.label: 'Current stock'
 form.product_create_plan.children.features.label_add: 'Add included benefit'
+form.product_create_plan.children.features.label_delete: 'Delete option'
 form.product_create_plan.children.productIncluded.label_add: 'Add a product included in this formula'
+form.product_create_plan.children.productIncluded.label_delete: 'Delete option from formula'
 form.product_create_plan.children.submit.label: Save
 form.product_create_planning.children.submit.label: save
 form.product_update_option.children.submit.label: Save
 form.product_update_participant.children.submit.label: Save
 form.product_update_plan.children.features.label_add: 'Add included benefit'
+form.product_update_plan.children.features.label_delete: 'Delete option'
 form.product_update_plan.children.productIncluded.label_add: 'Add a product included in this formula'
+form.product_update_plan.children.productIncluded.label_delete: 'Delete option from formula'
 form.product_update_plan.children.submit.label: Save
 form.product_update_planning.children.submit.label: Save
 form.promotion_code_create.children.promotions.label_add: Add
+form.promotion_code_create.children.promotions.label_delete: Delete
 form.promotion_code_create.children.submit.label: Save
 form.promotion_code_translation.children.label.label: Title
 form.promotion_code_update.children.promotions.label_add: Add
+form.promotion_code_update.children.promotions.label_delete: Delete
 form.promotion_code_update.children.submit.label: Save
 form.register.children.email.label: Email
 form.register.children.password.children.first.label: Password
@@ -174,8 +183,10 @@ form.sheet_template_add_locale.children.submit.label: Add
 form.sheet_template_create.children.submit.label: Save
 form.sheet_template_duplicate.children.submit.label: Save
 form.sheet_template_preview.children.previewObjects.label_add: Add
+form.sheet_template_preview.children.previewObjects.label_delete: 'Delete item'
 form.sheet_template_update.children.submit.label: Save
 form.spot_batch_create.children.recipes.label_add: Add
+form.spot_batch_create.children.recipes.label_delete: Delete
 form.spot_batch_create.children.submit.label: Save
 form.spot_create.children.submit.label: Save
 form.template_registration_update.children.submit.label: Save
@@ -187,6 +198,7 @@ form.transaction.children.transaction_mode.bank_transfer: Transfer
 form.transaction.children.transaction_mode.paypal: Paypal
 form.type_create.children.submit.label: Save
 form.type_template_field_update_lib_choice.children.choices.label_add: Add
+form.type_template_field_update_lib_choice.children.choices.label_delete: Delete
 form.type_template_field_update_lib_choice.children.submit.label: Save
 form.type_template_field_update.children.submit.label: Save
 form.type_update.children.submit.label: Save

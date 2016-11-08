@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -33,9 +35,9 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2        = new User('test2@test.fr', 'test', 'test', 'fr');
         $user3        = new User('test3@test.fr', 'test', 'test', 'fr');
         $user4        = new User('test4@test.fr', 'test', 'test', 'fr');
-        $sheetTo      = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom    = new Sheet($event, $type, [], $user3, new \DateTime());
-        $dateTime     = new DateTime;
+        $dateTime     = new DateTime();
+        $sheetTo      = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom    = new Sheet($event, $type, [], $user3, $dateTime);
         $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3);
         $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4);
 
@@ -52,7 +54,7 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1);
         $expectedRequest->approve($dateTime);
 
-        $approveRequest = new ApproveRequest($request);
+        $approveRequest = new ApproveRequest($user3, $request, $sheetTo);
         $approveRequest->participants = [$toParticipant3, $toParticipant4];
         $approveRequest->description = 'content';
 
@@ -63,7 +65,67 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($message)->shouldBeCalled();
 
-        $handler = new ApproveRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $dateTime);
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+
+        $handler = new ApproveRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $dateTime
+        );
+        $handler->handle($approveRequest);
+    }
+
+    public function testHandleException()
+    {
+        $this->expectException(IsNotAllowedToApproveMeetingRequestException::class);
+
+        $event        = EventFactory::createEvent();
+        $type         = new Type($event);
+        $user1        = new User('test@test.fr', 'test', 'test', 'fr');
+        $user2        = new User('test2@test.fr', 'test', 'test', 'fr');
+        $user3        = new User('test3@test.fr', 'test', 'test', 'fr');
+        $user4        = new User('test4@test.fr', 'test', 'test', 'fr');
+        $dateTime     = new DateTime();
+        $sheetTo      = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom    = new Sheet($event, $type, [], $user3, $dateTime);
+        $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3);
+        $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4);
+
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1));
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+        $sheetTo->getParticipants()->add($toParticipant3);
+        $sheetTo->getParticipants()->add($toParticipant4);
+
+        $participants   = [];
+        $participants[] = $this->createParticipantMock($sheetTo, $user3, 3);
+        $participants[] = $this->createParticipantMock($sheetTo, $user4, 4);
+
+        $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1);
+        $expectedRequest->approve($dateTime);
+
+        $approveRequest = new ApproveRequest($user3, $request, $sheetTo);
+        $approveRequest->participants = [$toParticipant3, $toParticipant4];
+        $approveRequest->description = 'content';
+
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldNotBeCalled();
+
+        $message = new Message($expectedRequest, $sheetTo, 'content', $dateTime);
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($message)->shouldNotBeCalled();
+
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
+
+        $handler = new ApproveRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $dateTime
+        );
         $handler->handle($approveRequest);
     }
 

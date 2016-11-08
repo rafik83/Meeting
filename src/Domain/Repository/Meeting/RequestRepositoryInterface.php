@@ -29,6 +29,11 @@ interface RequestRepositoryInterface
     public function set(Request $request);
 
     /**
+     * @param Request $request
+     */
+    public function remove(Request $request);
+
+    /**
      * @param Sheet $sheet
      *
      * @return Request[]
