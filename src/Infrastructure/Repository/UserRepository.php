@@ -141,8 +141,7 @@ class UserRepository implements UserRepositoryInterface
                 ->leftJoin(Participant::class, 'participant', 'WITH', 'participant.user = user')
                 ->leftJoin('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
                 ->leftJoin('sheet.type', 'sheetType')
-                ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH',
-                    'sheetTypeTranslations.locale = :locale');
+                ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH', 'sheetTypeTranslations.locale = :locale');
         }
 
         $this->filterQueryBuilder($queryBuilder, $filter);
@@ -170,8 +169,7 @@ class UserRepository implements UserRepositoryInterface
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->join('sheet.type', 'sheetType')
-            ->join('sheetType.translations', 'sheetTypeTranslations', 'WITH',
-                'sheetTypeTranslations.locale = :locale');
+            ->join('sheetType.translations', 'sheetTypeTranslations', 'WITH', 'sheetTypeTranslations.locale = :locale');
     }
 
     /**
@@ -190,8 +188,8 @@ class UserRepository implements UserRepositoryInterface
 
         if (!empty($filter['text'])) {
             $queryBuilder
-                ->andWhere('LOWER(user.account.lastName) LIKE LOWER(:filter_text) OR LOWER(user.account.firstName) LIKE LOWER(:filter_text)')
-                ->orWhere('LOWER(user.email) LIKE LOWER(:filter_text)')
+                ->andWhere('user.account.lastName LIKE :filter_text OR user.account.firstName LIKE :filter_text')
+                ->orWhere('user.email LIKE :filter_text')
                 ->setParameter('filter_text', '%' . $filter['text'] . '%');
         }
     }
