@@ -42,9 +42,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $dateTime
         );
 
-        // We need a 'real' file to test the upload and getExtension method
-        //$uploadedFile = new UploadedFile(__FILE__, basename(__FILE__, '.php'));
-
         // Update command
         $create                = new Create($user);
         $create->title         = 'barfoo';
@@ -145,9 +142,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'ROLE_ORGANIZER',
             $dateTime
         );
-
-        // We need a 'real' file to test the upload and getExtension method
-        //$uploadedFile = new UploadedFile(__FILE__, basename(__FILE__, '.php'));
 
         // Update command
         $create             = new Create($user);
