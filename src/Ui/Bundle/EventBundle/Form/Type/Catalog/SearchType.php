@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,8 +23,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SearchType extends AbstractType
 {
     const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
+    const FILTER_LOCALIZATION          = 'localization';
     const FILTER_POSITION              = 'position';
     const FILTER_TYPE                  = 'type';
+    const FILTER_CONTENT               = 'content';
     const ORDER_BY                     = 'orderBy';
 
     /**
@@ -36,7 +39,7 @@ class SearchType extends AbstractType
         $positionViews             = $options['positionViews'];
 
         $builder
-            ->add('orderBy', ChoiceType::class, [
+            ->add(self::ORDER_BY, ChoiceType::class, [
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
@@ -92,13 +95,19 @@ class SearchType extends AbstractType
             ],
         ]);
 
+        $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
+            'label'    => 'form.search.localization.label',
+            'required' => false
+        ]);
+
+        $builder
+            ->add(self::FILTER_CONTENT, TextType::class, [
+                'label' => 'form.search.content.label',
+            ]);
+
         $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
             'label'   => 'form.search.position.label',
             'choices' => $positionViews,
-        ]);
-
-        $builder->add('content', TextType::class, [
-            'label' => 'form.search.content.label',
         ]);
     }
 

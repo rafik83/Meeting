@@ -83,7 +83,8 @@ class SheetController extends Controller
             $this->getUser(),
             $locale
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'               => $eventDomain->getEvent(),
@@ -94,6 +95,7 @@ class SheetController extends Controller
             'participants'        => $participants,
             'templateData'        => $templateData,
             'sheetValidationView' => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'participantProduct'  => $participantProduct,
         ]);
     }
 
@@ -426,10 +428,15 @@ class SheetController extends Controller
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
 
+        $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
+
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'uid'   => $key,
-            'form'  => $form->createView(),
-            'label' => $label,
+            'uid'                => $key,
+            'form'               => $form->createView(),
+            'sheet'              => $sheet,
+            'label'              => $label,
+            'participantProduct' => $participantProduct,
+            'backRoute'          => 'backToSheet'
         ]);
     }
 
