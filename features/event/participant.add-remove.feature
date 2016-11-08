@@ -25,6 +25,7 @@ Feature: Manage participant
       | add_participant_firstName | Pascal                      |
       | add_participant_lastName  | MICHELIN                    |
       | add_participant_email     | pascal.michelin@example.net |
+    And I should see "Participant supplémentaire"
     Then I press "sheet.participant.sendInvite"
     And the "sheet.participant.add.confirmation" mail should be sent to "user_asddays_1@proximum.com"
     And the "user.account_activated" mail should be sent to "pascal.michelin@example.net"

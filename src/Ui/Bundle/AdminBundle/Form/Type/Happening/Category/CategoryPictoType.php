@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategoryPictoType extends AbstractType
@@ -37,6 +38,6 @@ class CategoryPictoType extends AbstractType
      */
     public function getParent()
     {
-        return \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class;
+        return ChoiceType::class;
     }
 }

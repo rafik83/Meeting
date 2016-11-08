@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
@@ -66,12 +67,12 @@ class Sheet implements TraceableInterface
     private $orders;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $lastLoginAt;
 
@@ -117,7 +118,7 @@ class Sheet implements TraceableInterface
     private $inCatalog = false;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $inCatalogAt;
 
@@ -133,9 +134,9 @@ class Sheet implements TraceableInterface
      * @param Type               $type
      * @param array              $data
      * @param User               $owner
-     * @param \DateTimeInterface $createdAt
+     * @param DateTimeInterface $createdAt
      */
-    public function __construct(Event $event, Type $type, array $data, User $owner, \DateTimeInterface $createdAt)
+    public function __construct(Event $event, Type $type, array $data, User $owner, DateTimeInterface $createdAt)
     {
         $this->event        = $event;
         $this->type         = $type;
@@ -356,7 +357,7 @@ class Sheet implements TraceableInterface
     /**
      * Get createdAt
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -366,11 +367,11 @@ class Sheet implements TraceableInterface
     /**
      * Set lastLoginAt
      *
-     * @param \DateTimeInterface $lastLoginAt
+     * @param DateTimeInterface $lastLoginAt
      *
      * @return Sheet
      */
-    public function setLastLoginAt(\DateTimeInterface $lastLoginAt)
+    public function setLastLoginAt(DateTimeInterface $lastLoginAt)
     {
         $this->lastLoginAt = $lastLoginAt;
 
@@ -380,7 +381,7 @@ class Sheet implements TraceableInterface
     /**
      * Get lastLoginAt
      *
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getLastLoginAt()
     {
@@ -718,7 +719,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getInCatalogAt()
     {
@@ -726,7 +727,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @param \DateTimeInterface $inCatalogAt
+     * @param DateTimeInterface $inCatalogAt
      */
     public function setInCatalogAt($inCatalogAt)
     {
