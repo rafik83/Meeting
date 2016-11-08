@@ -1927,6 +1927,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
         arguments:
             - '@query.notification.sheet_notification_view_query_handler'
+            - '@query.notification.package_notification_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
     query.notification.sheet_notification_view_query_handler:
@@ -1934,8 +1935,16 @@ services:
         arguments:
             - '@query.notification.sheet_complete_translation_view_query_handler'
             - '@repository.sheet.completeness_repository'
+    query.notification.package_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@query.notification.package_no_order_view_query_handler'
     query.notification.sheet_complete_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
+    query.notification.package_no_order_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Package\NoOrderNotificationViewQueryHandler
         parent: 'query.notification.abstract_notification_view_query_handler'
 
     ##
@@ -2056,6 +2065,10 @@ services:
         arguments:
             - '@repository.billing_info_repository'
             - '%infrastructure.eu_countries%'
+    package.orders_checker:
+        class: Proximum\Vimeet\Domain\Package\Orders\OrdersChecker
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
 
     #
     # Cart

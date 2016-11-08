@@ -47,6 +47,7 @@ final class Events
     const SHEET_CATALOG                        = 'sheet.catalog';
     const REGISTRATION_STEP                    = 'user.registration.step';
     const SHEET_UPDATED                        = 'sheet.updated';
+    const PACKAGE_ORDER_UPDATED                = 'package.order.updated';
     const REGISTRATION_TEMPLATE_UPDATED        = 'registration_template.updated';
     const PACKAGE_STEP_DONE                    = 'package.step.done';
     const SHEET_COMPLETENESS                   = 'sheet.completeness';
