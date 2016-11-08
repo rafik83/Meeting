@@ -180,7 +180,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /**
      * @param TemplateData $templateData
      *
-     * @return null|string
+     * @return false|string
      */
     private function getCountryCode(TemplateData $templateData)
     {
@@ -198,7 +198,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $country     = [];
         $countryCode = $this->getCountryCode($templateData);
 
-        if ($countryCode) {
+        if ($countryCode !== false) {
             $regionBundle = Intl::getRegionBundle();
 
             foreach ($locales as $key => $locale) {
