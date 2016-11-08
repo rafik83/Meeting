@@ -4,6 +4,7 @@ var $                     = require('jquery'),
     ChoiceDescription     = require('./components/_ChoiceDescription'),
     ShowPaymentInfo       = require('./components/_ShowPaymentInfo'),
     AjaxForm              = require('./components/_AjaxForm'),
+    AjaxAutocomplete      = require('./components/_AjaxAutocomplete'),
     CheckAllButton        = require('./components/_CheckAllButton'),
     SelectParent          = require('./components/_SelectParent'),
     UploadPreview         = require('./components/_UploadPreview'),
@@ -37,7 +38,7 @@ function init (target) {
             allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
-
+    
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
         var anchor         = window.location.hash.substring(1);
         var anchorElements = target.getElementsByName(anchor);
@@ -54,12 +55,12 @@ function init (target) {
             nationalMode: false
         });
     });
-    
+
     $('.catalog form', target).on('submit', function (event) {
         event.preventDefault();
     });
 
-    $('.catalog form input, .catalog form select', target).on('change', function () {
+    $('.catalog form input, .catalog form select:not([data-disable-auto-submit])', target).on('change', function () {
         var result = new CatalogFilters($(this), $('.catalog form', target), target.querySelector('.catalog'));
 
         if ('checkbox' === $(this).attr('type')) {
@@ -113,6 +114,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-ajax-form]'), function (element) {
         new AjaxForm(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
+        new AjaxAutocomplete(element);
     });
 
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) {
