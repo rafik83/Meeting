@@ -13,6 +13,31 @@
   margin-top: 10px;
 }
 
+.custom-modal-content {
+  background: #e8e8e9;
+  border-radius: 4px;
+  padding: 20px;
+  min-height: 250px;
+  position: relative;
+}
+
+.modal-button-sheet {
+  position: absolute !important;
+  left: 20px;
+  bottom: 15px;
+}
+
+.modal-button-package {
+  position: absolute !important;
+  left: 15px;
+  bottom: 15px;
+}
+
+.modal-welcome {
+  background: none !important;
+  margin: 15px 35px;
+}
+
 .relative-modal {
   position: relative;
 }
