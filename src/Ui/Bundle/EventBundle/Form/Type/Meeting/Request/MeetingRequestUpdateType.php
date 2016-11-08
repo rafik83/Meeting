@@ -10,19 +10,21 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
-use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
-use Symfony\Component\Form\AbstractType;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MeetingRequestCancelType extends AbstractType
+class MeetingRequestUpdateType extends AbstractMeetingRequestType
 {
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('placeholder_description', 'form.catalog_edit_meeting_request.children.description.placeholder');
         $resolver->setDefaults([
-            'data_class' => CancelRequest::class,
+           'data_class' => UpdateMeetingRequest::class,
         ]);
     }
 
@@ -31,6 +33,6 @@ class MeetingRequestCancelType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'catalog_cancel_meeting_request';
+        return 'catalog_edit_meeting_request';
     }
 }

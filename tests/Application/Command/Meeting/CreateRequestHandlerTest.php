@@ -13,8 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 use DateTime;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler;
-use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Command\Meeting\CreateRequestResult;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -24,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,14 +60,12 @@ class CreateRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch('meeting_request.send', new RequestSentEvent($user1, $expectedRequest, $dateTime, 'test'));
-        $eventDispatcher->dispatch('meeting_request.participant.added', new ParticipantAddedEvent($user1, $participant1, $expectedRequest, 'test', $dateTime));
-        $eventDispatcher->dispatch('meeting_request.participant.added', new ParticipantAddedEvent($user1, $participant2, $expectedRequest, 'test', $dateTime));
-
         // Handler
-        $handler = new CreateRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $eventDispatcher->reveal(), $dateTime);
-        $handler->handle($createRequest);
+        $handler = new CreateRequestHandler($requestRepository->reveal(), $messageRepository->reveal(), $dateTime);
+        $result = $handler->handle($createRequest);
+
+        $meetingRequestResult = new CreateRequestResult($expectedRequest);
+        $this->assertEquals($meetingRequestResult, $result);
     }
 
     /**
