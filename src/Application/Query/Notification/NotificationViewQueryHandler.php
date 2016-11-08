@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Notification;
 
+use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQuery;
+use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Notification\NotificationListView;
@@ -22,13 +24,20 @@ class NotificationViewQueryHandler
     private $sheetNotificationViewQueryHandler;
 
     /**
-     * NotificationViewQueryHandler constructor.
-     *
-     * @param SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler
+     * @var PackageNotificationViewQueryHandler
      */
-    public function __construct(SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler)
-    {
-        $this->sheetNotificationViewQueryHandler = $sheetNotificationViewQueryHandler;
+    private $packageNotificationViewQueryHandler;
+
+    /**
+     * @param SheetNotificationViewQueryHandler   $sheetNotificationViewQueryHandler
+     * @param PackageNotificationViewQueryHandler $packageNotificationViewQueryHandler
+     */
+    public function __construct(
+        SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler,
+        PackageNotificationViewQueryHandler $packageNotificationViewQueryHandler
+    ) {
+        $this->sheetNotificationViewQueryHandler   = $sheetNotificationViewQueryHandler;
+        $this->packageNotificationViewQueryHandler = $packageNotificationViewQueryHandler;
     }
 
     /**
@@ -38,9 +47,15 @@ class NotificationViewQueryHandler
      */
     public function handle(NotificationViewQuery $query)
     {
-        $notificationViews = $this->sheetNotificationViewQueryHandler->handle(
+        $sheetNotificationViews = $this->sheetNotificationViewQueryHandler->handle(
             new SheetNotificationViewQuery($query->sheet)
         );
+
+        $packageNotificationView = $this->packageNotificationViewQueryHandler->handle(
+            new PackageNotificationViewQuery($query->sheet)
+        );
+
+        $notificationViews = array_merge($sheetNotificationViews, $packageNotificationView);
 
         return new NotificationListView($notificationViews);
     }
