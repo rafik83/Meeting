@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ApproveRequest
 {
@@ -31,11 +33,25 @@ class ApproveRequest
     public $participants;
 
     /**
-     * @param Request $request
+     * @var User
      */
-    public function __construct(Request $request)
+    public $editor;
+
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @param User    $editor
+     * @param Request $request
+     * @param Sheet   $sheet
+     */
+    public function __construct(User $editor, Request $request, Sheet $sheet)
     {
         $this->request      = $request;
-        $this->participants = [];
+        $this->participants = $request->getToParticipants()->toArray();
+        $this->editor       = $editor;
+        $this->sheet        = $sheet;
     }
 }

@@ -122,6 +122,7 @@ class SheetSearchQueryBuilder
         $this->filterByPredefined($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
+        $this->filterByLocalization($filters);
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
     }
@@ -369,6 +370,39 @@ class SheetSearchQueryBuilder
             }
 
             $this->query->addMust($matchOrganizationCategory);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByLocalization(array &$filters)
+    {
+        if (isset($filters['localization'])) {
+            $localizations = explode(',', $filters['localization']);
+
+            $boolQuery = new BoolQuery();
+
+            foreach ($localizations as $localization) {
+                if (strlen($localization) >= 2 && preg_match('/^[0-9]*$/', $localization)) {
+                    $boolQuery->addShould(new Match('zipcode', $localization));
+                } else {
+                    $boolQuery->addShould(new Match('city', $localization));
+
+                    $nested           = new Nested();
+                    $nestedBoolQuery  = new BoolQuery();
+                    $matchQuery       = new Match('country.label', $localization);
+                    $matchLocaleQuery = new Match('country.locale', $this->locale);
+
+                    $nestedBoolQuery->addMust($matchQuery);
+                    $nestedBoolQuery->addMust($matchLocaleQuery);
+
+                    $nested->setQuery($nestedBoolQuery)->setPath('country');
+                    $boolQuery->addShould($nested);
+                }
+            }
+
+            $this->query->addMust($boolQuery);
         }
     }
 

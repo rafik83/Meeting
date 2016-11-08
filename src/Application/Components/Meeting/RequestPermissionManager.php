@@ -51,19 +51,40 @@ class RequestPermissionManager
      */
     public function isAllowedToEdit(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
+        return $sheet->hasUser($user) && $request->isSender($sheet) && $request->isSent();
+    }
 
-        if ($sheet === $request->getFromSheet() && !$request->isRefused() && !$request->isCancelled()) {
-            return true;
-        }
-
-        if ($sheet === $request->getToSheet() && $request->isApproved()) {
-            return true;
+    /**
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToEditSentOrApproved(User $user, Request $request, Sheet $sheet)
+    {
+        if ($request->isSent()) {
+            return $this->isAllowedToEdit($user, $request, $sheet);
+        } elseif ($request->isApproved()) {
+            return $this->isAllowedToEditApproved($user, $request, $sheet);
         }
 
         return false;
+    }
+
+    /**
+     * Is a user allowed to edit an approved meeting request
+     *
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToEditApproved(User $user, Request $request, Sheet $sheet)
+    {
+        return $sheet->hasUser($user)
+            && ($request->isSender($sheet) || $request->isReceiver($sheet)) && $request->isApproved();
     }
 
     /**
@@ -77,19 +98,9 @@ class RequestPermissionManager
      */
     public function isAllowedToCancel(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->getFromSheet() === $sheet && ($request->isSent() || $request->isApproved())) {
-            return true;
-        }
-
-        if ($request->getToSheet() === $sheet && $request->isApproved()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user)
+            && $request->isSender($sheet)
+            && ($request->isSent() || $request->isApproved());
     }
 
     /**
@@ -103,15 +114,7 @@ class RequestPermissionManager
      */
     public function isAllowedToRefuse(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->getToSheet() === $sheet && $request->isSent()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user) && $request->isReceiver($sheet) && $request->isSent();
     }
 
     /**
@@ -125,15 +128,7 @@ class RequestPermissionManager
      */
     public function isAllowedToApprove(User $user, Request $request, Sheet $sheet)
     {
-        if (!$sheet->hasUser($user)) {
-            return false;
-        }
-
-        if ($request->getToSheet() === $sheet && $request->isSent()) {
-            return true;
-        }
-
-        return false;
+        return $sheet->hasUser($user) && $request->isReceiver($sheet) && $request->isSent();
     }
 
     /**
@@ -147,7 +142,35 @@ class RequestPermissionManager
      */
     public function isAllowedToSee(User $user, Request $request, Sheet $sheet)
     {
-        return $sheet->hasUser($user) && ($request->getFromSheet() === $sheet || $request->getToSheet() === $sheet);
+        return $sheet->hasUser($user) && ($request->isSender($sheet) || $request->isReceiver($sheet));
+    }
+
+    /**
+     * Is a user allowed to unrefuse a refused meeting request
+     *
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToUnRefuse(User $user, Request $request, Sheet $sheet)
+    {
+        return $sheet->hasUser($user) && $request->isRefused() && $request->isReceiver($sheet);
+    }
+
+    /**
+     * Is a user allowed to unapproved an approved meeting request
+     *
+     * @param User    $user
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return bool
+     */
+    public function isAllowedToUnApprove(User $user, Request $request, Sheet $sheet)
+    {
+        return $sheet->hasUser($user) && $request->isApproved() && $request->isReceiver($sheet);
     }
 
     /**
@@ -168,6 +191,23 @@ class RequestPermissionManager
     }
 
     /**
+     * Is a user allowed to see conversation of a refuse meeting request
+     *
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function isAllowedToSeeConversationOfRefuseMeetingRequest(User $user, Request $request)
+    {
+        if (!$request->isRefused()) {
+            return false;
+        }
+
+        return $request->getFromSheet()->hasUser($user) || $request->getToSheet()->hasUser($user);
+    }
+
+    /**
      * Hasn't living meeting request between these two sheets
      *
      * @param Sheet $from
@@ -179,6 +219,7 @@ class RequestPermissionManager
     {
         return empty($this->requestRepository->getRequestBetweenSheetsWithStates($from, $to, [
             Request::STATE_APPROVED,
+            Request::STATE_REFUSED,
             Request::STATE_SENT,
         ]));
     }

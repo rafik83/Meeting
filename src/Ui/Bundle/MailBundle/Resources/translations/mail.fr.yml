@@ -22,7 +22,7 @@ mail.completeProfile.link: 'Compléter votre profil participant'
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de pase a bien été changé'
-mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription à %event% en tant que %type% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
+mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription à %event% a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe %event%.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
 mail.event.preregister.end: 'Bien cordialement,'
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
@@ -31,6 +31,7 @@ mail.orderConfirm.body: "Bonjour,\n\nVotre commande numéro %orderNumero% en dat
 mail.orderConfirm.end: 'Cordialement,'
 mail.orderConfirm.linkToProForma: 'Voir la facture pro-forma'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'
+mail.participant.profile.link: 'Votre profil participant'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté Vimeet.\n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
 mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
@@ -42,12 +43,11 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
-mail.participant.profile.link: 'Votre profil participant'
+mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
+mail.sheet.submitted.end: 'Cordialement,'
+mail.sheet.submitted.link: 'Voir la fiche'
+mail.sheet.submitted.subject: 'Fiche %sheetName% finalisée'
 mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.\n\nNous vous rappelons ci-dessous les prochaines étapes de votre participation :<ul>\n<li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>\n<li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %scheduleDate%. Ensuite l’ensemble des participants auront jusqu’au %scheduleDate% pour valider les différentes propositions reçues.</li>\n<li>Le %scheduleDate% votre planning sera disponible en ligne.</li></ul>\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
 mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.sheet.submitted.subject: 'Fiche %sheetName% finalisée'
-mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
-mail.sheet.submitted.end: 'Cordialement,'
-mail.sheet.submitted.link: 'Voir la fiche'

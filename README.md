@@ -92,7 +92,7 @@ Best practices:
 2. Drop db schema `$ bin/console doctrine:schema:drop --force`
 3. Empty the `migration_versions` table
 4. Run all migrations `$ bin/console doctrine:migrations:migrate`
-5. Generate the new migration : `$ bin/console doctrine:migrations:diff`
+5. Generate the new migration : `$ bin/console doctrine:migrations:diff`. Warning : Remove Create/Drop sessions table (table is not mapped by Doctrine)
 6. Edit docblocks in generated file `/src/Infrastructure/Bundle/InfrastructureBundle/Migrations/VersionYYYYMMDDHHMMSS.php`
 7. Add a new branch, commit and push `git checkout -b migrations/VersionYYYYMMDDHHMMSS && git add . && git commit -m "Add migrations" && git push origin migrations/VersionYYYYMMDDHHMMSS`
 8. Add a merge request

@@ -14,17 +14,14 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityController extends Controller
 {
     /**
-     * @param Request $request
-     *
-     * @return Response|RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('admin_event_list');

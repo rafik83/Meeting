@@ -8,15 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\MeetingRequest;
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFromHandler;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestToHandler;
-use Proximum\Vimeet\Application\Event\MeetingRequest\MessageEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantRemovedEvent;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequestHandler;
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -26,9 +23,8 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandleWithStateSentForSheetFrom()
     {
@@ -39,8 +35,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -49,13 +46,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom->addParticipant($participant2);
         $sheetFrom->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
-
         //Actual
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
 
         //Command
-        $command = new UpdateRequestFrom($request, $datetime, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -70,28 +65,18 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         //Handler
-        $handler = new UpdateRequestFromHandler(
+        $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $permissionManager->reveal(),
+            $datetime
         );
 
-        $handler->handle($command, $sheetFrom);
+        $handler->handle($command);
     }
 
     public function testHandleWithStateApprovedForSheetFrom()
@@ -103,8 +88,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -113,14 +99,12 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetFrom->addParticipant($participant2);
         $sheetFrom->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
-
         //Actual
         $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateRequestFrom($request, $datetime, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -136,32 +120,24 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
 
         //Handler
-        $handler = new UpdateRequestFromHandler(
+        $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $permissionManager->reveal(),
+            $datetime
         );
 
-        $handler->handle($command, $sheetFrom);
+        $handler->handle($command);
     }
 
     public function testHandleWithStateSentForSheetTo()
     {
+        $this->expectException(IsNotAllowedToUpdateMeetingRequestException::class);
+
         // Context
         $event     = EventFactory::createEvent();
         $type      = new Type($event);
@@ -169,8 +145,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -179,13 +156,11 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo->addParticipant($participant2);
         $sheetTo->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
-
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
 
         //Command
-        $command = new UpdateRequestTo($request, $datetime, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -195,33 +170,23 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $requestRepository->set($expectedRequest)->shouldBeCalled();
+        $requestRepository->set($expectedRequest)->shouldNotBeCalled();
 
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
-        $messageRepository->add($expectedMessage)->shouldBeCalled();
+        $messageRepository->add($expectedMessage)->shouldNotBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
         //Handler
-        $handler = new UpdateRequestToHandler(
+        $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $permissionManager->reveal(),
+            $datetime
         );
 
-        $handler->handle($command, $sheetFrom);
+        $handler->handle($command);
     }
 
     public function testHandleWithStateApprovedForSheetTo()
@@ -233,8 +198,9 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheetTo   = new Sheet($event, $type, [], $user1, new \DateTime());
-        $sheetFrom = new Sheet($event, $type, [], $user4, new \DateTime());
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -243,14 +209,13 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $sheetTo->addParticipant($participant2);
         $sheetTo->addParticipant($participant3);
 
-        $datetime = new \DateTime('2016-01-24 09:00:00');
 
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
         $request->approve($datetime);
 
         //Command
-        $command = new UpdateRequestTo($request, $datetime, $user1);
+        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
         $command->participants = [$participant1, $participant3];
         $command->description  = 'modif';
 
@@ -266,28 +231,18 @@ class EditRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $messageRepository->add($expectedMessage)->shouldBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.removed',
-            new ParticipantRemovedEvent($user2, $participant2, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.participant.added',
-            new ParticipantAddedEvent($user3, $participant3, $expectedRequest, $expectedMessage->getContent(), $datetime)
-        )->shouldBeCalled();
-        $eventDispatcher->dispatch(
-            'meeting_request.update.message',
-            new MessageEvent($expectedMessage, $user1)
-        )->shouldBeCalled();
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         //Handler
-        $handler = new UpdateRequestToHandler(
+        $handler = new UpdateMeetingRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
-            $eventDispatcher->reveal()
+            $permissionManager->reveal(),
+            $datetime
         );
 
-        $handler->handle($command, $sheetFrom);
+        $handler->handle($command);
     }
 
     /**
