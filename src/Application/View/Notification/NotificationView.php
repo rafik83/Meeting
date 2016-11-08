@@ -68,7 +68,7 @@ class NotificationView
         $description,
         $link,
         $priority,
-        $locale
+        $locale = ''
     ) {
         $this->createdAt   = $createdAt;
         $this->category    = $category;
