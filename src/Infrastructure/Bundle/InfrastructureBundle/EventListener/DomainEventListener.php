@@ -35,6 +35,14 @@ class DomainEventListener
     private $ignoredRoutes = [
         'liip_imagine_filter_runtime',
         'liip_imagine_filter',
+        'payum_capture_do_session',
+        'payum_capture_do',
+        'payum_notify_do_unsafe',
+        'payum_notify_do',
+        'payum_authorize_do',
+        '_wdt',
+        '_profiler',
+        '_errors',
     ];
 
     /**
