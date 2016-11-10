@@ -56,6 +56,7 @@ class FilterFullType extends AbstractType
                 'label'       => 'form.sheet_filter.children.follower.label',
                 'placeholder' => '',
                 'event'       => $options['event'],
+                'unassigned'  => true,
             ])
             ->add('predefined', PredefinedFiltersChoiceType::class, [
                 'label'       => 'form.filter.label',
