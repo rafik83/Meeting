@@ -44,8 +44,19 @@ class FollowerChoiceType extends AbstractType
             'choices' => function (Options $options) {
                 return $this->adminRepository->getFollowers($options['event']);
             },
-            'choice_label' => function (Admin $admin) {
-                return $admin->getDisplayName();
+            'choice_label' => function ($admin) {
+                if ($admin instanceof Admin) {
+                    return $admin->getDisplayName();
+                }
+
+                return null;
+            },
+            'choice_value' => function($admin) {
+                if ($admin instanceof Admin) {
+                    return $admin->getId();
+                }
+
+                return null;
             },
             'choice_translation_domain' => false,
         ]);

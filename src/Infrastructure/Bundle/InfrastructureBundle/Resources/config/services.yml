@@ -2274,3 +2274,11 @@ services:
             - '%phantomjs_path%'
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
+
+    #
+    # Filter
+    #
+    filter.sheet_filter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
+        arguments:
+            - '@session'

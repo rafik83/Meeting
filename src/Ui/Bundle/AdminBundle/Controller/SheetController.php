@@ -51,29 +51,42 @@ class SheetController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
+        if (empty($request->query->all()) && $this->get('filter.sheet_filter')->get() !== null) {
+            return $this->redirectToRoute('admin_sheet', array_merge(
+                ['event' => $event->getId()],
+                $this->get('filter.sheet_filter')->get()
+            ));
+        }
+
+        if ($request->query->get('reset') !== null) {
+            $this->get('filter.sheet_filter')->clear();
+        }
+
         $filters = FilterFullType::getDefaultFilters();
 
         $filterFullForm = $this->createFilterForm(FilterFullType::class, $filters, [
             'event'  => $event,
             'locale' => $locale,
-            'user'   => $this->getUser()
+            'user'   => $this->getUser(),
         ]);
 
-        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, [
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, [], [
             'event'  => $event,
             'locale' => $locale,
         ]);
 
         $filterPartForm->handleRequest(Request::create($request->getUri()));
-        $filtered       = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
+        $filtered = $filterFullForm->handleRequest($request)->isSubmitted() && $filterFullForm->isValid();
 
         if ($filtered) {
             $filters = $filterFullForm->getData();
+            // save filter into session
+            $this->get('filter.sheet_filter')->add($request->query->all());
         }
 
         // Pagination
         try {
-            $query  = new PaginatedSheetListViewQuery($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            $query = new PaginatedSheetListViewQuery($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
@@ -139,7 +152,7 @@ class SheetController extends Controller
                     '%count%' => $result->count,
                 ]));
             } else {
-                $this->addFlash('error', (string) $batchForm->getErrors(true));
+                $this->addFlash('error', (string)$batchForm->getErrors(true));
             }
         }
 
@@ -255,11 +268,17 @@ class SheetController extends Controller
             /** @var AssignSpotResult $result */
             $result = $this->get('tactician.commandbus')->handle($command);
         } catch (SpotNotFoundException $exception) {
-            return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.notFound')], 404);
+            return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.assign.spot.notFound'),
+            ], 404);
         } catch (SpotNotActiveException $exception) {
-            return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.notActive')], 404);
+            return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.assign.spot.notActive'),
+            ], 404);
         } catch (\Exception $exception) {
-            return new JsonResponse(['error' => $this->get('translator')->trans('admin.sheet.assign.spot.exception')], 500);
+            return new JsonResponse([
+                'error' => $this->get('translator')->trans('admin.sheet.assign.spot.exception'),
+            ], 500);
         }
 
         if ($result->hasInfo()) {
