@@ -225,6 +225,10 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
+sheet.welcome.title: 'Félicitation, vous venez de finaliser la première partie de votre demande de participation.'
+sheet.welcome.subtitle: 'Pour finaliser votre demande de participation il vous reste à'
+sheet.welcome.sheetContent: 'Compléter votre fiche de présentation publiée dans le catalogue en ligne. Plus vos informations seront précises, plus vos rendez-vous seront ciblés'
+sheet.welcome.packageContent: 'Choisir la formule de participation qui correspond à vos attentes'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total
