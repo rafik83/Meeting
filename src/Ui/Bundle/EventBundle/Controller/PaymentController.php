@@ -134,6 +134,7 @@ class PaymentController extends Controller
         Sheet $sheet
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 

@@ -49,10 +49,10 @@ interface RouterInterface
     public function generateSheet(Sheet $sheet);
 
     /**
-     * @param $path
-     * @param $parameters
+     * @param string $path
+     * @param array $parameters
      *
      * @return string
      */
-    public function generate($path, $parameters);
+    public function generate($path, array $parameters = []);
 }

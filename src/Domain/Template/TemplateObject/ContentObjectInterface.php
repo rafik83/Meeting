@@ -18,6 +18,13 @@ interface ContentObjectInterface
     public function getContentValue();
 
     /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getContentValueLocalize($locale);
+
+    /**
      * @return string
      */
     public function getContentLabel();

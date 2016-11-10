@@ -15,27 +15,20 @@
     {% endif %}
 
     <ul class="header__navigation">
+        {% if is_granted('ROLE_USER') %}
+            <li class="notifs">
+                <a href="{{ path('event_notification_list') }}">
+                    <i class="icon-Retard"></i>
+                    <span class="name">{{ 'navigation.links.notification'|trans }}</span> <!--<span class="notif">1</span>-->
+                </a>
+            </li>
+        {% endif %}
+
         {% if event is defined %}
             {% for locale in event.locales if locale != app.request.locale %}
                 <li><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({ '_locale' : locale })) }}">{{ locale }}</a><li>
             {% endfor %}
         {% endif %}
-
-        {#
-        {% if is_granted('ROLE_USER') %}
-            <li class="notifs">
-                <a href="">
-                    <i class="icon-Retard"></i>
-                    <span class="name">Notifications</span> <span class="notif">1</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <i class="icon-Preferences_1"></i>
-                </a>
-            </li>
-        {% endif %}
-        #}
 
         {% if is_granted('ROLE_USER') %}
             <li>

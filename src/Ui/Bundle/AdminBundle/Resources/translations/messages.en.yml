@@ -28,6 +28,7 @@ admin.operator.update.title: 'Edit collaborater'
 admin.order_edit.columns.quantity: Quantity
 admin.order_edit.columns.unitPrice: 'Unit price'
 admin.order_edit.VAT: VAT
+admin.order.title: 'Order list'
 admin.plan.unitPrice: 'Unit price'
 admin.product.unitPrice: 'Unit price'
 admin.rule.link: 'Who see who'

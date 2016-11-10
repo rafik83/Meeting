@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThi
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -68,13 +69,22 @@ class SheetController extends Controller
             }
         }
 
+        if ($sheet->isValidationDraft()) {
+            $sheetValidationView = $this->get('tactician.commandbus.query')->handle(
+                new SheetValidationViewQuery(
+                    $sheet,
+                    $locale
+                )
+            );
+        }
+
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
             $this->getUser(),
             $locale
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
 
         $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
@@ -87,15 +97,16 @@ class SheetController extends Controller
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
-            'popinWelcome'  => $popinWelcome,
-            'participantProduct' => $participantProduct
+            'event'               => $eventDomain->getEvent(),
+            'sheet'               => $sheet,
+            'taggedData'          => $taggedData,
+            'locale'              => $locale,
+            'nomenclatures'       => $nomenclatures,
+            'participants'        => $participants,
+            'templateData'        => $templateData,
+            'popinWelcome'        => $popinWelcome,
+            'sheetValidationView' => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'participantProduct'  => $participantProduct,
         ]);
     }
 

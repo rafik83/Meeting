@@ -1,7 +1,5 @@
 {% if sheet.isValidationDraft %}
-    <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary">
-        {{ 'sheet.submit.validation'|trans }}
-    </a>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#sheetSubmitModal">{{ 'sheet.submit.validation'|trans }}</button>
 {% elseif sheet.isValidationPending %}
     <a class="btn btn-gray" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
         {{ 'sheet.submit.validation.pending'|trans }}
