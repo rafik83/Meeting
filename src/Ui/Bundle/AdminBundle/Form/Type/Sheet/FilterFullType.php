@@ -84,4 +84,14 @@ class FilterFullType extends AbstractType
     {
         return 'sheet_filter';
     }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return [
+            'enabled' => true,
+        ];
+    }
 }

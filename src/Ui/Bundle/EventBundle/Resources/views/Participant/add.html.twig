@@ -14,6 +14,31 @@
             {{ form_row(form.lastName) }}
             {{ form_row(form.email) }}
 
+
+            {% if participantProduct is not null %}
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="col-xs-9">
+                                <div class="buyable-product-row">
+                                    {{ participantProduct.title(app.request.locale) }}
+                                </div>
+                            </td>
+                            <td class="col-xs-3">
+                                <div class="buyable-product-row product-price">
+                                    {{ 'package.product.unitPrice'|trans({
+                                        '%price%': participantProduct.unitPrice,
+                                        '%currency%': participantProduct.currency|currency_symbol,
+                                        '%vatMode%': ('package.vatMode.' ~ participantProduct.vatMode)|trans
+                                    })|html }}
+                                </div>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
             <div class="validation">
                 <button type="submit" class="btn btn-primary">
                     {{ 'sheet.participant.sendInvite'|trans }}
@@ -24,6 +49,6 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
-        <i class="icon-Retour"></i>{{ 'common.backToSheet'|trans }}
+        <i class="icon-Retour"></i>{{ ('common.' ~ backRoute)|trans }}
     </button>
 </div>

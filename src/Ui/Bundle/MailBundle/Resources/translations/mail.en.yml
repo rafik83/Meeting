@@ -5,7 +5,10 @@ mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
 mail.changeMailNew.validate: 'Validate Your new email'
 mail.changeMailOld.subject: 'Email change request'
+mail.event.preregister.subject: 'You are pre-registered to'
 mail.orderConfirm.body: "Dear %Name%,\n\nYour order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
 mail.orderConfirm.linkToProForma: 'View Proforma invoice'
 mail.orderConfirm.subject: 'Your order has been registered'
+mail.register.body: '%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created. We are happy to count you among the Vimeet community. You can now connect to your member area on the website of %event%. Best regards,'
+mail.register.subject: 'The access to your member area of %event% has been created'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"

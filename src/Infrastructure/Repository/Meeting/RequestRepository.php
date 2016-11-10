@@ -75,6 +75,21 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(Request $request)
+    {
+        $this->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(Request::class, 'request')
+            ->where('request = :request')
+            ->setParameter('request', $request)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
@@ -185,9 +200,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-            ->where('request.state != :cancelState')
-            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
+            ->from(Request::class, 'request');
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -308,9 +321,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request')
-            ->where('request.state != :cancelState')
-            ->setParameter('cancelState', Meeting\Request::STATE_CANCEL);
+            ->from(Request::class, 'request');
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
@@ -386,7 +397,9 @@ class RequestRepository implements RequestRepositoryInterface
                 ->setParameter('types', $filters['type']);
         }
 
-        // set sheet
-        $queryBuilder->setParameter('sheet', $sheet);
+        if (!empty($filters['state'])) {
+            // set sheet
+            $queryBuilder->setParameter('sheet', $sheet);
+        }
     }
 }

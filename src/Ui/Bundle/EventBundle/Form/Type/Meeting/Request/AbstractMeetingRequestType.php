@@ -41,12 +41,14 @@ abstract class AbstractMeetingRequestType extends AbstractType
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
 
-        $builder
-            ->add('description', TextType::class, [
-                'placeholder' => $options['placeholder_description'],
-                'required'    => false,
-            ])
-        ;
+        if ($options['show_description']) {
+            $builder
+                ->add('description', TextType::class, [
+                    'placeholder' => $options['placeholder_description'],
+                    'required'    => false,
+                ])
+            ;
+        }
 
         if (1 < $sheet->countParticipant()) {
             $builder
@@ -74,5 +76,6 @@ abstract class AbstractMeetingRequestType extends AbstractType
     {
         $resolver->setRequired(['sheet', 'locale']);
         $resolver->setDefault('placeholder_description', '');
+        $resolver->setDefault('show_description', true);
     }
 }

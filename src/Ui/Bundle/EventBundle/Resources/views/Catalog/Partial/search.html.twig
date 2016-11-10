@@ -12,6 +12,25 @@
     {% if searchForm.position is defined %}
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.position }, false) }}
     {% endif %}
+
+    {% if searchForm.localization is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.localization.vars.label|trans({}, searchForm.localization.vars.translation_domain) }}</h3>
+            {{ form_widget(searchForm.localization) }}
+
+            <select multiple
+                    id="localization-autocomplete"
+                    data-parent-input="{{ searchForm.localization.vars.id }}"
+                    data-disable-auto-submit
+                    data-ajax-autocomplete
+                    data-method="post"
+                    data-action="{{ path('event_catalog_search_localization') }}"
+                    data-placeholder="{{ 'form.search.localization.search.placeholder'|trans({}, searchForm.vars.translation_domain) }}"
+                    class="form-control">
+            </select>
+        </div>
+    {% endif %}
+
     {% if searchForm.content is defined %}
         {{ include('EventBundle:Catalog:Partial/text.html.twig', { form: searchForm.content }, false) }}
     {% endif %}

@@ -40,7 +40,7 @@ class MediaCollectionValidator extends TemplateObjectValidator
     {
         if ($value instanceof TemplateObject\MediaCollection) {
             $this->checkRequired($value, $constraint);
-            $this->checkHasPayableOption($value, $constraint);
+            $this->checkHasPayableOption($value);
         }
     }
 
@@ -63,9 +63,8 @@ class MediaCollectionValidator extends TemplateObjectValidator
 
     /**
      * @param TemplateObject\MediaCollection $object
-     * @param Constraint                     $constraint
      */
-    protected function checkHasPayableOption(TemplateObject\MediaCollection $object, Constraint $constraint)
+    protected function checkHasPayableOption(TemplateObject\MediaCollection $object)
     {
         if (count($object->getNotEmptyMedias()) > 0 && $this->templateProductGuesser->hasPayableOption($object)) {
             $this->context

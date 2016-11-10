@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Domain\Model;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Exception\Spot\PropertyNotSupportedException;
 

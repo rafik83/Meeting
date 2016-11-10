@@ -89,6 +89,13 @@ class CatalogSheetPreviewView
         return null !== $this->meetingRequest;
     }
 
+    /**
+     * @return bool
+     */
+    public function isAllowedToCreateMeetingRequest()
+    {
+        return $this->meetingRequest === null;
+    }
 
     /**
      * @return bool

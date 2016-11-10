@@ -34,9 +34,14 @@ navigation.close: Close
 navigation.links.billing.billing_info: 'Billing information'
 navigation.links.billing.order_history: 'Orders & Transactions'
 navigation.links.catalog.available_date: 'Available on the'
-navigation.links.catalog.incoming: 'To come up'
+navigation.links.catalog.incoming: 'Coming soon'
 navigation.links.catalog.sheet_not_in_catalog: 'Your participation is awaiting validation'
-navigation.links.incoming: 'To come up'
+navigation.links.happening.accept: 'Accepted requests'
+navigation.links.happening.decline: 'Refused requests'
+navigation.links.happening.open_date: 'Available on the'
+navigation.links.happening.proposal: 'Proposals received'
+navigation.links.happening.waiting: 'Requests pending'
+navigation.links.incoming: 'Coming soon'
 navigation.links.member_space.avatar: 'Profile picture'
 navigation.links.member_space.company: 'Compagny / Organization'
 navigation.links.member_space.profile: Profile
@@ -151,6 +156,8 @@ sheet.edit.object: Edit
 sheet.object.action.add: Add
 sheet.object.action.backToSheet: 'Back to sheet'
 sheet.object.action.edit: Edit
+sheet.object.action.remove: Delete
+sheet.object.image.remove: 'Delete image'
 sheet.participant.remove: 'Remove from the sheet'
 sheet.participant.sendInvite: 'Send Invitation'
 sheet.title: 'Presentation sheet'

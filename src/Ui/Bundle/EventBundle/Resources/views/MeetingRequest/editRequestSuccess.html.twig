@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        {% if meetingRequest.isApproved %}
+            <i class="icon-Valider_4"></i>
+            {% if isProposition %}
+                {{ 'catalog.action.meeting.proposition.approved'|trans }}
+            {% else %}
+                {{ 'catalog.action.meeting.request.approved'|trans }}
+            {% endif %}
+        {% else %}
+            <i class="icon-RDV"></i>
+            {{ 'catalog.action.meeting.request.pending'|trans }}
+        {% endif %}
+    </h4>
+</div>
+
+<div class="modal-body">
+    <div class="modal-content-request">
+        {{ include('EventBundle::flashes.html.twig') }}
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
+    </button>
+</div>
