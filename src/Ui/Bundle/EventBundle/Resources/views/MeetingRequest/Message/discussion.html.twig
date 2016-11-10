@@ -1,31 +1,19 @@
 {% if discussion.hasMessages %}
-<div class="message" style="margin-bottom: 10px;">
+<div class="messages">
     <div class="row">
-        {% for message in discussion.messages %}
-            {% if message.isLeft %}
-                <div class="col-md-8">
-                    <div>
-                        <div class="text-center">
-                            {{ message.sheetName }}
-                        </div>
-                        <div class="img-thumbnail">
-                            {{ message.content }}
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="col-md-offset-4 col-md-8">
-                        <div>
-                            <div class="text-center">
-                                {{ message.sheetName }}
-                            </div>
-                            <div class="img-thumbnail pull-right">
-                                {{ message.content }}
-                            </div>
-                        </div>
-                    </div>
-            {% endif %}
-        {% endfor %}
+        <div class="message col-xs-8">
+            <span class="author">Société</span>
+            <p>Nous souhaitons vous rencontrer pour aborder la maintenance de la soufflerie de Modane.</p>
+        </div>
+        <div class="message message--right col-xs-offset-4 col-xs-8">
+            <span class="author">Onera</span>
+            <p>Oui entendu c'est un sujet d'actualité pour nous ! J'accepte votre proposition de rendez-vous.</p>
+        </div>
+        <div class="message col-xs-8">
+            <span class="author">Société</span>
+            <p>Très bien, merci.</p>
+            <p>Quelles sont vos disponiblités ?</p>
+        </div>
     </div>
 </div>
 {% endif %}
