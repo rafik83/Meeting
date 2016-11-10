@@ -1,15 +1,84 @@
-{% extends 'EventBundle::base.html.twig' %}
+{% set formIsNotNull = form is not null %}
+{% set cancelFormIsNotNull = cancelForm is not null %}
+{% set unApprovedFormIsNotNull = unApprovedForm is not null %}
+{% if formIsNotNull %}
+    {% form_theme form '@Ui/default.html.twig' %}
+{% endif %}
 
-{% form_theme form '@Ui/default.html.twig' %}
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        {% if meetingRequest.isApproved %}
+            <i class="icon-Valider_4"></i>
+            {% if isProposition %}
+                {{ 'catalog.action.meeting.proposition.approved'|trans }}
+            {% else %}
+                {{ 'catalog.action.meeting.request.approved'|trans }}
+            {% endif %}
+        {% else %}
+            <i class="icon-RDV"></i>
+            {{ 'catalog.action.meeting.request.pending'|trans }}
+        {% endif %}
+    </h4>
+</div>
 
-{% block title 'event.meeting.editRequest.title'|trans %}
 
-{% block content %}
-    <h1>{{ 'event.meeting.editRequest.title'|trans }}</h1>
-    <h2>{{ 'event.meeting.editRequest.destination'|trans({'%toName%': toName, '%fromName%': fromName}) }}</h2>
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            {{ form(form) }}
-        </div>
+<div class="modal-body">
+    {% if formIsNotNull %}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+    {% endif %}
+    <div class="modal-content-request">
+        {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
+        {% if formIsNotNull %}
+            {% for key, child in form if key != 'submit'%}
+                {% if key == 'participants' %}
+                    {{ form_row(child, {'attr': { 'data-participants-checkbox': 'here', 'data-placeholder-preference': 'form.catalog_create_meeting_request.children.participants.default.no_preference'|trans({}, 'forms') }}) }}
+                {% else %}
+                    {{ form_row(child) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
-{% endblock %}
+    {% if formIsNotNull %}
+        <div class="validation button">
+            <button type="submit" class="btn btn-primary">
+                {% if meetingRequest.isApproved %}
+                    {% if isProposition %}
+                        <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.proposition.children.submit.label'|trans({}, 'forms') }}
+                    {% else %}
+                        <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.request.children.submit.label'|trans({}, 'forms') }}
+                    {% endif %}
+                {% else %}
+                    <i class="icon-Valider_4"></i> {{ 'form.catalog_edit_meeting_request.pending.request.children.submit.label'|trans({}, 'forms') }}
+                {% endif %}
+            </button>
+        </div>
+    {% endif %}
+    {% if formIsNotNull %}
+        {{ form_end(form) }}
+    {% endif %}
+</div>
+<div class="modal-footer">
+    {% if cancelFormIsNotNull %}
+        {{ form_start(cancelForm) }}
+        <div class="validation pull-left">
+            <button type="submit" class="btn btn-no-style text-underline">
+                <i class="icon-Fermer_4"></i> {{ 'form.catalog_cancel_meeting_request.request.children.submit.label'|trans({}, 'forms') }}
+            </button>
+        </div>
+        {{ form_end(cancelForm) }}
+    {% endif %}
+    {% if unApprovedFormIsNotNull %}
+        {{ form_start(unApprovedForm) }}
+        <div class="validation pull-left">
+            <button type="submit" class="btn btn-no-style text-underline">
+                <i class="icon-Fermer_4"></i> {{ 'form.catalog_un_approve_meeting_request.proposition.children.submit.label'|trans({}, 'forms') }}
+            </button>
+        </div>
+        {{ form_end(unApprovedForm) }}
+    {% endif %}
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'catalog.action.meeting.request.back'|trans }}
+    </button>
+</div>
+

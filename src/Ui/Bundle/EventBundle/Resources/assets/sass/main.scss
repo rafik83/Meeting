@@ -58,8 +58,10 @@
 @import "base/_responsive";
 
 @import "components/_select2";
+@import "components/_modal";
 
 @import "generic/_buttons";
+@import "generic/_table";
 
 @import "print/_print";
 
@@ -208,4 +210,8 @@
   padding: 8px;
   border-radius: 4px;
   font-size: 12px;
+}
+
+.modal-content-request {
+  margin-top: 0;
 }

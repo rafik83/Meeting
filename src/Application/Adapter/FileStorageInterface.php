@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 interface FileStorageInterface
 {
     /**
@@ -35,4 +37,11 @@ interface FileStorageInterface
      * @return string|null
      */
     public function copyAndRename($identifier, $name = null);
+
+    /**
+     * @param UploadedFile $file
+     *
+     * @return string|null
+     */
+    public function getExtension(UploadedFile $file);
 }

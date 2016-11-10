@@ -10,7 +10,7 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 <div class="modal-body">
-    <div class="object--form--field" style="margin-top: 0;">
+    <div class="modal-content-request">
         {{ include('EventBundle:MeetingRequest/Message:discussion.html.twig', {'discussion': discussion}) }}
         {% for key, child in form if key != 'submit'%}
             {{ form_row(child) }}

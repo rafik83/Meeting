@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Sheet;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Notification\SheetCompletenessEvent;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetCompleteness;
@@ -20,6 +22,7 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\BooleanObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CompletenessCalculator
 {
@@ -39,19 +42,27 @@ class CompletenessCalculator
     private $sheetCompletenessRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * @param TemplateDataFactory                  $templateDataFactory
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetCompletenessRepositoryInterface $sheetCompletenessRepository
+     * @param DelayedEventDispatcher               $eventDispatcher
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         SheetRepositoryInterface $sheetRepository,
-        SheetCompletenessRepositoryInterface $sheetCompletenessRepository
+        SheetCompletenessRepositoryInterface $sheetCompletenessRepository,
+        DelayedEventDispatcher $eventDispatcher
     ) {
 
         $this->templateDataFactory         = $templateDataFactory;
         $this->sheetRepository             = $sheetRepository;
         $this->sheetCompletenessRepository = $sheetCompletenessRepository;
+        $this->eventDispatcher             = $eventDispatcher;
     }
 
     /**
@@ -88,7 +99,8 @@ class CompletenessCalculator
 
         $this->sheetCompletenessRepository->removeForSheet($sheet);
 
-        $averageCompleteness   = 0;
+        $notificationCompleteness = [];
+        $averageCompleteness      = 0;
         foreach ($locales as $locale) {
             $localeCompleteness        = floor($completed[$locale] / $total[$locale] * 100);
             $unitLocalizedCompleteness = new SheetCompleteness(
@@ -99,11 +111,19 @@ class CompletenessCalculator
 
             $this->sheetCompletenessRepository->add($unitLocalizedCompleteness);
             $averageCompleteness += $localeCompleteness;
+
+            $notificationCompleteness[$locale] = $localeCompleteness === 100;
         }
 
         $sheet->setCompleteness(intval(floor($averageCompleteness / count($locales))));
 
         $this->sheetRepository->set($sheet);
+
+        // trigger sheet completeness event to generate notification
+        $this->eventDispatcher->dispatch(
+            Events::SHEET_COMPLETENESS,
+            new SheetCompletenessEvent($sheet, $notificationCompleteness)
+        );
     }
 
     /**

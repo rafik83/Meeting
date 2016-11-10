@@ -10,9 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface NotificationRepositoryInterface
 {
@@ -27,10 +26,16 @@ interface NotificationRepositoryInterface
     public function set(Notification $notification);
 
     /**
-     * @param Event $event
-     * @param User  $user
-     *
-     * @return Notification[]
+     * @param Sheet  $sheet
+     * @param string $type
      */
-    public function getNotificationsByEventAndUser(Event $event, User $user);
+    public function removeByType(Sheet $sheet, $type);
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $type
+     *
+     * @return Notification
+     */
+    public function findByType(Sheet $sheet, $type);
 }

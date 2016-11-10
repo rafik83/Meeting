@@ -13,8 +13,8 @@
                 {% if sheet.isValidationDraft %}
                     <button class="btn btn-primary" data-toggle="modal" data-target="#sheetSubmitModal">{{ 'sheet.submit.validation'|trans }}</button>
                 {% elseif sheet.isValidationPending %}
-                    <a class="btn btn-black" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
-                        <span><i class="icon-Retard"></i> {{ 'sheet.submit.validation.pending'|trans }}</span>
+                    <a class="btn btn-gray" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
+                        {{ 'sheet.submit.validation.pending'|trans }}
                     </a>
                 {% endif %}
             {% endif %}
@@ -58,7 +58,7 @@
     </div>
 </section>
 
-<div class="modal fade clear-on-hidden-modal{% if form is defined or form_participant is defined or form_remove is defined %} show-modal{% endif %}" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+<div class="modal fade clear-on-hidden-modal{% if form is defined or form_participant is defined or form_remove is defined or (popinWelcome is defined and popinWelcome is not null) %} show-modal{% endif %}" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             {% if form is defined %}
@@ -67,6 +67,8 @@
                 {{ include('EventBundle:Participant:add.html.twig', { 'form': form_participant, 'label': label, 'sheet': sheet, 'backRoute': 'backToSheet', 'participantProduct': participantProduct }) }}
             {% elseif form_remove is defined %}
                 {{ include('EventBundle:Participant:remove.html.twig', { 'form': form_remove, 'participants': participants, 'label': label }) }}
+            {% elseif popinWelcome is defined and popinWelcome is not null %}
+                {{ include('EventBundle:Sheet/Partial:welcome.html.twig', { 'popinWelcome': popinWelcome }) }}
             {% endif %}
         </div>
     </div>
@@ -77,5 +79,5 @@
 {% endif %}
 
 {% if sheetValidationView is defined and sheetValidationView is not empty %}
-    {{ include('EventBundle:Sheet:modalSheetValidation.html.twig', {'view': sheetValidationView }) }}
+    {{ include('EventBundle:Sheet:modalSheetValidation.html.twig', { 'view': sheetValidationView, 'sheet': sheet }, false) }}
 {% endif %}

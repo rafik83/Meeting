@@ -10,23 +10,12 @@
             </div>
 
             <div class="buttons-zone button">
-                {% if meetingRequestView.isProposition %}
-                    {% if meetingRequestView.isPending %}
-                        {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': meetingRequestView.meetingRequest, 'sheet': sheet}) }}
-                    {% elseif meetingRequestView.meetingRequest.isApproved %}
-                        {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
-                    {% elseif meetingRequestView.meetingRequest.isRefused %}
-                        {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': meetingRequestView.meetingRequest}) }}
-                    {% endif %}
-                {% else %}
-                    {% if meetingRequestView.isPending %}
-                        {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
-                    {% elseif meetingRequestView.meetingRequest.isApproved %}
-                        {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
-                    {% elseif meetingRequestView.meetingRequest.isRefused %}
-                        {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': meetingRequestView.meetingRequest}) }}
-                    {% endif %}
-                {% endif %}
+                {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
+                    'allowedToCreate': false,
+                    'meetingRequest': meetingRequestView.meetingRequest,
+                    'viewed': meetingRequestView.sheet,
+                    'viewer': sheet,
+                }) }}
             </div>
 
             <p class="tags">

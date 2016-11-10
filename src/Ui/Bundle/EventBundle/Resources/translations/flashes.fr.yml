@@ -1,3 +1,6 @@
+flash.meeting_request.pending.request.edit.success: 'Vous avez bien modifié la demande de rendez-vous'
+flash.meeting_request.approved.request.edit.success: 'Vous avez bien modifié la demande de rendez-vous'
+flash.meeting_request.approved.proposition.edit.success: 'Vous avez bien modifié la proposition de rendez-vous'
 flash.package.promotionCode.error.alreadyExist: 'Code déjà utilisé'
 flash.package.promotionCode.error.codeConflict: 'Code en concurrence avec un code existant'
 flash.package.promotionCode.error.negativeRow: 'Le code promotionnel ne peut pas s''appliquer sur des produits négatifs'

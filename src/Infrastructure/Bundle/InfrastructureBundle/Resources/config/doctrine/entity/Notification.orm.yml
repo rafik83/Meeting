@@ -7,27 +7,11 @@ Proximum\Vimeet\Domain\Model\Notification:
             generator:
                 strategy: AUTO
     fields:
-        action:
+        type:
             type: string
-        message:
-            type: text
-        url:
-            type: text
-            nullable: true
-        createdAt:
-            type: datetime
-        view:
-            type: boolean
+            nullable: false
     manyToOne:
-        emitter:
-            targetEntity: Proximum\Vimeet\Domain\Model\User
-            joinColumn:
-                onDelete: CASCADE
-        recipient:
-            targetEntity: Proximum\Vimeet\Domain\Model\User
-            joinColumn:
-                onDelete: CASCADE
-        event:
-            targetEntity: Proximum\Vimeet\Domain\Model\Event
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
                 onDelete: CASCADE

@@ -18,64 +18,25 @@ class Notification
     private $id;
 
     /**
-     * @var Event
+     * @var Sheet
      */
-    private $event;
-
-    /**
-     * @var User
-     */
-    private $emitter;
-
-    /**
-     * @var User
-     */
-    private $recipient;
-
-    /**
-     * @var bool
-     */
-    private $view;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $createdAt;
+    private $sheet;
 
     /**
      * @var string
      */
-    private $action;
+    private $type;
 
     /**
-     * @var string
+     * Notification constructor.
+     *
+     * @param Sheet  $sheet
+     * @param string $type
      */
-    private $message;
-
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @param Event              $event
-     * @param User               $emitter
-     * @param User               $recipient
-     * @param \DateTimeInterface $createdAt
-     * @param string             $action
-     * @param string             $message
-     * @param string             $url
-     */
-    public function __construct(Event $event, User $emitter, User $recipient, \DateTimeInterface $createdAt, $action, $message, $url = null)
+    public function __construct(Sheet $sheet, $type)
     {
-        $this->event     = $event;
-        $this->emitter   = $emitter;
-        $this->recipient = $recipient;
-        $this->createdAt = $createdAt;
-        $this->action    = $action;
-        $this->message   = $message;
-        $this->view      = false;
-        $this->url       = $url;
+        $this->sheet = $sheet;
+        $this->type  = $type;
     }
 
     /**
@@ -87,88 +48,18 @@ class Notification
     }
 
     /**
-     * @return Event
+     * @return Sheet
      */
-    public function getEvent()
+    public function getSheet()
     {
-        return $this->event;
-    }
-
-    /**
-     * @return User
-     */
-    public function getEmitter()
-    {
-        return $this->emitter;
-    }
-
-    /**
-     * @return User
-     */
-    public function getRecipient()
-    {
-        return $this->recipient;
-    }
-
-    /**
-     * @return bool
-     *
-     * @deprecated Use is read instead
-     */
-    public function isView()
-    {
-        return $this->view;
-    }
-
-    /**
-     * @return \DateTimeImmutable
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
+        return $this->sheet;
     }
 
     /**
      * @return string
      */
-    public function getAction()
+    public function getType()
     {
-        return $this->action;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRead()
-    {
-        return (bool) $this->view;
-    }
-
-    /**
-     * @return Notification
-     */
-    public function markAsRead()
-    {
-        $this->view = true;
-
-        return $this;
+        return $this->type;
     }
 }
