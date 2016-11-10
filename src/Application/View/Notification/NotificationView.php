@@ -82,8 +82,16 @@ class NotificationView
     /**
      * @return bool
      */
-    public function hasLabel()
+    public function hasPriorityLabel()
     {
         return $this->priority !== Notification::PRIORITY_NONE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImportant()
+    {
+        return $this->priority === Notification::PRIORITY_IMPORTANT;
     }
 }

@@ -84,7 +84,7 @@ class SheetController extends Controller
             $this->getUser(),
             $locale
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
 
         $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
@@ -104,9 +104,9 @@ class SheetController extends Controller
             'nomenclatures'       => $nomenclatures,
             'participants'        => $participants,
             'templateData'        => $templateData,
+            'popinWelcome'        => $popinWelcome,
             'sheetValidationView' => (isset($sheetValidationView)) ? $sheetValidationView : null,
-            'popinWelcome'  => $popinWelcome,
-            'participantProduct' => $participantProduct
+            'participantProduct'  => $participantProduct,
         ]);
     }
 
