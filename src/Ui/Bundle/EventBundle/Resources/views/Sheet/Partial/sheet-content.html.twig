@@ -11,13 +11,10 @@
                 {{ include('EventBundle:Sheet:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}) }}
             {% else %}
                 {% if sheet.isValidationDraft %}
-                    <a href="{{ path('event_sheet_submit_validation', {'sheet': sheet.id}) }}" class="btn btn-primary">
-                        <i class="icon-Document_1"></i>
-                        {{ 'sheet.submit.validation'|trans }}
-                    </a>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#sheetSubmitModal">{{ 'sheet.submit.validation'|trans }}</button>
                 {% elseif sheet.isValidationPending %}
                     <a class="btn btn-gray" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
-                        <span><i class="icon-Document_1"></i> {{ 'sheet.submit.validation.pending'|trans }}</span>
+                        {{ 'sheet.submit.validation.pending'|trans }}
                     </a>
                 {% endif %}
             {% endif %}
@@ -79,4 +76,8 @@
 
 {% if isRequestMeetingEnabled %}
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
+{% endif %}
+
+{% if sheetValidationView is defined and sheetValidationView != null %}
+    {{ include('EventBundle:Sheet:modalSheetValidation.html.twig', { 'view': sheetValidationView, 'sheet': sheet }, false) }}
 {% endif %}

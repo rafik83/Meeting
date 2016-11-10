@@ -10,38 +10,6 @@ services:
             - { name: kernel.event_listener, event: kernel.terminate, method: process }
 
     #
-    # Subscriber
-    #
-    notification_subscriber:
-        abstract:  true
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
-
-    vimeet_app.vimeet.application.event.notification_on_meeting_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnMeetingEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-    vimeet_app.vimeet.application.event.notification_on_message_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnMessageEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-    vimeet_app.vimeet.application.event.notification_on_request_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnRequestEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-    vimeet_app.vimeet.application.event.notification_on_sheet_event_subscriber:
-        class: Proximum\Vimeet\Application\Event\NotificationOnSheetEventSubscriber
-        parent: notification_subscriber
-        tags:
-            - { name: 'kernel.event_subscriber' }
-
-    #
     # Repositories
     #
     vimeet_infrastructure.repository.event_repository:
@@ -173,6 +141,10 @@ services:
             - '@vimeet.components.paginator'
     repository.sheet.comment_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\CommentRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    repository.sheet.completeness_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetCompletenessRepository
         arguments:
             - '@doctrine.orm.entity_manager'
     repository.admin_activate_account_token_repository:
@@ -982,6 +954,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateProfile }
     command.participant.update_avatar_handler:
@@ -989,6 +962,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateAvatar }
     command.register.participant_step_handler:
@@ -1097,6 +1071,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@account.synchronizer'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
     command.nomenclature.create_handler:
@@ -1843,6 +1818,13 @@ services:
             - '@query.catalog.sheet_preview_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+
+    query.sheet.sheet_validation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQueryHandler
+        arguments:
+            - '@repository.sheet.completeness_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery }
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:
@@ -1952,7 +1934,6 @@ services:
         arguments:
             - '@navigation.navigation_builder'
 
-
     query.navigation.catalog_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
         arguments:
@@ -1965,6 +1946,33 @@ services:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
 
+    ##
+    # Notification query handler
+    ##
+    query.notification.abstract_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\AbstractNotificationQueryHandler
+        abstract: true
+        arguments:
+            - '@adapter.router'
+            - '@datetime'
+    query.notification.notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
+        arguments:
+            - '@query.notification.sheet_notification_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
+    query.notification.sheet_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler
+        arguments:
+            - '@query.notification.sheet_complete_translation_view_query_handler'
+            - '@repository.sheet.completeness_repository'
+    query.notification.sheet_complete_translation_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
+
+    ##
+    # Meeting Request query handler
+    ##
     query.meeting_request.meeting_request_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler
         arguments:
@@ -2256,6 +2264,8 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.sheet.completeness_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
 
     printer.sheet_pdf_printer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter

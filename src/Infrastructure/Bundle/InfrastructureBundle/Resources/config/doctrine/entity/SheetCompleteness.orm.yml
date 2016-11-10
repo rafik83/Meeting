@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\SheetCompleteness:
+    type: entity
+    table: sheet_completeness
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        completeness:
+            type: integer
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE

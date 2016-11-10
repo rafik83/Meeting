@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -20,8 +23,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
@@ -184,8 +188,8 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
-        $sheet = new Sheet($event, $type, [], $user, $now);
-        $participant  = new Participant(
+        $sheet       = new Sheet($event, $type, [], $user, $now);
+        $participant = new Participant(
             $sheet,
             $user,
             [
@@ -198,10 +202,10 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -219,14 +223,21 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
+            function(SheetUpdatedEvent $sheetUpdatedEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
+
         $handler = new UpdateProfileHandler(
             $participantRepository->reveal(),
-            $accountSynchronizer->reveal()
+            $accountSynchronizer->reveal(),
+            $eventDispatcher->reveal()
         );
 
-        $templateData = new TemplateData('root', [], 'fr', 'fr');
-        $block = new Block('12', [], 'fr', 'fr');
-        $text  = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
+        $templateData  = new TemplateData('root', [], 'fr', 'fr');
+        $block         = new Block('12', [], 'fr', 'fr');
+        $text          = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
         $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
@@ -235,11 +246,11 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
         $editableText2->setContentValue('bidule');
-        $telephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
+        $telephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
         $telephone1->setContentValue('+11111111');
-        $telephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
+        $telephone2 = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $telephone2->setContentValue('+22222222');
@@ -253,9 +264,9 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
-        $expectedBlock = new Block('12', [], 'fr', 'fr');
-        $expectedText  = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
-        $exEditableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
+        $expectedBlock        = new Block('12', [], 'fr', 'fr');
+        $expectedText         = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
+        $exEditableText1      = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText1->setContentValue('foo');
@@ -263,11 +274,11 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText2->setContentValue('bar');
-        $exTelephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
+        $exTelephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone1->setContentValue('phone');
-        $exTelephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
+        $exTelephone2 = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone2->setContentValue('mobile');
@@ -456,8 +467,8 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
-        $sheet = new Sheet($event, $type, [], $user, $now);
-        $participant  = new Participant(
+        $sheet       = new Sheet($event, $type, [], $user, $now);
+        $participant = new Participant(
             $sheet,
             $user,
             [
@@ -470,10 +481,10 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -491,14 +502,21 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
+            function(SheetUpdatedEvent $sheetUpdatedEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
+
         $handler = new UpdateProfileHandler(
             $participantRepository->reveal(),
-            $accountSynchronizer->reveal()
+            $accountSynchronizer->reveal(),
+            $eventDispatcher->reveal()
         );
 
-        $templateData = new TemplateData('root', [], 'fr', 'fr');
-        $block = new Block('12', [], 'fr', 'fr');
-        $text  = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
+        $templateData  = new TemplateData('root', [], 'fr', 'fr');
+        $block         = new Block('12', [], 'fr', 'fr');
+        $text          = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
         $editableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
@@ -507,11 +525,11 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
         $editableText2->setContentValue('bidule');
-        $telephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
+        $telephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
         $telephone1->setContentValue('+11111111');
-        $telephone2    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
+        $telephone2 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $telephone2->setContentValue('+22222222');
@@ -525,9 +543,9 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expectedTemplateData = new TemplateData('root', [], 'fr', 'fr');
-        $expectedBlock = new Block('12', [], 'fr', 'fr');
-        $expectedText  = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
-        $exEditableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
+        $expectedBlock        = new Block('12', [], 'fr', 'fr');
+        $expectedText         = new TemplateObject\Text('69b3cde1', 'text', [], 'fr', 'fr');
+        $exEditableText1      = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText1->setContentValue('foo');
@@ -535,11 +553,11 @@ class UpdateProfileHandlerTest extends \PHPUnit_Framework_TestCase
             'tags' => ['participant_lastname', 'participant_data'],
         ], 'fr', 'fr');
         $exEditableText2->setContentValue('bar');
-        $exTelephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
+        $exTelephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone1->setContentValue('phone');
-        $exTelephone2    = new TemplateObject\Telephone('69b3cde2', 'telephone', [
+        $exTelephone2 = new TemplateObject\Telephone('69b3cde2', 'telephone', [
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone2->setContentValue('mobile');
