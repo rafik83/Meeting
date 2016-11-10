@@ -54,7 +54,7 @@ class NotificationView
      * NotificationView constructor.
      *
      * @param DateTimeInterface $createdAt
-     * @param                   $icon
+     * @param string            $icon
      * @param string            $category
      * @param string            $description
      * @param string            $link
@@ -82,8 +82,16 @@ class NotificationView
     /**
      * @return bool
      */
-    public function hasLabel()
+    public function hasPriorityLabel()
     {
         return $this->priority !== Notification::PRIORITY_NONE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImportant()
+    {
+        return $this->priority === Notification::PRIORITY_IMPORTANT;
     }
 }

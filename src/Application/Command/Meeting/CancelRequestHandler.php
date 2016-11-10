@@ -3,20 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use DateTimeInterface;
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Meeting\RequestCanceledEvent;
-use Proximum\Vimeet\Domain\Model\Meeting\Message;
-use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToCancelMeetingRequestException;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CancelRequestHandler
 {
@@ -26,64 +22,39 @@ class CancelRequestHandler
     private $requestRepository;
 
     /**
-     * @var MessageRepositoryInterface
+     * @var RequestPermissionManager
      */
-    private $messageRepository;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var DateTimeInterface
-     */
-    private $createdAt;
+    private $permissionManager;
 
     /**
      * CancelRequestHandler constructor.
      *
      * @param RequestRepositoryInterface $requestRepository
-     * @param MessageRepositoryInterface $messageRepository
-     * @param EventDispatcherInterface   $eventDispatcher
-     * @param DateTimeInterface          $createdAt
+     * @param RequestPermissionManager   $permissionManager
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        MessageRepositoryInterface $messageRepository,
-        EventDispatcherInterface $eventDispatcher,
-        DateTimeInterface $createdAt
+        RequestPermissionManager $permissionManager
     ) {
         $this->requestRepository = $requestRepository;
-        $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->createdAt         = $createdAt;
+        $this->permissionManager = $permissionManager;
     }
 
     /**
      * @param CancelRequest $cancelRequest
+     *
+     * @throws IsNotAllowedToCancelMeetingRequestException
      */
     public function handle(CancelRequest $cancelRequest)
     {
-        // Cancel request
-        $this->requestRepository->set($cancelRequest->request->cancel($cancelRequest->date));
-
-        // Add message
-        if ($cancelRequest->message) {
-            $this->messageRepository->add(new Message(
-                $cancelRequest->request,
-                $cancelRequest->sheet,
-                $cancelRequest->message,
-                $this->createdAt
-            ));
-        }
-
-        // Dispatch event
-        $this->eventDispatcher->dispatch(Events::REQUEST_CANCELED, new RequestCanceledEvent(
+        if (!$this->permissionManager->isAllowedToCancel(
             $cancelRequest->emitter,
             $cancelRequest->request,
-            $this->createdAt,
-            $cancelRequest->message
-        ));
+            $cancelRequest->sheet
+        )) {
+            throw new IsNotAllowedToCancelMeetingRequestException();
+        }
+
+        $this->requestRepository->remove($cancelRequest->request);
     }
 }

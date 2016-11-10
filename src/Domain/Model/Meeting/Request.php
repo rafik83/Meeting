@@ -23,7 +23,6 @@ class Request implements MessageSubjectInterface
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
-    const STATE_CANCEL   = 'cancelled';
 
     /**
      * @var int
@@ -190,19 +189,6 @@ class Request implements MessageSubjectInterface
      *
      * @return Request
      */
-    public function cancel(\DateTimeInterface $date)
-    {
-        $this->state          = self::STATE_CANCEL;
-        $this->stateUpdatedAt = $date;
-
-        return $this;
-    }
-
-    /**
-     * @param \DateTimeInterface $date
-     *
-     * @return Request
-     */
     public function approve(\DateTimeInterface $date)
     {
         $this->state          = self::STATE_APPROVED;
@@ -215,6 +201,15 @@ class Request implements MessageSubjectInterface
      * @param DateTimeInterface $date
      */
     public function unRefuse(\DateTimeInterface $date)
+    {
+        $this->state          = self::STATE_SENT;
+        $this->stateUpdatedAt = $date;
+    }
+
+    /**
+     * @param DateTimeInterface $date
+     */
+    public function unApprove(\DateTimeInterface $date)
     {
         $this->state          = self::STATE_SENT;
         $this->stateUpdatedAt = $date;
@@ -395,14 +390,6 @@ class Request implements MessageSubjectInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isCancelled()
-    {
-        return self::STATE_CANCEL === $this->state;
-    }
-
-    /**
      * @return array
      */
     public static function getAllStates()
@@ -411,7 +398,26 @@ class Request implements MessageSubjectInterface
             self::STATE_SENT,
             self::STATE_APPROVED,
             self::STATE_REFUSED,
-            self::STATE_CANCEL
         ];
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function isSender(Sheet $sheet)
+    {
+        return $this->from === $sheet;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function isReceiver(Sheet $sheet)
+    {
+        return $this->to === $sheet;
     }
 }

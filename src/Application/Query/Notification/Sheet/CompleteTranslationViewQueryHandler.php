@@ -25,7 +25,7 @@ class CompleteTranslationViewQueryHandler extends AbstractNotificationQueryHandl
     public function handle(CompleteTranslationViewQuery $query)
     {
         return new NotificationView(
-            $this->datetime,
+            $query->sheet->getCreatedAt(),
             Category::SHEET_ICON,
             Notification::CATEGORY_SHEET,
             'notification.sheet.completeTranslation',

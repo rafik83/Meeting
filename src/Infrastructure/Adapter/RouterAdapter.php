@@ -77,7 +77,7 @@ class RouterAdapter implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($path, $parameters = [])
+    public function generate($path, array $parameters = [])
     {
         return $this->router->generate($path, $parameters);
     }

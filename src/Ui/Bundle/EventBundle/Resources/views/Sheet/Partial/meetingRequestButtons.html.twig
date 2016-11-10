@@ -1,0 +1,6 @@
+{{ include('EventBundle:MeetingRequest:buttons.html.twig', {
+    'allowedToCreate': meetingRequest is null or not meetingRequest,
+    'meetingRequest': meetingRequest,
+    'viewed': sheet,
+    'viewer': userSheet,
+}) }}

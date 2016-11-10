@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -22,19 +22,9 @@ class CancelRequest
     public $request;
 
     /**
-     * @var string
-     */
-    public $message;
-
-    /**
      * @var User
      */
     public $emitter;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $date;
 
     /**
      * @var Sheet
@@ -44,16 +34,14 @@ class CancelRequest
     /**
      * CancelRequest constructor.
      *
-     * @param Request            $request
-     * @param User               $emitter
-     * @param \DateTimeInterface $date
-     * @param Sheet              $sheet
+     * @param Request $request
+     * @param User    $emitter
+     * @param Sheet   $sheet
      */
-    public function __construct(Request $request, User $emitter, \DateTimeInterface $date, Sheet $sheet)
+    public function __construct(Request $request, User $emitter, Sheet $sheet)
     {
         $this->request = $request;
         $this->emitter = $emitter;
-        $this->date    = $date;
         $this->sheet   = $sheet;
     }
 }

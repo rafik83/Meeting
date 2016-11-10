@@ -149,6 +149,10 @@ trans-pull: trans-openl10n-pull
 trans-openl10n-pull:
 	openl10n pull --locale=all
 
+trans-sync:
+	openl10n push --locale=all
+	openl10n pull --locale=all
+
 ########
 # Test #
 ########

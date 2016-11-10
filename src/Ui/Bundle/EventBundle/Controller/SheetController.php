@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipant
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -86,6 +87,15 @@ class SheetController extends Controller
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
 
+        $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
+        $isFirstRegistration   = in_array(true, $flagFirstRegistration);
+        $popinWelcome          = null;
+
+        if ($isFirstRegistration) {
+            $welcomeViewQuery = new WelcomeViewQuery($sheet);
+            $popinWelcome     = $this->get('tactician.commandbus.query')->handle($welcomeViewQuery);
+        }
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'               => $eventDomain->getEvent(),
             'sheet'               => $sheet,
@@ -94,6 +104,7 @@ class SheetController extends Controller
             'nomenclatures'       => $nomenclatures,
             'participants'        => $participants,
             'templateData'        => $templateData,
+            'popinWelcome'        => $popinWelcome,
             'sheetValidationView' => (isset($sheetValidationView)) ? $sheetValidationView : null,
             'participantProduct'  => $participantProduct,
         ]);

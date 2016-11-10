@@ -128,6 +128,11 @@ class Event implements EventInterface
     private $currency;
 
     /**
+     * @var string
+     */
+    private $logoExtension;
+
+    /**
      * Constructor.
      *
      * @param string $title
@@ -364,10 +369,12 @@ class Event implements EventInterface
 
     /**
      * @param string $logo
+     * @param string $logoExtension
      */
-    public function setLogo($logo)
+    public function setLogo($logo, $logoExtension)
     {
-        $this->logo = $logo;
+        $this->logo          = $logo;
+        $this->logoExtension = $logoExtension;
     }
 
     /**
@@ -382,8 +389,18 @@ class Event implements EventInterface
      * @param string $domain
      * @param string $organiserName
      */
-    public function update($title, array $locales, $fallback, $mode, $vat, $country, $currency, $timeZone, $domain, $organiserName)
-    {
+    public function update(
+        $title,
+        array $locales,
+        $fallback,
+        $mode,
+        $vat,
+        $country,
+        $currency,
+        $timeZone,
+        $domain,
+        $organiserName
+    ) {
         $this->title         = $title;
         $this->locales       = $locales;
         $this->fallback      = $fallback;
@@ -444,7 +461,7 @@ class Event implements EventInterface
 
     /**
      * @param string $organiserEmail
-     * 
+     *
      * @return $this
      */
     public function setOrganiserEmail($organiserEmail)
@@ -510,5 +527,13 @@ class Event implements EventInterface
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSvgLogo()
+    {
+        return $this->logoExtension === 'svg';
     }
 }

@@ -27,7 +27,7 @@
                         </td>
                         <td>
                             {{ notification.description|trans({'%locale%': notification.locale|locale(app.request.locale)|lower}) }}
-                            {% if notification.hasLabel %}
+                            {% if notification.icon is not null %}
                                 <span class="label label-{{ notification.priority }}">{{ ('notification.label.' ~ notification.priority)|trans }}</span>
                             {% endif %}
                         </td>

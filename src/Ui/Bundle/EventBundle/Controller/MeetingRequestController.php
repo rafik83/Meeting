@@ -14,9 +14,10 @@ use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
+use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom;
-use Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
@@ -25,16 +26,14 @@ use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\View\Meeting\ShowDetailsView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestRefuseType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateFromType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateToType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,11 +45,11 @@ use Symfony\Component\HttpFoundation\Response;
 class MeetingRequestController extends Controller
 {
     /**
-     * List meeting requests the sheet sent
+     * List all meeting request of a sheet (sent and received)
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
+     * @param Sheet       $sheet
      *
      * @return Response
      */
@@ -109,18 +108,15 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * Create a meeting request between two sheet
-     *
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
+     * @param null        $from
      *
-     * @return Response|JsonResponse
+     * @throws \Exception
      */
-    public function createRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    private function authorizeToCreateRequest(Request $request, EventDomain $eventDomain, Sheet $sheet, &$from)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
         $event = $eventDomain->getEvent();
 
         if (!$sheet->isInCatalog()) {
@@ -157,6 +153,23 @@ class MeetingRequestController extends Controller
         ) {
             throw $this->createNotFoundException('You can not request a meeting as there is already one');
         }
+    }
+
+    /**
+     * Create a meeting request between two sheet
+     *
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     *
+     * @return Response|JsonResponse
+     */
+    public function createRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $from = null;
+        $this->authorizeToCreateRequest($request, $eventDomain, $sheet, $from);
 
         $createRequest = new CreateRequest($from, $sheet, $this->getUser());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
@@ -167,25 +180,24 @@ class MeetingRequestController extends Controller
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
         if ($isSubmitted && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($createRequest);
+            $result = $this->get('tactician.commandbus')->handle($createRequest);
 
-            $response = new JsonResponse();
-            $response->setData([
-                'status' => 'ok',
-                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig'),
-            ]);
-
-            return $response;
+            return new JsonResponse($this->createJsonResponseData(
+                true,
+                true,
+                $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
+                    'meetingRequest' => $result->meetingRequest,
+                ])
+            ));
         } elseif ($isSubmitted && !$form->isValid()) {
-            $response = new JsonResponse();
-            $response->setData([
-                'status' => 'error',
-                'html'   => $this->renderView('EventBundle:MeetingRequest:createRequest.html.twig', [
-                    'form' => $form->createView(),
-                ]),
-            ]);
 
-            return $response;
+            return new JsonResponse($this->createJsonResponseData(
+                false,
+                false,
+                $this->renderView('EventBundle:MeetingRequest:createRequest.html.twig', [
+                    'form' => $form->createView(),
+                ])
+            ));
         }
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
@@ -222,14 +234,14 @@ class MeetingRequestController extends Controller
             ->get('tactician.commandbus.query')
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
-        $approveRequest = new ApproveRequest($meetingRequest);
+        $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet);
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
                 'sheet'          => $sheet->getId(),
                 'meetingRequest' => $meetingRequest->getId()
             ]),
-            'sheet'  => $sheet,
             'locale' => $request->getLocale(),
+            'sheet'  => $sheet,
         ]);
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
@@ -237,24 +249,22 @@ class MeetingRequestController extends Controller
         if ($isSubmitted && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($approveRequest);
 
-            $response = new JsonResponse();
-            $response->setData([
-                'status' => 'ok',
-                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig'),
-            ]);
-
-            return $response;
+            return new JsonResponse($this->createJsonResponseData(
+                true,
+                true,
+                $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
+                    'meetingRequest' => $meetingRequest
+                ])
+            ));
         } elseif ($isSubmitted && !$form->isValid()) {
-            $response = new JsonResponse();
-            $response->setData([
-                'status' => 'error',
-                'html'   => $this->renderView('EventBundle:MeetingRequest:approvedRequest.html.twig', [
+            return new JsonResponse($this->createJsonResponseData(
+                false,
+                false,
+                $this->renderView('EventBundle:MeetingRequest:approvedRequest.html.twig', [
                     'discussion' => $discussion,
                     'form'       => $form->createView(),
-                ]),
-            ]);
-
-            return $response;
+                ])
+            ));
         }
 
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
@@ -305,26 +315,22 @@ class MeetingRequestController extends Controller
         if ($isSubmitted && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($refuseRequest);
 
-            $response = new JsonResponse();
-            $response->setData([
-                'status' => 'ok',
-                'html'   => $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
+            return new JsonResponse($this->createJsonResponseData(
+                true,
+                true,
+                $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
                     'meetingRequest' => $meetingRequest,
-                ]),
-            ]);
-
-            return $response;
+                ])
+            ));
         } elseif ($isSubmitted && !$form->isValid()) {
-            $response = new JsonResponse();
-            $response->setData([
-                'status' => 'error',
-                'html'   => $this->renderView('EventBundle:MeetingRequest:refusedRequest.html.twig', [
+            return new JsonResponse($this->createJsonResponseData(
+                false,
+                false,
+                $this->renderView('EventBundle:MeetingRequest:refusedRequest.html.twig', [
                     'discussion' => $discussion,
                     'form'       => $form->createView(),
-                ]),
-            ]);
-
-            return $response;
+                ])
+            ));
         }
 
         return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
@@ -335,17 +341,20 @@ class MeetingRequestController extends Controller
 
     /**
      * @param Request        $request
+     * @param EventDomain    $eventDomain
      * @param MeetingRequest $meetingRequest
      *
      * @return Response
      */
-    public function showConversationOfRefuseRequestAction(Request $request, MeetingRequest $meetingRequest)
-    {
+    public function showConversationOfRefuseRequestAction(
+        Request $request,
+        EventDomain $eventDomain,
+        MeetingRequest $meetingRequest
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $permissionManager = $this->get('meeting.request_permission_manager');
 
-        if (!$meetingRequest->getFromSheet()->hasUser($this->getUser())
-            && !$meetingRequest->getToSheet()->hasUser($this->getUser())
-        ) {
+        if (!$permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($this->getUser(), $meetingRequest)) {
             throw $this->createNotFoundException('You are not allowed to see this meeting request.');
         }
 
@@ -353,7 +362,11 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $isItRequest = $meetingRequest->getFromSheet()->hasUser($this->getUser());
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
+            $this->getUser(),
+            $eventDomain->getEvent(),
+            $request->getLocale()
+        );
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
@@ -362,8 +375,8 @@ class MeetingRequestController extends Controller
 
         $form = null;
 
-        if (!$isItRequest) {
-            $unRefuse = new UnRefuseMeetingRequest($meetingRequest);
+        if ($permissionManager->isAllowedToUnRefuse($this->getUser(), $meetingRequest, $sheet)) {
+            $unRefuse = new UnRefuseMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
                     'meetingRequest' => $meetingRequest->getId()
@@ -375,188 +388,266 @@ class MeetingRequestController extends Controller
             if ($isSubmitted && $form->isValid()) {
                 $this->get('tactician.commandbus')->handle($unRefuse);
 
-                $response = new JsonResponse();
-                $response->setData([
-                    'status' => 'ok',
-                    'html'   => $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
+                return new JsonResponse($this->createJsonResponseData(
+                    true,
+                    true,
+                    $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
                         'meetingRequest' => $meetingRequest,
                         'sheet'          => $meetingRequest->getToSheet(),
-                    ]),
-                ]);
-
-                return $response;
+                    ])
+                ));
             } elseif ($isSubmitted && !$form->isValid()) {
-                $response = new JsonResponse();
-                $response->setData([
-                    'status' => 'error',
-                    'html'   => $this->renderView('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
+                return new JsonResponse($this->createJsonResponseData(
+                    false,
+                    false,
+                    $this->renderView('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
                         'discussion'  => $discussion,
-                        'isItRequest' => $isItRequest,
+                        'isItRequest' => $meetingRequest->isSender($sheet),
                         'form'        => $form->createView(),
-                    ]),
-                ]);
-
-                return $response;
+                    ])
+                ));
             }
         }
 
         return $this->render('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
             'discussion'  => $discussion,
-            'isItRequest' => $isItRequest,
+            'isItRequest' => $meetingRequest->isSender($sheet),
             'form'        => $form !== null ? $form->createView() : null,
         ]);
     }
 
     /**
-     * Display a meeting request
+     * @param bool   $ok
+     * @param bool   $close
+     * @param string $html
      *
-     * @param Request        $request
-     * @param EventDomain      $eventDomain
-     * @param Sheet          $sheet
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return Response
+     * @return array
      */
-    public function showRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
+    private function createJsonResponseData($ok, $close, $html)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $locale = $request->getLocale();
-
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToSee($this->getUser(), $meetingRequest, $sheet)) {
-            throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
-        }
-
-        if ($meetingRequest->getFromSheet() === $sheet) {
-            $participants = $meetingRequest->getFromParticipants()->toArray();
-        } elseif ($meetingRequest->getToSheet() === $sheet) {
-            $participants = $meetingRequest->getToParticipants()->toArray();
-        } else {
-            throw $this->createAccessDeniedException('You are not allowed to see this meeting request.');
-        }
-
-        $messageRepository = $this->get('vimeet_infrastructure.repository.meeting.message_repository');
-        $permissionManager = $this->get('meeting.request_permission_manager');
-        $sheetInfoGuesser  = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
-
-        $meetingRequestView = new ShowDetailsView(
-            $meetingRequest->getId(),
-            $meetingRequest->getToSheet()->getId(),
-            $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            $meetingRequest->getFromSheet()->getId(),
-            $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            array_map(
-                function (Participant $participant) use ($locale) {
-                    return $this
-                        ->get('template.participant_info_guesser')
-                        ->guessParticipantCompleteName($participant, $locale);
-                },
-                $participants
-            ),
-            $messageRepository->getMessagesByMeetingRequest($meetingRequest),
-            $meetingRequest->getState()
-        );
-
-        return $this->render('EventBundle:MeetingRequest:showRequest.html.twig', [
-            'event'              => $eventDomain->getEvent(),
-            'sheet'              => $sheet,
-            'meetingRequestView' => $meetingRequestView,
-            'canEdit'            => $permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet),
-            'canCancel'          => $permissionManager->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet),
-            'canRefuse'          => $permissionManager->isAllowedToRefuse($this->getUser(), $meetingRequest, $sheet),
-            'canApprove'         => $permissionManager->isAllowedToApprove($this->getUser(), $meetingRequest, $sheet),
-        ]);
+        return [
+            'status' => $ok === true ? 'ok' : 'error',
+            'close'  => $close,
+            'html'   => $html,
+        ];
     }
 
     /**
-     * Cancel a meeting request
+     * @param Request                  $request
+     * @param MeetingRequest           $meetingRequest
+     * @param Sheet                    $sheet
+     * @param RequestPermissionManager $permissionManager
+     * @param null                     $cancelForm
      *
-     * @param Request        $request
-     * @param EventDomain      $eventDomain
-     * @param Sheet          $sheet
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return RedirectResponse|Response
+     * @return null|JsonResponse
      */
-    public function cancelRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+    private function cancelFormOnEdit(
+        Request &$request,
+        MeetingRequest &$meetingRequest,
+        Sheet &$sheet,
+        RequestPermissionManager &$permissionManager,
+        &$cancelForm
+    ) {
+        if ($permissionManager->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet)) {
+            $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
+            $cancelForm    = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
+                'action' => $this->generateUrl('event_meeting_request_edit', [
+                    'meetingRequest' => $meetingRequest->getId()
+                ]),
+            ]);
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToCancel($this->getUser(), $meetingRequest, $sheet)) {
-            throw $this->createAccessDeniedException('You are not allowed to cancel this meeting request.');
+            if ($cancelForm->handleRequest($request)->isSubmitted() && $cancelForm->isValid()) {
+                $this->get('tactician.commandbus')->handle($cancelRequest);
+
+                return new JsonResponse($this->createJsonResponseData(
+                    true,
+                    true,
+                    $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
+                        'sheet' => $meetingRequest->getToSheet(),
+                    ])
+                ));
+            }
         }
 
-        $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), new \DateTime(), $sheet);
-        $form          = $this->createForm(MeetingRequestCancelType::class, $cancelRequest);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($cancelRequest);
-            $this->addFlash('success', 'flash.meeting_request.cancelled.success');
-
-            return $this->redirectToRoute('event_meeting_list_request', ['sheet' => $sheet->getId()]);
-        }
-
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
-
-        return $this->render('EventBundle:MeetingRequest:cancelRequest.html.twig', [
-            'event'    => $eventDomain->getEvent(),
-            'sheet'    => $sheet,
-            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            'form'     => $form->createView(),
-        ]);
+        return null;
     }
 
     /**
-     * Edit a meeeting request
+     * @param Request                  $request
+     * @param MeetingRequest           $meetingRequest
+     * @param Sheet                    $sheet
+     * @param RequestPermissionManager $permissionManager
+     * @param null                     $unApprovedForm
+     *
+     * @return null|JsonResponse
+     */
+    private function unApproveFormOnEdit(
+        Request &$request,
+        MeetingRequest &$meetingRequest,
+        Sheet &$sheet,
+        RequestPermissionManager &$permissionManager,
+        &$unApprovedForm = null
+    ) {
+        if ($permissionManager->isAllowedToUnApprove($this->getUser(), $meetingRequest, $sheet)) {
+            $unApprovedRequest = new UnApproveMeetingRequest($this->getUser(), $meetingRequest, $sheet);
+            $unApprovedForm    = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
+                'action' => $this->generateUrl('event_meeting_request_edit', [
+                    'meetingRequest' => $meetingRequest->getId()
+                ]),
+            ]);
+
+            if ($unApprovedForm->handleRequest($request)->isSubmitted() && $unApprovedForm->isValid()) {
+                $this->get('tactician.commandbus')->handle($unApprovedRequest);
+
+                return new JsonResponse($this->createJsonResponseData(
+                    true,
+                    true,
+                    $this->renderView('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', [
+                        'meetingRequest' => $meetingRequest,
+                        'sheet'          => $sheet
+                    ])
+                ));
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Edit a meeting request
      *
      * @param Request        $request
      * @param EventDomain    $eventDomain
-     * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
-     * @return RedirectResponse|Response
+     * @return JsonResponse|Response
      */
-    public function editRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, MeetingRequest $meetingRequest)
+    public function editRequestAction(Request $request, EventDomain $eventDomain, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet)) {
-            throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Not allowed method');
         }
 
-        if ($meetingRequest->getFromSheet() === $sheet) {
-            $command = new UpdateRequestFrom($meetingRequest, new \DateTime(), $this->getUser());
-            $form    = $this->createForm(MeetingRequestUpdateFromType::class, $command, [
-                'sheet'  => $sheet,
-                'locale' => $request->getLocale(),
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
+            $this->getUser(),
+            $eventDomain->getEvent(),
+            $request->getLocale()
+        );
+        $permissionManager = $this->get('meeting.request_permission_manager');
+
+        $isNotAllowedToEditApproved = $meetingRequest->isApproved() && !$permissionManager->isAllowedToEditApproved($this->getUser(), $meetingRequest, $sheet);
+
+        $isNotAllowedToEdit = $meetingRequest->isSent() && !$permissionManager->isAllowedToEdit($this->getUser(), $meetingRequest, $sheet);
+
+
+        if ($isNotAllowedToEditApproved || $isNotAllowedToEdit) {
+            throw $this->createNotFoundException('You are not allowed to edit this meeting request.');
+        }
+
+        /** @var DiscussionMeetingRequestView $discussion */
+        $discussion = $this
+            ->get('tactician.commandbus.query')
+            ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
+
+        $isProposition      = $meetingRequest->isReceiver($sheet);
+        $form               = null;
+        $cancelForm         = null;
+        $unApprovedForm     = null;
+        $cancelResponse     = $this->cancelFormOnEdit(
+            $request,
+            $meetingRequest,
+            $sheet,
+            $permissionManager,
+            $cancelForm
+        );
+        $unapprovedResponse = $this->unApproveFormOnEdit(
+            $request,
+            $meetingRequest,
+            $sheet,
+            $permissionManager,
+            $unApprovedForm
+        );
+
+        if ($cancelResponse !== null) {
+            return $cancelResponse;
+        }
+
+        if ($unapprovedResponse !== null) {
+            return $unapprovedResponse;
+        }
+
+        if ($this->displayEditForm($discussion, $sheet)) {
+            $command = new UpdateMeetingRequest($meetingRequest, $sheet, $this->getUser());
+            $form    = $this->createForm(MeetingRequestUpdateType::class, $command, [
+                'sheet'            => $sheet,
+                'locale'           => $request->getLocale(),
+                'show_description' => !$discussion->hasMessageOfSheet($sheet),
+                'action'           => $this->generateUrl('event_meeting_request_edit', [
+                    'meetingRequest' => $meetingRequest->getId()
+                ]),
             ]);
-        } elseif ($meetingRequest->getToSheet() === $sheet) {
-            $command = new UpdateRequestTo($meetingRequest, new \DateTime(), $this->getUser());
-            $form    = $this->createForm(MeetingRequestUpdateToType::class, $command, [
-                'sheet'  => $sheet,
-                'locale' => $request->getLocale(),
-            ]);
-        } else {
-            throw $this->createAccessDeniedException('You are not allowed to edit this meeting request.');
+
+            $isSubmitted = $form->handleRequest($request)->isSubmitted();
+            if ($isSubmitted && $form->isValid()) {
+                $this->get('tactician.commandbus')->handle($command);
+                if ($meetingRequest->isApproved()) {
+                    if ($isProposition) {
+                        $this->addFlash('success', 'flash.meeting_request.approved.proposition.edit.success');
+                    } else {
+                        $this->addFlash('success', 'flash.meeting_request.approved.request.edit.success');
+                    }
+                } else {
+                    $this->addFlash('success', 'flash.meeting_request.pending.request.edit.success');
+                }
+
+                return new JsonResponse($this->createJsonResponseData(
+                    true,
+                    false,
+                    $this->renderView('EventBundle:MeetingRequest:editRequestSuccess.html.twig', [
+                        'isProposition'  => $isProposition,
+                        'meetingRequest' => $meetingRequest,
+                    ])
+                ));
+            } elseif ($isSubmitted && !$form->isValid()) {
+                return new JsonResponse($this->createJsonResponseData(
+                    false,
+                    false,
+                    $this->renderView('EventBundle:MeetingRequest:editRequest.html.twig', [
+                        'discussion'     => $discussion,
+                        'form'           => $form->createView(),
+                        'cancelForm'     => $cancelForm !== null ? $cancelForm->createView() : null,
+                        'unApprovedForm' => $unApprovedForm !== null ? $unApprovedForm->createView() : null,
+                        'isProposition'  => $isProposition,
+                        'meetingRequest' => $meetingRequest,
+                    ])
+                ));
+            }
         }
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.meeting_request.edit.success');
-
-            return $this->redirectToRoute('event_meeting_list_request', ['sheet' => $sheet->getId()]);
-        }
-
-        $sheetInfoGuesser = $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser');
 
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
-            'event'    => $eventDomain->getEvent(),
-            'fromName' => $sheetInfoGuesser->guessSheetName($meetingRequest->getFromSheet(), $request->getLocale()),
-            'toName'   => $sheetInfoGuesser->guessSheetName($meetingRequest->getToSheet(), $request->getLocale()),
-            'form'     => $form->createView(),
-            'sheet'    => $sheet,
+            'discussion'     => $discussion,
+            'form'           => $form !== null ? $form->createView() : $form,
+            'cancelForm'     => $cancelForm !== null ? $cancelForm->createView() : null,
+            'unApprovedForm' => $unApprovedForm !== null ? $unApprovedForm->createView() : null,
+            'isProposition'  => $isProposition,
+            'meetingRequest' => $meetingRequest,
         ]);
+    }
+
+    /**
+     * The form should not be initiated and display if the current sheet has
+     * already sent a message and has only one participant
+     *
+     * @param DiscussionMeetingRequestView $discussion
+     * @param Sheet                        $sheet
+     *
+     * @return bool
+     */
+    private function displayEditForm(DiscussionMeetingRequestView $discussion, Sheet $sheet)
+    {
+        return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant();
     }
 
     /**

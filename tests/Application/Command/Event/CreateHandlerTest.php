@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +31,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual user
         $dateTime = new \DateTime();
-        $user = new Admin(
+        $user     = new Admin(
             'email@email.fr',
             'salt',
             'password',
@@ -50,7 +51,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->leftColor     = '#FFFFFF';
         $create->rightColor    = '#000000';
         $create->textColor     = '#CCCCCC';
-        $create->logo          = 'shouldBeUploadFile';
+        // It mocks the creation of an UploadedFile
+        $create->logo          = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
@@ -71,7 +77,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
-        $expectedEvent->setLogo('toto.jpg');
+        $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
         $expectedUser = new Admin(
             'email@email.fr',
@@ -83,7 +89,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'ROLE_SUPER_ADMIN',
             $dateTime
         );
-
         // Mock
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $adminRepository->set($expectedUser)->shouldNotBeCalled();
@@ -100,7 +105,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
+        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('toto.jpeg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('jpeg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -122,7 +132,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         // Actual user
         $dateTime = new \DateTime();
-        $user = new Admin(
+        $user     = new Admin(
             'email@email.fr',
             'salt',
             'password',
@@ -142,7 +152,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->leftColor  = '#FFFFFF';
         $create->rightColor = '#000000';
         $create->textColor  = '#CCCCCC';
-        $create->logo       = 'shouldBeUploadFile';
+        $create->logo       = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
         $create->domain     = 'hello.vimeet.proximum.dev';
         $create->timeZone   = 'Europe/Paris';
 
@@ -162,7 +176,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
-        $expectedEvent->setLogo('toto.jpg');
+        $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
         $expectedUser = new Admin(
             'email@email.fr',
@@ -197,7 +211,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         }))->shouldBeCalled();
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload('shouldBeUploadFile')->shouldBeCalled()->willReturn('toto.jpg');
+        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('toto.jpeg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('jpeg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -241,7 +260,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->leftColor     = '#FFFFFF';
         $create->rightColor    = '#000000';
         $create->textColor     = '#CCCCCC';
-        $create->logo          = 'shouldBeUploadFile';
+        $create->logo          = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
@@ -262,7 +285,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
-        $expectedEvent->setLogo('toto.jpg');
+        $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
         $expectedUser = new Admin(
             'email@email.fr',
@@ -288,7 +311,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
         $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled()->willReturn('toto.jpg');
+        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldNotBeCalled()->willReturn('toto.jpeg');
+        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldNotBeCalled()->willReturn('jpeg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {

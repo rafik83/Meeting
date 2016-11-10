@@ -422,26 +422,18 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CreateRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.update_request_from_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFromHandler
+        class: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@meeting.request_permission_manager'
+            - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestFrom }
-    vimeet_infrastructure.vimeet.application.command.meeting.update_request_to_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestToHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\UpdateRequestTo }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting.update_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateHandler
         arguments:
@@ -455,6 +447,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@meeting.request_permission_manager'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }
@@ -471,6 +464,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@meeting.request_permission_manager'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
@@ -486,11 +480,17 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CancelRequestHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting.message_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
+            - '@meeting.request_permission_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CancelRequest }
+    command.meeting.un_approve_meeting_request_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequestHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@meeting.request_permission_manager'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
     vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
         arguments:
@@ -1292,8 +1292,6 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.participant_info_guesser'
-    sheet.state_setter:
-        class: Proximum\Vimeet\Application\Components\Sheet\StateSetter
     sheet.sheet_details_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Details\SheetDetailsViewFactory
         arguments:
@@ -1626,6 +1624,10 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
+    query.sheet.welcome_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery }
     query.participant.card_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
         arguments:
@@ -1868,6 +1870,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
         arguments:
             - '@adapter.router'
+    navigation.session_flashbag:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\SessionFlashbag
+        arguments:
+            - '@session.flash_bag'
 
     ##
     # Navigation query handler
@@ -1887,6 +1893,14 @@ services:
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery }
+    query.navigation.submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@query.navigation.sheet_submenu_view_query_handler'
+            - '@query.navigation.catalog_submenu_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery }
     query.navigation.category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\CategoryViewQueryHandler
         arguments:
@@ -1927,6 +1941,18 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+
+    query.navigation.catalog_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@datetime'
+
+    query.navigation.sheet_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@repository.cart_row_repository'
 
     ##
     # Notification query handler

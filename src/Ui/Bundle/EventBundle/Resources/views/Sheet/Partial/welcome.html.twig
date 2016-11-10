@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        {{ 'sheet.welcome.title'|trans }}
+    </h4>
+    <div class="modal-subtitle">
+        {{ 'sheet.welcome.subtitle'|trans }}
+    </div>
+</div>
+<div class="row modal-welcome">
+    <div class="col-md-6">
+        <div class="col-md-12 text-center custom-modal-content">
+            {{ 'sheet.welcome.sheetContent'|trans }}
+            <button type="button" class="modal-button-sheet btn btn btn-primary" data-dismiss="modal">
+                <i class="icon-Document_1"></i>
+                {{ 'navigation.category.sheet'|trans }}
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="col-md-12 text-center custom-modal-content">
+            {% if popinWelcome.hasPackage %}
+                {{ 'sheet.welcome.packageContent'|trans }}
+                <a type="button" class="modal-button-package btn btn-primary" href="{{ path('event_package') }}">
+                    <i class="icon-Panier_2"></i>
+                    {{ 'navigation.category.package'|trans }}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="modal-footer"></div>

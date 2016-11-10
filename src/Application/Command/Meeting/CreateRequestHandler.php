@@ -10,14 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Meeting\RequestSentEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipantAddedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateRequestHandler
 {
@@ -32,11 +28,6 @@ class CreateRequestHandler
     private $messageRepository;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @var \DateTimeInterface
      */
     private $dateTime;
@@ -46,23 +37,22 @@ class CreateRequestHandler
      *
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
-     * @param EventDispatcherInterface   $eventDispatcher
      * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
-        EventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
         $this->dateTime          = $dateTime;
     }
 
     /**
      * @param CreateRequest $createRequest
+     *
+     * @return CreateRequestResult
      */
     public function handle(CreateRequest $createRequest)
     {
@@ -88,23 +78,6 @@ class CreateRequestHandler
             ));
         }
 
-        // Notify request creation
-        $this->eventDispatcher->dispatch(Events::REQUEST_SENT, new RequestSentEvent(
-            $createRequest->creator,
-            $request,
-            $this->dateTime,
-            $createRequest->description
-        ));
-
-        // Notify participant add
-        foreach ($createRequest->participants as $participant) {
-            $this->eventDispatcher->dispatch(Events::REQUEST_PARTICIPANT_ADDED, new ParticipantAddedEvent(
-                $createRequest->creator,
-                $participant,
-                $request,
-                $createRequest->description,
-                $this->dateTime
-            ));
-        }
+        return new CreateRequestResult($request);
     }
 }

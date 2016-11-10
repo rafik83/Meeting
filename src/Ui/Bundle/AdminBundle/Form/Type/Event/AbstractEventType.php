@@ -61,7 +61,7 @@ abstract class AbstractEventType extends AbstractType
             ->add('logo', FileType::class, [
                 'required' => false,
                 'attr'     => [
-                    'accept' => implode(', ', ["image/jpeg", "image/pjpeg", "image/png", "image/x-png",]),
+                    'accept' => implode(', ', ["image/jpeg", "image/pjpeg", "image/png", "image/x-png", 'image/svg+xml']),
                 ],
             ])
             ->add('country', CountryType::class)

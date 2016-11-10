@@ -13,7 +13,6 @@ Proximum\Vimeet\Domain\Model\Event:
             - "PROXIMUM"               #organiserName
         locales: [es]
         assetPath: ''
-        logo: 'assets/images/asddays-logo.png'
         paymentAddress: '@payment_address_event_spanish'
         configuration: '@configuration_event_spanish'
         organiserEmail: accounts@proximumgroup.com

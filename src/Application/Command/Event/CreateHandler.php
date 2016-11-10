@@ -68,7 +68,6 @@ class CreateHandler
         $this->fileStorage         = $fileStorage;
     }
 
-
     public function handle(Create $create)
     {
         if (null !== $this->eventRepository->getEventByDomain($create->domain)) {
@@ -91,7 +90,9 @@ class CreateHandler
         $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
 
         if (null !== $create->logo) {
-            $event->setLogo($this->fileStorage->upload($create->logo));
+            $logoExtension = $this->fileStorage->getExtension($create->logo);
+            $logoPath      = $this->fileStorage->upload($create->logo);
+            $event->setLogo($logoPath, $logoExtension);
         }
 
         foreach ($event->getLocales() as $locale) {

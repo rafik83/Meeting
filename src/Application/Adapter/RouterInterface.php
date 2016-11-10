@@ -54,5 +54,5 @@ interface RouterInterface
      *
      * @return string
      */
-    public function generate($path, $parameters = []);
+    public function generate($path, array $parameters = []);
 }
