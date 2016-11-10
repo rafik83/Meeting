@@ -1,0 +1,61 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+
+class SheetSubmenuViewQuery
+{
+    /**
+     * @var User
+     */
+    public $user;
+
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
+    /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var string
+     */
+    public $route;
+
+    /**
+     * SheetSubmenuViewQuery constructor.
+     *
+     * @param User   $user
+     * @param Event  $event
+     * @param string $locale
+     * @param Sheet  $sheet
+     * @param string $route
+     */
+    public function __construct(User $user, Event $event, $locale, Sheet $sheet, $route)
+    {
+        $this->user   = $user;
+        $this->event  = $event;
+        $this->locale = $locale;
+        $this->sheet  = $sheet;
+        $this->route  = $route;
+    }
+}
