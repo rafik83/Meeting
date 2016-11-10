@@ -63,8 +63,10 @@ class FollowerChoiceType extends AbstractType
             'choice_value' => function ($admin) {
                 if ($admin instanceof Admin) {
                     return $admin->getId();
+                } elseif ($admin === self::UNASSIGNED_FOLLOWER) {
+                    return self::UNASSIGNED_FOLLOWER;
                 } else {
-                    return 'unassigned';
+                    return null;
                 }
             }
         ]);
