@@ -68,7 +68,6 @@ class SheetController extends Controller
 
         if ($request->query->get('reset') !== null) {
             $this->get('filter.sheet_filter')->clear();
-
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
@@ -90,7 +89,6 @@ class SheetController extends Controller
 
         if ($filtered) {
             $filters = $filterFullForm->getData();
-
             // save filter into session
             $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
                 $filterFullForm,
