@@ -17,6 +17,11 @@ use Proximum\Vimeet\Domain\Notification\Notification;
 
 class NoOrderNotificationViewQueryHandler extends AbstractNotificationQueryHandler
 {
+    /**
+     * @param NoOrderNotificationViewQuery $query
+     *
+     * @return NotificationView
+     */
     public function handle(NoOrderNotificationViewQuery $query)
     {
         return new NotificationView(

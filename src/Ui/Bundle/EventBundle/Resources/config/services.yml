@@ -246,7 +246,7 @@ services:
         tags:
             - { name: kernel.event_subscriber }
     event_listener.sheet.package_orders_updated_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Package\PackageOrdersUpdatedEventSubscriber
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Package\MustSelectPackageEvent
         arguments:
             - '@package.orders_checker'
         tags:

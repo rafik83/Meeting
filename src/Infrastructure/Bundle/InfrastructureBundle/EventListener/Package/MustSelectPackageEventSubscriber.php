@@ -12,12 +12,12 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
-use Proximum\Vimeet\Application\Event\Package\OrdersUpdatedEvent;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Package\Orders\OrdersChecker;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PackageOrdersUpdatedEventSubscriber implements EventSubscriberInterface
+class MustSelectPackageEventSubscriber implements EventSubscriberInterface
 {
     /**
      * @var OrdersChecker
@@ -33,9 +33,9 @@ class PackageOrdersUpdatedEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param OrdersUpdatedEvent $ordersUpdatedEvent
+     * @param MustSelectPackageEvent $ordersUpdatedEvent
      */
-    public function onSheetCreation(OrdersUpdatedEvent $ordersUpdatedEvent)
+    public function onSheetCreation(MustSelectPackageEvent $ordersUpdatedEvent)
     {
         $this->ordersChecker->check($ordersUpdatedEvent->getSheet());
     }
@@ -62,9 +62,9 @@ class PackageOrdersUpdatedEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::PACKAGE_ORDER_UPDATED => 'onSheetCreation',
-            Events::SHEET_CHANGED_TYPE    => 'onTypeChanged',
-            Events::ORDER_CONFIRMED       => 'onOrderCreation',
+            Events::MUST_SELECT_PACKAGE => 'onSheetCreation',
+            Events::SHEET_CHANGED_TYPE  => 'onTypeChanged',
+            Events::ORDER_CONFIRMED     => 'onOrderCreation',
         ];
     }
 }

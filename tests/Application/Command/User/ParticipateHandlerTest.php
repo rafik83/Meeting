@@ -14,6 +14,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -26,8 +27,8 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -312,6 +313,12 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
             function (SheetUpdatedEvent $sheetUpdatedEvent) {
+                return true;
+            }
+        ))->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, Argument::that(
+            function (MustSelectPackageEvent $event) {
                 return true;
             }
         ))->shouldBeCalled();

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Package\OrdersUpdatedEvent;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -138,7 +138,7 @@ class ParticipateHandler
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
 
-        $ordersUpdated = new OrdersUpdatedEvent($sheet);
-        $this->eventDispatcher->dispatch(Events::PACKAGE_ORDER_UPDATED, $ordersUpdated);
+        $mustSelectPackageEvent = new MustSelectPackageEvent($sheet);
+        $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $mustSelectPackageEvent);
     }
 }

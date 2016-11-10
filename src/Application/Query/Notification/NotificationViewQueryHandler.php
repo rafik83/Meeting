@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationVi
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Notification\NotificationListView;
+use Proximum\Vimeet\Application\View\Notification\NotificationView;
 
 class NotificationViewQueryHandler
 {
@@ -29,6 +30,13 @@ class NotificationViewQueryHandler
     private $packageNotificationViewQueryHandler;
 
     /**
+     * @var NotificationView[]
+     */
+    private $notificationViews;
+
+    /**
+     * NotificationViewQueryHandler constructor.
+     *
      * @param SheetNotificationViewQueryHandler   $sheetNotificationViewQueryHandler
      * @param PackageNotificationViewQueryHandler $packageNotificationViewQueryHandler
      */
@@ -38,6 +46,7 @@ class NotificationViewQueryHandler
     ) {
         $this->sheetNotificationViewQueryHandler   = $sheetNotificationViewQueryHandler;
         $this->packageNotificationViewQueryHandler = $packageNotificationViewQueryHandler;
+        $this->notificationViews                   = [];
     }
 
     /**
@@ -51,12 +60,24 @@ class NotificationViewQueryHandler
             new SheetNotificationViewQuery($query->sheet)
         );
 
-        $packageNotificationView = $this->packageNotificationViewQueryHandler->handle(
-            new PackageNotificationViewQuery($query->sheet)
-        );
+        $this->addNotifications($sheetNotificationViews);
 
-        $notificationViews = array_merge($sheetNotificationViews, $packageNotificationView);
+        if ($query->sheet->getPackage() !== null && $query->sheet->getPackage()->isPassable()) {
+            $packageNotificationView = $this->packageNotificationViewQueryHandler->handle(
+                new PackageNotificationViewQuery($query->sheet)
+            );
 
-        return new NotificationListView($notificationViews);
+            $this->addNotifications($packageNotificationView);
+        }
+
+        return new NotificationListView($this->notificationViews);
+    }
+
+    /**
+     * @param NotificationView[] $notificationViews
+     */
+    private function addNotifications(array $notificationViews)
+    {
+        array_merge($this->notificationViews, $notificationViews);
     }
 }

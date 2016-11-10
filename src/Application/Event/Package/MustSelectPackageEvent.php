@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Event\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\Event;
 
-class OrdersUpdatedEvent extends Event
+class MustSelectPackageEvent extends Event
 {
     /**
      * @var Sheet

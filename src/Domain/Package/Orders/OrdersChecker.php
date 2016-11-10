@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Package\Orders;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Notification;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Notification\Notification as NotificationConstant;
+use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
 class OrdersChecker
 {
@@ -27,10 +27,8 @@ class OrdersChecker
      *
      * @param NotificationRepositoryInterface $notificationRepository
      */
-    public function __construct(
-        NotificationRepositoryInterface $notificationRepository
-    ) {
-
+    public function __construct(NotificationRepositoryInterface $notificationRepository)
+    {
         $this->notificationRepository = $notificationRepository;
     }
 

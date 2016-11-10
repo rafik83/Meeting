@@ -47,14 +47,14 @@ class PackageNotificationViewQueryHandler
      */
     public function handle(PackageNotificationViewQuery $query)
     {
-        $packageNotif = $this->notificationRepository->findByType(
+        $packageNotification = $this->notificationRepository->findByType(
             $query->sheet,
             Notification::TYPE_PACKAGE_ORDERS
         );
 
         $notificationViews = [];
 
-        if ($packageNotif) {
+        if ($packageNotification !== null) {
             $notificationViews[] = $this->noOrderNotificationViewQueryHandler->handle(
                 new NoOrderNotificationViewQuery($query->sheet)
             );
