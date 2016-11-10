@@ -28,7 +28,7 @@ Proximum\Vimeet\Application\Command\Event\Update:
             - NotBlank: ~
         logo:
             - Image:
-                mimeTypes: ["image/jpeg", "image/pjpeg", "image/png", "image/x-png"]
+                mimeTypes: ["image/jpeg", "image/pjpeg", "image/png", "image/x-png", 'image/svg+xml']
         textColor:
             - NotBlank: ~
             - Regex:

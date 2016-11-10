@@ -55,4 +55,11 @@ interface CartRowRepositoryInterface
      * @return CartRow[]
      */
     public function findByProduct($product);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasProducts(Sheet $sheet);
 }

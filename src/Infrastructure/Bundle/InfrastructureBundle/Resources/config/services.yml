@@ -1624,6 +1624,10 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery }
+    query.sheet.welcome_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery }
     query.participant.card_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
         arguments:
@@ -1866,6 +1870,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
         arguments:
             - '@adapter.router'
+    navigation.session_flashbag:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\SessionFlashbag
+        arguments:
+            - '@session.flash_bag'
 
     ##
     # Navigation query handler
@@ -1877,6 +1885,14 @@ services:
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
+    query.navigation.submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@query.navigation.sheet_submenu_view_query_handler'
+            - '@query.navigation.catalog_submenu_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery }
     query.navigation.category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\CategoryViewQueryHandler
         arguments:
@@ -1917,6 +1933,18 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+
+    query.navigation.catalog_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@datetime'
+
+    query.navigation.sheet_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@repository.cart_row_repository'
 
     ##
     # Notification query handler

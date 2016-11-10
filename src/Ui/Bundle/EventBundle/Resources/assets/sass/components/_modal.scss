@@ -1,0 +1,43 @@
+.separator {
+  position: absolute;
+  height: 110px;
+  width: 0px;
+  border-right: 1px solid black;
+  right: 0;
+  left: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal-subtitle {
+  margin-top: 10px;
+}
+
+.custom-modal-content {
+  background: #e8e8e9;
+  border-radius: 4px;
+  padding: 20px;
+  min-height: 250px;
+  position: relative;
+}
+
+.modal-button-sheet {
+  position: absolute !important;
+  left: 20px;
+  bottom: 15px;
+}
+
+.modal-button-package {
+  position: absolute !important;
+  left: 15px;
+  bottom: 15px;
+}
+
+.modal-welcome {
+  background: none !important;
+  margin: 15px 35px;
+}
+
+.relative-modal {
+  position: relative;
+}
