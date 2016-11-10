@@ -1,0 +1,5 @@
+Proximum\Vimeet\Domain\Model\Notification:
+    asddays_must_select_package:
+        __construct:
+            - '@sheet_asddays_1'
+            - 'packageOrders'

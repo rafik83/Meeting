@@ -29,5 +29,5 @@ final class Notification
      * Type
      */
     const TYPE_SHEET_TRANSLATION_COMPLETENESS = 'sheetTranslationCompleteness';
-    const TYPE_PACKAGE_ORDERS = 'packageOrders';
+    const TYPE_PACKAGE_ORDERS                 = 'packageOrders';
 }
