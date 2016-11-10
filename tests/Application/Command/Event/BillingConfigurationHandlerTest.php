@@ -26,7 +26,7 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', ''));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', ''));
-        $event->setLogo('toto.jpg');
+        $event->setLogo('toto.jpg', 'jpg');
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
@@ -34,7 +34,7 @@ class BillingConfigurationHandlerTest extends \PHPUnit_Framework_TestCase
             new EventTranslation($expectedEvent, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));
         $expectedEvent->getTranslations()->set('en',
             new EventTranslation($expectedEvent, 'en', '', 'FR14-000', 'billing address', 'condition', 'footers'));
-        $expectedEvent->setLogo('toto.jpg');
+        $expectedEvent->setLogo('toto.jpg', 'jpg');
 
         // Command
         $billingConfiguration               = new BillingConfiguration($event);
