@@ -42,7 +42,7 @@ class OrdersChecker
 
         if (null !== $package
             && $package->isPassable()
-            && !$sheet->hasOrders()
+            && !$sheet->hasNotCancelledOrders()
         ) {
             $this->notificationRepository->add(new Notification(
                 $sheet,

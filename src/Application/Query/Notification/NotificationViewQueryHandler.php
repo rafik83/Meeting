@@ -78,6 +78,6 @@ class NotificationViewQueryHandler
      */
     private function addNotifications(array $notificationViews)
     {
-        array_merge($this->notificationViews, $notificationViews);
+        $this->notificationViews = array_merge($this->notificationViews, $notificationViews);
     }
 }
