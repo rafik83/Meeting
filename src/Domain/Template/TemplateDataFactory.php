@@ -57,6 +57,24 @@ class TemplateDataFactory
     private $nomenclatures = [];
 
     /**
+     * Cached nomenclatures by event to avoid multiples request
+     *
+     * Array by id of events of nomenclature
+     *
+     * @var array
+     */
+    private $nomenclatureByEvent = [];
+
+    /**
+     * Cached global nomenclatures
+     *
+     * null or array of nomenclatures
+     *
+     * @var null|array
+     */
+    private $globalsNomenclatures = null;
+
+    /**
      * @param NomenclatureRepositoryInterface $nomenclatureRepository
      */
     public function __construct(NomenclatureRepositoryInterface $nomenclatureRepository)
@@ -340,9 +358,35 @@ class TemplateDataFactory
     private function loadNomenclatures(Event $event = null)
     {
         $this->nomenclatures = $event
-            ? $this->nomenclatureRepository->findByEvent($event)
-            : $this->nomenclatureRepository->findGlobals();
+            ? $this->findNomenclatureByEvent($event)
+            : $this->getGlobalsNomenclatures();
 
         return $this;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Nomenclature[]
+     */
+    private function findNomenclatureByEvent(Event $event)
+    {
+        if (!isset($this->nomenclatureByEvent[$event->getId()])) {
+            $this->nomenclatureByEvent[$event->getId()] = $this->nomenclatureRepository->findByEvent($event);
+        }
+
+        return $this->nomenclatureByEvent[$event->getId()];
+    }
+
+    /**
+     * @return Nomenclature[]
+     */
+    private function getGlobalsNomenclatures()
+    {
+        if (!$this->globalsNomenclatures) {
+            $this->globalsNomenclatures = $this->nomenclatureRepository->findGlobals();
+        }
+
+        return $this->globalsNomenclatures;
     }
 }
