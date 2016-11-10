@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
 
 class SheetSearchQueryBuilder
 {
@@ -298,12 +299,20 @@ class SheetSearchQueryBuilder
      */
     protected function filterByFollower(array &$filters)
     {
-        if (isset($filters['follower']) && $filters['follower'] instanceof Admin) {
-            $matchFollower = new Match();
-            $matchFollower
-                ->setField('followUp', $filters['follower']->getId());
+        if (isset($filters['follower'])) {
+            if ($filters['follower'] instanceof Admin) {
+                $matchFollower = new Match();
+                $matchFollower
+                    ->setField('followUp', $filters['follower']->getId());
 
-            $this->query->addMust($matchFollower);
+                $this->query->addMust($matchFollower);
+            } elseif ($filters['follower'] === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
+                $matchFollower = new Match();
+                $matchFollower
+                    ->setField('followUp', 0);
+
+                $this->query->addMust($matchFollower);
+            }
         }
     }
 
