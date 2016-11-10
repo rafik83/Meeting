@@ -67,6 +67,13 @@ class FollowerChoiceType extends AbstractType
 
                 return null;
             },
+            'choice_value' => function ($admin) {
+                if ($admin instanceof Admin) {
+                    return $admin->getId();
+                } else {
+                    return 'unassigned';
+                }
+            }
         ]);
     }
 
