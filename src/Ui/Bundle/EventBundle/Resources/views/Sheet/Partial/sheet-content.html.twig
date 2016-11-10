@@ -8,7 +8,7 @@
 
         <div class="buttons-zone button request-meeting-sheet">
             {% if isRequestMeetingEnabled %}
-                {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {'sheet': sheet, 'meetingRequest': meetingRequest}, false) }}
+                {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {'sheet': sheet, 'userSheet': userSheet, 'meetingRequest': meetingRequest}, false) }}
             {% else %}
                 {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
             {% endif %}
