@@ -1,19 +1,19 @@
 {% if discussion.hasMessages %}
 <div class="messages">
     <div class="row">
-        <div class="message col-xs-8">
-            <span class="author">Société</span>
-            <p>Nous souhaitons vous rencontrer pour aborder la maintenance de la soufflerie de Modane.</p>
-        </div>
-        <div class="message message--right col-xs-offset-4 col-xs-8">
-            <span class="author">Onera</span>
-            <p>Oui entendu c'est un sujet d'actualité pour nous ! J'accepte votre proposition de rendez-vous.</p>
-        </div>
-        <div class="message col-xs-8">
-            <span class="author">Société</span>
-            <p>Très bien, merci.</p>
-            <p>Quelles sont vos disponiblités ?</p>
-        </div>
+    {% for message in discussion.messages %}
+        {% if message.isLeft %}
+            <div class="message col-xs-8">
+                <span class="author">{{ message.sheetName|upper }}</span>
+                <p>{{ message.content }}</p>
+            </div>
+        {% else %}
+            <div class="message message--right col-xs-offset-4 col-xs-8">
+                <span class="author">{{ message.sheetName|upper }}</span>
+                <p>{{ message.content }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
     </div>
 </div>
 {% endif %}
