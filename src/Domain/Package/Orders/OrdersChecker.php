@@ -37,7 +37,7 @@ class OrdersChecker
      */
     public function check(Sheet $sheet)
     {
-        $this->notificationRepository->removeByType($sheet, NotificationConstant::TYPE_PACKAGE_ORDERS);
+        $this->notificationRepository->removeByType($sheet, NotificationConstant::TYPE_PACKAGE_SELECTED);
         $package = $sheet->getPackage();
 
         if (null !== $package
@@ -46,7 +46,7 @@ class OrdersChecker
         ) {
             $this->notificationRepository->add(new Notification(
                 $sheet,
-                NotificationConstant::TYPE_PACKAGE_ORDERS
+                NotificationConstant::TYPE_PACKAGE_SELECTED
             ));
         }
     }

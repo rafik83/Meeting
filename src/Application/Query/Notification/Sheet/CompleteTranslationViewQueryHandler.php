@@ -31,7 +31,7 @@ class CompleteTranslationViewQueryHandler extends AbstractNotificationQueryHandl
             'notification.sheet.completeTranslation',
             $this->router->generate('event_sheet_locale', ['locale' => $query->locale]),
             Notification::PRIORITY_REQUIRED,
-            $query->locale
+            ['%locale%' => $query->locale]
         );
     }
 }

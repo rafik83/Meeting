@@ -49,7 +49,7 @@ class PackageNotificationViewQueryHandler
     {
         $packageNotification = $this->notificationRepository->findByType(
             $query->sheet,
-            Notification::TYPE_PACKAGE_ORDERS
+            Notification::TYPE_PACKAGE_SELECTED
         );
 
         $notificationViews = [];
