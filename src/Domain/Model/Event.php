@@ -133,8 +133,11 @@ class Event implements EventInterface
     private $logoExtension;
 
     /**
-     * Constructor.
-     *
+     * @var string
+     */
+    private $emailTeam;
+
+    /**
      * @param string $title
      * @param string $fallback
      * @param array  $locales
@@ -145,6 +148,7 @@ class Event implements EventInterface
      * @param string $timeZone
      * @param string $domain
      * @param string $organiserName
+     * @param string $emailTeam
      */
     public function __construct(
         $title,
@@ -156,7 +160,8 @@ class Event implements EventInterface
         $currency,
         $timeZone,
         $domain,
-        $organiserName
+        $organiserName,
+        $emailTeam = ''
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -171,6 +176,7 @@ class Event implements EventInterface
         $this->timeZone       = $timeZone;
         $this->domain         = $domain;
         $this->organiserName  = $organiserName;
+        $this->emailTeam      = $emailTeam;
     }
 
     /**
@@ -184,8 +190,6 @@ class Event implements EventInterface
     }
 
     /**
-     * Get domain.
-     *
      * @return string
      */
     public function getDomain()
@@ -202,8 +206,6 @@ class Event implements EventInterface
     }
 
     /**
-     * Get title.
-     *
      * @return string
      */
     public function getTitle()
@@ -378,6 +380,22 @@ class Event implements EventInterface
     }
 
     /**
+     * @return string
+     */
+    public function getEmailTeam()
+    {
+        return $this->emailTeam;
+    }
+
+    /**
+     * @param string $emailTeam
+     */
+    public function setEmailTeam($emailTeam)
+    {
+        $this->emailTeam = $emailTeam;
+    }
+
+    /**
      * @param string $title
      * @param array  $locales
      * @param string $fallback
@@ -388,6 +406,7 @@ class Event implements EventInterface
      * @param string $timeZone
      * @param string $domain
      * @param string $organiserName
+     * @param string $emailTeam
      */
     public function update(
         $title,
@@ -399,7 +418,8 @@ class Event implements EventInterface
         $currency,
         $timeZone,
         $domain,
-        $organiserName
+        $organiserName,
+        $emailTeam = ''
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
@@ -411,6 +431,7 @@ class Event implements EventInterface
         $this->timeZone      = $timeZone;
         $this->domain        = $domain;
         $this->organiserName = $organiserName;
+        $this->emailTeam     = $emailTeam;
     }
 
     /**
