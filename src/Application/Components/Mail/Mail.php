@@ -68,7 +68,7 @@ class Mail
     /**
      * @var bool
      */
-    protected $sendToEmailTeam;
+    protected $sendToEmailTeam = false;
 
     /**
      * @param string     $sender
@@ -77,7 +77,6 @@ class Mail
      * @param User|null  $senderUser
      * @param User|null  $receiverUser
      * @param Event|null $event
-     * @param bool       $sendToEmailTeam
      */
     public function __construct(
         $sender,
@@ -85,8 +84,7 @@ class Mail
         $locale,
         User $senderUser = null,
         User $receiverUser = null,
-        Event $event = null,
-        $sendToEmailTeam = false
+        Event $event = null
     ) {
         $this->sender          = $sender;
         $this->receiver        = $receiver;
@@ -94,7 +92,6 @@ class Mail
         $this->senderUser      = $senderUser;
         $this->receiverUser    = $receiverUser;
         $this->event           = $event;
-        $this->sendToEmailTeam = $sendToEmailTeam;
     }
 
     /**
