@@ -39,7 +39,7 @@ Feature: See sheet details
     And I should see "Ville"
     And I should see "Adresse"
     And I should see "Site internet"
-    
+
   Scenario: I can add a comment on a sheet
     Given I am logged with "test@test.com" on admin
     Then I go to this page "/admin/fr/event/1/sheet/1"
@@ -63,5 +63,6 @@ Feature: See sheet details
     Then I should be on this page "/admin/fr/event/1/sheet/1"
     And I should see "flash.admin.sheet.change_type.success"
     And the "sheet.changed_type" mail should be sent to "test@elao.com"
+    And the "sheet.changed_type" mail should be sent to "team-project@proximum.com"
     And the ".label-sheet-type" element should contain "Investisseur"
     And I should see "admin.sheet.trace.changed_type"
