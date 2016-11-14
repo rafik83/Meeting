@@ -117,7 +117,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 $message = unserialize(file_get_contents($file));
 
                 // check the recipients
-                $recipients = array_keys($message->getTo());
+                $bcc = ($message->getBcc() ? array_keys($message->getBcc()) : []);
+
+                $recipients = array_merge(array_keys($message->getTo()), $bcc);
+
                 if (!in_array($email, $recipients)) {
                     continue;
                 }
