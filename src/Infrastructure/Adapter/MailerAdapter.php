@@ -71,7 +71,7 @@ class MailerAdapter implements MailerInterface
         $emailTeam = $mail->getEvent()->getEmailTeam();
 
         if ($mail->sendToEmailTeam() && null !== $emailTeam) {
-            $this->mailer->setCc($emailTeam);
+            $message->setCc($emailTeam);
         }
 
         $this->mailer->send($message);
