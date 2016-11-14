@@ -64,11 +64,10 @@ class MailerAdapter implements MailerInterface
             ->setFrom($mail->getSender())
             ->setTo($mail->getReceiver());
 
-        $emailTeam = $mail->getEvent()->getEmailTeam();
-
-        if ($mail->sendToEmailTeam() && null !== $emailTeam) {
-            $message->setBcc($emailTeam);
+        if ($mail->sendToEmailTeam() && null !== $mail->getEvent()->getEmailTeam()) {
+            $message->setBcc($mail->getEvent()->getEmailTeam());
         }
+
         $message
             ->setBody($body)
             ->setContentType('text/html');
