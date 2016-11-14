@@ -79,7 +79,7 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $mail = new SheetValidatedMail(
             $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
+            $this->sender->generate(),
             $owner->getEmail(),
             $owner->getLocale()
         );
@@ -110,7 +110,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $oldMail = new ChangeOldMailAddressMail(
             $event->getEvent(),
-            $this->sender->generate(),
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getMail()
@@ -118,7 +118,7 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $newMail = new ChangeNewMailAddressMail(
             $event->getEvent(),
-            $this->sender->generate(),
+            $this->sender->generate($event->getEvent()),
             $event->getChangeMailToken()->getMail(),
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken(),
@@ -137,7 +137,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
         $mail = new OrderConfirmMail(
-            $this->sender->generate(),
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getOrder(),

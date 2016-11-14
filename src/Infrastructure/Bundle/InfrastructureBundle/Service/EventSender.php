@@ -39,7 +39,7 @@ class EventSender
     }
 
     /**
-     * @param Event $event
+     * @param Event|null $event
      *
      * @return string
      */
