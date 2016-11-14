@@ -45,6 +45,9 @@ Proximum\Vimeet\Domain\Model\Event:
         logoExtension:
             type: string
             nullable: true
+        emailTeam:
+            type: string
+            nullable: true
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address
