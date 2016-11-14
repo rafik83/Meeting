@@ -29,7 +29,8 @@ class EventFactory
             'EUR',
             'Europe/Paris',
             'super-event.vimeet.proximum.dev',
-            'proximum'
+            'proximum',
+            'team-project@proximum.com'
         );
     }
 }

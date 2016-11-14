@@ -9,8 +9,9 @@ Proximum\Vimeet\Domain\Model\Event:
             - 'FR'                     #country
             -  'EUR'                   #currency
             - 'Europe/Paris'           #timeZone
-            - asddays-2016.<domain()> #domain
+            - asddays-2016.<domain()>  #domain
             - "PROXIMUM"               #organiserName
+            - 'team-project@proximum.com'   #emailTeam
         setLogo: ['assets/images/asddays-logo.png', 'png']
         assetPath: ''
         paymentAddress: '@payment_address_event_asddays_2016'
