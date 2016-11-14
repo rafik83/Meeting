@@ -66,12 +66,18 @@ class Mail
     protected $locale;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam;
+
+    /**
      * @param string     $sender
      * @param string     $receiver
      * @param string     $locale
      * @param User|null  $senderUser
      * @param User|null  $receiverUser
      * @param Event|null $event
+     * @param bool       $sendToEmailTeam
      */
     public function __construct(
         $sender,
@@ -79,14 +85,16 @@ class Mail
         $locale,
         User $senderUser = null,
         User $receiverUser = null,
-        Event $event = null
+        Event $event = null,
+        $sendToEmailTeam = false
     ) {
-        $this->sender       = $sender;
-        $this->receiver     = $receiver;
-        $this->locale       = $locale;
-        $this->senderUser   = $senderUser;
-        $this->receiverUser = $receiverUser;
-        $this->event        = $event;
+        $this->sender          = $sender;
+        $this->receiver        = $receiver;
+        $this->locale          = $locale;
+        $this->senderUser      = $senderUser;
+        $this->receiverUser    = $receiverUser;
+        $this->event           = $event;
+        $this->sendToEmailTeam = $sendToEmailTeam;
     }
 
     /**
@@ -167,5 +175,13 @@ class Mail
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function sendToEmailTeam()
+    {
+        return $this->sendToEmailTeam;
     }
 }

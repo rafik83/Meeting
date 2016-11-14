@@ -68,6 +68,12 @@ class MailerAdapter implements MailerInterface
 
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
+        $emailTeam = $mail->getEvent()->getEmailTeam();
+
+        if ($mail->sendToEmailTeam() && null !== $emailTeam) {
+            $this->mailer->setCc($emailTeam);
+        }
+
         $this->mailer->send($message);
     }
 }
