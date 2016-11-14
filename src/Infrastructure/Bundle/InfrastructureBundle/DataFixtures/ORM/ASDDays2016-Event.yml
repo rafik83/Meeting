@@ -16,6 +16,7 @@ Proximum\Vimeet\Domain\Model\Event:
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
+        emailTeam: "teamproject@proximumgroup.com"
 
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
     configuration_asddays_2016:
