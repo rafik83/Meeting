@@ -12,27 +12,12 @@
 
             {% if not catalogSheetPreviewView.isItMySheet %}
                 <div class="buttons-zone button">
-                {% if not catalogSheetPreviewView.hasMeetingRequest %}
-                    {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': catalogSheetPreviewView.sheet}) }}
-                {% else %}
-                    {% if catalogSheetPreviewView.meetingRequestIsProposition %}
-                        {% if catalogSheetPreviewView.meetingRequestIsPending %}
-                            {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest, 'sheet': viewer}) }}
-                        {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
-                            {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {}) }}
-                        {% elseif catalogSheetPreviewView.meetingRequest.isRefused %}
-                            {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest}) }}
-                        {% endif %}
-                    {% else %}
-                        {% if catalogSheetPreviewView.meetingRequestIsPending %}
-                            {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {}) }}
-                        {% elseif catalogSheetPreviewView.meetingRequest.isApproved %}
-                            {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {}) }}
-                        {% elseif catalogSheetPreviewView.meetingRequest.isRefused %}
-                            {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {'meetingRequest': catalogSheetPreviewView.meetingRequest}) }}
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
+                    {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
+                        'allowedToCreate': catalogSheetPreviewView.isAllowedToCreateMeetingRequest,
+                        'meetingRequest': catalogSheetPreviewView.meetingRequest,
+                        'viewed': catalogSheetPreviewView.sheet,
+                        'viewer': viewer,
+                    }) }}
                 </div>
             {% endif %}
 

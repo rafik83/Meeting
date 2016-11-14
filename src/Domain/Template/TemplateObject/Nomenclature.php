@@ -69,6 +69,14 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * {@inheritdoc}
      */
+    public function getContentValueLocalize($locale)
+    {
+        return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getContentLabel()
     {
         return $this->getNomenclatureLabel();

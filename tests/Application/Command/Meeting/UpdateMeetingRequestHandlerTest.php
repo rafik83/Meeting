@@ -1,0 +1,267 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2015 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
+
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
+use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequestHandler;
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToUpdateMeetingRequestException;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class UpdateMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandleWithStateSentForSheetFrom()
+    {
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user1     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user2     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+
+        $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
+        $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
+        $participant3 = $this->createParticipantMock($sheetFrom, $user3, 3);
+        $sheetFrom->addParticipant($participant1);
+        $sheetFrom->addParticipant($participant2);
+        $sheetFrom->addParticipant($participant3);
+
+        //Actual
+        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
+
+        //Command
+        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
+        $command->participants = [$participant1, $participant3];
+        $command->description  = 'modif';
+
+        //Expected
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1);
+        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'modif', $datetime);
+
+        //Mock
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldBeCalled();
+
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldBeCalled();
+
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+
+        //Handler
+        $handler = new UpdateMeetingRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $datetime
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleWithStateApprovedForSheetFrom()
+    {
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user1     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user2     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+
+        $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
+        $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
+        $participant3 = $this->createParticipantMock($sheetFrom, $user3, 3);
+        $sheetFrom->addParticipant($participant1);
+        $sheetFrom->addParticipant($participant2);
+        $sheetFrom->addParticipant($participant3);
+
+        //Actual
+        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1);
+        $request->approve($datetime);
+
+        //Command
+        $command = new UpdateMeetingRequest($request, $sheetFrom, $user1);
+        $command->participants = [$participant1, $participant3];
+        $command->description  = 'modif';
+
+        //Expected
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1);
+        $expectedRequest->approve($datetime);
+        $expectedMessage = new Message($expectedRequest, $sheetFrom, 'modif', $datetime);
+
+        //Mock
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldBeCalled();
+
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldBeCalled();
+
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetFrom)->shouldBeCalled()->willReturn(true);
+
+        //Handler
+        $handler = new UpdateMeetingRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $datetime
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleWithStateSentForSheetTo()
+    {
+        $this->expectException(IsNotAllowedToUpdateMeetingRequestException::class);
+
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user1     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user2     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+
+        $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
+        $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
+        $participant3 = $this->createParticipantMock($sheetTo, $user3, 3);
+        $sheetTo->addParticipant($participant1);
+        $sheetTo->addParticipant($participant2);
+        $sheetTo->addParticipant($participant3);
+
+        //Actual
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
+
+        //Command
+        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
+        $command->participants = [$participant1, $participant3];
+        $command->description  = 'modif';
+
+        //Expected
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1);
+        $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
+
+        //Mock
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldNotBeCalled();
+
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldNotBeCalled();
+
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
+
+        //Handler
+        $handler = new UpdateMeetingRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $datetime
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleWithStateApprovedForSheetTo()
+    {
+        // Context
+        $event     = EventFactory::createEvent();
+        $type      = new Type($event);
+        $user1     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user2     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user3     = new User('email@email.com', 'salt', 'password', 'fr');
+        $user4     = new User('email@email.com', 'salt', 'password', 'fr');
+        $datetime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+
+        $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
+        $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
+        $participant3 = $this->createParticipantMock($sheetTo, $user3, 3);
+        $sheetTo->addParticipant($participant1);
+        $sheetTo->addParticipant($participant2);
+        $sheetTo->addParticipant($participant3);
+
+
+        //Actual
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1);
+        $request->approve($datetime);
+
+        //Command
+        $command = new UpdateMeetingRequest($request, $sheetTo, $user1);
+        $command->participants = [$participant1, $participant3];
+        $command->description  = 'modif';
+
+        //Expected
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1);
+        $expectedRequest->approve($datetime);
+        $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
+
+        //Mock
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->set($expectedRequest)->shouldBeCalled();
+
+        $messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $messageRepository->add($expectedMessage)->shouldBeCalled();
+
+        $permissionManager = $this->prophesize(RequestPermissionManager::class);
+        $permissionManager->isAllowedToEditSentOrApproved($user1, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
+
+        //Handler
+        $handler = new UpdateMeetingRequestHandler(
+            $requestRepository->reveal(),
+            $messageRepository->reveal(),
+            $permissionManager->reveal(),
+            $datetime
+        );
+
+        $handler->handle($command);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param User $user
+     * @param $id
+     *
+     * @return Participant
+     */
+    public function createParticipantMock(Sheet $sheet, User $user, $id)
+    {
+        $participant = new Participant($sheet, $user, [], false, true);
+        $reflection  = new \ReflectionClass(Participant::class);
+
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($participant, $id);
+        $property->setAccessible(false);
+
+        return $participant;
+    }
+}

@@ -12,10 +12,13 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
+catalog.action.meeting.proposition.approved: 'Proposition acceptée'
 catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
 catalog.action.meeting.request.approve: 'Proposition reçue'
+catalog.action.meeting.request.approved: 'Demande acceptée'
 catalog.action.meeting.request.back: Retour
 catalog.action.meeting.request.create: 'Demander en RDV'
+catalog.action.meeting.request.pending: 'Demande en attente'
 catalog.action.meeting.request.refuse: 'Proposition reçue'
 catalog.action.meeting.request.show.refuse: 'Demande refusée'
 catalog.complete_sheet: 'Voir la fiche complète'
@@ -45,8 +48,10 @@ login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
+modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
 navigation.category.billing: Facturation
 navigation.category.catalog: 'Catalogue des participants'
+navigation.category.happening: 'Gestion de rdv'
 navigation.category.meeting: 'Gestion de rdv'
 navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
@@ -58,12 +63,20 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
+navigation.links.happening.accept: Acceptées
+navigation.links.happening.approved: Acceptées
+navigation.links.happening.decline: Refusées
+navigation.links.happening.open_date: 'Disponible le'
+navigation.links.happening.proposal: 'Propositions de RDV'
+navigation.links.happening.refused: Refusées
+navigation.links.happening.sent: 'Demandes en attente'
+navigation.links.happening.waiting: 'Demandes en attente'
+navigation.links.incoming: 'A venir'
+navigation.links.meetingRequest.approved: Acceptées
 navigation.links.meetingRequest.open_date: 'Disponible le'
 navigation.links.meetingRequest.proposal: 'Propositions de RDV'
-navigation.links.meetingRequest.approved: 'Acceptées'
-navigation.links.meetingRequest.refused: 'Refusées'
+navigation.links.meetingRequest.refused: Refusées
 navigation.links.meetingRequest.sent: 'Demandes en attente'
-navigation.links.incoming: 'A venir'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
 navigation.links.member_space.profile: Profil
@@ -79,6 +92,7 @@ navigation.links.planning.flash_presentation: 'Présentations flash'
 navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
 navigation.links.sheet.locale: Version
+navigation.links.notification: Notifications
 navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
@@ -98,7 +112,7 @@ order.list.pay_remaining: 'Solder la totalité'
 order.list.pro_forma.link: 'Voir la pro-forma'
 order.list.remainingToPay: 'Reste à payer'
 order.list.title: 'Liste de vos commandes'
-order.transaction.howtopay: 'How to pay ?'
+order.transaction.howtopay: 'Comment payer ?'
 order.transaction.list.column.date: Date
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: État
@@ -164,9 +178,9 @@ package.summary.columns.title: Intitulé
 package.summary.columns.total: Total
 package.summary.columns.unitPrice: 'Prix unitaire'
 package.summary.edit: 'Modifier ma participation'
-package.summary.order-list: 'Liste des commandes'
 package.summary.empty: 'Votre panier est vide'
 package.summary.option: Option
+package.summary.order-list: 'Liste des commandes'
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
 package.summary.pay: 'Régler le forfait de participation'
 package.summary.promotion.button.label: Valider
@@ -209,9 +223,17 @@ sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander en RDV'
 sheet.submit.validation: 'Soumettre pour validation'
+sheet.submit.completeYourSheet: 'Completer ma fiche'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
+sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
+sheet.welcome.title: 'Félicitation, vous venez de finaliser la première partie de votre demande de participation.'
+sheet.welcome.subtitle: 'Pour finaliser votre demande de participation il vous reste à'
+sheet.welcome.sheetContent: 'Compléter votre fiche de présentation publiée dans le catalogue en ligne. Plus vos informations seront précises, plus vos rendez-vous seront ciblés'
+sheet.welcome.packageContent: 'Choisir la formule de participation qui correspond à vos attentes'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total
@@ -223,3 +245,13 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
+notification.columns.createdAt: 'Reçu le'
+notification.columns.category: 'Rubrique'
+notification.columns.description: 'Description'
+notification.link.label: 'Voir'
+notification.sheet.completeTranslation: "Compléter votre fiche de présentation en %locale%"
+notification.category.sheet.label: 'Fiche de présentation'
+notification.list.title.label: 'Notifications'
+notification.empty: 'Aucune notification en attente'
+notification.label.required: 'Obligatoire'
+notification.label.important: 'Important'

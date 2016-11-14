@@ -17,3 +17,5 @@ Proximum\Vimeet\Domain\Model\Product\Feature:
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             inversedBy: features
+            joinColumn:
+                onDelete: CASCADE

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +25,7 @@ class UpdateUnavailabilityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Event $event */
         $event = $options['sheet']->getEvent();
 
         $builder
@@ -50,5 +53,6 @@ class UpdateUnavailabilityType extends AbstractType
         ]);
 
         $resolver->setRequired(['sheet']);
+        $resolver->setAllowedTypes('sheet', Sheet::class);
     }
 }

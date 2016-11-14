@@ -15,8 +15,8 @@ Proximum\Vimeet\Domain\Model\CartRow:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE
         product:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE

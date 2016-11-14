@@ -1,3 +1,8 @@
+admin.mail.activateAccount.activate: 'Activate your account'
+admin.mail.activateAccount.end: 'Best regards,'
+admin.mail.activateAccount.subject: 'Activate your account'
+admin.mail.resetPassword.end: 'Best regards,'
+mail.activateAccount.activate: 'Activate your account'
 mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
 mail.activateAccount.subject: '[%event%] Activate your account'
@@ -5,7 +10,22 @@ mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
 mail.changeMailNew.validate: 'Validate Your new email'
 mail.changeMailOld.subject: 'Email change request'
-mail.orderConfirm.body: "Dear %Name%,\n\nYour order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
+mail.completeProfile.body: 'You have been invited as participant on the event %event%. To access it, please click on the link below and chose a password to complete your member area.'
+mail.completeProfile.end: 'Best regards,'
+mail.completeProfile.link: 'Complete your member area'
+mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer\n\nBest regards,"
+mail.event.preregister.end: 'Best regards,'
+mail.event.preregister.link: 'Your member area'
+mail.event.preregister.subject: 'You are pre-registered to %event%'
+mail.orderConfirm.body: "Dear %firstname% %lastname%, Your order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
+mail.orderConfirm.end: 'Best regards,'
 mail.orderConfirm.linkToProForma: 'View Proforma invoice'
 mail.orderConfirm.subject: 'Your order has been registered'
+mail.participant.profile.link: 'Your member area'
+mail.register.body: '%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created. We are happy to count you among the Vimeet community. You can now connect to your member area on the website of %event%. Best regards,'
+mail.register.subject: 'The access to your member area of %event% has been created'
+mail.resetPassword.end: 'Best regards,'
+mail.sheet.change_type.end: 'Best regards,'
+mail.sheet.submitted.body: 'The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. To acess the details of the presentation sheet, please click on the link below'
+mail.sheet.submitted.end: 'Best regards,'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"

@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Notification;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
 class NotificationRepository implements NotificationRepositoryInterface
@@ -51,19 +50,35 @@ class NotificationRepository implements NotificationRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getNotificationsByEventAndUser(Event $event, User $user)
+    public function findByType(Sheet $sheet, $type)
     {
-        $queryBuilder = $this
-            ->entityManager
+        $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select('notification')
             ->from(Notification::class, 'notification')
-            ->andWhere('notification.recipient = :user')
-            ->setParameter('user', $user)
-            ->andWhere('notification.event = :event')
-            ->setParameter('event', $event)
-            ->orderBy('notification.createdAt', 'DESC');
+            ->where('notification.sheet = :sheet')
+            ->andWhere('notification.type = :type')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('type', $type)
+            ->setMaxResults(1);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeByType(Sheet $sheet, $type)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(Notification::class, 'notification')
+            ->where('notification.sheet = :sheet')
+            ->andWhere('notification.type = :type')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('type', $type);
+
+        $queryBuilder->getQuery()->execute();
     }
 }

@@ -10,8 +10,8 @@ Proximum\Vimeet\Domain\Model\PromotionCodeRow:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE
         promotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
             joinColumn:
-                onDelete: "cascade"
+                onDelete: CASCADE

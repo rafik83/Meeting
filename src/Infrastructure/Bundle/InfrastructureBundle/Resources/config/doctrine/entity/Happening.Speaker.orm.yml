@@ -22,6 +22,8 @@ Proximum\Vimeet\Domain\Model\Happening\Speaker:
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
     oneToMany:
         talkings:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Talking

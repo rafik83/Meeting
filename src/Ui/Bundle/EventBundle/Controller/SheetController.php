@@ -19,6 +19,8 @@ use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThi
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -67,22 +69,44 @@ class SheetController extends Controller
             }
         }
 
+        if ($sheet->isValidationDraft()) {
+            $sheetValidationView = $this->get('tactician.commandbus.query')->handle(
+                new SheetValidationViewQuery(
+                    $sheet,
+                    $locale
+                )
+            );
+        }
+
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
             $eventDomain->getEvent(),
             $sheet,
             $this->getUser(),
             $locale
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
+
+        $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
+        $isFirstRegistration   = in_array(true, $flagFirstRegistration);
+        $popinWelcome          = null;
+
+        if ($isFirstRegistration) {
+            $welcomeViewQuery = new WelcomeViewQuery($sheet);
+            $popinWelcome     = $this->get('tactician.commandbus.query')->handle($welcomeViewQuery);
+        }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'         => $eventDomain->getEvent(),
-            'sheet'         => $sheet,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
+            'event'               => $eventDomain->getEvent(),
+            'sheet'               => $sheet,
+            'taggedData'          => $taggedData,
+            'locale'              => $locale,
+            'nomenclatures'       => $nomenclatures,
+            'participants'        => $participants,
+            'templateData'        => $templateData,
+            'popinWelcome'        => $popinWelcome,
+            'sheetValidationView' => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'participantProduct'  => $participantProduct,
         ]);
     }
 
@@ -415,10 +439,15 @@ class SheetController extends Controller
             'action' => $this->generateUrl('event_sheet_handle_participant', ['locale' => $locale, 'key' => $key]),
         ]);
 
+        $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
+
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'uid'   => $key,
-            'form'  => $form->createView(),
-            'label' => $label,
+            'uid'                => $key,
+            'form'               => $form->createView(),
+            'sheet'              => $sheet,
+            'label'              => $label,
+            'participantProduct' => $participantProduct,
+            'backRoute'          => 'backToSheet'
         ]);
     }
 

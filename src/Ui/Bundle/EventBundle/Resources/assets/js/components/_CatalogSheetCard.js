@@ -34,11 +34,21 @@ CatalogSheetCard.prototype.onButtonClick = function(button)
         $(this.modal).find(".modal-content").html(placeholder);
 
         // Load content from ajax and display the modal
-        $(this.modal).find(".modal-content").load(button.link, function () {
-            this.putListenerOnRequestForm();
+        $(this.modal).find(".modal-content").load(button.link, function (response, status) {
+            if (status === 'error') {
+                this.displayErrorLoading();
+            } else if (status === 'success') {
+                this.putListenerOnRequestForm();
+            }
         }.bind(this));
         $(this.modal).modal();
     }
+};
+
+CatalogSheetCard.prototype.displayErrorLoading = function ()
+{
+    var errorMessage = this.modal.getAttribute('data-loading-error');
+    $(this.modal).find(".modal-content").html(errorMessage);
 };
 
 CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
@@ -47,37 +57,46 @@ CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
         new CatalogSheetCardRequestCheckbox(this.modal.querySelector('[data-participants-checkbox]'));
     }
 
-    $(this.modal.querySelector('form')).on('submit', function (event) {
-        this.handleRequestForm();
+    [].forEach.call(this.modal.querySelectorAll('form'), function (form) {
+        $(form).on('submit', function (event) {
+            this.handleRequestForm(form);
 
-        return false;
+            return false;
+        }.bind(this));
     }.bind(this));
 };
 
-CatalogSheetCard.prototype.handleRequestForm = function ()
+CatalogSheetCard.prototype.handleRequestForm = function (form)
 {
-    var action = $(this.modal.querySelector('form')).attr('action');
-    var data   = $(this.modal.querySelector('form')).serialize();
+    var action = $(form).attr('action');
+    var data   = $(form).serialize();
 
     // Put the placeholder during the ajax call to avoid mistake of the user
     var placeholder = this.modal.getAttribute('data-placeholder');
     $(this.modal).find(".modal-content").html(placeholder);
 
-
     // Update sheets list
     $.post(action, data, function(response) {
-      if (response.status === 'ok') {
-          [].forEach.call(this.buttonsZones, function (buttonZone) {
-              $(buttonZone).html(response.html)
-          });
-          $(this.modal).modal('hide');
-          this.identifyButtons();
-      }
+        if (response.close === true) {
+            if (response.status === 'ok') {
+                [].forEach.call(this.buttonsZones, function (buttonZone) {
+                    $(buttonZone).html(response.html)
+                });
+                $(this.modal).modal('hide');
+                this.identifyButtons();
+            }
+        } else {
+            if (response.status === 'ok') {
+                $(this.modal).find(".modal-content").html(response.html);
+            }
+        }
 
-      if (response.status === 'error') {
-          $(this.modal).find(".modal-content").html(response.html);
-          this.putListenerOnRequestForm();
-      }
+        if (response.status === 'error') {
+            $(this.modal).find(".modal-content").html(response.html);
+            this.putListenerOnRequestForm();
+        }
+    }.bind(this)).fail(function () {
+        this.displayErrorLoading();
     }.bind(this));
 
     return false;

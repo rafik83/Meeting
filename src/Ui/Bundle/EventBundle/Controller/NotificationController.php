@@ -10,19 +10,22 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery;
+use Proximum\Vimeet\Application\View\Notification\NotificationListView;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NotificationController extends Controller
 {
     /**
      * List user notifications
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
      *
      * @return Response
@@ -31,17 +34,30 @@ class NotificationController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $notifications = $this
-            ->get('notification.notification_view_factory')
-            ->getNotificationsByEventAndUser($eventDomain->getEvent(), $this->getUser(), $request->getLocale());
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
+            $this->getUser(),
+            $eventDomain->getEvent(),
+            $request->getLocale()
+        );
+
+        if ($sheet === null) {
+            throw new NotFoundHttpException('Sheet not found');
+        }
+
+        /** @var NotificationListView $notificationListView */
+        $notificationListView = $this->get('tactician.commandbus.query')->handle(
+            new NotificationViewQuery($sheet)
+        );
 
         return $this->render('EventBundle:Notification:list.html.twig', [
             'event'         => $eventDomain->getEvent(),
-            'notifications' => $notifications,
+            'notifications' => $notificationListView,
         ]);
     }
 
     /**
+     * @deprecated
+     *
      * @param EventDomain $eventDomain
      *
      * @return Response
@@ -61,6 +77,8 @@ class NotificationController extends Controller
 
     /**
      * Mark the notification as read and redirect to the embedded url
+     *
+     * @deprecated
      *
      * @param Notification $notification
      *

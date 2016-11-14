@@ -166,9 +166,13 @@ class RegisterController extends Controller
 
             $nextStep = $registrationTemplate->getNextBlockPosition(1);
 
-            return $nextStep
-                ? $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participate->participant->getId()])
-                : $this->redirectToRoute('event_sheet');
+            if ($nextStep) {
+                return $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participate->participant->getId()]);
+            }
+
+            $this->container->get('session')->getFlashBag()->set('first_registration', true);
+
+            return $this->redirectToRoute('event_sheet');
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
@@ -215,12 +219,16 @@ class RegisterController extends Controller
 
                 $nextStep = $registrationTemplate->getNextBlockPosition($step);
 
-                return $nextStep
-                    ? $this->redirectToRoute(
+                if ($nextStep) {
+                    return $this->redirectToRoute(
                         'event_participant_step',
                         ['step' => $nextStep, 'participant' => $participant->getId()]
-                    )
-                    : $this->redirectToRoute('event_sheet');
+                    );
+                }
+
+                $this->container->get('session')->getFlashBag()->add('first_registration', true);
+
+                return $this->redirectToRoute('event_sheet');
             }
         }
 

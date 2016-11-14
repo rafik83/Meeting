@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateAvatar;
 use Proximum\Vimeet\Application\Command\Participant\UpdateAvatarHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -22,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
@@ -116,6 +120,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -130,10 +135,16 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
+            function(SheetUpdatedEvent $sheetUpdatedEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
 
         $handler = new UpdateAvatarHandler(
             $participantRepository->reveal(),
-            $accountSynchronizer->reveal()
+            $accountSynchronizer->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
@@ -255,6 +266,7 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -270,9 +282,16 @@ class UpdateAvatarHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
+            function(SheetUpdatedEvent $sheetUpdatedEvent){
+                return true;
+            }
+        ))->shouldBeCalled();
+
         $handler = new UpdateAvatarHandler(
             $participantRepository->reveal(),
-            $accountSynchronizer->reveal()
+            $accountSynchronizer->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');

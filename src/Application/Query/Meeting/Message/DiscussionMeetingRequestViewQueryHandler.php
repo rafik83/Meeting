@@ -58,8 +58,8 @@ class DiscussionMeetingRequestViewQueryHandler
 
         $messages = $this->messageRepository->getMessagesByMeetingRequest($query->meetingRequest);
 
-        $sheetFrom = $this->sheetInfoGuesser->guessSheetName($query->meetingRequest->getFromSheet(), $query->locale);
-        $sheetTo   = $this->sheetInfoGuesser->guessSheetName($query->meetingRequest->getToSheet(), $query->locale);
+        $sheetFrom = $this->sheetInfoGuesser->guessSheetTitle($query->meetingRequest->getFromSheet(), $query->locale);
+        $sheetTo   = $this->sheetInfoGuesser->guessSheetTitle($query->meetingRequest->getToSheet(), $query->locale);
 
         /** @var Meeting\Message $message */
         foreach ($messages as $message) {

@@ -420,26 +420,9 @@ event_meeting_request_show_conversation_refuse:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:showConversationOfRefuseRequest }
 
-event_meeting_request_cancel:
-    path: /sheet/{sheet}/meeting/request/{meetingRequest}/cancel
-    requirements:
-        sheet: \d+
-        meetingRequest: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:MeetingRequest:cancelRequest }
-
-event_meeting_request_show:
-    path: /sheet/{sheet}/meeting/request/{meetingRequest}
-    requirements:
-        sheet: \d+
-        meetingRequest: \d+
-    methods:  [GET]
-    defaults: { _controller: EventBundle:MeetingRequest:showRequest }
-
 event_meeting_request_edit:
-    path: /sheet/{sheet}/meeting/request/{meetingRequest}/edit
+    path: /meeting/request/{meetingRequest}/edit
     requirements:
-        sheet: \d+
         meetingRequest: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:editRequest }
@@ -448,7 +431,7 @@ event_meeting_request_edit:
 # Notification
 #
 event_notification_list:
-    path:     /notification
+    path: /notification
     methods:  [GET]
     defaults: { _controller: EventBundle:Notification:list }
 
