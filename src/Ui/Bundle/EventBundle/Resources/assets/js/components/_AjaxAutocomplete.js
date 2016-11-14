@@ -31,11 +31,11 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
             noResults: '',
             errorLoading: '',
             inputTooShort: function () {
-                return '';
-            },
+                return this.element.dataset.labelInputTooShort;
+            }.bind(this),
             searching: function () {
-                return 'Recherche ...';
-            }
+                return this.element.dataset.labelSearching;
+            }.bind(this)
         },
         ajax: {
             url: this.element.dataset.action,

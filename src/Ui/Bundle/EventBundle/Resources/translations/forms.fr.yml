@@ -47,6 +47,8 @@ form.payment_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bancaire'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
+form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
+form.search.autocomplete.searching: 'Recherche en cours...'
 form.search.content.label: 'Mots clés'
 form.search.localization.label: 'Zones géographiques'
 form.search.localization.search.placeholder: '69, Lyon, France...'

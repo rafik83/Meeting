@@ -19,11 +19,12 @@
             {{ form_widget(searchForm.localization) }}
 
             <select multiple
-                    id="localization-autocomplete"
                     data-parent-input="{{ searchForm.localization.vars.id }}"
                     data-disable-auto-submit
                     data-ajax-autocomplete
                     data-method="post"
+                    data-label-input-too-short="{{ 'form.search.autocomplete.atLeastTwoChars'|trans({}, 'forms') }}"
+                    data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
                     data-action="{{ path('event_catalog_search_localization') }}"
                     data-placeholder="{{ 'form.search.localization.search.placeholder'|trans({}, searchForm.vars.translation_domain) }}"
                     class="form-control">
@@ -38,11 +39,12 @@
             {{ form_widget(searchForm.content) }}
 
             <select multiple
-                    id="keyword-autocomplete"
                     data-parent-input="{{ searchForm.content.vars.id }}"
                     data-disable-auto-submit
                     data-ajax-autocomplete
                     data-method="post"
+                    data-label-input-too-short="{{ 'form.search.autocomplete.atLeastTwoChars'|trans({}, 'forms') }}"
+                    data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
                     data-action="{{ path('event_catalog_search_keywords') }}"
                     data-placeholder="{{ 'form.search.keywords.search.placeholder'|trans({}, searchForm.vars.translation_domain) }}"
                     class="form-control">
