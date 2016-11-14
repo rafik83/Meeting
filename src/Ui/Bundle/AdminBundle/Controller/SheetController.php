@@ -90,8 +90,12 @@ class SheetController extends Controller
 
         if ($filtered) {
             $filters = $filterFullForm->getData();
+
             // save filter into session
-            $this->get('filter.sheet_filter')->add($request->query->all());
+            $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
+                $filterFullForm,
+                $request->query->all()
+            ));
         }
 
         // Pagination
@@ -162,7 +166,7 @@ class SheetController extends Controller
                     '%count%' => $result->count,
                 ]));
             } else {
-                $this->addFlash('error', (string) $batchForm->getErrors(true));
+                $this->addFlash('error', (string)$batchForm->getErrors(true));
             }
         }
 
@@ -306,5 +310,26 @@ class SheetController extends Controller
                 'value' => $command->spotCode,
             ], $infos)
         );
+    }
+
+    /**
+     * @param FormInterface $filterFullForm
+     * @param array         $filters
+     *
+     * @return array
+     */
+    private function getEnabledFilters(FormInterface $filterFullForm, array $filters)
+    {
+        $enabledFilters = array_map(function (FormInterface $child) {
+            return $child->getName();
+        }, $filterFullForm->all());
+
+        foreach ($filters as $key => $filter) {
+            if (!in_array($key, $enabledFilters)) {
+                unset($filters[$key]);
+            }
+        }
+
+        return $filters;
     }
 }

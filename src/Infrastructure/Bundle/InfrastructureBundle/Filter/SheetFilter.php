@@ -44,10 +44,6 @@ class SheetFilter
      */
     public function add(array $filters)
     {
-        if (isset($filters['page'])) {
-            unset($filters['page']);
-        }
-
         $this->session->set(self::SHEET_FILTER,
             array_filter($filters, function ($filter) {
                 return $filter !== null;
