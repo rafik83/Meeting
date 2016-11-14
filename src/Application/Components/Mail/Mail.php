@@ -86,12 +86,12 @@ class Mail
         User $receiverUser = null,
         Event $event = null
     ) {
-        $this->sender          = $sender;
-        $this->receiver        = $receiver;
-        $this->locale          = $locale;
-        $this->senderUser      = $senderUser;
-        $this->receiverUser    = $receiverUser;
-        $this->event           = $event;
+        $this->sender       = $sender;
+        $this->receiver     = $receiver;
+        $this->locale       = $locale;
+        $this->senderUser   = $senderUser;
+        $this->receiverUser = $receiverUser;
+        $this->event        = $event;
     }
 
     /**

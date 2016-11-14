@@ -380,7 +380,7 @@ class Event implements EventInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEmailTeam()
     {
@@ -396,17 +396,17 @@ class Event implements EventInterface
     }
 
     /**
-     * @param string $title
-     * @param array  $locales
-     * @param string $fallback
-     * @param string $mode
-     * @param float  $vat
-     * @param string $country
-     * @param string $currency
-     * @param string $timeZone
-     * @param string $domain
-     * @param string $organiserName
-     * @param string $emailTeam
+     * @param string      $title
+     * @param array       $locales
+     * @param string      $fallback
+     * @param string      $mode
+     * @param float       $vat
+     * @param string      $country
+     * @param string      $currency
+     * @param string      $timeZone
+     * @param string      $domain
+     * @param string      $organiserName
+     * @param string|null $emailTeam
      */
     public function update(
         $title,
@@ -419,7 +419,7 @@ class Event implements EventInterface
         $timeZone,
         $domain,
         $organiserName,
-        $emailTeam = ''
+        $emailTeam
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
