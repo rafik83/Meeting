@@ -133,22 +133,22 @@ class Event implements EventInterface
     private $logoExtension;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $emailTeam;
 
     /**
-     * @param string $title
-     * @param string $fallback
-     * @param array  $locales
-     * @param string $mode
-     * @param float  $vat
-     * @param string $country
-     * @param string $currency
-     * @param string $timeZone
-     * @param string $domain
-     * @param string $organiserName
-     * @param string $emailTeam
+     * @param string      $title
+     * @param string      $fallback
+     * @param array       $locales
+     * @param string      $mode
+     * @param float       $vat
+     * @param string      $country
+     * @param string      $currency
+     * @param string      $timeZone
+     * @param string      $domain
+     * @param string      $organiserName
+     * @param string|null $emailTeam
      */
     public function __construct(
         $title,
@@ -161,7 +161,7 @@ class Event implements EventInterface
         $timeZone,
         $domain,
         $organiserName,
-        $emailTeam = ''
+        $emailTeam
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
