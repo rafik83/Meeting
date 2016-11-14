@@ -94,7 +94,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $query = new Query();
         $query->addAggregation($this->findCityQuery($event, $filter))
-            ->addAggregation($this->findZipcodeQuery($event, $filter))
             ->addAggregation($this->findCountryQuery($event, $filter, $locale))
             ->setSize(0);
 
@@ -255,32 +254,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $cities->setFilter($filterQuery);
 
         return $cities;
-    }
-
-    /**
-     * @param string $filter
-     * @param Event  $event
-     *
-     * @return Filter
-     */
-    private function findZipcodeQuery(Event $event, $filter)
-    {
-        $matchZipcode = new Query\Bool();
-        $matchZipcode->addMust(new Query\Match('event', $event->getId()));
-        $matchZipcode->addMust(new Query\Match('zipcode_autocomplete', $filter));
-
-        $filterZipcodeQuery = new FilterQuery();
-        $filterZipcodeQuery->setQuery($matchZipcode);
-
-        $zipcodeAggregations = new Terms('zipcodes');
-        $zipcodeAggregations->setField('zipcode');
-        $zipcodeAggregations->setSize(10);
-
-        $zipcodes = new Filter('zipcode_aggs');
-        $zipcodes->addAggregation($zipcodeAggregations);
-        $zipcodes->setFilter($filterZipcodeQuery);
-
-        return $zipcodes;
     }
 
     /**

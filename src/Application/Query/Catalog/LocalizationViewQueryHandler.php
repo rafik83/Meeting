@@ -52,13 +52,6 @@ class LocalizationViewQueryHandler
             }
         }
 
-        // handle zipcode
-        if (!empty($localizations['zipcode_aggs']['zipcodes'])) {
-            foreach ($localizations['zipcode_aggs']['zipcodes']['buckets'] as $zipcode) {
-                $localizationViews[] = new LocalizationView($zipcode['key']);
-            }
-        }
-
         // handle country
         if (!empty($localizations['countries_aggs']['countries']['countries_filter']['countries'])) {
             foreach ($localizations['countries_aggs']['countries']['countries_filter']['countries']['buckets'] as $country) {

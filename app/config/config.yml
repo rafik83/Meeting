@@ -124,19 +124,11 @@ fos_elastica:
                                 type: custom
                                 tokenizer: "standard"
                                 filter: ["standard", "lowercase", "autocomplete_filter", "asciifolding"]
-                            zipcode_autocomplete:
-                                type: custom
-                                tokenizer: "standard"
-                                filter: ["standard", "zipcode_autocomplete_filter"]
                         filter:
                             autocomplete_filter:
                                 type: edge_ngram
                                 min_gram: 3
                                 max_gram: 50
-                            zipcode_autocomplete_filter:
-                                type: edge_ngram
-                                min_gram: 2
-                                max_gram: 2
             types:
                 sheet:
                     mappings:
@@ -214,14 +206,8 @@ fos_elastica:
                             type: string
                             index: "not_analyzed"
                         zipcode:
-                            type: multi_field
-                            fields:
-                                zipcode:
-                                    type: string
-                                    index: "not_analyzed"
-                                zipcode_autocomplete:
-                                    type: string
-                                    analyzer: "zipcode_autocomplete"
+                            type: string
+                            index: "not_analyzed"
                         city:
                             type: multi_field
                             fields:
