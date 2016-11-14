@@ -49,6 +49,14 @@ class SheetController extends Controller
         // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        // redirect to list with default filters if no parameters
+        if (empty($request->query->all()) && empty($this->get('filter.sheet_filter')->get())) {
+            return $this->redirectToRoute('admin_sheet', array_merge(
+                ['event' => $event->getId()],
+                FilterFullType::getDefaultFilters()
+            ));
+        }
+
         $locale = $event->getAvailableLocale($request->getLocale());
 
         if (empty($request->query->all()) && $this->get('filter.sheet_filter')->get() !== null) {
