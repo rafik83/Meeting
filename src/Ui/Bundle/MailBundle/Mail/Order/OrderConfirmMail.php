@@ -43,6 +43,11 @@ class OrderConfirmMail extends Mail
     private $user;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = true;
+
+    /**
      * @param string $sender
      * @param string $receiver
      * @param string $locale

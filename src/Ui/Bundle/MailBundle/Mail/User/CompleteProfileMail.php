@@ -37,6 +37,11 @@ class CompleteProfileMail extends Mail
     private $participant;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = false;
+
+    /**
      * @param Participant $participant
      * @param string      $sender
      * @param string      $receiver

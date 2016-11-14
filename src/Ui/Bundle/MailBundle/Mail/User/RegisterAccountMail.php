@@ -33,6 +33,11 @@ class RegisterAccountMail extends Mail
     protected $messageId = Events::USER_REGISTERED;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = false;
+
+    /**
      * @param Event  $event
      * @param string $sender
      * @param string $receiver

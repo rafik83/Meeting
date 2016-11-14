@@ -43,6 +43,11 @@ class TransactionConfirmMail extends Mail
     private $transaction;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = true;
+
+    /**
      * TransactionConfirmEvent constructor.
      *
      * @param Transaction $transaction

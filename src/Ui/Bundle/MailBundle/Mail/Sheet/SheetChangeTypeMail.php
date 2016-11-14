@@ -48,6 +48,11 @@ class SheetChangeTypeMail extends Mail
     private $fromTypeTitle;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = true;
+
+    /**
      * @param Event  $event
      * @param string $sender
      * @param string $receiver
