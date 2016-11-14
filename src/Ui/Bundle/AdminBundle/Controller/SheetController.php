@@ -60,6 +60,8 @@ class SheetController extends Controller
 
         if ($request->query->get('reset') !== null) {
             $this->get('filter.sheet_filter')->clear();
+
+            return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
         $filters = FilterFullType::getDefaultFilters();
@@ -152,7 +154,7 @@ class SheetController extends Controller
                     '%count%' => $result->count,
                 ]));
             } else {
-                $this->addFlash('error', (string)$batchForm->getErrors(true));
+                $this->addFlash('error', (string) $batchForm->getErrors(true));
             }
         }
 
