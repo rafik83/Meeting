@@ -31,7 +31,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - 'Europe/Paris'                #timeZone
             - rdv-carnot-2016.<domain()>    #domain
             - "PROXIMUM"                    #organiserName
-            - 'team-project@example.net'   #emailTeam
+            - 'team-project@example.net'    #emailTeam
         assetPath: ''
         configuration: '@event_rdv_carnot_2016_configuration'
         paymentAddress: '@event_rdv_carnot_2016_payment_address_event'
