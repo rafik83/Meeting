@@ -68,7 +68,7 @@ class FollowerChoiceType extends AbstractType
                 } else {
                     return null;
                 }
-            }
+            },
         ]);
     }
 

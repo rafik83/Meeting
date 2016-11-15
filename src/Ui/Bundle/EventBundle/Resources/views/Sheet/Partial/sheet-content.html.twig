@@ -73,5 +73,5 @@
 {% endif %}
 
 {% if sheetValidationView is defined and sheetValidationView is not empty %}
-    {{ include('EventBundle:Sheet:modalSheetValidation.html.twig', {'view': sheetValidationView }) }}
+    {{ include('EventBundle:Sheet:modalSheetValidation.html.twig', { 'view': sheetValidationView, 'sheet': sheet }, false) }}
 {% endif %}
