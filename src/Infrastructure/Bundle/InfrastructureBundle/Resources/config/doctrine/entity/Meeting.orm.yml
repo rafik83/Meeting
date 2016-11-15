@@ -16,6 +16,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
             joinColumn:
                 nullable: false
+                onDelete: CASCADE
         fromSheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
