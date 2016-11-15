@@ -60,7 +60,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->domain        = 'hello.vimeet.proximum.dev';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
-        $create->emailTeam     = 'team-project@proximum.com';
+        $create->emailTeam     = 'team-project@example.net';
 
         // Expected event
         $expectedEvent = new Event(
@@ -74,7 +74,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-project@proximum.com'
+            'team-project@example.net'
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -161,7 +161,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $create->domain     = 'hello.vimeet.proximum.dev';
         $create->timeZone   = 'Europe/Paris';
-        $create->emailTeam  = 'team-project@proximum.com';
+        $create->emailTeam  = 'team-project@example.net';
 
         // Expected event
         $expectedEvent = new Event(
@@ -175,7 +175,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-project@proximum.com'
+            'team-project@example.net'
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -285,7 +285,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
             'proximum',
-            'team-project@proximum.com'
+            'team-project@example.net'
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));

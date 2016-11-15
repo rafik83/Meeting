@@ -54,7 +54,7 @@ Feature: Admin Transaction
     Then I should be on this page "/admin/fr/event/1/sheet/1"
     And I should see "flash.admin.transaction.update.success"
     And the "transaction.confirm" mail should be sent to "user_asddays_1@proximum.com"
-    And the "transaction.confirm" mail should be sent to "team-project@proximum.com"
+    And the "transaction.confirm" mail should be sent in bcc to "team-project@example.net"
 
   Scenario: I can remove a transaction
     Given I am logged with "test@test.com" on admin

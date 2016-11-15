@@ -30,7 +30,7 @@ class EventFactory
             'Europe/Paris',
             'super-event.vimeet.proximum.dev',
             'proximum',
-            'team-project@proximum.com'
+            'team-project@example.net'
         );
     }
 }

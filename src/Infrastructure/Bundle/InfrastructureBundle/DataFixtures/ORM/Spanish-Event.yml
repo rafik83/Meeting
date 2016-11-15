@@ -11,7 +11,7 @@ Proximum\Vimeet\Domain\Model\Event:
             - 'Europe/Paris'           #timeZone
             - spanish-event.<domain()> #domain
             - "PROXIMUM"               #organiserName
-            - 'team-project@proximum.com'   #emailTeam
+            - 'team-project@example.net'   #emailTeam
         locales: [es]
         assetPath: ''
         paymentAddress: '@payment_address_event_spanish'

@@ -63,6 +63,6 @@ Feature: See sheet details
     Then I should be on this page "/admin/fr/event/1/sheet/1"
     And I should see "flash.admin.sheet.change_type.success"
     And the "sheet.changed_type" mail should be sent to "test@elao.com"
-    And the "sheet.changed_type" mail should be sent to "team-project@proximum.com"
+    And the "sheet.changed_type" mail should be sent in bcc to "team-project@example.net"
     And the ".label-sheet-type" element should contain "Investisseur"
     And I should see "admin.sheet.trace.changed_type"

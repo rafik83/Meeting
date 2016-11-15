@@ -11,13 +11,13 @@ Proximum\Vimeet\Domain\Model\Event:
             - 'Europe/Paris'           #timeZone
             - asddays-2016.<domain()>  #domain
             - "PROXIMUM"               #organiserName
-            - 'team-project@proximum.com'   #emailTeam
+            - 'team-project@example.net'   #emailTeam
         setLogo: ['assets/images/asddays-logo.png', 'png']
         assetPath: ''
         paymentAddress: '@payment_address_event_asddays_2016'
         configuration: '@configuration_asddays_2016'
         organiserEmail: "accounts@proximumgroup.com"
-        emailTeam: "team-project@proximum.com"
+        emailTeam: "team-project@example.net"
 
 Proximum\Vimeet\Domain\Model\Event\Configuration (local):
     configuration_asddays_2016:
