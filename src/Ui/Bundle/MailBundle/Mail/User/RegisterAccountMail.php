@@ -35,7 +35,7 @@ class RegisterAccountMail extends Mail
     /**
      * @var bool
      */
-    protected $sendToEmailTeam = false;
+    protected $sendToEmailTeam = true;
 
     /**
      * @param Event  $event
