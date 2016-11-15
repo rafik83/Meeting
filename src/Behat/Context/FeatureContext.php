@@ -100,6 +100,26 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function theMailShouldBeSentTo($type, $email)
     {
+        $this->checkMailSendToRecipient($type, $email, 'getTo');
+    }
+
+    /**
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent in bcc to "(?P<email>[^"]+)"$/
+     */
+    public function theMailShouldBeSentInBCCTo($type, $email)
+    {
+        $this->checkMailSendToRecipient($type, $email, 'getBcc');
+    }
+
+    /**
+     * @param string $type
+     * @param string $email
+     * @param string $recipient
+     *
+     * @throws \Exception
+     */
+    private function checkMailSendToRecipient($type, $email, $recipient)
+    {
         $spoolDir = $this->getSpoolDir();
 
         $filesystem = new Filesystem();
@@ -117,9 +137,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 $message = unserialize(file_get_contents($file));
 
                 // check the recipients
-                $bcc = ($message->getBcc() ? array_keys($message->getBcc()) : []);
-
-                $recipients = array_merge(array_keys($message->getTo()), $bcc);
+                $recipients = array_keys($message->$recipient());
 
                 if (!in_array($email, $recipients)) {
                     continue;
