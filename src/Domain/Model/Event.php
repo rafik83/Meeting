@@ -388,14 +388,6 @@ class Event implements EventInterface
     }
 
     /**
-     * @param string $emailTeam
-     */
-    public function setEmailTeam($emailTeam)
-    {
-        $this->emailTeam = $emailTeam;
-    }
-
-    /**
      * @param string      $title
      * @param array       $locales
      * @param string      $fallback
