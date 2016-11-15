@@ -1,4 +1,4 @@
-@admin
+@admin @mail
 
 Feature: Edit participant status
   As an admin, I can edit participant status
@@ -25,7 +25,7 @@ Feature: Edit participant status
     And I should see "admin.sheet.title.count"
     Then I check "sheet_batch_ids_4"
     And I press "form.sheet_batch.children.validate.label"
-    Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com"
+    Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com" from "vimeet@proximum.dev"
 
   Scenario: I can enable or disable participant registration
     Given I am logged with "test@test.com" on admin
