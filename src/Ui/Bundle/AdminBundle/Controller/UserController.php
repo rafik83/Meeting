@@ -59,6 +59,10 @@ class UserController extends Controller
             $filters['types'] = [$filters['type']];
         }
 
+        if (!isset($filters['participation'])) {
+            $filters['participation'] = FilterType::FILTER_WITH_SHEET;
+        }
+
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
             new UserListViewQuery($event, $locale, $request->query->get('page', 1), $filters)
         );
