@@ -48,9 +48,14 @@ class TaggedNomenclatureFilterGetter
             $tag
         );
 
+        $nomenclaturesId = (null !== $taggedNomenclatureFilter->getNomenclaturesId())
+            ? $taggedNomenclatureFilter->getNomenclaturesId()
+            : []
+        ;
+
         $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
             $event,
-            $taggedNomenclatureFilter->getNomenclaturesId()
+            $nomenclaturesId
         );
 
         $nomenclatureItems = [];
