@@ -69,4 +69,14 @@ class FilterType extends AbstractType
     {
         return 'user_filter';
     }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return [
+            'participation' => FilterType::FILTER_WITH_SHEET
+        ];
+    }
 }
