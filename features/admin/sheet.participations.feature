@@ -1,4 +1,4 @@
-@admin
+@admin @sheet
 
 Feature: Edit participant status
   As an admin, I can edit participant status

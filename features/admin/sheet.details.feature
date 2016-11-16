@@ -1,4 +1,4 @@
-@admin
+@admin @sheet
 
 Feature: See sheet details
   As an admin, I can see the details of a sheet
