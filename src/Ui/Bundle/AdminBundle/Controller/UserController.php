@@ -34,7 +34,7 @@ class UserController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filters = [];
+        $filters = FilterType::getDefaultFilters();
 
         $filterType = $this->createFilterForm(FilterType::class, $filters, [
             'event'  => $event,
@@ -57,10 +57,6 @@ class UserController extends Controller
                 ->getAllowedTypesByEvent($this->getUser(), $event);
         } else {
             $filters['types'] = [$filters['type']];
-        }
-
-        if (!isset($filters['participation'])) {
-            $filters['participation'] = FilterType::FILTER_WITH_SHEET;
         }
 
         $paginatedResult = $this->get('tactician.commandbus.query')->handle(
