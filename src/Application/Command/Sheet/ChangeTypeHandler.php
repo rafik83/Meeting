@@ -122,6 +122,7 @@ class ChangeTypeHandler
             )
         );
 
+        // trigger event to generate must select package notification if user has no order
         $ordersUpdated = new MustSelectPackageEvent($changeType->sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $ordersUpdated);
     }

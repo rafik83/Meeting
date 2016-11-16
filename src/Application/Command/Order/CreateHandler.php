@@ -69,6 +69,7 @@ class CreateHandler
         $event = new OrderConfirmEvent($order, $create->user);
         $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
 
+        // trigger event to remove must select package notification after first order
         $mustSelectPackageEvent = new MustSelectPackageEvent($create->sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $mustSelectPackageEvent);
     }
