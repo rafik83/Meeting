@@ -65,7 +65,7 @@ class SheetSubmenuViewQueryHandler
                 'package.title',
                 $this->navigationBuilder->getRoute('event_package'),
                 Route::isPackage($query->route),
-                ($hasProductsInCartRow === true) ? 'icon-Alerter_1' : null
+                $hasProductsInCartRow === true
             );
         }
 

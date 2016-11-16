@@ -81,4 +81,20 @@ class NotificationRepository implements NotificationRepositoryInterface
 
         $queryBuilder->getQuery()->execute();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function sheetHasNotification(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('notification.id')
+            ->from(Notification::class, 'notification')
+            ->where('notification.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->setMaxResults(1);
+
+        return count($queryBuilder->getQuery()->getResult()) === 1;
+    }
 }

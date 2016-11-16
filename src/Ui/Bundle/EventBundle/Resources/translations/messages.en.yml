@@ -65,7 +65,9 @@ order.list.column.numero: Number
 order.list.column.total: Total
 order.list.pay_remaining: 'Full payment'
 order.list.pro_forma.link: 'View Proforma'
+order.list.remainingToPay: 'To be paid'
 order.list.title: 'My orders'
+order.transaction.howtopay: 'How to pay?'
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: State
 order.transaction.list.column.total: Amount
@@ -96,6 +98,7 @@ package.payment.total.toPay: '%total%'
 package.planning.label: 'Title & Description'
 package.planning.quantity: Quantity
 package.planning.quantityMax: 'Maximum quantity reached'
+package.planning.quantityMax.forParticipation: 'Total quantity higher than number of participants'
 package.planning.quantityMin: 'Maximum minimum reached'
 package.planning.total: Total
 package.planning.unitPrice: 'Unit price'
@@ -130,6 +133,7 @@ package.summary.columns.unitPrice: 'Unit price'
 package.summary.edit: 'Modify package'
 package.summary.empty: 'No product has been added'
 package.summary.option: Options
+package.summary.order-list: 'Order list'
 package.summary.pageTitle: 'Summary of your package of participation'
 package.summary.pay: 'Pay participation package'
 package.summary.promotion.button.label: Validate
@@ -160,6 +164,8 @@ sheet.object.action.remove: Delete
 sheet.object.image.remove: 'Delete image'
 sheet.participant.remove: 'Remove from the sheet'
 sheet.participant.sendInvite: 'Send Invitation'
+sheet.submit.validation: 'Submit for validation'
+sheet.submit.validation.pending: 'Awaiting for validation'
 sheet.title: 'Presentation sheet'
 summary.column.quantity: Quantity
 summary.column.title: Title

@@ -1881,6 +1881,14 @@ services:
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
+    query.navigation.menu_header_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery }
     query.navigation.submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
         arguments:

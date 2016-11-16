@@ -3,3 +3,7 @@ Proximum\Vimeet\Domain\Model\Notification:
         __construct:
             - '@sheet_asddays_1'
             - 'packageSelected'
+    asddays_sheet_translation_completeness:
+        __construct:
+            - '@sheet_asddays_1'
+            - 'sheetTranslationCompleteness'

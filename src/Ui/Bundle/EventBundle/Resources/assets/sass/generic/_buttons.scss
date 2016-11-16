@@ -98,3 +98,18 @@ button, a {
 }
 
 .glyphicon { margin-right: 8px; }
+
+.alert-notification {
+  display: block;
+  margin-left: 10px;
+  float: right;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: white;
+  line-height: 20px;
+  text-align: center;
+  background: $color-notification;
+  font-style: normal;
+}

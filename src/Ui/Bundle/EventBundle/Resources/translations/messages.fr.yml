@@ -12,9 +12,9 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
+catalog.action.meeting.proposition.approved: 'Proposition acceptée'
 catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
 catalog.action.meeting.request.approve: 'Proposition reçue'
-catalog.action.meeting.proposition.approved: 'Proposition acceptée'
 catalog.action.meeting.request.approved: 'Demande acceptée'
 catalog.action.meeting.request.back: Retour
 catalog.action.meeting.request.create: 'Demander en RDV'
