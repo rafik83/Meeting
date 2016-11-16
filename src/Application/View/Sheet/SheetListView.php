@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Trace;
 
 class SheetListView
@@ -223,5 +224,13 @@ class SheetListView
         }
 
         return 'danger';
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTraceLabel()
+    {
+        return ($this->state === Sheet::STATE_VALIDATED || $this->state === Sheet::STATE_ACCEPTED) && !empty($this->traceAction);
     }
 }
