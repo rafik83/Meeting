@@ -150,7 +150,7 @@ class PaginatedSheetListViewQueryHandler
 
         return new SheetListView(
             $sheet->getId(),
-            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
             $sheet->getState(),
             $sheet->getValidationState(),
             $sheet->getCompleteness(),

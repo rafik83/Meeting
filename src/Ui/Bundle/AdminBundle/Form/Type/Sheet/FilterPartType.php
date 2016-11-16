@@ -34,6 +34,7 @@ class FilterPartType extends AbstractType
             ->add('type', HiddenType::class)
             ->add('follower', HiddenType::class)
             ->add('predefined', HiddenType::class)
+            ->add('validationState', HiddenType::class)
         ;
     }
 

@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FollowerChoiceType extends AbstractType
 {
+    const UNASSIGNED_FOLLOWER = 'un-assigned-follower';
+
     /**
      * @var AdminRepositoryInterface
      */
@@ -40,14 +42,33 @@ class FollowerChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
+        $resolver->setDefault('unassigned', false);
         $resolver->setDefaults([
-            'choices' => function (Options $options) {
-                return $this->adminRepository->getFollowers($options['event']);
+            'choices'      => function (Options $options) {
+                $admins = $this->adminRepository->getFollowers($options['event']);
+
+                if ($options['unassigned'] === true) {
+                    return array_merge([self::UNASSIGNED_FOLLOWER], $admins);
+                } else {
+                    return $admins;
+                }
             },
-            'choice_label' => function (Admin $admin) {
-                return $admin->getDisplayName();
+            'choice_label' => function ($admin) {
+                if ($admin instanceof Admin) {
+                    return $admin->getDisplayName();
+                } else {
+                    return 'admin.sheet.follower.un-assigned';
+                }
             },
-            'choice_translation_domain' => false,
+            'choice_value' => function ($admin) {
+                if ($admin instanceof Admin) {
+                    return $admin->getId();
+                } elseif ($admin === self::UNASSIGNED_FOLLOWER) {
+                    return self::UNASSIGNED_FOLLOWER;
+                } else {
+                    return null;
+                }
+            }
         ]);
     }
 
