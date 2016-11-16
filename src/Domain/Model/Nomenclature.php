@@ -206,7 +206,7 @@ class Nomenclature
         return array_map(function ($key, $item) use ($sort) {
             return new NomenclatureItem(
                 $key,
-                $item['label'],
+                isset($item['label']) ? $item['label'] : '',
                 isset($item['children']) ? self::items($item['children'], $sort) : [],
                 $sort
             );
