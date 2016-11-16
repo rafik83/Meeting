@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Navigation;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MenuHeaderView
 {
@@ -30,17 +31,24 @@ class MenuHeaderView
     private $localeRoutes;
 
     /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * MenuHeaderView constructor.
      *
-     * @param Event $event
-     * @param array $localeRoutes
-     * @param bool  $notification
+     * @param Event      $event
+     * @param array      $localeRoutes
+     * @param Sheet|null $sheet
+     * @param bool       $notification
      */
-    public function __construct(Event $event, array $localeRoutes, $notification = false)
+    public function __construct(Event $event, array $localeRoutes, Sheet $sheet = null, $notification = false)
     {
         $this->notification = $notification;
         $this->event        = $event;
         $this->localeRoutes = $localeRoutes;
+        $this->sheet        = $sheet;
     }
 
     /**
@@ -65,5 +73,13 @@ class MenuHeaderView
     public function getLocaleRoutes()
     {
         return $this->localeRoutes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSheet()
+    {
+        return $this->sheet !== null;
     }
 }

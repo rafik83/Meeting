@@ -45,13 +45,19 @@ class NavigationController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param bool        $registration
      *
      * @return Response
      */
-    public function menuHeaderAction(Request $request, EventDomain $eventDomain)
+    public function menuHeaderAction(Request $request, EventDomain $eventDomain, $registration = false)
     {
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
-            new MenuHeaderViewQuery($eventDomain->getEvent(), $request->getLocale(), $this->getUser())
+            new MenuHeaderViewQuery(
+                $eventDomain->getEvent(),
+                $request->getLocale(),
+                $this->getUser(),
+                $registration
+            )
         );
 
         return $this->render('EventBundle::Navigation/headerMenu.html.twig', [

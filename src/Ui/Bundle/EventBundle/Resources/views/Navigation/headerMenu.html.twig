@@ -11,7 +11,7 @@
     {% endif %}
 
     <ul class="header__navigation">
-        {% if is_granted('ROLE_USER') %}
+        {% if is_granted('ROLE_USER') and menuHeader.hasSheet %}
             <li class="notifs">
                 <a href="{{ path('event_notification_list') }}">
                     <i class="icon-Retard"></i>
