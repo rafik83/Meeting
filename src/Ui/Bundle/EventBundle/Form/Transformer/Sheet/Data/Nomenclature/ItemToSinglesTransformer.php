@@ -32,7 +32,7 @@ class ItemToSinglesTransformer extends AbstractTransformer
         $depth = $this->nomenclature->getDepth();
 
         if (null === $item) {
-            throw new TransformationFailedException(sprintf('Item is null for this value %s', $value));
+            return [];
         }
 
         if ($depth === 1) {
