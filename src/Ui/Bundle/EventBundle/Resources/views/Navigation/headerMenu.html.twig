@@ -3,9 +3,9 @@
         {% if menuHeader.event.logo != null %}
             <a href="{{ path('event') }}">
                 {% if menuHeader.event.isSvgLogo %}
-                    <img src="{{ event.logo }}" class="logo">
+                    <img src="{{ menuHeader.event.logo }}" class="logo">
                 {% else %}
-                    <img src="{{ event.logo|imagine_filter('event_header_logo') }}" class="logo">
+                    <img src="{{ menuHeader.event.logo|imagine_filter('event_header_logo') }}" class="logo">
                 {% endif %}
             </a>
         {% endif %}
