@@ -7,3 +7,7 @@ Proximum\Vimeet\Domain\Model\Notification:
         __construct:
             - '@sheet_asddays_1'
             - 'sheetTranslationCompleteness'
+    asddays_pending_transaction:
+        __construct:
+            - '@sheet_asddays_1'
+            - 'transactionPending'
