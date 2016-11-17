@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Notification;
 
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Notification\NotificationListView;
 
 class NotificationViewQueryHandler
@@ -20,15 +21,23 @@ class NotificationViewQueryHandler
      * @var SheetNotificationViewQueryHandler
      */
     private $sheetNotificationViewQueryHandler;
+    /**
+     * @var TransactionNotificationViewQueryHandler
+     */
+    private $transactionNotificationViewQueryHandler;
 
     /**
      * NotificationViewQueryHandler constructor.
      *
-     * @param SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler
+     * @param SheetNotificationViewQueryHandler       $sheetNotificationViewQueryHandler
+     * @param TransactionNotificationViewQueryHandler $transactionNotificationViewQueryHandler
      */
-    public function __construct(SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler)
-    {
-        $this->sheetNotificationViewQueryHandler = $sheetNotificationViewQueryHandler;
+    public function __construct(
+        SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler,
+        TransactionNotificationViewQueryHandler $transactionNotificationViewQueryHandler
+    ) {
+        $this->sheetNotificationViewQueryHandler       = $sheetNotificationViewQueryHandler;
+        $this->transactionNotificationViewQueryHandler = $transactionNotificationViewQueryHandler;
     }
 
     /**

@@ -1966,6 +1966,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
         arguments:
             - '@query.notification.sheet_notification_view_query_handler'
+            - '@query.notification.transaction_notification_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
     query.notification.sheet_notification_view_query_handler:
@@ -1975,6 +1976,11 @@ services:
             - '@repository.sheet.completeness_repository'
     query.notification.sheet_complete_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
+    query.notification.transaction_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler
+    query.notification.transaction_pending_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionPendingViewQueryHandler
         parent: 'query.notification.abstract_notification_view_query_handler'
 
     ##

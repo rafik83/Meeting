@@ -22,7 +22,8 @@ final class Notification
     /**
      * Category
      */
-    const CATEGORY_SHEET = 'sheet';
+    const CATEGORY_SHEET       = 'sheet';
+    const CATEGORY_TRANSACTION = 'transaction';
 
     /**
      * Type
