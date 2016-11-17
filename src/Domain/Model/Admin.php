@@ -442,6 +442,14 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasAccessToAllEvent()
+    {
+        return $this->isSuperAdmin() && !$this->hasEvents();
+    }
+
+    /**
      * @param EventInterface $event
      *
      * @return bool
