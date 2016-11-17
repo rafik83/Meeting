@@ -44,7 +44,7 @@ class FollowerChoiceType extends AbstractType
         $resolver->setRequired(['event']);
         $resolver->setDefault('unassigned', false);
         $resolver->setDefaults([
-            'choices'      => function (Options $options) {
+            'choices' => function (Options $options) {
                 $admins = $this->adminRepository->getFollowers($options['event']);
 
                 if ($options['unassigned'] === true) {
@@ -56,9 +56,9 @@ class FollowerChoiceType extends AbstractType
             'choice_label' => function ($admin) {
                 if ($admin instanceof Admin) {
                     return $admin->getDisplayName();
-                } else {
-                    return 'admin.sheet.follower.un-assigned';
                 }
+
+                return 'admin.sheet.follower.un-assigned';
             },
             'choice_value' => function ($admin) {
                 if ($admin instanceof Admin) {
@@ -68,7 +68,7 @@ class FollowerChoiceType extends AbstractType
                 } else {
                     return null;
                 }
-            }
+            },
         ]);
     }
 
