@@ -16,8 +16,12 @@ use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update as PaymentConditionsUpdate;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
+use Proximum\Vimeet\Application\Command\Order\Find;
+use Proximum\Vimeet\Application\Command\Order\FindResult;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
+use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
@@ -26,6 +30,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,9 +40,11 @@ use Symfony\Component\HttpFoundation\Response;
 class EventController extends Controller
 {
     /**
+     * @param Request $request
+     *
      * @return Response
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         /** @var Admin $admin */
         $admin  = $this->getUser();
@@ -45,14 +52,52 @@ class EventController extends Controller
             ->get('vimeet_infrastructure.repository.event_repository')
             ->getListByAdmin($admin);
 
-        $form = null;
+        $orderForm       = null;
+        $formIsSubmitted = false;
 
         if (!$admin->isPartner()) {
+            $find      = new Find($admin);
+            $orderForm = $this->createForm(FindType::class, $find);
+
+            $formIsSubmitted = $orderForm->handleRequest($request)->isSubmitted();
+
+            if ($formIsSubmitted && $orderForm->isValid()) {
+                try {
+                    /** @var FindResult $result */
+                    $result = $this->get('tactician.commandbus')->handle($find);
+
+                    return $this->redirect($this->generateUrl('admin_sheet_details', [
+                        'event' => $result->sheet->getEvent()->getId(),
+                        'sheet' => $result->sheet->getId(),
+                    ]) . '#sheetOrders');
+                } catch (OrderNotFoundException $exception) {
+                    $orderForm->get('numero')->addError(
+                        new FormError(
+                            $this->get('translator')->trans(
+                                'validators.order.orderNotFound',
+                                [],
+                                'validators'
+                            )
+                        )
+                    );
+                } catch (InvalidNumeroOrderException $exception) {
+                    $orderForm->get('numero')->addError(
+                        new FormError(
+                            $this->get('translator')->trans(
+                                'validators.order.numeroNotValid',
+                                [],
+                                'validators'
+                            )
+                        )
+                    );
+                }
+            }
         }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
-            'events' => $events,
-            'orderForm' => $form !== null ? null : null,
+            'events'         => $events,
+            'orderForm'      => $orderForm !== null ? $orderForm->createView() : null,
+            'orderTabActive' => $orderForm !== null && $formIsSubmitted ? !$orderForm->isValid() : false,
         ]);
     }
 
