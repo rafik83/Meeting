@@ -44,7 +44,7 @@ class FindHandler
      */
     public function handle(Find $find)
     {
-        if (Finder::isAllowToFind($find->admin)) {
+        if (!Finder::isAllowedToFind($find->admin)) {
             throw new IsNotAllowedToFindOrderException(
                 sprintf('This user of id %s is not allowed to find an order', $find->admin->getId())
             );
@@ -62,7 +62,7 @@ class FindHandler
 
         $order = $this->orderRepository->findByNumero($eventId, $sheetId, $orderId);
 
-        if ($order === null) {
+        if ($order === null || !Finder::isAllowedToAccess($find->admin, $order)) {
             throw new OrderNotFoundException(
                 sprintf('The order with numero %s does not exist', $numero)
             );
