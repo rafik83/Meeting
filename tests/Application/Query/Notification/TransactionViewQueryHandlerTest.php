@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Notification;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
+use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQuery;
+use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionPendingViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionPendingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Notification\NotificationView;
@@ -20,12 +21,13 @@ use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Notification\Notification;
 use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class TransactionPendingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHandle()
+    public function testHandleNotificationPending()
     {
         $datetime    = new \DateTime();
         $event       = EventFactory::createEvent();
@@ -47,7 +49,7 @@ class TransactionPendingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $router   = $this->prophesize(RouterInterface::class);
+        $router = $this->prophesize(RouterInterface::class);
 
         $router->generate('event_order_list', ['sheet' => $sheet->getId()])
             ->shouldBeCalled()
@@ -58,5 +60,31 @@ class TransactionPendingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $notificationView = $handler->handle(new TransactionPendingViewQuery($transaction));
 
         $this->assertEquals($notificationView, $expectedNotificationView);
+    }
+
+    public function testHandle()
+    {
+        $datetime    = new \DateTime();
+        $event       = EventFactory::createEvent();
+        $user        = new User('user@gmail.com', 'salt', 'pasword', 'fr');
+        $sheet       = SheetFactory::create($event, $user, $datetime);
+        $transaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
+
+        // Mock
+        $transactionRepository              = $this->prophesize(TransactionRepositoryInterface::class);
+        $transactionPendingViewQueryHandler = $this->prophesize(TransactionPendingViewQueryHandler::class);
+
+        $transactionRepository->findPending($sheet)->shouldBeCalled()->willReturn([$transaction]);
+
+        $transactionPendingViewQueryHandler
+            ->handle(new TransactionPendingViewQuery($transaction))
+            ->shouldBeCalled();
+
+        $handler = new TransactionNotificationViewQueryHandler(
+            $transactionRepository->reveal(),
+            $transactionPendingViewQueryHandler->reveal()
+        );
+
+        $handler->handle(new TransactionNotificationViewQuery($sheet));
     }
 }
