@@ -10,12 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
@@ -49,9 +52,16 @@ class CreateTransactionHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
+
         $transactionRepository->add($expectedTransaction)->shouldBeCalled();
 
-        $handler = new CreateHandler($transactionRepository->reveal());
+        $eventDispatcher->dispatch(
+            Events::TRANSACTION_CREATED,
+            new TransactionCreatedEvent($expectedTransaction)
+        )->shouldBeCalled();
+
+        $handler = new CreateHandler($transactionRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($create);
     }
 }
