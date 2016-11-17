@@ -96,4 +96,26 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByNumero($eventId, $sheetId, $orderId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(Order::class, '_order')
+            ->join('_order.sheet', 'sheet')
+            ->where('_order.id = :orderId')
+            ->andWhere('_order.sheet = :sheetId')
+            ->andWhere('sheet.event = :eventId')
+            ->setParameter('eventId', $eventId)
+            ->setParameter('sheetId', $sheetId)
+            ->setParameter('orderId', $orderId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

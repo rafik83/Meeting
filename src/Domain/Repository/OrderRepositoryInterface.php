@@ -44,4 +44,13 @@ interface OrderRepositoryInterface
      * @return PaginatedResult
      */
     public function findByEvent(Event $event, array $filters, $page, $limit, $locale);
+
+    /**
+     * @param int $eventId
+     * @param int $sheetId
+     * @param int $orderId
+     *
+     * @return Order|null
+     */
+    public function findByNumero($eventId, $sheetId, $orderId);
 }
