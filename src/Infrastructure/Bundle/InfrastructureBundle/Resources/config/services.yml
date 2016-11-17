@@ -1877,10 +1877,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
         arguments:
             - '@adapter.router'
-    navigation.session_flashbag:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\SessionFlashbag
-        arguments:
-            - '@session.flash_bag'
 
     ##
     # Navigation query handler
@@ -1892,6 +1888,14 @@ services:
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
+    query.navigation.menu_header_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery }
     query.navigation.submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
         arguments:
@@ -1940,13 +1944,11 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-
     query.navigation.catalog_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@datetime'
-
     query.navigation.sheet_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
@@ -1967,6 +1969,7 @@ services:
         arguments:
             - '@query.notification.sheet_notification_view_query_handler'
             - '@query.notification.transaction_notification_view_query_handler'
+            - '@query.notification.package_notification_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
     query.notification.sheet_notification_view_query_handler:
@@ -1974,6 +1977,11 @@ services:
         arguments:
             - '@query.notification.sheet_complete_translation_view_query_handler'
             - '@repository.sheet.completeness_repository'
+    query.notification.package_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@query.notification.package_no_order_view_query_handler'
     query.notification.sheet_complete_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
         parent: 'query.notification.abstract_notification_view_query_handler'
@@ -1981,6 +1989,9 @@ services:
         class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler
     query.notification.transaction_pending_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionPendingViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
+    query.notification.package_no_order_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Package\NoOrderNotificationViewQueryHandler
         parent: 'query.notification.abstract_notification_view_query_handler'
 
     ##
@@ -2101,6 +2112,10 @@ services:
         arguments:
             - '@repository.billing_info_repository'
             - '%infrastructure.eu_countries%'
+    package.orders_checker:
+        class: Proximum\Vimeet\Domain\Package\Orders\OrdersChecker
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
 
     #
     # Cart

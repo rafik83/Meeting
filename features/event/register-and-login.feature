@@ -127,3 +127,20 @@ Feature: Register and login user
     Then I should be on this page "/fr/participant/5/step/3"
     And I should see "register.step"
     And I should see "3/3"
+    And I fill in the following:
+      | Nom (Société / Organisme)     | Elao              |
+      | block[97ed778d][item][first]  | category1         |
+      | Adresse                       | 10 rue Saint Marc |
+      | Code postal                   | 75002             |
+      | Ville                         | Paris             |
+      | Pays                          | FR                |
+      | block[57da9df7ced30][boolean] | 1                 |
+      | Décrivez votre activité       | abc               |
+    When I press "register.finalize"
+    Then I should be on this page "/fr/sheet"
+    When I follow "navigation.links.notification"
+    Then I should be on this page "/fr/notification"
+    And I should see "notification.list.title.label"
+    And I should see "notification.package.noOrder"
+    And I should see "notification.label.required"
+    And I should see "notification.category.package.label"

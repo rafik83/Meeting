@@ -35,7 +35,14 @@ interface NotificationRepositoryInterface
      * @param Sheet  $sheet
      * @param string $type
      *
-     * @return Notification
+     * @return Notification|null
      */
     public function findByType(Sheet $sheet, $type);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function sheetHasNotification(Sheet $sheet);
 }

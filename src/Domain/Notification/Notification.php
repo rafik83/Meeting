@@ -24,9 +24,11 @@ final class Notification
      */
     const CATEGORY_SHEET       = 'sheet';
     const CATEGORY_TRANSACTION = 'transaction';
+    const CATEGORY_PACKAGE     = 'package';
 
     /**
      * Type
      */
     const TYPE_SHEET_TRANSLATION_COMPLETENESS = 'sheetTranslationCompleteness';
+    const TYPE_PACKAGE_SELECTED               = 'packageSelected';
 }

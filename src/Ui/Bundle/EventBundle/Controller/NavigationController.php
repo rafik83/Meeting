@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Application\View\Navigation\MenuView;
@@ -38,6 +39,29 @@ class NavigationController extends Controller
         return $this->render('EventBundle::Navigation/dropdownMenu.html.twig', [
             'menuView'    => $menuView,
             'submenuView' => $submenuView,
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param bool        $registration
+     *
+     * @return Response
+     */
+    public function menuHeaderAction(Request $request, EventDomain $eventDomain, $registration = false)
+    {
+        $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
+            new MenuHeaderViewQuery(
+                $eventDomain->getEvent(),
+                $request->getLocale(),
+                $this->getUser(),
+                $registration
+            )
+        );
+
+        return $this->render('EventBundle::Navigation/headerMenu.html.twig', [
+            'menuHeader' => $menuHeaderView,
         ]);
     }
 
