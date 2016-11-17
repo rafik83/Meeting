@@ -105,7 +105,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent in bcc to "(?P<email>[^"]+)"$/
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent in bcc to "(?P<email>[^"]+)" from "(?P<sender>[^"]+)"$/
      */
     public function theMailShouldBeSentInBCCTo($type, $email, $senderEmail)
     {
