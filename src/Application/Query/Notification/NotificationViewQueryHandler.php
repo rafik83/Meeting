@@ -25,6 +25,7 @@ class NotificationViewQueryHandler
      * @var SheetNotificationViewQueryHandler
      */
     private $sheetNotificationViewQueryHandler;
+
     /**
      * @var TransactionNotificationViewQueryHandler
      */
