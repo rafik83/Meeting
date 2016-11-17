@@ -1863,6 +1863,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
+    query.user.user_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserListViewQuery }
+
     ##
     # Navigation builder
     ##

@@ -622,6 +622,8 @@ form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
 form.user_filter.children.type.label: Type
+form.user_filter.children.text_search.label: Nom, prénom ou email de l'utilisateur
+form.user_filter.children.participation.label: Participation
 form.vatMode.ati: TTC
 form.vatMode.et: HT
 form.who_see_who.children.seeable.label: Voit
