@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
@@ -38,12 +39,20 @@ class EventController extends Controller
      */
     public function listAction()
     {
+        /** @var Admin $admin */
+        $admin  = $this->getUser();
         $events = $this
             ->get('vimeet_infrastructure.repository.event_repository')
-            ->getListByAdmin($this->getUser());
+            ->getListByAdmin($admin);
+
+        $form = null;
+
+        if (!$admin->isPartner()) {
+        }
 
         return $this->render('AdminBundle:Event:list.html.twig', [
             'events' => $events,
+            'orderForm' => $form !== null ? null : null,
         ]);
     }
 
