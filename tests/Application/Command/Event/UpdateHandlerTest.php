@@ -42,7 +42,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR',
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
-            'oldProximum'
+            'oldProximum',
+            'team-project@example.net'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -73,6 +74,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->domain        = 'hello.vimeet.proximum.dev';
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
+        $update->emailTeam     = 'team-event@example.net';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -87,7 +89,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'USD',
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
-            'proximum'
+            'proximum',
+            'team-event@example.net'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -135,7 +138,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR',
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
-            'oldProximum'
+            'oldProximum',
+            'team-project@example.net'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -160,6 +164,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->domain        = 'hello.vimeet.proximum.dev';
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
+        $update->emailTeam     = 'team-event@example.net';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -174,7 +179,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR',
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
-            'proximum'
+            'proximum',
+            'team-event@example.net'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -217,7 +223,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR',
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
-            'oldProximum'
+            'oldProximum',
+            'team-project@example.net'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -242,7 +249,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->domain        = 'hello.vimeet.proximum.dev';
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
-
+        $update->emailTeam     = 'team-event@example.net';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -257,7 +264,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR',
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
-            'proximum'
+            'proximum',
+            'team-event@example.net'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
@@ -299,7 +307,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'EUR',
             'Europe/Madrid',
             'old.vimeet.proximum.dev',
-            'oldProximum'
+            'oldProximum',
+            'team-project@example.net'
         );
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
@@ -326,6 +335,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $update->domain        = 'hello.vimeet.proximum.dev';
         $update->timeZone      = 'Europe/Paris';
         $update->organiserName = 'proximum';
+        $update->emailTeam     = 'team-event@example.net';
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -340,7 +350,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'USD',
             'Europe/Paris',
             'hello.vimeet.proximum.dev',
-            'proximum'
+            'proximum',
+            'team-event@example.net'
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));

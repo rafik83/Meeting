@@ -42,6 +42,11 @@ class ChangeNewMailAddressMail extends Mail
     private $user;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = false;
+
+    /**
      * @param Event  $event
      * @param string $sender
      * @param string $receiver

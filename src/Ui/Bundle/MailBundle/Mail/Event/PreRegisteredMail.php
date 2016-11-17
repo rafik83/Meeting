@@ -44,6 +44,11 @@ class PreRegisteredMail extends Mail
     private $sheet;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = true;
+
+    /**
      * @param Participant $participant
      * @param string      $sender
      * @param string      $receiver

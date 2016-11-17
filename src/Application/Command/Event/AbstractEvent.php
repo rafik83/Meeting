@@ -83,4 +83,9 @@ abstract class AbstractEvent
      * @var string
      */
     public $organiserName;
+
+    /**
+     * @var string|null
+     */
+    public $emailTeam;
 }

@@ -44,6 +44,11 @@ class AddParticipantMail extends Mail
     private $guest;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = false;
+
+    /**
      * @param Event       $event
      * @param string      $sender
      * @param string      $receiver

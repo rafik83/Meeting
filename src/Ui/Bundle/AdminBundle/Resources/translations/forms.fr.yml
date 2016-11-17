@@ -153,6 +153,7 @@ form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
 form.event_update.children.domain.label: 'Domaine (complet)'
+form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
 form.event_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.event_update.children.locales.label: Langues

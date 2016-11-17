@@ -101,6 +101,27 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function theMailShouldBeSentTo($type, $email, $senderEmail)
     {
+        $this->checkMailSendToRecipient($type, $email, 'to', $senderEmail);
+    }
+
+    /**
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent in bcc to "(?P<email>[^"]+)" from "(?P<sender>[^"]+)"$/
+     */
+    public function theMailShouldBeSentInBCCTo($type, $email, $senderEmail)
+    {
+        $this->checkMailSendToRecipient($type, $email, 'bcc', $senderEmail);
+    }
+
+    /**
+     * @param string $type
+     * @param string $email
+     * @param string $recipient
+     * @param string $senderEmail
+     *
+     * @throws \Exception
+     */
+    private function checkMailSendToRecipient($type, $email, $recipient, $senderEmail)
+    {
         $spoolDir = $this->getSpoolDir();
 
         $filesystem = new Filesystem();
@@ -118,8 +139,16 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 /** @var \Swift_Message $message */
                 $message = unserialize(file_get_contents($file));
 
+                $messageRecipients = [];
+
+                if ($recipient == 'to') {
+                    $messageRecipients = $message->getTo();
+                } elseif ($recipient == 'bcc') {
+                    $messageRecipients = $message->getBcc();
+                }
+
                 // check the recipients
-                $recipients = array_keys($message->getTo());
+                $recipients = array_keys($messageRecipients);
                 $sender = key($message->getFrom());
 
                 if (!in_array($email, $recipients)) {

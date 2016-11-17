@@ -14,6 +14,9 @@ use Proximum\Vimeet\Domain\Model\Admin;
 
 class Create extends AbstractEvent
 {
+    /**
+     * @var Admin
+     */
     public $admin;
 
     /**

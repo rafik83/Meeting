@@ -23,3 +23,4 @@ Feature: Sheet validation workflow
     Then I should be on this page "/fr/sheet"
     And I should see "sheet.submit.validation.pending"
     And the "sheet.validation.pending" mail should be sent to "partenaire@proximumgroup.com" from "vimeet@proximum.dev"
+    And the "sheet.validation.pending" mail should be sent in bcc to "team-project@example.net" from "vimeet@proximum.dev"
