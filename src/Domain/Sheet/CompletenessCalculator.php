@@ -112,7 +112,7 @@ class CompletenessCalculator
             $this->sheetCompletenessRepository->add($unitLocalizedCompleteness);
             $averageCompleteness += $localeCompleteness;
 
-            $notificationCompleteness[$locale] = $localeCompleteness === 100;
+            $notificationCompleteness[$locale] = (int) $localeCompleteness === 100;
         }
 
         $sheet->setCompleteness(intval(floor($averageCompleteness / count($locales))));

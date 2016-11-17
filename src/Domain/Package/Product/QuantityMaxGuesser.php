@@ -51,12 +51,17 @@ class QuantityMaxGuesser
         }
 
         $cart              = $this->cartManager->getCart($sheet);
-        $selectedPlan      = $cart->getPlanRow();
+        $selectedPlan      = ($cart->getPlanRow() !== null) ? $cart->getPlanRow()->getProduct() : null;
         $countParticipants = $sheet->getParticipants()->count();
         $remainingQuantity = INF;
 
+        if ($sheet->hasOrders()) {
+            $order        = $this->merger->merge($sheet->getOrders());
+            $selectedPlan = $order->getPlan();
+        }
+
         if ($selectedPlan) {
-            $includedPlanningProduct = $selectedPlan->getProduct()->getIncludedPlanningProduct();
+            $includedPlanningProduct = $selectedPlan->getIncludedPlanningProduct();
 
             if ($includedPlanningProduct) {
                 $remainingQuantity = $countParticipants - $includedPlanningProduct->getQuantity();

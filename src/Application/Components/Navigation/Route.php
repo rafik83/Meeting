@@ -44,6 +44,10 @@ final class Route
         'event_order_summary_total',
     ];
 
+    const NOTIFICATION = [
+        'event_notification_list'
+    ];
+
     /**
      * @param string $route
      *
@@ -72,5 +76,15 @@ final class Route
     public static function isMeetingRequest($route)
     {
         return in_array($route, self::MEETING_REQUEST);
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isNotification($route)
+    {
+        return in_array($route, self::NOTIFICATION);
     }
 }

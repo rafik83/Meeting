@@ -2,7 +2,11 @@
     {% if menuHeader.event is defined %}
         {% if menuHeader.event.logo != null %}
             <a href="{{ path('event') }}">
-                <img src="{{ menuHeader.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+                {% if menuHeader.event.isSvgLogo %}
+                    <img src="{{ menuHeader.event.logo }}" class="logo">
+                {% else %}
+                    <img src="{{ menuHeader.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+                {% endif %}
             </a>
         {% endif %}
         <div class="header__info">
