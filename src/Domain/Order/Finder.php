@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Order;
 
 class Finder
 {
@@ -19,8 +20,27 @@ class Finder
      *
      * @return bool
      */
-    public static function isAllowToFind(Admin $admin)
+    public static function isAllowedToFind(Admin $admin)
     {
-        return $admin->isPartner();
+        return !$admin->isPartner();
+    }
+
+    /**
+     * @param Admin $admin
+     * @param Order $order
+     *
+     * @return bool
+     */
+    public static function isAllowedToAccess(Admin $admin, Order $order)
+    {
+        if (!self::isAllowedToFind($admin)) {
+            return false;
+        }
+
+        if ($admin->hasAccessToAllEvent()) {
+            return true;
+        }
+
+        return $admin->hasEvent($order->getSheet()->getEvent());
     }
 }
