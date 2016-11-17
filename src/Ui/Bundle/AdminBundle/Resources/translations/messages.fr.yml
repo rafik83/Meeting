@@ -33,6 +33,9 @@ admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.create.title: 'Créer un événement'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
+admin.event.page.list.title: 'Liste de mes événements'
+admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
+admin.event.page.orderFinder.title: Recherche commande
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
