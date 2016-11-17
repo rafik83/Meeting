@@ -160,6 +160,22 @@ function init(target) {
             nonSelectedListLabel: nonSelectedListLabel
         });
     });
+
+    [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {
+        // Found the anchor and focus the tab on it
+        if (element.getAttribute('data-switch-to-tab') === 'anchor') {
+            var hash       = location.hash;
+            var hashPieces = hash.split('?');
+
+            if (hashPieces.length > 0 && hashPieces[0] !== "") {
+                var activeTab = $('[href=' + hashPieces[0] + ']');
+
+                if (activeTab.length !== 0) {
+                    activeTab.tab('show');
+                }
+            }
+        }
+    })
 }
 
 // Call init function when element is added to DOM
