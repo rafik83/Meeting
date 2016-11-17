@@ -26,6 +26,7 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
@@ -51,7 +52,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     private $mailer;
 
     /**
-     * @var string
+     * @var EventSender
      */
     private $sender;
 
@@ -59,9 +60,9 @@ class MailEventSubscriber implements EventSubscriberInterface
      * MailEventSubscriber constructor.
      *
      * @param MailerInterface $mailer
-     * @param string          $sender
+     * @param EventSender     $sender
      */
-    public function __construct(MailerInterface $mailer, $sender)
+    public function __construct(MailerInterface $mailer, EventSender $sender)
     {
         $this->mailer = $mailer;
         $this->sender = $sender;
@@ -78,7 +79,7 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $mail = new SheetValidatedMail(
             $event->getSheet(),
-            $this->sender,
+            $this->sender->generate(),
             $owner->getEmail(),
             $owner->getLocale()
         );
@@ -94,7 +95,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new TransactionConfirmMail(
             $event->getTransaction(),
             $event->getUser(),
-            $this->sender,
+            $this->sender->generate(),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale()
         );
@@ -109,7 +110,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $oldMail = new ChangeOldMailAddressMail(
             $event->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getMail()
@@ -117,7 +118,7 @@ class MailEventSubscriber implements EventSubscriberInterface
 
         $newMail = new ChangeNewMailAddressMail(
             $event->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getChangeMailToken()->getMail(),
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken(),
@@ -136,7 +137,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
         $mail = new OrderConfirmMail(
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getOrder(),
@@ -153,7 +154,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new AddParticipantMail(
             $event->getSheet()->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getUser(),
@@ -169,7 +170,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onAdminActivateAccount(AdminActivateAccountEvent $event)
     {
         $mail = new AdminActivateAccountMail(
-            $this->sender,
+            $this->sender->generate(),
             $event->getAdmin()->getEmail(),
             $event->getLocale(),
             $event->getActivateAccountToken()->getToken()
@@ -184,7 +185,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onAdminResetPassword(AdminResetPasswordEvent $event)
     {
         $mail = new AdminResetPasswordMail(
-            $this->sender,
+            $this->sender->generate(),
             $event->getAdmin()->getEmail(),
             $event->getLocale(),
             $event->getForgottenPasswordToken()->getToken()
@@ -200,7 +201,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new UserActivateAccountMail(
             $event->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getActivateAccountToken()->getToken(),
@@ -218,7 +219,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new UserResetPasswordMail(
             $event->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
             $event->getForgottenPasswordToken()->getToken()
@@ -236,7 +237,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new ResetPasswordConfirmMail(
             $event->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
             $event->getUser()
@@ -252,7 +253,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new UserCompleteProfileMail(
             $event->getParticipant(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale()
         );
@@ -269,7 +270,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new PreRegisteredMail(
             $event->getParticipant(),
-            $this->sender,
+            $this->sender->generate($event->getParticipant()->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
             $event->getUser()
@@ -285,7 +286,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new RegisterAccountMail(
             $event->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
             $event->getUser()
@@ -301,7 +302,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = new SheetChangeTypeMail(
             $event->getSheet()->getEvent(),
-            $this->sender,
+            $this->sender->generate($event->getSheet()->getEvent()),
             $event->getSheet()->getOwner()->getEmail(),
             $event->getLocale(),
             $event->getSheet()->getOwner(),

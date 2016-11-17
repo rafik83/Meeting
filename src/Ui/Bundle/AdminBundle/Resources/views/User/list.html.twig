@@ -5,6 +5,27 @@
 {% block content %}
     <h1 class="page-header">{{ paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
+    <div class="row filters">
+        <div class="col-md-offset-4 col-md-4">
+            {{ form_start(filter_part_form) }}
+
+            <div class="input-group col-md-12">
+                {{ form_widget(filter_part_form.text) }}
+            </div>
+
+            {{ form_end(filter_part_form) }}
+        </div>
+    </div>
+
+    <div class="row filters">
+        <div class="col-md-4 col-md-offset-4">
+            {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                filters:   filters_summary,
+                resetLink: path('admin_users', { 'event': event.id })
+            }) }}
+        </div>
+    </div>
+
     <table class="table table-hover">
         <thead>
         <tr>
@@ -12,7 +33,7 @@
             <th>{{ 'admin.users.email'|trans }}</th>
             <th>{{ 'admin.users.lastName'|trans }}</th>
             <th>{{ 'admin.users.firstName'|trans }}</th>
-            <th></th>
+            <th class="text-right">{{ macro.choice_as_dropdown(filter_form.participation, false, true) }}</th>
         </tr>
         </thead>
         <tbody>

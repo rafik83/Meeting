@@ -1,5 +1,4 @@
-@event
-@account
+@event @account @mail
 Feature: Forgot Password
   I need to be able to change my password if I forgot it
 
@@ -24,7 +23,7 @@ Feature: Forgot Password
     And I fill in "form.forgotten_password.children.email.label" with "test@test.com"
     And I press "form.forgotten_password.children.submit.label"
     And I should be on this page "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/forgotten_password/confirm"
-    And the "user.password_reset" mail should be sent to "test@test.com"
+    And the "user.password_reset" mail should be sent to "test@test.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
     And the "user.password_reset" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/"
     And I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/reset_password/" link in the "user.password_reset" mail
     And the response status code should be 200

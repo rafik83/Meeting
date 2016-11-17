@@ -37,7 +37,7 @@ class FilterFullType extends AbstractType
             ])
             ->add('completed', CompletedChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.completed.label',
-                'placeholder' => ''
+                'placeholder' => '',
             ])
             ->add('category', CategoryChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.category.label',
@@ -50,12 +50,13 @@ class FilterFullType extends AbstractType
                 'placeholder' => '',
                 'event'       => $options['event'],
                 'locale'      => $options['locale'],
-                'user'        => $options['user']
+                'user'        => $options['user'],
             ])
             ->add('follower', FollowerChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.follower.label',
                 'placeholder' => '',
                 'event'       => $options['event'],
+                'unassigned'  => true,
             ])
             ->add('predefined', PredefinedFiltersChoiceType::class, [
                 'label'       => 'form.filter.label',
