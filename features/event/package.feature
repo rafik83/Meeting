@@ -1,6 +1,4 @@
-@event
-@package
-@product
+@event @package @product @mail
 Feature: Complete my package
   I need to be able to buy plan, participants, planning and options
 
@@ -141,7 +139,7 @@ Feature: Complete my package
     When I press "package.payment.pay.label"
     Then I should be on this page "/fr/sheet/1/orders"
     And I should see "order.transaction.state.pending"
-    And the "order.confirm" mail should be sent to "user_asddays_1@proximum.com"
+    And the "order.confirm" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
 
   Scenario: I can see my package total summary:
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"

@@ -1,5 +1,4 @@
-@event
-@sheet
+@event @sheet @mail
 Feature: Sheet validation workflow
   I can send my sheet to validation when I think I'm done
 
@@ -23,4 +22,4 @@ Feature: Sheet validation workflow
     When I follow "sheet.submit.validation"
     Then I should be on this page "/fr/sheet"
     And I should see "sheet.submit.validation.pending"
-    And the "sheet.validation.pending" mail should be sent to "partenaire@proximumgroup.com"
+    And the "sheet.validation.pending" mail should be sent to "partenaire@proximumgroup.com" from "vimeet@proximum.dev"

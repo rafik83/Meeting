@@ -213,7 +213,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
         arguments:
             - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
+            - '@event_sender'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.submit_sheet_mail_event_subscriber:
@@ -332,6 +332,12 @@ services:
 
     markdown:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown
+
+    event_sender:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender
+        arguments:
+            - '%domain%'
+            - '%mailer_sender%'
 
 
     #
