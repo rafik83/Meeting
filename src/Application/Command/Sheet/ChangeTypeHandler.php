@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -120,5 +121,9 @@ class ChangeTypeHandler
                 $changeType->locale
             )
         );
+
+        // trigger event to generate must select package notification if user has no order
+        $ordersUpdated = new MustSelectPackageEvent($changeType->sheet);
+        $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $ordersUpdated);
     }
 }

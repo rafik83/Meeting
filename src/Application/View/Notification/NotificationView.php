@@ -46,9 +46,9 @@ class NotificationView
     public $priority;
 
     /**
-     * @var string
+     * @var array
      */
-    public $locale;
+    public $parameters;
 
     /**
      * NotificationView constructor.
@@ -59,7 +59,7 @@ class NotificationView
      * @param string            $description
      * @param string            $link
      * @param string            $priority
-     * @param string            $locale
+     * @param array             $parameters
      */
     public function __construct(
         DateTimeInterface $createdAt,
@@ -68,7 +68,7 @@ class NotificationView
         $description,
         $link,
         $priority,
-        $locale
+        array $parameters = []
     ) {
         $this->createdAt   = $createdAt;
         $this->category    = $category;
@@ -76,7 +76,7 @@ class NotificationView
         $this->link        = $link;
         $this->priority    = $priority;
         $this->icon        = $icon;
-        $this->locale      = $locale;
+        $this->parameters  = $parameters;
     }
 
     /**

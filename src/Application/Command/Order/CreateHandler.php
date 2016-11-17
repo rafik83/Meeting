@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Order;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -67,5 +68,9 @@ class CreateHandler
 
         $event = new OrderConfirmEvent($order, $create->user);
         $this->eventDispatcher->dispatch(Events::ORDER_CONFIRMED, $event);
+
+        // trigger event to remove must select package notification after first order
+        $mustSelectPackageEvent = new MustSelectPackageEvent($create->sheet);
+        $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $mustSelectPackageEvent);
     }
 }

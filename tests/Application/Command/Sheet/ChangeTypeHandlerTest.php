@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
+use Proximum\Vimeet\Application\Event\Package\OrdersUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -111,6 +113,11 @@ class ChangeTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch(
             Events::SHEET_CHANGED_TYPE,
             new SheetChangedTypeEvent($expectedSheet, $admin, $date, '', '', 'fr')
+        )->shouldBeCalled();
+
+        $eventDispatcher->dispatch(
+            Events::MUST_SELECT_PACKAGE,
+            new MustSelectPackageEvent($expectedSheet)
         )->shouldBeCalled();
     }
 
