@@ -2281,6 +2281,7 @@ services:
         arguments:
             - '@payum'
             - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet.payum.paypal.action.store_notification:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
         arguments:

@@ -11,9 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Payment;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Notification\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
-use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;

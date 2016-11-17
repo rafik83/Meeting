@@ -8,25 +8,33 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Event\Notification;
+namespace Proximum\Vimeet\Application\Event\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Symfony\Component\EventDispatcher;
 
-class TransactionCreatedEvent extends EventDispatcher\Event
+abstract class AbstractTransactionEvent extends EventDispatcher\Event
 {
     /**
      * @var Transaction
      */
-    public $transaction;
+    protected $transaction;
 
     /**
-     * TransactionCreatedEvent constructor.
+     * TransactionUpdatedEvent constructor.
      *
      * @param Transaction $transaction
      */
     public function __construct(Transaction $transaction)
     {
         $this->transaction = $transaction;
+    }
+
+    /**
+     * @return Transaction
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
     }
 }

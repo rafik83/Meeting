@@ -12,10 +12,13 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Notification\SheetCompletenessEvent;
-use Proximum\Vimeet\Application\Event\Notification\TransactionCreatedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\AbstractTransactionEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Notification\Notification as NotificationConstant;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class NotificationEventSubscriber implements EventSubscriberInterface
@@ -26,13 +29,22 @@ class NotificationEventSubscriber implements EventSubscriberInterface
     private $notificationRepository;
 
     /**
+     * @var TransactionRepositoryInterface
+     */
+    private $transactionRepository;
+
+    /**
      * NotificationEventSubscriber constructor.
      *
      * @param NotificationRepositoryInterface $notificationRepository
+     * @param TransactionRepositoryInterface  $transactionRepository
      */
-    public function __construct(NotificationRepositoryInterface $notificationRepository)
-    {
+    public function __construct(
+        NotificationRepositoryInterface $notificationRepository,
+        TransactionRepositoryInterface $transactionRepository
+    ) {
         $this->notificationRepository = $notificationRepository;
+        $this->transactionRepository  = $transactionRepository;
     }
 
     /**
@@ -44,7 +56,7 @@ class NotificationEventSubscriber implements EventSubscriberInterface
             $event->getSheet(), NotificationConstant::TYPE_SHEET_TRANSLATION_COMPLETENESS
         );
 
-        foreach($event->getNotificationCompleteness() as $completeState) {
+        foreach ($event->getNotificationCompleteness() as $completeState) {
             if ($completeState !== true) {
                 $this->notificationRepository->add(new Notification(
                     $event->getSheet(),
@@ -60,13 +72,31 @@ class NotificationEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionCreated(TransactionCreatedEvent $event)
     {
+        $this->updateTransactionNotification($event);
+    }
+
+    /**
+     * @param TransactionUpdatedEvent $event
+     */
+    public function onTransactionUpdated(TransactionUpdatedEvent $event)
+    {
+        $this->updateTransactionNotification($event);
+    }
+
+    /**
+     * @param AbstractTransactionEvent $event
+     */
+    private function updateTransactionNotification(AbstractTransactionEvent $event)
+    {
         $this->notificationRepository->removeByType(
-            $event->transaction->getSheet(), NotificationConstant::TYPE_TRANSACTION_PENDING
+            $event->getTransaction()->getSheet(), NotificationConstant::TYPE_TRANSACTION_PENDING
         );
 
-        if ($event->transaction->isPending()) {
+        $pendingTransactions = $this->transactionRepository->findPending($event->getTransaction()->getSheet());
+
+        if (count($pendingTransactions) > 0) {
             $this->notificationRepository->add(new Notification(
-                $event->transaction->getSheet(),
+                $event->getTransaction()->getSheet(),
                 NotificationConstant::TYPE_TRANSACTION_PENDING
             ));
         }
@@ -78,8 +108,10 @@ class NotificationEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::SHEET_COMPLETENESS => 'onSheetCompleteness',
-            Events::TRANSACTION_CREATED => 'onTransactionCreated'
+            Events::SHEET_COMPLETENESS  => 'onSheetCompleteness',
+            Events::TRANSACTION_CREATED => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED => 'onTransactionUpdated',
         ];
     }
+
 }

@@ -265,6 +265,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Notification\NotificationEventSubscriber
         arguments:
             - '@vimeet_infrastructure.repository.notification_repository'
+            - '@repository.transaction'
         tags:
             - { name: kernel.event_subscriber }
 

@@ -52,4 +52,5 @@ final class Events
     const PACKAGE_STEP_DONE                    = 'package.step.done';
     const SHEET_COMPLETENESS                   = 'sheet.completeness';
     const TRANSACTION_CREATED                  = 'transaction.created';
+    const TRANSACTION_UPDATED                  = 'transaction.updated';
 }
