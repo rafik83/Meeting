@@ -53,4 +53,5 @@ final class Events
     const SHEET_COMPLETENESS                   = 'sheet.completeness';
     const TRANSACTION_CREATED                  = 'transaction.created';
     const TRANSACTION_UPDATED                  = 'transaction.updated';
+    const TRANSACTION_REMOVED                  = 'transaction.removed';
 }

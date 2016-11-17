@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Notification\SheetCompletenessEvent;
 use Proximum\Vimeet\Application\Event\Transaction\AbstractTransactionEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Notification\Notification as NotificationConstant;
@@ -84,6 +85,14 @@ class NotificationEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param TransactionRemovedEvent $event
+     */
+    public function onTransactionRemoved(TransactionRemovedEvent $event)
+    {
+        $this->updateTransactionNotification($event);
+    }
+
+    /**
      * @param AbstractTransactionEvent $event
      */
     private function updateTransactionNotification(AbstractTransactionEvent $event)
@@ -111,6 +120,7 @@ class NotificationEventSubscriber implements EventSubscriberInterface
             Events::SHEET_COMPLETENESS  => 'onSheetCompleteness',
             Events::TRANSACTION_CREATED => 'onTransactionCreated',
             Events::TRANSACTION_UPDATED => 'onTransactionUpdated',
+            Events::TRANSACTION_REMOVED => 'onTransactionRemoved',
         ];
     }
 
