@@ -253,7 +253,9 @@ notification.package.noOrder: "Vous devez choisir votre forfait de participation
 notification.sheet.completeTranslation: "Compléter votre fiche de présentation en %locale%"
 notification.category.package.label: 'Forfait de participation'
 notification.category.sheet.label: 'Fiche de présentation'
+notification.category.transaction.label: 'Facturation'
 notification.list.title.label: 'Notifications'
 notification.empty: 'Aucune notification en attente'
 notification.label.required: 'Obligatoire'
 notification.label.important: 'Important'
+notification.transaction.pending: 'Le règlement de %amount% est en attente'

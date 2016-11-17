@@ -21,19 +21,12 @@ class TransactionNotificationViewQuery
     public $sheet;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * TransactionNotificationViewQuery constructor.
      *
      * @param Sheet $sheet
-     * @param User  $user
      */
-    public function __construct(Sheet $sheet, User $user)
+    public function __construct(Sheet $sheet)
     {
         $this->sheet = $sheet;
-        $this->user  = $user;
     }
 }

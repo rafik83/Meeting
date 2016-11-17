@@ -31,7 +31,10 @@ class TransactionPendingViewQueryHandler extends AbstractNotificationQueryHandle
             'notification.transaction.pending',
             $this->router->generate('event_order_list', ['sheet' => $query->transaction->getSheet()->getId()]),
             Notification::PRIORITY_IMPORTANT,
-            ''
+            [
+                '%amount%'   => $query->transaction->getAmount(),
+                '%currency%' => $query->transaction->getCurrency(),
+            ]
         );
     }
 }

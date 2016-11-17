@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationVi
 use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Notification\NotificationListView;
 use Proximum\Vimeet\Application\View\Notification\NotificationView;
@@ -75,7 +76,12 @@ class NotificationViewQueryHandler
                 new PackageNotificationViewQuery($query->sheet)
             );
 
+            $transactionNotificationView = $this->transactionNotificationViewQueryHandler->handle(
+                new TransactionNotificationViewQuery($query->sheet)
+            );
+
             $this->addNotifications($packageNotificationView);
+            $this->addNotifications($transactionNotificationView);
         }
 
         return new NotificationListView($this->notificationViews);

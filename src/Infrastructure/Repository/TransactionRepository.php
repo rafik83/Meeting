@@ -74,4 +74,21 @@ class TransactionRepository implements TransactionRepositoryInterface
         $this->entityManager->remove($transaction);
         $this->entityManager->flush($transaction);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findPending(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('transaction')
+            ->from(Transaction::class, 'transaction')
+            ->where('transaction.sheet = :sheet')
+            ->andWhere('transaction.state = :state')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', Transaction::STATE_PENDING);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

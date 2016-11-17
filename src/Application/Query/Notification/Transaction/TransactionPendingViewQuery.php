@@ -18,4 +18,14 @@ class TransactionPendingViewQuery
      * @var Transaction
      */
     public $transaction;
+
+    /**
+     * TransactionPendingViewQuery constructor.
+     *
+     * @param Transaction $transaction
+     */
+    public function __construct(Transaction $transaction)
+    {
+        $this->transaction = $transaction;
+    }
 }
