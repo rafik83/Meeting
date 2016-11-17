@@ -32,6 +32,15 @@ class FindType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Find::class,
+            'submit'     => true,
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'order_find';
     }
 }
