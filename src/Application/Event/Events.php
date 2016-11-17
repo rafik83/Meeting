@@ -51,4 +51,5 @@ final class Events
     const REGISTRATION_TEMPLATE_UPDATED        = 'registration_template.updated';
     const PACKAGE_STEP_DONE                    = 'package.step.done';
     const SHEET_COMPLETENESS                   = 'sheet.completeness';
+    const TRANSACTION_CREATED                  = 'transaction.created';
 }

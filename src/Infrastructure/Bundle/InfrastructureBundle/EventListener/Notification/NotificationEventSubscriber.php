@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Notification\SheetCompletenessEvent;
+use Proximum\Vimeet\Application\Event\Notification\TransactionCreatedEvent;
 use Proximum\Vimeet\Domain\Model\Notification;
 use Proximum\Vimeet\Domain\Notification\Notification as NotificationConstant;
 use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
@@ -55,12 +56,30 @@ class NotificationEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param TransactionCreatedEvent $event
+     */
+    public function onTransactionCreated(TransactionCreatedEvent $event)
+    {
+        $this->notificationRepository->removeByType(
+            $event->transaction->getSheet(), NotificationConstant::TYPE_TRANSACTION_PENDING
+        );
+
+        if ($event->transaction->isPending()) {
+            $this->notificationRepository->add(new Notification(
+                $event->transaction->getSheet(),
+                NotificationConstant::TYPE_TRANSACTION_PENDING
+            ));
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
             Events::SHEET_COMPLETENESS => 'onSheetCompleteness',
+            Events::TRANSACTION_CREATED => 'onTransactionCreated'
         ];
     }
 }
