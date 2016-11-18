@@ -3,19 +3,26 @@
 {% block content %}
     {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
         <div class="text-right">
-            <a href="{{ path('admin_event_create') }}" class="btn btn-primary">{{ 'admin.event.create.title'|trans }}</a>
+            <a href="{{ path('admin_event_create') }}" class="btn btn-primary">
+                {{ 'admin.event.create.title'|trans }}
+            </a>
         </div>
     {% endif %}
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="{% if not orderTabActive %}active{% endif %}">
-                    <a href="#eventList" aria-controls="home" role="tab" data-toggle="tab">{{ 'admin.event.page.list.title'|trans }}</a>
+                    <a href="#eventList" aria-controls="home" role="tab" data-toggle="tab">
+                        {{ 'admin.event.page.list.title'|trans }}
+                    </a>
                 </li>
-                <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
-                    <a href="#orderFinder" aria-controls="profile" role="tab"
-                       data-toggle="tab">{{ 'admin.event.page.orderFinder.title'|trans }}</a>
-                </li>
+                {% if orderForm is defined and orderForm is not null %}
+                    <li role="presentation" class="{% if orderTabActive %}active{% endif %}">
+                        <a href="#orderFinder" aria-controls="profile" role="tab" data-toggle="tab">
+                            {{ 'admin.event.page.orderFinder.title'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane {% if not orderTabActive %}active{% endif %}" id="eventList">
@@ -60,15 +67,18 @@
                 </div>
                 {% if orderForm is defined and orderForm is not null %}
                     <div role="tabpanel" class="tab-pane {% if orderTabActive %}active{% endif %}" id="orderFinder">
-                    {{ 'admin.event.page.orderFinder.explanation'|trans }}
+                        {{ 'admin.event.page.orderFinder.explanation'|trans }}
+
                         {{ form_start(orderForm) }}
-                            <div class="col-md-9">
-                                {{ form_label(orderForm.numero) }}
-                                {{ form_widget(orderForm.numero) }}
-                                {{ form_errors(orderForm.numero) }}
-                            </div>
-                            <div class="col-md-3" style="margin-top: 25px;">
-                                {{ form_widget(orderForm.submit) }}
+                            {{ form_label(orderForm.numero) }}
+                            <div class="row">
+                                <div class="col-md-9">
+                                    {{ form_widget(orderForm.numero) }}
+                                    {{ form_errors(orderForm.numero) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_widget(orderForm.submit) }}
+                                </div>
                             </div>
                         {{ form_end(orderForm) }}
                     </div>
