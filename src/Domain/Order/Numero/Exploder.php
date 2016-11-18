@@ -21,7 +21,7 @@ class Exploder
      *
      * @param string $numero
      *
-     * @return array
+     * @return OrderNumeroView
      *
      * @throws CanNotExplodeNotValidNumeroOrderException
      */
@@ -30,7 +30,7 @@ class Exploder
         if (Validator::isValid($numero)) {
             $numeroElements = array_map('intval', explode('-', $numero));
 
-            return $numeroElements;
+            return new OrderNumeroView($numeroElements[0], $numeroElements[1], $numeroElements[2]);
         }
 
         throw new CanNotExplodeNotValidNumeroOrderException();
