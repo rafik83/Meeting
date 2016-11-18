@@ -11,7 +11,8 @@ var $                       = require('jquery'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
     SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update'),
-    PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit');
+    PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
+    AnchorFocuser           = require('./components/_AnchorFocuser');
 
 require('elao-form.js');
 require('select2');
@@ -162,19 +163,7 @@ function init(target) {
     });
 
     [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {
-        // Found the anchor and focus the tab on it
-        if (element.getAttribute('data-switch-to-tab') === 'anchor') {
-            var hash       = location.hash;
-            var hashPieces = hash.split('?');
-
-            if (hashPieces.length > 0 && hashPieces[0] !== "") {
-                var activeTab = $('[href=' + hashPieces[0] + ']');
-
-                if (activeTab.length !== 0) {
-                    activeTab.tab('show');
-                }
-            }
-        }
+        new AnchorFocuser(element, location);
     })
 }
 
