@@ -32,20 +32,28 @@ class TransactionNotificationViewQueryHandler
     private $balance;
 
     /**
+     * @var TransactionPaidViewQueryHandler
+     */
+    private $transactionPaidViewQueryHandler;
+
+    /**
      * TransactionNotificationViewQueryHandler constructor.
      *
      * @param Balance                            $balance
      * @param TransactionRepositoryInterface     $transactionRepository
      * @param TransactionPendingViewQueryHandler $transactionPendingViewQueryHandler
+     * @param TransactionPaidViewQueryHandler    $transactionPaidViewQueryHandler
      */
     public function __construct(
         Balance $balance,
         TransactionRepositoryInterface $transactionRepository,
-        TransactionPendingViewQueryHandler $transactionPendingViewQueryHandler
+        TransactionPendingViewQueryHandler $transactionPendingViewQueryHandler,
+        TransactionPaidViewQueryHandler $transactionPaidViewQueryHandler
     ) {
         $this->balance                            = $balance;
         $this->transactionRepository              = $transactionRepository;
         $this->transactionPendingViewQueryHandler = $transactionPendingViewQueryHandler;
+        $this->transactionPaidViewQueryHandler    = $transactionPaidViewQueryHandler;
     }
 
     /**
@@ -59,12 +67,21 @@ class TransactionNotificationViewQueryHandler
 
         $balance             = $this->balance->getBalance($query->sheet);
         $pendingTransactions = $this->transactionRepository->findPending($query->sheet);
+        $paidTransactions    = $this->transactionRepository->findPaid($query->sheet);
 
         // generate notification if transaction pending and balance is positive
         if (count($pendingTransactions) > 0 && $balance > 0) {
             foreach ($pendingTransactions as $pendingTransaction) {
                 $transactionNotificationViews[] = $this->transactionPendingViewQueryHandler->handle(
                     new TransactionPendingViewQuery($pendingTransaction)
+                );
+            }
+        }
+
+        if (count($paidTransactions) > 0) {
+            foreach ($paidTransactions as $paidTransaction) {
+                $transactionNotificationViews[] = $this->transactionPaidViewQueryHandler->handle(
+                    new TransactionPaidViewQuery($paidTransaction)
                 );
             }
         }

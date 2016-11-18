@@ -92,4 +92,21 @@ class TransactionRepository implements TransactionRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findPaid(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('transaction')
+            ->from(Transaction::class, 'transaction')
+            ->where('transaction.sheet = :sheet')
+            ->andWhere('transaction.state = :state')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', Transaction::STATE_PAID);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
