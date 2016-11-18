@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Order\Finder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
@@ -55,7 +56,7 @@ class EventController extends Controller
         $orderForm       = null;
         $formIsSubmitted = false;
 
-        if (!$admin->isPartner()) {
+        if (Finder::IsAllowedToFind($admin)) {
             $find      = new Find($admin);
             $orderForm = $this->createForm(FindType::class, $find);
 
