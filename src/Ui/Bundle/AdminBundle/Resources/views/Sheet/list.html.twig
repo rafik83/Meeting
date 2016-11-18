@@ -79,7 +79,7 @@
             <div class="col-md-4">
                 {{ include('AdminBundle:Common:filters_summary.html.twig', {
                     filters:   filters_summary,
-                    resetLink: path('admin_sheet', { 'event': event.id })
+                    resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
                 }) }}
             </div>
         </div>

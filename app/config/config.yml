@@ -149,7 +149,7 @@ fos_elastica:
                             fields:
                                 raw:
                                     type: string
-                                    index: "not_analyzed"
+                                    analyzer: "lowercaseAnalyzer"
                         content:
                             type: string
                         content_en:

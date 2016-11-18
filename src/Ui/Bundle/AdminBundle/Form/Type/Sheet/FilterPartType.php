@@ -24,7 +24,6 @@ class FilterPartType extends AbstractType
     {
         $builder
             ->add('text', SheetTextSearchType::class, [
-                'label'       => false,
                 'placeholder' => 'form.sheet_filter.children.text_search.label',
             ])
             ->add('enabled', HiddenType::class)

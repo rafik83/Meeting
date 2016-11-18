@@ -1,5 +1,4 @@
-@event
-@account
+@event @account @mail
 Feature: Change my mail
   I need to be able to change my account
 
@@ -27,8 +26,8 @@ Feature: Change my mail
     Then I should be on "/fr/participant/1/step/1"
     And the response status code should be 200
     And I should see "flash.change_mail.success"
-    And the "change_mail_old" mail should be sent to "test@test.com"
-    And the "change_mail_new" mail should be sent to "truc@bidule.com"
+    And the "change_mail_old" mail should be sent to "test@test.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+    And the "change_mail_new" mail should be sent to "truc@bidule.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
     And the "change_mail_new" mail should contain the link "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/account/change_mail/"
     Then I follow the "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr/account/change_mail/" link in the "change_mail_new" mail
     And the response status code should be 200

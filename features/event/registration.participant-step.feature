@@ -1,6 +1,4 @@
-@event
-@participant
-@registration
+@event @participant @registration @mail
 Feature: Register with participant step
   I need to be able to register and fill information during the registration
 
@@ -40,7 +38,8 @@ Feature: Register with participant step
     And I fill in the following:
       | Décrivez votre activité | Ceci est une description |
     When I press "register.finalize"
-    Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com"
+    Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
+    Then the "event.preregistered" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
     And I should be on this page "/fr/sheet"
     And I should see "sheet.welcome.title"
     And I should see "sheet.welcome.sheetContent"

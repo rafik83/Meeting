@@ -66,6 +66,11 @@ class Mail
     protected $locale;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = false;
+
+    /**
      * @param string     $sender
      * @param string     $receiver
      * @param string     $locale
@@ -167,5 +172,13 @@ class Mail
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function sendToEmailTeam()
+    {
+        return $this->sendToEmailTeam;
     }
 }

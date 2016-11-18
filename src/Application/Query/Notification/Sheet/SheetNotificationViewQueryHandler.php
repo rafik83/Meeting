@@ -19,7 +19,7 @@ class SheetNotificationViewQueryHandler
      * @var SheetCompletenessRepositoryInterface
      */
     private $sheetCompletenessRepository;
-    
+
     /**
      * @var CompleteTranslationViewQueryHandler
      */

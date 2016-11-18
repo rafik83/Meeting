@@ -26,7 +26,7 @@
                             <i class="{{ notification.icon }}"></i> {{ ('notification.category.' ~ notification.category ~ '.label')|trans }}
                         </td>
                         <td>
-                            {{ notification.description|trans({'%locale%': notification.locale|locale(app.request.locale)|lower}) }}
+                            {{ notification.description|trans(notification.parameters|merge({'%locale%': notification.parameters['%locale%'] is defined ? notification.parameters['%locale%']|locale(app.request.locale)|lower : ''})) }}
                             {% if notification.hasPriorityLabel %}
                                 <span class="label label-{{ notification.priority }} {{ notification.isImportant ? 'bg-highlighted' : '' }}">{{ ('notification.label.' ~ notification.priority)|trans }}</span>
                             {% endif %}

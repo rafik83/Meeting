@@ -69,6 +69,11 @@ class SheetSubmittedMail extends Mail
     private $lastname;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = true;
+
+    /**
      * @param Event             $event
      * @param string            $sender
      * @param string            $receiver

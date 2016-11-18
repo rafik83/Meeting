@@ -48,10 +48,12 @@ class PaymentController extends Controller
         if ($eventDomain->getEvent() !== $sheet->getEvent()
             || !$sheet->hasUser($this->getUser())
             || !$sheet->getPackage()->isPassable()
-            || false === $authorize
-            || false === $funnel->isCompleted()
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
+        }
+
+        if (false === $authorize || false === $funnel->isCompleted()) {
+            return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
         }
 
         $now   = new \DateTime();

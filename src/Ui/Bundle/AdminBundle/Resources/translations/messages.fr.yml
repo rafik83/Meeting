@@ -416,6 +416,8 @@ admin.users.link: Utilisateurs
 admin.users.see-sheet: 'Voir la participation'
 admin.users.title: Utilisateurs
 admin.users.type: Type
+admin.users.withSheet: 'Avec fiche'
+admin.users.withoutSheet: 'Sans fiche'
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'

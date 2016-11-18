@@ -37,6 +37,11 @@ class SheetValidatedMail extends Mail
     private $sheet;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = true;
+
+    /**
      * SheetValidatedMail constructor.
      *
      * @param Sheet  $sheet

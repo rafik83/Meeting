@@ -133,18 +133,22 @@ class Event implements EventInterface
     private $logoExtension;
 
     /**
-     * Constructor.
-     *
-     * @param string $title
-     * @param string $fallback
-     * @param array  $locales
-     * @param string $mode
-     * @param float  $vat
-     * @param string $country
-     * @param string $currency
-     * @param string $timeZone
-     * @param string $domain
-     * @param string $organiserName
+     * @var string|null
+     */
+    private $emailTeam;
+
+    /**
+     * @param string      $title
+     * @param string      $fallback
+     * @param array       $locales
+     * @param string      $mode
+     * @param float       $vat
+     * @param string      $country
+     * @param string      $currency
+     * @param string      $timeZone
+     * @param string      $domain
+     * @param string      $organiserName
+     * @param string|null $emailTeam
      */
     public function __construct(
         $title,
@@ -156,7 +160,8 @@ class Event implements EventInterface
         $currency,
         $timeZone,
         $domain,
-        $organiserName
+        $organiserName,
+        $emailTeam
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -171,6 +176,7 @@ class Event implements EventInterface
         $this->timeZone       = $timeZone;
         $this->domain         = $domain;
         $this->organiserName  = $organiserName;
+        $this->emailTeam      = $emailTeam;
     }
 
     /**
@@ -184,8 +190,6 @@ class Event implements EventInterface
     }
 
     /**
-     * Get domain.
-     *
      * @return string
      */
     public function getDomain()
@@ -202,8 +206,6 @@ class Event implements EventInterface
     }
 
     /**
-     * Get title.
-     *
      * @return string
      */
     public function getTitle()
@@ -378,16 +380,25 @@ class Event implements EventInterface
     }
 
     /**
-     * @param string $title
-     * @param array  $locales
-     * @param string $fallback
-     * @param string $mode
-     * @param float  $vat
-     * @param string $country
-     * @param string $currency
-     * @param string $timeZone
-     * @param string $domain
-     * @param string $organiserName
+     * @return string|null
+     */
+    public function getEmailTeam()
+    {
+        return $this->emailTeam;
+    }
+
+    /**
+     * @param string      $title
+     * @param array       $locales
+     * @param string      $fallback
+     * @param string      $mode
+     * @param float       $vat
+     * @param string      $country
+     * @param string      $currency
+     * @param string      $timeZone
+     * @param string      $domain
+     * @param string      $organiserName
+     * @param string|null $emailTeam
      */
     public function update(
         $title,
@@ -399,7 +410,8 @@ class Event implements EventInterface
         $currency,
         $timeZone,
         $domain,
-        $organiserName
+        $organiserName,
+        $emailTeam
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
@@ -411,6 +423,7 @@ class Event implements EventInterface
         $this->timeZone      = $timeZone;
         $this->domain        = $domain;
         $this->organiserName = $organiserName;
+        $this->emailTeam     = $emailTeam;
     }
 
     /**

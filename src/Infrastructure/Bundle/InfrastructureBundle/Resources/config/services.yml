@@ -1681,6 +1681,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQueryHandler
         arguments:
             - '@cart_manager'
+            - '@order.merger'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PlanningViewQuery }
     query.package.participant_view_query_handler:
@@ -1863,6 +1865,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
+    query.user.user_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\UserListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserListViewQuery }
+
     ##
     # Navigation builder
     ##
@@ -1870,10 +1879,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder
         arguments:
             - '@adapter.router'
-    navigation.session_flashbag:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\SessionFlashbag
-        arguments:
-            - '@session.flash_bag'
 
     ##
     # Navigation query handler
@@ -1885,6 +1890,14 @@ services:
             - '@query.navigation.category_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery }
+    query.navigation.menu_header_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\MenuHeaderViewQuery }
     query.navigation.submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
         arguments:
@@ -1933,13 +1946,11 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-
     query.navigation.catalog_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@datetime'
-
     query.navigation.sheet_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
@@ -1959,6 +1970,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
         arguments:
             - '@query.notification.sheet_notification_view_query_handler'
+            - '@query.notification.package_notification_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
     query.notification.sheet_notification_view_query_handler:
@@ -1966,8 +1978,16 @@ services:
         arguments:
             - '@query.notification.sheet_complete_translation_view_query_handler'
             - '@repository.sheet.completeness_repository'
+    query.notification.package_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+            - '@query.notification.package_no_order_view_query_handler'
     query.notification.sheet_complete_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
+    query.notification.package_no_order_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Package\NoOrderNotificationViewQueryHandler
         parent: 'query.notification.abstract_notification_view_query_handler'
 
     ##
@@ -2088,6 +2108,10 @@ services:
         arguments:
             - '@repository.billing_info_repository'
             - '%infrastructure.eu_countries%'
+    package.orders_checker:
+        class: Proximum\Vimeet\Domain\Package\Orders\OrdersChecker
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
 
     #
     # Cart
@@ -2274,3 +2298,11 @@ services:
             - '%phantomjs_path%'
             - '%phantomjs_script%'
             - '%phantomjs_http_password%'
+
+    #
+    # Filter
+    #
+    filter.sheet_filter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
+        arguments:
+            - '@session'

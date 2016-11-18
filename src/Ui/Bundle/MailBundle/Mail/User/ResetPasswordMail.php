@@ -37,6 +37,11 @@ class ResetPasswordMail extends Mail
     private $token;
 
     /**
+     * @var bool
+     */
+    protected $sendToEmailTeam = false;
+
+    /**
      * @param Event  $event
      * @param string $sender
      * @param string $receiver
