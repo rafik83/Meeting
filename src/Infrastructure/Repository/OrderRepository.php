@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class OrderRepository implements OrderRepositoryInterface
@@ -100,7 +101,7 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByNumero($eventId, $sheetId, $orderId)
+    public function findByNumero(OrderNumeroView $orderNumeroView)
     {
         $queryBuilder = $this
             ->entityManager
@@ -111,9 +112,9 @@ class OrderRepository implements OrderRepositoryInterface
             ->where('_order.id = :orderId')
             ->andWhere('_order.sheet = :sheetId')
             ->andWhere('sheet.event = :eventId')
-            ->setParameter('eventId', $eventId)
-            ->setParameter('sheetId', $sheetId)
-            ->setParameter('orderId', $orderId)
+            ->setParameter('eventId', $orderNumeroView->eventId)
+            ->setParameter('sheetId', $orderNumeroView->sheetId)
+            ->setParameter('orderId', $orderNumeroView->orderId)
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
