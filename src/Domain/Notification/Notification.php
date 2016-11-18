@@ -27,7 +27,7 @@ final class Notification
     const CATEGORY_PACKAGE     = 'package';
 
     /**
-     * Database Type
+     * Notification Type
      */
     const TYPE_SHEET_TRANSLATION_COMPLETENESS = 'sheetTranslationCompleteness';
     const TYPE_PACKAGE_SELECTED               = 'packageSelected';
