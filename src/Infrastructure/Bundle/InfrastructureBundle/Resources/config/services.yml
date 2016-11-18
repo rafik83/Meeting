@@ -1992,6 +1992,7 @@ services:
     query.notification.transaction_notification_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler
         arguments:
+            - '@order.balance'
             - '@repository.transaction'
             - '@query.notification.transaction_pending_view_query_handler'
     query.notification.transaction_pending_view_query_handler:

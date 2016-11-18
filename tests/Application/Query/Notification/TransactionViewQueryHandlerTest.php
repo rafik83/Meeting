@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\View\Notification\NotificationView;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Notification\Notification;
+use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -73,7 +74,9 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $transactionRepository              = $this->prophesize(TransactionRepositoryInterface::class);
         $transactionPendingViewQueryHandler = $this->prophesize(TransactionPendingViewQueryHandler::class);
+        $balance = $this->prophesize(Balance::class);
 
+        $balance->getBalance($sheet)->shouldBeCalled()->willReturn(100.0);
         $transactionRepository->findPending($sheet)->shouldBeCalled()->willReturn([$transaction]);
 
         $transactionPendingViewQueryHandler
@@ -81,6 +84,7 @@ class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled();
 
         $handler = new TransactionNotificationViewQueryHandler(
+            $balance->reveal(),
             $transactionRepository->reveal(),
             $transactionPendingViewQueryHandler->reveal()
         );

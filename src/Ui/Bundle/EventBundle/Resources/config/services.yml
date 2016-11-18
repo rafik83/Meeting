@@ -266,6 +266,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.notification_repository'
             - '@repository.transaction'
+            - '@order.balance'
         tags:
             - { name: kernel.event_subscriber }
 

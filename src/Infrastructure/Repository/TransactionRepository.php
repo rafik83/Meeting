@@ -86,6 +86,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->from(Transaction::class, 'transaction')
             ->where('transaction.sheet = :sheet')
             ->andWhere('transaction.state = :state')
+            ->orderBy('transaction.date', 'DESC')
             ->setParameter('sheet', $sheet)
             ->setParameter('state', Transaction::STATE_PENDING);
 
