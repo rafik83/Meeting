@@ -58,9 +58,9 @@ class FindHandler
             );
         }
 
-        list($eventId, $sheetId, $orderId) = Exploder::explode($numero);
+        $orderNumeroView = Exploder::explode($numero);
 
-        $order = $this->orderRepository->findByNumero($eventId, $sheetId, $orderId);
+        $order = $this->orderRepository->findByNumero($orderNumeroView);
 
         if ($order === null || !Finder::isAllowedToAccess($find->admin, $order)) {
             throw new OrderNotFoundException(
