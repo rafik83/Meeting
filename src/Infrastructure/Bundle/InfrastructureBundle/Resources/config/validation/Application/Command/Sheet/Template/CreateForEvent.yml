@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Sheet\Template\OrganizerCreate:
+Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent:
     properties:
         title:
             - NotBlank: ~

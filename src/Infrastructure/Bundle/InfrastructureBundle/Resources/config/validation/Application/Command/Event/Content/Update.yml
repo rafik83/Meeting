@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Event\Content\UpdateTermsOfSale:
+Proximum\Vimeet\Application\Command\Event\Content\Update:
     properties:
         translations:
             - All:
