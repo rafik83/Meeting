@@ -38,3 +38,8 @@ Feature: Navigate in my notification
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr/notification"
     Then I should see "notification.transaction.pending"
+
+  Scenario: I have receive a paid transaction notification
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/notification"
+    Then I should see "notification.transaction.paid"
