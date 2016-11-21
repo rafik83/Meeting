@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Notification\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 
 class TransactionNotificationViewQuery
 {
