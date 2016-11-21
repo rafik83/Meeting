@@ -50,7 +50,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations)
+    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations, array $nomenclatureItems = [])
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
         $query   = new Query($builder->getQuery());

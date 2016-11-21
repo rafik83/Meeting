@@ -99,10 +99,10 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
         $categories = $this->buildCategories($sheet);
 
-        $hasCart              = count($this->cartRowRepository->findBySheet($sheet)) > 0;
-        $templateData         = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
-        $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
-        $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
+        $hasCart                  = count($this->cartRowRepository->findBySheet($sheet)) > 0;
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
+        $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
+        $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
         $content         = [];
         $contentByLocale = [];
@@ -120,10 +120,22 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             }
         }
 
+        $nomenclatureItems = [];
+
+        foreach ($data->getNomenclatureObjects() as $nomenclatureObject) {
+            $items = $nomenclatureObject->getData();
+
+            if (isset($items['items'])) {
+                foreach ($items['items'] as $item) {
+                    $nomenclatureItems[]['key'] = $item;
+                }
+            }
+        }
+
         return new Document($sheet->getId(), array_merge(
             [
                 'id'                   => $sheet->getId(),
-                'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+                'sheetName'            => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 'state'                => $sheet->getState(),
                 'validationState'      => $sheet->getValidationState(),
                 'enabled'              => $sheet->isEnabled(),
@@ -143,9 +155,10 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasCart'              => $hasCart,
                 'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'              => implode(' ', $content),
-                'city'                 => $this->getCity($templateData),
-                'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($templateData),
-                'country'              => $this->buildCountry($templateData, $sheet->getEvent()->getLocales()),
+                'city'                 => $this->getCity($registrationTemplateData),
+                'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
+                'country'              => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
+                'nomenclatureItems'    => $nomenclatureItems,
             ],
             $contentByLocale
         ));

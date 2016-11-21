@@ -1818,6 +1818,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
+            - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
