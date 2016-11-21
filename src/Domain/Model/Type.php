@@ -141,6 +141,16 @@ class Type implements WhoInterface
     }
 
     /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getDescription() : '';
+    }
+
+    /**
      * @return SheetTemplate
      */
     public function getSheetTemplate()
