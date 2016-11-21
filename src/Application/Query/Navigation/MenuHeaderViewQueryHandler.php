@@ -66,7 +66,10 @@ class MenuHeaderViewQueryHandler
 
                 foreach ($query->event->getLocales() as $locale) {
                     if ($locale !== $query->locale) {
-                        $routes[$locale] = $this->router->generate('event_sheet_locale', ['locale' => $locale]);
+                        $routes[$locale] = $this->router->generate($query->route, array_merge(
+                            $query->routeParameters,
+                            ['_locale' => $locale]
+                        ));
                     }
                 }
 

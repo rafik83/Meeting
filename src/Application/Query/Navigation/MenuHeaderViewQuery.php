@@ -36,18 +36,32 @@ class MenuHeaderViewQuery
     public $registration;
 
     /**
+     * @var string
+     */
+    public $route;
+
+    /**
+     * @var array
+     */
+    public $routeParameters;
+
+    /**
      * MenuHeaderViewQuery constructor.
      *
      * @param Event     $event
      * @param string    $locale
      * @param User|null $user
+     * @param string    $route
+     * @param array     $routeParameters
      * @param bool      $registration
      */
-    public function __construct(Event $event, $locale, User $user = null, $registration)
+    public function __construct(Event $event, $locale, User $user = null, $route, array $routeParameters, $registration)
     {
-        $this->event        = $event;
-        $this->user         = $user;
-        $this->locale       = $locale;
-        $this->registration = $registration;
+        $this->event           = $event;
+        $this->user            = $user;
+        $this->locale          = $locale;
+        $this->registration    = $registration;
+        $this->route           = $route;
+        $this->routeParameters = $routeParameters;
     }
 }

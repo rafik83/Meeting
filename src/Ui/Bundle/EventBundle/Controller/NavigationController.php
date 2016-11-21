@@ -51,11 +51,17 @@ class NavigationController extends Controller
      */
     public function menuHeaderAction(Request $request, EventDomain $eventDomain, $registration = false)
     {
+        $requestStack    = $this->get('request_stack');
+        $route           = $requestStack->getMasterRequest()->get('_route');
+        $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
+
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
             new MenuHeaderViewQuery(
                 $eventDomain->getEvent(),
                 $request->getLocale(),
                 $this->getUser(),
+                $route,
+                $routeParameters,
                 $registration
             )
         );
