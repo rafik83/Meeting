@@ -45,16 +45,16 @@ class KeywordViewQueryHandler
 
         $keywordViews = [];
 
-        // handle keyword
-        if (!empty($keywords['keywords']['keywords_aggs']['keywords_filter']['keyword'])) {
-            foreach ($keywords['keywords']['keywords_aggs']['keywords_filter']['keyword']['buckets'] as $keyword) {
+        // handle sheetname
+        if (!empty($keywords['sheet']['sheetname'])) {
+            foreach ($keywords['sheet']['sheetname']['buckets'] as $keyword) {
                 $keywordViews[] = new KeywordView($keyword['key']);
             }
         }
 
-        // handle sheetname
-        if (!empty($keywords['sheet']['sheetname'])) {
-            foreach ($keywords['sheet']['sheetname']['buckets'] as $keyword) {
+        // handle keyword
+        if (!empty($keywords['keywords']['keywords_aggs']['keywords_filter']['keyword'])) {
+            foreach ($keywords['keywords']['keywords_aggs']['keywords_filter']['keyword']['buckets'] as $keyword) {
                 $keywordViews[] = new KeywordView($keyword['key']);
             }
         }
