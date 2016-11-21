@@ -1,4 +1,4 @@
-{% import 'AdminBundle::macro.html.twig' as macros %}
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -46,7 +46,7 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <li>
-                                        {{ macros.delete_button(
+                                        {{ delete_button(
                                         path('admin_sheet_transaction_remove', {
                                             'event': event.id,
                                             'sheet': sheet.id,
