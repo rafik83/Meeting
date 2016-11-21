@@ -212,6 +212,11 @@ fos_elastica:
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
+                        nomenclatureItems:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
                         zipcode:
                             type: multi_field
                             fields:
