@@ -12,12 +12,11 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Countable;
 use Iterator;
-use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 
 class PaginatedResult implements Countable, Iterator
 {
     /**
-     * @var SheetListView[]
+     * @var array
      */
     public $results;
 
@@ -49,11 +48,11 @@ class PaginatedResult implements Countable, Iterator
     /**
      * PaginatedResult constructor.
      *
-     * @param SheetListView[] $results
-     * @param int             $page
-     * @param int             $limit
-     * @param int             $total
-     * @param array|null      $aggregations
+     * @param array      $results
+     * @param int        $page
+     * @param int        $limit
+     * @param int        $total
+     * @param array|null $aggregations
      */
     public function __construct(array $results, $page, $limit, $total, array $aggregations = null)
     {
