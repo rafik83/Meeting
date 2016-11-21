@@ -305,7 +305,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     private function findSheetnameQuery(Event $event, $filter)
     {
         $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust(new Query\Match('sheetName.autocomplete', $filter));
+        $boolQuery->addMust(new Query\Term('sheetName.autocomplete', $filter));
         $boolQuery->addMust(new Query\Match('event', $event->getId()));
 
         $sheetAggregation = new Terms('sheetname');
