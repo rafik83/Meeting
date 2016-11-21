@@ -10,8 +10,13 @@
             background-color: #fff;
             height: 160px;
             line-height: 160px;
+            font-size: 0;
             box-shadow: 0 10px 10px 0 rgba(0,0,0,0.2);
             text-align: center;
+
+            .add-photo {
+                font-size: 15px;
+            }
         }
     }
 
