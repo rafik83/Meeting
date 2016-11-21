@@ -30,7 +30,7 @@ Feature:
     And I should see "user_asddays_1@proximum.com"
     And I should see "user_asddays_2@proximum.com"
     And I should see "user_asddays_3@proximum.com"
-    And I should see "user_asddays_4@proximum.com"
+    And I should not see "user_asddays_4@proximum.com"
     When I follow "Investisseur"
     Then I should see "user_asddays_3@proximum.com"
     And I should not see "user_asddays_1@proximum.com"
