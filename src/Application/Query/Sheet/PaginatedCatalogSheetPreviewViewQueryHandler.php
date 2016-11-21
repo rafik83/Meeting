@@ -65,17 +65,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
     {
-        $templateData = $this->templateDataFactory->createFromSheet($query->viewer, $query->locale);
-
-        $nomenclatureItems = [];
-
-        foreach ($templateData->getNomenclatureObjects() as $nomenclatureObject) {
-            $items = $nomenclatureObject->getData();
-            if (isset($items['items'])) {
-                $nomenclatureItems = array_merge($nomenclatureItems, $items['items']);
-            }
-        }
-
         $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
             array_merge([SheetSearchAdapterInterface::ES_FIELD_IN_CATALOG => true], $query->filters),
@@ -84,7 +73,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->limit,
             $query->locale,
             true,
-            $nomenclatureItems
+            $this->getNomenclatureItems($query->viewer, $query->locale)
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
@@ -99,5 +88,26 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         );
 
         return $paginatedResult;
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function getNomenclatureItems(Sheet $sheet, $locale)
+    {
+        $nomenclatureItems = [];
+        $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+        foreach ($templateData->getNomenclatureObjects() as $nomenclatureObject) {
+            $items = $nomenclatureObject->getData();
+            if (isset($items['items'])) {
+                $nomenclatureItems = array_merge($nomenclatureItems, $items['items']);
+            }
+        }
+
+        return $nomenclatureItems;
     }
 }
