@@ -105,7 +105,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function findKeyword(Event $event, $filter, $locale)
     {
-        $matchKeyword = new Query\Match('keywords.label_autocomplete', $filter);
+        $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
         $boolQuery = new Query\Bool();
@@ -305,7 +305,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     private function findSheetnameQuery(Event $event, $filter)
     {
         $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust(new Query\Term('sheetName.autocomplete', $filter));
+        $boolQuery->addMust(new Query\Term(['sheetName.autocomplete' => $filter]));
         $boolQuery->addMust(new Query\Match('event', $event->getId()));
 
         $sheetAggregation = new Terms('sheetname');
