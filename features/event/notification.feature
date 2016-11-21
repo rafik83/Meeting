@@ -13,6 +13,7 @@ Feature: Navigate in my notification
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Notifications.yml     |
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
