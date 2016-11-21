@@ -71,6 +71,8 @@ class BillingController extends Controller
                     'sheet' => $sheet->getId(),
                 ]);
             } else {
+                $this->addFlash('success', 'flash.billing.update_info.success');
+
                 return $this->redirectToRoute('event_billing_info', [
                     'sheet' => $sheet->getId(),
                 ]);

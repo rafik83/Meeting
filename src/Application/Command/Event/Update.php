@@ -44,6 +44,7 @@ class Update extends AbstractEvent
         $this->rightColor    = $event->getConfiguration()->getRightColor();
         $this->textColor     = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
+        $this->emailTeam     = $event->getEmailTeam();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

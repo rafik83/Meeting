@@ -54,7 +54,7 @@ class SheetSubmenuViewQueryHandler
             Category::SHEET_ICON,
             'sheet.title',
             $this->navigationBuilder->getRoute('event_sheet'),
-            !Route::isPackage($query->route)
+            !Route::isPackage($query->route) && !Route::isNotification($query->route)
         );
 
         if ($query->sheet->getPackage() !== null && $query->sheet->getPackage()->isPassable() === true) {
@@ -65,7 +65,7 @@ class SheetSubmenuViewQueryHandler
                 'package.title',
                 $this->navigationBuilder->getRoute('event_package'),
                 Route::isPackage($query->route),
-                ($hasProductsInCartRow === true) ? 'icon-Alerter_1' : null
+                $hasProductsInCartRow === true
             );
         }
 

@@ -47,6 +47,37 @@ Feature:
     And I should not see "user_asddays_2@proximum.com"
     And I should not see "user_asddays_3@proximum.com"
 
+  Scenario: I can filter users by participation with sheet or without sheet
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    And I go to this page "/admin/fr/event/1/users"
+    When I follow "admin.users.withSheet"
+    Then I should see "form.user_filter.children.participation.label: admin.users.withSheet"
+    And I should see "user_asddays_1@proximum.com"
+    And I should see "user_asddays_2@proximum.com"
+    And I should see "user_asddays_3@proximum.com"
+    But I should not see "user_asddays_4@proximum.com"
+    When I follow "admin.users.withoutSheet"
+    Then I should see "form.user_filter.children.participation.label: admin.users.withoutSheet"
+    And I should see "user_asddays_4@proximum.com"
+    But I should not see "user_asddays_1@proximum.com"
+    And I should not see "user_asddays_2@proximum.com"
+    And I should not see "user_asddays_3@proximum.com"
+
+  Scenario: I can search user by name or email
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to this page "/admin/fr/event/1/users?text=john"
+    Then I should see "user_asddays_1@proximum.com"
+    But I should not see "user_asddays_2@proximum.com"
+    And I should not see "user_asddays_3@proximum.com"
+    And I should not see "user_asddays_4@proximum.com"
+    When I go to this page "/admin/fr/event/1/users?text=asddays_2"
+    Then I should see "user_asddays_2@proximum.com"
+    But I should not see "user_asddays_1@proximum.com"
+    And I should not see "user_asddays_3@proximum.com"
+    And I should not see "user_asddays_4@proximum.com"
+
   Scenario: I can see details information from an user
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"

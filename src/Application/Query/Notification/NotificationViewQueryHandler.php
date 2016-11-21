@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Notification;
 
+use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQuery;
+use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQuery;
 use Proximum\Vimeet\Application\Query\Notification\Sheet\SheetNotificationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Notification\NotificationListView;
+use Proximum\Vimeet\Application\View\Notification\NotificationView;
 
 class NotificationViewQueryHandler
 {
@@ -22,13 +25,28 @@ class NotificationViewQueryHandler
     private $sheetNotificationViewQueryHandler;
 
     /**
+     * @var PackageNotificationViewQueryHandler
+     */
+    private $packageNotificationViewQueryHandler;
+
+    /**
+     * @var NotificationView[]
+     */
+    private $notificationViews;
+
+    /**
      * NotificationViewQueryHandler constructor.
      *
-     * @param SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler
+     * @param SheetNotificationViewQueryHandler   $sheetNotificationViewQueryHandler
+     * @param PackageNotificationViewQueryHandler $packageNotificationViewQueryHandler
      */
-    public function __construct(SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler)
-    {
-        $this->sheetNotificationViewQueryHandler = $sheetNotificationViewQueryHandler;
+    public function __construct(
+        SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler,
+        PackageNotificationViewQueryHandler $packageNotificationViewQueryHandler
+    ) {
+        $this->sheetNotificationViewQueryHandler   = $sheetNotificationViewQueryHandler;
+        $this->packageNotificationViewQueryHandler = $packageNotificationViewQueryHandler;
+        $this->notificationViews                   = [];
     }
 
     /**
@@ -38,10 +56,28 @@ class NotificationViewQueryHandler
      */
     public function handle(NotificationViewQuery $query)
     {
-        $notificationViews = $this->sheetNotificationViewQueryHandler->handle(
+        $sheetNotificationViews = $this->sheetNotificationViewQueryHandler->handle(
             new SheetNotificationViewQuery($query->sheet)
         );
 
-        return new NotificationListView($notificationViews);
+        $this->addNotifications($sheetNotificationViews);
+
+        if ($query->sheet->getPackage() !== null && $query->sheet->getPackage()->isPassable()) {
+            $packageNotificationView = $this->packageNotificationViewQueryHandler->handle(
+                new PackageNotificationViewQuery($query->sheet)
+            );
+
+            $this->addNotifications($packageNotificationView);
+        }
+
+        return new NotificationListView($this->notificationViews);
+    }
+
+    /**
+     * @param NotificationView[] $notificationViews
+     */
+    private function addNotifications(array $notificationViews)
+    {
+        $this->notificationViews = array_merge($this->notificationViews, $notificationViews);
     }
 }

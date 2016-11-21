@@ -299,6 +299,7 @@ admin.sheet.go_back_to_list: 'Retour à la liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.inCatalog: 'Au catalogue'
+admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.read: Voir
@@ -415,6 +416,8 @@ admin.users.link: Utilisateurs
 admin.users.see-sheet: 'Voir la participation'
 admin.users.title: Utilisateurs
 admin.users.type: Type
+admin.users.withSheet: 'Avec fiche'
+admin.users.withoutSheet: 'Sans fiche'
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'

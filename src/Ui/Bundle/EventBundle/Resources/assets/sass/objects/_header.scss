@@ -47,10 +47,17 @@
         float: left;
         font-size: 20px;
         margin-top: 7px;
+
+        &.notification {
+          float: right !important;
+          margin-left: 5px;
+          color: $color-notification;
+        }
       }
 
       &.notifs {
         i[class^='icon-'] { margin-right: 5px; }
+        span.alert-notification { margin-top: 7px; }
       }
 
       a {

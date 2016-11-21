@@ -89,7 +89,8 @@ class UpdateHandler
             $update->currency,
             $update->timeZone,
             $update->domain,
-            $update->organiserName
+            $update->organiserName,
+            $update->emailTeam
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
 

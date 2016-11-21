@@ -1,16 +1,17 @@
 Proximum\Vimeet\Domain\Model\Event:
     event_spanish:
         __construct:
-            - "Evento en español"      #title
-            -  es                      #fallback
-            - [es]                     #locales
-            - 'et'                     #mode
-            - 20                       #vat
-            - 'ES'                     #country
-            -  'EUR'                   #currency
-            - 'Europe/Paris'           #timeZone
-            - spanish-event.<domain()> #domain
-            - "PROXIMUM"               #organiserName
+            - "Evento en español"        #title
+            -  es                        #fallback
+            - [es]                       #locales
+            - 'et'                       #mode
+            - 20                         #vat
+            - 'ES'                       #country
+            -  'EUR'                     #currency
+            - 'Europe/Paris'             #timeZone
+            - spanish-event.<domain()>   #domain
+            - "PROXIMUM"                 #organiserName
+            - 'team-project@example.net' #emailTeam
         locales: [es]
         assetPath: ''
         paymentAddress: '@payment_address_event_spanish'

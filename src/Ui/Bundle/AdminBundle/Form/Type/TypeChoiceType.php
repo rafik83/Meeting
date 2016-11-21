@@ -42,9 +42,20 @@ class TypeChoiceType extends AbstractType
         $resolver->setRequired(['event', 'locale', 'user']);
         $resolver->setDefaults([
             'choice_label' => function (Options $options) {
-                return function (Type $type) use ($options) {
-                    return $type->getTitle($options['locale']);
+                return function ($type) use ($options) {
+                    if ($type instanceof Type) {
+                        return $type->getTitle($options['locale']);
+                    }
+
+                    return null;
                 };
+            },
+            'choice_value' => function ($type) {
+                if($type instanceof Type) {
+                    return $type->getId();
+                }
+
+                return null;
             },
             'choices' => function (Options $options) {
                 if ($options['user']->hasAllowedTypes()) {

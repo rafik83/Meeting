@@ -153,6 +153,7 @@ form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
 form.event_update.children.domain.label: 'Domaine (complet)'
+form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
 form.event_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.event_update.children.locales.label: Langues
@@ -488,6 +489,7 @@ form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
@@ -621,6 +623,8 @@ form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
 form.user_filter.children.type.label: Type
+form.user_filter.children.text_search.label: Nom, prénom ou email de l'utilisateur
+form.user_filter.children.participation.label: Participation
 form.vatMode.ati: TTC
 form.vatMode.et: HT
 form.who_see_who.children.seeable.label: Voit

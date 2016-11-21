@@ -213,7 +213,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
         arguments:
             - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
+            - '@event_sender'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.submit_sheet_mail_event_subscriber:
@@ -243,6 +243,12 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetUpdatedEventSubscriber
         arguments:
             - '@sheet.completeness_calculator'
+        tags:
+            - { name: kernel.event_subscriber }
+    event_listener.sheet.package_orders_updated_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Package\MustSelectPackageEventSubscriber
+        arguments:
+            - '@package.orders_checker'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.xhr_authentication_expired_exception_listener:
@@ -332,6 +338,12 @@ services:
 
     markdown:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown
+
+    event_sender:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender
+        arguments:
+            - '%domain%'
+            - '%mailer_sender%'
 
 
     #

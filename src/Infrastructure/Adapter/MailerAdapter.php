@@ -62,7 +62,13 @@ class MailerAdapter implements MailerInterface
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom($mail->getSender())
-            ->setTo($mail->getReceiver())
+            ->setTo($mail->getReceiver());
+
+        if ($mail->sendToEmailTeam() === true && null !== $mail->getEvent()->getEmailTeam()) {
+            $message->setBcc($mail->getEvent()->getEmailTeam());
+        }
+
+        $message
             ->setBody($body)
             ->setContentType('text/html');
 

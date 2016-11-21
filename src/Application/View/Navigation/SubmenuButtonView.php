@@ -18,9 +18,9 @@ class SubmenuButtonView
     public $icon;
 
     /**
-     * @var string
+     * @var bool
      */
-    public $alertIcon;
+    private $alert;
 
     /**
      * @var bool
@@ -44,14 +44,22 @@ class SubmenuButtonView
      * @param string $label
      * @param string $link
      * @param bool   $state
-     * @param string $alertIcon
+     * @param bool   $alert
      */
-    public function __construct($icon, $label, $link, $state = true, $alertIcon = null)
+    public function __construct($icon, $label, $link, $state = true, $alert = false)
     {
-        $this->icon      = $icon;
-        $this->state     = $state;
-        $this->label     = $label;
-        $this->link      = $link;
-        $this->alertIcon = $alertIcon;
+        $this->icon  = $icon;
+        $this->state = $state;
+        $this->label = $label;
+        $this->link  = $link;
+        $this->alert = $alert;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAlert()
+    {
+        return $this->alert === true;
     }
 }

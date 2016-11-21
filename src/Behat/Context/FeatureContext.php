@@ -81,8 +81,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
     /**
      * @param $string
+     *
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function getLinkFromA($string)
     {
@@ -96,9 +97,30 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent to "(?P<email>[^"]+)"$/
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent to "(?P<email>[^"]+)" from "(?P<sender>[^"]+)"$/
      */
-    public function theMailShouldBeSentTo($type, $email)
+    public function theMailShouldBeSentTo($type, $email, $senderEmail)
+    {
+        $this->checkMailSendToRecipient($type, $email, 'to', $senderEmail);
+    }
+
+    /**
+     * @Given /^(?:|the )"(?P<type>[^"]+)" mail should be sent in bcc to "(?P<email>[^"]+)" from "(?P<sender>[^"]+)"$/
+     */
+    public function theMailShouldBeSentInBCCTo($type, $email, $senderEmail)
+    {
+        $this->checkMailSendToRecipient($type, $email, 'bcc', $senderEmail);
+    }
+
+    /**
+     * @param string $type
+     * @param string $email
+     * @param string $recipient
+     * @param string $senderEmail
+     *
+     * @throws \Exception
+     */
+    private function checkMailSendToRecipient($type, $email, $recipient, $senderEmail)
     {
         $spoolDir = $this->getSpoolDir();
 
@@ -114,10 +136,21 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                 ->files();
 
             foreach ($finder as $file) {
+                /** @var \Swift_Message $message */
                 $message = unserialize(file_get_contents($file));
 
+                $messageRecipients = [];
+
+                if ($recipient == 'to') {
+                    $messageRecipients = $message->getTo();
+                } elseif ($recipient == 'bcc') {
+                    $messageRecipients = $message->getBcc();
+                }
+
                 // check the recipients
-                $recipients = array_keys($message->getTo());
+                $recipients = array_keys($messageRecipients);
+                $sender = key($message->getFrom());
+
                 if (!in_array($email, $recipients)) {
                     continue;
                 }
@@ -128,6 +161,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                     $messageId = $headers->get('X-Message-ID')->getValue();
 
                     if ($messageId == $type) {
+                        if ($sender != $senderEmail) {
+                            throw new \Exception(
+                                sprintf("The \"%s\" was not sent from \"%s\"", $type, $senderEmail)
+                            );
+                        }
+
                         return;
                     }
                 }

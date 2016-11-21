@@ -15,7 +15,7 @@
     <body {% block body_attributes '' %}>
         {% block body %}
             <div class="wrapper">
-                {{ include('EventBundle:Common:header.html.twig') }}
+                {{ render(controller('EventBundle:Navigation:menuHeader')) }}
 
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     {{ include('EventBundle:Navigation:menu.html.twig') }}
