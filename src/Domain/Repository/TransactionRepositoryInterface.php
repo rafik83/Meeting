@@ -43,4 +43,11 @@ interface TransactionRepositoryInterface
      * @return Transaction[]
      */
     public function findPending(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Transaction[]
+     */
+    public function findPaid(Sheet $sheet);
 }
