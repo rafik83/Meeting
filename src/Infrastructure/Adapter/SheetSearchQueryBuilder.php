@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
@@ -267,9 +268,7 @@ class SheetSearchQueryBuilder
                 foreach ($filters['type'] as $type) {
                     $typeId = null;
 
-                    if ($type instanceof TypeView) {
-                        $typeId = $type->id;
-                    } elseif ($type instanceof Type) {
+                    if ($type instanceof TypeInterface) {
                         $typeId = $type->getId();
                     }
 
