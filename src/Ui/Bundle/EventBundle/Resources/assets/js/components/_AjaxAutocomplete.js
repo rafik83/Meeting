@@ -23,7 +23,7 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         multiple: true,
         data: [],
         delay: 250,
-        minimumInputLength: 3,
+        minimumInputLength: this.element.dataset.minimumInputLength,
         placeholder: this.element.dataset.placeholder,
         tokenSeparators: [','],
         language: {
