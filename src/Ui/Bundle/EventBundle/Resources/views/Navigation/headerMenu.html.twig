@@ -29,7 +29,7 @@
 
         {% if menuHeader.event is defined %}
             {% for locale, path in menuHeader.localeRoutes %}
-                <li><a href="{{ path }}">{{ locale }}</a></li>
+                <li class="locale"><a href="{{ path }}">{{ locale }}</a></li>
             {% endfor %}
         {% endif %}
 
