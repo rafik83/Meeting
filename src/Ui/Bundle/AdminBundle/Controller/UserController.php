@@ -34,7 +34,16 @@ class UserController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filters = FilterType::getDefaultFilters();
+        if ($request->query->get('participation') === null
+            || !in_array($request->query->get('participation'), FilterType::getAllFilters())
+        ) {
+            return $this->redirectToRoute('admin_users', array_merge(
+                ['event' => $event->getId()],
+                FilterType::getDefaultFilters()
+            ));
+        }
+
+        $filters = [];
 
         $filterType = $this->createFilterForm(FilterType::class, $filters, [
             'event'  => $event,
