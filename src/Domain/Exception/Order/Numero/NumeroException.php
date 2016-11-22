@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\Order;
+namespace Proximum\Vimeet\Domain\Exception\Order\Numero;
 
-class RemoveProductNotAllowedException extends OrderException
+class NumeroException extends \Exception
 {
 }

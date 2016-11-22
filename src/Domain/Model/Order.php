@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Order\Row;
+use Proximum\Vimeet\Domain\Order\Numero\Generator as NumeroGenerator;
 
 /**
  * "Commande"
@@ -120,12 +121,7 @@ class Order
      */
     public function getNumero()
     {
-        return sprintf(
-            '%s-%s-%s',
-            str_pad($this->getSheet()->getEvent()->getId(), 2, "0", STR_PAD_LEFT),
-            str_pad($this->getSheet()->getId(), 2, "0", STR_PAD_LEFT),
-            str_pad($this->getId(), 2, "0", STR_PAD_LEFT)
-        );
+        return NumeroGenerator::generate($this);
     }
 
     /**

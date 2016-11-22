@@ -1229,6 +1229,12 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AssignSpot }
+    command.order.find_handler:
+        class: Proximum\Vimeet\Application\Command\Order\FindHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Find }
 
     #
     # Security

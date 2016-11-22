@@ -266,6 +266,8 @@ form.nomenclature_update_type.children.sort.choice.sort_file: 'Conserver l''ordr
 form.nomenclature_update_type.children.sort.label: Tri
 form.nomenclature_update_type.children.submit.label: Enregistrer
 form.nomenclature_update_type.children.title.label: Titre
+form.order_find.children.numero.label: 'Entrer le numéro de la commande'
+form.order_find.children.submit.label: 'Rechercher'
 form.order_row.children.description.label: Description
 form.order_row.children.label.label: Intitulé
 form.order_row.children.price.label: 'Prix unitaire'
