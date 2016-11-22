@@ -32,7 +32,8 @@ class ItemToSinglesTransformer extends AbstractTransformer
         $depth = $this->nomenclature->getDepth();
 
         if (null === $item) {
-            throw new TransformationFailedException(sprintf('Item is null for this value %s', $value));
+            // Case of participation type change => when old nomenclature data aren't matching with the news ones
+            return [];
         }
 
         if ($depth === 1) {
