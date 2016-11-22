@@ -79,4 +79,15 @@ class FilterType extends AbstractType
             'participation' => FilterType::FILTER_WITH_SHEET
         ];
     }
+
+    /**
+     * @return array
+     */
+    public static function getAllFilters()
+    {
+        return [
+            self::FILTER_WITH_SHEET,
+            self::FILTER_WITHOUT_SHEET
+        ];
+    }
 }
