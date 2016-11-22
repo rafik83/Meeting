@@ -18,6 +18,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FindType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -25,6 +28,7 @@ class FindType extends AbstractType
                 'required' => true
             ]);
     }
+
     /**
      * {@inheritdoc}
      */
