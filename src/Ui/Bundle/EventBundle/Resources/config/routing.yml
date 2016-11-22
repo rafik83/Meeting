@@ -571,3 +571,12 @@ event_order_summary_total:
         sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Order:summaryTotal }
+
+
+#
+# Agenda
+#
+event_agenda:
+    path: /agenda
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:index }
