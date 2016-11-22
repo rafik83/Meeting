@@ -36,4 +36,11 @@ interface TransactionRepositoryInterface
      * @param Transaction $transaction
      */
     public function remove(Transaction $transaction);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Transaction[]
+     */
+    public function findPending(Sheet $sheet);
 }

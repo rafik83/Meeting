@@ -12,19 +12,13 @@ namespace Proximum\Vimeet\Application\Event\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
-use Symfony\Component\EventDispatcher\Event;
 
-class TransactionConfirmEvent extends Event
+class TransactionConfirmEvent extends AbstractTransactionEvent
 {
     /**
      * @var User
      */
     private $user;
-
-    /**
-     * @var Transaction
-     */
-    private $transaction;
 
     /**
      * TransactionConfirmEvent constructor.
@@ -34,8 +28,9 @@ class TransactionConfirmEvent extends Event
      */
     public function __construct(User $user, Transaction $transaction)
     {
-        $this->user        = $user;
-        $this->transaction = $transaction;
+        parent::__construct($transaction);
+
+        $this->user = $user;
     }
 
     /**
@@ -44,13 +39,5 @@ class TransactionConfirmEvent extends Event
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * @return Transaction
-     */
-    public function getTransaction()
-    {
-        return $this->transaction;
     }
 }

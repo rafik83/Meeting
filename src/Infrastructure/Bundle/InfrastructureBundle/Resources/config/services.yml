@@ -512,6 +512,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Transaction\CreateHandler
         arguments:
             - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Create }
     command.transaction.update_handler:
@@ -525,6 +526,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Transaction\RemoveHandler
         arguments:
             - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transaction\Remove }
     command.happening.category.create_handler:
@@ -1976,6 +1978,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler
         arguments:
             - '@query.notification.sheet_notification_view_query_handler'
+            - '@query.notification.transaction_notification_view_query_handler'
             - '@query.notification.package_notification_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery }
@@ -1991,6 +1994,15 @@ services:
             - '@query.notification.package_no_order_view_query_handler'
     query.notification.sheet_complete_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Sheet\CompleteTranslationViewQueryHandler
+        parent: 'query.notification.abstract_notification_view_query_handler'
+    query.notification.transaction_notification_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionNotificationViewQueryHandler
+        arguments:
+            - '@order.balance'
+            - '@repository.transaction'
+            - '@query.notification.transaction_pending_view_query_handler'
+    query.notification.transaction_pending_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Notification\Transaction\TransactionPendingViewQueryHandler
         parent: 'query.notification.abstract_notification_view_query_handler'
     query.notification.package_no_order_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Notification\Package\NoOrderNotificationViewQueryHandler
@@ -2278,6 +2290,7 @@ services:
         arguments:
             - '@payum'
             - '@repository.transaction'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     vimeet.payum.paypal.action.store_notification:
         class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
         arguments:
