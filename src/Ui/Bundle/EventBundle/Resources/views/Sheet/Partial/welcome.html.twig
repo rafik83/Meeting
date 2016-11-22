@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="row modal-welcome">
-    <div class="col-md-{% if popinWelcome.hasPackage %}6{% else %}12{% endif %}">
+    <div class="col-md-{{ popinWelcome.hasPackage ? '6' : '12' }}">
         <div class="text-center custom-modal-content">
             <p class="custom-modal-text">{{ 'sheet.welcome.sheetContent'|trans }}</p>
             <div class="custom-modal-button-parent">
