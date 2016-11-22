@@ -23,19 +23,22 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         multiple: true,
         data: [],
         delay: 250,
-        minimumInputLength: 2,
-        maximumInputLength: 50,
+        minimumInputLength: this.element.dataset.minimumInputLength,
         placeholder: this.element.dataset.placeholder,
         tokenSeparators: [','],
         language: {
-            noResults: '',
-            errorLoading: '',
-            inputTooShort: function () {
-                return '';
+            noResults: function () {
+                return ''
             },
+            errorLoading: function () {
+                return ''
+            },
+            inputTooShort: function () {
+                return this.element.dataset.labelInputTooShort;
+            }.bind(this),
             searching: function () {
-                return 'Recherche ...';
-            }
+                return this.element.dataset.labelSearching;
+            }.bind(this)
         },
         ajax: {
             url: this.element.dataset.action,
@@ -62,15 +65,15 @@ AjaxAutocomplete.prototype.unselectTag = function () {
 };
 
 AjaxAutocomplete.prototype.updateParentInput = function () {
-    var localizations = $.map(this.autocompleteElement.select2('data'),
-        function (localization) {
-            if (localization.text != "") {
-                return localization.text;
+    var tags = $.map(this.autocompleteElement.select2('data'),
+        function (tag) {
+            if (tag.text != "") {
+                return tag.text;
             }
         }
     ).join(',');
 
-    this.parentInput.value = localizations.toString();
+    this.parentInput.value = tags.toString();
     this.parentInput.dispatchEvent(new Event('change'));
 };
 
@@ -79,10 +82,10 @@ AjaxAutocomplete.prototype.prefill = function () {
         return;
     }
 
-    var requestLocalizations = this.parentInput.value.split(',');
+    var requestFilters = this.parentInput.value.split(',');
 
-    requestLocalizations.forEach(function (localization) {
-        var option = '<option selected="selected" value="' + localization + '">' + localization + '</option>';
+    requestFilters.forEach(function (filter) {
+        var option = '<option selected="selected" value="' + filter + '">' + filter + '</option>';
 
         this.autocompleteElement.append(option)
     }.bind(this));
@@ -93,10 +96,10 @@ AjaxAutocomplete.prototype.prefill = function () {
 AjaxAutocomplete.prototype.onSuccess = function (data) {
     var results = [];
 
-    $.map(data, function (localization) {
+    $.map(data, function (result) {
         results.push({
-            id: localization.id,
-            text: localization.name
+            id: result.id,
+            text: result.name
         });
     });
 

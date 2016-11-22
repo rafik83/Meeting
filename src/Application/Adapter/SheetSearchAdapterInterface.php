@@ -45,6 +45,15 @@ interface SheetSearchAdapterInterface
 
     /**
      * @param Event  $event
+     * @param string $filter
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function findKeyword(Event $event, $filter, $locale);
+
+    /**
+     * @param Event  $event
      * @param string $locale
      * @param array  $filters
      * @param string $filterToRemove

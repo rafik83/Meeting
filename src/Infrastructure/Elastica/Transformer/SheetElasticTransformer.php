@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Symfony\Component\Intl\Intl;
@@ -156,6 +157,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
                 'country'              => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
                 'nomenclatureItems'    => $nomenclatureItems,
+                'keywords'             => $this->buildKeywords($sheet)
             ],
             $contentByLocale
         ));
@@ -185,6 +187,43 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return implode(' ', $searchableContent);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    private function buildKeywords(Sheet $sheet)
+    {
+        $keywords     = [];
+        $keywordIndex = 0;
+
+        foreach ($sheet->getEvent()->getLocales() as $locale) {
+            $templateData  = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+            foreach ($templateData->getObjects() as $templateObject) {
+                if ($templateObject instanceof IndexableObjectInterface) {
+                    $content = $templateObject->getSearchableContent();
+
+                    if (is_array($content)) {
+                        foreach ($content as $item) {
+                            $keywords[$keywordIndex]['label']              = $item;
+                            $keywords[$keywordIndex]['label_autocomplete'] = $item;
+                            $keywords[$keywordIndex]['locale']             = $locale;
+                            $keywordIndex++;
+                        }
+                    } elseif (null !== $content && !empty($content)) {
+                        $keywords[$keywordIndex]['label']              = $content;
+                        $keywords[$keywordIndex]['label_autocomplete'] = $content;
+                        $keywords[$keywordIndex]['locale']             = $locale;
+                        $keywordIndex++;
+                    }
+                }
+            }
+        }
+
+        return $keywords;
     }
 
     /**
@@ -242,11 +281,11 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             return null;
         }
 
-        if (4 === strlen($zipcode)) {
+        if (4 === mb_strlen($zipcode)) {
             return '0' . substr($zipcode, 0, 1);
         }
 
-        if (5 === strlen($zipcode)) {
+        if (5 === mb_strlen($zipcode)) {
             return substr($zipcode, 0, 2);
         }
 
@@ -261,7 +300,6 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private function getCity(TemplateData $templateData)
     {
         return $templateData->getTaggedContentValue(Tag::SHEET_CITY) ?: null;
-
     }
 
     /**

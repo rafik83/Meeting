@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class ItemCollection extends TemplateObject implements SearchableObjectInterface
+class ItemCollection extends TemplateObject implements SearchableObjectInterface, IndexableObjectInterface
 {
     /**
      * @var Item[]
@@ -157,8 +157,16 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     {
         $this->buildItems($this->getData());
 
-        return array_map(function (Item $item) {
-            return $item->getTitle();
-        }, $this->items);
+        return array_filter(
+            array_map(
+                function (Item $item) {
+                    return $item->getTitle();
+                },
+                $this->items
+            ),
+            function ($title) {
+                return null !== $title;
+            }
+        );
     }
 }
