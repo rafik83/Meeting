@@ -174,7 +174,7 @@
                                 'accepted': 'warning',
                                 'validated': 'success'
                             },
-                            sheet.state == 'accepted' or sheet.state == 'validated' ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                            sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
                         ) }}
                     </td>
                     <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
