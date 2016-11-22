@@ -55,7 +55,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->sheetRepository              = $sheetRepository;
         $this->sheetSearchAdapter           = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler = $sheetPreviewViewQueryHandler;
-        $this->templateDataFactory = $templateDataFactory;
+        $this->templateDataFactory          = $templateDataFactory;
     }
 
     /**
