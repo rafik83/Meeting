@@ -29,6 +29,8 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
+    const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
+
     /**
      * @var PaginatedFinderInterface Elastica finder
      */
@@ -62,7 +64,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $getAggregations,
         array $nomenclatureItems = []
     ) {
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, count($nomenclatureItems));
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query   = new Query($builder->getQuery());
@@ -76,7 +78,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
                 $nested = new \Elastica\Filter\Nested();
                 $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
                 $nested->setPath('nomenclatureItems');
-                $functionScore->addFunction('weight', [], $nested, 1.1);
+                $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
             }
 
             $query = $functionScore->setQuery($builder->getQuery());

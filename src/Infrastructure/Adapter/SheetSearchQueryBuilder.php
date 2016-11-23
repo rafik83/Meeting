@@ -30,26 +30,32 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
 
 class SheetSearchQueryBuilder
 {
-    /**
-     * @var BoolQuery
-     */
+    const BOOSTER_SHEET_NAME      = 5;
+    const BOOSTER_LOCALE_CONTENT  = 3;
+    const BOOSTER_DEFAULT_CONTENT = 2;
+
+    // Percentage content minimum should match
+    const CONTENT_MINIMUM_SHOULD_MATCH = 70;
+
+    /** @var BoolQuery */
     private $query;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
+    /** @var int */
+    private $initialBooster = 1;
+
     /**
-     * SheetSearchQuery constructor.
-     *
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param int    $initialBooster
      */
-    public function __construct(Event $event, array $filters, $locale)
+    public function __construct(Event $event, array $filters, $locale, $initialBooster = 1)
     {
-        $this->locale = $locale;
+        $this->locale         = $locale;
+        $this->initialBooster = $initialBooster;
 
         $this->query = new BoolQuery();
         $this->matchEvent($event);
@@ -156,17 +162,20 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        // Boost sheetname by 5
-        $fields = ['sheetName^5', 'content'];
+        // Boost sheetname and content
+        $fields = [
+            sprintf('sheetName^%s', $this->initialBooster * self::BOOSTER_SHEET_NAME),
+            sprintf('content^%s', $this->initialBooster * self::BOOSTER_DEFAULT_CONTENT),
+        ];
 
         if (in_array($this->locale, AvailableLocales::getAvailableLocalesForContent())) {
-            // If locale field is available, boost it by 2
-            $fields[] = sprintf('content_%s^2', $this->locale);
+            // If locale field is available
+            $fields[] = sprintf('content_%s^%s', $this->locale, $this->initialBooster * self::BOOSTER_LOCALE_CONTENT);
         }
 
         $multiMatch = new MultiMatch();
         $multiMatch
-            ->setMinimumShouldMatch('70%')
+            ->setMinimumShouldMatch(self::CONTENT_MINIMUM_SHOULD_MATCH . '%')
             ->setFields($fields)
             ->setFuzziness(1)
             ->setQuery($filters['content']);
