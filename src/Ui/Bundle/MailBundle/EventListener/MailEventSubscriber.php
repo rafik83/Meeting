@@ -95,7 +95,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new TransactionConfirmMail(
             $event->getTransaction(),
             $event->getUser(),
-            $this->sender->generate(),
+            $this->sender->generate($event->getTransaction()->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale()
         );
