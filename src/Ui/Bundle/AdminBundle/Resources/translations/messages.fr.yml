@@ -35,7 +35,7 @@ admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
-admin.event.page.orderFinder.title: Recherche commande
+admin.event.page.orderFinder.title: 'Recherche commande'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
@@ -298,11 +298,11 @@ admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.follower: 'Suivi commercial'
+admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.inCatalog: 'Au catalogue'
-admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.read: Voir
@@ -419,8 +419,8 @@ admin.users.link: Utilisateurs
 admin.users.see-sheet: 'Voir la participation'
 admin.users.title: Utilisateurs
 admin.users.type: Type
-admin.users.withSheet: 'Avec fiche'
 admin.users.withoutSheet: 'Sans fiche'
+admin.users.withSheet: 'Avec fiche'
 admin.zero-result: 'Aucun résultat'
 and: et
 and_more: 'et %count% autre|et %count% autres'

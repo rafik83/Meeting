@@ -27,7 +27,7 @@ mail.event.preregister.end: 'Bien cordialement,'
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: Contact
-mail.orderConfirm.body: "Bonjour %firstname% %lastname%,\n\nVotre commande numéro %orderNumero% en date du %orderDate% a bien été enregistrée. Vous trouverez ci-dessous un lien vers la facture pro-forma. Une facture finale vous sera adressée à l'issue de l’événement."
+mail.orderConfirm.body: "Bonjour,\n\nVotre commande numéro %orderNumero% en date du %orderDate% a bien été enregistrée. Vous trouverez ci-dessous un lien vers la facture pro-forma. Une facture finale vous sera adressée à l'issue de l’événement."
 mail.orderConfirm.end: 'Cordialement,'
 mail.orderConfirm.linkToProForma: 'Voir la facture pro-forma'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'
@@ -47,7 +47,7 @@ mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été fin
 mail.sheet.submitted.end: 'Cordialement,'
 mail.sheet.submitted.link: 'Voir la fiche'
 mail.sheet.submitted.subject: 'Fiche %sheetName% finalisée'
-mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.\n\nNous vous rappelons ci-dessous les prochaines étapes de votre participation :<ul>\n<li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>\n<li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %scheduleDate%. Ensuite l’ensemble des participants auront jusqu’au %scheduleDate% pour valider les différentes propositions reçues.</li>\n<li>Le %scheduleDate% votre planning sera disponible en ligne.</li></ul>\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
+mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre participation à l'événement %event% et nous vous remercions de votre confiance.\n\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
 mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
