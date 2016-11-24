@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EnabledChoiceType extends AbstractType
+class OrderChoiceType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -23,13 +24,10 @@ class EnabledChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => [
-                'enabled'  => true,
-                'disabled' => false,
+                'event.sheet.order.alphabetic' => Constant::ORDER_BY_ALPHABETICAL,
+                'event.sheet.order.createdAt'  => Constant::ORDER_BY_CREATED_AT,
             ],
             'choice_translation_domain' => 'messages',
-            'choice_label'              => function ($currentChoice) {
-                return sprintf('event.sheet.enableState.%s', $currentChoice ? 'enabled' : 'disabled');
-            },
         ]);
     }
 
