@@ -116,8 +116,8 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new SheetValidationDraftMail(
             $event->getSheet(),
             $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getAuthor()->getEmail(),
-            $event->getAuthor()->getLocale()
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale()
         );
 
         $this->mailer->send($mail);
@@ -131,8 +131,8 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = new SheetValidationValidateMail(
             $event->getSheet(),
             $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getAuthor()->getEmail(),
-            $event->getAuthor()->getLocale()
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale()
         );
 
         $this->mailer->send($mail);
