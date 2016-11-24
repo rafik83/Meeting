@@ -51,8 +51,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->createQueryBuilder()
             ->select('type')
             ->from(Type::class, 'type', 'type.id')
-            ->join('type.translations', 'translation', 'WITH', 'type.event = :eventId AND translation.locale = :locale')
-            ->setParameter('locale', $locale)
+            ->join('type.translations', 'translation', 'WITH', 'type.event = :eventId')
             ->setParameter('eventId', $eventId)
             ->orderBy('type.position', 'ASC');
 

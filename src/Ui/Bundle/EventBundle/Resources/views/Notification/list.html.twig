@@ -26,7 +26,12 @@
                             <i class="{{ notification.icon }}"></i> {{ ('notification.category.' ~ notification.category ~ '.label')|trans }}
                         </td>
                         <td>
-                            {{ notification.description|trans(notification.parameters|merge({'%locale%': notification.parameters['%locale%'] is defined ? notification.parameters['%locale%']|locale(app.request.locale)|lower : ''})) }}
+                            {{ notification.description|trans(notification.parameters|merge({
+                                '%locale%': notification.parameters['%locale%'] is defined ?
+                                notification.parameters['%locale%']|locale(app.request.locale)|lower : '',
+                                '%amount%': notification.parameters['%amount%'] is defined and notification.parameters['%currency%'] is defined ?
+                                notification.parameters['%amount%']|localizedcurrency(notification.parameters['%currency%']) : ''
+                            })) }}
                             {% if notification.hasPriorityLabel %}
                                 <span class="label label-{{ notification.priority }} {{ notification.isImportant ? 'bg-highlighted' : '' }}">{{ ('notification.label.' ~ notification.priority)|trans }}</span>
                             {% endif %}

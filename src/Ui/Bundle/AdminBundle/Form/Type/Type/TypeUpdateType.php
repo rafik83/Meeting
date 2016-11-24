@@ -80,7 +80,9 @@ class TypeUpdateType extends AbstractType
                 'entry_type' => TypeTranslationType::class,
                 'label'      => false,
             ])
-            ->add('rank', IntegerType::class)
+            ->add('rank', IntegerType::class, [
+                'required' => false,
+            ])
             ->add('hidden', CheckboxType::class, [
                 'required' => false,
             ])

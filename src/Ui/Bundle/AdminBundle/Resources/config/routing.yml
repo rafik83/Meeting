@@ -114,7 +114,7 @@ admin_create_new_password:
 
 admin_event_list:
     path: /event
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:list }
 
 admin_event_read:

@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
 
 interface OrderRepositoryInterface
 {
@@ -44,4 +45,11 @@ interface OrderRepositoryInterface
      * @return PaginatedResult
      */
     public function findByEvent(Event $event, array $filters, $page, $limit, $locale);
+
+    /**
+     * @param OrderNumeroView $orderNumeroView
+     *
+     * @return Order|null
+     */
+    public function findByNumero(OrderNumeroView $orderNumeroView);
 }

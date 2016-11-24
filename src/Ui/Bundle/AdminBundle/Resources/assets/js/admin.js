@@ -11,7 +11,8 @@ var $                       = require('jquery'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
     SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update'),
-    PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit');
+    PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
+    AnchorFocuser           = require('./components/_AnchorFocuser');
 
 require('elao-form.js');
 require('select2');
@@ -160,6 +161,10 @@ function init(target) {
             nonSelectedListLabel: nonSelectedListLabel
         });
     });
+
+    [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {
+        new AnchorFocuser(element, location);
+    })
 }
 
 // Call init function when element is added to DOM

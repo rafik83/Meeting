@@ -79,10 +79,10 @@ class Update
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
         $this->hidden                              = $type->isHidden();
 
-        foreach ($type->getTranslations() as $translation) {
-            $this->translations[$translation->getLocale()] = [
-                'title'       => $translation->getTitle(),
-                'description' => $translation->getDescription(),
+        foreach ($type->getEvent()->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'title'       => $type->getTitle($locale),
+                'description' => $type->getDescription($locale),
             ];
         }
     }

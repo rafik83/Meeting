@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class OrderRepository implements OrderRepositoryInterface
@@ -95,5 +96,27 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByNumero(OrderNumeroView $orderNumeroView)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(Order::class, '_order')
+            ->join('_order.sheet', 'sheet')
+            ->where('_order.id = :orderId')
+            ->andWhere('_order.sheet = :sheetId')
+            ->andWhere('sheet.event = :eventId')
+            ->setParameter('eventId', $orderNumeroView->eventId)
+            ->setParameter('sheetId', $orderNumeroView->sheetId)
+            ->setParameter('orderId', $orderNumeroView->orderId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Order;
 
-class RemoveProductNotAllowedException extends \Exception
+class RemoveProductNotAllowedException extends OrderException
 {
 }
