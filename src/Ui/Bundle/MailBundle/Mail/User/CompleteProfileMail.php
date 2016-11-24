@@ -11,10 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class CompleteProfileMail extends Mail
+class CompleteProfileMail extends Mail implements ParticipantMail
 {
     /**
      * @var string
@@ -42,16 +43,36 @@ class CompleteProfileMail extends Mail
     protected $sendToEmailTeam = false;
 
     /**
+     * @var string
+     */
+    protected $firstname;
+
+    /**
+     * @var string
+     */
+    protected $lastname;
+
+    /**
      * @param Participant $participant
      * @param string      $sender
      * @param string      $receiver
      * @param string      $locale
+     * @param string      $firstname
+     * @param string      $lastname
      */
-    public function __construct(Participant $participant, $sender, $receiver, $locale)
-    {
+    public function __construct(
+        Participant $participant,
+        $sender,
+        $receiver,
+        $locale,
+        $firstname,
+        $lastname
+    ) {
         parent::__construct($sender, $receiver, $locale, null, null, $participant->getSheet()->getEvent());
 
         $this->participant = $participant;
+        $this->firstname   = $firstname;
+        $this->lastname    = $lastname;
     }
 
     /**
@@ -70,5 +91,29 @@ class CompleteProfileMail extends Mail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticipantType()
+    {
+        return $this->participant->getSheet()->getType()->getTitle($this->locale);
     }
 }

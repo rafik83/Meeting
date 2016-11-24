@@ -26,6 +26,8 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
@@ -57,15 +59,33 @@ class MailEventSubscriber implements EventSubscriberInterface
     private $sender;
 
     /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
+
+    /**
+     * @var ParticipantRepositoryInterface
+     */
+    private $participantRepository;
+
+    /**
      * MailEventSubscriber constructor.
      *
-     * @param MailerInterface $mailer
-     * @param EventSender     $sender
+     * @param MailerInterface                $mailer
+     * @param EventSender                    $sender
+     * @param ParticipantInfoGuesser         $participantInfoGuesser
+     * @param ParticipantRepositoryInterface $participantRepository
      */
-    public function __construct(MailerInterface $mailer, EventSender $sender)
-    {
-        $this->mailer = $mailer;
-        $this->sender = $sender;
+    public function __construct(
+        MailerInterface $mailer,
+        EventSender $sender,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        ParticipantRepositoryInterface $participantRepository
+    ) {
+        $this->mailer                 = $mailer;
+        $this->sender                 = $sender;
+        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->participantRepository  = $participantRepository;
     }
 
     /**
@@ -92,12 +112,32 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionConfirmed(TransactionConfirmEvent $event)
     {
+        $participant = $this->participantRepository->getParticipantForUserAndSheet(
+            $event->getUser(),
+            $event->getTransaction()->getSheet()
+        );
+
+        if ($participant !== null) {
+            $firstname = $this->participantInfoGuesser->guessParticipantFirstName(
+                $participant,
+                $event->getUser()->getLocale()
+            );
+
+            $lastname = $this->participantInfoGuesser->guessParticipantLastName(
+                $participant,
+                $event->getUser()->getLocale()
+            );
+        }
+
         $mail = new TransactionConfirmMail(
             $event->getTransaction(),
             $event->getUser(),
             $this->sender->generate($event->getTransaction()->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
-            $event->getUser()->getLocale()
+            $event->getUser()->getLocale(),
+            $participant,
+            isset($firstname) && $firstname !== null ? $firstname : '',
+            isset($lastname) && $lastname !== null ? $lastname : ''
         );
 
         $this->mailer->send($mail);
@@ -113,7 +153,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
-            $event->getChangeMailToken()->getMail()
+            $event->getChangeMailToken()->getMail(),
+            $event->getUser()
         );
 
         $newMail = new ChangeNewMailAddressMail(
@@ -152,13 +193,25 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetAddParticipant(SheetAddParticipantEvent $event)
     {
+        $firstname = $this->participantInfoGuesser->guessParticipantFirstName(
+            $event->getGuest(),
+            $event->getUser()->getLocale()
+        );
+
+        $lastname = $this->participantInfoGuesser->guessParticipantLastName(
+            $event->getGuest(),
+            $event->getUser()->getLocale()
+        );
+
         $mail = new AddParticipantMail(
             $event->getSheet()->getEvent(),
             $this->sender->generate($event->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getUser(),
-            $event->getGuest()
+            $event->getGuest(),
+            $firstname !== null ? $firstname : '',
+            $lastname !== null ? $lastname : ''
         );
 
         $this->mailer->send($mail);
@@ -222,7 +275,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
-            $event->getForgottenPasswordToken()->getToken()
+            $event->getForgottenPasswordToken()->getToken(),
+            $event->getUser()
         );
 
         $this->mailer->send($mail);
@@ -251,11 +305,23 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserCompleteProfile(UserCompleteProfileEvent $event)
     {
+        $firstname = $this->participantInfoGuesser->guessParticipantFirstName(
+            $event->getParticipant(),
+            $event->getLocale()
+        );
+
+        $lastname = $this->participantInfoGuesser->guessParticipantLastName(
+            $event->getParticipant(),
+            $event->getLocale()
+        );
+
         $mail = new UserCompleteProfileMail(
             $event->getParticipant(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
-            $event->getLocale()
+            $event->getLocale(),
+            $firstname !== null ? $firstname : '',
+            $lastname !== null ? $lastname : ''
         );
 
         $this->mailer->send($mail);
@@ -300,6 +366,23 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetChangeType(SheetChangedTypeEvent $event)
     {
+        $participant = $this->participantRepository->getParticipantForUserAndSheet(
+            $event->getSheet()->getOwner(),
+            $event->getSheet()
+        );
+
+        if ($participant !== null) {
+            $firstname = $this->participantInfoGuesser->guessParticipantFirstName(
+                $participant,
+                $event->getSheet()->getOwner()->getLocale()
+            );
+
+            $lastname = $this->participantInfoGuesser->guessParticipantLastName(
+                $participant,
+                $event->getSheet()->getOwner()->getLocale()
+            );
+        }
+
         $mail = new SheetChangeTypeMail(
             $event->getSheet()->getEvent(),
             $this->sender->generate($event->getSheet()->getEvent()),
@@ -307,7 +390,9 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getLocale(),
             $event->getSheet()->getOwner(),
             $event->getFromTypeTitle(),
-            $event->getSheet()->getType()->getTitle($event->getLocale())
+            $event->getSheet()->getType()->getTitle($event->getLocale()),
+            (isset($firstname) && $firstname !== null) ? $firstname : '',
+            (isset($lastname) && $lastname !== null) ? $lastname : ''
         );
 
         $this->mailer->send($mail);

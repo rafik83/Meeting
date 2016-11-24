@@ -11,11 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class RegisterAccountMail extends Mail
+class RegisterAccountMail extends Mail implements ParticipantMail
 {
     /**
      * @var string
@@ -62,5 +63,29 @@ class RegisterAccountMail extends Mail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->getReceiverUser()->getAccount()->getFirstName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->getReceiverUser()->getAccount()->getLastName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticipantType()
+    {
+        return '';
     }
 }

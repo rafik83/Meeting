@@ -11,12 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
-class AddParticipantMail extends Mail
+class AddParticipantMail extends Mail implements ParticipantMail
 {
     /**
      * @var string
@@ -49,19 +50,41 @@ class AddParticipantMail extends Mail
     protected $sendToEmailTeam = false;
 
     /**
+     * @var string
+     */
+    protected $firstname;
+
+    /**
+     * @var string
+     */
+    protected $lastname;
+
+    /**
      * @param Event       $event
      * @param string      $sender
      * @param string      $receiver
      * @param string      $locale
      * @param User        $user
      * @param Participant $guest
+     * @param string      $firstname
+     * @param string      $lastname
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, User $user, Participant $guest)
-    {
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        User $user,
+        Participant $guest,
+        $firstname,
+        $lastname
+    ) {
         parent::__construct($sender, $receiver, $locale, null, null, $event);
 
-        $this->user  = $user;
-        $this->guest = $guest;
+        $this->user      = $user;
+        $this->guest     = $guest;
+        $this->firstname = $firstname;
+        $this->lastname  = $lastname;
     }
 
     /**
@@ -78,5 +101,29 @@ class AddParticipantMail extends Mail
     public function getGuest()
     {
         return $this->guest;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantType()
+    {
+        return $this->guest->getSheet()->getType()->getTitle($this->locale);
     }
 }

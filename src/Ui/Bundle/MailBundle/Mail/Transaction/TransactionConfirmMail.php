@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 
-class TransactionConfirmMail extends Mail
+class TransactionConfirmMail extends Mail implements ParticipantMail
 {
     /**
      * @var string
@@ -48,6 +50,21 @@ class TransactionConfirmMail extends Mail
     protected $sendToEmailTeam = true;
 
     /**
+     * @var string
+     */
+    protected $firstname;
+
+    /**
+     * @var string
+     */
+    protected $lastname;
+
+    /**
+     * @var Participant
+     */
+    protected $participant;
+
+    /**
      * TransactionConfirmEvent constructor.
      *
      * @param Transaction $transaction
@@ -55,18 +72,27 @@ class TransactionConfirmMail extends Mail
      * @param string      $sender
      * @param string      $receiver
      * @param string      $locale
+     * @param Participant $participant
+     * @param string      $firstname
+     * @param string      $lastname
      */
     public function __construct(
         Transaction $transaction,
         User $user,
         $sender,
         $receiver,
-        $locale
+        $locale,
+        Participant $participant,
+        $firstname,
+        $lastname
     ) {
         parent::__construct($sender, $receiver, $locale, null, null, $transaction->getSheet()->getEvent());
 
         $this->user        = $user;
         $this->transaction = $transaction;
+        $this->firstname   = $firstname;
+        $this->lastname    = $lastname;
+        $this->participant = $participant;
     }
 
     /**
@@ -93,5 +119,29 @@ class TransactionConfirmMail extends Mail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantType()
+    {
+        return $this->participant->getSheet()->getType()->getTitle($this->locale);
     }
 }

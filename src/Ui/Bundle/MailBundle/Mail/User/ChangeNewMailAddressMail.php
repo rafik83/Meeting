@@ -11,10 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ChangeNewMailAddressMail extends Mail
+class ChangeNewMailAddressMail extends Mail implements ParticipantMail
 {
     /**
      * @var string
@@ -76,5 +77,29 @@ class ChangeNewMailAddressMail extends Mail
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->user->getAccount()->getFirstName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->user->getAccount()->getLastName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticipantType()
+    {
+        return '';
     }
 }

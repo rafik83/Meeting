@@ -214,6 +214,8 @@ services:
         arguments:
             - '@adapter.mailer_adapter'
             - '@event_sender'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.submit_sheet_mail_event_subscriber:

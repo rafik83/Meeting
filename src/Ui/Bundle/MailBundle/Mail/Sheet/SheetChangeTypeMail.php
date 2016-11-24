@@ -11,11 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SheetChangeTypeMail extends Mail
+class SheetChangeTypeMail extends Mail implements ParticipantMail
 {
     /**
      * @var string
@@ -53,6 +54,16 @@ class SheetChangeTypeMail extends Mail
     protected $sendToEmailTeam = true;
 
     /**
+     * @var string
+     */
+    protected $firstname;
+
+    /**
+     * @var string
+     */
+    protected $lastname;
+
+    /**
      * @param Event  $event
      * @param string $sender
      * @param string $receiver
@@ -60,6 +71,8 @@ class SheetChangeTypeMail extends Mail
      * @param User   $user
      * @param string $fromTypeTitle
      * @param string $toTypeTitle
+     * @param string $firstname
+     * @param string $lastname
      */
     public function __construct(
         Event $event,
@@ -68,13 +81,17 @@ class SheetChangeTypeMail extends Mail
         $locale,
         User $user,
         $fromTypeTitle,
-        $toTypeTitle
+        $toTypeTitle,
+        $firstname,
+        $lastname
     ) {
         parent::__construct($sender, $receiver, $locale, null, null, $event);
 
         $this->user          = $user;
         $this->fromTypeTitle = $fromTypeTitle;
         $this->toTypeTitle   = $toTypeTitle;
+        $this->firstname     = $firstname;
+        $this->lastname      = $lastname;
     }
 
     /**
@@ -109,5 +126,29 @@ class SheetChangeTypeMail extends Mail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantType()
+    {
+        return $this->toTypeTitle;
     }
 }

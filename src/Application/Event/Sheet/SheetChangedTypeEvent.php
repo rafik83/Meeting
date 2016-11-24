@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Event\Sheet;
 
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\Event;
 
