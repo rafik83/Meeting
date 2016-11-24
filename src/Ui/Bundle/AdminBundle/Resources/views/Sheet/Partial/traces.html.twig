@@ -3,6 +3,10 @@
         {{ 'admin.sheet.createdAt'|trans }}
         <span class="badge">{{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}</span>
     </li>
+    <li class="list-group-item">
+        {{ 'admin.sheet.lastLoginAt'|trans }}
+        <span class="badge">{{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}</span>
+    </li>
     {% for trace in traces %}
         <li class="list-group-item">
             {{ ('admin.sheet.trace.' ~ trace.action)|trans({'%at%': trace.date|localizeddate('medium', 'short', app.request.locale)}) }}
