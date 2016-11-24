@@ -15,7 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OrderChoiceType extends AbstractType
+class SortChoiceType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,6 @@ class OrderChoiceType extends AbstractType
                 'event.sheet.order.alphabetic' => Constant::ORDER_BY_ALPHABETICAL,
                 'event.sheet.order.createdAt'  => Constant::ORDER_BY_CREATED_AT,
             ],
-            'choice_translation_domain' => 'messages',
         ]);
     }
 

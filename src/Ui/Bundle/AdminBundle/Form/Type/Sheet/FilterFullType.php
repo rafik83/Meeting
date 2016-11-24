@@ -67,7 +67,7 @@ class FilterFullType extends AbstractType
                 'label'       => 'form.sheet_filter.children.validationState.label',
                 'placeholder' => '',
             ])
-            ->add('order', OrderChoiceType::class, [
+            ->add('order', SortChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.order.label',
             ])
         ;
