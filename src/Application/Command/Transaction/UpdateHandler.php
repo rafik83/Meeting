@@ -30,7 +30,7 @@ class UpdateHandler
     private $eventDispatcher;
 
     /**
-     * CreateHandler constructor.
+     * UpdateHandler constructor.
      *
      * @param TransactionRepositoryInterface $transactionRepository
      * @param DelayedEventDispatcher         $eventDispatcher
