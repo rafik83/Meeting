@@ -5,6 +5,7 @@
     help: { (locale): '' },
     nomenclature: '',
     mode: 'checkboxes',
+    objective: 'none',
     style: ''
 }|merge(config|default({})) %}
 
@@ -78,6 +79,27 @@
                                         <label>
                                             <input type="radio" name="mode" value="singles">
                                             {{ 'template.nomenclature.choice.singles'|trans }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">{{ 'template.nomenclature.objective.title'|trans }}</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="objective" value="none">
+                                            {{ 'template.nomenclature.objective.none'|trans }}
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="objective" value="supply">
+                                            {{ 'template.nomenclature.objective.supply'|trans }}
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="objective" value="need">
+                                            {{ 'template.nomenclature.objective.need'|trans }}
                                         </label>
                                     </div>
                                 </div>
