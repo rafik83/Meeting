@@ -124,6 +124,8 @@ class UserRepository implements UserRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
 
+        $this->filterQueryBuilder($queryBuilder, $filter);
+
         if (!empty($filter['participation'])) {
             switch ($filter['participation']) {
                 case FilterType::FILTER_WITH_SHEET:
@@ -144,15 +146,13 @@ class UserRepository implements UserRepositoryInterface
                 ->leftJoin('sheetType.translations', 'sheetTypeTranslations', 'WITH', 'sheetTypeTranslations.locale = :locale');
         }
 
-        $this->filterQueryBuilder($queryBuilder, $filter);
-
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'user', 'id');
     }
 
     /**
      * @param QueryBuilder $queryBuilder
      */
-    private function userWithoutSheetQueryBuilder(QueryBuilder &$queryBuilder)
+    private function userWithoutSheetQueryBuilder(QueryBuilder $queryBuilder)
     {
         $queryBuilder->andWhere($queryBuilder->expr()->not(
             $queryBuilder->expr()
@@ -163,7 +163,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param QueryBuilder $queryBuilder
      */
-    private function userWithSheetQueryBuilder(QueryBuilder &$queryBuilder)
+    private function userWithSheetQueryBuilder(QueryBuilder $queryBuilder)
     {
         $queryBuilder
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
@@ -178,8 +178,15 @@ class UserRepository implements UserRepositoryInterface
      * @param QueryBuilder $queryBuilder
      * @param array        $filter
      */
-    private function filterQueryBuilder(QueryBuilder &$queryBuilder, array $filter)
+    private function filterQueryBuilder(QueryBuilder $queryBuilder, array $filter)
     {
+        if (!empty($filter['text'])) {
+            $queryBuilder
+                ->andWhere('user.account.lastName LIKE :filter_text OR user.account.firstName LIKE :filter_text')
+                ->orWhere('user.email LIKE :filter_text')
+                ->setParameter('filter_text', '%' . $filter['text'] . '%');
+        }
+
         if (!empty($filter['types'])) {
             if (empty($filter['participation']) || $filter['participation'] === FilterType::FILTER_WITH_SHEET) {
                 $queryBuilder
@@ -190,13 +197,6 @@ class UserRepository implements UserRepositoryInterface
                     ->andWhere('userEvent.type IS NOT NULL AND userEvent.type IN (:types)')
                     ->setParameter('types', $filter['types']);
             }
-        }
-
-        if (!empty($filter['text'])) {
-            $queryBuilder
-                ->andWhere('user.account.lastName LIKE :filter_text OR user.account.firstName LIKE :filter_text')
-                ->orWhere('user.email LIKE :filter_text')
-                ->setParameter('filter_text', '%' . $filter['text'] . '%');
         }
     }
 }
