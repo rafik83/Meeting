@@ -43,10 +43,10 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
-            return $this->redirectToRoute('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]);
+            return $this->redirect($this->generateUrl('admin_sheet_details', [
+                    'event' => $event->getId(),
+                    'sheet' => $sheet->getId(),
+                ]) . '#sheetOrders');
         }
 
         $sheetInfo = $this
