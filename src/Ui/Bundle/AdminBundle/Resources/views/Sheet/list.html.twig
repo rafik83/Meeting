@@ -6,16 +6,20 @@
     <h1 class="page-header">{{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}</h1>
 
     <div class="row filters">
-        <div class="col-md-offset-4 col-md-4">
-            {{ form_start(filter_part_form) }}
+        {{ form_start(filter_part_form) }}
+        <div class="col-md-offset-4 col-md col-md-4">
 
             <div class="input-group">
                 {{ macro.choice_as_dropdown(filter_form.predefined, true, false, true) }}
                 {{ form_widget(filter_part_form.text) }}
             </div>
 
-            {{ form_end(filter_part_form) }}
         </div>
+        <div class="col-md-4 text-right">
+            {{ macro.choice_as_dropdown(filter_form.order, true, true, false, false, false) }}
+        </div>
+        {{ form_end(filter_part_form) }}
+
     </div>
 
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
@@ -115,7 +119,7 @@
                     {{ macro.choice_as_dropdown(filter_form.state) }}
                 </th>
                 <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
-                <th>{{ 'admin.sheet.lastLoginAt'|trans }}</th>
+                <th>{{ 'admin.sheet.createdAt'|trans }}</th>
                 <th>{{ 'admin.sheet.spot'|trans }}</th>
                 <th nowrap="nowrap">
                     {{ macro.choice_as_dropdown(filter_form.follower) }}
@@ -180,9 +184,7 @@
                     <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                     <td>
                         <small>
-                        {% if sheet.lastLoginAt %}
-                            {{ sheet.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
-                        {% endif %}
+                            {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}
                         </small>
                     </td>
                     <td>
