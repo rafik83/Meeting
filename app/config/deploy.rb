@@ -1,7 +1,7 @@
 set :application, "vimeet"
 
 # Multistage
-set :stages,        %w(demo preprod prod)
+set :stages,        %w(preprod prod)
 set :default_stage, "demo"
 set :stage_dir,     app_config_path + "/deploy"
 require 'capistrano/ext/multistage'
