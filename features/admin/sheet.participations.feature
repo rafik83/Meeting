@@ -47,17 +47,6 @@ Feature: Edit participant status
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "✓" in the "#sheet-7" element
 
-  Scenario: I can put sheet participation to draft
-    Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    When I go to "/admin/fr/event/1/sheet"
-    Then I should see "admin.sheet.title.count"
-    And I check "sheet_batch_ids_7"
-    When I press "form.sheet_batch.children.validationStateDraft"
-    Then I should be on this page "/admin/fr/event/1/sheet"
-    And I should see "flash.admin.sheet_batch.draft.success"
-    And I should see "event.sheet.validationState.draft" in the "#sheet-7" element
-
   Scenario: I can put sheet participation content to validated
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
@@ -68,6 +57,19 @@ Feature: Edit participant status
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.validation.validate.success"
     And I should see "event.sheet.validationState.validated" in the "#sheet-7" element
+    And the "sheet.validation.validate" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+
+  Scenario: I can put sheet participation to draft
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to "/admin/fr/event/1/sheet"
+    Then I should see "admin.sheet.title.count"
+    And I check "sheet_batch_ids_7"
+    When I press "form.sheet_batch.children.validationStateDraft"
+    Then I should be on this page "/admin/fr/event/1/sheet"
+    And I should see "flash.admin.sheet_batch.draft.success"
+    And I should see "event.sheet.validationState.draft" in the "#sheet-7" element
+    And the "sheet.validation.draft" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can use filters, navigate on admin and see my filters was saved
     Given I am logged with "test@test.com" on admin
