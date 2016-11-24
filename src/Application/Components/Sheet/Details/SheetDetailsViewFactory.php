@@ -71,12 +71,12 @@ class SheetDetailsViewFactory
         TraceRepositoryInterface $traceRepository,
         Balance $balance
     ) {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->requestRepository      = $requestRepository;
-        $this->templateDataFactory    = $templateDataFactory;
-        $this->commentRepository      = $commentRepository;
-        $this->traceRepository        = $traceRepository;
-        $this->balance                = $balance;
+        $this->sheetInfoGuesser    = $sheetInfoGuesser;
+        $this->requestRepository   = $requestRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->commentRepository   = $commentRepository;
+        $this->traceRepository     = $traceRepository;
+        $this->balance             = $balance;
     }
 
     /**
@@ -91,7 +91,7 @@ class SheetDetailsViewFactory
 
         return new SheetDetailsView(
             // Title
-            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
             // State
             $sheet->getState(),
             new OwnerView(
