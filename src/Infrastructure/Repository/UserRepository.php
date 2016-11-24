@@ -190,11 +190,11 @@ class UserRepository implements UserRepositoryInterface
         if (!empty($filter['types'])) {
             if (empty($filter['participation']) || $filter['participation'] === FilterType::FILTER_WITH_SHEET) {
                 $queryBuilder
-                    ->andWhere('sheet.type IS NOT NULL AND sheet.type IN (:types) OR sheet.type IS NULL AND userEvent.type IN (:types)')
+                    ->andWhere('sheet.type IN (:types) OR sheet.type IS NULL AND userEvent.type IN (:types)')
                     ->setParameter('types', $filter['types']);
             } elseif ($filter['participation'] === FilterType::FILTER_WITHOUT_SHEET) {
                 $queryBuilder
-                    ->andWhere('userEvent.type IS NOT NULL AND userEvent.type IN (:types)')
+                    ->andWhere('userEvent.type IN (:types)')
                     ->setParameter('types', $filter['types']);
             }
         }
