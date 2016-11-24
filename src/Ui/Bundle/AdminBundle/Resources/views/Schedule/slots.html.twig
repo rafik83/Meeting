@@ -2,6 +2,11 @@
 
 {% block content %}
     <h1>{{ 'admin.schedule.title'|trans }}</h1>
+    <div class="pull-right">
+        <a href="{{ path('admin_schedule_days', {'event': event.id}) }}" class="btn btn-info">
+            {{ 'admin.schedule.days.title'|trans }}
+        </a>
+    </div>
 
     <div class="mg-bt">
         {{ form_start(form) }}
