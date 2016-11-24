@@ -12,6 +12,7 @@ var $                     = require('jquery'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
+    AgendaMeet            = require('./components/_AgendaMeet'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
@@ -38,7 +39,7 @@ function init (target) {
             allowClear: element.getAttribute('data-disallow-clear') !== 'true'
         });
     });
-    
+
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
         var anchor         = window.location.hash.substring(1);
         var anchorElements = target.getElementsByName(anchor);
@@ -70,6 +71,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
         new CatalogSheetCard(element, document.getElementById('request-modal'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.agenda .meet'), function (element) {
+        new AgendaMeet(element);
     });
 
     $('.dropdown-menu', target).on('click', function (e) {
