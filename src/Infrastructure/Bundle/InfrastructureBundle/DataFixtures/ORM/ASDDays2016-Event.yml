@@ -103,3 +103,17 @@ Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
             contracts between us and our clients. Any differing conditions or terms of
             buyer are herewith objected to and shall not apply. Any agreement affecting
             the execution of this contract must be in writing.
+
+Proximum\Vimeet\Domain\Model\Event\Day:
+    asd_days_day_1:
+        __construct: false
+        event: '@event_asddays_2016'
+        day: <(new DateTime('12-10-2016 00:00:00.000'))>
+        startTime: <(new DateTime('12-10-2016 08:00:00.000'))>
+        endTime: <(new DateTime('12-10-2016 18:00:00.000'))>
+    asd_days_day_2:
+        __construct: false
+        event: '@event_asddays_2016'
+        day: <(new DateTime('13-10-2016 00:00:00.000'))>
+        startTime: <(new DateTime('13-10-2016 08:00:00.000'))>
+        endTime: <(new DateTime('13-10-2016 18:00:00.000'))>
