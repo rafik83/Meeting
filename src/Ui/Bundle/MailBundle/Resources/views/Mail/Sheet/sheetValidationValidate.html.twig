@@ -1,5 +1,7 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
+    {{ 'mail.sheet.validation.validate.body'|trans({
 
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
