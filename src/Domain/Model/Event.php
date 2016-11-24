@@ -138,6 +138,11 @@ class Event implements EventInterface
     private $emailTeam;
 
     /**
+     * @var ArrayCollection
+     */
+    private $days;
+
+    /**
      * @param string      $title
      * @param string      $fallback
      * @param array       $locales
@@ -166,6 +171,7 @@ class Event implements EventInterface
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
         $this->paymentAddress = new Address('', '', '', '');
+        $this->days           = new ArrayCollection();
         $this->title          = $title;
         $this->fallback       = $fallback;
         $this->locales        = $locales;
@@ -548,5 +554,13 @@ class Event implements EventInterface
     public function isSvgLogo()
     {
         return $this->logoExtension === 'svg';
+    }
+
+    /**
+     * @return Event\Day[]
+     */
+    public function getDays()
+    {
+        return $this->days->toArray();
     }
 }
