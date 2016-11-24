@@ -1,4 +1,4 @@
-@admin @mail
+@admin @mail @transaction
 
 Feature: Admin Transaction
   I need to be able to manage the transaction for a participant
@@ -38,7 +38,7 @@ Feature: Admin Transaction
       | form.create_transaction.children.reference.label | transaction_03 |
     And I check the "form.transaction.children.state.pending" radio
     And I press "form.create_transaction.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/sheet/1"
+    Then I should be on this page "/admin/fr/event/1/sheet/1#sheetOrders"
     And I should see "flash.admin.transaction.create.success"
 
   Scenario: I can edit a transaction
@@ -51,10 +51,10 @@ Feature: Admin Transaction
       | form.update_transaction.children.amount.label | 525 |
     Then I check the "form.transaction.children.state.paid" radio
     And I press "form.update_transaction.children.submit.label"
-    Then I should be on this page "/admin/fr/event/1/sheet/1"
+    Then I should be on this page "/admin/fr/event/1/sheet/1#sheetOrders"
     And I should see "flash.admin.transaction.update.success"
-    And the "transaction.confirm" mail should be sent to "user_asddays_1@proximum.com" from "vimeet@proximum.dev"
-    And the "transaction.confirm" mail should be sent in bcc to "team-project@example.net" from "vimeet@proximum.dev"
+    And the "transaction.confirm" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
+    And the "transaction.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
 
   Scenario: I can remove a transaction
     Given I am logged with "test@test.com" on admin
