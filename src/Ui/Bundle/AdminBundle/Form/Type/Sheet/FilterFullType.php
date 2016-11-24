@@ -97,6 +97,7 @@ class FilterFullType extends AbstractType
     {
         return [
             'enabled' => true,
+            "order"   => 'alphabetical',
         ];
     }
 }
