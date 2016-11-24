@@ -777,6 +777,13 @@ admin_schedule_slot_unlock:
         event: \d+
         meetingSlot: \d+
 
+admin_schedule_days:
+    path: /event/{event}/schedule/days
+    defaults: { _controller: AdminBundle:Schedule:day }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
 #
 # Nomenclature
 #
