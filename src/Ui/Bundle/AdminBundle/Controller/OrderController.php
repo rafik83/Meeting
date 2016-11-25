@@ -51,11 +51,6 @@ class OrderController extends Controller
 
         if ($filtered) {
             $filters = $filterForm->getData();
-            // save filter into session
-            $this->get('filter.sheet_filter')->add($this->getEnabledFilters(
-                $filterForm,
-                $request->query->all()
-            ));
         }
 
         $query = new PaginatedOrderListViewQuery(
@@ -283,26 +278,5 @@ class OrderController extends Controller
             'required'           => false,
             'allow_extra_fields' => true,
         ]));
-    }
-
-    /**
-     * @param FormInterface $filterFullForm
-     * @param array         $filters
-     *
-     * @return array
-     */
-    private function getEnabledFilters(FormInterface $filterFullForm, array $filters)
-    {
-        $enabledFilters = array_map(function (FormInterface $child) {
-            return $child->getName();
-        }, $filterFullForm->all());
-
-        foreach ($filters as $key => $filter) {
-            if (!in_array($key, $enabledFilters)) {
-                unset($filters[$key]);
-            }
-        }
-
-        return $filters;
     }
 }
