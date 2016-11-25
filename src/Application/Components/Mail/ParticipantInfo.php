@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Mail;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-interface ParticipantMail
+interface ParticipantInfo
 {
     /**
      * @return string

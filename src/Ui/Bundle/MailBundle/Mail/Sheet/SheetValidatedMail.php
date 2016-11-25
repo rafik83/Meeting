@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetValidatedMail extends Mail
+class SheetValidatedMail extends UserMail
 {
     /**
      * @var string
@@ -44,14 +46,20 @@ class SheetValidatedMail extends Mail
     /**
      * SheetValidatedMail constructor.
      *
-     * @param Sheet  $sheet
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
+     * @param Sheet               $sheet
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
-    public function __construct(Sheet $sheet, $sender, $receiver, $locale)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $sheet->getEvent());
+    public function __construct(
+        Sheet $sheet,
+        $sender,
+        $receiver,
+        $locale,
+        ParticipantInfoView $participantInfoView
+    ) {
+        parent::__construct($sender, $receiver, $locale, $sheet->getEvent(), $participantInfoView);
 
         $this->sheet = $sheet;
     }
@@ -73,7 +81,7 @@ class SheetValidatedMail extends Mail
     {
         return [
             '%event%'             => $this->getEvent()->getTitle(),
-            '%participationType%' => $this->getSheet()->getType()->getTitle($this->getLocale()),
+            '%participationType%' => $this->getParticipantType(),
         ];
     }
 }

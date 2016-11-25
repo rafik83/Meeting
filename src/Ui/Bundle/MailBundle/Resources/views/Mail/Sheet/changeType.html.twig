@@ -7,8 +7,8 @@
         '%event%': mail.event.title,
         '%fromType%': mail.fromTypeTitle,
         '%toType%': mail.toTypeTitle,
-        '%firstname%': mail.user.account.firstname|capitalize,
-        '%lastname%': mail.user.account.lastname|upper
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>

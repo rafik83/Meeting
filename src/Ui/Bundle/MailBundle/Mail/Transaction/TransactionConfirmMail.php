@@ -10,14 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 
-class TransactionConfirmMail extends Mail implements ParticipantMail
+class TransactionConfirmMail extends UserMail
 {
     /**
      * @var string
@@ -60,21 +59,14 @@ class TransactionConfirmMail extends Mail implements ParticipantMail
     protected $lastname;
 
     /**
-     * @var Participant
-     */
-    protected $participant;
-
-    /**
      * TransactionConfirmEvent constructor.
      *
-     * @param Transaction $transaction
-     * @param User        $user
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $locale
-     * @param Participant $participant
-     * @param string      $firstname
-     * @param string      $lastname
+     * @param Transaction         $transaction
+     * @param User                $user
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Transaction $transaction,
@@ -82,17 +74,12 @@ class TransactionConfirmMail extends Mail implements ParticipantMail
         $sender,
         $receiver,
         $locale,
-        Participant $participant,
-        $firstname,
-        $lastname
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, null, null, $transaction->getSheet()->getEvent());
+        parent::__construct($sender, $receiver, $locale, $transaction->getSheet()->getEvent(), $participantInfoView);
 
         $this->user        = $user;
         $this->transaction = $transaction;
-        $this->firstname   = $firstname;
-        $this->lastname    = $lastname;
-        $this->participant = $participant;
     }
 
     /**
@@ -119,29 +106,5 @@ class TransactionConfirmMail extends Mail implements ParticipantMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParticipantType()
-    {
-        return $this->participant->getSheet()->getType()->getTitle($this->locale);
     }
 }

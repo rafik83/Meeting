@@ -10,12 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 
-class ChangeNewMailAddressMail extends Mail implements ParticipantMail
+class ChangeNewMailAddressMail extends UserMail
 {
     /**
      * @var string
@@ -38,29 +37,29 @@ class ChangeNewMailAddressMail extends Mail implements ParticipantMail
     private $token;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
      * @var bool
      */
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $token
-     * @param User   $user
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param string              $token
+     * @param ParticipantInfoView $participantInfo
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, $token, User $user)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $event);
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        $token,
+        ParticipantInfoView $participantInfo
+    ) {
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfo);
 
         $this->token = $token;
-        $this->user  = $user;
     }
 
     /**
@@ -69,37 +68,5 @@ class ChangeNewMailAddressMail extends Mail implements ParticipantMail
     public function getToken()
     {
         return $this->token;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->user->getAccount()->getFirstName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->user->getAccount()->getLastName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getParticipantType()
-    {
-        return '';
     }
 }

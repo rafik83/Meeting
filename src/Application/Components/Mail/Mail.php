@@ -13,42 +13,12 @@ namespace Proximum\Vimeet\Application\Components\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Mail
+class Mail extends AbstractMail
 {
     /**
      * @var Event|null
      */
     protected $event;
-
-    /**
-     * @var string
-     */
-    protected $subject;
-
-    /**
-     * @var array
-     */
-    protected $subjectParameters = [];
-
-    /**
-     * @var string
-     */
-    protected $template;
-
-    /**
-     * @var string
-     */
-    protected $messageId;
-
-    /**
-     * @var string
-     */
-    private $sender;
-
-    /**
-     * @var string
-     */
-    private $receiver;
 
     /**
      * @var User|null
@@ -59,16 +29,6 @@ class Mail
      * @var User|null
      */
     private $receiverUser;
-
-    /**
-     * @var string
-     */
-    protected $locale;
-
-    /**
-     * @var bool
-     */
-    protected $sendToEmailTeam = false;
 
     /**
      * @param string     $sender
@@ -86,28 +46,11 @@ class Mail
         User $receiverUser = null,
         Event $event = null
     ) {
-        $this->sender       = $sender;
-        $this->receiver     = $receiver;
-        $this->locale       = $locale;
+        parent::__construct($sender, $receiver, $locale);
+
         $this->senderUser   = $senderUser;
         $this->receiverUser = $receiverUser;
         $this->event        = $event;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSender()
-    {
-        return $this->sender;
-    }
-
-    /**
-     * @return string
-     */
-    public function getReceiver()
-    {
-        return $this->receiver;
     }
 
     /**
@@ -124,14 +67,6 @@ class Mail
     public function getMessageId()
     {
         return $this->messageId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**

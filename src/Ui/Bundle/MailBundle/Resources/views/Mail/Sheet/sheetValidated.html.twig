@@ -5,7 +5,7 @@
         '%event%': mail.sheet.event.title,
         '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate|localizeddate('medium', 'none', mail.locale),
         '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate|localizeddate('medium', 'none', mail.locale),
-        '%firstname%': mail.sheet.owner.account.firstname|capitalize,
-        '%lastname%': mail.sheet.owner.account.lastname|upper
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

@@ -10,13 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 
-class ActivateAccountMail extends Mail implements ParticipantMail
+class ActivateAccountMail extends UserMail
 {
     /**
      * @var string
@@ -44,13 +43,12 @@ class ActivateAccountMail extends Mail implements ParticipantMail
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $token
-     * @param User   $senderUser
-     * @param User   $receiverUser
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param string              $token
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Event $event,
@@ -58,10 +56,9 @@ class ActivateAccountMail extends Mail implements ParticipantMail
         $receiver,
         $locale,
         $token,
-        $senderUser,
-        $receiverUser
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, $senderUser, $receiverUser, $event);
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
         $this->token = $token;
     }
@@ -82,29 +79,5 @@ class ActivateAccountMail extends Mail implements ParticipantMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFirstname()
-    {
-        return $this->getReceiverUser()->getAccount()->getFirstName();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLastname()
-    {
-        return $this->getReceiverUser()->getAccount()->getLastName();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParticipantType()
-    {
-        return '';
     }
 }

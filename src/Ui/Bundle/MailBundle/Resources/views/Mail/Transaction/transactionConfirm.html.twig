@@ -2,8 +2,8 @@
 
 {% block body %}
     {{ 'mail.transaction.confirm.body'|trans({
-        '%firstname%': mail.user.account.firstname|capitalize,
-        '%lastname%': mail.user.account.lastname|upper,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
         '%transactionTotal%': mail.transaction.amount ~ ' ' ~ mail.transaction.currency|currency_symbol
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

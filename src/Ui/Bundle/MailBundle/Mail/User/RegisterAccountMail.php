@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 
-class RegisterAccountMail extends Mail implements ParticipantMail
+class RegisterAccountMail extends UserMail
 {
     /**
      * @var string
@@ -39,20 +39,20 @@ class RegisterAccountMail extends Mail implements ParticipantMail
     protected $sendToEmailTeam = true;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param User   $receiverUser
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Event $event,
         $sender,
         $receiver,
         $locale,
-        User $receiverUser
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, null, $receiverUser, $event);
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
     }
 
     /**
@@ -63,29 +63,5 @@ class RegisterAccountMail extends Mail implements ParticipantMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->getReceiverUser()->getAccount()->getFirstName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->getReceiverUser()->getAccount()->getLastName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getParticipantType()
-    {
-        return '';
     }
 }

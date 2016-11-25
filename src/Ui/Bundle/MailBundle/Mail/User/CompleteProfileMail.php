@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class CompleteProfileMail extends Mail implements ParticipantMail
+class CompleteProfileMail extends UserMail
 {
     /**
      * @var string
@@ -53,26 +53,22 @@ class CompleteProfileMail extends Mail implements ParticipantMail
     protected $lastname;
 
     /**
-     * @param Participant $participant
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $locale
-     * @param string      $firstname
-     * @param string      $lastname
+     * @param Participant         $participant
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Participant $participant,
         $sender,
         $receiver,
         $locale,
-        $firstname,
-        $lastname
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, null, null, $participant->getSheet()->getEvent());
+        parent::__construct($sender, $receiver, $locale, $participant->getSheet()->getEvent(), $participantInfoView);
 
         $this->participant = $participant;
-        $this->firstname   = $firstname;
-        $this->lastname    = $lastname;
     }
 
     /**
@@ -91,29 +87,5 @@ class CompleteProfileMail extends Mail implements ParticipantMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getParticipantType()
-    {
-        return $this->participant->getSheet()->getType()->getTitle($this->locale);
     }
 }

@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 
 class MailerAdapter implements MailerInterface
 {
@@ -45,9 +47,9 @@ class MailerAdapter implements MailerInterface
     /**
      * Send Mail via Swift Mailer
      *
-     * @param Mail $mail
+     * @param AbstractMail $mail
      */
-    public function send(Mail $mail)
+    public function send(AbstractMail $mail)
     {
         /** @var \Twig_Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
@@ -64,7 +66,7 @@ class MailerAdapter implements MailerInterface
             ->setFrom($mail->getSender())
             ->setTo($mail->getReceiver());
 
-        if ($mail->sendToEmailTeam() === true && null !== $mail->getEvent()->getEmailTeam()) {
+        if ($mail->sendToEmailTeam() === true && $mail instanceof UserMail) {
             $message->setBcc($mail->getEvent()->getEmailTeam());
         }
 

@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
-use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SheetChangeTypeMail extends Mail implements ParticipantMail
+class SheetChangeTypeMail extends UserMail
 {
     /**
      * @var string
@@ -54,25 +54,19 @@ class SheetChangeTypeMail extends Mail implements ParticipantMail
     protected $sendToEmailTeam = true;
 
     /**
-     * @var string
+     * @var ParticipantInfoView
      */
-    protected $firstname;
+    private $participantInfoView;
 
     /**
-     * @var string
-     */
-    protected $lastname;
-
-    /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param User   $user
-     * @param string $fromTypeTitle
-     * @param string $toTypeTitle
-     * @param string $firstname
-     * @param string $lastname
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param User                $user
+     * @param string              $fromTypeTitle
+     * @param string              $toTypeTitle
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         Event $event,
@@ -82,16 +76,14 @@ class SheetChangeTypeMail extends Mail implements ParticipantMail
         User $user,
         $fromTypeTitle,
         $toTypeTitle,
-        $firstname,
-        $lastname
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, null, null, $event);
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
-        $this->user          = $user;
-        $this->fromTypeTitle = $fromTypeTitle;
-        $this->toTypeTitle   = $toTypeTitle;
-        $this->firstname     = $firstname;
-        $this->lastname      = $lastname;
+        $this->user                = $user;
+        $this->fromTypeTitle       = $fromTypeTitle;
+        $this->toTypeTitle         = $toTypeTitle;
+        $this->participantInfoView = $participantInfoView;
     }
 
     /**
@@ -126,29 +118,5 @@ class SheetChangeTypeMail extends Mail implements ParticipantMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParticipantType()
-    {
-        return $this->toTypeTitle;
     }
 }
