@@ -95,6 +95,14 @@ class OrderRepository implements OrderRepositoryInterface
                 ->setParameter('product', $filters['product']);
         }
 
+        if (isset($filters['enabled']) && $filters['enabled'] == 0) {
+            $queryBuilder
+                ->andWhere('sheet.enable = 0');
+        } else {
+            $queryBuilder
+                ->andWhere('sheet.enable = 1');
+        }
+
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
     }
 
