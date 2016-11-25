@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
@@ -159,6 +160,37 @@ class CatalogController extends Controller
         );
 
         return new JsonResponse($localizationView);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return JsonResponse
+     */
+    public function searchKeywordsAction(Request $request, EventDomain $eventDomain)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
+
+        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
+            throw $this->createNotFoundException();
+        }
+
+        $keywordView = $this->get('tactician.commandbus.query')->handle(
+            new KeywordViewQuery(
+                $eventDomain->getEvent(),
+                $request->get('query'),
+                $request->getLocale()
+            )
+        );
+
+        return new JsonResponse($keywordView);
     }
 
     /**

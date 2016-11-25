@@ -1826,6 +1826,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_search_adapter'
             - '@query.catalog.sheet_preview_view_query_handler'
+            - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -1853,6 +1854,12 @@ services:
             - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery }
+    query.catalog.keyword_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\KeywordViewQueryHandler
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery }
     query.catalog.position_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\PositionViewQueryHandler
         arguments:

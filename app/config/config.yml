@@ -125,19 +125,12 @@ fos_elastica:
                                 type: custom
                                 tokenizer: "standard"
                                 filter: ["standard", "lowercase", "autocomplete_filter", "asciifolding"]
-                            zipcode_autocomplete:
-                                type: custom
-                                tokenizer: "standard"
-                                filter: ["standard", "zipcode_autocomplete_filter"]
                         filter:
                             autocomplete_filter:
                                 type: edge_ngram
+                                side: front
                                 min_gram: 3
-                                max_gram: 50
-                            zipcode_autocomplete_filter:
-                                type: edge_ngram
-                                min_gram: 2
-                                max_gram: 2
+                                max_gram: 20
             types:
                 sheet:
                     mappings:
@@ -151,6 +144,9 @@ fos_elastica:
                                 raw:
                                     type: string
                                     analyzer: "lowercaseAnalyzer"
+                                autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
                         content:
                             type: string
                         content_en:
@@ -213,15 +209,14 @@ fos_elastica:
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
+                        nomenclatureItems:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
                         zipcode:
-                            type: multi_field
-                            fields:
-                                zipcode:
-                                    type: string
-                                    index: "not_analyzed"
-                                zipcode_autocomplete:
-                                    type: string
-                                    analyzer: "zipcode_autocomplete"
+                            type: string
+                            index: "not_analyzed"
                         city:
                             type: multi_field
                             fields:
@@ -232,6 +227,19 @@ fos_elastica:
                                     type: string
                                     analyzer: "autocomplete"
                         country:
+                            type: nested
+                            index: "not_analyzed"
+                            properties:
+                                label:
+                                    type: string
+                                    analyzer: "lowercaseAnalyzer"
+                                label_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                                locale:
+                                    type: string
+                                    index: "not_analyzed"
+                        keywords:
                             type: nested
                             index: "not_analyzed"
                             properties:

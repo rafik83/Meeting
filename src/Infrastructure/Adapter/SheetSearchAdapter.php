@@ -14,7 +14,9 @@ use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Filter\Query as FilterQuery;
+use Elastica\Filter\Term;
 use Elastica\Query;
+use Elastica\Query\FunctionScore;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
@@ -27,6 +29,8 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
+    const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
+
     /**
      * @var PaginatedFinderInterface Elastica finder
      */
@@ -50,16 +54,39 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations)
-    {
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
-        $query   = new Query($builder->getQuery());
+    public function find(
+        Event $event,
+        array $filters,
+        $orderBy,
+        $page,
+        $limit,
+        $locale,
+        $getAggregations,
+        array $nomenclatureItems = []
+    ) {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, count($nomenclatureItems));
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
+            $query   = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
+
         } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
+            $functionScore = new FunctionScore();
+            $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
+
+            foreach ($nomenclatureItems as $key) {
+                $nested = new \Elastica\Filter\Nested();
+                $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
+                $nested->setPath('nomenclatureItems');
+                $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
+            }
+
+            $query = $functionScore->setQuery($builder->getQuery());
+            $query = new Query($query);
             $query->addSort(['_score' => 'desc']);
+
         } else {
+            $query   = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
         }
 
@@ -92,63 +119,50 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function findLocalization(Event $event, $filter, $locale)
     {
-        // city
-        $match = new Query\Match();
-        $match->setField('city_autocomplete', $filter);
+        $query = new Query();
+        $query->addAggregation($this->findCityQuery($event, $filter))
+            ->addAggregation($this->findCountryQuery($event, $filter, $locale))
+            ->setSize(0);
 
-        $filterQuery = new FilterQuery();
-        $filterQuery->setQuery($match);
+        return $this->searchable->search($query)->getAggregations();
+    }
 
-        $citiesAggregations = new Terms('cities');
-        $citiesAggregations->setField('city');
-        $citiesAggregations->setSize(10);
-
-        $cities = new Filter('cities_aggs');
-        $cities->addAggregation($citiesAggregations);
-        $cities->setFilter($filterQuery);
-
-        // zipcode
-        $matchZipcode = new Query\Match();
-        $matchZipcode->setField('zipcode_autocomplete', $filter);
-
-        $filterZipcodeQuery = new FilterQuery();
-        $filterZipcodeQuery->setQuery($matchZipcode);
-
-        $zipcodeAggregations = new Terms('zipcodes');
-        $zipcodeAggregations->setField('zipcode');
-        $zipcodeAggregations->setSize(10);
-
-        $zipcodes = new Filter('zipcode_aggs');
-        $zipcodes->addAggregation($zipcodeAggregations);
-        $zipcodes->setFilter($filterZipcodeQuery);
-
-        // country
-        $matchCountry = new Query\Match('country.label_autocomplete', $filter);
-        $matchLocale  = new Query\Match('country.locale', $locale);
+    /**
+     * {@inheritdoc}
+     */
+    public function findKeyword(Event $event, $filter, $locale)
+    {
+        $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
+        $matchLocale  = new Query\Match('keywords.locale', $locale);
 
         $boolQuery = new Query\Bool();
-        $boolQuery->addMust($matchCountry);
+        $boolQuery->addMust($matchKeyword);
         $boolQuery->addMust($matchLocale);
 
-        $filterCountryQuery = new FilterQuery();
-        $filterCountryQuery->setQuery($boolQuery);
+        $filterKeywordQuery = new FilterQuery();
+        $filterKeywordQuery->setQuery($boolQuery);
 
-        $countryAggregations = new Terms('countries');
-        $countryAggregations->setField('country.label');
-        $countryAggregations->setSize(10);
+        $filterEventQuery = new FilterQuery();
+        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
 
-        $filterCountries = new Filter('countries_filter');
-        $filterCountries->addAggregation($countryAggregations);
-        $filterCountries->setFilter($filterCountryQuery);
+        $keywordAggregations = new Terms('keyword');
+        $keywordAggregations->setField('keywords.label');
+        $keywordAggregations->setSize(10);
 
-        $nestedCountryAggregations = new Nested('countries_aggs', 'country');
-        $nestedCountryAggregations->addAggregation($filterCountries);
+        $filterKeywords = new Filter('keywords_filter');
+        $filterKeywords->addAggregation($keywordAggregations);
+        $filterKeywords->setFilter($filterKeywordQuery);
+
+        $nestedKeywordsAggregations = new Nested('keywords_aggs', 'keywords');
+        $nestedKeywordsAggregations->addAggregation($filterKeywords);
+
+        $filterKeywordsEvent = new Filter('keywords', $filterEventQuery);
+        $filterKeywordsEvent->addAggregation($nestedKeywordsAggregations);
 
         $query = new Query();
-        $query->addAggregation($cities)
-          ->addAggregation($zipcodes)
-          ->addAggregation($nestedCountryAggregations)
-          ->setSize(0);
+        $query->addAggregation($filterKeywordsEvent)
+            ->addAggregation($this->findSheetnameQuery($event, $filter))
+            ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -241,5 +255,93 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $nested->addAggregation($this->getAggregation($field));
 
         return $nested;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $filter
+     *
+     * @return Filter
+     */
+    private function findCityQuery(Event $event, $filter)
+    {
+        $matchCity = new Query\Bool();
+        $matchCity->addMust(new Query\Match('event', $event->getId()));
+        $matchCity->addMust(new Query\Match('city_autocomplete', $filter));
+
+        $filterQuery = new FilterQuery();
+        $filterQuery->setQuery($matchCity);
+
+        $citiesAggregations = new Terms('cities');
+        $citiesAggregations->setField('city');
+        $citiesAggregations->setSize(10);
+
+        $cities = new Filter('cities_aggs');
+        $cities->addAggregation($citiesAggregations);
+        $cities->setFilter($filterQuery);
+
+        return $cities;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $filter
+     * @param string $locale
+     *
+     * @return Filter
+     */
+    private function findCountryQuery(Event $event, $filter, $locale)
+    {
+        $filterEventQuery = new FilterQuery();
+        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+
+        // country
+        $matchCountry = new Query\Match('country.label_autocomplete', $filter);
+        $matchLocale  = new Query\Match('country.locale', $locale);
+
+        $boolQuery = new Query\Bool();
+        $boolQuery->addMust($matchCountry);
+        $boolQuery->addMust($matchLocale);
+
+        $filterCountryQuery = new FilterQuery();
+        $filterCountryQuery->setQuery($boolQuery);
+
+        $countryAggregations = new Terms('countries');
+        $countryAggregations->setField('country.label');
+        $countryAggregations->setSize(10);
+
+        $filterCountries = new Filter('countries_filter');
+        $filterCountries->addAggregation($countryAggregations);
+        $filterCountries->setFilter($filterCountryQuery);
+
+        $nestedCountryAggregations = new Nested('countries', 'country');
+        $nestedCountryAggregations->addAggregation($filterCountries);
+
+        $filterCountryEvent = new Filter('countries_aggs', $filterEventQuery);
+        $filterCountryEvent->addAggregation($nestedCountryAggregations);
+
+        return $filterCountryEvent;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $filter
+     *
+     * @return Filter
+     */
+    private function findSheetnameQuery(Event $event, $filter)
+    {
+        $boolQuery = new Query\BoolQuery();
+        $boolQuery->addMust(new Query\Term(['sheetName.autocomplete' => $filter]));
+        $boolQuery->addMust(new Query\Match('event', $event->getId()));
+
+        $sheetAggregation = new Terms('sheetname');
+        $sheetAggregation->setField('sheetName.raw');
+
+        $filterQuery     = new FilterQuery($boolQuery);
+        $filterSheetname = new Filter('sheet', $filterQuery);
+        $filterSheetname->addAggregation($sheetAggregation);
+
+        return $filterSheetname;
     }
 }

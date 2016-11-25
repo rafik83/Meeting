@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\View\Catalog;
 
-class TypeView
+use Proximum\Vimeet\Domain\Type\TypeInterface;
+
+class TypeView implements TypeInterface
 {
     /** @var int */
     public $id;
@@ -31,5 +33,13 @@ class TypeView
         $this->id    = $id;
         $this->title = $title;
         $this->count = $count;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

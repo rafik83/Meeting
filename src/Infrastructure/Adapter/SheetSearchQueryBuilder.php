@@ -15,6 +15,7 @@ use Elastica\Query\Match;
 use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
+use Elastica\Query\Term;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -22,33 +23,39 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
-use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
 
 class SheetSearchQueryBuilder
 {
-    /**
-     * @var BoolQuery
-     */
+    const BOOSTER_SHEET_NAME      = 5;
+    const BOOSTER_LOCALE_CONTENT  = 3;
+    const BOOSTER_DEFAULT_CONTENT = 2;
+
+    // Percentage content minimum should match
+    const CONTENT_MINIMUM_SHOULD_MATCH = 70;
+
+    /** @var BoolQuery */
     private $query;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
+    /** @var int */
+    private $initialBooster = 1;
+
     /**
-     * SheetSearchQuery constructor.
-     *
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param int    $initialBooster
      */
-    public function __construct(Event $event, array $filters, $locale)
+    public function __construct(Event $event, array $filters, $locale, $initialBooster = 1)
     {
-        $this->locale = $locale;
+        $this->locale         = $locale;
+        $this->initialBooster = $initialBooster;
 
         $this->query = new BoolQuery();
         $this->matchEvent($event);
@@ -74,8 +81,8 @@ class SheetSearchQueryBuilder
      */
     protected function matchEvent(Event $event)
     {
-        $matchEvent = new Match();
-        $matchEvent->setField('event', $event->getId());
+        $matchEvent = new Term();
+        $matchEvent->setTerm('event', $event->getId());
         $this->query->addMust($matchEvent);
     }
 
@@ -155,17 +162,20 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        // Boost sheetname by 5
-        $fields = ['sheetName^5', 'content'];
+        // Boost sheetname and content
+        $fields = [
+            sprintf('sheetName^%s', $this->initialBooster * self::BOOSTER_SHEET_NAME),
+            sprintf('content^%s', $this->initialBooster * self::BOOSTER_DEFAULT_CONTENT),
+        ];
 
         if (in_array($this->locale, AvailableLocales::getAvailableLocalesForContent())) {
-            // If locale field is available, boost it by 2
-            $fields[] = sprintf('content_%s^2', $this->locale);
+            // If locale field is available
+            $fields[] = sprintf('content_%s^%s', $this->locale, $this->initialBooster * self::BOOSTER_LOCALE_CONTENT);
         }
 
         $multiMatch = new MultiMatch();
         $multiMatch
-            ->setMinimumShouldMatch('70%')
+            ->setMinimumShouldMatch(self::CONTENT_MINIMUM_SHOULD_MATCH . '%')
             ->setFields($fields)
             ->setFuzziness(1)
             ->setQuery($filters['content']);
@@ -227,7 +237,7 @@ class SheetSearchQueryBuilder
     protected function filterByState(array &$filters)
     {
         if (isset($filters['state']) && in_array($filters['state'], Sheet::getAllStates())) {
-            $this->query->addMust(new Match('state', $filters['state']));
+            $this->query->addMust((new Term())->setTerm('state', $filters['state']));
         }
     }
 
@@ -237,7 +247,7 @@ class SheetSearchQueryBuilder
     protected function filterByValidationState(array &$filters)
     {
         if (isset($filters['validationState']) && in_array($filters['validationState'], Sheet::getAllValidationStates())) {
-            $this->query->addMust(new Match('validationState', $filters['validationState']));
+            $this->query->addMust((new Term())->setTerm('validationState', $filters['validationState']));
         }
     }
 
@@ -247,7 +257,7 @@ class SheetSearchQueryBuilder
     protected function filterByEnabled(array &$filters)
     {
         if (isset($filters['enabled'])) {
-            $this->query->addMust(new Match('enabled', (bool) $filters['enabled']));
+            $this->query->addMust((new Term())->setTerm('enabled', (bool) $filters['enabled']));
         }
     }
 
@@ -258,19 +268,19 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['type'])) {
             if ($filters['type'] instanceof Type) {
-                $matchType = new Match();
-                $matchType->setField('type', $filters['type']->getId());
-                $this->query->addMust($matchType);
+                $this->query->addMust((new Term())->setTerm('type', $filters['type']->getId()));
 
             } elseif (is_array($filters['type'])) {
                 $filterByTypes = new BoolQuery();
 
                 foreach ($filters['type'] as $type) {
-                    if ($type instanceof TypeView) {
-                        $filterByTypes->addShould(new Match('type', $type->id));
-                    } elseif ($type instanceof Type) {
-                        $filterByTypes->addShould(new Match('type', $type->getId()));
+                    $typeId = null;
+
+                    if ($type instanceof TypeInterface) {
+                        $typeId = $type->getId();
                     }
+
+                    $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
                 }
 
                 $this->query->addMust($filterByTypes);
@@ -301,15 +311,15 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['follower'])) {
             if ($filters['follower'] instanceof Admin) {
-                $matchFollower = new Match();
+                $matchFollower = new Term();
                 $matchFollower
-                    ->setField('followUp', $filters['follower']->getId());
+                    ->setTerm('followUp', $filters['follower']->getId());
 
                 $this->query->addMust($matchFollower);
             } elseif ($filters['follower'] === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
-                $matchFollower = new Match();
+                $matchFollower = new Term();
                 $matchFollower
-                    ->setField('followUp', 0);
+                    ->setTerm('followUp', 0);
 
                 $this->query->addMust($matchFollower);
             }
@@ -323,7 +333,7 @@ class SheetSearchQueryBuilder
     {
         if (isset($filters['predefined'])) {
             if ($filters['predefined'] === Constant::CREATED_TODAY) {
-                $this->filterCreatedTotay();
+                $this->filterCreatedToday();
             } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
                 $this->filterCreatedThisWeek();
             } elseif ($filters['predefined'] === Constant::NO_ORDER) {
@@ -342,8 +352,8 @@ class SheetSearchQueryBuilder
     protected function filterByCompleted(array &$filters)
     {
         if (isset($filters['completed'])) {
-            $matchCompleted = new Match();
-            $matchCompleted->setField('completed', $filters['completed']);
+            $matchCompleted = new Term();
+            $matchCompleted->setTerm('completed', $filters['completed']);
 
             $this->query->addMust($matchCompleted);
         }
@@ -355,8 +365,8 @@ class SheetSearchQueryBuilder
     protected function filterByInCatalog(array &$filters)
     {
         if (isset($filters['inCatalog'])) {
-            $matchInCatalog = new Match();
-            $matchInCatalog->setField('inCatalog', $filters['inCatalog']);
+            $matchInCatalog = new Term();
+            $matchInCatalog->setTerm('inCatalog', $filters['inCatalog']);
 
             $this->query->addMust($matchInCatalog);
         }
@@ -373,7 +383,7 @@ class SheetSearchQueryBuilder
             foreach ($filters['organizationCategory'] as $organizationCategory) {
                 if ($organizationCategory instanceof OrganizationCategoryView) {
                     $matchOrganizationCategory->addShould(
-                        new Match('organizationCategory', $organizationCategory->key)
+                        (new Term)->setTerm('organizationCategory', $organizationCategory->key)
                     );
                 }
             }
@@ -418,7 +428,7 @@ class SheetSearchQueryBuilder
     /**
      * Created totay filter
      */
-    protected function filterCreatedTotay()
+    protected function filterCreatedToday()
     {
         $rangePredefinedDateBegin = new Range();
         $rangePredefinedDateEnd   = new Range();
@@ -462,8 +472,8 @@ class SheetSearchQueryBuilder
      */
     protected function filterNoOrder()
     {
-        $matchHasOrder = new Match();
-        $matchHasOrder->setField('hasOrder', false);
+        $matchHasOrder = new Term();
+        $matchHasOrder->setTerm('hasOrder', false);
 
         $this->query->addMust($matchHasOrder);
     }
@@ -473,8 +483,8 @@ class SheetSearchQueryBuilder
      */
     protected function filterHasCart()
     {
-        $matchHasCart = new Match();
-        $matchHasCart->setField('hasCart', true);
+        $matchHasCart = new Term();
+        $matchHasCart->setTerm('hasCart', true);
 
         $this->query->addMust($matchHasCart);
     }
@@ -486,8 +496,8 @@ class SheetSearchQueryBuilder
     {
         $nested     = new Nested();
         $boolQuery  = new BoolQuery();
-        $matchQuery = new Match();
-        $matchQuery->setField('booleanFilter.key', $predefined);
+        $matchQuery = new Term();
+        $matchQuery->setTerm('booleanFilter.key', $predefined);
 
         $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
         $this->query->addMust($nested);
@@ -507,7 +517,7 @@ class SheetSearchQueryBuilder
             foreach ($filters['position'] as $position) {
                 if ($position instanceof PositionView) {
                     $matchPosition->addShould(
-                        new Match('participants.position', $position->getKey())
+                        (new Term)->setTerm('participants.position', $position->getKey())
                     );
                 }
             }
