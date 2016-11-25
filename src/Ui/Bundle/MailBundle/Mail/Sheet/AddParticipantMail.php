@@ -37,17 +37,18 @@ class AddParticipantMail extends UserMail
      * @var bool
      */
     protected $sendToEmailTeam = false;
+
     /**
      * @var User
      */
-    private $guess;
+    private $guest;
 
     /**
      * @param Event               $event
      * @param string              $sender
      * @param string              $receiver
      * @param string              $locale
-     * @param User                $guess
+     * @param User                $guest
      * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
@@ -55,19 +56,19 @@ class AddParticipantMail extends UserMail
         $sender,
         $receiver,
         $locale,
-        User $guess,
+        User $guest,
         ParticipantInfoView $participantInfoView
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
-        $this->guess = $guess;
+        $this->guest = $guest;
     }
 
     /**
      * @return User
      */
-    public function getGuess()
+    public function getGuest()
     {
-        return $this->guess;
+        return $this->guest;
     }
 }

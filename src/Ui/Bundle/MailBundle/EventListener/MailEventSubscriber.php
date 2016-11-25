@@ -149,6 +149,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getChangeMailToken()->getMail(),
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken(),
+            $event->getUser(),
             $participantMailView
         );
 
@@ -184,7 +185,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onSheetAddParticipant(SheetAddParticipantEvent $event)
     {
         $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getUser())
+            new ParticipantMailViewQuery($event->getSheet(), $event->getGuest()->getUser())
         );
 
         $mail = new AddParticipantMail(
@@ -235,7 +236,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserActivateAccount(UserActivateAccountEvent $event)
     {
         $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery(null, $event->getUser())
+            new ParticipantMailViewQuery($event->getSheet(), $event->getUser())
         );
 
         $mail = new UserActivateAccountMail(

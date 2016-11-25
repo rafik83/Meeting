@@ -4,7 +4,7 @@
     {{ 'mail.sheet.add_participant_confirmation.body'|trans({
         '%firstname%': mail.firstname|capitalize,
         '%lastname%': mail.lastname|upper,
-        '%guestEmail%': mail.guest.user.email,
+        '%guestEmail%': mail.guest.email,
         '%event%': mail.event.title
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

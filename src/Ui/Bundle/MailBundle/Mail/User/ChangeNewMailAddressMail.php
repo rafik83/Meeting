@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ChangeNewMailAddressMail extends UserMail
 {
@@ -40,6 +41,10 @@ class ChangeNewMailAddressMail extends UserMail
      * @var bool
      */
     protected $sendToEmailTeam = false;
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
      * @param Event               $event
@@ -47,6 +52,7 @@ class ChangeNewMailAddressMail extends UserMail
      * @param string              $receiver
      * @param string              $locale
      * @param string              $token
+     * @param User                $user
      * @param ParticipantInfoView $participantInfo
      */
     public function __construct(
@@ -55,11 +61,21 @@ class ChangeNewMailAddressMail extends UserMail
         $receiver,
         $locale,
         $token,
+        User $user,
         ParticipantInfoView $participantInfo
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfo);
 
         $this->token = $token;
+        $this->user  = $user;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
