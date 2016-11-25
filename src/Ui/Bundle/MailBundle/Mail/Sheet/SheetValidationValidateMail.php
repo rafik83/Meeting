@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
 use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetValidationValidateMail extends Mail
@@ -64,5 +65,21 @@ class SheetValidationValidateMail extends Mail
     public function getSheet()
     {
         return $this->sheet;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->sheet->getEvent();
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->sheet->getType()->getTitle($this->locale);
     }
 }

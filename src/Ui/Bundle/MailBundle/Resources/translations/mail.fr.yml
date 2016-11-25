@@ -46,8 +46,13 @@ mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
 mail.sheet.submitted.link: 'Voir la fiche'
+mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.subject: 'Fiche %sheetName% finalisée'
 mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre inscription à l'événement %event% et nous vous remercions de votre confiance.\n\nNous vous rappelons ci-dessous les prochaines étapes de votre participation :<ul>\n<li>Le %catalogOnlineDate% nous ouvrons la prise de rendez-vous sur la plateforme ViMeet, assurez-vous d’avoir complété votre profil avant cette date pour optimiser votre participation</li>\n<li>Nous vous recommandons d’effectuer vos demande de rendez-vous avant le %scheduleDate%. Ensuite l’ensemble des participants auront jusqu’au %scheduleDate% pour valider les différentes propositions reçues.</li>\n<li>Le %scheduleDate% votre planning sera disponible en ligne.</li></ul>\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
 mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.sheet.validation.draft.subject: 'Fiche remise en brouillon'
+mail.sheet.validation.draft.body: "Bonjour,\n\nVotre fiche de présentation de type %type% à été remise en brouillon car incomplète. Pour compléter votre fiche"
+mail.sheet.validation.validate.subject: 'Fiche validée'
+mail.sheet.validation.validate.body: "Bonjour,\n\nVotre fiche de présentation de type %type% à été validée"
