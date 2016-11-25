@@ -45,7 +45,6 @@ class FilterType extends AbstractType
             ])
             ->add('enabled', EnabledChoiceType::class, [
                 'label'       => 'form.order_filter.children.sheet.enabled.label',
-                'placeholder' => '',
             ])
         ;
     }
