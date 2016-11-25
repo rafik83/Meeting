@@ -45,12 +45,17 @@ class RuleController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $rule = $this->findOrCreateRule($event, $form->get('seer')->getData(), $form->get('seeable')->getData());
+            $rule = $this->findOrCreateRule($event, $form->get('seer')->getData(), $form->get('seeable')->getData(), $form->get('priority')->getData());
 
             return $this->redirectToRoute('admin_rule_see_what', ['event' => $event->getId(), 'rule' => $rule->getId()]);
         }
 
         $rules = $this->get('repository.rule_repository')->getByEvent($event);
+
+        // Order rules by priority asc
+        usort($rules, function (Rule $rule, Rule $anotherRule) {
+            return $rule->getPriority() > $anotherRule->getPriority();
+        });
 
         return $this->render('AdminBundle:Rule:list.html.twig', [
             'form'   => $form->createView(),
@@ -70,6 +75,16 @@ class RuleController extends Controller
     public function seeWhatAction(Request $request, Event $event, Rule $rule)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($rule->getEvent() !== $event) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'This rule %s is not on this event %s',
+                    $rule->getId(),
+                    $event->getId()
+                )
+            );
+        }
 
         $seeWhat = new SeeWhat($rule);
         $form    = $this->createForm(SeeWhatType::class, $seeWhat, [
@@ -132,12 +147,13 @@ class RuleController extends Controller
      * @param Event        $event
      * @param WhoInterface $seer
      * @param WhoInterface $seeable
+     * @param int          $priority
      *
      * @return Rule
      */
-    private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable, $priority)
     {
         return $this->findRule($event, $seer, $seeable) ?:
-            $this->get('repository.rule_repository')->add(new Rule($event, $seer, $seeable, Tag::getSeeableTags()));
+            $this->get('repository.rule_repository')->add(new Rule($event, $seer, $seeable, Tag::getSeeableTags(), $priority));
     }
 }
