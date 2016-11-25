@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 
 /**
  * "Evènement".
@@ -561,6 +562,12 @@ class Event implements EventInterface
      */
     public function getDays()
     {
-        return $this->days->toArray();
+        $days = $this->days->toArray();
+
+        usort($days, function (Day $day1, Day $day2) {
+            return $day1->getDay() > $day2->getDay();
+        });
+
+        return $days;
     }
 }
