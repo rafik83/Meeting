@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface
 {
@@ -236,7 +237,9 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getObjective()
     {
-        return !empty($this->getOption('objective')) ? $this->getOption('objective') : '';
+        $objectiveOption = $this->getOption('objective');
+
+        return !isset($objectiveOption) ? $objectiveOption : Constant::NONE_ORDER_BY;
     }
 
     /**
