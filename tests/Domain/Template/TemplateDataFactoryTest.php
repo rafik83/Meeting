@@ -104,6 +104,7 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($editableObjects['azerty'], $templateData->getObject('azerty'));
         $this->assertTrue($templateData->getObject('azerty')->isEditable());
         $this->assertTrue($templateData->getObject('azerty')->isSupply());
+        $this->assertFalse($templateData->getObject('azerty')->isNeed());
 
         // Assert normalize give back the template array
         $this->assertEquals($template, $templateData->normalize());
