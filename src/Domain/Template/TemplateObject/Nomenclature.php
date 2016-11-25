@@ -17,6 +17,20 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface
 {
     /**
+     * Need and supply objectives constants
+     */
+    const NO_OBJECTIVE     = 'none';
+    const SUPPLY_OBJECTIVE = 'supply';
+    const NEED_OBJECTIVE   = 'need';
+
+    /**
+     * Singles, checkboxes and radios display mode
+     */
+    const SINGLES_MODE    = 'singles';
+    const CHECKBOXES_MODE = 'checkboxes';
+    const RADIOS_MODE     = 'radios';
+
+    /**
      * @var NomenclatureModel
      */
     private $nomenclature;
@@ -213,7 +227,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSingles()
     {
-        return $this->getMode() === 'singles';
+        return $this->getMode() === self::CHECKBOXES_MODE;
     }
 
     /**
@@ -221,7 +235,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isRadios()
     {
-        return $this->getMode() === 'radios';
+        return $this->getMode() === self::RADIOS_MODE;
     }
 
     /**
@@ -229,7 +243,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isCheckboxes()
     {
-        return $this->getMode() === 'checkboxes';
+        return $this->getMode() === self::CHECKBOXES_MODE;
     }
 
     /**
@@ -237,9 +251,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getObjective()
     {
-        $objectiveOption = $this->getOption('objective');
-
-        return isset($objectiveOption) ? $objectiveOption : Constant::NONE_ORDER_BY;
+        return null !== $this->getOption('objective') ? $this->getOption('objective') : self::NO_OBJECTIVE;
     }
 
     /**
@@ -247,7 +259,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isNeed()
     {
-        return $this->getObjective() === 'need';
+        return $this->getObjective() === self::NEED_OBJECTIVE;
     }
 
     /**
@@ -255,7 +267,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSupply()
     {
-        return $this->getObjective() === 'supply';
+        return $this->getObjective() === self::SUPPLY_OBJECTIVE;
     }
 
     /**
