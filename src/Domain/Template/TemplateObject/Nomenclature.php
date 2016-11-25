@@ -236,7 +236,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getObjective()
     {
-        return $this->getOption('objective');
+        return !empty($this->getOption('objective')) ? $this->getOption('objective') : '';
     }
 
     /**
