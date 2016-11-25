@@ -39,9 +39,5 @@ class Update
                 'endTime'   => $day->getEndTime(),
             ];
         }
-
-        usort($this->days, function ($day1, $day2) {
-            return $day1['day'] > $day2['day'];
-        });
     }
 }
