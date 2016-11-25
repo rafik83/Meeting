@@ -22,7 +22,7 @@ class EnabledChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices'                   => [
+            'choices' => [
                 'enabled'  => true,
                 'disabled' => false,
             ],

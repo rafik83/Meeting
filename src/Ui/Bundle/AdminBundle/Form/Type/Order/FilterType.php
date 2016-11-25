@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\EnabledChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,6 +42,10 @@ class FilterType extends AbstractType
 
                     return $choice;
                 }
+            ])
+            ->add('enabled', EnabledChoiceType::class, [
+                'label'       => 'form.order_filter.children.sheet.enabled.label',
+                'placeholder' => '',
             ])
         ;
     }
