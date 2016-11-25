@@ -59,18 +59,6 @@ class Day
     }
 
     /**
-     * @param DateTimeInterface $day
-     * @param DateTimeInterface $startTime
-     * @param DateTimeInterface $endTime
-     */
-    public function update(DateTimeInterface $day, DateTimeInterface $startTime, DateTimeInterface $endTime)
-    {
-        $this->day       = $day;
-        $this->startTime = $startTime;
-        $this->endTime   = $endTime;
-    }
-
-    /**
      * @return int
      */
     public function getId()
