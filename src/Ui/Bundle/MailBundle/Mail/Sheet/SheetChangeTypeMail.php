@@ -54,11 +54,6 @@ class SheetChangeTypeMail extends UserMail
     protected $sendToEmailTeam = true;
 
     /**
-     * @var ParticipantInfoView
-     */
-    private $participantInfoView;
-
-    /**
      * @param Event               $event
      * @param string              $sender
      * @param string              $receiver
@@ -83,7 +78,6 @@ class SheetChangeTypeMail extends UserMail
         $this->user                = $user;
         $this->fromTypeTitle       = $fromTypeTitle;
         $this->toTypeTitle         = $toTypeTitle;
-        $this->participantInfoView = $participantInfoView;
     }
 
     /**

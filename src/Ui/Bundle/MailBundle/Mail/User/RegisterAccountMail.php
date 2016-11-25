@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\ParticipantMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;

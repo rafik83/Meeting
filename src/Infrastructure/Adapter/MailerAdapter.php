@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
-use Proximum\Vimeet\Application\Components\Mail\Mail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 
 class MailerAdapter implements MailerInterface
