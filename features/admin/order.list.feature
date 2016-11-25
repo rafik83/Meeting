@@ -33,5 +33,15 @@ Feature: List and filter orders
     Then I should see "Onera"
     And I should not see "Hello World Company"
 
+  Scenario: Filter disabled orders
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event/1/order"
+    And I should see "form.order_filter.children.sheet.enabled.label"
+    And I should see "Onera"
+    And I should see "Hello World Company"
+    When I am on this page "/admin/fr/event/1/order?enabled=0"
+    Then I should not see "Onera"
+    And I should not see "Hello World Company"
+
 
 
