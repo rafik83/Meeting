@@ -43,6 +43,14 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
                                 'length'      => 100,
                                 'required'    => true,
                             ]
+                        ],
+                        'azerty' => [
+                            'component' => 'object',
+                            'type'      => 'nomenclature',
+                            'config'    => [
+                                'nomenclature' => null,
+                                'objective'    => 'supply'
+                            ],
                         ]
                     ],
                     [
@@ -59,6 +67,7 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
             '0aea62b2' => [
                 'text' => ['fr' => 'Lorem ipsum 0aea62b2 fr', 'en' => 'Lorem ipsum 0aea62b2 en'],
             ],
+            'azerty' => []
         ];
 
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
@@ -69,7 +78,7 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
         // Assert objects are created
         $objects = $templateData->getObjects();
 
-        $this->assertCount(2, $objects);
+        $this->assertCount(3, $objects);
         $this->assertArrayHasKey('ec74be5e', $objects);
         $this->assertArrayHasKey('0aea62b2', $objects);
 
@@ -83,10 +92,18 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
 
         // Assert getEditableObjects() return editable objects
         $editableObjects = $templateData->getEditableObjects();
-        $this->assertCount(1, $editableObjects);
+        $this->assertCount(2, $editableObjects);
         $this->assertArrayHasKey('0aea62b2', $editableObjects);
         $this->assertEquals($editableObjects['0aea62b2'], $templateData->getObject('0aea62b2'));
         $this->assertTrue($templateData->getObject('0aea62b2')->isEditable());
+
+        // Assert getNomenclatureObjects return nomenclature objects
+        $nomenclatureObjects = $templateData->getNomenclatureObjects();
+        $this->assertCount(1, $nomenclatureObjects);
+        $this->assertArrayHasKey('azerty', $nomenclatureObjects);
+        $this->assertEquals($editableObjects['azerty'], $templateData->getObject('azerty'));
+        $this->assertTrue($templateData->getObject('azerty')->isEditable());
+        $this->assertTrue($templateData->getObject('azerty')->isSupply());
 
         // Assert normalize give back the template array
         $this->assertEquals($template, $templateData->normalize());

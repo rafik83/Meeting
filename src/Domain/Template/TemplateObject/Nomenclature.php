@@ -239,7 +239,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     {
         $objectiveOption = $this->getOption('objective');
 
-        return !isset($objectiveOption) ? $objectiveOption : Constant::NONE_ORDER_BY;
+        return isset($objectiveOption) ? $objectiveOption : Constant::NONE_ORDER_BY;
     }
 
     /**
