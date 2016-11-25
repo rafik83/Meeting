@@ -17,7 +17,7 @@ mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %
 mail.event.preregister.end: 'Best regards,'
 mail.event.preregister.link: 'Your member area'
 mail.event.preregister.subject: 'You are pre-registered to %event%'
-mail.orderConfirm.body: "Dear %firstname% %lastname%, Your order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
+mail.orderConfirm.body: "Dear participant,\n\nYour order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
 mail.orderConfirm.end: 'Best regards,'
 mail.orderConfirm.linkToProForma: 'View Proforma invoice'
 mail.orderConfirm.subject: 'Your order has been registered'

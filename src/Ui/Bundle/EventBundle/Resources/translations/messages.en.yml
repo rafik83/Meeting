@@ -60,6 +60,7 @@ navigation.links.sheet.locale: Version
 navigation.menu: Menu
 nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
+nomenclature.select_none: none
 nomenclature.submit: Save
 order.list.column.numero: Number
 order.list.column.total: Total
@@ -156,6 +157,7 @@ register.already_registered: 'Already registered?'
 register.finalize: Complete
 register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all"
 register.register_as: 'Register as:'
+select2.no_results: 'No results'
 sheet.edit.object: Edit
 sheet.object.action.add: Add
 sheet.object.action.backToSheet: 'Back to sheet'
