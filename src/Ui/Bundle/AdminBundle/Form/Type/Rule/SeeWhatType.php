@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Rule\TagIdentifier;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -48,6 +49,13 @@ class SeeWhatType extends AbstractType
         $locale = $options['locale'];
 
         $builder
+            ->add('priority', IntegerType::class, [
+                'attr'     =>  [
+                    'min' => 0,
+                    'max' => 10,
+                ],
+                'required' => true,
+            ])
             ->add('seeWhat', ChoiceType::class, [
                 'attr'         => [
                     'data-dual-list-box'                      => true,
