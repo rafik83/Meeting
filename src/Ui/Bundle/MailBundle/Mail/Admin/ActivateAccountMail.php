@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\AdminMail;
 use Proximum\Vimeet\Application\Event\Events;
 
-class ActivateAccountMail extends Mail
+class ActivateAccountMail extends AdminMail
 {
     /**
      * @var string

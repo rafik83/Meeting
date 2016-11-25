@@ -278,12 +278,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getUser())
+        );
+
         $mail = new ResetPasswordConfirmMail(
             $event->getEvent(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
-            $event->getUser()
+            $participantMailView
         );
 
         $this->mailer->send($mail);

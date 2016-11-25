@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Mail;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Mail extends AbstractMail
+class AdminMail extends AbstractMail
 {
     /**
      * @var Event|null
@@ -54,23 +54,7 @@ class Mail extends AbstractMail
     }
 
     /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessageId()
-    {
-        return $this->messageId;
-    }
-
-    /**
-     * @return User|null
+     * @return null|User
      */
     public function getSenderUser()
     {
@@ -78,42 +62,10 @@ class Mail extends AbstractMail
     }
 
     /**
-     * @return User|null
+     * @return null|User
      */
     public function getReceiverUser()
     {
         return $this->receiverUser;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubject()
-    {
-        return $this->subject;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSubjectParameters()
-    {
-        return $this->subjectParameters;
-    }
-
-    /**
-     * @return Event|null
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function sendToEmailTeam()
-    {
-        return $this->sendToEmailTeam;
     }
 }
