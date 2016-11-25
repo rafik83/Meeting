@@ -232,6 +232,30 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @return string
+     */
+    public function getObjective()
+    {
+        return $this->getOption('objective');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNeed()
+    {
+        return $this->getObjective() === 'need';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSupply()
+    {
+        return $this->getObjective() === 'supply';
+    }
+
+    /**
      * @return bool
      */
     public function isDisplayOnCompanyProfile()
