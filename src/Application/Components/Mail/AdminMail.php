@@ -68,4 +68,12 @@ class AdminMail extends AbstractMail
     {
         return $this->receiverUser;
     }
+
+    /**
+     * @return null|Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
 }
