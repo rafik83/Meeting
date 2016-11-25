@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day;
 
-use Proximum\Vimeet\Application\Command\Event\Day\UpdateDay;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\DayStartTimeEndTimeToDayTransformer;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
