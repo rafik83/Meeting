@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -96,7 +97,7 @@ class FilterFullType extends AbstractType
     {
         return [
             'enabled' => true,
-            "order"   => 'alphabetical',
+            "order"   => Constant::ORDER_BY_ALPHABETICAL,
         ];
     }
 }
