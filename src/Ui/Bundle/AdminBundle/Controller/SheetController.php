@@ -101,7 +101,10 @@ class SheetController extends Controller
             $query = new PaginatedSheetListViewQuery(
                 $event,
                 $filters,
-                $request->query->getInt('page', 1), 20, $locale, $this->getUser()
+                $request->query->getInt('page', 1),
+                20,
+                $locale,
+                $this->getUser()
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
