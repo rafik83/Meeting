@@ -64,7 +64,7 @@ class ParticipantMailViewQueryHandler
             $query->user->getLocale()
         );
 
-        $lastname = $this->participantInfoGuesser->guessParticipantFirstName(
+        $lastname = $this->participantInfoGuesser->guessParticipantLastName(
             $participant,
             $query->user->getLocale()
         );
