@@ -3,7 +3,12 @@
 {% import "MailBundle:Mail:macros.html.twig" as macros %}
 
 {% block body %}
-    {{ 'mail.orderConfirm.body'|trans({'%orderNumero%': mail.order.numero, '%orderDate%': mail.order.createdAt|localizeddate('medium', 'none', mail.locale)}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.orderConfirm.body'|trans({
+        '%orderNumero%': mail.order.numero,
+        '%orderDate%': mail.order.createdAt|localizeddate('medium', 'none', mail.locale),
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper
+    }, 'mail', mail.locale)|html|nl2br }}
 
     <br>
     <br>

@@ -5,8 +5,8 @@
 {% block body %}
     {{ 'mail.activateAccount.body'|trans({
         '%event%': mail.event.title,
-        '%firstname%': mail.firstname,
-        '%lastname%': mail.lastname,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>

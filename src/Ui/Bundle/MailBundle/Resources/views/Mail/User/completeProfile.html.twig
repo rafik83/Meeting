@@ -3,7 +3,11 @@
 {% import "MailBundle:Mail:macros.html.twig" as macros %}
 
 {% block body %}
-    {{ 'mail.completeProfile.body'|trans({'%event%': mail.event.title}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.completeProfile.body'|trans({
+        '%event%': mail.event.title,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper
+    }, 'mail', mail.locale)|html|nl2br }}
 
     <br>
     <br>
