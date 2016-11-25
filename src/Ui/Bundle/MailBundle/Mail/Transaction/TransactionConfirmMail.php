@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction;
 
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 

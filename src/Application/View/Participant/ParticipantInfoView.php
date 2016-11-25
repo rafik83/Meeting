@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Mail;
+namespace Proximum\Vimeet\Application\View\Participant;
 
 class ParticipantInfoView
 {

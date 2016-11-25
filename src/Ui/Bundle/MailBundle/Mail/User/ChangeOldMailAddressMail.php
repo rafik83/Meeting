@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
-use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class ChangeOldMailAddressMail extends UserMail

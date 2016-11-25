@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Mail;
 
-use Proximum\Vimeet\Application\View\Mail\ParticipantInfoView;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
