@@ -18,16 +18,15 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * Need and supply objectives constants
      */
-    const NO_OBJECTIVE     = 'none';
-    const SUPPLY_OBJECTIVE = 'supply';
-    const NEED_OBJECTIVE   = 'need';
-
+    const OBJECTIVE_NONE   = 'none';
+    const OBJECTIVE_SUPPLY = 'supply';
+    const OBJECTIVE_NEED   = 'need';
     /**
      * Singles, checkboxes and radios display mode
      */
-    const SINGLES_MODE    = 'singles';
-    const CHECKBOXES_MODE = 'checkboxes';
-    const RADIOS_MODE     = 'radios';
+    const MODE_SINGLES    = 'singles';
+    const MODE_CHECKBOXES = 'checkboxes';
+    const MODE_RADIOS     = 'radios';
 
     /**
      * @var NomenclatureModel
@@ -226,7 +225,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSingles()
     {
-        return $this->getMode() === self::CHECKBOXES_MODE;
+        return $this->getMode() === self::MODE_SINGLES;
     }
 
     /**
@@ -234,7 +233,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isRadios()
     {
-        return $this->getMode() === self::RADIOS_MODE;
+        return $this->getMode() === self::MODE_RADIOS;
     }
 
     /**
@@ -242,7 +241,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isCheckboxes()
     {
-        return $this->getMode() === self::CHECKBOXES_MODE;
+        return $this->getMode() === self::MODE_CHECKBOXES;
     }
 
     /**
@@ -250,7 +249,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getObjective()
     {
-        return null !== $this->getOption('objective') ? $this->getOption('objective') : self::NO_OBJECTIVE;
+        return null !== $this->getOption('objective') ? $this->getOption('objective') : self::OBJECTIVE_NONE;
     }
 
     /**
@@ -258,7 +257,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isNeed()
     {
-        return $this->getObjective() === self::NEED_OBJECTIVE;
+        return $this->getObjective() === self::OBJECTIVE_NEED;
     }
 
     /**
@@ -266,7 +265,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSupply()
     {
-        return $this->getObjective() === self::SUPPLY_OBJECTIVE;
+        return $this->getObjective() === self::OBJECTIVE_SUPPLY;
     }
 
     /**
