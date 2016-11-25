@@ -98,7 +98,11 @@ class SheetController extends Controller
 
         // Pagination
         try {
-            $query = new PaginatedSheetListViewQuery($event, $filters, $request->query->getInt('page', 1), 20, $locale, $this->getUser());
+            $query = new PaginatedSheetListViewQuery(
+                $event,
+                $filters,
+                $request->query->getInt('page', 1), 20, $locale, $this->getUser()
+            );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
