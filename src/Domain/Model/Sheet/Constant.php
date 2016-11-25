@@ -21,4 +21,5 @@ final class Constant
     const ORDER_BY_DATE_ADDED_TO_CATALOG = 'dateAddedToCatalog';
     const ORDER_BY_CREATED_AT            = 'created_at';
     const ORDER_BY_RELEVANCE             = 'relevance';
+    const NONE_ORDER_BY                  = 'none';
 }
