@@ -69,10 +69,12 @@ class ParticipantMailViewQueryHandler
             $query->user->getLocale()
         );
 
+        $locale = $participant->getSheet()->getEvent()->getAvailableLocale($query->user->getLocale());
+
         return new ParticipantInfoView(
             $firstname !== null ? $firstname : $query->user->getAccount()->getFirstName(),
             $lastname !== null ? $lastname : $query->user->getAccount()->getLastName(),
-            $participant->getSheet()->getType()->getTitle($query->user->getLocale())
+            $participant->getSheet()->getType()->getTitle($locale)
         );
     }
 

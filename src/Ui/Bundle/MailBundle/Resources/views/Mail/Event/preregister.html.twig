@@ -12,9 +12,10 @@
 
     <br>
     <br>
+
     {{ macros.button(
-    'mail.event.preregister.link'|trans({}, 'mail', mail.locale),
-    url('event_account_participant', {'sheet': mail.sheet.id, 'participant': mail.participant.id})
+        'mail.event.preregister.link'|trans({}, 'mail', mail.locale),
+        url('event_account_participant', {'sheet': mail.sheet.id, 'participant': mail.participant.id})
     ) }}
     <br>
 

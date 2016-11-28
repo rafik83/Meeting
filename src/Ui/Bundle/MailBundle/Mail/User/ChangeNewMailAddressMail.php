@@ -41,6 +41,7 @@ class ChangeNewMailAddressMail extends UserMail
      * @var bool
      */
     protected $sendToEmailTeam = false;
+
     /**
      * @var User
      */
