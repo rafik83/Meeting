@@ -4,6 +4,7 @@
     {{ 'mail.transaction.confirm.body'|trans({
         '%firstname%': mail.firstname|capitalize,
         '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType,
         '%transactionTotal%': mail.transaction.amount ~ ' ' ~ mail.transaction.currency|currency_symbol
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

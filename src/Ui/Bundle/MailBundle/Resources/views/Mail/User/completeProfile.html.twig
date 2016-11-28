@@ -6,7 +6,8 @@
     {{ 'mail.completeProfile.body'|trans({
         '%event%': mail.event.title,
         '%firstname%': mail.firstname|capitalize,
-        '%lastname%': mail.lastname|upper
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>

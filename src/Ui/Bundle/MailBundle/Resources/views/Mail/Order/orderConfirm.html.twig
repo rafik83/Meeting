@@ -7,7 +7,8 @@
         '%orderNumero%': mail.order.numero,
         '%orderDate%': mail.order.createdAt|localizeddate('medium', 'none', mail.locale),
         '%firstname%': mail.firstname|capitalize,
-        '%lastname%': mail.lastname|upper
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>

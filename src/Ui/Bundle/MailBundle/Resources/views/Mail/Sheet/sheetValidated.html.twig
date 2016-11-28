@@ -6,6 +6,7 @@
         '%catalogOnlineDate%': mail.sheet.event.configuration.catalogOnlineDate|localizeddate('medium', 'none', mail.locale),
         '%scheduleDate%': mail.sheet.event.configuration.schedulePublishDate|localizeddate('medium', 'none', mail.locale),
         '%firstname%': mail.firstname|capitalize,
-        '%lastname%': mail.lastname|upper
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
     }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}
