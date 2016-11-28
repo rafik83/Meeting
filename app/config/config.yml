@@ -21,7 +21,6 @@ framework:
     #serializer:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: "%trusted_proxies%"
@@ -33,7 +32,8 @@ framework:
         gc_maxlifetime: 86400
     fragments:       ~
     http_method_override: true
-    assets: ~
+    assets:
+        version: "%assets_version%"
 
 # Twig Configuration
 twig:
