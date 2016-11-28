@@ -13,11 +13,11 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Transaction\Create;
 use Proximum\Vimeet\Application\Command\Transaction\Remove;
 use Proximum\Vimeet\Application\Command\Transaction\Update;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\CreateTransactionType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\UpdateTransactionType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\CreateTransactionType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transaction\UpdateTransactionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,10 +43,10 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($create);
             $this->addFlash('success', 'flash.admin.transaction.create.success');
 
-            return $this->redirectToRoute('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]);
+            return $this->redirect($this->generateUrl('admin_sheet_details', [
+                    'event' => $event->getId(),
+                    'sheet' => $sheet->getId(),
+                ]) . '#sheetOrders');
         }
 
         $sheetInfo = $this
@@ -83,10 +83,10 @@ class TransactionController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.transaction.update.success');
 
-            return $this->redirectToRoute('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]);
+            return $this->redirect($this->generateUrl('admin_sheet_details', [
+                    'event' => $event->getId(),
+                    'sheet' => $sheet->getId(),
+                ]) . '#sheetOrders');
         }
 
         $sheetInfo = $this

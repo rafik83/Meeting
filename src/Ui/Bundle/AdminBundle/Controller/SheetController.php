@@ -200,6 +200,16 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
 
+        if ($sheet->getEvent() !== $event) {
+            throw $this->createNotFoundException(
+                sprintf(
+                    'The sheet %s is not on this event %s',
+                    $sheet->getId(),
+                    $event->getId()
+                )
+            );
+        }
+
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $locale);

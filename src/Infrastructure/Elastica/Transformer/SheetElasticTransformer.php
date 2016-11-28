@@ -100,16 +100,25 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
         $categories = $this->buildCategories($sheet);
 
-        $hasCart              = count($this->cartRowRepository->findBySheet($sheet)) > 0;
-        $templateData         = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
-        $filtersValue         = TemplateBooleanFilterIdentifier::getBooleanFilterValues($templateData);
-        $organizationCategory = $templateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
+        $hasCart                  = count($this->cartRowRepository->findBySheet($sheet)) > 0;
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
+        $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
+        $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
-        $content         = [];
-        $contentByLocale = [];
+        $content           = [];
+        $contentByLocale   = [];
+
+        $fallbackLocale    = $sheet->getEvent()->getFallback();
+        $fallbackData      = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
+        $nomenclatureItems = $this->buildNomenclatureItems($fallbackData);
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
-            $data          = $this->templateDataFactory->createFromSheet($sheet, $locale);
+            if ($locale !== $fallbackLocale) {
+                $data = $this->templateDataFactory->createFromSheet($sheet, $locale);
+            } else {
+                $data = $fallbackData;
+            }
+
             $localeContent = $this->getSearchableContent($data->getObjects());
 
             // Add locale content in same field
@@ -124,7 +133,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return new Document($sheet->getId(), array_merge(
             [
                 'id'                   => $sheet->getId(),
-                'sheetName'            => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+                'sheetName'            => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 'state'                => $sheet->getState(),
                 'validationState'      => $sheet->getValidationState(),
                 'enabled'              => $sheet->isEnabled(),
@@ -144,9 +153,10 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasCart'              => $hasCart,
                 'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'              => implode(' ', $content),
-                'city'                 => $this->getCity($templateData),
-                'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($templateData),
-                'country'              => $this->buildCountry($templateData, $sheet->getEvent()->getLocales()),
+                'city'                 => $this->getCity($registrationTemplateData),
+                'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
+                'country'              => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
+                'nomenclatureItems'    => $nomenclatureItems,
                 'keywords'             => $this->buildKeywords($sheet)
             ],
             $contentByLocale
@@ -335,5 +345,27 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         );
 
         return $categories;
+    }
+
+    /**
+     * @param TemplateData $data
+     *
+     * @return array
+     */
+    private function buildNomenclatureItems(TemplateData $data)
+    {
+        $nomenclatureItems = [];
+
+        foreach ($data->getNomenclatureObjects() as $nomenclatureObject) {
+            $items = $nomenclatureObject->getData();
+
+            if (isset($items['items'])) {
+                foreach ($items['items'] as $item) {
+                    $nomenclatureItems[]['key'] = $item;
+                }
+            }
+        }
+
+        return $nomenclatureItems;
     }
 }

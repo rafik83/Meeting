@@ -13,11 +13,12 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Type\TypeInterface;
 
 /**
  * "Type de participation".
  */
-class Type implements WhoInterface
+class Type implements WhoInterface, TypeInterface
 {
     /**
      * @var int
@@ -138,6 +139,16 @@ class Type implements WhoInterface
     public function getTitle($locale)
     {
         return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getTitle() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getDescription() : '';
     }
 
     /**

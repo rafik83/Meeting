@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Order\Find:
+    properties:
+        numero:
+            - NotBlank: ~

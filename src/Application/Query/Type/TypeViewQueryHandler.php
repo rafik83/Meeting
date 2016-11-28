@@ -39,11 +39,12 @@ class TypeViewQueryHandler
      */
     public function handle(TypeViewQuery $query)
     {
+        $locale      = $query->event->getAvailableLocale($query->locale);
         $typeResults = $this->typeRepository->paginate(
             $query->page,
             20,
             $query->event->getId(),
-            $query->event->getAvailableLocale($query->locale)
+            $locale
         );
 
         $typeListsView = new TypeListsView();
@@ -53,7 +54,7 @@ class TypeViewQueryHandler
             $typeListsView->types[] = new TypeListView(
                 $type->getId(),
                 $type->getPosition(),
-                $type->getTitle($query->event->getAvailableLocale($query->locale)),
+                $type->getTitle($locale),
                 $type->isHidden(),
                 (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
                 (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',

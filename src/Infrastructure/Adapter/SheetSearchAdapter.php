@@ -14,7 +14,9 @@ use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Filter\Query as FilterQuery;
+use Elastica\Filter\Term;
 use Elastica\Query;
+use Elastica\Query\FunctionScore;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
@@ -27,6 +29,8 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
+    const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
+
     /**
      * @var PaginatedFinderInterface Elastica finder
      */
@@ -50,16 +54,39 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations)
-    {
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
-        $query   = new Query($builder->getQuery());
+    public function find(
+        Event $event,
+        array $filters,
+        $orderBy,
+        $page,
+        $limit,
+        $locale,
+        $getAggregations,
+        array $nomenclatureItems = []
+    ) {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, count($nomenclatureItems));
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
+            $query   = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
+
         } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
+            $functionScore = new FunctionScore();
+            $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
+
+            foreach ($nomenclatureItems as $key) {
+                $nested = new \Elastica\Filter\Nested();
+                $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
+                $nested->setPath('nomenclatureItems');
+                $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
+            }
+
+            $query = $functionScore->setQuery($builder->getQuery());
+            $query = new Query($query);
             $query->addSort(['_score' => 'desc']);
+
         } else {
+            $query   = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
         }
 

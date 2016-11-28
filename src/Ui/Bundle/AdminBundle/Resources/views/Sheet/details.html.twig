@@ -45,7 +45,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs" role="tablist" data-switch-to-tab="anchor">
                 <li role="presentation" class="active"><a href="#sheetDashboard" aria-controls="home" role="tab" data-toggle="tab">{{ 'admin.sheet.details.dashboard.title'|trans }}</a></li>
                 {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
                     <li role="presentation">

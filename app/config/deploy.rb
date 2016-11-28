@@ -1,8 +1,8 @@
 set :application, "vimeet"
 
 # Multistage
-set :stages,        %w(demo preprod prod)
-set :default_stage, "demo"
+set :stages,        %w(preprod prod)
+set :default_stage, "preprod"
 set :stage_dir,     app_config_path + "/deploy"
 require 'capistrano/ext/multistage'
 
@@ -36,7 +36,7 @@ set :cache_path,      "var/cache"
 
 # Shared
 set :shared_files,    [app_config_path + "/" + app_config_file]
-set :shared_children, ["web/uploads", "node_modules", log_path, "web/css", "web/media"]
+set :shared_children, ["web/uploads", log_path, "web/css", "web/media"]
 
 # Assets
 set :dump_assetic_assets,        false
@@ -63,11 +63,6 @@ after :deploy, 'app_tasks:php'
 after :deploy, 'deploy:cleanup'
 
 namespace :app_tasks do
-  task :initdb do
-      capifony_pretty_print "--> Init DB"
-      invoke_command "cd #{latest_release} && make init-db", :via => run_method
-      capifony_puts_ok
-  end
   task :php do
       capifony_pretty_print "--> Restarting PHP"
       invoke_command "sudo service php5-fpm restart", :via => run_method

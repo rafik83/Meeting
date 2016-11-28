@@ -34,7 +34,11 @@ final class Charset
             try {
                 $input       = file_get_contents($inFilename);
                 $outFilename = $outFilename ? : sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
-                $output      = iconv($inCharset, $outCharset, $input);
+                try {
+                    $output = iconv($inCharset, $outCharset . "//TRANSLIT", $input);
+                } catch (ContextErrorException $exception) {
+                    $output = iconv($inCharset, $outCharset . "//IGNORE", $input);
+                }
 
                 file_put_contents($outFilename, $output);
             } catch (ContextErrorException $exception) {

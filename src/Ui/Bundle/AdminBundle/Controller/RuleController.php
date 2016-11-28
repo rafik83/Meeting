@@ -91,7 +91,7 @@ class RuleController extends Controller
             'event'   => $event,
             'seer'    => $rule->getSeer(),
             'seeable' => $rule->getSeeable(),
-            'locale'  => $request->getLocale(),
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
         ]);
     }
 

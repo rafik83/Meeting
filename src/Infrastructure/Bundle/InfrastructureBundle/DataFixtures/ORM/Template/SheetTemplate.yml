@@ -115,6 +115,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                 help:
                                     fr: ""
                                     en: ""
+                                mode: checkboxes
                                 required: false
                                 default: 1
                                 nomenclature: "@nomenclature_competences->id"
@@ -320,6 +321,7 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos offres"
                                                 en: "Your offers"
                                             required: true
+                                            mode: checkboxes
                                             nomenclature: "@nomenclature_offre_besoins->id"
                                     63ccc105:
                                         component: "object"
@@ -336,4 +338,5 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
                                                 fr: "Vos besoins"
                                                 en: "Your needs"
                                             required: true
+                                            mode: checkboxes
                                             nomenclature: "@nomenclature_offre_besoins->id"

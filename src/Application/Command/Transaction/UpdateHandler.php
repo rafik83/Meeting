@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Transaction;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -29,7 +30,7 @@ class UpdateHandler
     private $eventDispatcher;
 
     /**
-     * CreateHandler constructor.
+     * UpdateHandler constructor.
      *
      * @param TransactionRepositoryInterface $transactionRepository
      * @param DelayedEventDispatcher         $eventDispatcher
@@ -63,5 +64,10 @@ class UpdateHandler
             $event = new TransactionConfirmEvent($update->transaction->getUser(), $update->transaction);
             $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $event);
         }
+
+        $this->eventDispatcher->dispatch(
+            Events::TRANSACTION_UPDATED,
+            new TransactionUpdatedEvent($update->transaction)
+        );
     }
 }

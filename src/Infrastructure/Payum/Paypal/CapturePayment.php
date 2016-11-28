@@ -13,8 +13,11 @@ namespace Proximum\Vimeet\Infrastructure\Payum\Paypal;
 use Payum\Core\Payum;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Paypal\ExpressCheckout\Nvp\Api;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -36,15 +39,23 @@ class CapturePayment
     private $transactionRepository;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * @param Payum                          $payum
      * @param TransactionRepositoryInterface $transactionRepository
+     * @param DelayedEventDispatcher         $eventDispatcher
      */
     public function __construct(
         Payum $payum,
-        TransactionRepositoryInterface $transactionRepository
+        TransactionRepositoryInterface $transactionRepository,
+        DelayedEventDispatcher $eventDispatcher
     ) {
         $this->payum                 = $payum;
         $this->transactionRepository = $transactionRepository;
+        $this->eventDispatcher       = $eventDispatcher;
     }
 
     /**
@@ -87,6 +98,11 @@ class CapturePayment
             } elseif (Api::PAYMENTSTATUS_PENDING === $paymentStatus) {
                 return self::STATUS_PENDING;
             }
+
+            $this->eventDispatcher->dispatch(
+                Events::TRANSACTION_UPDATED,
+                new TransactionUpdatedEvent($transaction)
+            );
         }
 
         return self::STATUS_ERROR;

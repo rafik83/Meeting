@@ -10,12 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveTransactionHandlerTest extends \PHPUnit_Framework_TestCase
@@ -41,9 +44,16 @@ class RemoveTransactionHandlerTest extends \PHPUnit_Framework_TestCase
         $remove = new Remove($transaction);
 
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
-        $transactionRepository->remove($transaction)->shouldBeCalled();
+        $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
 
-        $handler = new RemoveHandler($transactionRepository->reveal());
+        $transactionRepository->remove($transaction)->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            Events::TRANSACTION_REMOVED,
+            new TransactionRemovedEvent($transaction)
+        )->shouldBeCalled();
+
+
+        $handler = new RemoveHandler($transactionRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($remove);
     }
 }

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
 {
@@ -35,18 +36,26 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private $sheetPreviewViewQueryHandler;
 
     /**
+     * @var TemplateDataFactory
+     */
+    private $templateDataFactory;
+
+    /**
      * @param SheetRepositoryInterface     $sheetRepository
      * @param SheetSearchAdapterInterface  $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler
+     * @param TemplateDataFactory          $templateDataFactory
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler
+        SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
+        TemplateDataFactory $templateDataFactory
     ) {
         $this->sheetRepository              = $sheetRepository;
         $this->sheetSearchAdapter           = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler = $sheetPreviewViewQueryHandler;
+        $this->templateDataFactory          = $templateDataFactory;
     }
 
     /**
@@ -63,7 +72,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->page,
             $query->limit,
             $query->locale,
-            true
+            true,
+            $this->getNomenclatureItems($query->viewer, $query->locale)
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
@@ -78,5 +88,26 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         );
 
         return $paginatedResult;
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function getNomenclatureItems(Sheet $sheet, $locale)
+    {
+        $nomenclatureItems = [];
+        $templateData      = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+        foreach ($templateData->getNomenclatureObjects() as $nomenclatureObject) {
+            $items = $nomenclatureObject->getData();
+            if (isset($items['items'])) {
+                $nomenclatureItems = array_merge($nomenclatureItems, $items['items']);
+            }
+        }
+
+        return $nomenclatureItems;
     }
 }

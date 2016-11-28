@@ -21,6 +21,8 @@ validators.nomenclature.import.missing_keys: 'Vous ne pouvez plus supprimer d''�
 validators.option.participant.alreadyAddedBoughtParticipant: 'Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche'
 validators.option.participant.optionCanNotBeUnselected: 'Vous ne pouvez pas désélectionner cette option, vous devez d''abord supprimer des participants depuis votre fiche'
 validators.option.quantityMustBeAdded: 'Vous devez ajouter une quantité si vous sélectionnez cette option'
+validators.order.numeroNotValid: 'Le numéro de la commande que vous avez entré n''est pas valide'
+validators.order.orderNotFound: 'Aucune commande avec ce numéro'
 validators.password.min: 'Le mot de passe doit comporter au moins {{ limit }} caractères'
 validators.password.mismatch: 'Les 2 mots de passe ne sont pas identiques'
 validators.position_meeting.fromParticipants.count.min: 'Vous devez choisir au moins {{ limit }} participant'

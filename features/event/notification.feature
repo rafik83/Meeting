@@ -13,6 +13,7 @@ Feature: Navigate in my notification
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Notifications.yml     |
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
@@ -33,3 +34,13 @@ Feature: Navigate in my notification
     Then I should see "notification.package.noOrder"
     And I should see "notification.label.required"
     And I should see "notification.category.package.label"
+
+  Scenario: I have receive notifications for warning me with my pending transaction
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/notification"
+    Then I should see "notification.transaction.pending"
+
+  Scenario: I have receive a paid transaction notification
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/notification"
+    Then I should see "notification.transaction.paid"
