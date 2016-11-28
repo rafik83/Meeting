@@ -44,3 +44,5 @@ parameters:
     phantomjs_path:          '%kernel.root_dir%/../node_modules/.bin/phantomjs'
     phantomjs_script:        '%kernel.root_dir%/../phantomjs/render.js'
     phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
+
+    assets_version: 1
