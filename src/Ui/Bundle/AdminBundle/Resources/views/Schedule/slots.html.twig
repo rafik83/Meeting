@@ -1,12 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1>{{ 'admin.schedule.title'|trans }}</h1>
-    <div class="pull-right">
-        <a href="{{ path('admin_schedule_days', {'event': event.id}) }}" class="btn btn-info">
-            {{ 'admin.schedule.days.title'|trans }}
-        </a>
-    </div>
+    <h1 class="page-header">{{ 'admin.schedule.title'|trans }}</h1>
 
     <div class="mg-bt">
         {{ form_start(form) }}
@@ -20,58 +15,92 @@
         {{ form_end(form) }}
     </div>
 
-    <h1>{{ 'admin.schedule.slots.title'|trans }}</h1>
+    <hr>
+
+    <h2>{{ 'admin.schedule.days.title'|trans }}</h2>
+
+    <a href="{{ path('admin_schedule_days', {'event': event.id}) }}" class="btn btn-info">
+        <i class="glyphicon glyphicon-calendar"></i>
+        {{ 'admin.schedule.days.link'|trans }}
+    </a>
+
+    {% if event.days|length > 0 %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ 'admin.schedule.days.day'|trans }}</th>
+                <th>{{ 'admin.schedule.days.startTime'|trans }}</th>
+                <th>{{ 'admin.schedule.days.endTime'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for day in event.days %}
+                <tr>
+                    <td>{{ day.day|localizeddate('medium', 'none') }}</td>
+                    <td>{{ day.startTime|localizeddate('none', 'short') }}</td>
+                    <td>{{ day.endTime|localizeddate('none', 'short') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <hr>
+
+    <h2>{{ 'admin.schedule.slots.title'|trans }}</h2>
 
     <div class="mg-bt">
-        <a href="{{ path('admin_schedule_slots_generate', { 'event': event.id }) }}" class="btn btn-success">
+        <a href="{{ path('admin_schedule_slots_generate', { 'event': event.id }) }}" class="btn btn-info">
             <i class="glyphicon glyphicon-tasks"></i>
             {{ 'admin.schedule.slots.generate.action'|trans }}
         </a>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>{{ 'admin.schedule.slots.table.begin'|trans }}</th>
-                <th>{{ 'admin.schedule.slots.table.end'|trans }}</th>
-                <th>{{ 'admin.schedule.slots.table.duration'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for slot in slots %}
+    {% if slots|length > 0 %}
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{{ slot.begin|localizeddate }}</td>
-                    <td>{{ slot.end|localizeddate }}</td>
-                    <td>{{ slot.duration }}</td>
-                    <td class="text-center">
-                        {% if slot.locked %}
-                            <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                <div class="btn-group" role="group" aria-label="locked">
-                                    <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlock'|trans }}">
-                                        <i class="glyphicon glyphicon-ok"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.locked'|trans }}">
-                                        <i class="glyphicon glyphicon-lock"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        {% else %}
-                            <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                <div class="btn-group" role="group" aria-label="locked">
-                                    <button type="button" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlocked'|trans }}">
-                                        <i class="glyphicon glyphicon-ok"></i>
-                                    </button>
-                                    <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.lock'|trans }}">
-                                        <i class="glyphicon glyphicon-lock"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        {% endif %}
-                    </td>
+                    <th>{{ 'admin.schedule.slots.table.begin'|trans }}</th>
+                    <th>{{ 'admin.schedule.slots.table.end'|trans }}</th>
+                    <th>{{ 'admin.schedule.slots.table.duration'|trans }}</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for slot in slots %}
+                    <tr>
+                        <td>{{ slot.begin|localizeddate }}</td>
+                        <td>{{ slot.end|localizeddate }}</td>
+                        <td>{{ slot.duration }}</td>
+                        <td class="text-center">
+                            {% if slot.locked %}
+                                <form action="{{ path('admin_schedule_slot_unlock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                    <div class="btn-group" role="group" aria-label="locked">
+                                        <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlock'|trans }}">
+                                            <i class="glyphicon glyphicon-ok"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.locked'|trans }}">
+                                            <i class="glyphicon glyphicon-lock"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <form action="{{ path('admin_schedule_slot_lock', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                    <div class="btn-group" role="group" aria-label="locked">
+                                        <button type="button" class="btn btn-success active" data-toggle="tooltip" title="{{ 'admin.schedule.slot.unlocked'|trans }}">
+                                            <i class="glyphicon glyphicon-ok"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-default" data-toggle="tooltip" title="{{ 'admin.schedule.slot.lock'|trans }}">
+                                            <i class="glyphicon glyphicon-lock"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 {% endblock %}

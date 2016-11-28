@@ -259,7 +259,11 @@ admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
-admin.schedule.days.title: 'Définir les jours de l''événement'
+admin.schedule.days.day: 'Jour'
+admin.schedule.days.endTime: 'Heure de fin'
+admin.schedule.days.title: 'Jours de l''événement'
+admin.schedule.days.link: Définir
+admin.schedule.days.startTime: 'Heure de début'
 admin.schedule_day.update.title: 'Définir les jours de l''événement'
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
 admin.sheet.assign.spot.exception: 'Une erreur est survenu'
