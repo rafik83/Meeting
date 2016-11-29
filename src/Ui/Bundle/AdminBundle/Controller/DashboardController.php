@@ -29,8 +29,7 @@ class DashboardController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $query = new DashboardViewQuery($event);
-
-        $view = $this->get('query.sheet.dashboard_view_query_handler')->handle($query);
+        $view  = $this->get('query.sheet.dashboard_view_query_handler')->handle($query);
 
         return $this->render('AdminBundle:Event/Dashboard:list.html.twig', [
             'event' => $event,

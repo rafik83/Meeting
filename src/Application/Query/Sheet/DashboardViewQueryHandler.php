@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Domain\Order\Balance;
-use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class DashboardViewQueryHandler
@@ -22,11 +21,6 @@ class DashboardViewQueryHandler
     private $sheetRepository;
 
     /**
-     * @var Merger
-     */
-    private $orderMerger;
-
-    /**
      * @var Balance
      */
     private $balance;
@@ -35,16 +29,13 @@ class DashboardViewQueryHandler
      * DashboardViewQueryHandler constructor.
      *
      * @param SheetRepositoryInterface $sheetRepository
-     * @param Merger                   $orderMerger
      * @param Balance                  $balance
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        Merger $orderMerger,
         Balance $balance
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->orderMerger     = $orderMerger;
         $this->balance         = $balance;
     }
 
