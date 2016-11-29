@@ -18,6 +18,7 @@ Feature: See the dashboard of an event
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
+    When I go to this page "/admin/en/event"
     And I am on this page "/admin/en/event/1"
     When I follow "admin.dashboard.link"
     Then the response status code should be 200
