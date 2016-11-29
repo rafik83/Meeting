@@ -34,7 +34,6 @@ class Update
 
         foreach ($event->getDays() as $day) {
             $this->days[] = [
-                'day'       => $day->getDay(),
                 'startTime' => $day->getStartTime(),
                 'endTime'   => $day->getEndTime(),
             ];
