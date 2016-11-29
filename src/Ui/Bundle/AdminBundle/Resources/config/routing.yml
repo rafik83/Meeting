@@ -852,3 +852,11 @@ admin_users_details:
     requirements:
         event: \d+
         user: \d+
+
+# Dashboard
+admin_dashboard:
+    path: /event/{event}/dashboard
+    defaults: { _controller: AdminBundle:Dashboard:list }
+    methods: [GET]
+    requirements:
+        event: \d+
