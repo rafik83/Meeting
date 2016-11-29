@@ -28,11 +28,6 @@ class Day
     /**
      * @var DateTimeInterface
      */
-    private $day;
-
-    /**
-     * @var DateTimeInterface
-     */
     private $startTime;
 
     /**
@@ -42,18 +37,15 @@ class Day
 
     /**
      * @param Event             $event
-     * @param DateTimeInterface $day
      * @param DateTimeInterface $startTime
      * @param DateTimeInterface $endTime
      */
     public function __construct(
         Event $event,
-        DateTimeInterface $day,
         DateTimeInterface $startTime,
         DateTimeInterface $endTime
     ) {
         $this->event     = $event;
-        $this->day       = $day;
         $this->startTime = $startTime;
         $this->endTime   = $endTime;
     }
@@ -79,7 +71,7 @@ class Day
      */
     public function getDay()
     {
-        return $this->day;
+        return $this->startTime;
     }
 
     /**
@@ -96,14 +88,6 @@ class Day
     public function getEndTime()
     {
         return $this->endTime;
-    }
-
-    /**
-     * @param DateTimeInterface $day
-     */
-    public function setDay($day)
-    {
-        $this->day = $day;
     }
 
     /**
