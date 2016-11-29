@@ -126,7 +126,7 @@ class SearchFacet
      */
     public function getTranslations()
     {
-        return $this->translations;
+        return $this->translations->toArray();
     }
 
     /**
@@ -176,5 +176,22 @@ class SearchFacet
     public function hasPlaceholder()
     {
         return !in_array($this->type, [self::TYPE_TYPE, self::TYPE_CATEGORY]);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return SearchFacetTranslation|null
+     */
+    public function getTranslation($locale)
+    {
+        /** @var SearchFacetTranslation $translation */
+        foreach ($this->translations as $translation) {
+            if ($translation->getLocale() === $locale) {
+                return $translation;
+            }
+        }
+
+        return null;
     }
 }
