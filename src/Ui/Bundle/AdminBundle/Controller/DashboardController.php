@@ -1,0 +1,40 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
+
+use Proximum\Vimeet\Application\Query\Sheet\DashboardViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class DashboardController extends Controller
+{
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function listAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $query = new DashboardViewQuery($event);
+
+        $view = $this->get('query.sheet.dashboard_view_query_handler')->handle($query);
+
+        return $this->render('AdminBundle:Event/Dashboard:list.html.twig', [
+            'event' => $event,
+            'view'  => $view,
+        ]);
+    }
+}
