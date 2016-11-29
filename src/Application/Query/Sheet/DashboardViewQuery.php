@@ -19,20 +19,6 @@ class DashboardViewQuery
      */
     public $event;
 
-    /**
-     * @var float|int
-     */
-    public $totalOrders;
-
-    /**
-     * @var float|int
-     */
-    public $totalRemainingToPay;
-
-    /**
-     * @var float|int
-     */
-    public $totalPaid;
 
     /**
      * DashboardViewQuery constructor.

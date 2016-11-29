@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Application\View\Sheet\DashboardView;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -42,20 +43,22 @@ class DashboardViewQueryHandler
     /**
      * @param DashboardViewQuery $dashboardViewQuery
      *
-     * @return DashboardViewQuery
+     * @return DashboardView
      */
     public function handle(DashboardViewQuery $dashboardViewQuery)
     {
         $sheets = $this->sheetRepository->getEnabledSheetsByEvent($dashboardViewQuery->event);
 
+        $dashboardView = new DashboardView();
+
         foreach ($sheets as $sheet) {
             if ($sheet->hasOrders()) {
-                $dashboardViewQuery->totalPaid           += $this->balance->getTotalPaid($sheet);
-                $dashboardViewQuery->totalOrders         += $this->balance->getTotal($sheet);
-                $dashboardViewQuery->totalRemainingToPay += $this->balance->getRemainingToPay($sheet);
+                $dashboardView->totalPaid           += $this->balance->getTotalPaid($sheet);
+                $dashboardView->totalOrders         += $this->balance->getTotal($sheet);
+                $dashboardView->totalRemainingToPay += $this->balance->getRemainingToPay($sheet);
             }
         }
 
-        return $dashboardViewQuery;
+        return $dashboardView;
     }
 }
