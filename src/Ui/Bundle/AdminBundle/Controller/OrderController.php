@@ -16,11 +16,11 @@ use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Order;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -41,19 +41,26 @@ class OrderController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filters = [];
+        if ($request->query->get('enabled') === null) {
+            return $this->redirectToRoute('admin_sheet_order_list', array_merge(
+                ['event' => $event->getId()],
+                array_merge($request->query->all(), FilterType::getDefaultFilters())
+            ));
+        }
+
+        $filters    = [];
         $filterForm = $this->createFilterForm(
             FilterType::class,
             $filters,
             ['event' => $event, 'locale' => $locale]
         );
-        $filtered = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
+        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
             $filters = $filterForm->getData();
         }
 
-        $query = new PaginatedOrderListViewQuery(
+        $query  = new PaginatedOrderListViewQuery(
             $event,
             $filters,
             $request->query->getInt('page', 1),
@@ -85,10 +92,9 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($order->getSheet(), $request->getLocale())
-        ;
+            ->guessSheetTitle($order->getSheet(), $request->getLocale());
 
-        $summaryView =  $this->get('tactician.commandbus.query')->handle(
+        $summaryView = $this->get('tactician.commandbus.query')->handle(
             new SummaryQuery(
                 $order->getSheet(),
                 $order,
@@ -119,8 +125,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($order->getSheet(), $request->getLocale())
-        ;
+            ->guessSheetTitle($order->getSheet(), $request->getLocale());
 
         $addRow = new AddRowToGroup($order, $group);
         $form   = $this->createForm(AddRowType::class, $addRow);
@@ -161,8 +166,7 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($order->getSheet(), $request->getLocale())
-        ;
+            ->guessSheetTitle($order->getSheet(), $request->getLocale());
 
         $addRow = new AddRowToProduct($order, $row);
         $form   = $this->createForm(AddRowType::class, $addRow);
