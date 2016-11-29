@@ -57,4 +57,14 @@ class FilterType extends AbstractType
         $resolver->setRequired(['event', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
     }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return [
+            'enabled' => true
+        ];
+    }
 }
