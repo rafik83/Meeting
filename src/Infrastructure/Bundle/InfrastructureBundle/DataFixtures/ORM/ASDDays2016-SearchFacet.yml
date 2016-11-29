@@ -1,0 +1,69 @@
+Proximum\Vimeet\Domain\Model\SearchFacet:
+    search_facet_type:
+        __construct:
+            - '@event_asddays_2016'
+            - 'type'
+            - true
+    search_facet_position:
+        __construct:
+            - '@event_asddays_2016'
+            - 'type'
+            - true
+    search_facet_category:
+        __construct:
+            - '@event_asddays_2016'
+            - 'category'
+            - true
+    search_facet_organizationCategory:
+        __construct:
+            - '@event_asddays_2016'
+            - 'organizationCategory'
+            - true
+    search_facet_keywords:
+        __construct:
+            - '@event_asddays_2016'
+            - 'keywords'
+            - true
+    search_facet_localization:
+        __construct:
+            - '@event_asddays_2016'
+            - 'localization'
+            - true
+
+Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
+    search_facet_translation_type:
+        __construct:
+            - '@search_facet_type'
+            - 'Type'
+            - 'Type placeholder'
+            - 'fr'
+    search_facet_translation_position:
+        __construct:
+            - '@search_facet_position'
+            - 'Position'
+            - 'Position placeholder'
+            - 'fr'
+    search_facet_translation_category:
+        __construct:
+            - '@search_facet_category'
+            - 'Catégorie'
+            - 'Catégorie placeholder'
+            - 'fr'
+    search_facet_translation_organization_category:
+        __construct:
+            - '@search_facet_organizationCategory'
+            - 'Structure'
+            - 'Structure placeholder'
+            - 'fr'
+    search_facet_translation_organization_keywords:
+        __construct:
+            - '@search_facet_keywords'
+            - 'Mots clés'
+            - 'Mots clés placeholder'
+            - 'fr'
+    search_facet_translation_organization_localization:
+        __construct:
+            - '@search_facet_localization'
+            - 'Localisation'
+            - 'Localisation placeholder'
+            - 'fr'
