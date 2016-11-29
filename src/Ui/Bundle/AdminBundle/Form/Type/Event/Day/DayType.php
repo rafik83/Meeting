@@ -27,20 +27,21 @@ class DayType extends AbstractType
         $event = $options['event'];
 
         $builder
-            ->add('day', DateTimePickerType::class, [
-                'format'        => 'd/m/Y',
-                'display_hour'  => false,
-                'view_timezone' => $event->getTimeZone(),
-            ])
             ->add('startTime', DateTimePickerType::class, [
-                'format'        => 'H:i',
+                'format'        => 'd/m/Y H:i',
                 'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
+                'attr'  => [
+                    'class' => 'datetimepicker-range-element'
+                ],
             ])
             ->add('endTime', DateTimePickerType::class, [
-                'format'        => 'H:i',
+                'format'        => 'd/m/Y H:i',
                 'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
+                'attr'  => [
+                    'class' => 'datetimepicker-range-element'
+                ],
             ])
         ;
     }
