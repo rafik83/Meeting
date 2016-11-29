@@ -180,6 +180,8 @@ services:
 
     form_type.catalog_search_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType
+        arguments:
+            - '@query.catalog.search_facet_view_query_handler'
         tags:
             - { name: form.type }
 
