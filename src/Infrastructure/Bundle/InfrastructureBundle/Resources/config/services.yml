@@ -1851,7 +1851,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\DashboardViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@order.merger'
             - '@order.balance'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\DashboardViewQuery }
