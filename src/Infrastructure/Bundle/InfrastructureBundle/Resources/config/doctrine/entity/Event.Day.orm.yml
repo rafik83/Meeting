@@ -7,8 +7,6 @@ Proximum\Vimeet\Domain\Model\Event\Day:
             generator:
                 strategy: AUTO
     fields:
-        day:
-            type: datetime
         startTime:
             type: datetime
         endTime:
