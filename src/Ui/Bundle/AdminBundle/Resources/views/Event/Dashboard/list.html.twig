@@ -1,0 +1,17 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1>
+        {{ 'admin.event.dashboard.title'|trans }}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="sheetDashboard">
+                    {{ include('AdminBundle:Sheet/Partial:dashboard_orders.html.twig', { view: view }, false) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
