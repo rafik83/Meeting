@@ -75,7 +75,7 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return float|int
      */
     public function getTotal(Sheet $sheet)
     {
@@ -89,7 +89,7 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return float|int
      */
     public function getBalance(Sheet $sheet)
     {
@@ -108,7 +108,7 @@ class Balance
     /**
      * @param Sheet $sheet
      *
-     * @return float
+     * @return float|int
      */
     public function getRemainingToPay(Sheet $sheet)
     {
@@ -130,5 +130,24 @@ class Balance
 
             return $carry - $transaction->getAmount();
         }, $total);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return float|int
+     */
+    public function getTotalPaid(Sheet $sheet)
+    {
+        $totalPaid    = 0;
+        $transactions = $this->getTransactions($sheet);
+
+        foreach ($transactions as $transaction) {
+            if ($transaction->isPaid()) {
+                $totalPaid += $transaction->getAmount();
+            }
+        }
+
+        return $totalPaid;
     }
 }
