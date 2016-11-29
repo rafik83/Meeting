@@ -23,7 +23,7 @@ Feature: List and filter orders
   Scenario: Filter event orders
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/order"
-    And I should see "Onera"
+    Then I should see "Onera"
     And I should see "Hello World Company"
     When I select "3" from "product"
     And I press "admin.filter"
@@ -33,7 +33,7 @@ Feature: List and filter orders
   Scenario: Filter disabled sheet orders
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/order?enabled=1"
-    And I should see "form.order_filter.children.sheet.enabled.label"
+    Then I should see "form.order_filter.children.sheet.enabled.label"
     And I should see "Onera"
     And I should see "Hello World Company"
     When I go to this page "/admin/fr/event/1/order?enabled=0"

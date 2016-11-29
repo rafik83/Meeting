@@ -54,13 +54,14 @@ class OrderController extends Controller
             $filters,
             ['event' => $event, 'locale' => $locale]
         );
-        $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
+
+        $filtered = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
             $filters = $filterForm->getData();
         }
 
-        $query  = new PaginatedOrderListViewQuery(
+        $query = new PaginatedOrderListViewQuery(
             $event,
             $filters,
             $request->query->getInt('page', 1),

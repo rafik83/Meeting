@@ -64,7 +64,7 @@ class FilterType extends AbstractType
     public static function getDefaultFilters()
     {
         return [
-            'enabled' => true
+            'enabled' => true,
         ];
     }
 }
