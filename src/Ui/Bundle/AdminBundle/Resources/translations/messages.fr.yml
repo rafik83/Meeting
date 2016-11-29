@@ -27,10 +27,12 @@ admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
+admin.dashboard.link: 'Tableau de bord'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.create.title: 'Créer un événement'
+admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.page.list.title: 'Liste de mes événements'
@@ -277,6 +279,9 @@ admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
+admin.sheet.dashboard.totalOrders: 'Total des commandes'
+admin.sheet.dashboard.totalPaid: 'Total soldé'
+admin.sheet.dashboard.totalRemainingToPay: 'Total restant'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société
