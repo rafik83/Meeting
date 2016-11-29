@@ -32,6 +32,9 @@ class UpdateType extends AbstractType
                 'entry_options' => [
                     'label' => false,
                     'event' => $options['event'],
+                    'attr'  => [
+                        'class' => 'datetimepicker-range'
+                    ],
                 ],
             ]);
     }
