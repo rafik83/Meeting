@@ -1,13 +1,11 @@
 require('eonasdan-bootstrap-datetimepicker');
-var $ = require('jquery');
+var $      = require('jquery'),
+    moment = require('moment');
 
 function DateTimePicker(element)
 {
     this.element        = element;
-
-    this.displayHours = this.element.getAttribute('data-allow-hours') ? 'HH:mm' : '';
-    this.displayDates = this.element.getAttribute('data-allow-dates') ? 'DD/MM/YYYY ' : '';
-    this.format       = this.displayDates + this.displayHours;
+    this.parentZone     = null;
 
     this.standardConfig = {
         locale: 'fr',
@@ -24,10 +22,54 @@ function DateTimePicker(element)
             clear: 'glyphicon glyphicon-trash',
             close: 'glyphicon glyphicon-remove'
         },
-        format: this.format
+        format: 'DD/MM/YYYY HH:mm'
     };
 
     $(element).datetimepicker(this.standardConfig);
+
+    if ($(this.element).hasClass("datetimepicker-range-element")) {
+        this.bindRangeElement();
+    }
 }
+
+DateTimePicker.prototype.bindRangeElement = function ()
+{
+    // Find the parent zone
+    this.parentZone = $(this.element).closest('.datetimepicker-range');
+
+    if (this.parentZone !== null) {
+        this.rangeElement = $(this.parentZone).find(".datetimepicker-range-element");
+
+        [].forEach.call(this.rangeElement, function (rangeElement) {
+            if (!$(rangeElement).is(this.element)) {
+                $(rangeElement).on("dp.change", function (event) {
+                    if (typeof $(rangeElement).data("DateTimePicker") != 'undefined') {
+                        var elementDate  = $(rangeElement).data("DateTimePicker").date();
+                        this.currentDate = $(this.element).data("DateTimePicker").date();
+                        var newDate = moment().year(elementDate.year()).month(elementDate.month()).date(elementDate.date()).minute(0).hour(0);
+
+                        if (this.currentDate !== null) {
+                            if (elementDate.year() != this.currentDate.year()
+                                || elementDate.month() != this.currentDate.month()
+                                || elementDate.date() != this.currentDate.date()
+                            ) {
+                                newDate.hour(this.currentDate.hour());
+                                newDate.minute(this.currentDate.minute());
+
+                                $(this.element).data("DateTimePicker").date(
+                                    newDate
+                                );
+                            }
+                        } else {
+                            $(this.element).data("DateTimePicker").date(
+                                newDate
+                            );
+                        }
+                    }
+                }.bind(this));
+            }
+        }.bind(this));
+    }
+};
 
 module.exports = DateTimePicker;
