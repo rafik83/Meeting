@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Mail;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class UserMail extends AbstractMail implements ParticipantInfo
+class UserMail extends AbstractMail implements ParticipantInfoInterface
 {
     /**
      * @var ParticipantInfoView
