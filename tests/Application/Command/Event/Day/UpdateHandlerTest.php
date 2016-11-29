@@ -25,14 +25,12 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
 
-        $day1      = new \DateTime('24-12-2016 08:10:00.000');
-        $starTime1 = new \DateTime('12-12-2016 08:00:00.000');
-        $endTime1  = new \DateTime('15-12-2016 16:00:00.000');
+        $starTime1 = new \DateTime('24-12-2016 08:00:00.000');
+        $endTime1  = new \DateTime('24-12-2016 16:00:00.000');
 
         // Expected
         $expectedDay = new Day(
             $event,
-            new \DateTime('24-12-2016 00:00:00.000'),
             new \DateTime('24-12-2016 08:00:00.000'),
             new \DateTime('24-12-2016 16:00:00.000')
         );
@@ -45,7 +43,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Data
         $update  = new Update($event);
         $update->days[] = [
-            'day'       => $day1,
             'startTime' => $starTime1,
             'endTime'   => $endTime1,
         ];
@@ -61,35 +58,29 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $event = EventFactory::createEvent();
 
-        $day1      = new \DateTime('24-12-2016 08:10:00.000');
-        $starTime1 = new \DateTime('12-12-2016 08:00:00.000');
-        $endTime1  = new \DateTime('15-12-2016 16:00:00.000');
+        $starTime1 = new \DateTime('24-12-2016 08:00:00.000');
+        $endTime1  = new \DateTime('24-12-2016 16:00:00.000');
 
-        $day2      = new \DateTime('25-12-2016 07:40:10.000');
-        $starTime2 = new \DateTime('09-12-2016 10:00:00.000');
-        $endTime2  = new \DateTime('01-12-2016 18:00:00.000');
+        $starTime2 = new \DateTime('25-12-2016 10:00:00.000');
+        $endTime2  = new \DateTime('25-12-2016 18:00:00.000');
 
-        $day3      = new \DateTime('26-12-2016 02:19:00.000');
-        $starTime3 = new \DateTime('21-12-2016 12:30:00.000');
-        $endTime3  = new \DateTime('30-12-2016 20:45:00.000');
+        $starTime3 = new \DateTime('26-12-2016 12:30:00.000');
+        $endTime3  = new \DateTime('26-12-2016 20:45:00.000');
 
 
         // Expected
         $expectedDay1 = new Day(
             $event,
-            new \DateTime('24-12-2016 00:00:00.000'),
             new \DateTime('24-12-2016 08:00:00.000'),
             new \DateTime('24-12-2016 16:00:00.000')
         );
         $expectedDay2 = new Day(
             $event,
-            new \DateTime('25-12-2016 00:00:00.000'),
             new \DateTime('25-12-2016 10:00:00.000'),
             new \DateTime('25-12-2016 18:00:00.000')
         );
         $expectedDay3 = new Day(
             $event,
-            new \DateTime('26-12-2016 00:00:00.000'),
             new \DateTime('26-12-2016 12:30:00.000'),
             new \DateTime('26-12-2016 20:45:00.000')
         );
@@ -104,17 +95,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Data
         $update  = new Update($event);
         $update->days[] = [
-            'day'       => $day1,
             'startTime' => $starTime1,
             'endTime'   => $endTime1,
         ];
         $update->days[] = [
-            'day'       => $day2,
             'startTime' => $starTime2,
             'endTime'   => $endTime2,
         ];
         $update->days[] = [
-            'day'       => $day3,
             'startTime' => $starTime3,
             'endTime'   => $endTime3,
         ];
@@ -133,7 +121,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         // Unexpected
         $unExpectedDay = new Day(
             $event,
-            new \DateTime('24-12-2016 00:00:00.000'),
             new \DateTime('24-12-2016 08:00:00.000'),
             new \DateTime('24-12-2016 16:00:00.000')
         );
@@ -144,7 +131,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $dayRepository->add($unExpectedDay)->shouldNotBeCalled();
 
         // Data
-        $update  = new Update($event);
+        $update = new Update($event);
 
         $handler = new UpdateHandler($dayRepository->reveal());
         $handler->handle($update);
