@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -55,6 +56,12 @@ class OrderController extends Controller
             ['event' => $event, 'locale' => $locale]
         );
 
+        $filterPartForm = $this->createFilterForm(FilterPartType::class, $filters, [
+            'event'  => $event,
+            'locale' => $locale,
+        ]);
+
+        $filterPartForm->handleRequest(Request::create($request->getUri()));
         $filtered = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
         if ($filtered) {
@@ -71,9 +78,10 @@ class OrderController extends Controller
         $orders = $this->get('tactician.commandbus.query')->handle($query);
 
         return $this->render('AdminBundle:Order:list.html.twig', [
-            'event'      => $event,
-            'orders'     => $orders,
-            'filterForm' => $filterForm->createView(),
+            'event'          => $event,
+            'orders'         => $orders,
+            'filterForm'     => $filterForm->createView(),
+            'filterPartForm' => $filterPartForm->createView(),
         ]);
     }
 
