@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -32,6 +33,12 @@ class CategoryUpdateType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,
                 'label'      => false,
+            ])
+            ->add('leftColor', TextType::class, [
+                'required' => false
+            ])
+            ->add('rightColor', TextType::class, [
+                'required' => false
             ])
         ;
     }
