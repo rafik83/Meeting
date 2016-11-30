@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Event\SearchFacet\Update:
+    properties:
+        searchFacets:
+            - Valid: ~
