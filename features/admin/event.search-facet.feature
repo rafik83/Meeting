@@ -1,5 +1,4 @@
-@admin
-@admin-event
+@admin @admin-event @search-facet
 Feature: See and update search facet
   I need to be able to see and update search facet for an event catalog
 
@@ -18,10 +17,10 @@ Feature: See and update search facet
     And I should see "admin.event.search_facet.title"
     And I should see "français"
     When I fill in the following:
-      | search_facet_translation.children.label.label       | Groupements                    |
-      | search_facet_translation.children.placeholder.label | Votre recherche par groupement |
+      | search_facet_update_searchFacets_0_translations_fr_label | Catégorie |
+      | search_facet_update_searchFacets_0_translations_en_label | Category |
     And I check "search_facet_update_searchFacets_0_enabled"
     And I press "search_facet_update_submit"
     Then I should see "flash.admin.event.filter_facet.update.success"
-    And the "search_facet_translation.children.label.label" field should contain "Groupements"
-    And the "search_facet_translation.children.placeholder.label" field should contain "Votre recherche par groupement"
+    And the "search_facet_update_searchFacets_0_translations_fr_label" field should contain "Catégorie"
+    And the "search_facet_update_searchFacets_0_translations_en_label" field should contain "Category"
