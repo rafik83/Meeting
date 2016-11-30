@@ -16,6 +16,19 @@ use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface
 {
     /**
+     * Need and supply objectives constants
+     */
+    const OBJECTIVE_NONE   = 'none';
+    const OBJECTIVE_SUPPLY = 'supply';
+    const OBJECTIVE_NEED   = 'need';
+    /**
+     * Singles, checkboxes and radios display mode
+     */
+    const MODE_SINGLES    = 'singles';
+    const MODE_CHECKBOXES = 'checkboxes';
+    const MODE_RADIOS     = 'radios';
+
+    /**
      * @var NomenclatureModel
      */
     private $nomenclature;
@@ -212,7 +225,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSingles()
     {
-        return $this->getMode() === 'singles';
+        return $this->getMode() === self::MODE_SINGLES;
     }
 
     /**
@@ -220,7 +233,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isRadios()
     {
-        return $this->getMode() === 'radios';
+        return $this->getMode() === self::MODE_RADIOS;
     }
 
     /**
@@ -228,7 +241,31 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isCheckboxes()
     {
-        return $this->getMode() === 'checkboxes';
+        return $this->getMode() === self::MODE_CHECKBOXES;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjective()
+    {
+        return null !== $this->getOption('objective') ? $this->getOption('objective') : self::OBJECTIVE_NONE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNeed()
+    {
+        return $this->getObjective() === self::OBJECTIVE_NEED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSupply()
+    {
+        return $this->getObjective() === self::OBJECTIVE_SUPPLY;
     }
 
     /**
