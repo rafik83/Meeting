@@ -66,7 +66,13 @@ class CompleteProfileMail extends UserMail
         $locale,
         ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, $participant->getSheet()->getEvent(), $participantInfoView);
+        parent::__construct(
+            $sender,
+            $receiver,
+            $locale,
+            $participant->getSheet()->getEvent(),
+            $participantInfoView
+        );
 
         $this->participant = $participant;
     }

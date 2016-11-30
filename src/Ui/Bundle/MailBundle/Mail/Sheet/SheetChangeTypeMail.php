@@ -75,9 +75,9 @@ class SheetChangeTypeMail extends UserMail
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
-        $this->user                = $user;
-        $this->fromTypeTitle       = $fromTypeTitle;
-        $this->toTypeTitle         = $toTypeTitle;
+        $this->user          = $user;
+        $this->fromTypeTitle = $fromTypeTitle;
+        $this->toTypeTitle   = $toTypeTitle;
     }
 
     /**
