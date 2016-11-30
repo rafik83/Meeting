@@ -15,15 +15,15 @@ class DashboardView
     /**
      * @var float|int
      */
-    public $totalOrders;
+    public $totalOrders = 0;
 
     /**
      * @var float|int
      */
-    public $totalRemainingToPay;
+    public $totalRemainingToPay = 0;
 
     /**
      * @var float|int
      */
-    public $totalPaid;
+    public $totalPaid = 0;
 }

@@ -19,7 +19,6 @@ class DashboardViewQuery
      */
     public $event;
 
-
     /**
      * DashboardViewQuery constructor.
      *
