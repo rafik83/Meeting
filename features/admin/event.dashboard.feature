@@ -19,8 +19,7 @@ Feature: See the dashboard of an event
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
     When I go to this page "/admin/en/event"
-    And I am on this page "/admin/en/event/1"
-    When I follow "admin.dashboard.link"
+    And I follow "admin.dashboard.link"
     Then the response status code should be 200
     And I should see "admin.event.dashboard.title"
     And I should see "admin.sheet.dashboard.totalOrders"
