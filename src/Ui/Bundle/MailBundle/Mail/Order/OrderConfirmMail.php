@@ -56,7 +56,13 @@ class OrderConfirmMail extends UserMail
         Order $order,
         ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, $order->getSheet()->getEvent(), $participantInfoView);
+        parent::__construct(
+            $sender,
+            $receiver,
+            $locale,
+            $order->getSheet()->getEvent(),
+            $participantInfoView
+        );
 
         $this->order = $order;
     }

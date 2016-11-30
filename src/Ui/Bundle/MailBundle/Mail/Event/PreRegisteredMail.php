@@ -62,7 +62,13 @@ class PreRegisteredMail extends UserMail
         $locale,
         ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, $participant->getSheet()->getEvent(), $participantInfoView);
+        parent::__construct(
+            $sender,
+            $receiver,
+            $locale,
+            $participant->getSheet()->getEvent(),
+            $participantInfoView
+        );
 
         $this->sheet       = $participant->getSheet();
         $this->participant = $participant;
