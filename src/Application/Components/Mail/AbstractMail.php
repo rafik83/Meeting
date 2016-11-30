@@ -57,7 +57,7 @@ class AbstractMail
      *
      * @param string $sender
      * @param string $receiver
-     * @param        $locale
+     * @param string $locale
      */
     public function __construct($sender, $receiver, $locale)
     {
