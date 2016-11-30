@@ -41,7 +41,7 @@ class OrderController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        if ($request->query->get('enabled') === null) {
+        if (null === $request->query->get('enabled')) {
             return $this->redirectToRoute('admin_sheet_order_list', array_merge(
                 ['event' => $event->getId()],
                 array_merge($request->query->all(), FilterType::getDefaultFilters())
@@ -93,7 +93,8 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetTitle($order->getSheet(), $request->getLocale());
+            ->guessSheetTitle($order->getSheet(), $request->getLocale())
+        ;
 
         $summaryView = $this->get('tactician.commandbus.query')->handle(
             new SummaryQuery(
@@ -126,7 +127,8 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetTitle($order->getSheet(), $request->getLocale());
+            ->guessSheetTitle($order->getSheet(), $request->getLocale())
+        ;
 
         $addRow = new AddRowToGroup($order, $group);
         $form   = $this->createForm(AddRowType::class, $addRow);
@@ -167,7 +169,8 @@ class OrderController extends Controller
 
         $sheetInfo = $this
             ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetTitle($order->getSheet(), $request->getLocale());
+            ->guessSheetTitle($order->getSheet(), $request->getLocale())
+        ;
 
         $addRow = new AddRowToProduct($order, $row);
         $form   = $this->createForm(AddRowType::class, $addRow);
