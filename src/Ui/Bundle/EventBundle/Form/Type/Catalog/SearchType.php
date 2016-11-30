@@ -71,13 +71,13 @@ class SearchType extends AbstractType
             ]);
 
         // show type facette only if there is more than one filter
-        if (count($typeViews) > 1 && $searchFacetsView->hasType() !== null) {
+        if (count($typeViews) > 1 && $typeSearchFacet = $searchFacetsView->hasType()) {
             $builder
                 ->add(
                     self::FILTER_TYPE,
                     ChoiceType::class,
                     [
-                        'label'        => 'form.search.type.label',
+                        'label'        => $typeSearchFacet->label,
                         'expanded'     => true,
                         'multiple'     => true,
                         'choices'      => $typeViews,
