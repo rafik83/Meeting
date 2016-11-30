@@ -31,39 +31,75 @@ Proximum\Vimeet\Domain\Model\SearchFacet:
             - true
 
 Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
-    search_facet_translation_type:
+    search_facet_translation_type_fr:
         __construct:
             - '@search_facet_type'
             - 'Type'
             - 'Type placeholder'
             - 'fr'
-    search_facet_translation_position:
+    search_facet_translation_type_en:
+        __construct:
+            - '@search_facet_type'
+            - 'Type'
+            - 'Type placeholder'
+            - 'en'
+    search_facet_translation_position_fr:
         __construct:
             - '@search_facet_position'
             - 'Position'
             - 'Position placeholder'
             - 'fr'
-    search_facet_translation_category:
+    search_facet_translation_position_en:
+        __construct:
+            - '@search_facet_position'
+            - 'Position'
+            - 'Position placeholder'
+            - 'en'
+    search_facet_translation_category_fr:
         __construct:
             - '@search_facet_category'
             - 'Catégorie'
             - 'Catégorie placeholder'
             - 'fr'
-    search_facet_translation_organization_category:
+    search_facet_translation_category_en:
+        __construct:
+            - '@search_facet_category'
+            - 'Category'
+            - 'Category placeholder'
+            - 'en'
+    search_facet_translation_organization_category_fr:
         __construct:
             - '@search_facet_organizationCategory'
             - 'Structure'
             - 'Structure placeholder'
             - 'fr'
-    search_facet_translation_organization_keywords:
+    search_facet_translation_organization_category_en:
+        __construct:
+            - '@search_facet_organizationCategory'
+            - 'Structure'
+            - 'Structure placeholder'
+            - 'en'
+    search_facet_translation_organization_keywords_fr:
         __construct:
             - '@search_facet_keywords'
             - 'Mots clés'
             - 'Mots clés placeholder'
             - 'fr'
-    search_facet_translation_organization_localization:
+    search_facet_translation_organization_keywords_en:
+        __construct:
+            - '@search_facet_keywords'
+            - 'Keywords'
+            - 'Keywords placeholder'
+            - 'en'
+    search_facet_translation_organization_localization_fr:
         __construct:
             - '@search_facet_localization'
             - 'Localisation'
             - 'Localisation placeholder'
             - 'fr'
+    search_facet_translation_organization_localization_en:
+        __construct:
+            - '@search_facet_localization'
+            - 'Localization'
+            - 'Localization placeholder'
+            - 'en'
