@@ -43,12 +43,10 @@ class SearchFacetViewQueryHandler
         $searchFacetViews = [];
 
         foreach ($searchFacets as $facet) {
-            $translation = $facet->getTranslation($query->locale);
-
             $searchFacetViews[] = new SearchFacetView(
                 $facet->getType(),
-                $translation !== null ? $translation->getLabel() : '',
-                $translation !== null ? $translation->getPlaceholder() : '',
+                $facet->getLabel($query->locale),
+                $facet->getPlaceholder($query->locale),
                 $facet->isEnabled()
             );
         }

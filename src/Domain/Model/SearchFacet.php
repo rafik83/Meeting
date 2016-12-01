@@ -181,17 +181,20 @@ class SearchFacet
     /**
      * @param string $locale
      *
-     * @return SearchFacetTranslation|null
+     * @return string
      */
-    public function getTranslation($locale)
+    public function getLabel($locale)
     {
-        /** @var SearchFacetTranslation $translation */
-        foreach ($this->translations as $translation) {
-            if ($translation->getLocale() === $locale) {
-                return $translation;
-            }
-        }
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getLabel() : '';
+    }
 
-        return null;
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getPlaceholder($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPlaceholder() : '';
     }
 }
