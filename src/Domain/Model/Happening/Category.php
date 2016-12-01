@@ -169,4 +169,20 @@ class Category
     {
         return $this->rightColor;
     }
+
+    /**
+     * @param string $leftColor
+     */
+    public function setLeftColor($leftColor)
+    {
+        $this->leftColor = $leftColor;
+    }
+
+    /**
+     * @param string $rightColor
+     */
+    public function setRightColor($rightColor)
+    {
+        $this->rightColor = $rightColor;
+    }
 }
