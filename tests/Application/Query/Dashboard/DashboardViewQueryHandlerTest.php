@@ -24,53 +24,33 @@ class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $now              = new \DateTime();
-        $event            = EventFactory::createEvent();
-        $type             = new Type($event);
-        $user             = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet            = new Sheet($event, $type, [], $user, $now);
-        $orderBillingInfo = new Order\BillingInfo(
-            'gender',
-            'lastname',
-            'firstname',
-            'function',
-            'phone',
-            'mobile',
-            'company',
-            'email@email.com',
-            new Address('street', 'zipcode', 'city', 'FR'),
-            'vatNumber'
-        );
-
-        $order = new Order($sheet, false, $orderBillingInfo, '', $now);
-        $sheet->addOrder($order);
-
+        $event = EventFactory::createEvent();
         $query = new DashboardViewQuery($event);
 
         // Mock
-        $balance         = $this->prophesize(Balance::class);
+        $balance = $this->prophesize(Balance::class);
 
-        $balance->loadAllTransactions()
+        $balance->loadAllTransactions($event)
             ->shouldBeCalled()
             ->willReturn(true)
         ;
 
-        $balance->loadAllOrdersByEvent()
+        $balance->loadAllOrdersByEvent($event)
             ->shouldBeCalled()
             ->willReturn(true)
         ;
 
-        $balance->getOrdersTotal($sheet)
+        $balance->getOrdersTotal($event)
             ->shouldBeCalled()
             ->willReturn(100)
         ;
 
-        $balance->getTransactionsTotalPaid($sheet)
+        $balance->getTransactionsTotalPaid($event)
             ->shouldBeCalled()
             ->willReturn(100)
         ;
 
-        $balance->getOrdersTotalRemainingToPay($sheet)
+        $balance->getOrdersTotalRemainingToPay($event)
             ->shouldBeCalled()
             ->willReturn(100)
         ;
