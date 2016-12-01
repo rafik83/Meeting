@@ -60,11 +60,9 @@ class UpdateInfoHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-        $billingInfoRepository->add($billingInfo)->shouldBeCalled();
+        $billingInfoRepository->add($expectedBilling)->shouldBeCalled();
 
-        $handler    = new UpdateInfoHandler($billingInfoRepository->reveal());
-        $updateInfo = $handler->handle($update);
-
-        $this->assertEquals($expectedBilling, $updateInfo->billingInfo);
+        $handler = new UpdateInfoHandler($billingInfoRepository->reveal());
+        $handler->handle($update);
     }
 }

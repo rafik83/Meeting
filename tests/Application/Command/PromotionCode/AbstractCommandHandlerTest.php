@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCodeTranslation;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
+use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
@@ -24,7 +25,7 @@ class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testNonUniqueCodeException()
     {
-        $this->expectException('Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException');
+        $this->expectException(NonUniqueCodeException::class);
 
         $event = EventFactory::createEvent();
 
@@ -47,6 +48,8 @@ class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $uniqueCodeChecker       = $this->prophesize(UniqueCodeChecker::class);
 
+        $uniqueCodeChecker->hasUniqueCode($promotionCode)->shouldBeCalled()->willReturn(false);
+
         $handler = new CreateHandler(
             $promotionCodeRepository->reveal(),
             $uniqueCodeChecker->reveal()
@@ -58,14 +61,6 @@ class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
     public function testTranslate()
     {
         $event = EventFactory::createEvent();
-
-        // Expected
-        $promotionCode = new PromotionCode(
-            $event,
-            'promotionCodeTitle',
-            'TESTCODE',
-            10
-        );
 
         $translations[] = [
             'label'  => 'labelTest',
