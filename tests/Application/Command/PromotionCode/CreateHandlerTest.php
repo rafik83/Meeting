@@ -1,0 +1,58 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\PromotionCode;
+
+use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $event = EventFactory::createEvent();
+        $create = new Create($event);
+        $create->event        = $event;
+        $create->title        = 'promotionCodeTitle';
+        $create->code         = 'TESTCODE';
+        $create->stock        = 10;
+        $create->translations = [];
+
+        // Expected
+        $promotionCode = new PromotionCode(
+            $event,
+            'promotionCodeTitle',
+            'TESTCODE',
+            10
+        );
+
+        $expectedResult = new CreateResult($promotionCode);
+
+        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $uniqueCodeChecker       = $this->prophesize(UniqueCodeChecker::class);
+
+        $promotionCodeRepository->add($promotionCode)->shouldBeCalled();
+        $uniqueCodeChecker->hasUniqueCode($promotionCode)->shouldBeCalled()->willReturn(true);
+
+        $handler = new CreateHandler(
+            $promotionCodeRepository->reveal(),
+            $uniqueCodeChecker->reveal()
+        );
+
+        $result = $handler->handle($create);
+
+        $this->assertEquals($expectedResult, $result);
+    }
+}
