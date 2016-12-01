@@ -45,7 +45,7 @@ class PaginatedOrderListViewQueryHandler
      */
     public function handle(PaginatedOrderListViewQuery $query)
     {
-        $orders = $this->orderRepository->findByEvent(
+        $orders = $this->orderRepository->findAndPaginateByEvent(
             $query->event,
             $query->filters,
             $query->page,

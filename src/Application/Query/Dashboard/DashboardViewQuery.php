@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet;
+namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
