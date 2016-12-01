@@ -239,7 +239,7 @@ class Balance
      */
     public function getOrdersTotalRemainingToPay(Event $event)
     {
-        $total        = $this->getTransactionsTotal($event);
+        $total        = $this->getOrdersTotal($event);
 
         return array_reduce($this->transactions[$event->getId()], function ($carry, Transaction $transaction) {
             if ($carry < 0) {
