@@ -8,22 +8,22 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Sheet;
+namespace Proximum\Vimeet\Application\View\Dashboard;
 
 class DashboardView
 {
     /**
-     * @var float|int
+     * @var float
      */
     public $totalOrders = 0;
 
     /**
-     * @var float|int
+     * @var float
      */
     public $totalRemainingToPay = 0;
 
     /**
-     * @var float|int
+     * @var float
      */
     public $totalPaid = 0;
 }

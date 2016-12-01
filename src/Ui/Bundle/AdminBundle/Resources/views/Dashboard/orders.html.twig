@@ -5,7 +5,7 @@
                 {{ 'admin.sheet.dashboard.totalOrders'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ view.totalOrders|localizedcurrency(event.currency) }}
+                {{ dashboard.totalOrders|localizedcurrency(event.currency) }}
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
                 {{ 'admin.sheet.dashboard.totalPaid'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ view.totalPaid|localizedcurrency(event.currency) }}
+                {{ dashboard.totalPaid|localizedcurrency(event.currency) }}
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                 {{ 'admin.sheet.dashboard.totalRemainingToPay'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ view.totalRemainingToPay|localizedcurrency(event.currency) }}
+                {{ dashboard.totalRemainingToPay|localizedcurrency(event.currency) }}
             </div>
         </div>
     </div>
