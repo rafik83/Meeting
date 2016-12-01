@@ -89,14 +89,6 @@ class CompletenessCalculator
         $templateDataRegistration = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallback);
         $this->calculateCompletenessOfCompanyInfo($templateDataRegistration, $total, $completed, $locales);
 
-        $this->calculateCompletenessOfParticipantProfile(
-            $templateDataRegistration,
-            $sheet->getParticipants()->toArray(),
-            $total,
-            $completed,
-            $locales
-        );
-
         $this->sheetCompletenessRepository->removeForSheet($sheet);
 
         $notificationCompleteness = [];
@@ -127,6 +119,8 @@ class CompletenessCalculator
     }
 
     /**
+     * @deprecated
+     *
      * @param TemplateData $templateData
      * @param array        $participants
      * @param array        $total
