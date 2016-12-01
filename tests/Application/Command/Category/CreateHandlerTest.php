@@ -40,4 +40,31 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new CreateHandler($categoryRepository->reveal(), $typeRepository->reveal());
         $handler->handle($create);
     }
+
+    public function testHandleException()
+    {
+        $this->expectException('Exception');
+
+        //Context
+        $event = EventFactory::createEvent();
+        $event->setLocales(['fr'], 'fr');
+
+        //Expected
+        $category = new Category($event);
+
+        //Command
+        $create = new Create($event);
+        $create->types = ['test'];
+
+        //Mock
+        $categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+        $categoryRepository->add($category);
+
+        $typeRepository->getTypesByEvent($event)->willReturn([]);
+
+        //Handler
+        $handler = new CreateHandler($categoryRepository->reveal(), $typeRepository->reveal());
+        $handler->handle($create);
+    }
 }
