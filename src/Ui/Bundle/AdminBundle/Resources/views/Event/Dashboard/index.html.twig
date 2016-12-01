@@ -1,5 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.event.dashboard.title'|trans }}
+{% endblock %}
+
 {% block content %}
     <h1>
         {{ 'admin.event.dashboard.title'|trans }}
@@ -9,7 +13,7 @@
         <div class="col-md-9">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="sheetDashboard">
-                    {{ include('AdminBundle:Sheet/Partial:dashboard_orders.html.twig', { view: view, event: event }, false) }}
+                    {{ include('AdminBundle:Dashboard:orders.html.twig', { dashboard: dashboard, event: event }, false) }}
                 </div>
             </div>
         </div>
