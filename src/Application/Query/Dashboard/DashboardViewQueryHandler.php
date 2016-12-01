@@ -8,19 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet;
+namespace Proximum\Vimeet\Application\Query\Dashboard;
 
-use Proximum\Vimeet\Application\View\Sheet\DashboardView;
+use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
 use Proximum\Vimeet\Domain\Order\Balance;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class DashboardViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
     /**
      * @var Balance
      */
@@ -29,14 +23,10 @@ class DashboardViewQueryHandler
     /**
      * DashboardViewQueryHandler constructor.
      *
-     * @param SheetRepositoryInterface $sheetRepository
      * @param Balance                  $balance
      */
-    public function __construct(
-        SheetRepositoryInterface $sheetRepository,
-        Balance $balance
-    ) {
-        $this->sheetRepository = $sheetRepository;
+    public function __construct(Balance $balance) 
+    {
         $this->balance         = $balance;
     }
 
@@ -47,17 +37,13 @@ class DashboardViewQueryHandler
      */
     public function handle(DashboardViewQuery $dashboardViewQuery)
     {
-        $sheets = $this->sheetRepository->getEnabledSheetsByEvent($dashboardViewQuery->event);
-
         $dashboardView = new DashboardView();
+        $this->balance->loadAllTransactions($dashboardViewQuery->event);
+        $this->balance->loadAllOrdersByEvent($dashboardViewQuery->event);
 
-        foreach ($sheets as $sheet) {
-            if ($sheet->hasOrders()) {
-                $dashboardView->totalPaid           += $this->balance->getTotalPaid($sheet);
-                $dashboardView->totalOrders         += $this->balance->getTotal($sheet);
-                $dashboardView->totalRemainingToPay += $this->balance->getRemainingToPay($sheet);
-            }
-        }
+        $dashboardView->totalOrders         = $this->balance->getOrdersTotal($dashboardViewQuery->event);
+        $dashboardView->totalPaid           = $this->balance->getTransactionsTotalPaid($dashboardViewQuery->event);
+        $dashboardView->totalRemainingToPay = $this->balance->getOrdersTotalRemainingToPay($dashboardViewQuery->event);
 
         return $dashboardView;
     }
