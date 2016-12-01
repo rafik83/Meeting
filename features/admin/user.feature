@@ -1,5 +1,4 @@
-@admin
-@user
+@admin @user
 Feature:
   I need to be able to see the users by events and their details information
 
@@ -30,7 +29,7 @@ Feature:
     And I should see "user_asddays_1@proximum.com"
     And I should see "user_asddays_2@proximum.com"
     And I should see "user_asddays_3@proximum.com"
-    And I should see "user_asddays_4@proximum.com"
+    And I should not see "user_asddays_4@proximum.com"
     When I follow "Investisseur"
     Then I should see "user_asddays_3@proximum.com"
     And I should not see "user_asddays_1@proximum.com"
@@ -42,10 +41,24 @@ Feature:
     And I should not see "user_asddays_3@proximum.com"
     And I should not see "user_asddays_4@proximum.com"
     When I follow "Donneur d'ordre"
+    Then I should see "admin.zero-result"
+
+  Scenario: I can filter users by type and participation
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    And I go to this page "/admin/fr/event/1/users"
+    And I should see "user_asddays_1@proximum.com"
+    And I should see "user_asddays_2@proximum.com"
+    And I should see "user_asddays_3@proximum.com"
+    And I should not see "user_asddays_4@proximum.com"
+    When I follow "Donneur d'ordre"
+    And I follow "admin.users.withoutSheet"
     Then I should see "user_asddays_4@proximum.com"
-    And I should not see "user_asddays_1@proximum.com"
-    And I should not see "user_asddays_2@proximum.com"
-    And I should not see "user_asddays_3@proximum.com"
+    But I should not see "user_asddays_1@proximum.com"
+    But I should not see "user_asddays_2@proximum.com"
+    But I should not see "user_asddays_3@proximum.com"
+    When I go to this page "/admin/fr/event/1/users?participation=withoutSheet&type=3&text=user_asddays_2"
+    Then I should see "admin.zero-result"
 
   Scenario: I can filter users by participation with sheet or without sheet
     Given I am logged with "test@test.com" on admin
@@ -67,12 +80,12 @@ Feature:
   Scenario: I can search user by name or email
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
-    When I go to this page "/admin/fr/event/1/users?text=john"
+    When I go to this page "/admin/fr/event/1/users?text=john&participation=withSheet"
     Then I should see "user_asddays_1@proximum.com"
     But I should not see "user_asddays_2@proximum.com"
     And I should not see "user_asddays_3@proximum.com"
     And I should not see "user_asddays_4@proximum.com"
-    When I go to this page "/admin/fr/event/1/users?text=asddays_2"
+    When I go to this page "/admin/fr/event/1/users?text=asddays_2&participation=withSheet"
     Then I should see "user_asddays_2@proximum.com"
     But I should not see "user_asddays_1@proximum.com"
     And I should not see "user_asddays_3@proximum.com"
