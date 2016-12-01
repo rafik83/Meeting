@@ -71,7 +71,7 @@ class SearchType extends AbstractType
             ]);
 
         // show type facette only if there is more than one filter
-        if (count($typeViews) > 1 && $typeSearchFacet = $searchFacetsView->hasType()) {
+        if (count($typeViews) > 1 && ($typeSearchFacet = $searchFacetsView->hasType()) !== false) {
             $builder
                 ->add(
                     self::FILTER_TYPE,
@@ -91,7 +91,7 @@ class SearchType extends AbstractType
                 );
         }
 
-        if ($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) {
+        if (($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) !== false) {
             $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
                 'label'        => $organizationCategoryFacet->label,
                 'choices'      => $organizationCategoryViews,
@@ -118,7 +118,7 @@ class SearchType extends AbstractType
             ]);
         }
 
-        if ($localizationFacet = $searchFacetsView->hasLocalization()) {
+        if (($localizationFacet = $searchFacetsView->hasLocalization()) !== false) {
             $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
                 'label'    => $localizationFacet->label,
                 'required' => false,
@@ -128,7 +128,7 @@ class SearchType extends AbstractType
             ]);
         }
 
-        if ($keywordFacet = $searchFacetsView->hasKeywords()) {
+        if (($keywordFacet = $searchFacetsView->hasKeywords()) !== false) {
             $builder->add(self::FILTER_CONTENT, HiddenType::class, [
                 'label' => $keywordFacet->label,
                 'attr'  => [
@@ -137,7 +137,7 @@ class SearchType extends AbstractType
             ]);
         }
 
-        if ($positionFacet = $searchFacetsView->hasPosition()) {
+        if (($positionFacet = $searchFacetsView->hasPosition()) !== false) {
             $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
                 'label'   => $positionFacet->label,
                 'choices' => $positionViews,

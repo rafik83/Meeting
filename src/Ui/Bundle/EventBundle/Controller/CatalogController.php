@@ -422,8 +422,8 @@ class CatalogController extends Controller
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
-            'event' => $event,
-            'locale' => $locale
+            'event'                     => $event,
+            'locale'                    => $locale,
         ]);
     }
 
