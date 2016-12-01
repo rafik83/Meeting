@@ -34,12 +34,8 @@ class CategoryCreateType extends AbstractType
                 'entry_type' => CategoryTranslationType::class,
                 'label'      => false,
             ])
-            ->add('leftColor', TextType::class, [
-                'required' => false,
-            ])
-            ->add('rightColor', TextType::class, [
-                'required' => false,
-            ])
+            ->add('leftColor', TextType::class)
+            ->add('rightColor', TextType::class)
         ;
     }
 
