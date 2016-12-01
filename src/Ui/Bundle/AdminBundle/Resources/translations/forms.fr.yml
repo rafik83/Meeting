@@ -54,7 +54,7 @@ form.category_create.children.types.label: 'Sélectionner les types de participa
 form.category_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.category_update.children.picto.label: Picto
 form.category_update.children.position.label: Position
-form.category_update.children.rightColor.label: 'Couleur habillage de gauche'
+form.category_update.children.rightColor.label: 'Couleur habillage de droite'
 form.category_update.children.submit.label: Enregistrer
 form.category_update.children.translations.prototype.children.title.label: Titre
 form.category_update.children.types.label: 'Sélectionner les types de participation'
