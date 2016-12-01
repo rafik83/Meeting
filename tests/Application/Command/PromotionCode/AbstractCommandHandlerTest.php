@@ -1,0 +1,104 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\PromotionCode;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Application\Command\PromotionCode\Create;
+use Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PromotionCodeTranslation;
+use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
+
+class AbstractCommandHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testNonUniqueCodeException()
+    {
+        $this->expectException('Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException');
+
+        $event = EventFactory::createEvent();
+
+        // Expected
+        $promotionCode = new PromotionCode(
+            $event,
+            'promotionCodeTitle',
+            'TESTCODE',
+            10
+        );
+
+        $create = new Create($event);
+        $create->event        = $event;
+        $create->title        = 'promotionCodeTitle';
+        $create->code         = 'TESTCODE';
+        $create->stock        = 10;
+        $create->translations = [];
+
+
+        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $uniqueCodeChecker       = $this->prophesize(UniqueCodeChecker::class);
+
+        $handler = new CreateHandler(
+            $promotionCodeRepository->reveal(),
+            $uniqueCodeChecker->reveal()
+        );
+
+        $handler->handle($create);
+    }
+
+    public function testTranslate()
+    {
+        $event = EventFactory::createEvent();
+
+        // Expected
+        $promotionCode = new PromotionCode(
+            $event,
+            'promotionCodeTitle',
+            'TESTCODE',
+            10
+        );
+
+        $translations[] = [
+            'label'  => 'labelTest',
+            'description' => 'descriptionTest'
+        ];
+
+        $create = new Create($event);
+        $create->event        = $event;
+        $create->title        = 'promotionCodeTitle';
+        $create->code         = 'TESTCODE';
+        $create->stock        = 10;
+        $create->translations = $translations;
+
+        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
+
+        $uniqueCodeChecker = $this->getMockBuilder('Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $uniqueCodeChecker
+            ->expects($this->once())
+            ->method('hasUniqueCode')
+            ->withAnyParameters()
+            ->willReturn(true)
+        ;
+
+        $handler = new CreateHandler(
+            $promotionCodeRepository->reveal(),
+            $uniqueCodeChecker
+        );
+
+        $result = $handler->handle($create);
+        $this->assertEquals($translations, $result->promotionCode->getTranslationsData());
+    }
+}
