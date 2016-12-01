@@ -38,7 +38,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView
+     * @return SearchFacetView|false
      */
     public function hasPosition()
     {
@@ -46,7 +46,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView
+     * @return SearchFacetView|false
      */
     public function hasCategory()
     {
@@ -54,7 +54,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView
+     * @return SearchFacetView|false
      */
     public function hasKeywords()
     {
@@ -62,7 +62,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView
+     * @return SearchFacetView|false
      */
     public function hasLocalization()
     {
@@ -70,7 +70,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView
+     * @return SearchFacetView|false
      */
     public function hasOrganizationCategory()
     {
@@ -80,7 +80,7 @@ class SearchFacetsView
     /**
      * @param string $filter
      *
-     * @return SearchFacetView|null
+     * @return SearchFacetView|false
      */
     private function hasFilter($filter)
     {
@@ -90,6 +90,6 @@ class SearchFacetsView
             }
         }
 
-        return null;
+        return false;
     }
 }
