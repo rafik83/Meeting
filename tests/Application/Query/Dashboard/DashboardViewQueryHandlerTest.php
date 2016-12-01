@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler;
+use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -27,22 +28,27 @@ class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event = EventFactory::createEvent();
         $query = new DashboardViewQuery($event);
 
+        //Expected
+        $dashboardViewExpected = new DashboardView();
+
+        $dashboardViewExpected->totalOrders         = 200;
+        $dashboardViewExpected->totalRemainingToPay = 100;
+        $dashboardViewExpected->totalPaid           = 100;
+
         // Mock
         $balance = $this->prophesize(Balance::class);
 
         $balance->loadAllTransactions($event)
             ->shouldBeCalled()
-            ->willReturn(true)
         ;
 
         $balance->loadAllOrdersByEvent($event)
             ->shouldBeCalled()
-            ->willReturn(true)
         ;
 
         $balance->getOrdersTotal($event)
             ->shouldBeCalled()
-            ->willReturn(100)
+            ->willReturn(200)
         ;
 
         $balance->getTransactionsTotalPaid($event)
@@ -57,6 +63,8 @@ class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new DashboardViewQueryHandler($balance->reveal());
 
-        $handler->handle($query);
+        $dashboardView = $handler->handle($query);
+
+        $this->assertEquals($dashboardViewExpected, $dashboardView);
     }
 }
