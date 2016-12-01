@@ -97,7 +97,7 @@ class FilterFullType extends AbstractType
     {
         return [
             'enabled' => true,
-            "orderBy"   => Constant::ORDER_BY_ALPHABETICAL,
+            'orderBy' => Constant::ORDER_BY_CREATED_AT,
         ];
     }
 }

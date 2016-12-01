@@ -24,8 +24,8 @@ class SortChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => [
-                'event.sheet.order.alphabetic' => Constant::ORDER_BY_ALPHABETICAL,
                 'event.sheet.order.createdAt'  => Constant::ORDER_BY_CREATED_AT,
+                'event.sheet.order.alphabetic' => Constant::ORDER_BY_ALPHABETICAL,
             ],
         ]);
     }
