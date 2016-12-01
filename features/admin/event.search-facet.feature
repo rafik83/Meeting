@@ -13,7 +13,7 @@ Feature: See and update search facet
       | Admin.yml                                                                |
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/en/event/1"
-    When I follow "admin.spot.search_facets.link"
+    When I follow "admin.event.search_facets.link"
     Then the response status code should be 200
     And I should see "admin.event.search_facet.title"
     And I should see "français"

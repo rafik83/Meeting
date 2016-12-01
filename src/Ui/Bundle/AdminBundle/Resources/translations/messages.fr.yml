@@ -328,7 +328,7 @@ admin.sheet.validate: Valider
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
-admin.spot.configure_dates: 'Dates clés'
+admin.event.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.delete: Supprimer
 admin.spot.disable: Désactiver
@@ -344,7 +344,7 @@ admin.spot.listSpot.seatCapacity: 'Nombre de places assises'
 admin.spot.listSpot.sheet: 'Fiche(s) assignée(s)'
 admin.spot.listSpot.size: 'Taille (en m²)'
 admin.spot.listSpot.yes: Oui
-admin.spot.search_facets.link: 'Filtres catalogue'
+admin.event.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
