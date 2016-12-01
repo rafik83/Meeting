@@ -36,7 +36,7 @@ final class Charset
                 $outFilename = $outFilename ? : sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
                 try {
                     $output = iconv($inCharset, $outCharset . "//TRANSLIT", $input);
-                } catch (ContextErrorException $exception) {
+                } catch (\ErrorException  $exception) {
                     $output = iconv($inCharset, $outCharset . "//IGNORE", $input);
                 }
 
