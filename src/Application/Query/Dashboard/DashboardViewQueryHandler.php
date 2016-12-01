@@ -25,7 +25,7 @@ class DashboardViewQueryHandler
      *
      * @param Balance                  $balance
      */
-    public function __construct(Balance $balance) 
+    public function __construct(Balance $balance)
     {
         $this->balance         = $balance;
     }
