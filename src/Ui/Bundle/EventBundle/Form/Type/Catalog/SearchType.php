@@ -122,12 +122,18 @@ class SearchType extends AbstractType
             $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
                 'label'    => $localizationFacet->label,
                 'required' => false,
+                'attr'     => [
+                    'data-placeholder' => $localizationFacet->placeholder,
+                ],
             ]);
         }
 
         if ($keywordFacet = $searchFacetsView->hasKeywords()) {
             $builder->add(self::FILTER_CONTENT, HiddenType::class, [
                 'label' => $keywordFacet->label,
+                'attr'  => [
+                    'data-placeholder' => $keywordFacet->placeholder,
+                ],
             ]);
         }
 
@@ -135,6 +141,9 @@ class SearchType extends AbstractType
             $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
                 'label'   => $positionFacet->label,
                 'choices' => $positionViews,
+                'attr'    => [
+                    'data-placeholder' => $positionFacet->placeholder,
+                ],
             ]);
         }
     }

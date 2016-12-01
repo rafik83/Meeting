@@ -35,71 +35,71 @@ Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
         __construct:
             - '@search_facet_type'
             - 'Type'
-            - 'Type placeholder'
+            - ''
             - 'fr'
     search_facet_translation_type_en:
         __construct:
             - '@search_facet_type'
             - 'Type'
-            - 'Type placeholder'
+            - ''
             - 'en'
     search_facet_translation_position_fr:
         __construct:
             - '@search_facet_position'
             - 'Position'
-            - 'Position placeholder'
+            - ''
             - 'fr'
     search_facet_translation_position_en:
         __construct:
             - '@search_facet_position'
             - 'Position'
-            - 'Position placeholder'
+            - ''
             - 'en'
     search_facet_translation_category_fr:
         __construct:
             - '@search_facet_category'
             - 'Catégorie'
-            - 'Catégorie placeholder'
+            - ''
             - 'fr'
     search_facet_translation_category_en:
         __construct:
             - '@search_facet_category'
             - 'Category'
-            - 'Category placeholder'
+            - ''
             - 'en'
     search_facet_translation_organization_category_fr:
         __construct:
             - '@search_facet_organizationCategory'
             - 'Structure'
-            - 'Structure placeholder'
+            - 'PME, Startup ...'
             - 'fr'
     search_facet_translation_organization_category_en:
         __construct:
             - '@search_facet_organizationCategory'
             - 'Structure'
-            - 'Structure placeholder'
+            - 'PME, Startup ...'
             - 'en'
     search_facet_translation_organization_keywords_fr:
         __construct:
             - '@search_facet_keywords'
             - 'Mots clés'
-            - 'Mots clés placeholder'
+            - 'Société, Compétences ...'
             - 'fr'
     search_facet_translation_organization_keywords_en:
         __construct:
             - '@search_facet_keywords'
             - 'Keywords'
-            - 'Keywords placeholder'
+            - 'Company, Skills ...'
             - 'en'
     search_facet_translation_organization_localization_fr:
         __construct:
             - '@search_facet_localization'
             - 'Localisation'
-            - 'Localisation placeholder'
+            - '69, Paris, Lyon, France ...'
             - 'fr'
     search_facet_translation_organization_localization_en:
         __construct:
             - '@search_facet_localization'
             - 'Localization'
-            - 'Localization placeholder'
+            - '69, Paris, Lyon, France ...'
             - 'en'
