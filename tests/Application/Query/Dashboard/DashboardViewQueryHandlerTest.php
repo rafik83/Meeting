@@ -10,15 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
-use Proximum\Vimeet\Application\Query\Sheet\DashboardViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\DashboardViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery;
+use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Balance;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -50,33 +49,33 @@ class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $balance         = $this->prophesize(Balance::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
-        $sheetRepository
-            ->getEnabledSheetsByEvent($event)
+        $balance->loadAllTransactions()
             ->shouldBeCalled()
-            ->willReturn([$sheet])
+            ->willReturn(true)
         ;
 
-        $balance->getTotalPaid($sheet)
+        $balance->loadAllOrdersByEvent()
             ->shouldBeCalled()
-            ->willReturn(100)
+            ->willReturn(true)
         ;
 
-        $balance->getRemainingToPay($sheet)
+        $balance->getOrdersTotal($sheet)
             ->shouldBeCalled()
             ->willReturn(100)
         ;
 
-        $balance->getTotal($sheet)
+        $balance->getTransactionsTotalPaid($sheet)
             ->shouldBeCalled()
             ->willReturn(100)
         ;
 
-        $handler = new DashboardViewQueryHandler(
-            $sheetRepository->reveal(),
-            $balance->reveal()
-        );
+        $balance->getOrdersTotalRemainingToPay($sheet)
+            ->shouldBeCalled()
+            ->willReturn(100)
+        ;
+
+        $handler = new DashboardViewQueryHandler($balance->reveal());
 
         $handler->handle($query);
     }
