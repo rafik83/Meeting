@@ -117,51 +117,7 @@ class CompletenessCalculator
             new SheetCompletenessEvent($sheet, $notificationCompleteness)
         );
     }
-
-    /**
-     * @deprecated
-     *
-     * @param TemplateData $templateData
-     * @param array        $participants
-     * @param array        $total
-     * @param array        $completed
-     * @param array        $locales
-     */
-    private function calculateCompletenessOfParticipantProfile(
-        TemplateData $templateData,
-        array $participants,
-        array &$total,
-        array &$completed,
-        array $locales
-    ) {
-        $countCompleted = 0;
-        $countTotal     = 0;
-
-        foreach ($templateData->getProfileObjects() as $object) {
-            if ($object->isEditable() && true === $object->getRequired()) {
-                $countTotal++;
-
-                /** @var Participant $participant */
-                foreach ($participants as $participant) {
-                    $data = $participant->getData();
-
-                    // necessary when data is equal to false (!empty(false) = false)
-                    if ($object instanceof BooleanObject && $data[$object->getKey()] !== null) {
-                        $countCompleted++;
-                    } elseif (!empty($data[$object->getKey()])) {
-                        $countCompleted++;
-                    }
-                }
-
-            }
-        }
-
-        foreach ($locales as $locale) {
-            $total[$locale]     += $countTotal * count($participants);
-            $completed[$locale] += $countCompleted;
-        }
-    }
-
+    
     /**
      * @param TemplateData $templateData
      * @param array        $total
