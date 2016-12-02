@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
+use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetTypeView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetView;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -49,7 +50,18 @@ class DashboardSheetViewQueryHandler
     {
         $totalEnabledSheets = $this->sheetRepository->countEnabledSheetsByEvent($query->event);
         $totalParticipants  = $this->participantRepository->countByEnabledSheet($query->event);
+        $sheetsType         = $this->sheetRepository->countEnabledSheetsTypeByEvent($query->event, $query->locale);
+        
+        $sheetsTypeView     = [];
 
-        return new DashboardSheetView($totalEnabledSheets, $totalParticipants);
+        foreach ($sheetsType as $sheetType) {
+            $sheetsTypeView[] = new DashboardSheetTypeView($sheetType['id'], $sheetType['total'], $sheetType['title']);
+        }
+
+        return new DashboardSheetView(
+            $totalEnabledSheets,
+            $totalParticipants,
+            $sheetsTypeView
+        );
     }
 }

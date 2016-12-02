@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class DashboardSheetViewQuery
+class DashboardTransactionViewQuery
 {
     /**
      * @var Event
@@ -20,19 +20,12 @@ class DashboardSheetViewQuery
     public $event;
 
     /**
-     * @var string
-     */
-    public $locale;
-
-    /**
-     * DashboardSheetViewQuery constructor.
+     * DashboardTransactionView constructor.
      *
-     * @param Event  $event
-     * @param string $locale
+     * @param Event $event
      */
-    public function __construct(Event $event, $locale)
+    public function __construct(Event $event)
     {
-        $this->event  = $event;
-        $this->locale = $locale;
+        $this->event = $event;
     }
 }

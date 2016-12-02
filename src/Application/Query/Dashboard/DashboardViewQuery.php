@@ -20,12 +20,19 @@ class DashboardViewQuery
     public $event;
 
     /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * DashboardViewQuery constructor.
      *
-     * @param Event $event
+     * @param Event  $event
+     * @param string $locale
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, $locale)
     {
-        $this->event = $event;
+        $this->event  = $event;
+        $this->locale = $locale;
     }
 }

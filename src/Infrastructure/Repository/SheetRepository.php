@@ -342,4 +342,24 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countEnabledSheetsTypeByEvent(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(sheet) as total, type.id, typeTranslation.title')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->where('sheet.event = :event')
+            ->groupBy('type')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

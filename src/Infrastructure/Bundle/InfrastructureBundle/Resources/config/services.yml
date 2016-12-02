@@ -1840,9 +1840,21 @@ services:
     query.sheet.dashboard_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler
         arguments:
-            - '@order.balance'
+            - '@query.sheet.dashboard_transaction_view_query_handler'
+            - '@query.dashboard.dashboard_sheet_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
+
+    query.sheet.dashboard_transaction_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardTransactionViewQueryHandler
+        arguments:
+            - '@order.balance'
+
+    query.dashboard.dashboard_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardSheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
 
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler

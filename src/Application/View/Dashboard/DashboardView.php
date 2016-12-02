@@ -13,31 +13,26 @@ namespace Proximum\Vimeet\Application\View\Dashboard;
 class DashboardView
 {
     /**
-     * @var float
+     * @var DashboardTransactionView
      */
-    public $totalOrders = 0;
+    public $transactionView;
 
     /**
-     * @var float
+     * @var DashboardSheetView
      */
-    public $totalRemainingToPay = 0;
-
-    /**
-     * @var float
-     */
-    public $totalPaid = 0;
+    public $dashboardSheetView;
 
     /**
      * DashboardView constructor.
      *
-     * @param float $totalOrders
-     * @param float $totalRemainingToPay
-     * @param float $totalPaid
+     * @param DashboardTransactionView $transactionView
+     * @param DashboardSheetView       $dashboardSheetView
      */
-    public function __construct($totalOrders, $totalRemainingToPay, $totalPaid)
-    {
-        $this->totalOrders         = $totalOrders;
-        $this->totalRemainingToPay = $totalRemainingToPay;
-        $this->totalPaid           = $totalPaid;
+    public function __construct(
+        DashboardTransactionView $transactionView,
+        DashboardSheetView $dashboardSheetView
+    ) {
+        $this->transactionView    = $transactionView;
+        $this->dashboardSheetView = $dashboardSheetView;
     }
 }

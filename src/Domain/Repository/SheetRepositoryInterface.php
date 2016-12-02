@@ -139,4 +139,12 @@ interface SheetRepositoryInterface
      * @return int
      */
     public function countEnabledSheetsByEvent(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function countEnabledSheetsTypeByEvent(Event $event, $locale);
 }
