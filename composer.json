@@ -9,7 +9,10 @@
             "Proximum\\Vimeet\\": "src/",
             "SymfonyStandard\\": "app/SymfonyStandard/"
         },
-        "files": [ "app/AppKernel.php" ]
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
     },
     "require": {
         "php": ">=5.5.9",
