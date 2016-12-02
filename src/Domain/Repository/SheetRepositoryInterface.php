@@ -132,4 +132,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getEnabledSheetsByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countEnabledSheetsByEvent(Event $event);
 }

@@ -306,16 +306,40 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getEnabledSheetsByEvent(Event $event)
     {
+        $queryBuilder = $this->queryEnabledSheetsByEvent($event);
+
+        $queryBuilder->select('sheet');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countEnabledSheetsByEvent(Event $event)
+    {
+        $queryBuilder = $this->queryEnabledSheetsByEvent($event);
+
+        $queryBuilder->select('COUNT(sheet)');
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function queryEnabledSheetsByEvent(Event $event)
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet')
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event')
             ->andWhere('sheet.enable = true')
-            ->setParameter('event', $event)
-        ;
+            ->setParameter('event', $event);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
     }
 }
