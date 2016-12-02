@@ -1,5 +1,4 @@
-@admin
-@admin-dashboard
+@admin @dashboard
 Feature: See the dashboard of an event
   I need to be able to see the dashboard of an event
 
