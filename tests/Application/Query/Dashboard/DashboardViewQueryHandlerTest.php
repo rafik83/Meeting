@@ -30,36 +30,17 @@ class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         //Expected
         $dashboardViewExpected = new DashboardView(200, 100, 100);
-
         $dashboardViewExpected->totalOrders         = 200;
         $dashboardViewExpected->totalRemainingToPay = 100;
         $dashboardViewExpected->totalPaid           = 100;
 
         // Mock
         $balance = $this->prophesize(Balance::class);
-
-        $balance->loadAllTransactions($event)
-            ->shouldBeCalled()
-        ;
-
-        $balance->loadAllOrders($event)
-            ->shouldBeCalled()
-        ;
-
-        $balance->getOrdersTotal($event)
-            ->shouldBeCalled()
-            ->willReturn(200)
-        ;
-
-        $balance->getTransactionsTotalPaid($event)
-            ->shouldBeCalled()
-            ->willReturn(100)
-        ;
-
-        $balance->getOrdersTotalRemainingToPay($event)
-            ->shouldBeCalled()
-            ->willReturn(100)
-        ;
+        $balance->loadAllTransactions($event)->shouldBeCalled();
+        $balance->loadAllOrders($event)->shouldBeCalled();
+        $balance->getOrdersTotal($event)->shouldBeCalled()->willReturn(200);
+        $balance->getTransactionsTotalPaid($event)->shouldBeCalled()->willReturn(100);
+        $balance->getOrdersTotalRemainingToPay($event)->shouldBeCalled()->willReturn(100);
 
         $handler = new DashboardViewQueryHandler($balance->reveal());
 
