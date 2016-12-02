@@ -37,14 +37,13 @@ class DashboardViewQueryHandler
      */
     public function handle(DashboardViewQuery $dashboardViewQuery)
     {
-        $dashboardView = new DashboardView();
         $this->balance->loadAllTransactions($dashboardViewQuery->event);
         $this->balance->loadAllOrdersByEvent($dashboardViewQuery->event);
 
-        $dashboardView->totalOrders         = $this->balance->getOrdersTotal($dashboardViewQuery->event);
-        $dashboardView->totalPaid           = $this->balance->getTransactionsTotalPaid($dashboardViewQuery->event);
-        $dashboardView->totalRemainingToPay = $this->balance->getOrdersTotalRemainingToPay($dashboardViewQuery->event);
+        $totalOrders         = $this->balance->getOrdersTotal($dashboardViewQuery->event);
+        $totalPaid           = $this->balance->getTransactionsTotalPaid($dashboardViewQuery->event);
+        $totalRemainingToPay = $this->balance->getOrdersTotalRemainingToPay($dashboardViewQuery->event);
 
-        return $dashboardView;
+        return new DashboardView($totalOrders, $totalRemainingToPay, $totalPaid);
     }
 }
