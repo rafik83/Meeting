@@ -23,11 +23,11 @@ class DashboardViewQueryHandler
     /**
      * DashboardViewQueryHandler constructor.
      *
-     * @param Balance                  $balance
+     * @param Balance $balance
      */
     public function __construct(Balance $balance)
     {
-        $this->balance         = $balance;
+        $this->balance = $balance;
     }
 
     /**
