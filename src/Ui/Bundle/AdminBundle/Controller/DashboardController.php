@@ -13,18 +13,16 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response
      */
-    public function indexAction(Request $request, Event $event)
+    public function indexAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
