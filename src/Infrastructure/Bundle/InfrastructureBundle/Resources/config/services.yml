@@ -1836,6 +1836,14 @@ services:
             - '@repository.sheet.completeness_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery }
+
+    query.sheet.dashboard_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler
+        arguments:
+            - '@order.balance'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
+
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:

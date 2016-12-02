@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 
@@ -50,4 +51,11 @@ interface TransactionRepositoryInterface
      * @return Transaction[]
      */
     public function findPaid(Sheet $sheet);
+
+    /**
+     * @param Event $event
+     *
+     * @return Transaction[]
+     */
+    public function findByEvent(Event $event);
 }

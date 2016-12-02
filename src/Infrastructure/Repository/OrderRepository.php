@@ -78,7 +78,7 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event, array $filters, $page, $limit, $locale)
+    public function findAndPaginateByEvent(Event $event, array $filters, $page, $limit)
     {
         $queryBuilder = $this
             ->entityManager
@@ -96,6 +96,24 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(Order::class, '_order', '_order.id')
+            ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
