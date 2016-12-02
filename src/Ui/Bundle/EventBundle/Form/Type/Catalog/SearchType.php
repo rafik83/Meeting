@@ -111,9 +111,10 @@ class SearchType extends AbstractType
                 },
                 'required'     => false,
                 'multiple'     => true,
-                'attr'         => [
+                'attr' => [
                     'class'               => 'form-control select2',
                     'data-disallow-clear' => 'true',
+                    'placeholder'         => $organizationCategoryFacet->placeholder,
                 ],
             ]);
         }
