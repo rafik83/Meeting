@@ -60,25 +60,29 @@ class Balance
     }
 
     /**
+     * @param Event $event
+     */
+    public function loadAllOrders(Event $event)
+    {
+        $orders = $this->orderRepository->findByEvent($event);
+
+        foreach ($orders as $order) {
+            $this->orders[$event->getId()][$order->getSheet()->getId()] = $order;
+        }
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Order[]
      */
     public function getOrders(Sheet $sheet)
     {
-        return $this->orderRepository->findBySheet($sheet);
-    }
-
-    /**
-     * @param Event $event
-     */
-    public function loadAllOrdersByEvent(Event $event)
-    {
-        $orders = $this->orderRepository->findByEvent($event);
-
-        foreach ($orders as $order) {
-            $this->orders[$event->getId()][] = $order;
+        if (!isset($this->orders[$sheet->getEvent()->getId()][$sheet->getId()])) {
+            $this->orders[$sheet->getEvent()->getId()][$sheet->getId()] = $this->orderRepository->findBySheet($sheet);
         }
+
+        return $this->orders[$sheet->getEvent()->getId()][$sheet->getId()];
     }
 
     /**
@@ -102,7 +106,11 @@ class Balance
      */
     public function getTransactions(Sheet $sheet)
     {
-        return $this->transactionRepository->findBySheet($sheet);
+        if (!isset($this->transactions[$sheet->getEvent()->getId()][$sheet->getId()])) {
+            $this->transactions[$sheet->getEvent()->getId()][$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
+        }
+
+        return $this->transactions[$sheet->getEvent()->getId()][$sheet->getId()];
     }
 
     /**
