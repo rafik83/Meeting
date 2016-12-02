@@ -272,6 +272,9 @@ admin.sheet.createdAt: 'Date inscription'
 admin.sheet.dashboard.totalOrders: 'Total des commandes'
 admin.sheet.dashboard.totalPaid: 'Total soldé'
 admin.sheet.dashboard.totalRemainingToPay: 'Total restant'
+admin.sheet.dashboard.totalSheet: 'Total fiches'
+admin.sheet.dashboard.totalSheetType: 'Total fiches par type'
+admin.sheet.dashboard.totalParticipants: 'Total participants'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société

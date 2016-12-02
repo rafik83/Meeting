@@ -102,4 +102,12 @@ interface ParticipantRepositoryInterface
      * @return int
      */
     public function countByEnabledSheet(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function countByTypeWithEnabledSheet(Event $event, $locale);
 }

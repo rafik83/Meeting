@@ -51,17 +51,24 @@ class DashboardSheetViewQueryHandler
         $totalEnabledSheets = $this->sheetRepository->countEnabledSheetsByEvent($query->event);
         $totalParticipants  = $this->participantRepository->countByEnabledSheet($query->event);
         $sheetsType         = $this->sheetRepository->countEnabledSheetsTypeByEvent($query->event, $query->locale);
-        
-        $sheetsTypeView     = [];
+        $participantsType   = $this->participantRepository->countByTypeWithEnabledSheet($query->event, $query->locale);
+
+        $sheetsTypeView       = [];
+        $participantsTypeView = [];
 
         foreach ($sheetsType as $sheetType) {
             $sheetsTypeView[] = new DashboardSheetTypeView($sheetType['id'], $sheetType['total'], $sheetType['title']);
         }
 
+        foreach ($participantsType as $participantType) {
+            $participantsTypeView[] = new DashboardSheetTypeView($participantType['id'], $participantType['total'], $participantType['title']);
+        }
+
         return new DashboardSheetView(
             $totalEnabledSheets,
             $totalParticipants,
-            $sheetsTypeView
+            $sheetsTypeView,
+            $participantsTypeView
         );
     }
 }
