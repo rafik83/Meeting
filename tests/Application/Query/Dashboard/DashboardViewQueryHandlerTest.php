@@ -45,7 +45,7 @@ class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dashboardSheetHandler->handle(
             new DashboardSheetViewQuery($event, $locale)
         )->shouldBeCalled()->willReturn($dashboardSheetView);
-
+        
         $handler = new DashboardViewQueryHandler(
             $dashboardTransactionHandler->reveal(),
             $dashboardSheetHandler->reveal()
