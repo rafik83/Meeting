@@ -49,8 +49,7 @@ class PaginatedOrderListViewQueryHandler
             $query->event,
             $query->filters,
             $query->page,
-            $query->limit,
-            $query->locale
+            $query->limit
         );
 
         $orders->results = array_map(
