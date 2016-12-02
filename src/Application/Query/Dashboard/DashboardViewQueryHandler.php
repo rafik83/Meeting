@@ -38,7 +38,7 @@ class DashboardViewQueryHandler
     public function handle(DashboardViewQuery $dashboardViewQuery)
     {
         $this->balance->loadAllTransactions($dashboardViewQuery->event);
-        $this->balance->loadAllOrdersByEvent($dashboardViewQuery->event);
+        $this->balance->loadAllOrders($dashboardViewQuery->event);
 
         $totalOrders         = $this->balance->getOrdersTotal($dashboardViewQuery->event);
         $totalPaid           = $this->balance->getTransactionsTotalPaid($dashboardViewQuery->event);
