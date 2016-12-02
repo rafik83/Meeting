@@ -10,58 +10,46 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
+use Proximum\Vimeet\Application\Query\Dashboard\DashboardSheetViewQuery;
+use Proximum\Vimeet\Application\Query\Dashboard\DashboardSheetViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Dashboard\DashboardTransactionViewQuery;
+use Proximum\Vimeet\Application\Query\Dashboard\DashboardTransactionViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler;
+use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetView;
+use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
-use Proximum\Vimeet\Domain\Model\Address;
-use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $event = EventFactory::createEvent();
-        $query = new DashboardViewQuery($event);
+        $event  = EventFactory::createEvent();
+        $locale = 'fr';
+        $query  = new DashboardViewQuery($event, $locale);
 
         //Expected
-        $dashboardViewExpected = new DashboardView(200, 100, 100);
-
-        $dashboardViewExpected->totalOrders         = 200;
-        $dashboardViewExpected->totalRemainingToPay = 100;
-        $dashboardViewExpected->totalPaid           = 100;
+        $dashboardTransactionView = new DashboardTransactionView(100, 25, 75);
+        $dashboardSheetView = new DashboardSheetView(100, 150, [], []);
+        $dashboardViewExpected = new DashboardView($dashboardTransactionView, $dashboardSheetView);
 
         // Mock
-        $balance = $this->prophesize(Balance::class);
+        $dashboardTransactionHandler      = $this->prophesize(DashboardTransactionViewQueryHandler::class);
+        $dashboardSheetHandler = $this->prophesize(DashboardSheetViewQueryHandler::class);
 
-        $balance->loadAllTransactions($event)
-            ->shouldBeCalled()
-        ;
+        $dashboardTransactionHandler->handle(
+            new DashboardTransactionViewQuery($event)
+        )->shouldBeCalled()->willReturn($dashboardTransactionView);
 
-        $balance->loadAllOrders($event)
-            ->shouldBeCalled()
-        ;
+        $dashboardSheetHandler->handle(
+            new DashboardSheetViewQuery($event, $locale)
+        )->shouldBeCalled()->willReturn($dashboardSheetView);
 
-        $balance->getOrdersTotal($event)
-            ->shouldBeCalled()
-            ->willReturn(200)
-        ;
-
-        $balance->getTransactionsTotalPaid($event)
-            ->shouldBeCalled()
-            ->willReturn(100)
-        ;
-
-        $balance->getOrdersTotalRemainingToPay($event)
-            ->shouldBeCalled()
-            ->willReturn(100)
-        ;
-
-        $handler = new DashboardViewQueryHandler($balance->reveal());
+        $handler = new DashboardViewQueryHandler(
+            $dashboardTransactionHandler->reveal(),
+            $dashboardSheetHandler->reveal()
+        );
 
         $dashboardView = $handler->handle($query);
 
