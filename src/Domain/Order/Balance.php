@@ -265,5 +265,4 @@ class Balance
             return $carry - $transaction->getAmount();
         }, $total);
     }
-
 }
