@@ -24,4 +24,6 @@ Feature: See the dashboard of an event
     And I should see "admin.sheet.dashboard.totalOrders"
     And I should see "admin.sheet.dashboard.totalPaid"
     And I should see "admin.sheet.dashboard.totalRemainingToPay"
+    And I should see "admin.sheet.dashboard.totalSheet"
+    And I should see "admin.sheet.dashboard.totalParticipants"
 
