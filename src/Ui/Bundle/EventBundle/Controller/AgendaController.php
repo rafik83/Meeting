@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use DateTime;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,38 @@ class AgendaController extends Controller
     {
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event' => $eventDomain->getEvent(),
+            'morning' => [
+                $this->getMeeting('conf', new DateTime('2016-12-02 08:30'), new DateTime('2016-12-02 10:15')),
+                $this->getMeeting('conf', new DateTime('2016-12-02 08:15'), new DateTime('2016-12-02 09:15')),
+                $this->getMeeting('lock', new DateTime('2016-12-02 09:30'), new DateTime('2016-12-02 10:00')),
+                $this->getMeeting('lock', new DateTime('2016-12-02 10:30'), new DateTime('2016-12-02 11:00')),
+            ],
+            'afternoon' => [
+                $this->getMeeting('conf', new DateTime('2016-12-02 14:30'), new DateTime('2016-12-02 15:30')),
+                $this->getMeeting('break', new DateTime('2016-12-02 16:00'), new DateTime('2016-12-02 16:45')),
+                $this->getMeeting('conf', new DateTime('2016-12-02 17:00'), new DateTime('2016-12-02 17:30')),
+            ]
         ]);
+    }
+
+    /**
+     * Mocking a meeting
+     */
+    private function getMeeting($type, DateTime $beginHour, DateTime $endHour)
+    {
+        return [
+            'type' => $type,
+            'beginHour' => $beginHour,
+            'endHour' => $endHour,
+            'duration' => $endHour->diff($beginHour),
+            'title' => 'Collaboration entre ZODIAC Aerospace / Nexter Robotics',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc molestie euismod nisi, vel rhoncus lacus dignissim non. Curabitur ac justo sed nisi varius congue quis a purus. Suspendisse fermentum commodo mollis. Suspendisse potenti. Praesent dignissim orci sit amet turpis vehicula fermentum.',
+            'picture' => '',
+            'user' => [
+                'name' => 'Pierre Richard ANTONIN BRESSON',
+                'job' => 'Response Recherche',
+                'picture' => '',
+            ],
+        ];
     }
 }

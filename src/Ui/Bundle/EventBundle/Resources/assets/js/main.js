@@ -12,7 +12,7 @@ var $                     = require('jquery'),
     ProductSelector       = require('./components/_ProductSelector'),
     QuantitySelector      = require('./components/_QuantitySelector'),
     CatalogSheetCard      = require('./components/_CatalogSheetCard'),
-    AgendaMeet            = require('./components/_AgendaMeet'),
+    Agenda                = require('./components/agenda/_Agenda'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
@@ -73,8 +73,8 @@ function init (target) {
         new CatalogSheetCard(element, document.getElementById('request-modal'));
     });
 
-    [].forEach.call(target.querySelectorAll('.agenda .meet'), function (element) {
-        new AgendaMeet(element);
+    [].forEach.call(target.querySelectorAll('.agenda'), function (element) {
+        new Agenda(element);
     });
 
     $('.dropdown-menu', target).on('click', function (e) {

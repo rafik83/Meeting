@@ -50,8 +50,8 @@
 
   .meets {
     position: absolute;
-    right: 15px;
-    width: calc(100% - 30px - 50px);
+    right: 15px - $agenda-meet-margin;
+    width: calc(100% - 30px - 50px + 4px);
     height: 100%;
     z-index: 1;
   }
@@ -60,6 +60,7 @@
     position: absolute;
     left: 0;
     width: 100%;
+    padding: $agenda-meet-margin;
 
     &.open {
       > header { height: 57px !important; }
@@ -70,6 +71,7 @@
     > header {
       min-height: 57px;
       background-color: #0093df;
+      height: 100%;
 
       a {
         display: flex;
