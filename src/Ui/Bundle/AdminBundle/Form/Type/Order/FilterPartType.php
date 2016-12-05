@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
  * Copyright (C) 2016 Proximum
  *
@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\EnabledChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FilterType extends AbstractType
+class FilterPartType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -27,12 +27,12 @@ class FilterType extends AbstractType
     {
         $builder
             ->add('product', ProductChoiceType::class, [
-                'label'       => 'form.order.filter_by_bought_product',
-                'placeholder' => '',
-                'select2'     => true,
-                'event'       => $options['event'],
-                'locale'      => $options['locale'],
-                'group_by'    => function (Product $product) {
+                'label'        => 'form.order.filter_by_bought_product',
+                'placeholder'  => '',
+                'select2'      => true,
+                'event'        => $options['event'],
+                'locale'       => $options['locale'],
+                'group_by'     => function (Product $product) {
                     return sprintf('form.product_choice.group_by.type.%s', $product->getType());
                 },
                 'choice_value' => function ($choice) {
@@ -41,12 +41,9 @@ class FilterType extends AbstractType
                     }
 
                     return $choice;
-                }
+                },
             ])
-            ->add('enabled', EnabledChoiceType::class, [
-                'label'       => 'form.order_filter.children.sheet.enabled.label',
-            ])
-        ;
+            ->add('enabled', HiddenType::class);
     }
 
     /**
@@ -59,12 +56,10 @@ class FilterType extends AbstractType
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public static function getDefaultFilters()
+    public function getBlockPrefix()
     {
-        return [
-            'enabled' => true,
-        ];
+        return 'order_part_filter';
     }
 }

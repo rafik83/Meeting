@@ -1,7 +1,4 @@
-@admin
-@product
-@package
-@order
+@admin @product @package @order
 Feature: List and filter orders
   As an Admin, I need to be able to list and filter orders
 
@@ -26,12 +23,28 @@ Feature: List and filter orders
   Scenario: Filter event orders
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/order"
-    And I should see "Onera"
+    Then I should see "Onera"
     And I should see "Hello World Company"
     When I select "3" from "product"
     And I press "admin.filter"
     Then I should see "Onera"
     And I should not see "Hello World Company"
 
+  Scenario: Filter disabled sheet orders
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event/1/order?enabled=1"
+    Then I should see "form.order_filter.children.sheet.enabled.label"
+    And I should see "Onera"
+    And I should see "Hello World Company"
+    When I go to this page "/admin/fr/event/1/order?enabled=0"
+    Then I should not see "Onera"
+    And I should not see "Hello World Company"
+
+  Scenario: Filter order by product and enabled sheet
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event/1/order?enabled=1"
+    When I go to this page "/admin/fr/event/1/order?enabled=1&product=2"
+    Then I should not see "Onera"
+    And I should not see "Hello World Company"
 
 
