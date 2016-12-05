@@ -6,8 +6,7 @@ var Planner = require('./_Planner');
  *
  * @param {Element} element
  */
-function Agenda(element)
-{
+function Agenda(element) {
     this.element      = element;
     this.start        = this.getTime(this.element.getAttribute('data-beginhour'));
     this.end          = this.getTime(this.element.getAttribute('data-endhour'));
@@ -37,8 +36,7 @@ Agenda.prototype.slotHeight = 60;
  *
  * @param {Element} element
  */
-Agenda.prototype.addMeet = function(element)
-{
+Agenda.prototype.addMeet = function(element) {
     this.meets.push(new Meet(this, element));
 };
 
@@ -49,8 +47,7 @@ Agenda.prototype.addMeet = function(element)
  *
  * @return {Date}
  */
-Agenda.prototype.getTime = function(value)
-{
+Agenda.prototype.getTime = function(value) {
     var data = value.split(':');
     var hour = data[0] || 0;
     var minutes = data[1] || 0;
@@ -66,8 +63,7 @@ Agenda.prototype.getTime = function(value)
  *
  * @return {Number}
  */
-Agenda.prototype.getDuration = function(value, start)
-{
+Agenda.prototype.getDuration = function(value, start) {
     return this.diff(start || 0, this.getTime(value));
 };
 
@@ -79,8 +75,7 @@ Agenda.prototype.getDuration = function(value, start)
  *
  * @return {Number}
  */
-Agenda.prototype.diff = function(from, to)
-{
+Agenda.prototype.diff = function(from, to) {
     return Math.round(to - from);
 };
 
@@ -91,8 +86,7 @@ Agenda.prototype.diff = function(from, to)
  *
  * @return {Boolean}
  */
-Agenda.prototype.isAfternoon = function(time)
-{
+Agenda.prototype.isAfternoon = function(time) {
     return time >= this.afternoon;
 };
 

@@ -33,9 +33,11 @@ class AgendaController extends Controller
                 $this->getMeeting('lock', new DateTime('2016-12-02 10:30'), new DateTime('2016-12-02 11:00')),
             ],
             'afternoon' => [
-                $this->getMeeting('conf', new DateTime('2016-12-02 14:30'), new DateTime('2016-12-02 15:30')),
-                $this->getMeeting('break', new DateTime('2016-12-02 16:00'), new DateTime('2016-12-02 16:45')),
-                $this->getMeeting('conf', new DateTime('2016-12-02 17:00'), new DateTime('2016-12-02 17:30')),
+                $this->getMeeting('conf', new DateTime('2016-12-02 13:00'), new DateTime('2016-12-02 14:00')),
+                $this->getMeeting('conf', new DateTime('2016-12-02 13:30'), new DateTime('2016-12-02 14:30')),
+                $this->getMeeting('conf', new DateTime('2016-12-02 13:00'), new DateTime('2016-12-02 14:30')),
+                $this->getMeeting('break', new DateTime('2016-12-02 15:00'), new DateTime('2016-12-02 15:45')),
+                $this->getMeeting('conf', new DateTime('2016-12-02 16:00'), new DateTime('2016-12-02 16:30')),
             ]
         ]);
     }

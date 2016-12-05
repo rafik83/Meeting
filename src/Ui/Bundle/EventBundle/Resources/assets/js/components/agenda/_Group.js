@@ -1,42 +1,78 @@
+
 /**
  * Group
  */
-function Group()
-{
+function Group() {
     this.meets = [];
     this.layers = [];
+    this.expandedLayer = null;
 
     this.sortMeet = this.sortMeet.bind(this);
     this.resolveMeetLayer = this.resolveMeetLayer.bind(this);
+    this.displayMeet = this.displayMeet.bind(this);
+    this.onChange = this.onChange.bind(this);
 }
 
 /**
- * Count
+ * Layer collapsed width
  *
- * @return {Number}
+ * @type {Number}
  */
-Group.prototype.countLayers = function() {
-    return this.layers.length;
-};
+Group.prototype.collapsedWidth = 10;
 
 /**
  * Add a meet
  *
  * @param {Meet} meet
  */
-Group.prototype.add = function(meet)
-{
+Group.prototype.add = function(meet) {
     if (this.meets.indexOf(meet) < 0) {
         this.meets.push(meet);
         meet.setGroup(this);
+        meet.element.addEventListener('change', this.onChange);
     }
+};
+
+/**
+ * Get layer width
+ *
+ * @param {Number} index
+ *
+ * @return {Number}
+ */
+Group.prototype.getLayerWidth = function(index) {
+    if (this.expandedLayer === null) {
+        return 100 / this.layers.length;
+    }
+
+    if (this.expandedLayer === index) {
+        return 100 - (this.collapsedWidth * (this.layers.length - 1));
+    }
+
+    return this.collapsedWidth;
+};
+
+/**
+ * Get layer left
+ *
+ * @param {Number} index
+ *
+ * @return {Number}
+ */
+Group.prototype.getLayerLeft = function(index) {
+    var left = 0;
+
+    for (var l = 0; l < index; l++) {
+       left += this.getLayerWidth(l);
+    }
+
+    return left;
 };
 
 /**
  * Resolve
  */
-Group.prototype.resolve = function()
-{
+Group.prototype.resolve = function() {
     this.layers.length = 0;
     this.meets.sort(this.sortMeet);
     this.meets.forEach(this.resolveMeetLayer);
@@ -64,11 +100,11 @@ Group.prototype.sortMeet = function(meetA, meetB) {
  * @param {Meet} meet
  */
 Group.prototype.resolveMeetLayer = function(meet) {
-    var layer = this.getLayer(meet);
+    var index = this.getLayer(meet);
 
-    meet.setLayer(layer);
+    meet.setLayer(index);
 
-    this.layers[layer].push(meet);
+    this.layers[index].push(meet);
 };
 
 /**
@@ -101,6 +137,57 @@ Group.prototype.getLayer = function(meet) {
     this.layers.push([]);
 
     return layers;
+};
+
+/**
+ * On change
+ *
+ * @param {Event} event
+ */
+Group.prototype.onChange = function(event) {
+    var meet = event.target.meet;
+    var open = meet.isOpen();
+
+    this.expandedLayer = meet.isOpen() ? meet.layer : null;
+
+    if (open) {
+        this.closeOther(meet);
+    }
+
+    this.meets.forEach(this.displayMeet);
+};
+
+/**
+ * Close other
+ *
+ * @param {Meet} meet
+ */
+Group.prototype.closeOther = function(meet) {
+    for (var target, i = this.meets.length - 1; i >= 0; i--) {
+        target = this.meets[i];
+
+        if (target !== meet) {
+            target.close();
+        }
+    }
+};
+
+/**
+ * Is any layer expanded?
+ *
+ * @return {Boolean}
+ */
+Group.prototype.isExpanded = function() {
+    return this.expandedLayer !== null;
+};
+
+/**
+ * Display meet
+ *
+ * @param {Meet} meet
+ */
+Group.prototype.displayMeet = function(meet) {
+    meet.display();
 };
 
 module.exports = Group;

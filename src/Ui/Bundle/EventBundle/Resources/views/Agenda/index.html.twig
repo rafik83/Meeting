@@ -74,9 +74,9 @@
     data-duration="{{ meeting.duration.format('%H:%I') }}"
 >
     <header>
-        <a href="">
-            <span><i class="icon icon-Conference"></i> N°{{ index }}</span>
-            <p>{{ meeting.title }}</p>
+        <a class="content" href="#{{ meeting.title }}">
+            <span class="prefix"><i class="icon icon-Conference"></i> N°{{ index }}</span>
+            <p class="title">{{ meeting.title }}</p>
         </a>
     </header>
     <div class="details">

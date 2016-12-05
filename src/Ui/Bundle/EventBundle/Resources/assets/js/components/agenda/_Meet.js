@@ -4,8 +4,7 @@
  * @param {Agenda} agenda
  * @param {Element} element
  */
-function Meet(agenda, element)
-{
+function Meet(agenda, element) {
     this.agenda    = agenda;
     this.element   = element;
     this.header    = this.element.querySelector('header');
@@ -15,13 +14,13 @@ function Meet(agenda, element)
     this.startTime = this.agenda.diff(this.agenda.start, this.start);
     this.afternoon = this.agenda.isAfternoon(this.startTime);
     this.layer     = 0;
+    this.open      = false;
 
     this.toggleOpen = this.toggleOpen.bind(this);
     this.setLayer = this.setLayer.bind(this);
 
     this.header.addEventListener('click', this.toggleOpen);
-
-    this.display();
+    this.element.meet = this;
 };
 
 /**
@@ -32,6 +31,19 @@ Meet.prototype.display = function() {
     this.element.style.left = this.getLeft() + '%';
     this.element.style.width = this.getWidth() + '%';
     this.element.style.height = this.getHeight() + 'px';
+
+    if (this.open) {
+        this.element.classList.add('open');
+        this.element.classList.remove('collapsed');
+    } else {
+        this.element.classList.remove('open');
+
+        if (this.group.isExpanded()) {
+            this.element.classList.add('collapsed');
+        } else {
+            this.element.classList.remove('collapsed');
+        }
+    }
 };
 
 /**
@@ -39,10 +51,26 @@ Meet.prototype.display = function() {
  *
  * @param {Event} event
  */
-Meet.prototype.toggleOpen = function(event)
-{
+Meet.prototype.toggleOpen = function(event) {
     event.preventDefault();
-    this.element.classList.toggle('open');
+    this.open = !this.open;
+    this.element.dispatchEvent(new Event('change'));
+};
+
+/**
+ * Close
+ */
+Meet.prototype.close = function() {
+    this.open = false;
+};
+
+/**
+ * Is open
+ *
+ * @return {Boolean}
+ */
+Meet.prototype.isOpen = function() {
+    return this.open;
 };
 
 /**
@@ -50,8 +78,7 @@ Meet.prototype.toggleOpen = function(event)
  *
  * @return {Number}
  */
-Meet.prototype.getTop = function()
-{
+Meet.prototype.getTop = function() {
     return this.agenda.get(this.startTime) - (this.afternoon ? this.agenda.get(this.agenda.afternoon) : 0);
 };
 
@@ -60,9 +87,12 @@ Meet.prototype.getTop = function()
  *
  * @return {Number}
  */
-Meet.prototype.getLeft = function()
-{
-    return this.layer * this.getWidth();
+Meet.prototype.getLeft = function() {
+    if (!this.group) {
+        return 0;
+    }
+
+    return this.group.getLayerLeft(this.layer);
 };
 
 /**
@@ -70,11 +100,12 @@ Meet.prototype.getLeft = function()
  *
  * @return {Number}
  */
-Meet.prototype.getWidth = function()
-{
-    var groups = this.group ? this.group.countLayers() : 1;
+Meet.prototype.getWidth = function() {
+    if (!this.group) {
+        return 100;
+    }
 
-    return 100 / groups;
+    return this.group.getLayerWidth(this.layer);
 };
 
 /**
@@ -82,8 +113,7 @@ Meet.prototype.getWidth = function()
  *
  * @return {Number}
  */
-Meet.prototype.getHeight = function()
-{
+Meet.prototype.getHeight = function() {
     return this.agenda.get(this.duration);
 };
 
@@ -92,7 +122,7 @@ Meet.prototype.getHeight = function()
  *
  * @param {Group} group
  */
-Meet.prototype.setGroup = function(group) {
+Meet.prototype.setGroup = function(group)  {
     this.group = group;
 }
 

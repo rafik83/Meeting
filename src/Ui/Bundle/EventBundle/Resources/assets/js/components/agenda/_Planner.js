@@ -5,8 +5,7 @@ var Group = require('./_Group');
  *
  * @param {Array} meets List of Meet
  */
-function Planner(meets)
-{
+function Planner(meets) {
     this.meets = meets;
     this.groups = [];
 
@@ -19,8 +18,7 @@ function Planner(meets)
 /**
  * Resolve
  */
-Planner.prototype.resolve = function()
-{
+Planner.prototype.resolve = function() {
     this.groups.length = 0;
     this.meets.forEach(this.clearMeetGroup);
     this.meets.forEach(this.resolveMeetGroup);
