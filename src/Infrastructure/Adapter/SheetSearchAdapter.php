@@ -26,6 +26,7 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -62,19 +63,23 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $limit,
         $locale,
         $getAggregations,
-        array $nomenclatureItems = []
+        $nomenclatureItems = []
     ) {
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, count($nomenclatureItems));
+        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])) ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]) : 0;
+
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
-            $query   = new Query($builder->getQuery());
+            $query = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
 
-        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
+        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy &&
+            isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+        ) {
             $functionScore = new FunctionScore();
             $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
 
-            foreach ($nomenclatureItems as $key) {
+            foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
                 $nested = new \Elastica\Filter\Nested();
                 $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
                 $nested->setPath('nomenclatureItems');
@@ -86,7 +91,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query->addSort(['_score' => 'desc']);
 
         } else {
-            $query   = new Query($builder->getQuery());
+            $query = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
         }
 

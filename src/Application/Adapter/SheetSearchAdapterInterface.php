@@ -32,7 +32,16 @@ interface SheetSearchAdapterInterface
      *
      * @return PaginatedResult
      */
-    public function find(Event $event, array $filters, $orderBy, $page, $limit, $locale, $getAggregations, array $nomenclatureItems = []);
+    public function find(
+        Event $event,
+        array $filters,
+        $orderBy,
+        $page,
+        $limit,
+        $locale,
+        $getAggregations,
+        $nomenclatureItems = []
+    );
 
     /**
      * @param Event  $event
