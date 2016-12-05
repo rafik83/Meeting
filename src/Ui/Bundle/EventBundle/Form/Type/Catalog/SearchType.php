@@ -114,7 +114,7 @@ class SearchType extends AbstractType
                 'attr' => [
                     'class'               => 'form-control select2',
                     'data-disallow-clear' => 'true',
-                    'placeholder'         => $organizationCategoryFacet->placeholder,
+                    'data-placeholder'    => $organizationCategoryFacet->placeholder,
                 ],
             ]);
         }
@@ -142,7 +142,8 @@ class SearchType extends AbstractType
             $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
                 'label'   => $positionFacet->label,
                 'choices' => $positionViews,
-                'attr'    => [
+                'attr' => [
+                    'class'            => 'form-control select2',
                     'data-placeholder' => $positionFacet->placeholder,
                 ],
             ]);
