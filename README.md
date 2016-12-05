@@ -19,38 +19,11 @@ Clone the project in your workspace, and launch setup
 
     $ make setup
 
-You should access the project via http://vimeet.proximum.dev/app_dev.php
-
-### Fixtures
+You should access the project via vimeet.proximum.dev/app_dev.php/admin/fr/event
 
 Load Vimeet fixtures:
 
     ⇒ make init-db
-
-### Migrations
-
-Drop DB and generate migrations diff:
-
-    ⇒ make migrations
-
-### Localization
-
-All translations are stored on https://openl10n.vimeet.events (check 1password for access).
-If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
-
-Synchronize translations files :
-
-    ⇒ make trans-sync
-
-or use one of these commands according to your needs:
-
-    ⇒ openl10n push --locale=all
-    ⇒ openl10n pull --locale=all
-
-Remarks :
-
-- Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
-- Your locale translations will be updated with a `pull` command (new, update or delete).
 
 ### Usage
 
@@ -86,3 +59,45 @@ Install a package:
 Regenerate manually npm-shrinkwrap.json:
 
     ⇒ npm shrinkwrap
+
+### Migrations
+
+Drop DB and generate migrations diff:
+
+    ⇒ make migrations
+
+### Localization
+
+All translations are stored on https://openl10n.vimeet.events (check 1password for access).
+If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
+
+Synchronize translations files :
+
+    ⇒ make trans-sync
+
+or use one of these commands according to your needs:
+
+    ⇒ openl10n push --locale=all
+    ⇒ openl10n pull --locale=all
+
+Remarks :
+
+- Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
+- Your locale translations will be updated with a `pull` command (new, update or delete).
+
+### Deployment
+
+There are two branches :
+
+- preprod
+- prod
+
+After a deploy, you will need to do some commands on prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
+
+- Update Elastic Search index:
+
+    $ bin/console fos:elastica:populate --env=prod
+    
+- Rebuild events assets:
+
+    $ bin/console vimeet:event:build-guideline-asset
