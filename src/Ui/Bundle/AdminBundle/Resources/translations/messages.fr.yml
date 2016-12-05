@@ -239,9 +239,13 @@ admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
 admin.rule.list.column.actions: Actions
+admin.rule.list.column.priority: Priorité
 admin.rule.list.column.see: Voit
 admin.rule.list.column.who: Qui
+admin.rule.list.add.title: 'Ajouter une règle'
 admin.rule.list.title: 'Liste des règles'
+admin.rule.list.content.type: 'Type'
+admin.rule.list.content.category: 'Catégorie'
 admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
 admin.schedule.link: Agenda
 admin.schedule.slot.lock: Bloquer

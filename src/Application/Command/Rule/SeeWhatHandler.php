@@ -32,7 +32,7 @@ class SeeWhatHandler
      */
     public function handle(SeeWhat $seeWhat)
     {
-        $seeWhat->rule->setWhat($seeWhat->seeWhat);
+        $seeWhat->rule->update($seeWhat->seeWhat, $seeWhat->priority);
 
         $this->ruleRepository->update($seeWhat->rule);
     }

@@ -26,6 +26,8 @@ Proximum\Vimeet\Domain\Model\Rule:
     fields:
         what:
             type: json_array
+        priority:
+            type: integer
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

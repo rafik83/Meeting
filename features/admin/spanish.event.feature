@@ -43,6 +43,7 @@ Feature: Update spanish event
     When I fill in the following:
       | who_see_who_seer    | type:1 |
       | who_see_who_seeable | type:2 |
+      | priority            | 2      |
     And I press "form.who_see_who.children.submit.label"
     Then I should be on this page "/admin/en/event/1/who-see-who/see-what/1"
     And I should see "Who.see_who_but_dont_see"
