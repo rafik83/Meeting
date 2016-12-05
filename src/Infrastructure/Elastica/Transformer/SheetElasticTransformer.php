@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Symfony\Component\Intl\Intl;
@@ -105,8 +106,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
         $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
-        $content           = [];
-        $contentByLocale   = [];
+        $content         = [];
+        $contentByLocale = [];
 
         $fallbackLocale    = $sheet->getEvent()->getFallback();
         $fallbackData      = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
@@ -132,32 +133,40 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
         return new Document($sheet->getId(), array_merge(
             [
-                'id'                   => $sheet->getId(),
-                'sheetName'            => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
-                'state'                => $sheet->getState(),
-                'validationState'      => $sheet->getValidationState(),
-                'enabled'              => $sheet->isEnabled(),
-                'completed'            => $sheet->isCompleted(),
-                'type'                 => $sheet->getType()->getId(),
-                'categories'           => $categories,
-                'followUp'             => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
-                'participantNumber'    => count($sheet->getParticipants()),
-                'participants'         => $participants,
-                'event'                => $sheet->getEvent()->getId(),
-                'owner'                => $owner,
-                'createdAt'            => $sheet->getCreatedAt()->format('c'),
-                'inCatalog'            => $sheet->isInCatalog(),
-                'inCatalogAt'          => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
-                'booleanFilter'        => $filtersValue,
-                'hasOrder'             => $sheet->hasNotCancelledOrders(),
-                'hasCart'              => $hasCart,
-                'organizationCategory' => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
-                'content'              => implode(' ', $content),
-                'city'                 => $this->getCity($registrationTemplateData),
-                'zipcode'              => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
-                'country'              => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
-                'nomenclatureItems'    => $nomenclatureItems,
-                'keywords'             => $this->buildKeywords($sheet)
+                'id'                      => $sheet->getId(),
+                'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+                'state'                   => $sheet->getState(),
+                'validationState'         => $sheet->getValidationState(),
+                'enabled'                 => $sheet->isEnabled(),
+                'completed'               => $sheet->isCompleted(),
+                'type'                    => $sheet->getType()->getId(),
+                'categories'              => $categories,
+                'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()
+                    ->getId() : null,
+                'participantNumber'       => count($sheet->getParticipants()),
+                'participants'            => $participants,
+                'event'                   => $sheet->getEvent()->getId(),
+                'owner'                   => $owner,
+                'createdAt'               => $sheet->getCreatedAt()->format('c'),
+                'inCatalog'               => $sheet->isInCatalog(),
+                'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()
+                    ->format('c') : null,
+                'booleanFilter'           => $filtersValue,
+                'hasOrder'                => $sheet->hasNotCancelledOrders(),
+                'hasCart'                 => $hasCart,
+                'organizationCategory'    => in_array($organizationCategory, [
+                    false,
+                    '',
+                ]) ? null : $organizationCategory,
+                'content'                 => implode(' ', $content),
+                'city'                    => $this->getCity($registrationTemplateData),
+                'zipcode'                 => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
+                'country'                 => $this->buildCountry($registrationTemplateData, $sheet->getEvent()
+                    ->getLocales()),
+                'nomenclatureItems'       => $nomenclatureItems,
+                'nomenclatureItemsSupply' => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
+                'nomenclatureItemsNeeds'  => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_NEED),
+                'keywords'                => $this->buildKeywords($sheet),
             ],
             $contentByLocale
         ));
@@ -200,7 +209,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $keywordIndex = 0;
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
-            $templateData  = $this->templateDataFactory->createFromSheet($sheet, $locale);
+            $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
             foreach ($templateData->getObjects() as $templateObject) {
                 if ($templateObject instanceof IndexableObjectInterface) {
@@ -349,14 +358,16 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
     /**
      * @param TemplateData $data
+     * @param string       $objective
      *
      * @return array
      */
-    private function buildNomenclatureItems(TemplateData $data)
+    private function buildNomenclatureItems(TemplateData $data, $objective = Nomenclature::OBJECTIVE_NONE)
     {
-        $nomenclatureItems = [];
+        $nomenclatureItems   = [];
+        $nomenclatureObjects = $data->getNomenclatureObjectsByObjective($objective);
 
-        foreach ($data->getNomenclatureObjects() as $nomenclatureObject) {
+        foreach ($nomenclatureObjects as $nomenclatureObject) {
             $items = $nomenclatureObject->getData();
 
             if (isset($items['items'])) {
