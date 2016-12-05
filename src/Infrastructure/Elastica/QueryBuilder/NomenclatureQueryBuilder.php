@@ -114,7 +114,7 @@ class NomenclatureQueryBuilder
         $nestedSupply->setQuery($supplyBoolQuery);
 
         $nestedNeed = new Nested();
-        $nestedNeed->setPath('nomenclatureItemsNeed');
+        $nestedNeed->setPath('nomenclatureItemsNeeds');
         $needBoolQuery = new BoolQuery();
 
         foreach ($this->nomenclatureItems[Nomenclature::OBJECTIVE_NEED] as $nomenclatureItem) {

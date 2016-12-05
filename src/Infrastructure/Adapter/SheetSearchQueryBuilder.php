@@ -567,6 +567,8 @@ class SheetSearchQueryBuilder
                 in_array(Nomenclature::OBJECTIVE_SUPPLY, $objectives)
             ) {
                 $this->query->addMust($queryBuilder->filterBySupplyOrder());
+
+                return;
             }
 
             if (in_array(Nomenclature::OBJECTIVE_NEED, $objectives)) {
