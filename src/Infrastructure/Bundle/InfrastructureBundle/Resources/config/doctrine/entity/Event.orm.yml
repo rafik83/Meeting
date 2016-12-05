@@ -60,3 +60,8 @@ Proximum\Vimeet\Domain\Model\Event:
             indexBy: locale
             cascade: ["all"]
             orphanRemoval: true
+        days:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event\Day
+            mappedBy: event
+            cascade: ["all"]
+            orphanRemoval: true
