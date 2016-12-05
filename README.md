@@ -87,17 +87,22 @@ Remarks :
 
 ### Deployment
 
-There are two branches :
+There are two branches and two command to deploy for each environment:
 
-- preprod
+- `preprod`
+
+        $ make deploy@preprod
+
 - prod
 
-After a deploy, you will need to do some commands on prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
+        $ make deploy@prod
+
+After a deploy, you will need to do some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
 
 - Update Elastic Search index:
 
-    $ bin/console fos:elastica:populate --env=prod
+        $ bin/console fos:elastica:populate --env=prod
     
 - Rebuild events assets:
 
-    $ bin/console vimeet:event:build-guideline-asset
+        $ bin/console vimeet:event:build-guideline-asset
