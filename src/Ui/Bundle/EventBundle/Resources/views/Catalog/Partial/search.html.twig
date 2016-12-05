@@ -54,35 +54,13 @@
         </div>
     {% endif %}
 
-    {#
-    <form>
+    {% if searchForm.objective is defined %}
         <div class="filter">
-            <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-2"
-                aria-expanded="false" aria-controls="collapse-2">Objectifs</h3>
+            <h3>{{ searchForm.objective.vars.label|trans({}, searchForm.objective.vars.translation_domain) }}</h3>
 
-            <div class="collapse" id="collapse-2">
-                <ul>
-                    <li>
-                        <label class="checkbox-inline">
-                            <span class="filter-label"><input type="checkbox" checked="checked">Répondre à mes besoins</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label class="checkbox-inline">
-                            <span class="filter-label"><input type="checkbox">Rechercher mes offres</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label class="checkbox-inline">
-                            <span class="filter-label"><input type="checkbox">Autres</span>
-                        </label>
-                    </li>
-                </ul>
-            </div>
+            {{ form_widget(searchForm.objective) }}
         </div>
-        <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>
-    </form>
-    #}
+    {% endif %}
 
     {#
     <div class="actions">

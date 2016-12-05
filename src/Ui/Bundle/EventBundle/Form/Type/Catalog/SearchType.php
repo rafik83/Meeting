@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\Form\AbstractType;
@@ -26,6 +27,7 @@ class SearchType extends AbstractType
     const FILTER_POSITION              = 'position';
     const FILTER_TYPE                  = 'type';
     const FILTER_CONTENT               = 'content';
+    const FILTER_OBJECTIVE             = 'objective';
     const ORDER_BY                     = 'orderBy';
 
     /**
@@ -96,7 +98,7 @@ class SearchType extends AbstractType
 
         $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
             'label'    => 'form.search.localization.label',
-            'required' => false
+            'required' => false,
         ]);
 
         $builder
@@ -107,6 +109,16 @@ class SearchType extends AbstractType
         $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
             'label'   => 'form.search.position.label',
             'choices' => $positionViews,
+        ]);
+
+        $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
+            'label'    => 'form.search.objective.label',
+            'expanded' => true,
+            'multiple' => true,
+            'choices'  => [
+                'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
+                'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
+            ],
         ]);
     }
 
