@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Notification\SheetCompletenessEvent;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\SheetCompleteness;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetCompletenessRepositoryInterface;
