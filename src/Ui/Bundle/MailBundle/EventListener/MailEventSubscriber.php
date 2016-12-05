@@ -18,7 +18,9 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
@@ -34,6 +36,8 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidationDraftMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidationValidateMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
@@ -82,6 +86,36 @@ class MailEventSubscriber implements EventSubscriberInterface
             $this->sender->generate(),
             $owner->getEmail(),
             $owner->getLocale()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @param SheetDraftEvent $event
+     */
+    public function onSheetValidationDraft(SheetDraftEvent $event)
+    {
+        $mail = new SheetValidationDraftMail(
+            $event->getSheet(),
+            $this->sender->generate($event->getSheet()->getEvent()),
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @param SheetValidationValidateEvent $event
+     */
+    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
+    {
+        $mail = new SheetValidationValidateMail(
+            $event->getSheet(),
+            $this->sender->generate($event->getSheet()->getEvent()),
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale()
         );
 
         $this->mailer->send($mail);
@@ -333,6 +367,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
+            Events::SHEET_VALIDATION_DRAFT             => 'onSheetValidationDraft',
+            Events::SHEET_VALIDATION_VALIDATE          => 'onSheetValidationValidate',
         ];
     }
 }
