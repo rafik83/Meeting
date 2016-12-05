@@ -93,11 +93,11 @@ There are two branches and two command to deploy for each environment:
 
         $ make deploy@preprod
 
-- prod
+- `prod`
 
         $ make deploy@prod
-
-After a deploy, you will need to do some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
+        
+After a deploy, you will need to do manually some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
 
 - Update Elastic Search index:
 
