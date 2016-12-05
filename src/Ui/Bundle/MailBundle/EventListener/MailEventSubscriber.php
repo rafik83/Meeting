@@ -139,6 +139,36 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param SheetDraftEvent $event
+     */
+    public function onSheetValidationDraft(SheetDraftEvent $event)
+    {
+        $mail = new SheetValidationDraftMail(
+            $event->getSheet(),
+            $this->sender->generate($event->getSheet()->getEvent()),
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @param SheetValidationValidateEvent $event
+     */
+    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
+    {
+        $mail = new SheetValidationValidateMail(
+            $event->getSheet(),
+            $this->sender->generate($event->getSheet()->getEvent()),
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale()
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
      * @param TransactionConfirmEvent $event
      */
     public function onTransactionConfirmed(TransactionConfirmEvent $event)
