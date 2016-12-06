@@ -35,7 +35,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $create  = new Create($event);
         $create->picto = 'picto1';
-        $create->position = 3;
+        $create->rank  = 3;
         $create->translations = [
             'fr' => ['title' => 'truc'],
             'en' => ['title' => 'trac'],
