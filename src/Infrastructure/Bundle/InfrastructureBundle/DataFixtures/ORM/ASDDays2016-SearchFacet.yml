@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\SearchFacet:
     search_facet_position:
         __construct:
             - '@event_asddays_2016'
-            - 'type'
+            - 'position'
             - true
     search_facet_category:
         __construct:
