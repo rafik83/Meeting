@@ -88,6 +88,7 @@
         &:focus { text-decoration: none; }
 
         > span {
+          min-width: 30px;
           margin-right: 20px;
           line-height: 1;
           font-size: 15px;
@@ -103,7 +104,13 @@
         }
       }
 
-      p { margin-bottom: 0; }
+      p {
+        margin-bottom: 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
     }
 
     &.lock {
