@@ -2,10 +2,10 @@
  * Layer
  */
 function Layer() {
-    this.meets = [];
+    this.meets    = [];
     this.expanded = false;
 
-    this.onChange = this.onChange.bind(this);
+    this.onMeetChange = this.onMeetChange.bind(this);
 }
 
 /**
@@ -15,8 +15,7 @@ function Layer() {
  */
 Layer.prototype.add = function(meet) {
     this.meets.push(meet);
-
-    meet.addEventListener('change', this.onChange);
+    meet.on('change', this.onMeetChange);
 };
 
 /**
@@ -28,7 +27,12 @@ Layer.prototype.count = function() {
     return this.meets.length;
 };
 
-Layer.prototype.onChange = function() {
+/**
+ * On meet change
+ *
+ * @param {Event} event
+ */
+Layer.prototype.onMeetChange = function(event) {
     var expanded = this.isExpandedMeet();
 
     if (this.expanded !== expanded) {

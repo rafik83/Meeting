@@ -3,18 +3,18 @@
  * Group
  */
 function Group() {
-    this.meets = [];
-    this.layers = [];
+    this.meets         = [];
+    this.layers        = [];
     this.expandedLayer = null;
 
-    this.sortMeet = this.sortMeet.bind(this);
+    this.sortMeet         = this.sortMeet.bind(this);
     this.resolveMeetLayer = this.resolveMeetLayer.bind(this);
-    this.displayMeet = this.displayMeet.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.displayMeet      = this.displayMeet.bind(this);
+    this.onChange         = this.onChange.bind(this);
 }
 
 /**
- * Layer collapsed width
+ * Layer collapsed width (in percent)
  *
  * @type {Number}
  */
@@ -29,7 +29,7 @@ Group.prototype.add = function(meet) {
     if (this.meets.indexOf(meet) < 0) {
         this.meets.push(meet);
         meet.setGroup(this);
-        meet.element.addEventListener('change', this.onChange);
+        meet.on('change', this.onChange);
     }
 };
 
@@ -79,7 +79,7 @@ Group.prototype.resolve = function() {
 };
 
 /**
- * Sort meet by size
+ * Sort meet by size (and start date)
  *
  * @param {Meet} meetA
  * @param {Meet} meetB
@@ -88,10 +88,14 @@ Group.prototype.resolve = function() {
  */
 Group.prototype.sortMeet = function(meetA, meetB) {
     if (meetA.duration === meetB.duration) {
-        return 0;
+        if (meetA.start === meetB.start) {
+            return 0;
+        }
+
+        return meetA.start < meetB.start ? -1 : 1;
     }
 
-    return meetA.duration > meetB.duration ? 1 : -1;
+    return meetA.duration > meetB.duration ? -1 : 1;
 };
 
 /**
@@ -117,12 +121,12 @@ Group.prototype.resolveMeetLayer = function(meet) {
 Group.prototype.getLayer = function(meet) {
     var layers = this.layers.length;
 
-    for (var overlap, layer, length, m, i = 0; i < layers; i++) {
-        layer = this.layers[i];
-        length = layer.length;
+    for (var overlap, layer, length, i = 0; i < layers; i++) {
+        layer   = this.layers[i];
+        length  = layer.length;
         overlap = false;
 
-        for (m = 0; m < length; m++) {
+        for (var m = 0; m < length; m++) {
             if (layer[m].overlap(meet)) {
                 overlap = true;
                 break;
@@ -145,7 +149,7 @@ Group.prototype.getLayer = function(meet) {
  * @param {Event} event
  */
 Group.prototype.onChange = function(event) {
-    var meet = event.target.meet;
+    var meet = event.target.agendaMeet;
     var open = meet.isOpen();
 
     this.expandedLayer = meet.isOpen() ? meet.layer : null;

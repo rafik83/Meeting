@@ -2,23 +2,24 @@ var Group = require('./_Group');
 
 /**
  * Planner
- *
- * @param {Array} meets List of Meet
  */
-function Planner(meets) {
-    this.meets = meets;
+function Planner() {
+    this.meets  = [];
     this.groups = [];
 
-    this.clearMeetGroup = this.clearMeetGroup.bind(this);
+    this.clearMeetGroup   = this.clearMeetGroup.bind(this);
     this.resolveMeetGroup = this.resolveMeetGroup.bind(this);
-    this.resolveGroup = this.resolveGroup.bind(this);
-    this.displayMeet = this.displayMeet.bind(this);
+    this.resolveGroup     = this.resolveGroup.bind(this);
+    this.displayMeet      = this.displayMeet.bind(this);
 }
 
 /**
- * Resolve
+ * Set meets
+ *
+ * @param {Array} meets A list of Meet
  */
-Planner.prototype.resolve = function() {
+Planner.prototype.setMeets = function(meets) {
+    this.meets = meets;
     this.groups.length = 0;
     this.meets.forEach(this.clearMeetGroup);
     this.meets.forEach(this.resolveMeetGroup);

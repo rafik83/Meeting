@@ -4,7 +4,7 @@
 {% block title 'Agenda' %}
 
 {% block content %}
-<div class="agenda" data-beginHour="08:00" data-endHour="18:00" data-slotDuration="00:30">
+<div class="agenda-container">
     <header class="agenda-head">
         <p>
             <i class="icon icon-Conference"></i>
@@ -13,25 +13,13 @@
         </p>
     </header>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 agenda" data-beginHour="08:00" data-endHour="13:00" data-slotDuration="00:30">
             <div class="meets">
                 {% for index, meeting in morning %}
                     {{ block('meet') }}
                 {% endfor %}
             </div>
-            <div class="layout">
-                <div class="insert"><span>08h00</span></div>
-                <div class="insert"><span>08h30</span></div>
-                <div class="insert"><span>09h00</span></div>
-                <div class="insert"><span>09h30</span></div>
-                <div class="insert"><span>10h00</span></div>
-                <div class="insert"><span>10h30</span></div>
-                <div class="insert"><span>11h00</span></div>
-                <div class="insert"><span>11h30</span></div>
-                <div class="insert"><span>12h00</span></div>
-                <div class="insert"><span>12h30</span></div>
-                <div class="insert"><span>13h00</span></div>
-            </div>
+            <div class="layout"></div>
             <footer class="agenda-foot">
                 <p>
                     <i class="icon icon-Deverouiller_1"></i>
@@ -40,27 +28,20 @@
                 </p>
             </footer>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 agenda" data-beginHour="13:00" data-endHour="18:00" data-slotDuration="00:30">
             <div class="meets">
                 {% for index, meeting in afternoon %}
                     {{ block('meet') }}
                 {% endfor %}
             </div>
-            <div class="layout">
-                <div class="insert"><span>13h00</span></div>
-                <div class="insert"><span>13h30</span></div>
-                <div class="insert"><span>14h00</span></div>
-                <div class="insert"><span>14h30</span></div>
-                <div class="insert"><span>15h00</span></div>
-                <div class="insert"><span>15h30</span></div>
-                <div class="insert"><span>16h00</span></div>
-                <div class="insert"><span>16h30</span></div>
-                <div class="insert"><span>17h00</span></div>
-                <div class="insert"><span>17h30</span></div>
-                <div class="insert"><span>18h00</span></div>
-            </div>
+            <div class="layout"></div>
             <footer class="agenda-foot">
-                A voir également <a href="" class="btn btn-gray"><i class="icon icon-Conference"></i> Conférences</a>
+                <p>
+                    A voir également
+                    <a href="#conferences" class="btn btn-gray">
+                        <i class="icon icon-Conference"></i> Conférences
+                    </a>
+                </p>
             </footer>
         </div>
     </div>
@@ -95,7 +76,7 @@
         <footer>
             <p class="hours">
                 <i class="icon icon-Horaire"></i>
-                <span>{{ meeting.beginHour|date('H\hI') }} - {{ meeting.endHour|date('H\hI') }}</span>
+                <span>{{ meeting.beginHour|date('H:i') }} - {{ meeting.endHour|date('H:i') }}</span>
             </p>
             <a href="">
                 <i class="icon icon-Document_1"></i>

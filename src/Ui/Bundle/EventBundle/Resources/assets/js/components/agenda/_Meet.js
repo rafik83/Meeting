@@ -1,3 +1,5 @@
+var EventEmitter = require('./_EventEmitter');
+
 /**
  * Meet
  *
@@ -5,32 +7,44 @@
  * @param {Element} element
  */
 function Meet(agenda, element) {
-    this.agenda    = agenda;
-    this.element   = element;
-    this.header    = this.element.querySelector('header');
-    this.duration  = this.agenda.getDuration(this.element.getAttribute('data-duration'));
-    this.start     = this.agenda.getTime(this.element.getAttribute('data-beginhour'));
-    this.end       = this.start + this.duration;
-    this.startTime = this.agenda.diff(this.agenda.start, this.start);
-    this.afternoon = this.agenda.isAfternoon(this.startTime);
-    this.layer     = 0;
-    this.open      = false;
+    EventEmitter.call(this, element);
+
+    this.agenda   = agenda;
+    this.header   = this.element.querySelector('header');
+    this.details  = this.element.querySelector('.details');
+    this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
+    this.start    = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
+    this.end      = this.start + this.duration;
+    this.slots    = [];
+    this.scale    = 1;
+    this.layer    = 0;
+    this.open     = false;
 
     this.toggleOpen = this.toggleOpen.bind(this);
-    this.setLayer = this.setLayer.bind(this);
+    this.setLayer   = this.setLayer.bind(this);
 
     this.header.addEventListener('click', this.toggleOpen);
-    this.element.meet = this;
+    this.element.agendaMeet = this;
 };
+
+Meet.prototype = Object.create(EventEmitter.prototype);
+Meet.prototype.constructor = Meet;
+
+/**
+ * Margin: Top + Bottom padding of the ".meet" element.
+ *
+ * @type {Number}
+ */
+Meet.prototype.margin = 3;
 
 /**
  * Display
  */
 Meet.prototype.display = function() {
-    this.element.style.top = this.getTop() + 'px';
-    this.element.style.left = this.getLeft() + '%';
+    this.element.style.top   = this.getTop() + 'px';
+    this.element.style.left  = this.getLeft() + '%';
     this.element.style.width = this.getWidth() + '%';
-    this.element.style.height = this.getHeight() + 'px';
+    this.header.style.height = (this.getHeight() - this.margin) + 'px';
 
     if (this.open) {
         this.element.classList.add('open');
@@ -44,6 +58,13 @@ Meet.prototype.display = function() {
             this.element.classList.remove('collapsed');
         }
     }
+
+    var scale = this.resolveScale();
+
+    if (scale !== this.scale) {
+        this.scale = scale;
+        this.emit('scale');
+    }
 };
 
 /**
@@ -54,7 +75,7 @@ Meet.prototype.display = function() {
 Meet.prototype.toggleOpen = function(event) {
     event.preventDefault();
     this.open = !this.open;
-    this.element.dispatchEvent(new Event('change'));
+    this.emit('change');
 };
 
 /**
@@ -62,6 +83,19 @@ Meet.prototype.toggleOpen = function(event) {
  */
 Meet.prototype.close = function() {
     this.open = false;
+};
+
+/**
+ * Resovle scale
+ *
+ * @return {Number}
+ */
+Meet.prototype.resolveScale = function() {
+    if (!this.open) {
+        return 1;
+    }
+
+    return this.element.offsetHeight / (this.duration * this.agenda.scale);
 };
 
 /**
@@ -79,7 +113,7 @@ Meet.prototype.isOpen = function() {
  * @return {Number}
  */
 Meet.prototype.getTop = function() {
-    return this.agenda.get(this.startTime) - (this.afternoon ? this.agenda.get(this.agenda.afternoon) : 0);
+    return this.agenda.getY(this.start);
 };
 
 /**
@@ -114,7 +148,7 @@ Meet.prototype.getWidth = function() {
  * @return {Number}
  */
 Meet.prototype.getHeight = function() {
-    return this.agenda.get(this.duration);
+    return this.agenda.getY(this.end) - this.agenda.getY(this.start);
 };
 
 /**
@@ -122,9 +156,9 @@ Meet.prototype.getHeight = function() {
  *
  * @param {Group} group
  */
-Meet.prototype.setGroup = function(group)  {
+Meet.prototype.setGroup = function(group) {
     this.group = group;
-}
+};
 
 /**
  * Set layer
@@ -133,8 +167,7 @@ Meet.prototype.setGroup = function(group)  {
  */
 Meet.prototype.setLayer = function(layer) {
     this.layer = layer;
-    this.element.style.left = this.getLeft() + 'px';
-}
+};
 
 /**
  * Meet overlap?

@@ -1,4 +1,4 @@
-.agenda {
+.agenda-container {
   margin: 50px 0;
   z-index: 0;
 
@@ -64,14 +64,14 @@
 
     &.open {
       > header {
-        height: 57px !important;
+        height: 56px !important;
       }
 
       .details { display: block; }
     }
 
     > header {
-      min-height: 57px;
+      min-height: 56px;
       background-color: #0093df;
       height: 100%;
       overflow: hidden;
@@ -142,6 +142,8 @@
         text-align: center;
 
         .content {
+          padding: 0;
+
           .prefix {
             margin: 0 auto;
           }

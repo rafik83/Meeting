@@ -1,5 +1,7 @@
 var Meet = require('./_Meet');
+var Slot = require('./_Slot');
 var Planner = require('./_Planner');
+var Scaler = require('./_Scaler');
 
 /**
  * Agenda
@@ -8,28 +10,44 @@ var Planner = require('./_Planner');
  */
 function Agenda(element) {
     this.element      = element;
-    this.start        = this.getTime(this.element.getAttribute('data-beginhour'));
-    this.end          = this.getTime(this.element.getAttribute('data-endhour'));
-    this.duration     = this.diff(this.start, this.end);
-    this.afternoon    = this.duration / 2;
+    this.start        = this.parseTime(this.element.getAttribute('data-beginhour'));
+    this.end          = this.parseTime(this.element.getAttribute('data-endhour'));
+    this.duration     = this.end - this.start;
     this.slotDuration = this.getDuration(this.element.getAttribute('data-slotduration'));
-    this.scale        = this.slotHeight / this.slotDuration;
+    this.layout       = this.element.querySelector('.layout');
+    this.planner      = new Planner();
+    this.scaler       = new Scaler();
     this.meets        = [];
-    this.planner      = new Planner(this.meets);
+    this.slots        = [];
+    this.scale        = 0;
+    this.slotHeight   = 0;
 
-    this.addMeet = this.addMeet.bind(this);
+    this.addMeet     = this.addMeet.bind(this);
+    this.onSlotScale = this.onSlotScale.bind(this);
+
+    for (var time = this.start; time <= this.end; time += this.slotDuration) {
+        this.addSlot(time);
+    }
+
+    this.setSlotHeight(this.slots[0].element.offsetHeight);
 
     this.element.querySelectorAll('.meet').forEach(this.addMeet);
 
-    this.planner.resolve();
+    this.planner.setMeets(this.meets);
+    this.scaler.setMeets(this.meets);
 };
 
 /**
- * Slot height
+ * Add slot
  *
- * @type {Number}
+ * @param {Number} time Time in minutes
  */
-Agenda.prototype.slotHeight = 60;
+Agenda.prototype.addSlot = function(time) {
+    var slot = new Slot(this, time, this.slotDuration);
+    this.slots.push(slot);
+    this.layout.appendChild(slot.element);
+    slot.on('scale', this.onSlotScale);
+};
 
 /**
  * Add a meet
@@ -37,7 +55,28 @@ Agenda.prototype.slotHeight = 60;
  * @param {Element} element
  */
 Agenda.prototype.addMeet = function(element) {
-    this.meets.push(new Meet(this, element));
+    var meet   = new Meet(this, element);
+    var length = this.slots.length;
+
+    this.meets.push(meet);
+
+    for (var slot, i = 0; i < length; i++) {
+        slot = this.slots[i];
+
+        if (slot.match(meet.start, meet.end)) {
+            slot.addMeet(meet);
+        }
+    }
+};
+
+/**
+ * Set slot height
+ *
+ * @param {Number} slotHeight
+ */
+Agenda.prototype.setSlotHeight = function(slotHeight) {
+    this.slotHeight = slotHeight;
+    this.scale      = this.slotHeight / this.slotDuration;
 };
 
 /**
@@ -45,9 +84,9 @@ Agenda.prototype.addMeet = function(element) {
  *
  * @param {String} value
  *
- * @return {Date}
+ * @return {Number} (in minutes)
  */
-Agenda.prototype.getTime = function(value) {
+Agenda.prototype.parseTime = function(value) {
     var data = value.split(':');
     var hour = data[0] || 0;
     var minutes = data[1] || 0;
@@ -56,38 +95,25 @@ Agenda.prototype.getTime = function(value) {
 };
 
 /**
+ * Get time relative to the start of the agenda
+ *
+ * @param {Number} value
+ *
+ * @return {Number} (in minutes)
+ */
+Agenda.prototype.getRelativeTime = function(value) {
+    return value - this.start;
+};
+
+/**
  * Get duration from DomElement
  *
  * @param {String} value
- * @param {Date} start
  *
  * @return {Number}
  */
-Agenda.prototype.getDuration = function(value, start) {
-    return this.diff(start || 0, this.getTime(value));
-};
-
-/**
- * Get time difference in minutes
- *
- * @param {Date|Number} from
- * @param {Date|Number} to
- *
- * @return {Number}
- */
-Agenda.prototype.diff = function(from, to) {
-    return Math.round(to - from);
-};
-
-/**
- * Is the given Meet in the afternoon?
- *
- * @param {Number} time
- *
- * @return {Boolean}
- */
-Agenda.prototype.isAfternoon = function(time) {
-    return time >= this.afternoon;
+Agenda.prototype.getDuration = function(value) {
+    return this.parseTime(value);
 };
 
 /**
@@ -97,8 +123,30 @@ Agenda.prototype.isAfternoon = function(time) {
  *
  * @return {Number}
  */
-Agenda.prototype.get = function(time) {
-    return time * this.scale;
-}
+Agenda.prototype.getY = function(time) {
+    var length = this.slots.length;
+    var y = (time % this.slotDuration) * this.scale;
+    var i = 0;
+
+    while (i < length && time >= this.slots[i].end) {
+        y += this.slots[i++].getHeight();
+    }
+
+    return y;
+};
+
+/**
+ * On slot scale
+ *
+ * @param {Event} event
+ */
+Agenda.prototype.onSlotScale = function(event) {
+    var slot   = event.target.agendaSlot;
+    var length = this.slots.length;
+
+    for (var i = this.slots.indexOf(slot); i < length; i++) {
+        this.slots[i].displayMeets();
+    }
+};
 
 module.exports = Agenda;
