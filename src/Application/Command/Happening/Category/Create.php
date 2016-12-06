@@ -18,7 +18,7 @@ class Create
     /**
      * @var int
      */
-    public $position;
+    public $rank;
 
     /**
      * @var Event
