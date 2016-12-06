@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
-use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
 
 class DashboardViewQueryHandler
