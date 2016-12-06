@@ -217,6 +217,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Event\DayRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.unavailability.category_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\CategoryRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1247,6 +1251,19 @@ services:
             - '@repository.event.day_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Day\Update }
+    command.unavailability.category.create_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Category\CreateHandler
+        arguments:
+            - '@repository.unavailability.category_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Category\Create }
+
+    command.unavailability.category.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Category\UpdateHandler
+        arguments:
+            - '@repository.unavailability.category_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Category\Update }
 
     #
     # Security
