@@ -20,7 +20,7 @@ class CategoryListView
     /**
      * @var int
      */
-    public $position;
+    public $rank;
 
     /**
      * @var string
@@ -38,13 +38,13 @@ class CategoryListView
      * @param int    $id
      * @param string $title
      * @param string $picto
-     * @param int    $position
+     * @param int    $rank
      */
-    public function __construct($id, $title, $picto, $position)
+    public function __construct($id, $title, $picto, $rank)
     {
-        $this->id       = $id;
-        $this->title    = $title;
-        $this->picto    = $picto;
-        $this->position = $position;
+        $this->id    = $id;
+        $this->title = $title;
+        $this->picto = $picto;
+        $this->rank  = $rank;
     }
 }
