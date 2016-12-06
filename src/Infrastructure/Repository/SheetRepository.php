@@ -300,22 +300,4 @@ class SheetRepository implements SheetRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEnabledSheetsByEvent(Event $event)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet')
-            ->where('sheet.event = :event')
-            ->andWhere('sheet.enable = true')
-            ->setParameter('event', $event)
-        ;
-
-        return $queryBuilder->getQuery()->getResult();
-    }
 }
