@@ -6,7 +6,7 @@ Proximum\Vimeet\Application\Command\Happening\Category\Update:
                     fields:
                         title:
                             - NotBlank: ~
-        position:
+        rank:
             - NotNull: ~
         leftColor:
             - NotBlank: ~
