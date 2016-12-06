@@ -10,8 +10,13 @@
 
 namespace Proximum\Vimeet\Domain\View\Package\Product;
 
+use Proximum\Vimeet\Domain\Model\Product;
+
 class IncludedParticipantView
 {
+    /** @var null|Product */
+    public $product;
+
     /** @var int */
     public $totalQuantity;
 
@@ -19,11 +24,13 @@ class IncludedParticipantView
     public $remainingQuantity;
 
     /**
-     * @param int $totalQuantity
-     * @param int $remainingQuantity
+     * @param null|Product $product
+     * @param int          $totalQuantity
+     * @param int          $remainingQuantity
      */
-    public function __construct($totalQuantity, $remainingQuantity)
+    public function __construct($product, $totalQuantity, $remainingQuantity)
     {
+        $this->product           = $product;
         $this->totalQuantity     = $totalQuantity;
         $this->remainingQuantity = $remainingQuantity;
     }

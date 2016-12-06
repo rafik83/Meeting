@@ -1716,6 +1716,12 @@ services:
             - '@package.product.included_participant_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
+    query.package.participant_product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQueryHandler
+        arguments:
+            - '@package.product.included_participant_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery }
     query.package.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQueryHandler
         arguments:

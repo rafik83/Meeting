@@ -42,10 +42,38 @@ class IncludedParticipantGuesser
      */
     public function getIncludedParticipantView(Sheet $sheet)
     {
-        $totalQuantity     = $this->getParticipantIncludedQuantity($sheet);
-        $remainingQuantity = min(0, $totalQuantity - $sheet->countParticipant());
+        $product             = null;
+        $totalQuantity       = 0;
+        $participantIncluded = $this->getParticipantIncluded($sheet);
 
-        return new IncludedParticipantView($totalQuantity, $remainingQuantity);
+        if (null !== $participantIncluded) {
+            $totalQuantity = $participantIncluded->getQuantity();
+            $product       = $participantIncluded->getIncluded();
+        }
+
+        $remainingQuantity = max(0, $totalQuantity - $sheet->countParticipant());
+
+        return new IncludedParticipantView($product, $totalQuantity, $remainingQuantity);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return ProductIncluded
+     */
+    private function getParticipantIncluded(Sheet $sheet)
+    {
+        $selectedPlan = $this->getSelectedPlan($sheet);
+
+        if (null !== $selectedPlan) {
+            $participantProductIncluded = $selectedPlan->getIncludedParticipantProduct();
+
+            if ($participantProductIncluded instanceof ProductIncluded) {
+                return $participantProductIncluded;
+            }
+        }
+
+        return null;
     }
 
     /**

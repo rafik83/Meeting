@@ -57,7 +57,7 @@ class ParticipantsViewQueryHandler
                     $participantProduct,
                     $participant,
                     $locale,
-                    count($participantView) <= $numberIncluded
+                    count($participantView) < $numberIncluded
                 )
             );
         }
