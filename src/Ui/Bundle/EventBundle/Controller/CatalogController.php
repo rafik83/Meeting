@@ -80,7 +80,7 @@ class CatalogController extends Controller
 
         $filters = $this->getDefaultFilters($typeViews);
 
-        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews);
+        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews, $event, $locale);
 
         if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
             $filters = $searchForm->getData();
@@ -222,8 +222,7 @@ class CatalogController extends Controller
 
         $rules = $this
             ->get('repository.rule_repository')
-            ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType())
-        ;
+            ->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
 
         if (empty($rules)) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
@@ -405,6 +404,8 @@ class CatalogController extends Controller
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param Event                      $event
+     * @param string                     $locale
      *
      * @return FormInterface
      */
@@ -412,13 +413,17 @@ class CatalogController extends Controller
         array $filters,
         array $typeViews,
         array $organizationCategoryViews,
-        array $positionViews
+        array $positionViews,
+        Event $event,
+        $locale
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index'),
             'typeViews'                 => $typeViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
+            'event'                     => $event,
+            'locale'                    => $locale,
         ]);
     }
 
@@ -496,7 +501,9 @@ class CatalogController extends Controller
             $filters,
             $filteredTypeViews,
             $filteredOrganizationCategoryViews,
-            $filteredPositionViews
+            $filteredPositionViews,
+            $event,
+            $locale
         );
     }
 }

@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
@@ -31,6 +34,21 @@ class SearchType extends AbstractType
     const ORDER_BY                     = 'orderBy';
 
     /**
+     * @var SearchFacetViewQueryHandler
+     */
+    private $searchFacetViewQueryHandler;
+
+    /**
+     * SearchType constructor.
+     *
+     * @param SearchFacetViewQueryHandler $searchFacetViewQueryHandler
+     */
+    public function __construct(SearchFacetViewQueryHandler $searchFacetViewQueryHandler)
+    {
+        $this->searchFacetViewQueryHandler = $searchFacetViewQueryHandler;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -38,6 +56,10 @@ class SearchType extends AbstractType
         $typeViews                 = $options['typeViews'];
         $organizationCategoryViews = $options['organizationCategoryViews'];
         $positionViews             = $options['positionViews'];
+
+        $searchFacetsView = $this->searchFacetViewQueryHandler->handle(
+            new SearchFacetViewQuery($options['event'], $options['locale'])
+        );
 
         $builder
             ->add(self::ORDER_BY, ChoiceType::class, [
@@ -51,13 +73,13 @@ class SearchType extends AbstractType
             ]);
 
         // show type facette only if there is more than one filter
-        if (count($typeViews) > 1) {
+        if (count($typeViews) > 1 && ($typeSearchFacet = $searchFacetsView->hasType()) !== false) {
             $builder
                 ->add(
                     self::FILTER_TYPE,
                     ChoiceType::class,
                     [
-                        'label'        => 'form.search.type.label',
+                        'label'        => $typeSearchFacet->label,
                         'expanded'     => true,
                         'multiple'     => true,
                         'choices'      => $typeViews,
@@ -71,45 +93,31 @@ class SearchType extends AbstractType
                 );
         }
 
-        $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
-            'label'        => 'form.search.organizationCategory.label',
-            'choices'      => $organizationCategoryViews,
-            'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
-                if ($organizationCategoryView !== null) {
-                    return $organizationCategoryView->key;
-                }
-
-                return null;
-            },
-            'choice_label' => function (OrganizationCategoryView $organizationCategoryView = null) {
-                if ($organizationCategoryView !== null) {
-                    return $organizationCategoryView->title;
-                }
-
-                return null;
-            },
-            'required'     => false,
-            'multiple'     => true,
-            'attr'         => [
-                'class'               => 'form-control select2',
-                'data-disallow-clear' => 'true',
-            ],
-        ]);
-
-        $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
-            'label'    => 'form.search.localization.label',
-            'required' => false,
-        ]);
-
-        $builder
-            ->add(self::FILTER_CONTENT, HiddenType::class, [
-                'label' => 'form.search.content.label',
+        if (($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) !== false) {
+            $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
+                'label'        => $organizationCategoryFacet->label,
+                'choices'      => $organizationCategoryViews,
+                'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
+                    if ($organizationCategoryView !== null) {
+                        return $organizationCategoryView->key;
+                    }
+                    return null;
+                },
+                'choice_label' => function (OrganizationCategoryView $organizationCategoryView = null) {
+                    if ($organizationCategoryView !== null) {
+                        return $organizationCategoryView->title;
+                    }
+                    return null;
+                },
+                'required'     => false,
+                'multiple'     => true,
+                'attr' => [
+                    'class'               => 'form-control select2',
+                    'data-disallow-clear' => 'true',
+                    'data-placeholder'    => $organizationCategoryFacet->placeholder,
+                ],
             ]);
-
-        $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
-            'label'   => 'form.search.position.label',
-            'choices' => $positionViews,
-        ]);
+        }
 
         $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
             'label'    => 'form.search.objective.label',
@@ -120,6 +128,36 @@ class SearchType extends AbstractType
                 'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
             ],
         ]);
+
+        if (($localizationFacet = $searchFacetsView->hasLocalization()) !== false) {
+            $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
+                'label'    => $localizationFacet->label,
+                'required' => false,
+                'attr'     => [
+                    'data-placeholder' => $localizationFacet->placeholder,
+                ],
+            ]);
+        }
+
+        if (($keywordFacet = $searchFacetsView->hasKeywords()) !== false) {
+            $builder->add(self::FILTER_CONTENT, HiddenType::class, [
+                'label' => $keywordFacet->label,
+                'attr'  => [
+                    'data-placeholder' => $keywordFacet->placeholder,
+                ],
+            ]);
+        }
+
+        if (($positionFacet = $searchFacetsView->hasPosition()) !== false) {
+            $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
+                'label'   => $positionFacet->label,
+                'choices' => $positionViews,
+                'attr' => [
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => $positionFacet->placeholder,
+                ],
+            ]);
+        }
     }
 
     /**
@@ -127,7 +165,16 @@ class SearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['typeViews', 'organizationCategoryViews', 'positionViews']);
+        $resolver->setRequired([
+            'typeViews',
+            'organizationCategoryViews',
+            'positionViews',
+            'event',
+            'locale',
+        ]);
+
+        $resolver->setAllowedTypes('event', Event::class);
+
         $resolver->setDefaults([
             'required'        => false,
             'method'          => 'GET',

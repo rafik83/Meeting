@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 
 /**
  * "Evènement".
@@ -138,6 +139,11 @@ class Event implements EventInterface
     private $emailTeam;
 
     /**
+     * @var ArrayCollection
+     */
+    private $days;
+
+    /**
      * @param string      $title
      * @param string      $fallback
      * @param array       $locales
@@ -166,6 +172,7 @@ class Event implements EventInterface
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
         $this->paymentAddress = new Address('', '', '', '');
+        $this->days           = new ArrayCollection();
         $this->title          = $title;
         $this->fallback       = $fallback;
         $this->locales        = $locales;
@@ -548,5 +555,19 @@ class Event implements EventInterface
     public function isSvgLogo()
     {
         return $this->logoExtension === 'svg';
+    }
+
+    /**
+     * @return Event\Day[]
+     */
+    public function getDays()
+    {
+        $days = $this->days->toArray();
+
+        usort($days, function (Day $day1, Day $day2) {
+            return $day1->getDay() > $day2->getDay();
+        });
+
+        return $days;
     }
 }

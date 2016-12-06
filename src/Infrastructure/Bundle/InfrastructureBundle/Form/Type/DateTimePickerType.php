@@ -40,6 +40,8 @@ class DateTimePickerType extends AbstractType
         $view->vars['attr']['data-datatimepicker'] = $this->fixLocale($options['locale']);
         $view->vars['attr']['autocomplete']        = 'off';
         $view->vars['group_attr']['style']         = 'position: relative;';
+        $view->vars['attr']['data-allow-hours']    = $options['display_hour'];
+        $view->vars['attr']['data-allow-dates']    = $options['display_date'];
     }
 
     /**
@@ -50,6 +52,8 @@ class DateTimePickerType extends AbstractType
         $resolver->setDefaults([
             'locale'         => 'fr',
             'format'         => 'd/m/Y H:i',
+            'display_hour'   => true,
+            'display_date'   => true,
             'model_timezone' => date_default_timezone_get(),
             'view_timezone'  => date_default_timezone_get(),
         ]);

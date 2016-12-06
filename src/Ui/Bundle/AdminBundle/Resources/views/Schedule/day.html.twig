@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    {{ 'admin.schedule_day.update.title'|trans }}
+{% endblock %}
+
+{% block form_title 'admin.schedule_day.update.title'|trans %}
+
+{% block form_content %}
+{% endblock %}
+
+{% block goback_link path('admin_schedule_slots', {'event': event.id}) %}

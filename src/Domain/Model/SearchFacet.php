@@ -126,7 +126,7 @@ class SearchFacet
      */
     public function getTranslations()
     {
-        return $this->translations;
+        return $this->translations->toArray();
     }
 
     /**
@@ -176,5 +176,25 @@ class SearchFacet
     public function hasPlaceholder()
     {
         return !in_array($this->type, [self::TYPE_TYPE, self::TYPE_CATEGORY]);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getLabel($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getLabel() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getPlaceholder($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPlaceholder() : '';
     }
 }
