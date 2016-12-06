@@ -15,6 +15,7 @@ Feature: Search sheet in catalog
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-SearchFacet.yml       |
     And elastica is populate
     When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
@@ -24,8 +25,9 @@ Feature: Search sheet in catalog
     And I should see "World Company Inc"
     And I should see "Hello World Company"
     When I go to this page "/fr/catalog?position[]=position98"
+    Then I should see "1" in the ".total-result" element
     Then I should see "Onera"
-    And I should not see "World Company Inc"
+    But I should not see "World Company Inc"
     And I should not see "Hello World Company"
 
   Scenario: I can search and filter sheet by localization
@@ -37,7 +39,8 @@ Feature: Search sheet in catalog
     And I should see "World Company Inc"
     And I should see "Hello World Company"
     When I go to this page "/fr/catalog?localization=lyon"
-    Then I should see "World Company Inc"
+    Then I should see "1" in the ".total-result" element
+    And I should see "World Company Inc"
     But I should not see "Onera"
     And I should not see "Hello World Company"
 
@@ -45,12 +48,25 @@ Feature: Search sheet in catalog
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
     And I go to this page "/fr/catalog"
-    Then I should see "Onera"
+    Then I should see "3" in the ".total-result" element
+    And I should see "Onera"
     And I should see "World Company Inc"
     And I should see "Hello World Company"
     When I go to this page "/fr/catalog?content=onera"
-    Then I should see "Onera"
+    Then I should see "1" in the ".total-result" element
+    And I should see "Onera"
     But I should not see "World Company Inc"
     And I should not see "Hello World Company"
     When I go to this page "/fr/catalog?content=unknowsheet"
+    Then I should see "0" in the ".total-result" element
     Then I should see "catalog.noResult"
+
+  Scenario: I can search and filter sheet by supply or need
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr"
+    When I go to this page "/fr/catalog?objective=supply"
+    Then I should see "3" in the ".total-result" element
+    And I should see "Hello World Company"
+    And I should see "Onera"
+    And I should see "World Company Inc"
+
