@@ -1,7 +1,6 @@
 var Meet = require('./_Meet');
 var Slot = require('./_Slot');
 var Planner = require('./_Planner');
-var Scaler = require('./_Scaler');
 
 /**
  * Agenda
@@ -16,7 +15,6 @@ function Agenda(element) {
     this.slotDuration = this.getDuration(this.element.getAttribute('data-slotduration'));
     this.layout       = this.element.querySelector('.layout');
     this.planner      = new Planner();
-    this.scaler       = new Scaler();
     this.meets        = [];
     this.slots        = [];
     this.scale        = 0;
@@ -34,7 +32,6 @@ function Agenda(element) {
     this.element.querySelectorAll('.meet').forEach(this.addMeet);
 
     this.planner.setMeets(this.meets);
-    this.scaler.setMeets(this.meets);
 }
 
 /**

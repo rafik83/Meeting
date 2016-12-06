@@ -1,4 +1,3 @@
-
 /**
  * Group
  */
@@ -10,6 +9,7 @@ function Group() {
     this.sortMeet         = this.sortMeet.bind(this);
     this.resolveMeetLayer = this.resolveMeetLayer.bind(this);
     this.displayMeet      = this.displayMeet.bind(this);
+    this.closeMeet        = this.closeMeet.bind(this);
     this.onChange         = this.onChange.bind(this);
 }
 
@@ -152,28 +152,28 @@ Group.prototype.onChange = function(event) {
     var meet = event.target.agendaMeet;
     var open = meet.isOpen();
 
-    this.expandedLayer = meet.isOpen() ? meet.layer : null;
-
     if (open) {
         this.closeOther(meet);
     }
+
+    this.expandedLayer = this.getOpenLayer();
 
     this.meets.forEach(this.displayMeet);
 };
 
 /**
- * Close other
+ * Get open layer
  *
- * @param {Meet} meet
+ * @return {Number|null}
  */
-Group.prototype.closeOther = function(meet) {
-    for (var target, i = this.meets.length - 1; i >= 0; i--) {
-        target = this.meets[i];
-
-        if (target !== meet) {
-            target.close();
+Group.prototype.getOpenLayer = function() {
+    for (var i = this.meets.length - 1; i >= 0; i--) {
+        if (this.meets[i].isOpen()) {
+            return this.meets[i].layer;
         }
     }
+
+    return null;
 };
 
 /**
@@ -186,12 +186,34 @@ Group.prototype.isExpanded = function() {
 };
 
 /**
+ * Close other
+ *
+ * @param {Meet} meet
+ */
+Group.prototype.closeOther = function(meet) {
+    for (var layer, index = this.layers.length - 1; index >= 0; index--) {
+        if (meet.layer !== index) {
+            this.layers[index].forEach(this.closeMeet);
+        }
+    }
+};
+
+/**
  * Display meet
  *
  * @param {Meet} meet
  */
 Group.prototype.displayMeet = function(meet) {
     meet.display();
+};
+
+/**
+ * Close meet
+ *
+ * @param {Meet} meet
+ */
+Group.prototype.closeMeet = function(meet) {
+    meet.close();
 };
 
 module.exports = Group;

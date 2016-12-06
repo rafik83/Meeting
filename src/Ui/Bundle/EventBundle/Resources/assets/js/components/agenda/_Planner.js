@@ -59,8 +59,8 @@ Planner.prototype.resolveMeetGroup = function(meet) {
             if (target.group) {
                 return target.group.add(meet);
             } else {
-                var group = this.createGroup()
-;
+                var group = this.createGroup();
+
                 group.add(target);
 
                 return group.add(meet);
