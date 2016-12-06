@@ -25,7 +25,7 @@ function Meet(agenda, element) {
 
     this.header.addEventListener('click', this.toggleOpen);
     this.element.agendaMeet = this;
-};
+}
 
 Meet.prototype = Object.create(EventEmitter.prototype);
 Meet.prototype.constructor = Meet;

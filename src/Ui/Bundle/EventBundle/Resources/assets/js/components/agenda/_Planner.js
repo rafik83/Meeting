@@ -46,7 +46,7 @@ Planner.prototype.resolveMeetGroup = function(meet) {
         return;
     }
 
-    var length = this.meets.length;i
+    var length = this.meets.length;
 
     for (var target, i = 0; i < length; i++) {
         target = this.meets[i];
@@ -59,8 +59,8 @@ Planner.prototype.resolveMeetGroup = function(meet) {
             if (target.group) {
                 return target.group.add(meet);
             } else {
-                var group = this.createGroup();
-
+                var group = this.createGroup()
+;
                 group.add(target);
 
                 return group.add(meet);

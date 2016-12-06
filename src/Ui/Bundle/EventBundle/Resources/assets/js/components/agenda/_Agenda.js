@@ -35,7 +35,7 @@ function Agenda(element) {
 
     this.planner.setMeets(this.meets);
     this.scaler.setMeets(this.meets);
-};
+}
 
 /**
  * Add slot

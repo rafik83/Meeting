@@ -141,7 +141,7 @@ Slot.prototype.match = function(from, to) {
  */
 Slot.prototype.displayMeets = function() {
     this.meets.forEach(this.displayMeet);
-}
+};
 
 /**
  * Display meet

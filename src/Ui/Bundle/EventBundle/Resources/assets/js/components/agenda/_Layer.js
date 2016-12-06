@@ -38,7 +38,7 @@ Layer.prototype.onMeetChange = function(event) {
     if (this.expanded !== expanded) {
         this.expanded = expanded;
     }
-}
+};
 
 /**
  * Is any Meet expanded?
