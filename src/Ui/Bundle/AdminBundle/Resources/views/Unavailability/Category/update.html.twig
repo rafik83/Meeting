@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.unavailability.category.update'|trans %}
+
+{% block form_title 'admin.unavailability.category.update'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.title) }}
+    {{ form_row(form.picto) }}
+{% endblock %}
+
+{% block goback_link path('admin_unavailability_category_list', { 'event': event.id }) %}
