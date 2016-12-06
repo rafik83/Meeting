@@ -65,8 +65,17 @@ Feature: Search sheet in catalog
     Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
     And I go to this page "/fr"
     When I go to this page "/fr/catalog?objective=supply"
-    Then I should see "3" in the ".total-result" element
+    Then I should see "1" in the ".total-result" element
+    And I should see "Onera"
+    But I should not see "World Company Inc"
+    And I should not see "Hello World Company"
+    When I go to this page "/fr/catalog?objective=need"
+    Then I should see "2" in the ".total-result" element
     And I should see "Hello World Company"
     And I should see "Onera"
-    And I should see "World Company Inc"
-
+    But I should not see "World Company Inc"
+    When I go to this page "/fr/catalog?objective=supply&objective=need"
+    Then I should see "2" in the ".total-result" element
+    And I should see "Hello World Company"
+    And I should see "Onera"
+    But I should not see "World Company Inc"
