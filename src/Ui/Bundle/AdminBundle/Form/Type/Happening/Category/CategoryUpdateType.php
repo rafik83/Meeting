@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category;
 
+use Proximum\Vimeet\Application\Command\Happening\Category\Update;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Picto\CategoryPictoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -28,7 +30,7 @@ class CategoryUpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('position', IntegerType::class)
+            ->add('rank', IntegerType::class)
             ->add('picto', CategoryPictoType::class)
             ->add('translations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,
@@ -45,7 +47,7 @@ class CategoryUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Happening\Category\Update',
+            'data_class'    => Update::class,
             'csrf_token_id' => 'happening_category_update',
         ]);
     }
