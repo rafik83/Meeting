@@ -14,9 +14,10 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class ParticipantProductViewQuery
 {
-    /**
-     * @var string
-     */
+    /** @var Sheet */
+    public $sheet;
+
+    /** @var string */
     public $locale;
 
     /**
