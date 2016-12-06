@@ -1,6 +1,7 @@
 var Meet = require('./_Meet');
 var Slot = require('./_Slot');
 var Planner = require('./_Planner');
+var ResizeHandler = require('./_ResizeHandler');
 
 /**
  * Agenda
@@ -15,6 +16,7 @@ function Agenda(element) {
     this.slotDuration = this.getDuration(this.element.getAttribute('data-slotduration'));
     this.layout       = this.element.querySelector('.layout');
     this.planner      = new Planner();
+    this.resize       = new ResizeHandler(window);
     this.meets        = [];
     this.slots        = [];
     this.scale        = 0;
@@ -22,6 +24,8 @@ function Agenda(element) {
 
     this.addMeet     = this.addMeet.bind(this);
     this.onSlotScale = this.onSlotScale.bind(this);
+    this.onResize    = this.onResize.bind(this);
+    this.updateMeet  = this.updateMeet.bind(this);
 
     for (var time = this.start; time <= this.end; time += this.slotDuration) {
         this.addSlot(time);
@@ -32,6 +36,8 @@ function Agenda(element) {
     this.element.querySelectorAll('.meet').forEach(this.addMeet);
 
     this.planner.setMeets(this.meets);
+
+    this.resize.on('resized', this.onResize);
 }
 
 /**
@@ -133,6 +139,15 @@ Agenda.prototype.getY = function(time) {
 };
 
 /**
+ * Update meet scale
+ *
+ * @param {Meet} meet
+ */
+Agenda.prototype.updateMeet = function(meet) {
+    meet.updateScale();
+};
+
+/**
  * On slot scale
  *
  * @param {Event} event
@@ -144,6 +159,15 @@ Agenda.prototype.onSlotScale = function(event) {
     for (var i = this.slots.indexOf(slot); i < length; i++) {
         this.slots[i].displayMeets();
     }
+};
+
+/**
+ * On window resized
+ *
+ * @param {Event} event
+ */
+Agenda.prototype.onResize = function(event) {
+    this.meets.forEach(this.updateMeet);
 };
 
 module.exports = Agenda;

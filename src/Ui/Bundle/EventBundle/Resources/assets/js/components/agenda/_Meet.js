@@ -59,12 +59,7 @@ Meet.prototype.display = function() {
         }
     }
 
-    var scale = this.resolveScale();
-
-    if (scale !== this.scale) {
-        this.scale = scale;
-        this.emit('scale');
-    }
+    this.updateScale();
 };
 
 /**
@@ -83,6 +78,18 @@ Meet.prototype.toggleOpen = function(event) {
  */
 Meet.prototype.close = function() {
     this.open = false;
+};
+
+/**
+ * Update scale
+ */
+Meet.prototype.updateScale = function() {
+    var scale = this.resolveScale();
+
+    if (scale !== this.scale) {
+        this.scale = scale;
+        this.emit('scale');
+    }
 };
 
 /**
