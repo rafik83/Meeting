@@ -1,0 +1,38 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.unavailability.category.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.unavailability.category.title'|trans }}</h1>
+
+    <div>
+        <a href="{{ path('admin_unavailability_category_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
+            {{ 'admin.unavailability.category.add'|trans }}
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.unavailability.category.table.column.title'|trans }}</th>
+            <th>{{ 'admin.unavailability.category.table.column.picto'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.title }}</td>
+                <td>{{ category.picto }}</td>
+                <td class="text-right">
+                    <a href="{{ path('admin_unavailability_category_update', {event: event.id, category: category.id}) }}" class="btn btn-default">
+                        {{ 'admin.unavailability.category.table.content.update'|trans }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

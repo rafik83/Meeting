@@ -134,7 +134,7 @@
         </ul>
     </li>
     <li class="dropdown-submenu">
-        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.link'|trans }}</a>
+        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.menu.link'|trans }}</a>
         <ul class="dropdown-menu">
             <li>
                 <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">
@@ -149,6 +149,11 @@
             <li>
                 <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}">
                     {{ 'admin.happening_speaker.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_unavailability_category_list', { 'event': event.id }) }}">
+                    {{ 'admin.unavailability.category.link'|trans }}
                 </a>
             </li>
         </ul>
