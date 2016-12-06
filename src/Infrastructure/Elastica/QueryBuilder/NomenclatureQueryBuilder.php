@@ -51,10 +51,10 @@ class NomenclatureQueryBuilder
         }
 
         $boolQuery = new BoolQuery();
-        $this->query->setPath('nomenclatureItemsNeeds');
+        $this->query->setPath('nomenclatureItemsSupply');
 
         foreach ($this->nomenclatureItems[Nomenclature::OBJECTIVE_NEED] as $nomenclatureItem) {
-            $term = new Term(['nomenclatureItemsNeeds.key' => $nomenclatureItem]);
+            $term = new Term(['nomenclatureItemsSupply.key' => $nomenclatureItem]);
             $boolQuery->addShould($term);
         }
 
@@ -75,10 +75,10 @@ class NomenclatureQueryBuilder
         }
 
         $boolQuery = new BoolQuery();
-        $this->query->setPath('nomenclatureItemsSupply');
+        $this->query->setPath('nomenclatureItemsNeeds');
 
         foreach ($this->nomenclatureItems[Nomenclature::OBJECTIVE_SUPPLY] as $nomenclatureItem) {
-            $term = new Term(['nomenclatureItemsSupply.key' => $nomenclatureItem]);
+            $term = new Term(['nomenclatureItemsNeeds.key' => $nomenclatureItem]);
             $boolQuery->addShould($term);
         }
 
@@ -103,22 +103,22 @@ class NomenclatureQueryBuilder
         $boolQuery = new BoolQuery();
 
         $nestedSupply = new Nested();
-        $nestedSupply->setPath('nomenclatureItemsSupply');
+        $nestedSupply->setPath('nomenclatureItemsNeeds');
         $supplyBoolQuery = new BoolQuery();
 
         foreach ($this->nomenclatureItems[Nomenclature::OBJECTIVE_SUPPLY] as $nomenclatureItem) {
-            $term = new Term(['nomenclatureItemsSupply.key' => $nomenclatureItem]);
+            $term = new Term(['nomenclatureItemsNeeds.key' => $nomenclatureItem]);
             $supplyBoolQuery->addShould($term);
         }
 
         $nestedSupply->setQuery($supplyBoolQuery);
 
         $nestedNeed = new Nested();
-        $nestedNeed->setPath('nomenclatureItemsNeeds');
+        $nestedNeed->setPath('nomenclatureItemsSupply');
         $needBoolQuery = new BoolQuery();
 
         foreach ($this->nomenclatureItems[Nomenclature::OBJECTIVE_NEED] as $nomenclatureItem) {
-            $term = new Term(['nomenclatureItemsNeeds.key' => $nomenclatureItem]);
+            $term = new Term(['nomenclatureItemsSupply.key' => $nomenclatureItem]);
             $needBoolQuery->addShould($term);
         }
 
