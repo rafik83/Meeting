@@ -104,7 +104,7 @@ class PaginatedSheetListViewQueryHandler
         $sheets = $this->sheetSearchAdapter->find(
             $query->event,
             $query->filters,
-            null,
+            isset($query->filters['orderBy']) ? $query->filters['orderBy'] : null,
             $query->page,
             $query->limit,
             $query->locale,

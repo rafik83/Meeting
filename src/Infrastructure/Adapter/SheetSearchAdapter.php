@@ -84,7 +84,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query = $functionScore->setQuery($builder->getQuery());
             $query = new Query($query);
             $query->addSort(['_score' => 'desc']);
-
+        } elseif (Constant::ORDER_BY_CREATED_AT === $orderBy) {
+            $query   = new Query($builder->getQuery());
+            $query->addSort(['createdAt' => 'desc']);
         } else {
             $query   = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);

@@ -502,6 +502,7 @@ form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
