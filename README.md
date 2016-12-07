@@ -19,7 +19,11 @@ Clone the project in your workspace, and launch setup
 
     $ make setup
 
-You should access the project via http://vimeet.proximum.dev/app_dev.php
+You should access the project via http://vimeet.proximum.dev/app_dev.php/admin/fr/event
+
+Load Vimeet fixtures:
+
+    ⇒ make init-db
 
 ### Usage
 
@@ -32,31 +36,19 @@ Build assets
 
     ⇒ gulp
 
+Build Vimeet events assets
+
+    ⇒ bin/console vimeet:event:build-guideline-asset
+
 Enable/Disable php xdebug
 
     ⇒ elao_php_xdebug [on|off]
 
 * *Supervisor*: http://vimeet.proximum.dev:9001
-* *Mailcatcher*: http://vimeet.proximum.dev:1080
 * *Log.io*: http://vimeet.proximum.dev:28778
 * *OPcache Dashboard*: http://vimeet.proximum.dev:2013
 * *phpMyAdmin*: http://vimeet.proximum.dev:1979
-* *openl10n*: http://openl10n-app.elao.ninja/ or http://openl10n.elao.ninja/
 * *ElasticSearch HEAD*: http://vimeet.proximum.dev:9200/_plugin/head/
-
-### Mailtrap
-
-Pour consulter les emails, il faut se connecter sur: https://mailtrap.io/signin
-
-Avec les identifiants suivant:
-
-Email: `larose@proximumgroup.com`
-
-Mot de passe: `vimeet360`
-
-### Fixtures
-
-User exhibitor: test@elao.com / p@ssw0rd
 
 ### NPM
 
@@ -68,34 +60,49 @@ Regenerate manually npm-shrinkwrap.json:
 
     ⇒ npm shrinkwrap
 
+### Migrations
+
+Drop DB and generate migrations diff:
+
+    ⇒ make migrations
+
 ### Localization
 
-Create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
+All translations are stored on https://openl10n.vimeet.events (check 1password for access).
+If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
 
-Pushing localization files:
+Synchronize translations files :
+
+    ⇒ make trans-sync
+
+or use one of these commands according to your needs:
 
     ⇒ openl10n push --locale=all
-
-Pulling localization files:
-
     ⇒ openl10n pull --locale=all
 
-Best practices:
-* Update translations files on branch master.
-* Always push before pulling; new keys will be added and not used keys will be deleted on openl10n.
+Remarks :
 
-## Deployment
+- Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
+- Your locale translations will be updated with a `pull` command (new, update or delete).
 
-### Prepare migrations for prod|preprod
+### Deployment
 
-1. Checkout master branch `$ git checkout master && git pull origin master`
-2. Drop db schema `$ bin/console doctrine:schema:drop --force`
-3. Empty the `migration_versions` table
-4. Run all migrations `$ bin/console doctrine:migrations:migrate`
-5. Generate the new migration : `$ bin/console doctrine:migrations:diff`. Warning : Remove Create/Drop sessions table (table is not mapped by Doctrine)
-6. Edit docblocks in generated file `/src/Infrastructure/Bundle/InfrastructureBundle/Migrations/VersionYYYYMMDDHHMMSS.php`
-7. Add a new branch, commit and push `git checkout -b migrations/VersionYYYYMMDDHHMMSS && git add . && git commit -m "Add migrations" && git push origin migrations/VersionYYYYMMDDHHMMSS`
-8. Add a merge request
-9. Create prod|preprod branch from master branch
-10. Merge migration branch into prod|preprod : `git checkout prod && git merge origin/migrations/VersionYYYYMMDDHHMMSS`
-11. Finally, push the prod|preprod branch and deploy it!
+There are two branches and two command to deploy for each environment:
+
+- `preprod`
+
+        $ make deploy@preprod
+
+- `prod`
+
+        $ make deploy@prod
+        
+After a deploy, you will need to do manually some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
+
+- Update Elastic Search index:
+
+        $ bin/console fos:elastica:populate --env=prod
+    
+- Rebuild events assets:
+
+        $ bin/console vimeet:event:build-guideline-asset
