@@ -8,3 +8,7 @@ Proximum\Vimeet\Application\Command\Happening\Category\Create:
                             - NotBlank: ~
         position:
             - NotNull: ~
+        leftColor:
+            - NotBlank: ~
+        rightColor:
+            - NotBlank: ~

@@ -29,7 +29,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $end   = new \DateTime('2016-01-29 00:00:00');
 
         // Current
-        $category        = new Category($event, 'picto1', 0);
+        $category        = new Category($event, 'picto1', 0, '#AABB56', '#123456');
         $catTranslation1 = new CategoryTranslation($category, 'fr', 'truc');
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);

@@ -41,18 +41,37 @@ class Category
     private $translations;
 
     /**
+     * @var string
+     */
+    private $leftColor;
+
+    /**
+     * @var string
+     */
+    private $rightColor;
+
+    /**
      * Category constructor.
      *
      * @param Event  $event
      * @param string $picto
      * @param int    $position
+     * @param string $leftColor
+     * @param string $rightColor
      */
-    public function __construct(Event $event, $picto, $position)
-    {
+    public function __construct(
+        Event $event,
+        $picto,
+        $position,
+        $leftColor,
+        $rightColor
+    ) {
         $this->position     = $position;
         $this->event        = $event;
         $this->picto        = $picto;
         $this->translations = new ArrayCollection();
+        $this->leftColor    = $leftColor;
+        $this->rightColor   = $rightColor;
     }
 
     /**
@@ -133,5 +152,37 @@ class Category
     public function setTranslation(CategoryTranslation $categoryTranslation)
     {
         $this->translations->set($categoryTranslation->getLocale(), $categoryTranslation);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLeftColor()
+    {
+        return $this->leftColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRightColor()
+    {
+        return $this->rightColor;
+    }
+
+    /**
+     * @param string $leftColor
+     */
+    public function setLeftColor($leftColor)
+    {
+        $this->leftColor = $leftColor;
+    }
+
+    /**
+     * @param string $rightColor
+     */
+    public function setRightColor($rightColor)
+    {
+        $this->rightColor = $rightColor;
     }
 }
