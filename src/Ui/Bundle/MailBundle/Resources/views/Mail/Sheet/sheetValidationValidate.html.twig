@@ -4,7 +4,9 @@
 
 {% block body %}
     {{ 'mail.sheet.validation.validate.body'|trans({
-        '%type%': mail.type
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>
