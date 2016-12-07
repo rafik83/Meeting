@@ -33,7 +33,7 @@ function Agenda(element) {
 
     this.setSlotHeight(this.slots[0].element.offsetHeight);
 
-    this.element.querySelectorAll('.meet').forEach(this.addMeet);
+    Array.prototype.forEach.call(this.element.querySelectorAll('.meet'), this.addMeet);
 
     this.planner.setMeets(this.meets);
 
