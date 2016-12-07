@@ -23,6 +23,7 @@ event.info.close: Close
 event.info.contact: 'Useful information'
 gender.man: Mr
 gender.woman: Mrs
+login.forgotPassword: 'Forgotten password?'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'
@@ -58,10 +59,20 @@ navigation.links.planning.my_schedule: 'My calendar'
 navigation.links.planning.unavailability: 'Confirm my attendance'
 navigation.links.sheet.locale: Version
 navigation.menu: Menu
+new_password.confirm.title: 'Reset password'
+new_password.help.noaction: 'If you take no action, the current password remains valid'
+new_password.help.reset: 'You can reset your password'
 nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
 nomenclature.select_none: none
 nomenclature.submit: Save
+notification.category.sheet.label: 'Presentation sheet'
+notification.columns.category: Heading
+notification.columns.createdAt: 'Received on'
+notification.label.required: Mandatory
+notification.link.label: See
+notification.package.noOrder: 'You must chose a package of participation'
+notification.sheet.completeTranslation: 'Complete your presentation sheet in %locale%'
 order.list.column.numero: Number
 order.list.column.total: Total
 order.list.pay_remaining: 'Full payment'
@@ -164,11 +175,19 @@ sheet.object.action.backToSheet: 'Back to sheet'
 sheet.object.action.edit: Edit
 sheet.object.action.remove: Delete
 sheet.object.image.remove: 'Delete image'
+sheet.object.showLess.title: 'See more'
+sheet.object.showMore.title: 'See less'
 sheet.participant.remove: 'Remove from the sheet'
 sheet.participant.sendInvite: 'Send Invitation'
 sheet.submit.validation: 'Submit for validation'
 sheet.submit.validation.pending: 'Awaiting for validation'
 sheet.title: 'Presentation sheet'
+sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the online catalogue of participants. You will still be able to modify it later on'
+sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory feedls marked with an asterisk.'
+sheet.welcome.packageContent: 'Choose the formula of participation that corresponds to your expectations'
+sheet.welcome.sheetContent: 'Complete your presentation sheet that will be advertised in the online catalogue. The more accurate your information is, the more targeted your appointments will be'
+sheet.welcome.subtitle: 'To finalise your request you need to'
+sheet.welcome.title: 'Congratulations, you have finished the first part of your request for participation'
 summary.column.quantity: Quantity
 summary.column.title: Title
 summary.column.total: Total

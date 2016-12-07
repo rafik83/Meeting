@@ -4,6 +4,7 @@ admin.account.content.password: 'Change my password'
 admin.account.link: 'My account'
 admin.account.title: 'My account'
 admin.account.update_password.title: 'Change my password'
+admin.activateAccount.password.title: 'Creation of a password for your account as contributor'
 admin.admin_list.table.content.update: Edit
 admin.cancel: Cancel
 admin.category.add: Add
@@ -13,6 +14,7 @@ admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
 admin.event.update.link: Update
 admin.happening_category.add: Add
+admin.happening_speaker.action.see: See
 admin.happening_speaker.add: Add
 admin.happening_speaker.addTitle: 'Add Speaker'
 admin.happening_speaker.link: Speakers
@@ -23,6 +25,7 @@ admin.meeting_request.link: 'Meeting requests'
 admin.meeting.link: Meetings
 admin.menu.link: Menu
 admin.new.link: admin.new.link
+admin.nomenclature.table.read: See
 admin.operator_list.table.content.update: Edit
 admin.operator.update.title: 'Edit collaborater'
 admin.order_edit.columns.quantity: Quantity
@@ -36,6 +39,7 @@ admin.sheet.change.type.link: Change
 admin.sheet.change.type.title: 'Change the type of participation'
 admin.sheet.details.transactions: Transactions
 admin.sheet.link: 'Participation sheets'
+admin.sheet.read: See
 admin.sheet.state: State
 admin.sheet.trace.changed_type: 'The type of participation has been changed'
 admin.sheet.trace.changed_type_comment: 'Changed from %fromType% to %toType%'
@@ -62,6 +66,8 @@ admin.transaction.mode.bank_transfer: Transfer
 admin.transaction.mode.paypal: Paypal
 admin.transaction.state.pending: Pending
 admin.type.link: 'Participation types'
+admin.users.details: 'View the account'
+admin.users.see-sheet: 'See the participation'
 admin.zero-result: admin.zero-result
 and: and
 and_more: 'and %count% other|and %count% others'
@@ -86,7 +92,7 @@ event.meeting.cancelRequest.title: 'Cancel my request'
 event.meeting.createRequest.title: 'Meeting request'
 event.meeting.editRequest.title: 'Edit my request'
 event.meeting.listProposition.accept: Accept
-event.meeting.listProposition.createdAt: Received
+event.meeting.listProposition.createdAt: 'Received on'
 event.meeting.listProposition.description: Description
 event.meeting.listProposition.edit: 'Edit received proposal'
 event.meeting.listProposition.from: From
@@ -95,6 +101,7 @@ event.meeting.listProposition.participants: Participants
 event.meeting.listProposition.refuse: Reject
 event.meeting.listProposition.show: Show
 event.meeting.listProposition.state: State
+event.meeting.listRequest.show: See
 event.meeting.showDetailsRequest.from: From
 event.meeting.showDetailsRequest.message: 'Your conversation'
 event.meeting.showDetailsRequest.participants: Participants
@@ -148,9 +155,12 @@ event.sheet.summary.title: 'Package summary'
 event.sheet.summary.total: Total
 event.sheet.summary.unit_price: 'Unit price'
 event.sheet.summary.update_product: 'Update my participation'
+login.forgotPassword: 'Forgotten password?'
 login.link: Login
 login.title: Login
 logout.confirmation: 'Are you sure you want to logout of your account?'
 logout.link: Logout
 logout.title: Logout
+new_password.title: 'Create a new password'
 register.email_already_exists: 'An account with this email address already exists'
+reset_password.title: 'Request new password'

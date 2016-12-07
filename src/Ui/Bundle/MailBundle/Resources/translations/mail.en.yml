@@ -1,18 +1,25 @@
 admin.mail.activateAccount.activate: 'Activate your account'
+admin.mail.activateAccount.body: 'Hello, you have been invited as contributor on Vimeet. To be able to access it, please click on the following link and enter a password to activate you account:'
 admin.mail.activateAccount.end: 'Best regards,'
 admin.mail.activateAccount.subject: 'Activate your account'
+admin.mail.resetPassword.body: 'Hello, to reset your password, please click on the link below:'
 admin.mail.resetPassword.end: 'Best regards,'
+admin.mail.resetPassword.link: 'Reset password'
+admin.mail.resetPassword.subject: 'Forgotten password'
 mail.activateAccount.activate: 'Activate your account'
 mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
 mail.activateAccount.subject: '[%event%] Activate your account'
+mail.changeMailNew.body: 'Hello, you have chosen a new e-mail addresse as login to ViMeet instead of %currentEmail%. To confirm that you are the owner of this e-mail address, please click on the link below to log in to your member area.'
 mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
 mail.changeMailNew.validate: 'Validate Your new email'
+mail.changeMailOld.body: "Hello, \n\nYou have just made a request to change your email for %email%. \n\nCheck your inbox of this new address to validate the change. If you have not requested this change, please contact an administrator. \n\nRegards,"
 mail.changeMailOld.subject: 'Email change request'
 mail.completeProfile.body: 'You have been invited as participant on the event %event%. To access it, please click on the link below and chose a password to complete your member area.'
 mail.completeProfile.end: 'Best regards,'
 mail.completeProfile.link: 'Complete your member area'
+mail.confirmResetPassword.body: 'Dear %firstname% %lastname%, your password has been changed'
 mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer\n\nBest regards,"
 mail.event.preregister.end: 'Best regards,'
 mail.event.preregister.link: 'Your member area'
@@ -24,8 +31,19 @@ mail.orderConfirm.subject: 'Your order has been registered'
 mail.participant.profile.link: 'Your member area'
 mail.register.body: '%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created. We are happy to count you among the Vimeet community. You can now connect to your member area on the website of %event%. Best regards,'
 mail.register.subject: 'The access to your member area of %event% has been created'
+mail.resetPassword.body: 'Hello, you have asked for a password modification. Please click on the following link to create a new password:'
 mail.resetPassword.end: 'Best regards,'
-mail.sheet.change_type.end: 'Best regards,'
-mail.sheet.submitted.body: 'The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. To acess the details of the presentation sheet, please click on the link below'
-mail.sheet.submitted.end: 'Best regards,'
+mail.resetPassword.link: 'Reset password'
+mail.resetPassword.subject: '[%event%] Forgotten password'
+mail.sheet.add_participant_confirmation.body: "%firstname% %lastname%, \n\nYour invitation to %guestEmail% for %event% has been sent. \n\nRegards,"
+mail.sheet.add_participant_confirmation.subject: 'Invitation sent'
+mail.sheet.change_type.body: "%firstname% %lastname%, \n\nYour participation has been converted from %fromType% to %toType%.\n\nRegards,"
+mail.sheet.change_type.end: 'Regards,'
+mail.sheet.change_type.subject: '[%event%] Your participation has been converted'
+mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo acess the details of the presentation sheet, please click on the link below"
+mail.sheet.submitted.end: 'Regards,'
+mail.sheet.submitted.link: 'View sheet'
+mail.sheet.submitted.subject: 'Sheet %sheetName% finalized'
+mail.sheet.validated.body: "%firstname% %lastname%,\n\nWe are pleased to confirm your participation in the event %event% and we thank you for your confidence.\n\nOur entire team will be at your disposal to make your participation a success."
+mail.sheet.validated.subject: 'Your registration as %participationType% for %event% is validated'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"

@@ -7,10 +7,10 @@ admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
 mail.activateAccount.activate: 'Activer votre compte'
-mail.activateAccount.body: "Bonjour %firstname% %lastname%,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace membre, cliquez sur le lien ci-dessous."
+mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace membre, cliquez sur le lien ci-dessous."
 mail.activateAccount.end: 'Bien cordialement,'
 mail.activateAccount.subject: '[%event%] Activer votre compte'
-mail.changeMailNew.body: "Bonjour %firstname% %lastname%,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace membre."
+mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace membre."
 mail.changeMailNew.end: Cordialement
 mail.changeMailNew.subject: 'Votre nouvel identifiant'
 mail.changeMailNew.validate: 'Valider votre nouvel email'
@@ -27,14 +27,14 @@ mail.event.preregister.end: 'Bien cordialement,'
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: Contact
-mail.orderConfirm.body: "Bonjour %firstname% %lastname%,\n\nVotre commande numéro %orderNumero% en date du %orderDate% a bien été enregistrée. Vous trouverez ci-dessous un lien vers la facture pro-forma. Une facture finale vous sera adressée à l'issue de l’événement."
+mail.orderConfirm.body: "Bonjour,\n\nVotre commande numéro %orderNumero% en date du %orderDate% a bien été enregistrée. Vous trouverez ci-dessous un lien vers la facture pro-forma. Une facture finale vous sera adressée à l'issue de l’événement."
 mail.orderConfirm.end: 'Cordialement,'
 mail.orderConfirm.linkToProForma: 'Voir la facture pro-forma'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'
 mail.participant.profile.link: 'Votre profil participant'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre de %event% est créé. Nous sommes heureux de vous compter comme nouveau membre de la communauté Vimeet.\n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site de %event%.\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
-mail.resetPassword.body: "Bonjour %firstname% %lastname%,\n\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
+mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
 mail.resetPassword.end: 'Cordialement,'
 mail.resetPassword.link: 'Réinitialiser le mot de passe'
 mail.resetPassword.subject: '[%event%] Mot de passe oublié'
@@ -43,16 +43,16 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
 mail.sheet.submitted.link: 'Voir la fiche'
-mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.subject: 'Fiche %sheetName% finalisée'
 mail.sheet.validated.body: "%firstname% %lastname%,\n\nNous avons le plaisir de vous confirmer votre participation à l'événement %event% et nous vous remercions de votre confiance.\n\nToute notre équipe sera à votre disposition pour faire de votre participation un succès."
-mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à l''événement %event% est validée'
+mail.sheet.validated.subject: 'Votre inscription en tant que %participationType% à %event% est validée'
+mail.sheet.validation.draft.body: "Bonjour %firstname% %lastname%,\n\nVotre fiche de présentation de type %type% à été remise en brouillon car incomplète. Pour compléter votre fiche"
+mail.sheet.validation.draft.subject: 'Fiche remise en brouillon'
+mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre fiche de présentation de type %type% à été validée"
+mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.sheet.validation.draft.subject: 'Fiche remise en brouillon'
-mail.sheet.validation.draft.body: "Bonjour %firstname% %lastname%,\n\nVotre fiche de présentation de type %type% à été remise en brouillon car incomplète. Pour compléter votre fiche"
-mail.sheet.validation.validate.subject: 'Fiche validée'
-mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre fiche de présentation de type %type% à été validée"

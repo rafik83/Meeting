@@ -61,6 +61,7 @@ form.create_operator.children.email.label: Email
 form.create_operator.children.firstname.label: 'First Name'
 form.create_operator.children.lastname.label: 'Last Name'
 form.create_operator.children.submit.label: Send
+form.create_partner.children.password.label: Password
 form.create_speaker.children.firstname.label: 'First Name'
 form.create_speaker.children.lastname.label: 'Last Name'
 form.create_speaker.children.logo.label: Logo
@@ -100,6 +101,7 @@ form.event_update.children.submit.label: Save
 form.event_update.children.vat.label: 'VAT (%)'
 form.field.private: 'Private field'
 form.filter_admin.children.submit.label: Filter
+form.forgotten_password.children.email.label: 'Enter email address'
 form.generate_slot.children.submit.label: Save
 form.happening_create.children.talkings.label: Speakers
 form.happening_create.children.talkings.label_add: Add
@@ -179,6 +181,7 @@ form.sheet_batch.children.addCatalog.label: 'Add to catalogue'
 form.sheet_comment.children.submit.label: Save
 form.sheet_comment.children.text.placeholder: 'Add comment'
 form.sheet_filter.children.state.label: State
+form.sheet_filter.children.text_search.label: 'Title of the presentation sheet, name or participant''s email'
 form.sheet_template_add_locale.children.submit.label: Add
 form.sheet_template_create.children.submit.label: Save
 form.sheet_template_duplicate.children.submit.label: Save
@@ -199,14 +202,19 @@ form.transaction.children.transaction_mode.paypal: Paypal
 form.type_create.children.submit.label: Save
 form.type_template_field_update_lib_choice.children.choices.label_add: Add
 form.type_template_field_update_lib_choice.children.choices.label_delete: Delete
+form.type_template_field_update_lib_choice.children.required.label: Mandatory
 form.type_template_field_update_lib_choice.children.submit.label: Save
+form.type_template_field_update.children.required.label: Mandatory
 form.type_template_field_update.children.submit.label: Save
 form.type_update.children.submit.label: Save
+form.update_admin.children.email.label: Email
+form.update_admin.children.password.label: Password
 form.update_speaker.children.photo.label: 'Speaker picture'
 form.update_speaker.children.submit.label: Save
 form.update_transaction.children.mode.label: 'Mode of payment'
 form.update_transaction.children.submit.label: Save
 form.update_unavailability.children.submit.label: Modify
+form.user_filter.children.text_search.label: 'Last name, first name or email of user'
 form.vatMode.ati: 'Incl. Tax'
 form.vatMode.et: 'Ext. Tax'
 form.who_see_who.children.submit.label: Add
