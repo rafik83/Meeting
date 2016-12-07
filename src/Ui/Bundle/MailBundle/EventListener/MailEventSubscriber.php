@@ -113,11 +113,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetValidationDraft(SheetDraftEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
+        );
+
         $mail = new SheetValidationDraftMail(
             $event->getSheet(),
             $this->sender->generate($event->getSheet()->getEvent()),
             $event->getSheet()->getOwner()->getEmail(),
-            $event->getSheet()->getOwner()->getLocale()
+            $event->getSheet()->getOwner()->getLocale(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -128,11 +133,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetValidationValidate(SheetValidationValidateEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
+        );
+
         $mail = new SheetValidationValidateMail(
             $event->getSheet(),
             $this->sender->generate($event->getSheet()->getEvent()),
             $event->getSheet()->getOwner()->getEmail(),
-            $event->getSheet()->getOwner()->getLocale()
+            $event->getSheet()->getOwner()->getLocale(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
