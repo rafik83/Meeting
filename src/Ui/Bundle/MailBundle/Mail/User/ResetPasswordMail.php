@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ResetPasswordMail extends Mail
+class ResetPasswordMail extends UserMail
 {
     /**
      * @var string
@@ -42,15 +43,23 @@ class ResetPasswordMail extends Mail
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $token
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param string              $token
+     * @param ParticipantInfoView $participantInfoView
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, $token)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $event);
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        $token,
+        ParticipantInfoView $participantInfoView
+    ) {
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
+
         $this->token = $token;
     }
 

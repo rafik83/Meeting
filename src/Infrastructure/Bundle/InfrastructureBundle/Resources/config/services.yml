@@ -1896,7 +1896,12 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserListViewQuery }
-
+    query.mail.participant_mail_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.participant_info_guesser'
+            
     ##
     # Navigation builder
     ##

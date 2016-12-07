@@ -54,7 +54,7 @@ interface ParticipantRepositoryInterface
      * @param User  $user
      * @param Sheet $sheet
      *
-     * @return Participant
+     * @return Participant|null
      */
     public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 

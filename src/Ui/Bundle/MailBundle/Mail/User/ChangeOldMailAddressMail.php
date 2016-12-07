@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ChangeOldMailAddressMail extends Mail
+class ChangeOldMailAddressMail extends UserMail
 {
     /**
      * @var string
@@ -41,15 +42,23 @@ class ChangeOldMailAddressMail extends Mail
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $newMail
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param string              $newMail
+     * @param ParticipantInfoView $participantInfo
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, $newMail)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $event);
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        $newMail,
+        ParticipantInfoView $participantInfo
+    ) {
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfo);
+
         $this->newMail = $newMail;
     }
 
