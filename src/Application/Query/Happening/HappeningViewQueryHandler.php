@@ -77,7 +77,7 @@ class HappeningViewQueryHandler
 
         $middleDate = $this->getMiddleDate($scheduleScale, $eventDay);
 
-        foreach ($happenings as $happening) {
+        foreach ($happenings as $key => $happening) {
             $happeningCategoryView = new HappeningCategoryView(
                 $happening->getCategory()->getTitle($query->locale),
                 $happening->getCategory()->getPicto(),
@@ -90,7 +90,7 @@ class HappeningViewQueryHandler
             );
 
             $happeningView = new HappeningView(
-                $happening->getId(),
+                $key + 1,
                 $happeningCategoryView,
                 $happening->getBegin(),
                 $happening->getEnd(),
