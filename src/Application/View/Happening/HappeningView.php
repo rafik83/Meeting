@@ -16,11 +16,6 @@ use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 class HappeningView
 {
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
      * @var \DateTimeInterface
      */
     private $beginHour;
@@ -46,7 +41,7 @@ class HappeningView
     private $picture;
 
     /**
-     * @var Speaker[]
+     * @var HappeningSpeakerView[]
      */
     private $speakers;
 
@@ -56,10 +51,15 @@ class HappeningView
     private $code;
 
     /**
+     * @var HappeningCategoryView
+     */
+    private $category;
+
+    /**
      * HappeningView constructor.
      *
      * @param int                $code
-     * @param string             $type
+     * @param HappeningCategoryView           $category
      * @param \DateTimeInterface $beginHour
      * @param \DateTimeInterface $endHour
      * @param string             $title
@@ -69,7 +69,7 @@ class HappeningView
      */
     public function __construct(
         $code,
-        $type,
+        HappeningCategoryView $category,
         \DateTimeInterface $beginHour,
         \DateTimeInterface $endHour,
         $title,
@@ -77,7 +77,7 @@ class HappeningView
         $picture,
         array $speakers
     ) {
-        $this->type        = $type;
+        $this->category    = $category;
         $this->beginHour   = $beginHour;
         $this->endHour     = $endHour;
         $this->title       = $title;
@@ -104,11 +104,11 @@ class HappeningView
     }
 
     /**
-     * @return string
+     * @return HappeningCategoryView
      */
-    public function getType()
+    public function getCategory()
     {
-        return $this->type;
+        return $this->category;
     }
 
     /**
@@ -152,7 +152,7 @@ class HappeningView
     }
 
     /**
-     * @return Speaker[]
+     * @return HappeningSpeakerView[]
      */
     public function getSpeakers()
     {

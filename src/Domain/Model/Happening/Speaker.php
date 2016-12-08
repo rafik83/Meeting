@@ -200,7 +200,19 @@ class Speaker
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) { return $talking->getHappening(); })
+            ->map(function (Talking $talking) {
+                return $talking->getHappening();
+            })
             ->toArray();
+    }
+
+    /**
+     * @param $locale
+     *
+     * @return string
+     */
+    public function getPosition($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPosition() : '';
     }
 }

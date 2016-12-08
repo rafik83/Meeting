@@ -1924,9 +1924,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@repository.event.day_repository'
+            - '@query.happening.speaker_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery }
-            
+    query.happening.speaker_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\SpeakerViewQueryHandler
+
     ##
     # Navigation builder
     ##

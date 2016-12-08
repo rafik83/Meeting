@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 use DateInterval;
 use DatePeriod;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\MissingEventDayConfigurationException;
+use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningListView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -32,17 +33,25 @@ class HappeningViewQueryHandler
     private $dayRepository;
 
     /**
+     * @var SpeakerViewQueryHandler
+     */
+    private $speakerViewQueryHandler;
+
+    /**
      * HappeningViewQueryHandler constructor.
      *
      * @param HappeningRepositoryInterface $happeningRepository
      * @param DayRepositoryInterface       $dayRepository
+     * @param SpeakerViewQueryHandler      $speakerViewQueryHandler
      */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
-        DayRepositoryInterface $dayRepository
+        DayRepositoryInterface $dayRepository,
+        SpeakerViewQueryHandler $speakerViewQueryHandler
     ) {
-        $this->happeningRepository = $happeningRepository;
-        $this->dayRepository       = $dayRepository;
+        $this->happeningRepository     = $happeningRepository;
+        $this->dayRepository           = $dayRepository;
+        $this->speakerViewQueryHandler = $speakerViewQueryHandler;
     }
 
     /**
@@ -69,15 +78,26 @@ class HappeningViewQueryHandler
         $middleDate = $this->getMiddleDate($scheduleScale, $eventDay);
 
         foreach ($happenings as $happening) {
+            $happeningCategoryView = new HappeningCategoryView(
+                $happening->getCategory()->getTitle($query->locale),
+                $happening->getCategory()->getPicto(),
+                $happening->getCategory()->getLeftColor(),
+                $happening->getCategory()->getRightColor()
+            );
+
+            $speakerView = $this->speakerViewQueryHandler->handle(
+                new SpeakerViewQuery($happening, $query->locale)
+            );
+
             $happeningView = new HappeningView(
                 $happening->getId(),
-                $happening->getCategory()->getTitle($query->locale),
+                $happeningCategoryView,
                 $happening->getBegin(),
                 $happening->getEnd(),
                 $happening->getTitle($query->locale),
                 $happening->getDescription($query->locale),
                 '',
-                $happening->getSpeakers()
+                $speakerView
             );
 
             if ($happening->getEnd()->format('H:i:s') <= $middleDate->format('H:i:s')) {
