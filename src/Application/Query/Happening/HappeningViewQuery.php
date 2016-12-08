@@ -25,14 +25,21 @@ class HappeningViewQuery
     public $locale;
 
     /**
+     * @var int
+     */
+    public $day;
+
+    /**
      * HappeningViewQuery constructor.
      *
      * @param Event  $event
      * @param string $locale
+     * @param int    $day
      */
-    public function __construct(Event $event, $locale)
+    public function __construct(Event $event, $locale, $day)
     {
         $this->event  = $event;
         $this->locale = $locale;
+        $this->day    = $day;
     }
 }

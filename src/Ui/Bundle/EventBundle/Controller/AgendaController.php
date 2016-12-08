@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
 use Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,9 +29,21 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $happeningListView = $this->get('tactician.commandbus.query')->handle(
-            new HappeningViewQuery($eventDomain->getEvent(), $request->getLocale())
-        );
+        if ($request->attributes->get('day') === null) {
+            return $this->redirectToRoute('happening_program_day', ['day' => 1]);
+        }
+
+        try {
+            $happeningListView = $this->get('tactician.commandbus.query')->handle(
+                new HappeningViewQuery(
+                    $eventDomain->getEvent(),
+                    $request->getLocale(),
+                    $request->attributes->get('day')
+                )
+            );
+        } catch (HappeningException $exception) {
+            return $this->redirectToRoute('event_sheet');
+        }
 
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event'         => $eventDomain->getEvent(),

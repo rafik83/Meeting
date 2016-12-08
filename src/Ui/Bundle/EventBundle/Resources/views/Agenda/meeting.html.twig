@@ -20,7 +20,7 @@
                                 <div class="user__avatar">
                                     <span class="bullet"></span>
                                     <div class="avatar">
-                                        <img src="{{ speaker.picture }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
+                                        <img src="{{ speaker.picture|imagine_filter('user_avatar') }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
                                     </div>
                                 </div>
                             {% endif %}

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 
 use DateInterval;
 use DatePeriod;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\MissingEventDayConfigurationException;
+use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningListView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;

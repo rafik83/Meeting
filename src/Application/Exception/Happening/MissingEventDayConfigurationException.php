@@ -8,9 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\MeetingRequest;
+namespace Proximum\Vimeet\Application\Exception\Happening;
 
-class MissingEventDayConfigurationException extends \Exception
+class MissingEventDayConfigurationException extends HappeningException
 {
-
 }
