@@ -215,7 +215,7 @@ class Balance
      */
     public function getTransactionsTotalPaid(Event $event)
     {
-        $totalPaid    = 0;
+        $totalPaid = 0;
 
         foreach ($this->transactions[$event->getId()] as $transaction) {
             if ($transaction->isPaid()) {
