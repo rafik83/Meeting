@@ -79,26 +79,6 @@ class IncludedParticipantGuesser
     /**
      * @param Sheet $sheet
      *
-     * @return int
-     */
-    private function getParticipantIncludedQuantity(Sheet $sheet)
-    {
-        $selectedPlan = $this->getSelectedPlan($sheet);
-
-        if (null !== $selectedPlan) {
-            $participantProductIncluded = $selectedPlan->getIncludedParticipantProduct();
-
-            if ($participantProductIncluded instanceof ProductIncluded) {
-                return $participantProductIncluded->getQuantity();
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
      * @return null|Product
      */
     private function getSelectedPlan(Sheet $sheet)
