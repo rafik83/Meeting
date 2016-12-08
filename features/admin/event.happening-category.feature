@@ -33,7 +33,7 @@ Feature: See, create and update happening category
     And I follow "admin.happening_category.add"
     And I should be on this page "/admin/en/event/1/happening/category/create"
     When I fill in the following:
-      | category_create[position]                | 1             |
+      | category_create[rank]                    | 1             |
       | category_create[picto]                   | picto1        |
       | category_create[translations][fr][title] | MyCategory    |
       | category_create[translations][en][title] | MyCategory    |
@@ -47,7 +47,7 @@ Feature: See, create and update happening category
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/happening/category/7/update"
     When I fill in the following:
-      | category_update[position]                | 2                |
+      | category_update[rank]                    | 2                |
       | category_update[picto]                   | picto1           |
       | category_update[translations][fr][title] | MyNewCategory    |
       | category_update[translations][en][title] | MyNewCategory    |
