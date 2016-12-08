@@ -20,20 +20,19 @@ Feature: See, create and update unavailability category
     And I follow "admin.unavailability.category.add"
     And I should be on this page "/admin/fr/event/1/unavailability/category/create"
     When I fill in the following:
-      | unavailability_category_create[picto]      | picto1     |
+      | unavailability_category_create[picto]      | Dejeuner   |
       | unavailability_category_create[title]      | MyCategory |
       | unavailability_category_create[leftColor]  | #59a4eb    |
       | unavailability_category_create[rightColor] | #00398c    |
     And I press "form.unavailability_category_create.children.submit.label"
     Then I should see "flash.admin.unavailability.category.create.success"
     And I should see "MyCategory"
-    And I should see "picto1"
 
   Scenario: I can update an unavailability category
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/unavailability/category/update/1"
     When I fill in the following:
-      | unavailability_category_update[picto]      | picto2         |
+      | unavailability_category_update[picto]      | Dejeuner       |
       | unavailability_category_update[title]      | MyNewCategory2 |
       | unavailability_category_update[leftColor]  | #123123        |
       | unavailability_category_update[rightColor] | #456456        |
@@ -41,4 +40,3 @@ Feature: See, create and update unavailability category
     Then I should see "flash.admin.unavailability.category.update.success"
     And I should not see "MyCategory"
     And I should see "MyNewCategory2"
-    And I should see "picto2"

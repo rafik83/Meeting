@@ -34,7 +34,7 @@ Feature: See, create and update happening category
     And I should be on this page "/admin/en/event/1/happening/category/create"
     When I fill in the following:
       | category_create[rank]                    | 1             |
-      | category_create[picto]                   | picto1        |
+      | category_create[picto]                   | Dejeuner      |
       | category_create[translations][fr][title] | MyCategory    |
       | category_create[translations][en][title] | MyCategory    |
       | category_create[leftColor]               | #59a4eb       |
@@ -48,7 +48,7 @@ Feature: See, create and update happening category
     And I am on this page "/admin/fr/event/1/happening/category/7/update"
     When I fill in the following:
       | category_update[rank]                    | 2                |
-      | category_update[picto]                   | picto1           |
+      | category_update[picto]                   | Dejeuner         |
       | category_update[translations][fr][title] | MyNewCategory    |
       | category_update[translations][en][title] | MyNewCategory    |
       | category_update[leftColor]               | #59a4eb          |

@@ -134,7 +134,7 @@ class AbstractCategory
     /**
      * @return array
      */
-    public function getPictos()
+    public static function getPictos()
     {
         return [
             self::PICTO_COCKTAIL   => self::PICTO_COCKTAIL,
