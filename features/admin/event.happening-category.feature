@@ -7,15 +7,15 @@ Feature: See, create and update happening category
   Scenario: I can see the list of happening categories
     Given the database is purged
     And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Happening/RdvCarnot2016-Category.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | Admin.yml                                                                |
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                     |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml       |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/Happening/RdvCarnot2016-Category.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml                |
+      | Admin.yml                                                                   |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event/1/happening/category"
     Then I should see "Présentation flash"
