@@ -33,6 +33,12 @@ form.admin_schedule_days.children.days.prototype.children.endTime.label: Heure f
 form.admin_schedule_days.children.days.label_add: Ajouter un jour
 form.admin_schedule_days.children.days.label_delete: Supprimer ce jour
 form.admin_schedule_days.children.submit.label: Valider
+form.admin.picto.Cocktail: Cocktail
+form.admin.picto.Dejeuner: Dejeuner
+form.admin.picto.Conference: Micro
+form.admin.picto.RDV: Rendez-vous
+form.admin.picto.PresFlash_2: Flash
+form.admin.picto.Cafe_1: Café
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays

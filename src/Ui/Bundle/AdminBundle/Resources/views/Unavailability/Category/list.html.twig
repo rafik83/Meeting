@@ -26,7 +26,7 @@
         {% for category in categories %}
             <tr>
                 <td>{{ category.title }}</td>
-                <td>{{ category.picto }}</td>
+                <td><i class="icon-{{ category.picto }}"></i></td>
                 <td style="background-image: linear-gradient(to right, {{ category.leftColor }}, {{ category.rightColor }});"></td>
                 <td class="text-right">
                     <a href="{{ path('admin_unavailability_category_update', {event: event.id, category: category.id}) }}" class="btn btn-default">

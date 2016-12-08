@@ -33,7 +33,7 @@
         {% for category in categories %}
             <tr>
                 <td>{{ category.title }}</td>
-                <td>{{ category.picto }}</td>
+                <td><i class="icon-{{ category.picto }}"></i></td>
                 <td>{{ category.rank }}</td>
                 <td style="background-image: linear-gradient(to right, {{ category.leftColor }}, {{ category.rightColor }});"></td>
                 <td class="text-right">
