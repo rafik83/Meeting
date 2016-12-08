@@ -118,3 +118,13 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 - La branche est en platinum sur Insight 
 - Être reviewé (avoir un +1)
 - Pas de conflit avec `master` ou les résoudre dès que possible.
+
+### Code
+
+#### Gestion de la locale en Admin
+
+En admin, utiliser la méthode de l'event permettant de fallback, car la locale de l'admin n'est pas forcément utilisée sur un event :
+
+```php
+$locale = $event->getAvailableLocale($request->getLocale);
+```
