@@ -31,12 +31,11 @@ class HappeningAccess
     }
 
     /**
-     * @param User  $user
      * @param Event $event
      *
      * @return bool
      */
-    public function canAccess(User $user, Event $event)
+    public function canAccess(Event $event)
     {
         if ($event->getConfiguration()->getHappeningsOpenDate() >= $this->dateTime) {
             return true;

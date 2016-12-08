@@ -46,8 +46,6 @@ class HappeningAccessVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        $user = $token->getUser();
-
-        return $this->happeningAccess->canAccess($user, $subject);
+        return $this->happeningAccess->canAccess($subject);
     }
 }
