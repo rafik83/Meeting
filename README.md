@@ -106,3 +106,15 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 - Rebuild events assets:
 
         $ bin/console vimeet:event:build-guideline-asset
+
+### Definition of Done
+
+- Test d'acceptation respectée : relire la story
+- Clé et libellé de traduction posé en français
+- Checker l'accès aux controllers
+- Respecter l'UI Admin (si la story concerne l'Admin)
+- Générer une migration de la DB (si la structure change)
+- Tests unitaires et fonctionnels qui passent
+- La branche est en platinum sur Insight 
+- Être reviewé (avoir un +1)
+- Pas de conflit avec `master` ou les résoudre dès que possible.
