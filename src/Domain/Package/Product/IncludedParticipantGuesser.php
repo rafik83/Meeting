@@ -84,7 +84,8 @@ class IncludedParticipantGuesser
     private function getSelectedPlan(Sheet $sheet)
     {
         if ($sheet->hasNotCancelledOrders()) {
-            $orderMerged  = $this->orderMerger->merge($sheet->getNotCancelledOrders());
+            $orderMerged = $this->orderMerger->merge($sheet->getNotCancelledOrders());
+
             return $orderMerged->getPlan();
         }
 
