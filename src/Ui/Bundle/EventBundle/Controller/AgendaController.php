@@ -27,18 +27,14 @@ class AgendaController extends Controller
      */
     public function indexAction(Request $request, EventDomain $eventDomain)
     {
-        try {
-            $happeningListView = $this->get('tactician.commandbus.query')->handle(
-                new HappeningViewQuery($eventDomain->getEvent(), $request->getLocale())
-            );
+        $happeningListView = $this->get('tactician.commandbus.query')->handle(
+            new HappeningViewQuery($eventDomain->getEvent(), $request->getLocale())
+        );
 
-            return $this->render('EventBundle:Agenda:index.html.twig', [
-                'event'         => $eventDomain->getEvent(),
-                'happeningList' => $happeningListView,
-            ]);
-        } catch (\Exception $exception) {
-            return $this->redirectToRoute('event_sheet');
-        }
+        return $this->render('EventBundle:Agenda:index.html.twig', [
+            'event'         => $eventDomain->getEvent(),
+            'happeningList' => $happeningListView,
+        ]);
     }
 
     /**

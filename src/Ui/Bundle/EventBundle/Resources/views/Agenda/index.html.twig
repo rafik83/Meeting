@@ -1,110 +1,48 @@
-
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block title 'Agenda' %}
 
 {% block content %}
-<div class="agenda-container">
-    <header class="agenda-head">
-        <p>
-            <i class="icon icon-Conference"></i>
-            <strong>Conférences</strong>
-            <span>- Jeudi 02 février 2017</span>
-        </p>
-    </header>
-    <div class="row">
-        <div class="col-md-6 agenda" data-beginHour="{{ happeningList.startTime }}" data-endHour="{{ happeningList.middleTime }}" data-slotDuration="{{ happeningList.scale }}">
-            <div class="meets">
-                {% for index, meeting in happeningList.morning %}
-                    {{ block('meet') }}
-                {% endfor %}
-            </div>
-            <div class="layout"></div>
-            <footer class="agenda-foot">
-                <p>
-                    <i class="icon icon-Deverouiller_1"></i>
-                    <strong>Disponibilité restantes</strong>
-                    <span>- 17 plages horaires</span>
-                </p>
-            </footer>
-        </div>
-        <div class="col-md-6 agenda" data-beginHour="{{ happeningList.middleTime }}" data-endHour="{{ happeningList.endTime }}" data-slotDuration="{{ happeningList.scale }}">
-            <div class="meets">
-                {% for index, meeting in happeningList.afternoon %}
-                    {{ block('meet') }}
-                {% endfor %}
-            </div>
-            <div class="layout"></div>
-            <footer class="agenda-foot">
-                <p>
-                    A voir également
-                    <a href="#conferences" class="btn btn-gray">
-                        <i class="icon icon-Conference"></i> Conférences
-                    </a>
-                </p>
-            </footer>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block meet %}
-<div
-    class="meet {{ meeting.type }}"
-    data-beginHour="{{ meeting.beginHour|date('H:i') }}"
-    data-duration="{{ meeting.duration.format('%H:%I') }}"
->
-    <header>
-        <a class="content" href="#{{ meeting.title }}">
-            <span class="prefix"><i class="icon icon-Conference"></i> N°{{ index }}</span>
-            <p class="title">{{ meeting.title }}</p>
-        </a>
-    </header>
-    <div class="details">
-        <div class="row">
-            <div class="col-md-4">
-                <img src="{{ meeting.picture }}" />
-            </div>
-            <div class="col-md-8">
-                <div class="list list--users">
-                    {% set user = meeting.user %}
-                    {{ block('meet_user') }}
-                </div>
-            </div>
-        </div>
-        <p>{{ meeting.description }}</p>
-        <footer>
-            <p class="hours">
-                <i class="icon icon-Horaire"></i>
-                <span>{{ meeting.beginHour|date('H:i') }} - {{ meeting.endHour|date('H:i') }}</span>
+    <div class="agenda-container">
+        <header class="agenda-head">
+            <p>
+                <i class="icon icon-Conference"></i>
+                <strong>Conférences</strong>
+                <span>- Jeudi 02 février 2017</span>
             </p>
-            <a href="">
-                <i class="icon icon-Document_1"></i>
-                Details
-            </a>
-            <div class="actions">
-                <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
-                <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
-                <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
-                <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
-                <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+        </header>
+        <div class="row">
+            <div class="col-md-6 agenda" data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+                <div class="meets">
+                    {% for meeting in happeningList.morning %}
+                        {{ include('EventBundle:Agenda:meeting.html.twig', {'meeting': meeting}) }}
+                    {% endfor %}
+                </div>
+                <div class="layout"></div>
+                <footer class="agenda-foot">
+                    <p>
+                        <i class="icon icon-Deverouiller_1"></i>
+                        <strong>Disponibilité restantes</strong>
+                        <span>- 17 plages horaires</span>
+                    </p>
+                </footer>
             </div>
-        </footer>
-    </div>
-</div>
-{% endblock %}
-
-{% block meet_user %}
-<div class="user clearfix">
-    <div class="user__avatar">
-        <span class="bullet"></span>
-        <div class="avatar">
-            <img src="{{ user.picture }}" alt="{{ user.name|first }}." title="{{ user.name }}">
+            <div class="col-md-6 agenda" data-beginHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+                <div class="meets">
+                    {% for meeting in happeningList.afternoon %}
+                        {{ include('EventBundle:Agenda:meeting.html.twig', {'meeting': meeting}) }}
+                    {% endfor %}
+                </div>
+                <div class="layout"></div>
+                <footer class="agenda-foot">
+                    <p>
+                        A voir également
+                        <a href="#conferences" class="btn btn-gray">
+                            <i class="icon icon-Conference"></i> Conférences
+                        </a>
+                    </p>
+                </footer>
+            </div>
         </div>
     </div>
-    <div class="user__infos">
-        <p class="name">{{ user.name }}</p>
-        <p class="job">{{ user.job }}</p>
-    </div>
-</div>
 {% endblock %}

@@ -70,6 +70,7 @@ class HappeningViewQueryHandler
 
         foreach ($happenings as $happening) {
             $happeningView = new HappeningView(
+                $happening->getId(),
                 $happening->getCategory()->getTitle($query->locale),
                 $happening->getBegin(),
                 $happening->getEnd(),
@@ -79,7 +80,7 @@ class HappeningViewQueryHandler
                 $happening->getSpeakers()
             );
 
-            if ($happening->getEnd() <= $middleDate) {
+            if ($happening->getEnd()->format('H:i:s') <= $middleDate->format('H:i:s')) {
                 $morningHappeningView[] = $happeningView;
             } else {
                 $afternoonHappeningView[] = $happeningView;

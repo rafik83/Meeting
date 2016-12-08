@@ -1,0 +1,52 @@
+<div class="meet {{ meeting.type }}" data-beginHour="{{ meeting.beginHour|date('H:i') }}" data-duration="{{ meeting.duration.format('%H:%I') }}">
+    <header>
+        <a class="content" href="#{{ meeting.title }}">
+            <span class="prefix"><i class="icon icon-Conference"></i> N°{{ meeting.code }}</span>
+            <p class="title">{{ meeting.title }}</p>
+        </a>
+    </header>
+    <div class="details">
+        <div class="row">
+            <div class="col-md-4">
+                {% if meeting.hasPicture %}
+                    <img src="{{ meeting.picture }}"/>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="list list--users">
+                    {#{% set user = meeting.user %}#}
+                    {#<div class="user clearfix">#}
+                        {#<div class="user__avatar">#}
+                            {#<span class="bullet"></span>#}
+                            {#<div class="avatar">#}
+                                {#<img src="{{ user.picture }}" alt="{{ user.name|first }}." title="{{ user.name }}">#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#<div class="user__infos">#}
+                            {#<p class="name">{{ user.name }}</p>#}
+                            {#<p class="job">{{ user.job }}</p>#}
+                        {#</div>#}
+                    {#</div>#}
+                </div>
+            </div>
+        </div>
+        <p>{{ meeting.description }}</p>
+        <footer>
+            <p class="hours">
+                <i class="icon icon-Horaire"></i>
+                <span>{{ meeting.beginHour|date('H:i') }} - {{ meeting.endHour|date('H:i') }}</span>
+            </p>
+            <a href="">
+                <i class="icon icon-Document_1"></i>
+                Details
+            </a>
+            <div class="actions">
+                <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+            </div>
+        </footer>
+    </div>
+</div>

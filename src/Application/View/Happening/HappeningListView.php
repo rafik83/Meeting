@@ -107,7 +107,7 @@ class HappeningListView
      */
     public function getStartTime()
     {
-        return $this->startTime->format('H:i');
+        return $this->startTime;
     }
 
     /**
@@ -115,7 +115,7 @@ class HappeningListView
      */
     public function getEndTime()
     {
-        return $this->endTime->format('H:i');
+        return $this->endTime;
     }
 
     /**
@@ -123,7 +123,7 @@ class HappeningListView
      */
     public function getMiddleTime()
     {
-        return $this->middleTime->format('H:i');
+        return $this->middleTime;
     }
 
     /**

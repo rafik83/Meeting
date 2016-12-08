@@ -51,8 +51,14 @@ class HappeningView
     private $speakers;
 
     /**
+     * @var int
+     */
+    private $code;
+
+    /**
      * HappeningView constructor.
      *
+     * @param int                $code
      * @param string             $type
      * @param \DateTimeInterface $beginHour
      * @param \DateTimeInterface $endHour
@@ -62,6 +68,7 @@ class HappeningView
      * @param Speaker[]          $speakers
      */
     public function __construct(
+        $code,
         $type,
         \DateTimeInterface $beginHour,
         \DateTimeInterface $endHour,
@@ -77,6 +84,15 @@ class HappeningView
         $this->description = $description;
         $this->picture     = $picture;
         $this->speakers    = $speakers;
+        $this->code        = $code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
@@ -141,5 +157,13 @@ class HappeningView
     public function getSpeakers()
     {
         return $this->speakers;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPicture()
+    {
+        return !empty($this->picture);
     }
 }

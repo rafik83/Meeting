@@ -77,9 +77,7 @@ class Happening
     }
 
     /**
-     * Get id.
-     *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
