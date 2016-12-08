@@ -24,7 +24,6 @@ Feature: See, create and update happening category
     And I should see "Cocktail"
     And I should see "Réunion"
     And I should see "Table ronde"
-    And I should see "picto2"
     And I should see "6"
 
   Scenario: I can create a happening category
