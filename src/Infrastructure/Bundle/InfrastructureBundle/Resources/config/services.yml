@@ -1901,7 +1901,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
-            
+
     ##
     # Navigation builder
     ##
@@ -1986,6 +1986,8 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@domain.key_dates.checker.happenings_access_checker'
 
     ##
     # Notification query handler
