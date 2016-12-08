@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Domain\Package\Product;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
@@ -23,6 +24,9 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * No plan selected
+     */
     public function testNoPlanSelected()
     {
         $event       = EventFactory::createEvent();
@@ -31,9 +35,9 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->addParticipant($participant);
 
         $cartManager = $this->prophesize(CartManager::class);
-        $orderMerger = $this->prophesize(Merger::class);
+        $orderMerger = new Merger();
 
-        $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger->reveal());
+        $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger);
 
         $cart = new Cart($sheet, [], []);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
@@ -45,6 +49,9 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedIncludedParticipantView, $includedParticipantView);
     }
 
+    /**
+     * Plan selected in cart with 2 included and 1 remaining
+     */
     public function testPlanSelectedInCart()
     {
         $event       = EventFactory::createEvent();
@@ -53,9 +60,9 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         $sheet->addParticipant($participant);
 
         $cartManager = $this->prophesize(CartManager::class);
-        $orderMerger = $this->prophesize(Merger::class);
+        $orderMerger = new Merger();
 
-        $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger->reveal());
+        $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger);
 
         $plan                       = Product::createPlan($event, 'My plan', '', 99, 0, 0);
         $participantIncludedProduct = Product::createParticipant($event, 'My participant product', 0, 2);
@@ -68,6 +75,39 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
         $includedParticipantView = $includedParticipantGuesser->getIncludedParticipantView($sheet);
 
         $expectedIncludedParticipantView = new IncludedParticipantView($participantIncludedProduct, 2, 1);
+
+        $this->assertEquals($expectedIncludedParticipantView, $includedParticipantView);
+    }
+
+    /**
+     * Plan selected in order with 1 included and 0 remaining
+     */
+    public function testPlanSelectedInOrder()
+    {
+        $event       = EventFactory::createEvent();
+        $sheet       = SheetFactory::create($event);
+        $participant = ParticipantFactory::create($sheet);
+        $sheet->addParticipant($participant);
+
+        $cartManager = $this->prophesize(CartManager::class);
+        $orderMerger = new Merger();
+
+        $includedParticipantGuesser = new IncludedParticipantGuesser($cartManager->reveal(), $orderMerger);
+
+        $plan                       = Product::createPlan($event, 'My plan', '', 99, 0, 0);
+        $participantIncludedProduct = Product::createParticipant($event, 'My participant product', 0, 2);
+        $plan->includeProduct($participantIncludedProduct, 1);
+
+        $cartManager->getCart($sheet)->shouldNotBeCalled();
+
+        $order = Order::createFromSheet($sheet, new \DateTime());
+        $row   = new Order\Row($order, 1, $plan);
+        $order->addRow($row);
+        $sheet->addOrder($order);
+
+        $includedParticipantView = $includedParticipantGuesser->getIncludedParticipantView($sheet);
+
+        $expectedIncludedParticipantView = new IncludedParticipantView($participantIncludedProduct, 1, 0);
 
         $this->assertEquals($expectedIncludedParticipantView, $includedParticipantView);
     }
