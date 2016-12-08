@@ -30,10 +30,23 @@ class Create
     public $event;
 
     /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event      = $event;
+        $this->leftColor  = $event->getConfiguration()->getLeftColor();
+        $this->rightColor = $event->getConfiguration()->getRightColor();
+
     }
 }

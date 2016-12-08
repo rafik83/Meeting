@@ -32,7 +32,12 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $update->category->update($update->picto, $update->title);
+        $update->category->update(
+            $update->picto,
+            $update->title,
+            $update->leftColor,
+            $update->rightColor
+        );
 
         $this->categoryRepository->update($update->category);
     }

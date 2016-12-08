@@ -25,6 +25,7 @@
             <th>{{ 'admin.happening_category.table.column.title'|trans }}</th>
             <th>{{ 'admin.happening_category.table.column.picto'|trans }}</th>
             <th>{{ 'admin.happening_category.table.column.rank'|trans }}</th>
+            <th>{{ 'admin.happening_category.table.column.color'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -34,6 +35,7 @@
                 <td>{{ category.title }}</td>
                 <td>{{ category.picto }}</td>
                 <td>{{ category.rank }}</td>
+                <td style="background-image: linear-gradient(to right, {{ category.leftColor }}, {{ category.rightColor }});"></td>
                 <td class="text-right">
                     <a href="{{ path('admin_happening_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-sm btn-default">
                         {{ 'admin.happening_category.update'|trans }}

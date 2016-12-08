@@ -30,12 +30,24 @@ class Update
     public $category;
 
     /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
      * @param Category $category
      */
     public function __construct(Category $category)
     {
-        $this->category = $category;
-        $this->title    = $category->getTitle();
-        $this->picto    = $category->getPicto();
+        $this->category   = $category;
+        $this->title      = $category->getTitle();
+        $this->picto      = $category->getPicto();
+        $this->leftColor  = $category->getLeftColor();
+        $this->rightColor = $category->getRightColor();
     }
 }

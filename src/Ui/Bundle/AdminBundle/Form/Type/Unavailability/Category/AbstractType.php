@@ -29,6 +29,12 @@ abstract class AbstractType extends BaseAbstractType
             ->add('picto', CategoryPictoType::class, [
                 'required' => true,
             ])
+            ->add('leftColor', TextType::class, [
+                'required' => true,
+            ])
+            ->add('rightColor', TextType::class, [
+                'required' => true,
+            ])
         ;
     }
 }

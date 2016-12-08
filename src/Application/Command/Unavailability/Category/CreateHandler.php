@@ -33,7 +33,13 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $category = new Category($create->event, $create->picto, $create->title);
+        $category = new Category(
+            $create->event,
+            $create->picto,
+            $create->title,
+            $create->leftColor,
+            $create->rightColor
+        );
 
         $this->categoryRepository->create($category);
     }

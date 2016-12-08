@@ -18,6 +18,7 @@
         <tr>
             <th>{{ 'admin.unavailability.category.table.column.title'|trans }}</th>
             <th>{{ 'admin.unavailability.category.table.column.picto'|trans }}</th>
+            <th>{{ 'admin.unavailability.category.table.column.color'|trans }}</th>
             <th></th>
         </tr>
         </thead>
@@ -26,6 +27,7 @@
             <tr>
                 <td>{{ category.title }}</td>
                 <td>{{ category.picto }}</td>
+                <td style="background-image: linear-gradient(to right, {{ category.leftColor }}, {{ category.rightColor }});"></td>
                 <td class="text-right">
                     <a href="{{ path('admin_unavailability_category_update', {event: event.id, category: category.id}) }}" class="btn btn-default">
                         {{ 'admin.unavailability.category.table.content.update'|trans }}
