@@ -24,4 +24,11 @@ interface DayRepositoryInterface
      * @param Event $event
      */
     public function removeFromEvent(Event $event);
+
+    /**
+     * @param $event
+     *
+     * @return Day
+     */
+    public function findByEvent(Event $event);
 }

@@ -109,6 +109,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->from(Happening::class, 'happening')
             ->join('happening.translations', 'translations')
             ->where('happening.event = :event')
+            ->orderBy('happening.begin')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

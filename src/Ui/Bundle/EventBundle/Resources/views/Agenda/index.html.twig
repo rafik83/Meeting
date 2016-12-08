@@ -13,9 +13,9 @@
         </p>
     </header>
     <div class="row">
-        <div class="col-md-6 agenda" data-beginHour="08:00" data-endHour="13:00" data-slotDuration="00:30">
+        <div class="col-md-6 agenda" data-beginHour="{{ happeningList.startTime }}" data-endHour="{{ happeningList.middleTime }}" data-slotDuration="{{ happeningList.scale }}">
             <div class="meets">
-                {% for index, meeting in morning %}
+                {% for index, meeting in happeningList.morning %}
                     {{ block('meet') }}
                 {% endfor %}
             </div>
@@ -28,9 +28,9 @@
                 </p>
             </footer>
         </div>
-        <div class="col-md-6 agenda" data-beginHour="13:00" data-endHour="18:00" data-slotDuration="00:30">
+        <div class="col-md-6 agenda" data-beginHour="{{ happeningList.middleTime }}" data-endHour="{{ happeningList.endTime }}" data-slotDuration="{{ happeningList.scale }}">
             <div class="meets">
-                {% for index, meeting in afternoon %}
+                {% for index, meeting in happeningList.afternoon %}
                     {{ block('meet') }}
                 {% endfor %}
             </div>

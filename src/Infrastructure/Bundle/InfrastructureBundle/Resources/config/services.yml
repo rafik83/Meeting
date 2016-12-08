@@ -1918,6 +1918,14 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
+
+    query.happening.happening_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\HappeningViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@repository.event.day_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery }
             
     ##
     # Navigation builder

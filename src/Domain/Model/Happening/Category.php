@@ -105,4 +105,14 @@ class Category extends AbstractCategory
             ? $this->translations->get($locale)->getTitle()
             : '';
     }
+
+    /**
+     * @param $locale
+     *
+     * @return string
+     */
+    public function getTitle($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
 }
