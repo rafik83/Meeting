@@ -64,6 +64,7 @@ admin.goback.link: Retour
 admin.happening_category.add: Ajouter
 admin.happening_category.addTitle: 'Ajouter une catégorie de conférences'
 admin.happening_category.link: 'Catégories de conférences'
+admin.happening_category.table.column.color: Couleur
 admin.happening_category.table.column.picto: Picto
 admin.happening_category.table.column.rank: Position
 admin.happening_category.table.column.title: Titre
@@ -95,7 +96,7 @@ admin.happening_speaker.update: Modifier
 admin.happening_speaker.updateTitle: 'Modifier un intervenant'
 admin.happening.add: Ajouter
 admin.happening.addTitle: 'Ajouter une conférence'
-admin.happening.menu.link: Sous-événements
+admin.happening.menu.link: Programme
 admin.happening.link: Conférences
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
@@ -431,6 +432,7 @@ admin.unavailability.category.link: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.category.title: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.category.table.column.title: Titre
 admin.unavailability.category.table.column.picto: Picto
+admin.unavailability.category.table.column.color: Couleur
 admin.unavailability.category.table.content.update: Modifier
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'

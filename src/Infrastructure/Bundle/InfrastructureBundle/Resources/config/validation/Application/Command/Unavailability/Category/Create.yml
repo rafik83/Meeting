@@ -1,0 +1,14 @@
+Proximum\Vimeet\Application\Command\Unavailability\Category\Create:
+    properties:
+        title:
+            - NotNull: ~
+        leftColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        rightColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal

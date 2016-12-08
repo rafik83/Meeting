@@ -598,10 +598,14 @@ form.type_update.children.translations.prototype.children.description.label: Des
 form.type_update.children.translations.prototype.children.title.label: Titre
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_update.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.unavailability_category_create.children.leftColor.label: 'Couleur de gauche'
 form.unavailability_category_create.children.picto.label: 'Picto'
+form.unavailability_category_create.children.rightColor.label: 'Couleur de droite'
 form.unavailability_category_create.children.submit.label: 'Enregistrer'
 form.unavailability_category_create.children.title.label: 'Titre de la catégorie'
+form.unavailability_category_update.children.leftColor.label: 'Couleur de gauche'
 form.unavailability_category_update.children.picto.label: 'Picto'
+form.unavailability_category_update.children.rightColor.label: 'Couleur de droite'
 form.unavailability_category_update.children.submit.label: 'Enregistrer'
 form.unavailability_category_update.children.title.label: 'Titre de la catégorie'
 form.update_admin.children.email.label: Email

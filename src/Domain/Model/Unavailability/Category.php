@@ -26,10 +26,12 @@ class Category extends AbstractCategory
      * @param Event  $event
      * @param string $picto
      * @param string $title
+     * @param string $leftColor
+     * @param string $rightColor
      */
-    public function __construct(Event $event, $picto, $title)
+    public function __construct(Event $event, $picto, $title, $leftColor, $rightColor)
     {
-        parent::__construct($event, $picto);
+        parent::__construct($event, $picto, $leftColor, $rightColor);
 
         $this->title = $title;
     }
@@ -53,10 +55,14 @@ class Category extends AbstractCategory
     /**
      * @param string $picto
      * @param string $title
+     * @param string $leftColor
+     * @param string $rightColor
      */
-    public function update($picto, $title)
+    public function update($picto, $title, $leftColor, $rightColor)
     {
-        $this->picto = $picto;
-        $this->title = $title;
+        $this->picto      = $picto;
+        $this->title      = $title;
+        $this->leftColor  = $leftColor;
+        $this->rightColor = $rightColor;
     }
 }

@@ -59,7 +59,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\Happening\CategoryListView(category.id, translation.title, category.picto, category.rank)')
+            ->select('NEW Proximum\Vimeet\Domain\View\Happening\CategoryListView(category.id, translation.title, category.picto, category.rank, category.leftColor, category.rightColor)')
             ->from(Category::class, 'category')
             ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->where('category.event = :event')
