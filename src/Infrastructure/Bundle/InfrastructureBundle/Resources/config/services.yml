@@ -1456,6 +1456,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
     components.security.admin_sheet_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
+    components.security.happening_access:
+        class: Proximum\Vimeet\Application\Components\Security\HappeningAccess
+        arguments:
+            - '@datetime'
 
     #
     # Guideline Component

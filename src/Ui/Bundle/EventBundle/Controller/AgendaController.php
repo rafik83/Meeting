@@ -28,6 +28,7 @@ class AgendaController extends Controller
     public function indexAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
         if ($request->attributes->get('day') === null) {
             return $this->redirectToRoute('happening_program_day', ['day' => 1]);
