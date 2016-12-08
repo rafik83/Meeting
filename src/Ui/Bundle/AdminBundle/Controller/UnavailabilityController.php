@@ -57,6 +57,7 @@ class UnavailabilityController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($create);
+            $this->addFlash('success', 'flash.admin.unavailability.category.create.success');
 
             return $this->redirectToRoute('admin_unavailability_category_list', [
                 'event' => $event->getId(),
@@ -91,6 +92,7 @@ class UnavailabilityController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($update);
+            $this->addFlash('success', 'flash.admin.unavailability.category.update.success');
 
             return $this->redirectToRoute('admin_unavailability_category_list', [
                 'event' => $event->getId(),
