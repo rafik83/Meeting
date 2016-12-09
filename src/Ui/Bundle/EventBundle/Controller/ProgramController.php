@@ -16,13 +16,14 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProgramController extends Controller
 {
     /**
      * @param EventDomain $eventDomain
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function indexAction(EventDomain $eventDomain)
     {
@@ -53,7 +54,7 @@ class ProgramController extends Controller
                 new HappeningViewQuery(
                     $eventDomain->getEvent(),
                     $request->getLocale(),
-                    $request->attributes->get('day')
+                    $day
                 )
             );
         } catch (HappeningException $exception) {
