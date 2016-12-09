@@ -59,7 +59,7 @@ class DayRepository implements DayRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findFirstDayByEvent(Event $event)
     {
         $queryBuilder = $this
             ->entityManager

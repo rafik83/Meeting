@@ -116,6 +116,44 @@ class HappeningRepository implements HappeningRepositoryInterface
     }
 
     /**
+     * @param Event                   $event
+     * @param \DateTimeInterface      $day
+     * @param Happening\Category|null $category
+     *
+     * @return Happening[]
+     */
+    public function findByEventAndDayAndCategory(
+        Event $event,
+        \DateTimeInterface $day,
+        Happening\Category $category = null
+    ) {
+        $date = clone $day;
+
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translations')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translations')
+            ->where('happening.event = :event')
+            ->andWhere('happening.begin >= :startDay')
+            ->andWhere('happening.begin < :endDay')
+            ->orderBy('happening.begin')
+            ->setParameter('event', $event)
+            ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
+            ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')))
+        ;
+
+        if ($category !== null) {
+            $queryBuilder
+                ->andWhere('happening.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function findBySpeaker(Speaker $speaker, $locale)

@@ -26,9 +26,9 @@ interface DayRepositoryInterface
     public function removeFromEvent(Event $event);
 
     /**
-     * @param $event
+     * @param Event $event
      *
-     * @return Day
+     * @return Day|null
      */
-    public function findByEvent(Event $event);
+    public function findFirstDayByEvent(Event $event);
 }
