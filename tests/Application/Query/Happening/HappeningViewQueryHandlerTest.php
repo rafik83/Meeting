@@ -50,8 +50,8 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $speakerViewQueryHandler  = $this->prophesize(SpeakerViewQueryHandler::class);
         $categoryViewQueryHandler = $this->prophesize(CategoryViewQueryHandler::class);
 
-        $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn($eventDay);
-        $happeningRepository->findByEvent($event)->shouldBeCalled()->willReturn($happenings);
+        $dayRepository->findFirstDayByEvent($event)->shouldBeCalled()->willReturn($eventDay);
+        $happeningRepository->findByEventAndDayAndCategory($event, $start, null)->shouldBeCalled()->willReturn($happenings);
 
         foreach ($happenings as $happening) {
             $categoryViewQueryHandler->handle(Argument::that(function (CategoryViewQuery $query) {
@@ -63,7 +63,7 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $speakerViewQueryHandler->handle(Argument::that(function (SpeakerViewQuery $query) {
                 return $query;
             }))->shouldBeCalled()->willReturn([new HappeningSpeakerView(
-                'john', 'doh', 'developer', ''
+                'john', 'doh', 'developer', '', ''
             )]);
         }
 

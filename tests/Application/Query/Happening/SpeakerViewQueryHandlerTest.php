@@ -39,8 +39,8 @@ class SpeakerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Expected
         $expectedSpeakerViews = [
-            new HappeningSpeakerView('john', 'doh', 'developer', ''),
-            new HappeningSpeakerView('foo', 'bar', 'ceo', ''),
+            new HappeningSpeakerView('john', 'doh', 'developer', '', ''),
+            new HappeningSpeakerView('foo', 'bar', 'ceo', '', ''),
         ];
 
         $handler = new SpeakerViewQueryHandler();
