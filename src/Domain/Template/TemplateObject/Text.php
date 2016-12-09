@@ -42,4 +42,12 @@ class Text extends TemplateObject
     {
         return $this->getOption('type');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExportable()
+    {
+        return false;
+    }
 }

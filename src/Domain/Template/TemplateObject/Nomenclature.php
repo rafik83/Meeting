@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 
-class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface
+class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface
 {
     /**
      * Need and supply objectives constants
@@ -314,6 +314,52 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     public function isRequired()
     {
         return (bool) $this->getOption('required');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent()
+    {
+        if (empty($this->getItems())) {
+            return '';
+        }
+
+        $nomenclatureLabels = $this->getNomenclatureLabels();
+        // Leaf elements are the ones with the longest path (max depth):
+        $maxDepth = 1;
+        $allItemPaths = [];
+
+        foreach ($this->getItems() as $item) {
+            $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
+            $allItemPaths[] = $currentItemLabels;
+            $currentItemLabelCount = count($currentItemLabels);
+            // Update $maxDepth if current item's depth is greater than current $maxDepth:
+            if ($currentItemLabelCount > $maxDepth) {
+                $maxDepth = $currentItemLabelCount;
+            }
+        }
+
+        // Filter items to keep only lowest-level ones (items with the max depth):
+        $leaves = array_filter($allItemPaths, function ($item) use ($maxDepth) {
+            return count($item) === $maxDepth;
+        });
+
+        // Implode inner content (each item's path):
+        $leaves = array_map(function ($leave) {
+            return implode('>', $leave);
+        }, $leaves);
+
+        // Implode outer content (all item paths):
+        return implode(",", $leaves);
     }
 
     /**

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class ItemCollection extends TemplateObject implements SearchableObjectInterface, IndexableObjectInterface
+class ItemCollection extends TemplateObject implements SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface
 {
     /**
      * @var Item[]
@@ -168,5 +168,21 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
                 return null !== $title;
             }
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent()
+    {
+        return implode(";", $this->getSearchableContent());
     }
 }

@@ -86,4 +86,12 @@ class Image extends EditableObject implements ContentObjectInterface
             'image/svg+xml',
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExportable()
+    {
+        return false;
+    }
 }
