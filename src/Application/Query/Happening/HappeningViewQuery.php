@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 
 class HappeningViewQuery
