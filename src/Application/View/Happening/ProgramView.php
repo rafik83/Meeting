@@ -82,7 +82,7 @@ class ProgramView
      */
     public function getColSize()
     {
-        return count($this->days) === 1 ? 12 : 6;
+        return $this->getNumberOfDays() === 1 ? 12 : 6;
     }
 
     /**
