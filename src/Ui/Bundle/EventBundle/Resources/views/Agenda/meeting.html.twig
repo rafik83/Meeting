@@ -1,7 +1,7 @@
 <div class="meet {{ meeting.category.title|lower }}" data-beginHour="{{ meeting.beginHour|date('H:i') }}" data-duration="{{ meeting.duration.format('%H:%I') }}">
     <header style="background: linear-gradient(to right, {{ meeting.category.leftColor }} 0%, {{ meeting.category.rightColor }} 100%) !important;">
         <a class="content" href="#{{ meeting.title }}">
-            <span class="prefix"><i class="icon icon-Conference"></i> N°{{ meeting.code }}</span>
+            <span class="prefix"><i class="icon icon-{{ meeting.category.picto }}"></i> N°{{ meeting.code }}</span>
             <p class="title">{{ meeting.title }}</p>
         </a>
     </header>

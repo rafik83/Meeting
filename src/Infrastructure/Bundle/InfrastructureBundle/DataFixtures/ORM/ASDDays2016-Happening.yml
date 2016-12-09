@@ -1,8 +1,8 @@
 Proximum\Vimeet\Domain\Model\Happening\Category:
     category_conference:
-        __construct: ['@event_asddays_2016', 'picto1', 1, '#59a4ea', '#59a4eb']
+        __construct: ['@event_asddays_2016', 'Conference', 1, '#59a4ea', '#59a4eb']
     category_flash:
-        __construct: ['@event_asddays_2016', 'picto2', 2, '#59a4ec', '#59a4ed']
+        __construct: ['@event_asddays_2016', 'PresFlash_2', 2, '#59a4ec', '#59a4ed']
 
 Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation:
     category_conference_fr:
