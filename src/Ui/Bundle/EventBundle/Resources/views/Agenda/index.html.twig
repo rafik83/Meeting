@@ -12,11 +12,8 @@
             </p>
         </header>
         <div class="row">
-            <div class="col-md-6 agenda" data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+            <div class="col-md-6 agenda" {#data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}"#}>
                 <div class="meets">
-                    {% for meeting in happeningList.morning %}
-                        {{ include('EventBundle:Agenda:meeting.html.twig', {'meeting': meeting}) }}
-                    {% endfor %}
                 </div>
                 <div class="layout"></div>
                 <footer class="agenda-foot">
@@ -27,11 +24,13 @@
                     </p>
                 </footer>
             </div>
-            <div class="col-md-6 agenda" data-beginHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+            <div class="col-md-6 agenda" {#data-beginHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}"#}>
                 <div class="meets">
+                    {#
                     {% for meeting in happeningList.afternoon %}
                         {{ include('EventBundle:Agenda:meeting.html.twig', {'meeting': meeting}) }}
                     {% endfor %}
+                    #}
                 </div>
                 <div class="layout"></div>
                 <footer class="agenda-foot">
