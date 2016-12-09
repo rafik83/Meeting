@@ -109,14 +109,14 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 
 ### Definition of Done
 
-- Test d'acceptation respectée : relire la story
-- Clé et libellé de traduction posé en français
+- Test d'acceptation respecté : relire la story
+- Clé et libellé de traduction posé en français (Si possible, par ordre alphabétique, pour éviter les diffs et conflicts avec open10ln)
 - Checker l'accès aux controllers
 - Respecter l'UI Admin (si la story concerne l'Admin)
-- Générer une migration de la DB (si la structure change)
-- Tests unitaires et fonctionnels qui passent
+- Générer une migration de la DB (si la structure change => make migrations)
+- Tests unitaires et fonctionnels qui passent (make test)
 - La branche est en platinum sur Insight 
-- Être reviewé (avoir un +1)
+- Être reviewé (avoir plusieurs +1)
 - Pas de conflit avec `master` ou les résoudre dès que possible.
 
 ### Code
