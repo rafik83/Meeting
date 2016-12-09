@@ -10,6 +10,6 @@ Proximum\Vimeet\Application\Command\Happening\Create:
         allowQuestion:
             - NotNull: ~
         limitParticipant:
-            - Type: integer
+            - Type: int
             - Range:
                 min: 0

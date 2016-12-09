@@ -1,0 +1,46 @@
+@admin
+@admin-event
+@admin-happening
+Feature: See, create and update happening
+  I need to be able to see, create and update an happening
+
+  Scenario: I can create a happening
+    Given the database is purged
+    And the following fixtures files are loaded:
+      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                     |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml    |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml              |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml       |
+      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml           |
+      | @InfrastructureBundle/DataFixtures/ORM/Happening/RdvCarnot2016-Category.yml |
+      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml                |
+      | Admin.yml                                                                   |
+    And I am logged with "test@test.com" on admin
+    When I go to this page "/admin/fr/event/1/happening"
+    And I follow "admin.happening.add"
+    And I should be on this page "/admin/fr/event/1/happening/create"
+    When I fill in the following:
+      | happening_create[category]                | 1             |
+      | happening_create[translations][fr][title] | MyHappening   |
+      | happening_create[translations][en][title] | MyHappening   |
+      | happening_create[allowQuestion]           | 1             |
+      | happening_create[limitParticipant]        |               |
+    And I press "form.happening_create.children.submit.label"
+    Then I should see "flash.admin.happening.create.success"
+    And I should see "MyHappening"
+
+  Scenario: I can update a happening
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event/1/happening/1/update"
+    When I fill in the following:
+      | happening_update[category]                | 1               |
+      | happening_update[translations][fr][title] | Starting event  |
+      | happening_update[translations][en][title] | Starting event  |
+      | happening_update[allowQuestion]           | 0               |
+      | happening_update[limitParticipant]        | 100             |
+    And I press "form.happening_update.children.submit.label"
+    And I should be on this page "/admin/fr/event/1/happening/update"
+    Then I should see "flash.admin.happening.update.success"
+    And the "happening_update[translations][fr][title]" field should contain "Starting event"
+    And the "happening_update[limitParticipant]" field should contain "100"

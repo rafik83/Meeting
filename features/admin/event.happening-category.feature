@@ -28,9 +28,9 @@ Feature: See, create and update happening category
 
   Scenario: I can create a happening category
     Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/en/event/1/happening/category"
+    And I am on this page "/admin/fr/event/1/happening/category"
     And I follow "admin.happening_category.add"
-    And I should be on this page "/admin/en/event/1/happening/category/create"
+    And I should be on this page "/admin/fr/event/1/happening/category/create"
     When I fill in the following:
       | category_create[rank]                    | 1             |
       | category_create[picto]                   | Dejeuner      |
@@ -46,12 +46,12 @@ Feature: See, create and update happening category
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/happening/category/7/update"
     When I fill in the following:
-      | category_update[rank]                    | 2                |
-      | category_update[picto]                   | Dejeuner         |
-      | category_update[translations][fr][title] | MyNewCategory    |
-      | category_update[translations][en][title] | MyNewCategory    |
-      | category_update[leftColor]               | #59a4eb          |
-      | category_update[rightColor]              | #00398c          |
+      | category_update[rank]                    | 2              |
+      | category_update[picto]                   | Dejeuner       |
+      | category_update[translations][fr][title] | MyNewCategory  |
+      | category_update[translations][en][title] | MyNewCategory  |
+      | category_update[leftColor]               | #59a4eb        |
+      | category_update[rightColor]              | #00398c        |
     And I press "form.category_update.children.submit.label"
     Then I should see "flash.admin.happening.category.update.success"
     And I should not see "MyCategory"

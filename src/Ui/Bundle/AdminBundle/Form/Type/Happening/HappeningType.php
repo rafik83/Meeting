@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -46,7 +46,7 @@ abstract class HappeningType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
             ])
-            ->add('limitParticipant', NumberType::class, [
+            ->add('limitParticipant', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
