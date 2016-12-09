@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -35,6 +38,20 @@ abstract class HappeningType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,
                 'label'      => false,
+            ])
+            ->add('allowQuestion', ChoiceType::class, [
+                'choices'  => [
+                    'form.happening_create.children.allowQuestion.answer.true' => true,
+                    'form.happening_create.children.allowQuestion.answer.false'  => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])
+            ->add('limitParticipant', NumberType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
             ])
             ->add('talkings', CollectionType::class, [
                 'entry_type'     => TalkingType::class,
