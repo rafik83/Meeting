@@ -22,3 +22,6 @@ Feature: Search sheet in catalog
     Then I should be on this page "/fr/sheet"
     When I go to this page "/fr/program"
     Then I should be on this page "/fr/program/day/1"
+    And I should see "Elao Talk"
+    And I should see "Conférence 3"
+    And I should see "Proximum conf"
