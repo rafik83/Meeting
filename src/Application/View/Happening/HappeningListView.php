@@ -127,6 +127,14 @@ class HappeningListView
     }
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getDay()
+    {
+        return $this->startTime;
+    }
+
+    /**
      * @return string
      */
     public function getScale()

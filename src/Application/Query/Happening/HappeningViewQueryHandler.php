@@ -71,13 +71,18 @@ class HappeningViewQueryHandler
      */
     public function handle(HappeningViewQuery $query)
     {
-        $eventDay = $this->dayRepository->findByEvent($query->event);
+        $eventDay = $this->dayRepository->findFirstDayByEvent($query->event);
 
         if ($eventDay === null) {
             throw new MissingEventDayConfigurationException();
         }
 
-        $happenings    = $this->happeningRepository->findByEvent($query->event);
+        $happenings = $this->happeningRepository->findByEventAndDayAndCategory(
+            $query->event,
+            $eventDay->getDay(),
+            null
+        );
+
         $scheduleScale = $query->event->getConfiguration()->getScheduleScale();
 
         $morningHappeningView   = [];
@@ -105,11 +110,13 @@ class HappeningViewQueryHandler
                 $speakerView
             );
 
-            if ($happening->getEnd()->format('H:i:s') <= $middleDate->format('H:i:s')) {
+            //if ($happening->getBegin()->format('H:i:s') <= $middleDate->format('H:i:s')) {
                 $morningHappeningView[] = $happeningView;
-            } else {
-                $afternoonHappeningView[] = $happeningView;
-            }
+            //}
+
+            //if ($happening->getEnd()->format('H:i:s') > $middleDate->format('H:i:s')) {
+               // $afternoonHappeningView[] = $happeningView;
+            //}
 
         }
 
@@ -117,7 +124,8 @@ class HappeningViewQueryHandler
             $query->event,
             $eventDay->getStartTime(),
             $eventDay->getEndTime(),
-            $middleDate,
+            $eventDay->getEndTime(),
+            //$middleDate,
             $query->event->getConfiguration()->getScheduleScale(),
             $morningHappeningView,
             $afternoonHappeningView

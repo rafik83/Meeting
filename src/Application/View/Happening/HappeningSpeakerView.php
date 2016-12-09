@@ -33,19 +33,31 @@ class HappeningSpeakerView
     private $picture;
 
     /**
+     * @var string
+     */
+    private $companyPicture;
+
+    /**
      * HappeningSpeakerView constructor.
      *
      * @param string $firstname
      * @param string $lastname
      * @param string $position
      * @param string $picture
+     * @param string $companyPicture
      */
-    public function __construct($firstname, $lastname, $position, $picture)
-    {
-        $this->firstname = $firstname;
-        $this->lastname  = $lastname;
-        $this->position  = $position;
-        $this->picture   = $picture;
+    public function __construct(
+        $firstname,
+        $lastname,
+        $position,
+        $picture,
+        $companyPicture
+    ) {
+        $this->firstname      = $firstname;
+        $this->lastname       = $lastname;
+        $this->position       = $position;
+        $this->picture        = $picture;
+        $this->companyPicture = $companyPicture;
     }
 
     /**
@@ -86,5 +98,33 @@ class HappeningSpeakerView
     public function hasPicture()
     {
         return !empty($this->picture);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCompanyPicture()
+    {
+        return !empty($this->companyPicture);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyPicture()
+    {
+        return $this->companyPicture;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInitials()
+    {
+        return sprintf(
+            '%s%s',
+            strtoupper(mb_substr($this->firstname, 0, 1)),
+            strtoupper(mb_substr($this->lastname, 0, 1))
+        );
     }
 }

@@ -28,7 +28,8 @@ class SpeakerViewQueryHandler
                 $speaker->getFirstname(),
                 $speaker->getLastname(),
                 $speaker->getPosition($query->locale),
-                $speaker->getPhoto()
+                $speaker->getPhoto(),
+                $speaker->getLogo()
             );
         }
 
