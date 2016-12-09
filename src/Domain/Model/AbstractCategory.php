@@ -18,6 +18,7 @@ class AbstractCategory
     const PICTO_MEETING    = 'RDV';
     const PICTO_FLASH      = 'PresFlash_2';
     const PICTO_COFFEE     = 'Cafe_1';
+
     /**
      * @var int
      */

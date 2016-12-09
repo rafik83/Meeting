@@ -45,7 +45,6 @@ class Update
      */
     public $talkings = [];
 
-
     /**
      * @var bool
      */

@@ -285,7 +285,7 @@ class Happening
     }
 
     /**
-     * @param boolean $allowQuestion
+     * @param bool $allowQuestion
      */
     public function setAllowQuestion($allowQuestion)
     {
