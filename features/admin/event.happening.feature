@@ -40,7 +40,7 @@ Feature: See, create and update happening
       | happening_update[allowQuestion]           | 0               |
       | happening_update[limitParticipant]        | 100             |
     And I press "form.happening_update.children.submit.label"
-    And I should be on this page "/admin/fr/event/1/happening/update"
+    And I should be on this page "/admin/fr/event/1/happening/1/update"
     Then I should see "flash.admin.happening.update.success"
     And the "happening_update[translations][fr][title]" field should contain "Starting event"
     And the "happening_update[limitParticipant]" field should contain "100"
