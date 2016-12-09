@@ -31,7 +31,7 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $category = new Happening\Category($event, '', 1, '#aaa', '#bbb');
 
         $categoryTranslation = new Happening\CategoryTranslation($category, $locale, 'conference');
-        $category->getTranslations()->set($locale, $categoryTranslation);
+        $category->setTranslation($categoryTranslation);
 
         $happening1          = new Happening($event, $start, $end, $category);
         $speaker1            = new Happening\Speaker($event, 'john', 'doh', 'google', '', '');

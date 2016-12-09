@@ -26,7 +26,7 @@ class CategoryViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $category  = new Category($event, '', 1, '#aaa', '#bbb');
 
         $categoryTranslation = new Happening\CategoryTranslation($category, $locale, 'conference');
-        $category->getTranslations()->set($locale, $categoryTranslation);
+        $category->setTranslation($categoryTranslation);
 
         $happening = new Happening($event, $begin, $end, $category);
 
