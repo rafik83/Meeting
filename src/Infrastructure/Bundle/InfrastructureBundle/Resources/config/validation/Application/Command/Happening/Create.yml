@@ -7,3 +7,9 @@ Proximum\Vimeet\Application\Command\Happening\Create:
                         title:
                             - NotBlank: ~
                         description: ~
+        allowQuestion:
+            - NotNull: ~
+        limitParticipant:
+            - Type: integer
+            - Range:
+                min: 0
