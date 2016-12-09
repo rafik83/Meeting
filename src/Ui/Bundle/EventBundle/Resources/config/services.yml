@@ -45,7 +45,7 @@ services:
     security_voter.happening_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
         arguments:
-            - '@components.security.happening_access'
+            - '@domain.key_dates.checker.happenings_access_checker'
         tags:
             - { name: security.voter }
 

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter;
 
-use Proximum\Vimeet\Application\Components\Security\HappeningAccess;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -19,18 +19,18 @@ class HappeningAccessVoter extends Voter
 {
 
     /**
-     * @var HappeningAccess
+     * @var HappeningsAccessChecker
      */
-    private $happeningAccess;
+    private $happeningsAccessChecker;
 
     /**
      * HappeningAccessVoter constructor.
      *
-     * @param HappeningAccess $happeningAccess
+     * @param HappeningsAccessChecker $happeningsAccessChecker
      */
-    public function __construct(HappeningAccess $happeningAccess)
+    public function __construct(HappeningsAccessChecker $happeningsAccessChecker)
     {
-        $this->happeningAccess = $happeningAccess;
+        $this->happeningsAccessChecker = $happeningsAccessChecker;
     }
 
     /**
@@ -46,6 +46,6 @@ class HappeningAccessVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        return $this->happeningAccess->canAccess($subject);
+        return $this->happeningsAccessChecker->allowedToAccess($subject);
     }
 }
