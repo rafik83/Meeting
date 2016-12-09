@@ -10,12 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
-use DateInterval;
-use DatePeriod;
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\View\Happening\HappeningListView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
-use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
