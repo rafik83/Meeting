@@ -1,8 +1,8 @@
-@event @happening
-Feature: Search sheet in catalog
-  As a participant, I can filter the sheet list in catalog by position
+@event @happening @program
+Feature: Program Happening
+  As a participant, I can see the program of happening of the event
 
-  Scenario: I can search and filter sheet by catalog by position
+  Scenario: I can see the program of happening of the event
     Given the database is empty
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
