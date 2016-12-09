@@ -93,6 +93,16 @@ class SearchType extends AbstractType
                 );
         }
 
+        $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
+            'label'    => 'form.search.objective.label',
+            'expanded' => true,
+            'multiple' => true,
+            'choices'  => [
+                'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
+                'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
+            ],
+        ]);
+
         if (($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) !== false) {
             $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
                 'label'        => $organizationCategoryFacet->label,
@@ -119,15 +129,16 @@ class SearchType extends AbstractType
             ]);
         }
 
-        $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
-            'label'    => 'form.search.objective.label',
-            'expanded' => true,
-            'multiple' => true,
-            'choices'  => [
-                'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
-                'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
-            ],
-        ]);
+        if (($positionFacet = $searchFacetsView->hasPosition()) !== false) {
+            $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
+                'label'   => $positionFacet->label,
+                'choices' => $positionViews,
+                'attr' => [
+                    'class'            => 'form-control select2',
+                    'data-placeholder' => $positionFacet->placeholder,
+                ],
+            ]);
+        }
 
         if (($localizationFacet = $searchFacetsView->hasLocalization()) !== false) {
             $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
@@ -144,17 +155,6 @@ class SearchType extends AbstractType
                 'label' => $keywordFacet->label,
                 'attr'  => [
                     'data-placeholder' => $keywordFacet->placeholder,
-                ],
-            ]);
-        }
-
-        if (($positionFacet = $searchFacetsView->hasPosition()) !== false) {
-            $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
-                'label'   => $positionFacet->label,
-                'choices' => $positionViews,
-                'attr' => [
-                    'class'            => 'form-control select2',
-                    'data-placeholder' => $positionFacet->placeholder,
                 ],
             ]);
         }

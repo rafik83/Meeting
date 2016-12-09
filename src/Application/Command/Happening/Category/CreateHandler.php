@@ -34,7 +34,13 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $category = new Category($create->event, $create->picto, $create->position);
+        $category = new Category(
+            $create->event,
+            $create->picto,
+            $create->position,
+            $create->leftColor,
+            $create->rightColor
+        );
 
         foreach ($create->translations as $locale => $translation) {
             $category->setTranslation(new CategoryTranslation($category, $locale, $translation['title']));

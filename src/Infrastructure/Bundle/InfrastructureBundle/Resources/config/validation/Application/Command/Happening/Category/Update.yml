@@ -8,3 +8,7 @@ Proximum\Vimeet\Application\Command\Happening\Category\Update:
                             - NotBlank: ~
         position:
             - NotNull: ~
+        leftColor:
+            - NotBlank: ~
+        rightColor:
+            - NotBlank: ~

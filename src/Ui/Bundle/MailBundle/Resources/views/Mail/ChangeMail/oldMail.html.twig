@@ -1,5 +1,10 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
-    {{ 'mail.changeMailOld.body'|trans({'%email%': mail.newMail}, 'mail', mail.locale)|html|nl2br }}
+    {{ 'mail.changeMailOld.body'|trans({
+        '%email%': mail.newMail,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
+    }, 'mail', mail.locale)|html|nl2br }}
 {% endblock %}

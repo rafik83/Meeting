@@ -5,6 +5,14 @@
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
     {% endif %}
 
+    {% if searchForm.objective is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.objective.vars.label|trans({}, searchForm.objective.vars.translation_domain) }}</h3>
+
+            {{ form_widget(searchForm.objective) }}
+        </div>
+    {% endif %}
+
     {% if searchForm.organizationCategory is defined %}
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
@@ -49,14 +57,6 @@
                     data-minimum-input-length="3"
                     class="form-control">
             </select>
-        </div>
-    {% endif %}
-
-    {% if searchForm.objective is defined %}
-        <div class="filter">
-            <h3>{{ searchForm.objective.vars.label|trans({}, searchForm.objective.vars.translation_domain) }}</h3>
-
-            {{ form_widget(searchForm.objective) }}
         </div>
     {% endif %}
 

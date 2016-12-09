@@ -11,6 +11,10 @@ Proximum\Vimeet\Domain\Model\Happening\Category:
             type: string
         position:
             type: integer
+        leftColor:
+            type: string
+        rightColor:
+            type: string
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation

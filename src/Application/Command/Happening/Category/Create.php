@@ -41,13 +41,23 @@ class Create
     public $category;
 
     /**
-     * Create constructor.
-     *
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event      = $event;
+        $this->leftColor  = $event->getConfiguration()->getLeftColor();
+        $this->rightColor = $event->getConfiguration()->getRightColor();
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

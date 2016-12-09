@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -59,6 +60,9 @@ class FilterFullType extends AbstractType
             ->add('validationState', ValidationStateChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.validationState.label',
             ])
+            ->add('orderBy', SortChoiceType::class, [
+                'label'       => 'form.sheet_filter.children.orderBy.label',
+            ])
         ;
     }
 
@@ -85,6 +89,7 @@ class FilterFullType extends AbstractType
     {
         return [
             'enabled' => true,
+            'orderBy' => Constant::ORDER_BY_CREATED_AT,
         ];
     }
 }

@@ -26,14 +26,14 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $event->setLocales(['fr', 'en'], 'fr');
 
         // Current
-        $category     = new Category($event, 'picto1', 2);
+        $category     = new Category($event, 'picto1', 2, '#123456', '#AA3456');
         $translation1 = new CategoryTranslation($category, 'fr', 'truc');
         $translation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($translation1);
         $category->setTranslation($translation2);
 
         // Expected
-        $expectedCategory     = new Category($event, 'picto2', 3);
+        $expectedCategory     = new Category($event, 'picto2', 3, '#654321', '#BB4321');
         $expectedTranslation1 = new CategoryTranslation($expectedCategory, 'fr', 'troc');
         $expectedTranslation2 = new CategoryTranslation($expectedCategory, 'en', 'trec');
         $expectedCategory->setTranslation($expectedTranslation1);
@@ -51,6 +51,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             'fr' => ['title' => 'troc'],
             'en' => ['title' => 'trec'],
         ];
+        $update->leftColor  = '#654321';
+        $update->rightColor = '#BB4321';
 
         $handler = new UpdateHandler($categoryRepository->reveal());
         $handler->handle($update);

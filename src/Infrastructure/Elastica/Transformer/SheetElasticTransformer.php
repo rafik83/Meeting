@@ -141,28 +141,22 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'completed'               => $sheet->isCompleted(),
                 'type'                    => $sheet->getType()->getId(),
                 'categories'              => $categories,
-                'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()
-                    ->getId() : null,
+                'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
                 'participantNumber'       => count($sheet->getParticipants()),
                 'participants'            => $participants,
                 'event'                   => $sheet->getEvent()->getId(),
                 'owner'                   => $owner,
                 'createdAt'               => $sheet->getCreatedAt()->format('c'),
                 'inCatalog'               => $sheet->isInCatalog(),
-                'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()
-                    ->format('c') : null,
+                'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                 'booleanFilter'           => $filtersValue,
                 'hasOrder'                => $sheet->hasNotCancelledOrders(),
                 'hasCart'                 => $hasCart,
-                'organizationCategory'    => in_array($organizationCategory, [
-                    false,
-                    '',
-                ]) ? null : $organizationCategory,
+                'organizationCategory'    => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'                 => implode(' ', $content),
                 'city'                    => $this->getCity($registrationTemplateData),
                 'zipcode'                 => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
-                'country'                 => $this->buildCountry($registrationTemplateData, $sheet->getEvent()
-                    ->getLocales()),
+                'country'                 => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
                 'nomenclatureItems'       => $nomenclatureItems,
                 'nomenclatureItemsSupply' => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
                 'nomenclatureItemsNeeds'  => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_NEED),
@@ -196,6 +190,42 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return implode(' ', $searchableContent);
+    }
+
+    /**
+     * @param TemplateData $templateData
+     *
+     * @return false|string
+     */
+    private function getCountryCode(TemplateData $templateData)
+    {
+        return $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY);
+    }
+
+    /**
+     * @param TemplateData $templateData
+     * @param array        $locales
+     *
+     * @return array
+     */
+    private function buildCountry(TemplateData $templateData, array $locales)
+    {
+        $country     = [];
+        $countryCode = $this->getCountryCode($templateData);
+
+        if ($countryCode !== false) {
+            $regionBundle = Intl::getRegionBundle();
+
+            foreach ($locales as $key => $locale) {
+                $countryName = $regionBundle->getCountryName($countryCode, $locale);
+
+                $country[$key]['locale']             = $locale;
+                $country[$key]['label']              = $countryName;
+                $country[$key]['label_autocomplete'] = $countryName;
+            }
+        }
+
+        return $country;
     }
 
     /**
@@ -233,42 +263,6 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return $keywords;
-    }
-
-    /**
-     * @param TemplateData $templateData
-     *
-     * @return false|string
-     */
-    private function getCountryCode(TemplateData $templateData)
-    {
-        return $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY);
-    }
-
-    /**
-     * @param TemplateData $templateData
-     * @param array        $locales
-     *
-     * @return array
-     */
-    private function buildCountry(TemplateData $templateData, array $locales)
-    {
-        $country     = [];
-        $countryCode = $this->getCountryCode($templateData);
-
-        if ($countryCode !== false) {
-            $regionBundle = Intl::getRegionBundle();
-
-            foreach ($locales as $key => $locale) {
-                $countryName = $regionBundle->getCountryName($countryCode, $locale);
-
-                $country[$key]['locale']             = $locale;
-                $country[$key]['label']              = $countryName;
-                $country[$key]['label_autocomplete'] = $countryName;
-            }
-        }
-
-        return $country;
     }
 
     /**

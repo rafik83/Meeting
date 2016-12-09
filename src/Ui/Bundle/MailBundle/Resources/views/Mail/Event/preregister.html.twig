@@ -5,13 +5,15 @@
 {% block body %}
     {{ 'mail.event.preregister.body'|trans({
         '%event%': mail.event.title,
-        '%firstname%': mail.receiverUser.account.firstname|capitalize,
-        '%lastname%': mail.receiverUser.account.lastname|upper,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType,
         '%type%': mail.type
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>
     <br>
+
     {{ macros.button(
         'mail.event.preregister.link'|trans({}, 'mail', mail.locale),
         url('event_account_participant', {'sheet': mail.sheet.id, 'participant': mail.participant.id})
