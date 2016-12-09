@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
-use Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,11 +50,11 @@ class ProgramController extends Controller
         }
 
         try {
-            $happeningListView = $this->get('tactician.commandbus.query')->handle(
-                new HappeningViewQuery(
+            $program = $this->get('tactician.commandbus.query')->handle(
+                new ProgramViewQuery(
                     $eventDomain->getEvent(),
                     $request->getLocale(),
-                    $day
+                    null
                 )
             );
         } catch (HappeningException $exception) {
@@ -62,8 +62,8 @@ class ProgramController extends Controller
         }
 
         return $this->render('EventBundle:Program:day.html.twig', [
-            'event'         => $eventDomain->getEvent(),
-            'happeningList' => $happeningListView,
+            'event'   => $eventDomain->getEvent(),
+            'program' => $program,
         ]);
     }
 }

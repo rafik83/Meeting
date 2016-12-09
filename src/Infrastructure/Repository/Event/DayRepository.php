@@ -59,6 +59,23 @@ class DayRepository implements DayRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('day')
+            ->from(Day::class, 'day')
+            ->where('day.event = :event')
+            ->orderBy('day.startTime')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findFirstDayByEvent(Event $event)
     {
         $queryBuilder = $this

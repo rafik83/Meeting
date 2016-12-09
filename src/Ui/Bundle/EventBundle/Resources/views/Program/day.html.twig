@@ -4,17 +4,27 @@
 
 {% block content %}
     <div class="agenda-container">
-        <header class="agenda-head">
-            <p>
-                <i class="icon icon-Conference"></i>
-                <strong>{{ 'program.title'|trans }}</strong>
-                <span>- {{ happeningList.day|localizeddate('full', 'none')|capitalize }}</span>
-            </p>
-        </header>
         <div class="row">
-            <div class="col-md-12 agenda" data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+            {% for day in program.days %}
+            <div class="col-md-{{ program.colSize }} agenda" data-beginHour="{{ day.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ day.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.scale }}">
+                <header class="agenda-head">
+                    <p>
+                        {% if not program.hasCategory %}
+                            <i class="icon icon-Conference"></i>
+                            <strong>
+                                {{ 'program.title'|trans }}
+                            </strong>
+                        {% else %}
+                            <i class="icon icon-{{ program.categoryPicto }}"></i>
+                            <strong>
+                                {{ program.categoryTitle }}
+                            </strong>
+                        {% endif %}
+                        <span>- {{ day.day|localizeddate('full', 'none')|capitalize }}</span>
+                    </p>
+                </header>
                 <div class="meets">
-                    {% for happening in happeningList.happenings %}
+                    {% for happening in day.happenings %}
                         {{ include('EventBundle:Program:happening.html.twig', {'happening': happening}) }}
                     {% endfor %}
                 </div>
@@ -29,6 +39,7 @@
                 </footer>
                 #}
             </div>
+            {% endfor %}
             {#
             <div class="col-md-6 agenda">
                 <div class="meets">

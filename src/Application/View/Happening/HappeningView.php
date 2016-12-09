@@ -36,7 +36,7 @@ class HappeningView
     private $description;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $picture;
 
@@ -64,7 +64,7 @@ class HappeningView
      * @param \DateTimeInterface $endHour
      * @param string             $title
      * @param string             $description
-     * @param string             $picture
+     * @param string|null        $picture
      * @param Speaker[]          $speakers
      */
     public function __construct(
@@ -164,6 +164,6 @@ class HappeningView
      */
     public function hasPicture()
     {
-        return !empty($this->picture);
+        return $this->picture !== null;
     }
 }
