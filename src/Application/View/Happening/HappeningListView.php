@@ -37,17 +37,7 @@ class HappeningListView
     /**
      * @var HappeningView[]
      */
-    private $morning;
-
-    /**
-     * @var HappeningView[]
-     */
-    private $afternoon;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $middleTime;
+    private $happenings;
 
     /**
      * HappeningListView constructor.
@@ -55,27 +45,21 @@ class HappeningListView
      * @param Event              $event
      * @param \DateTimeInterface $startTime
      * @param \DateTimeInterface $endTime
-     * @param \DateTimeInterface $middleTime
      * @param int                $scale
-     * @param HappeningView[]    $morning
-     * @param HappeningView[]    $afternoon
+     * @param HappeningView[]    $happenings
      */
     public function __construct(
         Event $event,
         \DateTimeInterface $startTime,
         \DateTimeInterface $endTime,
-        \DateTimeInterface $middleTime,
         $scale,
-        array $morning,
-        array $afternoon
+        array $happenings
     ) {
         $this->event      = $event;
-        $this->morning    = $morning;
-        $this->afternoon  = $afternoon;
         $this->startTime  = $startTime;
         $this->endTime    = $endTime;
         $this->scale      = $scale;
-        $this->middleTime = $middleTime;
+        $this->happenings = $happenings;
     }
 
     /**
@@ -89,17 +73,9 @@ class HappeningListView
     /**
      * @return HappeningView[]
      */
-    public function getMorning()
+    public function getHappenings()
     {
-        return $this->morning;
-    }
-
-    /**
-     * @return HappeningView[]
-     */
-    public function getAfternoon()
-    {
-        return $this->afternoon;
+        return $this->happenings;
     }
 
     /**
@@ -116,14 +92,6 @@ class HappeningListView
     public function getEndTime()
     {
         return $this->endTime;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getMiddleTime()
-    {
-        return $this->middleTime;
     }
 
     /**

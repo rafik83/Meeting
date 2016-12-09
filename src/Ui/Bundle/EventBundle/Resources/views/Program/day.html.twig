@@ -12,9 +12,9 @@
             </p>
         </header>
         <div class="row">
-            <div class="col-md-12 agenda" data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+            <div class="col-md-12 agenda" data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
                 <div class="meets">
-                    {% for happening in happeningList.morning %}
+                    {% for happening in happeningList.happenings %}
                         {{ include('EventBundle:Program:happening.html.twig', {'happening': happening}) }}
                     {% endfor %}
                 </div>
@@ -30,11 +30,8 @@
                 #}
             </div>
             {#
-            <div class="col-md-6 agenda" data-beginHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}">
+            <div class="col-md-6 agenda">
                 <div class="meets">
-                    {% for happening in happeningList.afternoon %}
-                        {{ include('EventBundle:Program:happening.html.twig', {'happening': happening}) }}
-                    {% endfor %}
                 </div>
                 <div class="layout"></div>
                 <footer class="agenda-foot">

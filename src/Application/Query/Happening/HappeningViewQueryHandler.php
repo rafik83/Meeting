@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 use DateInterval;
 use DatePeriod;
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
-use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningListView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -83,12 +82,7 @@ class HappeningViewQueryHandler
             null
         );
 
-        $scheduleScale = $query->event->getConfiguration()->getScheduleScale();
-
-        $morningHappeningView   = [];
-        $afternoonHappeningView = [];
-
-        $middleDate = $this->getMiddleDate($scheduleScale, $eventDay);
+        $happeningViews = [];
 
         foreach ($happenings as $key => $happening) {
             $happeningCategoryView = $this->categoryViewQueryHandler->handle(
@@ -110,45 +104,15 @@ class HappeningViewQueryHandler
                 $speakerView
             );
 
-            //if ($happening->getBegin()->format('H:i:s') <= $middleDate->format('H:i:s')) {
-                $morningHappeningView[] = $happeningView;
-            //}
-
-            //if ($happening->getEnd()->format('H:i:s') > $middleDate->format('H:i:s')) {
-               // $afternoonHappeningView[] = $happeningView;
-            //}
-
+            $happeningViews[] = $happeningView;
         }
 
         return new HappeningListView(
             $query->event,
             $eventDay->getStartTime(),
             $eventDay->getEndTime(),
-            $eventDay->getEndTime(),
-            //$middleDate,
             $query->event->getConfiguration()->getScheduleScale(),
-            $morningHappeningView,
-            $afternoonHappeningView
+            $happeningViews
         );
-    }
-
-    /**
-     * @param int $scheduleScale (in minutes)
-     * @param Day $eventDay
-     *
-     * @return \DateTimeInterface
-     */
-    private function getMiddleDate($scheduleScale, Day $eventDay)
-    {
-        $interval   = DateInterval::createFromDateString($scheduleScale . 'minutes');
-        $period     = new DatePeriod($eventDay->getStartTime(), $interval, $eventDay->getEndTime());
-        $totalSlots = iterator_count($period);
-
-        $morningSlot = round($totalSlots / 2);
-        $startTime   = clone $eventDay->getStartTime();
-
-        $middleDayDate = $startTime->modify(($morningSlot * $scheduleScale) . 'minutes');
-
-        return $middleDayDate;
     }
 }
