@@ -165,3 +165,12 @@ logout.title: Logout
 new_password.title: 'Create a new password'
 register.email_already_exists: 'An account with this email address already exists'
 reset_password.title: 'Request new password'
+admin.messaging.link: Emailing
+admin.messaging.message.link: Messages
+admin.messaging.message.create.title: 'Create a new message'
+admin.messaging.message.name: Name emailing
+admin.messaging.message.subject: Subject
+admin.messaging.message.content: Content
+admin.messaging.message.createdAt: 'Created at'
+admin.messaging.message.list.edit_link: 'Edit'
+admin.messaging.message.edit.title: 'Edit message %name%'

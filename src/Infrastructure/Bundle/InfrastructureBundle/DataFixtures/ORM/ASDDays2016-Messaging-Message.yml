@@ -1,0 +1,8 @@
+Proximum\Vimeet\Domain\Model\Messaging\Message:
+    event_rdv_carnot_2016-message:
+        __construct:
+            - '@event_asddays_2016' #event
+            - <(new \DateTime())>
+            - dummy-name            #name
+            - dummy-subject         #subject
+            - dummy-content         #content

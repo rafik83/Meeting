@@ -229,6 +229,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassRepository
         arguments:
                 - '@doctrine.orm.entity_manager'
+    repository.messaging.message_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1295,6 +1299,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
 
+    command.messaging.message.create_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler
+        arguments:
+            - '@repository.messaging.message_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Message\Create }
+    command.messaging.message.update_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Message\UpdateHandler
+        arguments:
+            - '@repository.messaging.message_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Message\Update }
+
     #
     # Security
     #
@@ -2272,6 +2290,13 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
+
+    query.messaging.message.list_handler:
+        class: Proximum\Vimeet\Application\Query\Messaging\Message\ListQueryHandler
+        arguments:
+            - '@repository.messaging.message_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\ListQuery }
 
     #
     # Elastic Transformer

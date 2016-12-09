@@ -915,3 +915,26 @@ admin_dashboard:
     methods: [GET]
     requirements:
         event: \d+
+
+# Messaging Messages
+admin_messaging_message_list:
+    path: /event/{event}/messaging/messages
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Messaging\Message:list }
+
+admin_messaging_message_create:
+    path: /event/{event}/messaging/message/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Message:create }
+
+admin_messaging_message_update:
+    path: /event/{event}/messaging/message/update/{message}
+    requirements:
+        event: \d+
+        message: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Message:update }

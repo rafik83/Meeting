@@ -119,3 +119,5 @@ flash.sheet.update_block.success: 'Les informations ont bien été enregistrées
 flash.sheet.update_participant.success: 'La fiche participant a bien été modifiée'
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
+flash.messaging.message.create.success: 'Le message a bien été enregistré'
+flash.messaging.message.update.success: 'Le message a bien été modifié'

@@ -630,3 +630,12 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
+admin.messaging.link: Emailing
+admin.messaging.message.link: Messages
+admin.messaging.message.create.title: 'Créer un nouveau message'
+admin.messaging.message.name: Nom emailing
+admin.messaging.message.subject: Sujet
+admin.messaging.message.content: Contenu
+admin.messaging.message.createdAt: 'Créé le'
+admin.messaging.message.list.edit_link: 'Modifier'
+admin.messaging.message.edit.title: 'Modifier message %name%'
