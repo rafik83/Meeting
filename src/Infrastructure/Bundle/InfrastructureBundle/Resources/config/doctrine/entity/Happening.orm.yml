@@ -11,6 +11,13 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: datetime
         end:
             type: datetime
+        allowQuestion:
+            type: boolean
+            options:
+                default: false
+        limitParticipant:
+            type: integer
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

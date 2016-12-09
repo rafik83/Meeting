@@ -55,25 +55,41 @@ class Happening
     private $talkings;
 
     /**
+     * @var bool
+     */
+    private $allowQuestion = false;
+
+    /**
+     * @var int|null
+     */
+    private $limitParticipant;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param bool               $allowQuestion
+     * @param int|null           $limitParticipant
      */
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        CategoryHappening $category
+        CategoryHappening $category,
+        $allowQuestion = false,
+        $limitParticipant = null
     ) {
-        $this->event        = $event;
-        $this->begin        = $begin;
-        $this->end          = $end;
-        $this->category     = $category;
-        $this->translations = new ArrayCollection();
-        $this->talkings     = new ArrayCollection();
+        $this->event            = $event;
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->category         = $category;
+        $this->translations     = new ArrayCollection();
+        $this->talkings         = new ArrayCollection();
+        $this->allowQuestion    = $allowQuestion;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
@@ -184,12 +200,21 @@ class Happening
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param bool               $allowQuestion
+     * @param int|null           $limitParticipant
      */
-    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
-    {
-        $this->begin    = $begin;
-        $this->end      = $end;
-        $this->category = $category;
+    public function update(
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        CategoryHappening $category,
+        $allowQuestion,
+        $limitParticipant
+    ) {
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->category         = $category;
+        $this->allowQuestion    = $allowQuestion;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
@@ -249,5 +274,45 @@ class Happening
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowQuestion()
+    {
+        return $this->allowQuestion;
+    }
+
+    /**
+     * @param boolean $allowQuestion
+     */
+    public function setAllowQuestion($allowQuestion)
+    {
+        $this->allowQuestion = $allowQuestion;
+    }
+
+    /**
+     * @return bool
+     */
+    public function doesLimitParticipant()
+    {
+        return $this->limitParticipant !== null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLimitParticipant()
+    {
+        return $this->limitParticipant;
+    }
+
+    /**
+     * @param int|null $limitParticipant
+     */
+    public function setLimitParticipant($limitParticipant)
+    {
+        $this->limitParticipant = $limitParticipant;
     }
 }
