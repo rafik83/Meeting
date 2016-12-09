@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Components\Security;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 
 class HappeningAccess
 {

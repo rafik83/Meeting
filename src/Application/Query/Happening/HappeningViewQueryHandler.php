@@ -38,20 +38,28 @@ class HappeningViewQueryHandler
     private $speakerViewQueryHandler;
 
     /**
+     * @var CategoryViewQueryHandler
+     */
+    private $categoryViewQueryHandler;
+
+    /**
      * HappeningViewQueryHandler constructor.
      *
      * @param HappeningRepositoryInterface $happeningRepository
      * @param DayRepositoryInterface       $dayRepository
      * @param SpeakerViewQueryHandler      $speakerViewQueryHandler
+     * @param CategoryViewQueryHandler     $categoryViewQueryHandler
      */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         DayRepositoryInterface $dayRepository,
-        SpeakerViewQueryHandler $speakerViewQueryHandler
+        SpeakerViewQueryHandler $speakerViewQueryHandler,
+        CategoryViewQueryHandler $categoryViewQueryHandler
     ) {
-        $this->happeningRepository     = $happeningRepository;
-        $this->dayRepository           = $dayRepository;
-        $this->speakerViewQueryHandler = $speakerViewQueryHandler;
+        $this->happeningRepository      = $happeningRepository;
+        $this->dayRepository            = $dayRepository;
+        $this->speakerViewQueryHandler  = $speakerViewQueryHandler;
+        $this->categoryViewQueryHandler = $categoryViewQueryHandler;
     }
 
     /**
@@ -78,11 +86,8 @@ class HappeningViewQueryHandler
         $middleDate = $this->getMiddleDate($scheduleScale, $eventDay);
 
         foreach ($happenings as $key => $happening) {
-            $happeningCategoryView = new HappeningCategoryView(
-                $happening->getCategory()->getTitle($query->locale),
-                $happening->getCategory()->getPicto(),
-                $happening->getCategory()->getLeftColor(),
-                $happening->getCategory()->getRightColor()
+            $happeningCategoryView = $this->categoryViewQueryHandler->handle(
+                new CategoryViewQuery($happening, $query->locale)
             );
 
             $speakerView = $this->speakerViewQueryHandler->handle(
