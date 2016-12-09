@@ -87,12 +87,12 @@ class SheetSubmenuViewQueryHandler
 
         // Program button
         if ($this->happeningsAccessChecker->allowedToAccess($query->event)
-            && (!$query->sheet->getPackage()->isPassable() || $query->sheet->hasOrders())) {
+            && (!$query->sheet->getPackage()->isPassable() || $query->sheet->hasOrders())
+        ) {
             $buttonViews[] = new SubmenuButtonView(
                 Category::PLANNING_ICON,
                 'program.title',
-            // TODO Modifier la route par celle du programme quand elle sera crée sur la feature #179 "event_happenings_program"
-                $this->navigationBuilder->getRoute('event_catalog_index'),
+                $this->navigationBuilder->getRoute('happening_program'),
                 false
             );
         }
