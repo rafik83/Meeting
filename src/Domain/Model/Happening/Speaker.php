@@ -48,11 +48,14 @@ class Speaker
     private $organization;
 
     /**
+     * Company logo
+     *
      * @var string
      */
     private $logo;
 
     /**
+     * Photo on the speaker
      * @var string
      */
     private $photo;
@@ -135,7 +138,7 @@ class Speaker
     }
 
     /**
-     * Get logo
+     * Get the company logo of the speaker
      *
      * @return string
      */
@@ -145,7 +148,7 @@ class Speaker
     }
 
     /**
-     * Get photo
+     * Get the photo of the speaker
      *
      * @return string
      */
