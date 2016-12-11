@@ -17,3 +17,6 @@ Proximum\Vimeet\Application\Command\Unavailability\Mass\Update:
             - NotNull: ~
         end:
             - NotNull: ~
+            - Expression:
+                expression: "this.begin < this.end"
+                message: "validators.unavailability.startTimeMustBeBeforeEndTime"

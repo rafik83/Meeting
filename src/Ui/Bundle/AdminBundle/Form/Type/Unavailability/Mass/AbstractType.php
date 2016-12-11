@@ -11,10 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\ChoiceType as CategoryChoiceType;
 use Symfony\Component\Form\AbstractType as BaseAbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType as BaseChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +30,9 @@ class AbstractType extends BaseAbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Event $event */
+        $event = $options['event'];
+
         $builder
             ->add('name', TextType::class, [
                 'required' => true,
@@ -38,11 +41,16 @@ class AbstractType extends BaseAbstractType
                 'event'    => $options['event'],
                 'required' => true,
             ])
-            ->add('begin', DateTimeType::class, [
-                'required' => true,
+            ->add('begin', DateTimePickerType::class, [
+                'format'        => 'd/m/Y H:i',
+                'display_date'  => false,
+                'view_timezone' => $event->getTimeZone(),
             ])
-            ->add('end', DateTimeType::class, [
-                'required' => true,
+            ->add('end', DateTimePickerType::class, [
+                'format'        => 'd/m/Y H:i',
+                'display_date'  => false,
+                'required'      => true,
+                'view_timezone' => $event->getTimeZone(),
             ])
             ->add('blocking', BaseChoiceType::class, [
                 'choices'  => [
