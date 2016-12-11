@@ -111,6 +111,7 @@ class SearchType extends AbstractType
                     if ($organizationCategoryView !== null) {
                         return $organizationCategoryView->key;
                     }
+
                     return null;
                 },
                 'choice_label' => function (OrganizationCategoryView $organizationCategoryView = null) {

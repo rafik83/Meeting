@@ -1929,6 +1929,10 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
 
+    query.catalog.search_facet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.search_facet'
 
     #
     # Program query
@@ -1954,6 +1958,7 @@ services:
             - '@query.happening.day_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
+
     ##
     # Navigation builder
     ##
