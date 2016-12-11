@@ -221,7 +221,8 @@ form.happening_create.children.allowQuestion.label: 'Question des participants'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
-form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants (pas de limite si vide)'
+form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
+form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.submit.label: Envoyer
 form.happening_create.children.talkings.label: Intervenants
 form.happening_create.children.talkings.label_add: Ajouter
@@ -234,7 +235,7 @@ form.happening_update.children.allowQuestion.label: 'Question des participants'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
-form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants (pas de limite si vide)'
+form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
 form.happening_update.children.talkings.label_add: Ajouter
