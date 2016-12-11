@@ -43,7 +43,7 @@ class CreateHandler
         );
 
         foreach ($create->translations as $locale => $translation) {
-            $mass->createTranslation($locale, $translation['titlte'], $translation['description']);
+            $mass->createTranslation($locale, $translation['title'], $translation['description']);
         }
 
         $this->massRepository->create($mass);

@@ -51,16 +51,19 @@ class Create
     public $translations;
 
     /**
-     * @param Event     $event
-     * @param Event\Day $day
+     * @param Event          $event
+     * @param Event\Day|null $day
      */
-    public function __construct(Event $event, Event\Day $day)
+    public function __construct(Event $event, Event\Day $day = null)
     {
         $this->event        = $event;
-        $this->begin        = $day->getStartTime();
-        $this->end          = $day->getStartTime();
         $this->blocking     = true;
         $this->translations = [];
+
+        if ($day !== null) {
+            $this->begin = $day->getStartTime();
+            $this->end   = $day->getStartTime();
+        }
 
         foreach ($this->event->getLocales() as $locale) {
             $this->translations[$locale] = [
