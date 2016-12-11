@@ -427,6 +427,8 @@ admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.button.mass: 'Indisponibilité de masse'
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.category.add: Ajouter
 admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'
@@ -437,6 +439,17 @@ admin.unavailability.category.table.column.title: Titre
 admin.unavailability.category.table.content.update: Modifier
 admin.unavailability.category.title: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.category.update: 'Modification d''une catégorie d''indisponibilité de masse'
+admin.unavailability.mass.add: 'Ajouter'
+admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
+admin.unavailability.mass.link: 'Indisponibilité de masse'
+admin.unavailability.mass.table.column.begin: Debut
+admin.unavailability.mass.table.column.category: Catégorie
+admin.unavailability.mass.table.column.name: 'Nom back office'
+admin.unavailability.mass.table.column.title: Titre
+admin.unavailability.mass.table.column.end: Fin
+admin.unavailability.mass.table.content.update: Modifier
+admin.unavailability.mass.title: 'Indisponibilité de masse'
+admin.unavailability.mass.update: 'Modification d''une indisponibilité de masse'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
