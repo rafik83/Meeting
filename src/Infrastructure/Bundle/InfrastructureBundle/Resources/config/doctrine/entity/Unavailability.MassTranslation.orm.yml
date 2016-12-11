@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Unavailability\MassTranslation:
+    type:  entity
+    table: mass_unavailability_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: text
+        description:
+            type: text
+            nullable: true
+        locale:
+            type: string
+    manyToOne:
+        mass:
+            targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Mass
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

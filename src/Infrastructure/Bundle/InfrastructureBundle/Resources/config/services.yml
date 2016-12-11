@@ -225,6 +225,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.unavailability.mass_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassRepository
+        arguments:
+                - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
