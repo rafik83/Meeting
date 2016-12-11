@@ -84,4 +84,14 @@ class MassTranslation
     {
         return $this->description;
     }
+
+    /**
+     * @param string $title
+     * @param string $description
+     */
+    public function update($title, $description)
+    {
+        $this->title       = $title;
+        $this->description = $description;
+    }
 }
