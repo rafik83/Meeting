@@ -21,11 +21,13 @@ Feature: See, create and update happening
     And I follow "admin.happening.add"
     And I should be on this page "/admin/fr/event/1/happening/create"
     When I fill in the following:
-      | happening_create[category]                | 1             |
-      | happening_create[translations][fr][title] | MyHappening   |
-      | happening_create[translations][en][title] | MyHappening   |
-      | happening_create[allowQuestion]           | 1             |
-      | happening_create[limitParticipant]        |               |
+      | happening_create[category]                | 1                |
+      | happening_create[translations][fr][title] | MyHappening      |
+      | happening_create[translations][en][title] | MyHappening      |
+      | happening_create[begin]                   | 09/09/2016 10:10 |
+      | happening_create[end]                     | 09/09/2016 12:10 |
+      | happening_create[allowQuestion]           | 1                |
+      | happening_create[limitParticipant]        |                  |
     And I press "form.happening_create.children.submit.label"
     Then I should see "flash.admin.happening.create.success"
     And I should see "MyHappening"
