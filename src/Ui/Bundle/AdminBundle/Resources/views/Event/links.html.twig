@@ -156,6 +156,11 @@
                     {{ 'admin.unavailability.category.link'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_unavailability_mass_list', { 'event': event.id }) }}">
+                    {{ 'admin.unavailability.mass.link'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
 {% endif %}
