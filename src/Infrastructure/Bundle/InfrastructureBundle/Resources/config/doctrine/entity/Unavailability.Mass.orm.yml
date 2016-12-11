@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\Unavailability\Mass:
             generator:
                 strategy: AUTO
     fields:
+        name:
+            type: string
         begin:
             type: datetime
         end:
