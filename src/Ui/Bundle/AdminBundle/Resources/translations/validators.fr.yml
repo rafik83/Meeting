@@ -14,6 +14,7 @@ validators.field.notValid.telephone: 'Le format du champ téléphone n''est pas 
 validators.field.notValid.url: 'Le format du champ url n''est pas valide'
 validators.field.required: 'Ce champ est requis'
 validators.hexadecimal: 'Cette valeur doit être au format hexadécimal'
+validators.happening.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
 validators.json.invalid: 'Le JSON n''est pas valide'
 validators.meeting.slot.recipe.date_range: 'La date de début doit être antérieure à la date de fin'
 validators.nomenclature.import.error: 'Votre fichier comporte des erreurs'
