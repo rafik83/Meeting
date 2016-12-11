@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\Event;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 
 class DayRepository implements DayRepositoryInterface
@@ -51,9 +51,43 @@ class DayRepository implements DayRepositoryInterface
             ->where('day.event = :event')
             ->setParameter('event', $event)
             ->getQuery()
-            ->execute()
-        ;
+            ->execute();
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('day')
+            ->from(Day::class, 'day')
+            ->where('day.event = :event')
+            ->orderBy('day.startTime')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findFirstDayByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('day')
+            ->from(Day::class, 'day')
+            ->where('day.event = :event')
+            ->orderBy('day.startTime')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

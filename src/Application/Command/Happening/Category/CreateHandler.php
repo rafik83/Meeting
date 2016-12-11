@@ -37,7 +37,7 @@ class CreateHandler
         $category = new Category(
             $create->event,
             $create->picto,
-            $create->position,
+            $create->rank,
             $create->leftColor,
             $create->rightColor
         );
