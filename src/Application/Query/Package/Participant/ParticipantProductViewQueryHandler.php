@@ -19,7 +19,7 @@ class ParticipantProductViewQueryHandler
     private $includedParticipantGuesser;
 
     /**
-     * @param IncludedParticipantGuesser  $includedParticipantGuesser
+     * @param IncludedParticipantGuesser $includedParticipantGuesser
      */
     public function __construct(IncludedParticipantGuesser $includedParticipantGuesser)
     {
