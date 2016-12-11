@@ -42,4 +42,5 @@ validators.schedule_day.shouldBeTheSameDay: 'L''heure de début doit être au m�
 validators.schedule_day.startTimeMustBeBeforeEndTime: 'L''heure de début doit être avant l''heure de fin'
 validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
 validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
+validators.unavailability.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
 validators.whitespace: 'Ce champ ne doit pas contenir d''espace'
