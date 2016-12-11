@@ -49,6 +49,19 @@ interface HappeningRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * @param Event                   $event
+     * @param \DateTimeInterface      $day
+     * @param Happening\Category|null $category
+     *
+     * @return Happening[]
+     */
+    public function findByEventAndDayAndCategory(
+        Event $event,
+        \DateTimeInterface $day,
+        Happening\Category $category = null
+    );
+
+    /**
      * @param Speaker $speaker
      * @param string  $locale
      *

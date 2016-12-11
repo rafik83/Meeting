@@ -98,6 +98,7 @@ class HappeningListViewFactory
     {
         return new HappeningListView(
             $happening->getId(),
+            $happening->getCategory()->getTitle($locale),
             $happening->getBegin(),
             $happening->getEnd(),
             $happening->getTitle($locale),

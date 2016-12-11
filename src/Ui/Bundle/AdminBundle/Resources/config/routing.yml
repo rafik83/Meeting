@@ -837,6 +837,31 @@ admin_event_template_package:
     requirements:
         event: \d+
 
+#
+# Unavailability
+#
+admin_unavailability_category_list:
+    path: /event/{event}/unavailability/category
+    defaults: { _controller: AdminBundle:Unavailability:categoryList }
+    methods: [GET]
+    requirements:
+        event: \d+
+
+admin_unavailability_category_create:
+    path: /event/{event}/unavailability/category/create
+    defaults: { _controller: AdminBundle:Unavailability:createCategory }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_unavailability_category_update:
+    path: /event/{event}/unavailability/category/update/{category}
+    defaults: { _controller: AdminBundle:Unavailability:updateCategory }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        category: \d+
+
 # Users
 admin_users:
     path: /event/{event}/users
