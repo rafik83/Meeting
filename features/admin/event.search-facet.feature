@@ -37,7 +37,7 @@ Feature: See and update search facet
   Scenario: I can enable search type facet and see them in the catalog
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/en/event/1"
-    When I follow "admin.spot.search_facets.link"
+    When I follow "admin.event.search_facets.link"
     Then the response status code should be 200
     When I fill in the following:
       | search_facet_update_searchFacets_1_translations_fr_label | Participants |
