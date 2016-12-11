@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 
-class ResetPasswordConfirmMail extends Mail
+class ResetPasswordConfirmMail extends UserMail
 {
     /**
      * @var string
@@ -33,35 +33,25 @@ class ResetPasswordConfirmMail extends Mail
     protected $messageId = Events::USER_RESET_PASSWORD_CONFIRMED;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
      * @var bool
      */
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param User   $user
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, User $user)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $event);
-
-        $this->user  = $user;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        ParticipantInfoView $participantInfoView
+    ) {
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
     }
 
     /**

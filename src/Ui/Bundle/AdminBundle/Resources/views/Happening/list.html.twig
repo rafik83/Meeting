@@ -1,7 +1,21 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.happening.title'|trans }}
+{% endblock %}
+
 {% block content %}
-    <h1 class="page-header">{{ 'admin.happening.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.happening.title'|trans }}
+        <div class="pull-right">
+            <a class="btn btn-info" href="{{ path('admin_happening_category_list', {event: event.id}) }}">
+                {{ 'admin.happening.button.category'|trans }}
+            </a>
+            <a class="btn btn-info" href="{{ path('admin_happening_speaker_list', {event: event.id}) }}">
+                {{ 'admin.happening.button.speaker'|trans }}
+            </a>
+        </div>
+    </h1>
 
     <div>
         <a href="{{ path('admin_happening_create', { 'event': event.id }) }}" class="btn btn-primary new-action">
@@ -13,6 +27,7 @@
         <thead>
         <tr>
             <th>{{ 'admin.happening.list.title'|trans }}</th>
+            <th>{{ 'admin.happening.list.category'|trans }}</th>
             <th>{{ 'admin.happening.list.speaker'|trans }}</th>
             <th>{{ 'admin.happening.list.begin'|trans }}</th>
             <th>{{ 'admin.happening.list.end'|trans }}</th>
@@ -23,6 +38,7 @@
         {% for happening in happenings %}
             <tr>
                 <td>{{ happening.title }}</td>
+                <td>{{ happening.categoryTitle }}</td>
                 <td>{{ happening.speakers|join(', ') }}</td>
                 <td>{{ happening.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td>{{ happening.end|localizeddate('medium', 'short', app.request.locale) }}</td>

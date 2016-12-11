@@ -5,7 +5,17 @@
 {% block title 'admin.happening_speaker.title'|trans %}
 
 {% block content %}
-<h1 class="page-header">{{ 'admin.happening_speaker.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.happening_speaker.title'|trans }}
+        <div class="pull-right">
+            <a class="btn btn-info" href="{{ path('admin_happening_list', {event: event.id}) }}">
+                {{ 'admin.happening_speaker.button.happening'|trans }}
+            </a>
+            <a class="btn btn-info" href="{{ path('admin_happening_category_list', {event: event.id}) }}">
+                {{ 'admin.happening_speaker.button.happening_category'|trans }}
+            </a>
+        </div>
+    </h1>
 
     <div>
         <a href="{{ path('admin_happening_speaker_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">

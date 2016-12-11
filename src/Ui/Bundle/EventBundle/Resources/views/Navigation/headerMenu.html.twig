@@ -65,7 +65,7 @@
                 <ul>
                     <li><strong class="highlight">{{ menuHeader.event.organiserName }}</strong></li>
                     {% if menuHeader.event.configuration.contactFirstName or menuHeader.event.configuration.contactLastName %}
-                        <li>{{ menuHeader.event.configuration.contactFirstName|default('')|capitalize }} {{ event.configuration.contactLastName|default('')|upper }}</li>
+                        <li>{{ menuHeader.event.configuration.contactFirstName|default('')|capitalize }} {{ menuHeader.event.configuration.contactLastName|default('')|upper }}</li>
                     {% endif %}
                     {% if menuHeader.event.configuration.organiserPhone %}
                         <li><i class="icon-Appeler"></i> {{ menuHeader.event.configuration.organiserPhone }}</li>

@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 
-class AddParticipantMail extends Mail
+class AddParticipantMail extends UserMail
 {
     /**
      * @var string
@@ -34,46 +34,38 @@ class AddParticipantMail extends Mail
     protected $messageId = Events::SHEET_ADD_PARTICIPANT_CONFIRMATION;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Participant
-     */
-    private $guest;
-
-    /**
      * @var bool
      */
     protected $sendToEmailTeam = false;
 
     /**
-     * @param Event       $event
-     * @param string      $sender
-     * @param string      $receiver
-     * @param string      $locale
-     * @param User        $user
-     * @param Participant $guest
+     * @var User
      */
-    public function __construct(Event $event, $sender, $receiver, $locale, User $user, Participant $guest)
-    {
-        parent::__construct($sender, $receiver, $locale, null, null, $event);
+    private $guest;
 
-        $this->user  = $user;
+    /**
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param User                $guest
+     * @param ParticipantInfoView $participantInfoView
+     */
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        User $guest,
+        ParticipantInfoView $participantInfoView
+    ) {
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
+
         $this->guest = $guest;
     }
 
     /**
      * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return Participant
      */
     public function getGuest()
     {

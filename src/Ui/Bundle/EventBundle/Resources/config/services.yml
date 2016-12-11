@@ -42,6 +42,12 @@ services:
             - '@components.security.admin_sheet_access'
         tags:
             - { name: security.voter }
+    security_voter.happening_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
+        arguments:
+            - '@domain.key_dates.checker.happenings_access_checker'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -216,6 +222,7 @@ services:
         arguments:
             - '@adapter.mailer_adapter'
             - '@event_sender'
+            - '@query.mail.participant_mail_view_query_handler'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.submit_sheet_mail_event_subscriber:

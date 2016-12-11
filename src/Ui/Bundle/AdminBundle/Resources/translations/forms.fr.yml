@@ -33,6 +33,12 @@ form.admin_schedule_days.children.days.prototype.children.endTime.label: Heure f
 form.admin_schedule_days.children.days.label_add: Ajouter un jour
 form.admin_schedule_days.children.days.label_delete: Supprimer ce jour
 form.admin_schedule_days.children.submit.label: Valider
+form.admin.picto.Cocktail: Cocktail
+form.admin.picto.Dejeuner: Dejeuner
+form.admin.picto.Conference: Micro
+form.admin.picto.RDV: Rendez-vous
+form.admin.picto.PresFlash_2: Flash
+form.admin.picto.Cafe_1: Café
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -51,13 +57,17 @@ form.billing_update.children.submit.label: Enregistrer
 form.buy_participant.children.data.label: 'Coordonnées du participant'
 form.buy_participant.children.participantData.children.email.label: Email
 form.buy_participant.children.submit.label: Envoyer
+form.category_create.children.leftColor.label: 'Couleur habillage de gauche'
 form.category_create.children.picto.label: Picto
-form.category_create.children.position.label: Position
+form.category_create.children.rank.label: Position
+form.category_create.children.rightColor.label: 'Couleur habillage de droite'
 form.category_create.children.submit.label: Enregistrer
 form.category_create.children.translations.prototype.children.title.label: Titre
 form.category_create.children.types.label: 'Sélectionner les types de participation'
+form.category_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.category_update.children.picto.label: Picto
-form.category_update.children.position.label: Position
+form.category_update.children.rank.label: Position
+form.category_update.children.rightColor.label: 'Couleur habillage de droite'
 form.category_update.children.submit.label: Enregistrer
 form.category_update.children.translations.prototype.children.title.label: Titre
 form.category_update.children.types.label: 'Sélectionner les types de participation'
@@ -502,6 +512,7 @@ form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
@@ -593,6 +604,16 @@ form.type_update.children.translations.prototype.children.description.label: Des
 form.type_update.children.translations.prototype.children.title.label: Titre
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_update.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.unavailability_category_create.children.leftColor.label: 'Couleur de gauche'
+form.unavailability_category_create.children.picto.label: 'Picto'
+form.unavailability_category_create.children.rightColor.label: 'Couleur de droite'
+form.unavailability_category_create.children.submit.label: 'Enregistrer'
+form.unavailability_category_create.children.title.label: 'Titre de la catégorie'
+form.unavailability_category_update.children.leftColor.label: 'Couleur de gauche'
+form.unavailability_category_update.children.picto.label: 'Picto'
+form.unavailability_category_update.children.rightColor.label: 'Couleur de droite'
+form.unavailability_category_update.children.submit.label: 'Enregistrer'
+form.unavailability_category_update.children.title.label: 'Titre de la catégorie'
 form.update_admin.children.email.label: Email
 form.update_admin.children.events.label: Événements
 form.update_admin.children.firstname.label: Prénom

@@ -11,120 +11,71 @@
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\AbstractCategory;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Category
+class Category extends AbstractCategory
 {
     /**
      * @var int
      */
-    private $id;
-
-    /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * @var string
-     */
-    private $picto;
-
-    /**
-     * @var int
-     */
-    private $position;
+    private $rank;
 
     /**
      * @var ArrayCollection
      */
-    private $translations;
+    protected $translations;
 
     /**
      * Category constructor.
      *
      * @param Event  $event
      * @param string $picto
-     * @param int    $position
+     * @param int    $rank
+     * @param string $leftColor
+     * @param string $rightColor
      */
-    public function __construct(Event $event, $picto, $position)
+    public function __construct(Event $event, $picto, $rank, $leftColor, $rightColor)
     {
-        $this->position     = $position;
-        $this->event        = $event;
-        $this->picto        = $picto;
+        parent::__construct($event, $picto, $leftColor, $rightColor);
+
+        $this->rank         = $rank;
         $this->translations = new ArrayCollection();
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     * @param Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPicto()
-    {
-        return $this->picto;
-    }
-
-    /**
-     * Get position
+     * Get rank
      *
      * @return int
      */
-    public function getPosition()
+    public function getRank()
     {
-        return $this->position;
+        return $this->rank;
     }
 
     /**
-     * Set position
+     * Set rank
      *
-     * @param int $position
+     * @param int $rank
      *
      * @return Category
      */
-    public function setPosition($position)
+    public function setRank($rank)
     {
-        $this->position = $position;
+        $this->rank = $rank;
 
         return $this;
     }
 
     /**
-     * @param string $picto
+     * @param string $locale
+     * @param string $title
      */
-    public function setPicto($picto)
+    public function update($locale, $title)
     {
-        $this->picto = $picto;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
+        $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->setTitle($title)
+            : $this->translations->set($locale, new CategoryTranslation($this, $locale, $title));
     }
 
     /**
@@ -133,5 +84,24 @@ class Category
     public function setTranslation(CategoryTranslation $categoryTranslation)
     {
         $this->translations->set($categoryTranslation->getLocale(), $categoryTranslation);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTranslations()
+    {
+        return $this->translations->toArray();
+    }
+
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getTitle($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
     }
 }

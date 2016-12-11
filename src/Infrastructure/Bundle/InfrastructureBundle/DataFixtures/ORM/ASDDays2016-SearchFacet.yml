@@ -1,4 +1,9 @@
 Proximum\Vimeet\Domain\Model\SearchFacet:
+    search_facet_category:
+        __construct:
+            - '@event_asddays_2016'
+            - 'category'
+            - true
     search_facet_type:
         __construct:
             - '@event_asddays_2016'
@@ -7,12 +12,7 @@ Proximum\Vimeet\Domain\Model\SearchFacet:
     search_facet_position:
         __construct:
             - '@event_asddays_2016'
-            - 'type'
-            - true
-    search_facet_category:
-        __construct:
-            - '@event_asddays_2016'
-            - 'category'
+            - 'position'
             - true
     search_facet_organizationCategory:
         __construct:

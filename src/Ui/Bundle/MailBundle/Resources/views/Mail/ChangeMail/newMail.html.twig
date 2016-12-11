@@ -4,7 +4,10 @@
 
 {% block body %}
     {{ 'mail.changeMailNew.body'|trans({
-        '%currentEmail%': mail.user.email
+        '%currentEmail%': mail.user.email,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>

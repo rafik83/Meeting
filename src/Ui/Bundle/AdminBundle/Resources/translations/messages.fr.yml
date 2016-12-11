@@ -64,10 +64,13 @@ admin.goback.link: Retour
 admin.happening_category.add: Ajouter
 admin.happening_category.addTitle: 'Ajouter une catégorie de conférences'
 admin.happening_category.link: 'Catégories de conférences'
+admin.happening_category.table.column.color: Couleur
 admin.happening_category.table.column.picto: Picto
-admin.happening_category.table.column.position: Position
+admin.happening_category.table.column.rank: Position
 admin.happening_category.table.column.title: Titre
 admin.happening_category.title: 'Catégories de conférences'
+admin.happening_category.button.happening: 'Gérer les conférences'
+admin.happening_category.button.speaker: 'Gérer les intervenants'
 admin.happening_category.update: Modifier
 admin.happening_category.updateTitle: 'Modifier une catégorie de conférences'
 admin.happening_speaker.action.confirmDelete: 'Confirmer la suppression'
@@ -87,16 +90,22 @@ admin.happening_speaker.table.column.name: Nom
 admin.happening_speaker.table.column.photo: 'Photo de l''intervenant'
 admin.happening_speaker.table.column.subEvent: Sous-événements
 admin.happening_speaker.title: Intervenants
+admin.happening_speaker.button.happening: Gérer les conférences
+admin.happening_speaker.button.happening_category: Gérer les catégories de conférences
 admin.happening_speaker.update: Modifier
 admin.happening_speaker.updateTitle: 'Modifier un intervenant'
 admin.happening.add: Ajouter
 admin.happening.addTitle: 'Ajouter une conférence'
+admin.happening.menu.link: Programme
 admin.happening.link: Conférences
 admin.happening.list.begin: Début
+admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
 admin.happening.title: Conférences
+admin.happening.button.category: Gérer les catégories
+admin.happening.button.speaker: Gérer les intervenants
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
@@ -416,6 +425,15 @@ admin.type.sheet.template: 'Template de présentation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'
+admin.unavailability.category.add: 'Ajouter'
+admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'
+admin.unavailability.category.update: 'Modification d''une catégorie d''indisponibilité de masse'
+admin.unavailability.category.link: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.category.title: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.category.table.column.title: Titre
+admin.unavailability.category.table.column.picto: Picto
+admin.unavailability.category.table.column.color: Couleur
+admin.unavailability.category.table.content.update: Modifier
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
@@ -526,6 +544,8 @@ event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active
 event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
 event.sheet.listOrders.title: 'Liste de vos commandes'
+event.sheet.order.alphabetic: 'Alphabétique'
+event.sheet.order.createdAt: 'Date d''inscription'
 event.sheet.package.column.choices: Choix
 event.sheet.package.column.description: Description
 event.sheet.package.column.label: Intitulé

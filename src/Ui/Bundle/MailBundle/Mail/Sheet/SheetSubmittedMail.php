@@ -11,13 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\AdminMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetSubmittedMail extends Mail
+class SheetSubmittedMail extends AdminMail
 {
     /**
      * @var string
@@ -67,11 +67,6 @@ class SheetSubmittedMail extends Mail
      * @var string
      */
     private $lastname;
-
-    /**
-     * @var bool
-     */
-    protected $sendToEmailTeam = true;
 
     /**
      * @param Event             $event

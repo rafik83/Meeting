@@ -18,6 +18,11 @@ class HappeningListView
     public $id;
 
     /**
+     * @var string
+     */
+    public $categoryTitle;
+
+    /**
      * @var \DateTimeInterface
      */
     public $begin;
@@ -46,6 +51,7 @@ class HappeningListView
      * HappeningListView constructor.
      *
      * @param int                $id
+     * @param string             $categoryTitle
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string             $title
@@ -54,17 +60,19 @@ class HappeningListView
      */
     public function __construct(
         $id,
+        $categoryTitle,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $title,
         array $speakers,
         $canUpdate
     ) {
-        $this->id        = $id;
-        $this->begin     = $begin;
-        $this->end       = $end;
-        $this->title     = $title;
-        $this->speakers  = $speakers;
-        $this->canUpdate = $canUpdate;
+        $this->id            = $id;
+        $this->categoryTitle = $categoryTitle;
+        $this->begin         = $begin;
+        $this->end           = $end;
+        $this->title         = $title;
+        $this->speakers      = $speakers;
+        $this->canUpdate     = $canUpdate;
     }
 }
