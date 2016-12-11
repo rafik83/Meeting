@@ -133,6 +133,11 @@ build-all-assets: build-assets
 build-all-assets@prod: build-assets@prod
 	bin/console vimeet:event:build-guideline-asset
 
+## Build with watch
+watch: watch-assets
+
+watch-assets:
+	gulp watch --dev
 ################
 # Translations #
 ################

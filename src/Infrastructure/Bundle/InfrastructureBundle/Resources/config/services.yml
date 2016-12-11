@@ -1456,6 +1456,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
     components.security.admin_sheet_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
+    components.security.happening_access:
+        class: Proximum\Vimeet\Application\Components\Security\HappeningAccess
+        arguments:
+            - '@datetime'
 
     #
     # Guideline Component
@@ -1918,7 +1922,32 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
-            
+
+
+    #
+    # Program query
+    #
+    query.happening.happening_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\HappeningViewQueryHandler
+        arguments:
+            - '@query.happening.speaker_view_query_handler'
+            - '@query.happening.category_view_query_handler'
+    query.happening.speaker_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\SpeakerViewQueryHandler
+    query.happening.category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\CategoryViewQueryHandler
+    query.happening.day_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@query.happening.happening_view_query_handler'
+    query.happening.program_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\ProgramViewQueryHandler
+        arguments:
+            - '@repository.event.day_repository'
+            - '@query.happening.day_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
     ##
     # Navigation builder
     ##
@@ -2099,6 +2128,7 @@ services:
             - '@query.spot.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\ListViewQuery }
+
     #
     # Elastic Transformer
     #

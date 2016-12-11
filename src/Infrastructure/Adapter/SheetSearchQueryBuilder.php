@@ -501,8 +501,8 @@ class SheetSearchQueryBuilder
     {
         $nested     = new Nested();
         $boolQuery  = new BoolQuery();
-        $matchQuery = new Term();
-        $matchQuery->setTerm('booleanFilter.key', $predefined);
+        $matchQuery = new Match();
+        $matchQuery->setField('booleanFilter.key', $predefined);
 
         $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
         $this->query->addMust($nested);

@@ -106,3 +106,25 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 - Rebuild events assets:
 
         $ bin/console vimeet:event:build-guideline-asset
+
+### Definition of Done
+
+- Test d'acceptation respecté : relire la story
+- Clé et libellé de traduction posé en français (Si possible, par ordre alphabétique, pour éviter les diffs et conflicts avec open10ln)
+- Checker l'accès aux controllers
+- Respecter l'UI Admin (si la story concerne l'Admin)
+- Générer une migration de la DB (si la structure change => make migrations)
+- Tests unitaires et fonctionnels qui passent (make test)
+- La branche est en platinum sur Insight 
+- Être reviewé (avoir plusieurs +1)
+- Pas de conflit avec `master` ou les résoudre dès que possible.
+
+### Code
+
+#### Gestion de la locale en Admin
+
+En admin, utiliser la méthode de l'event permettant de fallback, car la locale de l'admin n'est pas forcément utilisée sur un event :
+
+```php
+$locale = $event->getAvailableLocale($request->getLocale);
+```
