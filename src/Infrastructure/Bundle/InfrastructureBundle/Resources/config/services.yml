@@ -1268,6 +1268,18 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Category\Update }
+    command.unavailability.mass.create_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\CreateHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Create }
+    command.unavailability.mass.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
 
     #
     # Security
