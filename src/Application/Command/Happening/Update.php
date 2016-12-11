@@ -45,17 +45,6 @@ class Update
      */
     public $talkings = [];
 
-
-    /**
-     * @var bool
-     */
-    public $allowQuestion;
-
-    /**
-     * @var int|null
-     */
-    public $limitParticipant;
-
     /**
      * @var bool
      */
