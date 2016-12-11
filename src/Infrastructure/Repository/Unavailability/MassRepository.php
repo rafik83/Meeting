@@ -62,7 +62,7 @@ class MassRepository implements MassRepositoryInterface
             ->select('mass')
             ->from(Mass::class, 'mass')
             ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->where('category.event = :event')
+            ->where('mass.event = :event')
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
 
