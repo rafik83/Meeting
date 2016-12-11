@@ -149,6 +149,8 @@ Feature: Update spanish event
     And I fill in the following:
       | happening_create[translations][es][title]       | HappeningTitle       |
       | happening_create[translations][es][description] | HappeningDescription |
+      | happening_create[begin]                         | 09/09/2016 10:10     |
+      | happening_create[end]                           | 09/09/2016 12:10     |
       | happening_create[allowQuestion]                 | 1                    |
       | happening_create[limitParticipant]              | 15                   |
     And I press "form.happening_create.children.submit.label"
