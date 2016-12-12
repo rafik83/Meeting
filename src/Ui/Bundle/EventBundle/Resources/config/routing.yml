@@ -573,5 +573,5 @@ event_sheet_happening_participate:
     requirements:
         sheet: \d+
         happening: \d+
-    methods:  [POST]
+    methods:  [GET]
     defaults: { _controller: EventBundle:Happening:participate }

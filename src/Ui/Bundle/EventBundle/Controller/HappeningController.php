@@ -30,8 +30,14 @@ class HappeningController extends Controller
      */
     public function participateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
     {
+        $event = $eventDomain->getEvent();
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
+        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+
+        if ($happening->getEvent() !== $event || $sheet->getEvent() !== $event) {
+            throw $this->createNotFoundException('Happening or sheet not in this event');
+        }
 
         $participant = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
@@ -44,6 +50,8 @@ class HappeningController extends Controller
         $participate = new Participate($happening, [$participant]);
         $this->get('tactician.commandbus')->handle($participate);
 
-        return new JsonResponse([]);
+        return $this->redirectToRoute('happening_program');
+
+//        return new JsonResponse([]);
     }
 }

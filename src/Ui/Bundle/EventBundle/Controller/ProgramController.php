@@ -47,6 +47,14 @@ class ProgramController extends Controller
             return $this->redirectToRoute('event_sheet');
         }
 
+
+        // @todo search all participations of sheet
+        $participant = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
+        $participations = $this->get('vimeet_infrastructure.repository.happening_participation_repository')->findByParticipant($participant);
+        dump($participations);
+
         return $this->render('EventBundle:Program:index.html.twig', [
             'event'   => $event,
             'sheet'   => $sheet,
