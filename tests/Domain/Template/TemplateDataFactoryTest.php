@@ -49,7 +49,8 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
                             'type'      => 'nomenclature',
                             'config'    => [
                                 'nomenclature' => null,
-                                'objective'    => 'supply'
+                                'objective'    => 'supply',
+                                'required'     => true
                             ],
                         ]
                     ],
@@ -105,6 +106,7 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($templateData->getObject('azerty')->isEditable());
         $this->assertTrue($templateData->getObject('azerty')->isSupply());
         $this->assertFalse($templateData->getObject('azerty')->isNeed());
+        $this->assertTrue($templateData->getObject('azerty')->isRequired());
 
         // Assert normalize give back the template array
         $this->assertEquals($template, $templateData->normalize());
