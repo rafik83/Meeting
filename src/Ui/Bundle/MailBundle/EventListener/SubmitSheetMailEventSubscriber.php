@@ -109,10 +109,6 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
             $admins = array_merge($admins,
                 $this->adminRepository->getAllowedOrganizer(
                     $event->getSheet()->getEvent()
-                ),
-                $this->adminRepository->getAllowedPartner(
-                    $event->getSheet()->getEvent(),
-                    $event->getSheet()->getType()
                 )
             );
         }
