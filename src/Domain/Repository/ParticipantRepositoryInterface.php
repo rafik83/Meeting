@@ -95,4 +95,13 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
+
+    /**
+     * @param Sheet              $sheet
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipants(Sheet $sheet, \DateTimeInterface $begin, \DateTimeInterface $end);
 }
