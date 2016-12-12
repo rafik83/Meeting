@@ -343,25 +343,6 @@ event_sheet_schedule_remove_unavailability:
     methods:  [DELETE]
     defaults: { _controller: EventBundle:Schedule:removeUnavailability }
 
-# @deprecated see HappeningController
-event_sheet_schedule_participate_happening:
-    path: /sheet/{sheet}/happening/{happening}/participate
-    requirements:
-        sheet: \d+
-        happening: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Schedule:participateHappening }
-
-# @deprecated see HappeningController
-event_sheet_schedule_unparticipate_happening:
-    path: /sheet/{sheet}/happening/{happening}/unparticipate/{participant}
-    requirements:
-        sheet: \d+
-        happening: \d+
-        participant: \d+
-    methods:  [POST]
-    defaults: { _controller: EventBundle:Schedule:unparticipateHappening }
-
 #
 # Meeting
 #
