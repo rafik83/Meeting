@@ -3,6 +3,7 @@ boolean.yes: 'Yes'
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: 'First name'
 form.add_participant.children.lastName.placeholder: 'Last Name'
+form.catalog_approve_meeting_request.children.description.label: 'Respond to the meeting request?'
 form.change_password_user.children.currentPassword.label: 'Current password'
 form.change_password_user.children.plainPassword.children.first.label: 'New password'
 form.change_password_user.children.plainPassword.children.second.label: 'Confirm new password'
@@ -25,6 +26,7 @@ form.payment_choice.children.paymentMode.bank_check: Cheque
 form.payment_choice.children.paymentMode.bank_transfer: Transfer
 form.payment_choice.children.paymentMode.paypal: 'Paypal or Bank card'
 form.register.newUser.password.placeholder: 'Choose your password'
+form.register.newUser.repeatedPassword.placeholder: 'confirm password'
 form.sheet_button_link_data.children.submit.label: Save
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Text

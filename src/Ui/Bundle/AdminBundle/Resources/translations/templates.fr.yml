@@ -13,11 +13,11 @@ template.media.placeholder.link: 'Placeholder du lien'
 template.media.placeholder.title: 'Placeholder du titre'
 template.nomenclature.choice.checkboxes: 'Cases à cocher (choix multiple)'
 template.nomenclature.choice.singles: 'Listes déroulantes (choix unique)'
+template.nomenclature.objective.need: Besoin
+template.nomenclature.objective.none: Aucun
+template.nomenclature.objective.supply: Offre
+template.nomenclature.objective.title: Objectif
 template.nomenclature.title: Nomenclature
-template.nomenclature.objective.need: 'Besoin'
-template.nomenclature.objective.none: 'Aucun'
-template.nomenclature.objective.supply: 'Offre'
-template.nomenclature.objective.title: 'Objectif'
 template.object.button-link: Lien
 template.object.collection: Collection
 template.object.editable-text: 'Texte modifiable'
