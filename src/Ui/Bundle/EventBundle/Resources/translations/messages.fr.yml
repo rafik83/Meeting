@@ -216,6 +216,7 @@ pro_forma.date.title: 'Date :'
 pro_forma.number.title: 'N° pro-forma :'
 pro_forma.title: 'Pro-forma - %date%'
 pro_forma.vatNumber.title: 'Numéro TVA'
+program.title: Programme
 register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser

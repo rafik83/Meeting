@@ -1,0 +1,55 @@
+<div class="meet {{ meeting.category.title|lower }}" data-beginHour="{{ meeting.beginHour|date('H:i') }}" data-duration="{{ meeting.duration.format('%H:%I') }}">
+    <header style="background: linear-gradient(to right, {{ meeting.category.leftColor }} 0%, {{ meeting.category.rightColor }} 100%) !important;">
+        <a class="content" href="#{{ meeting.title }}">
+            <span class="prefix"><i class="icon icon-{{ meeting.category.picto }}"></i> N°{{ meeting.code }}</span>
+            <p class="title">{{ meeting.title }}</p>
+        </a>
+    </header>
+    <div class="details">
+        <div class="row">
+            <div class="col-md-4">
+                {% if meeting.hasPicture %}
+                    <img src="{{ meeting.picture }}"/>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="list list--users">
+                    {% for speaker in meeting.speakers %}
+                        <div class="user clearfix">
+                            {% if speaker.hasPicture %}
+                                <div class="user__avatar">
+                                    <span class="bullet"></span>
+                                    <div class="avatar">
+                                        <img src="{{ speaker.picture|imagine_filter('user_avatar') }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="user__infos">
+                                <p class="name">{{ speaker.firstname }}</p>
+                                <p class="job">{{ speaker.position }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <p>{{ meeting.description }}</p>
+        <footer>
+            <p class="hours">
+                <i class="icon icon-Horaire"></i>
+                <span>{{ meeting.beginHour|date('H:i') }} - {{ meeting.endHour|date('H:i') }}</span>
+            </p>
+            <a href="">
+                <i class="icon icon-Document_1"></i>
+                Details
+            </a>
+            <div class="actions">
+                <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+            </div>
+        </footer>
+    </div>
+</div>

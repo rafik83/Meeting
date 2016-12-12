@@ -571,3 +571,19 @@ event_order_summary_total:
         sheet: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Order:summaryTotal }
+
+
+#
+# Agenda
+#
+happening_program:
+    path: /program
+    methods: [GET]
+    defaults: { _controller: EventBundle:Program:index }
+
+happening_program_day:
+    path: /program/day/{day}
+    requirements:
+        day: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Program:day }
