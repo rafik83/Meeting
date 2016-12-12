@@ -16,38 +16,19 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProgramController extends Controller
 {
     /**
-     * @param EventDomain $eventDomain
-     *
-     * @return RedirectResponse
-     */
-    public function indexAction(EventDomain $eventDomain)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
-
-        return $this->redirectToRoute('happening_program_day', ['day' => 1]);
-    }
-
-    /**
      * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param int         $day
      *
      * @return Response
      */
-    public function dayAction(Request $request, EventDomain $eventDomain, $day)
+    public function indexAction(Request $request, EventDomain $eventDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
-
-        if ($day !== '1') {
-            throw $this->createNotFoundException('The program is not available on this day');
-        }
 
         try {
             $program = $this->get('tactician.commandbus.query')->handle(
