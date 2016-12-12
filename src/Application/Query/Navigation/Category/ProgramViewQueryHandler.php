@@ -15,13 +15,14 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Happening\Category as HappeningCategory;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Infrastructure\Repository\HappeningRepository;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class ProgramViewQueryHandler
 {
     /**
-     * @var HappeningRepository
+     * @var HappeningRepositoryInterface
      */
     private $happeningRepository;
 
@@ -38,14 +39,14 @@ class ProgramViewQueryHandler
     /**
      * ProgramViewQueryHandler constructor.
      *
-     * @param NavigationBuilderInterface $navigationBuilder
-     * @param HappeningsAccessChecker    $happeningsAccessChecker
-     * @param HappeningRepository        $happeningRepository
+     * @param NavigationBuilderInterface   $navigationBuilder
+     * @param HappeningsAccessChecker      $happeningsAccessChecker
+     * @param HappeningRepositoryInterface $happeningRepository
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
         HappeningsAccessChecker $happeningsAccessChecker,
-        HappeningRepository $happeningRepository
+        HappeningRepositoryInterface $happeningRepository
     ) {
         $this->happeningRepository     = $happeningRepository;
         $this->happeningsAccessChecker = $happeningsAccessChecker;
@@ -76,7 +77,7 @@ class ProgramViewQueryHandler
             $categories[$categoryTitle] = $happening->getCategory();
         }
 
-        usort($categories, function($previousCategory, $nextCategory) {
+        usort($categories, function(HappeningCategory $previousCategory,HappeningCategory $nextCategory) {
             return strcmp($previousCategory->getRank(), $nextCategory->getRank());
         });
 

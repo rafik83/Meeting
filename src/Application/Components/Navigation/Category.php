@@ -44,6 +44,6 @@ final class Category
         self::CATALOG,
         self::MEETING,
         self::PLANNING,
-        self::PROGRAM
+        self::PROGRAM,
     ];
 }
