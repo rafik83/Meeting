@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class ProgramViewQuery
 {
@@ -36,16 +38,36 @@ class ProgramViewQuery
     public $category;
 
     /**
+     * @var Sheet
+     */
+    public $sheet;
+
+    /**
+     * @var User
+     */
+    public $user;
+
+    /**
      *  ProgramViewQuery constructor
      *
      * @param Event         $event
+     * @param Sheet         $sheet
+     * @param User          $user
      * @param string        $locale
      * @param Category|null $category
      * @param int|null      $day
      */
-    public function __construct(Event $event, $locale, Category $category = null, $day = null)
-    {
+    public function __construct(
+        Event $event,
+        Sheet $sheet,
+        User $user,
+        $locale,
+        Category $category = null,
+        $day = null
+    ) {
         $this->event    = $event;
+        $this->user     = $user;
+        $this->sheet    = $sheet;
         $this->locale   = $locale;
         $this->day      = $day;
         $this->category = $category;

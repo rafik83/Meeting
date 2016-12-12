@@ -61,6 +61,20 @@ class HappeningView
     private $category;
 
     /**
+     * If participants of the current sheet participate
+     *
+     * @var bool
+     */
+    private $hasParticipations = false;
+
+    /**
+     * If the current user participates
+     *
+     * @var bool
+     */
+    private $currentUserParticipate = false;
+
+    /**
      * HappeningView constructor.
      *
      * @param int                   $id
@@ -181,5 +195,37 @@ class HappeningView
     public function hasPicture()
     {
         return $this->picture !== null;
+    }
+
+    /**
+     * @param bool $currentUserParticipate
+     */
+    public function setCurrentUserParticipate($currentUserParticipate)
+    {
+        $this->currentUserParticipate = $currentUserParticipate;
+    }
+
+    /**
+     * @param bool $hasParticipations
+     */
+    public function setHasParticipation($hasParticipations)
+    {
+        $this->hasParticipations = $hasParticipations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function doesCurrentUserParticipate()
+    {
+        return $this->currentUserParticipate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParticipations()
+    {
+        return $this->hasParticipations;
     }
 }
