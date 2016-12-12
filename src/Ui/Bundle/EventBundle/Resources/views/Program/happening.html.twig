@@ -2,7 +2,10 @@
     <header style="background: linear-gradient(to right, {{ happening.category.leftColor }} 0%, {{ happening.category.rightColor }} 100%) !important;">
         <a class="content" href="#{{ happening.title }}">
             <span class="prefix"><i class="icon icon-{{ happening.category.picto }}"></i> N°{{ happening.code }}</span>
-            <p class="title">{{ happening.title }}</p>
+            <p class="title">
+                {{ happening.title }}
+                <i class="pull-right icon icon-Valider_3 happeningParticipate {{ happeningParticipations[happening.id] is defined ? '' : 'hide' }}"></i>
+            </p>
         </a>
     </header>
     <div class="details">
@@ -55,10 +58,15 @@
                 <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
                 #}
-                <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray">
-                    <i class="icon icon-{{ happening.category.picto }}"></i>
-                    {{ 'happening.participate'|trans }}
-                </a>
+                
+                {% if happeningParticipations[happening.id] is defined %}
+
+                {% else %}
+                    <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray">
+                        <i class="icon icon-{{ happening.category.picto }}"></i>
+                        {{ 'happening.participate'|trans }}
+                    </a>
+                {% endif %}
             </div>
         </footer>
     </div>

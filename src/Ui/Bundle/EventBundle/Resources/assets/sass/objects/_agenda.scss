@@ -110,6 +110,12 @@
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
+        width: 100%;
+        line-height: 30px;
+      }
+
+      .happeningParticipate {
+        font-size: 30px;
       }
     }
 
