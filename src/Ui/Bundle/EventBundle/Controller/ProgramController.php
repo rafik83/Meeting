@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
