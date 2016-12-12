@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Domain\Order;
 
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Order\Finder;
 use Proximum\Vimeet\Tests\Factory\EventFactory;

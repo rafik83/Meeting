@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category;
 
+use Proximum\Vimeet\Application\Command\Happening\Category\Create;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Picto\CategoryPictoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -28,7 +30,7 @@ class CategoryCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('position', IntegerType::class)
+            ->add('rank', IntegerType::class)
             ->add('picto', CategoryPictoType::class)
             ->add('translations', CollectionType::class, [
                 'entry_type' => CategoryTranslationType::class,
@@ -45,7 +47,7 @@ class CategoryCreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => 'Proximum\Vimeet\Application\Command\Happening\category\Create',
+            'data_class'    => Create::class,
             'csrf_token_id' => 'category_create',
         ]);
     }

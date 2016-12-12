@@ -326,6 +326,10 @@ liip_imagine:
                 thumbnail: { size: [160, 160], mode: outbound }
                 # fix orientation issue for example for iOS photo
                 auto_rotate: ~
+        program_company_logo:
+            quality: 100
+            filters:
+                thumbnail:  { size: [250, 100], mode: inset }
 
 # Doctrine migrations configuration
 doctrine_migrations:

@@ -134,8 +134,8 @@ Feature: Update spanish event
     And I follow "admin.happening_category.add"
     And I should be on this page "/admin/en/event/1/happening/category/create"
     When I fill in the following:
-      | category_create[position]                | 1             |
-      | category_create[picto]                   | picto1        |
+      | category_create[rank]                    | 1             |
+      | category_create[picto]                   | Cafe_1        |
       | category_create[translations][es][title] | CategoryLabel |
     And I press "form.category_create.children.submit.label"
     Then I should see "flash.admin.happening.category.create.success"

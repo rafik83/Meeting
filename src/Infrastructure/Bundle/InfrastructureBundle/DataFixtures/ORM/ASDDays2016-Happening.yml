@@ -1,0 +1,38 @@
+Proximum\Vimeet\Domain\Model\Happening\Category:
+    category_conference:
+        __construct: ['@event_asddays_2016', 'Conference', 1, '#59a4ea', '#59a4eb']
+    category_flash:
+        __construct: ['@event_asddays_2016', 'PresFlash_2', 2, '#59a4ec', '#59a4ed']
+
+Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation:
+    category_conference_fr:
+        __construct: ['@category_conference', "fr", "Conférence"]
+    category_conference_en:
+        __construct: ['@category_conference', "en", "Conference"]
+    category_flash_fr:
+        __construct: ['@category_flash', "fr", "Présentation flash"]
+    category_flash_en:
+        __construct: ['@category_flash', "en", "Flash"]
+
+
+Proximum\Vimeet\Domain\Model\Happening:
+    happening_01:
+        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 10:00:00.000'))>, <(new DateTime('12-10-2016 11:45:00.000'))>, '@category_conference']
+    happening_02:
+        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 14:15:00.000'))>, <(new DateTime('12-10-2016 16:15:00.000'))>, '@category_flash']
+    happening_03:
+        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 11:00:00.000'))>, <(new DateTime('12-10-2016 12:30:00.000'))>, '@category_conference']
+
+Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
+    happening_01_translation_fr:
+        __construct: ['@happening_01', 'fr', 'Elao Talk', "<realText()>"]
+    happening_01_translation_en:
+        __construct: ['@happening_01', 'en', 'Elao Talk', "<realText()>"]
+    happening_02_translation_fr:
+        __construct: ['@happening_02', 'fr', 'Proximum conf', "<realText()>"]
+    happening_02_translation_en:
+        __construct: ['@happening_02', 'en', 'Proximum conf', "<realText()>"]
+    happening_03_translation_fr:
+        __construct: ['@happening_03', 'fr', 'Conférence 3', "<realText()>"]
+    happening_03_translation_en:
+        __construct: ['@happening_03', 'en', 'Conférence 3', "<realText()>"]

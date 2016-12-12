@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Category;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Happening\Category\Update;
 use Proximum\Vimeet\Application\Command\Happening\Category\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
@@ -41,12 +42,27 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
-        $categoryRepository->set($expectedCategory)->shouldBeCalled();
+        $categoryRepository->set(Argument::that(function (Category $category) use ($expectedCategory) {
+            if ($category->getRank() !== $expectedCategory->getRank()) {
+                return false;
+            }
+
+            // Avoid: Nesting level too deep
+            if ($category->getTitle('fr') !== $expectedCategory->getTitle('fr')) {
+                return false;
+            }
+
+            if ($category->getTitle('en') !== $expectedCategory->getTitle('en')) {
+                return false;
+            }
+
+            return true;
+        }))->shouldBeCalled();
 
         // Command
-        $update           = new Update($category);
-        $update->picto    = 'picto2';
-        $update->position = 3;
+        $update        = new Update($category);
+        $update->picto = 'picto2';
+        $update->rank  = 3;
         $update->translations = [
             'fr' => ['title' => 'troc'],
             'en' => ['title' => 'trec'],
