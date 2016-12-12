@@ -30,7 +30,7 @@ interface HappeningParticipationRepositoryInterface
      * @param Happening   $happening
      * @param Participant $participant
      *
-     * @return HappeningParticipation
+     * @return null|HappeningParticipation
      */
     public function findByHappeningAndParticipant(Happening $happening, Participant $participant);
 }

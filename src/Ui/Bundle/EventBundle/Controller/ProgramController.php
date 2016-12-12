@@ -30,6 +30,11 @@ class ProgramController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
+        $event  = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+
         try {
             $program = $this->get('tactician.commandbus.query')->handle(
                 new ProgramViewQuery(
@@ -42,8 +47,9 @@ class ProgramController extends Controller
             return $this->redirectToRoute('event_sheet');
         }
 
-        return $this->render('EventBundle:Program:day.html.twig', [
-            'event'   => $eventDomain->getEvent(),
+        return $this->render('EventBundle:Program:index.html.twig', [
+            'event'   => $event,
+            'sheet'   => $sheet,
             'program' => $program,
         ]);
     }

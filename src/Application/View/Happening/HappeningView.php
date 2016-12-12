@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 class HappeningView
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var \DateTimeInterface
      */
     private $beginHour;
@@ -58,16 +63,18 @@ class HappeningView
     /**
      * HappeningView constructor.
      *
-     * @param int                $code
-     * @param HappeningCategoryView           $category
-     * @param \DateTimeInterface $beginHour
-     * @param \DateTimeInterface $endHour
-     * @param string             $title
-     * @param string             $description
-     * @param string|null        $picture
-     * @param Speaker[]          $speakers
+     * @param int                   $id
+     * @param int                   $code
+     * @param HappeningCategoryView $category
+     * @param \DateTimeInterface    $beginHour
+     * @param \DateTimeInterface    $endHour
+     * @param string                $title
+     * @param string                $description
+     * @param string|null           $picture
+     * @param Speaker[]             $speakers
      */
     public function __construct(
+        $id,
         $code,
         HappeningCategoryView $category,
         \DateTimeInterface $beginHour,
@@ -77,6 +84,7 @@ class HappeningView
         $picture,
         array $speakers
     ) {
+        $this->id          = $id;
         $this->category    = $category;
         $this->beginHour   = $beginHour;
         $this->endHour     = $endHour;
@@ -85,6 +93,14 @@ class HappeningView
         $this->picture     = $picture;
         $this->speakers    = $speakers;
         $this->code        = $code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

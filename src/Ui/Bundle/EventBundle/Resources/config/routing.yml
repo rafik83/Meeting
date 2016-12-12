@@ -308,6 +308,7 @@ event_catalog_sheet_meeting_request:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
+
 #
 # Schedule
 #
@@ -342,6 +343,7 @@ event_sheet_schedule_remove_unavailability:
     methods:  [DELETE]
     defaults: { _controller: EventBundle:Schedule:removeUnavailability }
 
+# @deprecated see HappeningController
 event_sheet_schedule_participate_happening:
     path: /sheet/{sheet}/happening/{happening}/participate
     requirements:
@@ -350,6 +352,7 @@ event_sheet_schedule_participate_happening:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Schedule:participateHappening }
 
+# @deprecated see HappeningController
 event_sheet_schedule_unparticipate_happening:
     path: /sheet/{sheet}/happening/{happening}/unparticipate/{participant}
     requirements:
@@ -580,3 +583,14 @@ happening_program:
     path: /program
     methods: [GET]
     defaults: { _controller: EventBundle:Program:index }
+
+#
+# Happening
+#
+event_sheet_happening_participate:
+    path: /sheet/{sheet}/happening/{happening}/participate
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    defaults: { _controller: EventBundle:Happening:participate }

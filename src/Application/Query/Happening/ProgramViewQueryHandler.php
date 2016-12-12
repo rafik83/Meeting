@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
-
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -63,7 +62,9 @@ class ProgramViewQueryHandler
             );
         }
 
-        $categoryTitle = $programViewQuery->category !== null ? $programViewQuery->category->getTitle($programViewQuery->locale) : null;
+        $categoryTitle = $programViewQuery->category !== null
+            ? $programViewQuery->category->getTitle($programViewQuery->locale)
+            : null;
 
         return new ProgramView(
             $dayViews,

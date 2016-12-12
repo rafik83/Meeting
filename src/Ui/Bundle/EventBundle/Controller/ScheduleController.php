@@ -174,6 +174,8 @@ class ScheduleController extends Controller
      * @param Happening $happening
      *
      * @return RedirectResponse|Response
+     *
+     * @deprecated see HappeningController
      */
     public function participateHappeningAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
     {
@@ -231,6 +233,8 @@ class ScheduleController extends Controller
      * @param Participant $participant
      *
      * @return RedirectResponse
+     *
+     * @deprecated see HappeningController
      */
     public function unparticipateHappeningAction(EventDomain $eventDomain, Sheet $sheet, Happening $happening, Participant $participant)
     {

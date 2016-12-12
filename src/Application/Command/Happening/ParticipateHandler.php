@@ -36,8 +36,16 @@ class ParticipateHandler
     public function handle(Participate $participate)
     {
         foreach ($participate->participants as $participant) {
-            $happeningParticipation = new HappeningParticipation($participate->happening, $participant);
-            $this->happeningParticipationRepository->add($happeningParticipation);
+            $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndParticipant(
+                $participate->happening,
+                $participant
+            );
+
+            if (null === $happeningParticipation) {
+                $this->happeningParticipationRepository->add(
+                    new HappeningParticipation($participate->happening, $participant)
+                );
+            }
         }
     }
 }

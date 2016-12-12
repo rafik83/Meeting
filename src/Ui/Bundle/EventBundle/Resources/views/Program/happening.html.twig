@@ -47,19 +47,19 @@
                 <i class="icon icon-Horaire"></i>
                 <span>{{ happening.beginHour|date('H:i') }} - {{ happening.endHour|date('H:i') }}</span>
             </p>
-            {#
-            <a href="">
-                <i class="icon icon-Document_1"></i>
-                Details
-            </a>
             <div class="actions">
+                {#
                 <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+                #}
+                <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray">
+                    <i class="icon icon-{{ happening.category.picto }}"></i>
+                    {{ 'happening.participate'|trans }}
+                </a>
             </div>
-            #}
         </footer>
     </div>
 </div>
