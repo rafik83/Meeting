@@ -227,7 +227,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
      * {@inheritdoc}
      */
     public function getAvailableParticipants(
-        Sheet $sheet,
+        $participants,
         \DateTimeInterface $begin,
         \DateTimeInterface $end
     ) {
@@ -236,8 +236,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participant')
             ->from(Participant::class, 'participant')
-            ->where('participant.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
+            ->where('participant IN (:participants)')
+            ->setParameter('participants', $participants);
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(

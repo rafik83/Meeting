@@ -417,6 +417,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\ParticipateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
     vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
