@@ -59,8 +59,14 @@ class UnavailabilityController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $days   = $event->getDays();
-        $create = new CreateMass($event, reset($days));
+        $days = $event->getDays();
+        $day  = reset($days);
+
+        if ($day === false) {
+            $day = null;
+        }
+
+        $create = new CreateMass($event, $day);
         $form   = $this->createForm(CreateMassType::class, $create, [
             'event'  => $event,
             'submit' => true,
