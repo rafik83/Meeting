@@ -27,13 +27,23 @@ class ProgramViewQueryHandler
     private $dayViewQueryHandler;
 
     /**
-     * @param DayRepositoryInterface $dayRepository
-     * @param DayViewQueryHandler    $dayViewQueryHandler
+     * @var HappeningParticipationQueryHandler
      */
-    public function __construct(DayRepositoryInterface $dayRepository, DayViewQueryHandler $dayViewQueryHandler)
-    {
-        $this->dayRepository       = $dayRepository;
-        $this->dayViewQueryHandler = $dayViewQueryHandler;
+    private $happeningParticipationQueryHandler;
+
+    /**
+     * @param DayRepositoryInterface             $dayRepository
+     * @param DayViewQueryHandler                $dayViewQueryHandler
+     * @param HappeningParticipationQueryHandler $happeningParticipationQueryHandler
+     */
+    public function __construct(
+        DayRepositoryInterface $dayRepository,
+        DayViewQueryHandler $dayViewQueryHandler,
+        HappeningParticipationQueryHandler $happeningParticipationQueryHandler
+    ) {
+        $this->dayRepository                      = $dayRepository;
+        $this->dayViewQueryHandler                = $dayViewQueryHandler;
+        $this->happeningParticipationQueryHandler = $happeningParticipationQueryHandler;
     }
 
     /**
@@ -66,9 +76,19 @@ class ProgramViewQueryHandler
             ? $programViewQuery->category->getTitle($programViewQuery->locale)
             : null;
 
-        return new ProgramView(
+        $programView = new ProgramView(
             $dayViews,
             $categoryTitle
         );
+
+        $this->happeningParticipationQueryHandler->handle(
+            new HappeningParticipationQuery(
+                $programView,
+                $programViewQuery->sheet,
+                $programViewQuery->user
+            )
+        );
+
+        return $programView;
     }
 }

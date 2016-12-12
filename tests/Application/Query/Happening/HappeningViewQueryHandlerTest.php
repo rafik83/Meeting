@@ -33,10 +33,16 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $happening1->setTranslation(new Happening\HappeningTranslation($happening1, 'fr', 'title', 'description'));
 
+        $reflection = new \ReflectionClass(Happening::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($happening1, 1);
+        $property->setAccessible(false);
 
         // Expected
         $happeningCategoryView = new HappeningCategoryView('title', 'Conference', '#123123', '#123123');
         $happeningView1 = new HappeningView(
+            1,
             1,
             $happeningCategoryView,
             $beginHappening1,

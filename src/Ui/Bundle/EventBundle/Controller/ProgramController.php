@@ -34,14 +34,21 @@ class ProgramController extends Controller
 
         $event  = $eventDomain->getEvent();
         $locale = $request->getLocale();
+        $user   = $this->getUser();
 
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($user, $event, $locale);
+
+        if ($sheet === null) {
+            throw $this->createNotFoundException(sprintf('This user %s has no sheet', $user->getId()));
+        }
 
         try {
             /** @var ProgramView $program */
             $program = $this->get('tactician.commandbus.query')->handle(
                 new ProgramViewQuery(
                     $eventDomain->getEvent(),
+                    $sheet,
+                    $user,
                     $request->getLocale(),
                     null
                 )
@@ -50,30 +57,10 @@ class ProgramController extends Controller
             return $this->redirectToRoute('event_sheet');
         }
 
-        $happenings = [];
-
-        foreach ($program->days as $day) {
-            foreach ($day->happenings as $happening) {
-                $happenings[] = $happening->getId();
-            }
-        }
-
-        $participations = $this
-            ->get('vimeet_infrastructure.repository.happening_participation_repository')
-            ->getParticipationsForSheet($sheet, $happenings);
-
-        $happeningParticipations = [];
-
-        foreach ($participations as $participation) {
-            /** @var HappeningParticipation $participation */
-            $happeningParticipations[$participation->getHappening()->getId()][] = $participation->getParticipant();
-        }
-
         return $this->render('EventBundle:Program:index.html.twig', [
             'event'   => $event,
             'sheet'   => $sheet,
             'program' => $program,
-            'happeningParticipations' => $happeningParticipations,
         ]);
     }
 }

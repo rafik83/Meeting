@@ -4,7 +4,7 @@
             <span class="prefix"><i class="icon icon-{{ happening.category.picto }}"></i> N°{{ happening.code }}</span>
             <p class="title">
                 {{ happening.title }}
-                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ happeningParticipations[happening.id] is defined ? '' : 'hide' }}"></i>
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ happening.doesCurrentUserParticipate ? '' : 'hide' }}"></i>
             </p>
         </a>
     </header>
@@ -59,7 +59,7 @@
                 <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
                 #}
 
-                {% if happeningParticipations[happening.id] is defined %}
+                {% if happening.hasParticipations %}
 
                 {% else %}
                     <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray happeningParticipateAction">
