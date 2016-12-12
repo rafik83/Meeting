@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Categor
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Update;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends AbstractType
+class UpdateType extends CategoryType
 {
     /**
      * {@inheritdoc}

@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends AbstractType
+class CreateType extends MassType
 {
     /**
      * {@inheritdoc}
