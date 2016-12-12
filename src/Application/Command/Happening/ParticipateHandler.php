@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
@@ -32,6 +33,8 @@ class ParticipateHandler
 
     /**
      * @param Participate $participate
+     *
+     * @throws ParticipantNotAvailableException
      */
     public function handle(Participate $participate)
     {
@@ -40,6 +43,12 @@ class ParticipateHandler
                 $participate->happening,
                 $participant
             );
+
+            $isNotAvailable = true;
+
+            if ($isNotAvailable) {
+                throw new ParticipantNotAvailableException();
+            }
 
             if (null === $happeningParticipation) {
                 $this->happeningParticipationRepository->add(

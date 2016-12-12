@@ -43,7 +43,9 @@ event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
 gender.man: Monsieur
 gender.woman: Madame
-happening.participate: Participer
+happening.participate.action: Participer
+happening.participate.participantNoFound: 'Participant non trouvé'
+happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'

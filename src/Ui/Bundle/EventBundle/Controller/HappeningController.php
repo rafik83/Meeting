@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
+use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -27,7 +28,7 @@ class HappeningController extends Controller
      * @param Sheet       $sheet
      * @param Happening   $happening
      *
-     * @return RedirectResponse
+     * @return JsonResponse
      */
     public function participateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
     {
@@ -45,12 +46,27 @@ class HappeningController extends Controller
             ->getParticipantForUserAndSheet($this->getUser(), $sheet);
 
         if (null === $participant) {
-            return new JsonResponse(['error' => 'Participant not found'], 404);
+            return new JsonResponse(
+                [
+                    'status'  => 'error',
+                    'message' => $this->get('translator')->trans('happening.participate.participantNoFound'),
+                ]
+            );
         }
 
         $participate = new Participate($happening, [$participant]);
-        $this->get('tactician.commandbus')->handle($participate);
 
-        return $this->redirectToRoute('happening_program');
+        try {
+            $this->get('tactician.commandbus')->handle($participate);
+        } catch (ParticipantNotAvailableException $participantNotAvailableException) {
+            return new JsonResponse(
+                [
+                    'status'  => 'error',
+                    'message' => $this->get('translator')->trans('happening.participate.youAreNotAvailable'),
+                ]
+            );
+        }
+
+        return new JsonResponse(['status' => 'ok']);
     }
 }

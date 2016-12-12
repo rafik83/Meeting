@@ -64,7 +64,7 @@
                 {% else %}
                     <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray happeningParticipateAction">
                         <i class="icon icon-{{ happening.category.picto }}"></i>
-                        {{ 'happening.participate'|trans }}
+                        {{ 'happening.participate.action'|trans }}
                     </a>
                 {% endif %}
             </div>
