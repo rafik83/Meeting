@@ -14,25 +14,27 @@
             {{ form_row(form.lastName) }}
             {{ form_row(form.email) }}
 
-
-            {% if participantProduct is not null %}
+            {% if participantProductView is not null %}
                 <table class="table">
                     <tbody>
                         <tr>
                             <td class="col-xs-9">
                                 <div class="buyable-product-row">
-                                    {{ participantProduct.title(app.request.locale) }}
+                                    {{ participantProductView.title }}
                                 </div>
                             </td>
                             <td class="col-xs-3">
                                 <div class="buyable-product-row product-price">
-                                    {{ 'package.product.unitPrice'|trans({
-                                        '%price%': participantProduct.unitPrice,
-                                        '%currency%': participantProduct.currency|currency_symbol,
-                                        '%vatMode%': ('package.vatMode.' ~ participantProduct.vatMode)|trans
-                                    })|html }}
+                                    {% if participantProductView.isIncluded %}
+                                        {{ 'package.participants.included'|trans }}
+                                    {% else %}
+                                        {{ 'package.product.unitPrice'|trans({
+                                            '%price%': participantProductView.unitPrice,
+                                            '%currency%': participantProductView.currency|currency_symbol,
+                                            '%vatMode%': ('package.vatMode.' ~ participantProductView.vatMode)|trans
+                                        })|html }}
+                                    {% endif %}
                                 </div>
-
                             </td>
                         </tr>
                     </tbody>

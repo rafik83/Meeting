@@ -9,7 +9,7 @@ Proximum\Vimeet\Domain\Model\Happening\Category:
     fields:
         picto:
             type: string
-        position:
+        rank:
             type: integer
         leftColor:
             type: string

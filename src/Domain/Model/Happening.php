@@ -62,8 +62,12 @@ class Happening
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
-    {
+    public function __construct(
+        Event $event,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        CategoryHappening $category
+    ) {
         $this->event        = $event;
         $this->begin        = $begin;
         $this->end          = $end;
@@ -73,9 +77,7 @@ class Happening
     }
 
     /**
-     * Get id.
-     *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -144,10 +146,22 @@ class Happening
 
     /**
      * @param string $locale
+     *
+     * @return string
      */
     public function getTitle($locale)
     {
-        return $this->getTranslations()->get($locale)->getTitle();
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -204,7 +218,9 @@ class Happening
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) { return $talking->getSpeaker(); })
+            ->map(function (Talking $talking) {
+                return $talking->getSpeaker();
+            })
             ->toArray();
     }
 

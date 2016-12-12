@@ -1,0 +1,69 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Happening;
+
+use Proximum\Vimeet\Application\View\Happening\HappeningView;
+
+class HappeningViewQueryHandler
+{
+    /**
+     * @var SpeakerViewQueryHandler
+     */
+    private $speakerViewQueryHandler;
+
+    /**
+     * @var CategoryViewQueryHandler
+     */
+    private $categoryViewQueryHandler;
+
+    /**
+     * HappeningViewQueryHandler constructor.
+     *
+     * @param SpeakerViewQueryHandler      $speakerViewQueryHandler
+     * @param CategoryViewQueryHandler     $categoryViewQueryHandler
+     */
+    public function __construct(
+        SpeakerViewQueryHandler $speakerViewQueryHandler,
+        CategoryViewQueryHandler $categoryViewQueryHandler
+    ) {
+        $this->speakerViewQueryHandler  = $speakerViewQueryHandler;
+        $this->categoryViewQueryHandler = $categoryViewQueryHandler;
+    }
+
+    /**
+     * @param HappeningViewQuery $query
+     *
+     * @return HappeningView
+     */
+    public function handle(HappeningViewQuery $query)
+    {
+        $happening = $query->happening;
+
+        $happeningCategoryView = $this->categoryViewQueryHandler->handle(
+            new CategoryViewQuery($happening, $query->locale)
+        );
+
+        $speakerView = $this->speakerViewQueryHandler->handle(
+            new SpeakerViewQuery($happening, $query->locale)
+        );
+
+        return new HappeningView(
+            $query->key,
+            $happeningCategoryView,
+            $happening->getBegin(),
+            $happening->getEnd(),
+            $happening->getTitle($query->locale),
+            $happening->getDescription($query->locale),
+            null, // Happening Picture
+            $speakerView
+        );
+    }
+}

@@ -1,0 +1,65 @@
+<div class="meet {{ happening.category.title|lower }}" data-beginHour="{{ happening.beginHour|date('H:i') }}" data-duration="{{ happening.duration.format('%H:%I') }}">
+    <header style="background: linear-gradient(to right, {{ happening.category.leftColor }} 0%, {{ happening.category.rightColor }} 100%) !important;">
+        <a class="content" href="#{{ happening.title }}">
+            <span class="prefix"><i class="icon icon-{{ happening.category.picto }}"></i> N°{{ happening.code }}</span>
+            <p class="title">{{ happening.title }}</p>
+        </a>
+    </header>
+    <div class="details">
+        <div class="row">
+            {% for speaker in happening.speakers %}
+                <div class="col-md-4 text-center">
+                    {% if speaker.hasCompanyPicture %}
+                        <img src="{{ speaker.companyPicture|imagine_filter('program_company_logo') }}"/>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="list list--users">
+                        <div class="user clearfix">
+                            {% if speaker.hasPicture %}
+                                <div class="user__avatar">
+                                    <span class="bullet">
+                                    </span>
+                                    <div class="avatar">
+                                        <img src="{{ speaker.picture|imagine_filter('user_avatar') }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="user__avatar">
+                                    <span class="bullet"></span>
+                                    <div class="avatar">
+                                        <p>{{ speaker.initials }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="user__infos">
+                                <p class="name">{{ speaker.firstname|capitalize }} {{ speaker.lastname|upper }}</p>
+                                <p class="job">{{ speaker.position }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <p>{{ happening.description }}</p>
+        <footer>
+            <p class="hours">
+                <i class="icon icon-Horaire"></i>
+                <span>{{ happening.beginHour|date('H:i') }} - {{ happening.endHour|date('H:i') }}</span>
+            </p>
+            {#
+            <a href="">
+                <i class="icon icon-Document_1"></i>
+                Details
+            </a>
+            <div class="actions">
+                <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
+                <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+            </div>
+            #}
+        </footer>
+    </div>
+</div>

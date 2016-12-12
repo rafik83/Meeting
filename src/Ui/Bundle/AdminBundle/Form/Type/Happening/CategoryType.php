@@ -36,7 +36,7 @@ class CategoryType extends AbstractType
             },
             'choice_label' => function (Options $options) {
                 return function (Category $category) use ($options) {
-                    return $category->getTranslations()->get($options['locale'])->getTitle();
+                    return $category->getTitle($options['locale']);
                 };
             },
         ]);

@@ -264,6 +264,14 @@ class Product
     }
 
     /**
+     * @param ArrayCollection $translations
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
+    }
+
+    /**
      * @return array
      */
     public function getTranslationsData()
