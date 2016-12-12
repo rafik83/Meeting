@@ -12,16 +12,16 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # participants
     product_participant_1_asddays:
-        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 1O ] }
+        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 10 ] }
         image: ~
-        availabilityCurrent: ~
+        availabilityCurrent: 0
         availabilityMax: ~
         quantityMax: 4
         updatable: false
         deletableUntil: ~
     # plannings
     product_planning_1_asddays:
-        __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 1O ] }
+        __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 10 ] }
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false

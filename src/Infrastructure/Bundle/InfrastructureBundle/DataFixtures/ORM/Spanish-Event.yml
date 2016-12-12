@@ -61,7 +61,7 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # participants
     product_participant_1_spanish_event:
-        __construct: { createParticipant: [ '@event_spanish', 'Participant supplémentaire Fournisseur', 195, 1O ] }
+        __construct: { createParticipant: [ '@event_spanish', 'Participant supplémentaire Fournisseur', 195, 10 ] }
         image: ~
         availabilityCurrent: 0
         availabilityMax: 0
@@ -69,7 +69,7 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # plannings
     product_planning_1_spanish_event:
-        __construct: { createPlanning: [ '@event_spanish', 'Planning supplémentaire Fournisseur', 495, 1O ] }
+        __construct: { createPlanning: [ '@event_spanish', 'Planning supplémentaire Fournisseur', 495, 10 ] }
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false
