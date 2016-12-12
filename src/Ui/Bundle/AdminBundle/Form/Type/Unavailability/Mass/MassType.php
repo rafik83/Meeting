@@ -23,7 +23,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AbstractType extends BaseAbstractType
+abstract class MassType extends BaseAbstractType
 {
     /**
      * {@inheritdoc}

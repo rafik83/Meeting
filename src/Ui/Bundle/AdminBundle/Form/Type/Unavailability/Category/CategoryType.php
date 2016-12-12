@@ -15,7 +15,7 @@ use Symfony\Component\Form\AbstractType as BaseAbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-abstract class AbstractType extends BaseAbstractType
+abstract class CategoryType extends BaseAbstractType
 {
     /**
      * {@inheritdoc}
