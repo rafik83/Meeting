@@ -1927,7 +1927,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
-            
+
     #
     # Program query
     #
@@ -1953,7 +1953,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
 
-##
+    ##
     # Navigation builder
     ##
     navigation.navigation_builder:
