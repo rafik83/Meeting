@@ -1928,7 +1928,6 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
 
-
     #
     # Program query
     #
@@ -1953,6 +1952,7 @@ services:
             - '@query.happening.day_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
+
     ##
     # Navigation builder
     ##
@@ -2037,6 +2037,8 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@domain.key_dates.checker.happenings_access_checker'
 
     ##
     # Notification query handler
