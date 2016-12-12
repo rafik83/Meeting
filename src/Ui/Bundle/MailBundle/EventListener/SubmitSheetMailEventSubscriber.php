@@ -105,7 +105,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         if ($follower !== null) {
             $admins[] = $follower;
         } else {
-            // notify all organizer and partner allowed to manage this sheet
+            // notify all organizer allowed to manage this sheet
             $admins = array_merge($admins,
                 $this->adminRepository->getAllowedOrganizer(
                     $event->getSheet()->getEvent()
