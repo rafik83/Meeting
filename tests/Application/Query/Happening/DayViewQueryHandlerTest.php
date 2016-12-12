@@ -53,6 +53,13 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $categoryH2
         );
 
+        $reflection = new \ReflectionClass(Happening::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($happening1, 1);
+        $property->setValue($happening2, 2);
+        $property->setAccessible(false);
+
         $happenings = [
             $happening1,
             $happening2,
@@ -61,6 +68,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $happeningCategoryView = new HappeningCategoryView('title', 'Conference', '#123123', '#123123');
         $happeningView1 = new HappeningView(
+            1,
             1,
             $happeningCategoryView,
             $beginHappening1,
@@ -71,6 +79,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             []
         );
         $happeningView2 = new HappeningView(
+            2,
             2,
             $happeningCategoryView,
             $beginHappening2,
