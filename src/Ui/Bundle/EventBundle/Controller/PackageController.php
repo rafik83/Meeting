@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThi
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
@@ -171,8 +172,13 @@ class PackageController extends Controller
             )
         );
 
+        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+            new ParticipantProductViewQuery($sheet, $request->getLocale())
+        );
+
         return $this->render('EventBundle:Package:step.html.twig', [
             'event'                        => $eventDomain->getEvent(),
+            'sheet'                        => $sheet,
             'view'                         => $view,
             'form'                         => $form->createView(),
             'form_add'                     => null !== $form_add ? $form_add->createView() : $form_add,
@@ -180,6 +186,7 @@ class PackageController extends Controller
             'displayAddParticipantForm'    => $displayAddParticipantForm,
             'displayRemoveParticipantForm' => $displayRemoveParticipantForm,
             'participants'                 => $participants,
+            'participantProductView'       => $participantProductView,
         ]);
     }
 
@@ -292,14 +299,16 @@ class PackageController extends Controller
             ]),
         ]);
 
-        $participantProduct = $sheet->getPackage()->isPassable() ? $sheet->getPackage()->getParticipant() : null;
+        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+            new ParticipantProductViewQuery($sheet, $locale)
+        );
 
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'label'              => $label,
-            'form'               => $form->createView(),
-            'sheet'              => $sheet,
-            'participantProduct' => $participantProduct,
-            'backRoute'          => 'backToPackage'
+            'label'                  => $label,
+            'form'                   => $form->createView(),
+            'sheet'                  => $sheet,
+            'participantProductView' => $participantProductView,
+            'backRoute'              => 'backToPackage',
         ]);
     }
 

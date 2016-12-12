@@ -11,39 +11,26 @@
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
-use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
 
 class ParticipantsViewQueryHandler
 {
-    /**
-     * @var ParticipantViewQueryHandler
-     */
+    /** @var ParticipantViewQueryHandler */
     private $participantViewQueryHandler;
 
-    /**
-     * @var CartManager
-     */
-    private $cartManager;
-
-    /**
-     * @var Merger
-     */
-    private $orderMerger;
+    /** @var IncludedParticipantGuesser */
+    private $includedParticipantGuesser;
 
     /**
      * @param ParticipantViewQueryHandler $participantViewQueryHandler
-     * @param CartManager                 $cartManager
-     * @param Merger                      $orderMerger
+     * @param IncludedParticipantGuesser  $includedParticipantGuesser
      */
     public function __construct(
         ParticipantViewQueryHandler $participantViewQueryHandler,
-        CartManager $cartManager,
-        Merger $orderMerger
+        IncludedParticipantGuesser $includedParticipantGuesser
     ) {
         $this->participantViewQueryHandler = $participantViewQueryHandler;
-        $this->cartManager                 = $cartManager;
-        $this->orderMerger                 = $orderMerger;
+        $this->includedParticipantGuesser  = $includedParticipantGuesser;
     }
 
     /**
@@ -52,26 +39,15 @@ class ParticipantsViewQueryHandler
      */
     public function handle(ParticipantsViewQuery $participantsViewQuery)
     {
-        $cart               = $this->cartManager->getCart($participantsViewQuery->sheet);
-        $locale             = $participantsViewQuery->locale;
+        $locale = $participantsViewQuery->locale;
+
+        $includedParticipantView = $this->includedParticipantGuesser->getIncludedParticipantView(
+            $participantsViewQuery->sheet
+        );
+
+        $numberIncluded = $includedParticipantView->totalQuantity;
+
         $participantProduct = $participantsViewQuery->sheet->getPackage()->getParticipant();
-
-        if ($participantsViewQuery->sheet->hasNotCancelledOrders()) {
-            $orderMerged  = $this->orderMerger->merge($participantsViewQuery->sheet->getNotCancelledOrders());
-            $selectedPlan = $orderMerged->getPlan();
-        } else {
-            $selectedPlan = $cart->getPlanRow()->getProduct();
-        }
-
-        $numberIncluded = 0;
-
-        if ($selectedPlan) {
-            $participantProductIncluded = $selectedPlan->getIncludedParticipantProduct();
-
-            if ($participantProductIncluded) {
-                $numberIncluded = $participantProductIncluded->getQuantity();
-            }
-        }
 
         $participantView = [];
 
@@ -81,11 +57,9 @@ class ParticipantsViewQueryHandler
                     $participantProduct,
                     $participant,
                     $locale,
-                    $numberIncluded > 0
+                    count($participantView) < $numberIncluded
                 )
             );
-
-            $numberIncluded--;
         }
 
         $participantsView = new ParticipantsView(
