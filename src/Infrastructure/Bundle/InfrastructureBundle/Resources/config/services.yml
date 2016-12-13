@@ -2422,3 +2422,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
         arguments:
             - '@session'
+
+    #
+    # Happening
+    #
+    domain.happening.participation_count:
+        class:  Proximum\Vimeet\Domain\Happening\ParticipationCount
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
