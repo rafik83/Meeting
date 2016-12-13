@@ -45,7 +45,7 @@ class HappeningController extends Controller
         $participate            = new Participate($happening, $sheet->getParticipants()->toArray());
         $isUserAloneParticipant = $this->isUserAloneParticipant($sheet);
 
-        if (true === $isUserAloneParticipant) {
+        if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
             try {
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
