@@ -33,21 +33,29 @@ class DayView
     public $happenings;
 
     /**
-     * @param \DateTimeInterface $startTime
-     * @param \DateTimeInterface $endTime
-     * @param int                $scale
-     * @param HappeningView[]    $happeningViews
+     * @var MassUnavailabilityView[]
+     */
+    public $masses;
+
+    /**
+     * @param \DateTimeInterface       $startTime
+     * @param \DateTimeInterface       $endTime
+     * @param int                      $scale
+     * @param HappeningView[]          $happeningViews
+     * @param MassUnavailabilityView[] $massViews
      */
     public function __construct(
         \DateTimeInterface $startTime,
         \DateTimeInterface $endTime,
         $scale,
-        array $happeningViews = []
+        array $happeningViews = [],
+        array $massViews = []
     ) {
         $this->startTime  = $startTime;
         $this->endTime    = $endTime;
         $this->scale      = $scale;
         $this->happenings = $happeningViews;
+        $this->masses     = $massViews;
     }
 
     /**

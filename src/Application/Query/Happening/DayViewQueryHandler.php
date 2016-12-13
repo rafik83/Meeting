@@ -26,15 +26,23 @@ class DayViewQueryHandler
     private $happeningRepository;
 
     /**
-     * @param HappeningRepositoryInterface $happeningRepository
-     * @param HappeningViewQueryHandler    $happeningViewQueryHandler
+     * @var MassUnavailabilityViewQueryHandler
+     */
+    private $massUnavailabilityViewQueryHandler;
+
+    /**
+     * @param HappeningRepositoryInterface       $happeningRepository
+     * @param HappeningViewQueryHandler          $happeningViewQueryHandler
+     * @param MassUnavailabilityViewQueryHandler $massUnavailabilityViewQueryHandler
      */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
-        HappeningViewQueryHandler $happeningViewQueryHandler
+        HappeningViewQueryHandler $happeningViewQueryHandler,
+        MassUnavailabilityViewQueryHandler $massUnavailabilityViewQueryHandler
     ) {
-        $this->happeningRepository       = $happeningRepository;
-        $this->happeningViewQueryHandler = $happeningViewQueryHandler;
+        $this->happeningRepository                = $happeningRepository;
+        $this->happeningViewQueryHandler          = $happeningViewQueryHandler;
+        $this->massUnavailabilityViewQueryHandler = $massUnavailabilityViewQueryHandler;
     }
 
     /**
@@ -51,6 +59,7 @@ class DayViewQueryHandler
         );
 
         $happeningViews = [];
+        $massView       = [];
 
         foreach ($happenings as $key => $happening) {
             $happeningViews[] = $this->happeningViewQueryHandler->handle(
@@ -58,11 +67,25 @@ class DayViewQueryHandler
             );
         }
 
+        $key = 1;
+        foreach ($query->masses as $mass) {
+            if ($mass->getBegin() >= $query->eventDay->getStartTime()
+                && $mass->getEnd() <= $query->eventDay->getEndTime()
+            ) {
+                $massView[] = $this->massUnavailabilityViewQueryHandler->handle(
+                    new MassUnavailabilityViewQuery($mass, $query->locale, $key)
+                );
+
+                $key++;
+            }
+        }
+
         return new DayView(
             $query->eventDay->getStartTime(),
             $query->eventDay->getEndTime(),
             $query->event->getConfiguration()->getScheduleScale(),
-            $happeningViews
+            $happeningViews,
+            $massView
         );
     }
 }

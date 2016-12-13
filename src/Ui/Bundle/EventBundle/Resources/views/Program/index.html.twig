@@ -27,34 +27,13 @@
                     {% for happening in day.happenings %}
                         {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': happening }) }}
                     {% endfor %}
+                    {% for mass in day.masses %}
+                        {{ include('EventBundle:Program:mass.html.twig', { 'mass': mass }) }}
+                    {% endfor %}
                 </div>
                 <div class="layout"></div>
-                {#
-                <footer class="agenda-foot">
-                    <p>
-                        <i class="icon icon-Deverouiller_1"></i>
-                        <strong>Disponibilité restantes</strong>
-                        <span>- 17 plages horaires</span>
-                    </p>
-                </footer>
-                #}
             </div>
             {% endfor %}
-            {#
-            <div class="col-md-6 agenda">
-                <div class="meets">
-                </div>
-                <div class="layout"></div>
-                <footer class="agenda-foot">
-                    <p>
-                        A voir également
-                        <a href="#conferences" class="btn btn-gray">
-                            <i class="icon icon-Conference"></i> Conférences
-                        </a>
-                    </p>
-                </footer>
-            </div>
-            #}
         </div>
     </div>
 

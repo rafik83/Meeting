@@ -14,10 +14,14 @@ use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\HappeningViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\DayView;
 use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
+use Proximum\Vimeet\Application\View\Happening\MassUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -31,6 +35,10 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $startTime = new \DateTime('2016-10-12 10:00:00');
         $endTime   = new \DateTime('2016-10-12 18:00:00');
         $eventDay  = new Day($event, $startTime, $endTime);
+
+        // Mass
+        $categoryMass = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
+        $mass = new Unavailability\Mass($event, $categoryMass, 'name', $startTime, $endTime, true);
 
         // Data
         $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
@@ -90,6 +98,18 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             []
         );
 
+        $massView = new MassUnavailabilityView(
+            1,
+            1,
+            $startTime,
+            $endTime,
+            'title',
+            'description',
+            'picto',
+            'leftColor',
+            'rightColor'
+        );
+
         $expected = new DayView(
             $startTime,
             $endTime,
@@ -97,7 +117,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 $happeningView1,
                 $happeningView2,
-            ]
+            ],
+            [$massView]
         );
 
         // Mock
@@ -124,16 +145,21 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             )
         )->shouldBeCalled()->willReturn($happeningView2);
 
+        $massHandler = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, 'fr', 1))->shouldBeCalled()->willReturn($massView);
+
 
         $handler = new DayViewQueryHandler(
             $happeningRepository->reveal(),
-            $happeningViewQueryHandler->reveal()
+            $happeningViewQueryHandler->reveal(),
+            $massHandler->reveal()
         );
         $result = $handler->handle(new DayViewQuery(
             $event,
             $eventDay,
             'fr',
-            $category
+            $category,
+            [$mass]
         ));
 
         $this->assertEquals($expected, $result);
