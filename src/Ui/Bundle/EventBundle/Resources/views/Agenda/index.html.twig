@@ -20,10 +20,10 @@
                     </header>
                     <div class="meets">
                         {% for happening in day.happenings %}
-                            {{ include('EventBundle:Agenda:happening.html.twig', { 'happening': happening }) }}
+                            {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening }) }}
                         {% endfor %}
                         {% for unavailability in day.unavailabilities %}
-                            {{ include('EventBundle:Agenda:unavailability.html.twig', {'unavailability': unavailability }) }}
+                            {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheet': agenda.sheet, 'unavailability': unavailability }) }}
                         {% endfor %}
                         {% for mass in day.masses %}
                             {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}

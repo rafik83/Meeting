@@ -30,7 +30,8 @@ class AgendaView
      */
     public function __construct(array $dayViews, Sheet $sheet)
     {
-        $this->days = $dayViews;
+        $this->days  = $dayViews;
+        $this->sheet = $sheet;
     }
 
     /**

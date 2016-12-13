@@ -1,8 +1,8 @@
 <div class="happening has-details meet {{ happening.title|lower }}" data-beginHour="{{ happening.begin|date('H:i') }}" data-duration="{{ happening.duration.format('%H:%I') }}">
     {{ include('EventBundle:Happening:header.html.twig', { leftColor: happening.leftColor, rightColor: happening.rightColor, picto: happening.picto, doesCurrentUserParticipate: true}) }}
     <div class="details">
-        {{ include('EventBundle:Happening:speakers.html.twig') }}
+        {{ include('EventBundle:Happening:speakers.html.twig', {happening: happening}) }}
         <p>{{ happening.description }}</p>
-        {{ include('EventBundle:Happening:actions.html.twig', {happening: happening, beginHour: happening.begin, endHour: happening.end}) }}
+        {{ include('EventBundle:Happening:actions.html.twig', {'sheet': agenda.sheet, happening: happening, beginHour: happening.begin, endHour: happening.end}) }}
     </div>
 </div>
