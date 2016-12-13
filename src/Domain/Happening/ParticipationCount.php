@@ -9,7 +9,10 @@
  */
 
 namespace Proximum\Vimeet\Domain\Happening;
+
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class ParticipationCount
@@ -18,6 +21,16 @@ class ParticipationCount
      * @var HappeningParticipationRepositoryInterface
      */
     private $happeningParticipationRepository;
+
+    /**
+     * @var Event
+     */
+    private $event;
+
+    /**
+     * @var HappeningParticipation[]
+     */
+    private $counts;
 
     /**
      * ParticipationCount constructor.
@@ -30,24 +43,31 @@ class ParticipationCount
     }
 
     /**
+     * @param Event     $event
      * @param Happening $happening
      *
      * @return int
      */
-    public function getRemaining(Happening $happening)
+    public function getRemaining(Event $event, Happening $happening)
     {
-        $participationNumber = $this->happeningParticipationRepository->countParticipationByHappening($happening);
+        if (!$this->event !== $event) {
+            $this->event  = $event;
+            $this->counts = $this->happeningParticipationRepository->countParticipationByEvent($event);
+        }
 
-        return $happening->getLimitParticipant() - $participationNumber;
+        $count = isset($this->counts[$happening->getId()]) ? $this->counts[$happening->getId()] : 0;
+
+        return max(0, $happening->getLimitParticipant() - $count);
     }
 
     /**
+     * @param Event     $event
      * @param Happening $happening
      *
      * @return bool
      */
-    public function isFull(Happening $happening)
+    public function isFull(Event $event, Happening $happening)
     {
-        return $this->getRemaining($happening) === 0;
+        return $this->getRemaining($event, $happening) === 0;
     }
 }
