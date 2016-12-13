@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,13 +24,22 @@ class ParticipateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('participants', ChoiceType::class, [
-                'choices'  => $options['participants'],
-                'multiple' => true,
-                'expanded' => true,
-            ])
-        ;
+        /** @var Happening $happening */
+        $happening = $options['happening'];
+
+        if ($happening->isQuestionAllowed()) {
+            $builder
+                ->add('question', TextareaType::class, [
+                    'required' => false,
+                ]);
+        }
+
+//        $builder
+//            ->add('participants', ChoiceType::class, [
+//                'choices'  => $options['participants'],
+//                'multiple' => true,
+//                'expanded' => true,
+//            ]);
     }
     /**
      * {@inheritdoc}
@@ -39,7 +48,7 @@ class ParticipateType extends AbstractType
     {
         $resolver->setRequired([
             'happening',
-            'participants',
+//            'participants',
         ]);
 
         $resolver->setAllowedTypes('happening', Happening::class);

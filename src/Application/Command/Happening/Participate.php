@@ -15,25 +15,24 @@ use Proximum\Vimeet\Domain\Model\Participant;
 
 class Participate
 {
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     public $happening;
 
-    /**
-     * @var Participant[]
-     */
+    /** @var Participant[] */
     public $participants;
 
+    /** @var string */
+    public $question;
+
     /**
-     * Participate constructor.
-     *
      * @param Happening $happening
      * @param array     $participants
+     * @param string    $question
      */
-    public function __construct(Happening $happening, array $participants)
+    public function __construct(Happening $happening, array $participants, $question = '')
     {
         $this->happening    = $happening;
         $this->participants = $participants;
+        $this->question     = $question;
     }
 }
