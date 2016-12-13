@@ -102,7 +102,7 @@ class HappeningListViewFactory
             $happening->getBegin(),
             $happening->getEnd(),
             $happening->getTitle($locale),
-            $happening->allowQuestion(),
+            $happening->isQuestionAllowed(),
             array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
             $this->happeningPermissionManager->isAllowedToBeModified($happening)
         );

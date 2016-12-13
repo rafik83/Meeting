@@ -101,7 +101,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::SHEET_ICON,
                 'sheet.title',
                 'sheet.title.link',
-                true
+                false
             ),
             new SubmenuButtonView(
                 Category::PACKAGE_ICON,

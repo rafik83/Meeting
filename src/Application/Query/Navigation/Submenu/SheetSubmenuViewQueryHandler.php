@@ -72,7 +72,7 @@ class SheetSubmenuViewQueryHandler
             Category::SHEET_ICON,
             'sheet.title',
             $this->navigationBuilder->getRoute('event_sheet'),
-            !Route::isPackage($query->route) && !Route::isNotification($query->route)
+            Route::isSheet($query->route)
         );
 
         // Catalog button

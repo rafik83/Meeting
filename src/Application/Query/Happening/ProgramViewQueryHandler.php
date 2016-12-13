@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
-
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -28,13 +27,23 @@ class ProgramViewQueryHandler
     private $dayViewQueryHandler;
 
     /**
-     * @param DayRepositoryInterface $dayRepository
-     * @param DayViewQueryHandler    $dayViewQueryHandler
+     * @var HappeningParticipationQueryHandler
      */
-    public function __construct(DayRepositoryInterface $dayRepository, DayViewQueryHandler $dayViewQueryHandler)
-    {
-        $this->dayRepository       = $dayRepository;
-        $this->dayViewQueryHandler = $dayViewQueryHandler;
+    private $happeningParticipationQueryHandler;
+
+    /**
+     * @param DayRepositoryInterface             $dayRepository
+     * @param DayViewQueryHandler                $dayViewQueryHandler
+     * @param HappeningParticipationQueryHandler $happeningParticipationQueryHandler
+     */
+    public function __construct(
+        DayRepositoryInterface $dayRepository,
+        DayViewQueryHandler $dayViewQueryHandler,
+        HappeningParticipationQueryHandler $happeningParticipationQueryHandler
+    ) {
+        $this->dayRepository                      = $dayRepository;
+        $this->dayViewQueryHandler                = $dayViewQueryHandler;
+        $this->happeningParticipationQueryHandler = $happeningParticipationQueryHandler;
     }
 
     /**
@@ -63,11 +72,23 @@ class ProgramViewQueryHandler
             );
         }
 
-        $categoryTitle = $programViewQuery->category !== null ? $programViewQuery->category->getTitle($programViewQuery->locale) : null;
+        $categoryTitle = $programViewQuery->category !== null
+            ? $programViewQuery->category->getTitle($programViewQuery->locale)
+            : null;
 
-        return new ProgramView(
+        $programView = new ProgramView(
             $dayViews,
             $categoryTitle
         );
+
+        $this->happeningParticipationQueryHandler->handle(
+            new HappeningParticipationQuery(
+                $programView,
+                $programViewQuery->sheet,
+                $programViewQuery->user
+            )
+        );
+
+        return $programView;
     }
 }

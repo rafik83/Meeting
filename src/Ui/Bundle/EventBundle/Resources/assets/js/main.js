@@ -16,6 +16,7 @@ var $                     = require('jquery'),
     ShowMore              = require('./components/_ShowMore'),
     CatalogFilters        = require('./components/_CatalogFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
+    Happening             = require('./components/_Happening'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit');
 
 require('bootstrap');
@@ -155,6 +156,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.object--nomenclature, .object--collection.style--style-2, .object--collection.style--style-3'), function (element) {
         new ShowMore(element.querySelector('.section__content'), element.querySelector('footer'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.happening'), function (element) {
+        new Happening(element, document.getElementById('happening-modal'));
     });
 
     [].forEach.call(target.querySelectorAll('form'), function (element) {
