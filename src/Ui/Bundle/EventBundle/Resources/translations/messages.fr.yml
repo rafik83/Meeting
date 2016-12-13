@@ -50,6 +50,7 @@ happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place 
 happening.participate.participantNotAvailable: 'Au moins un des participants sélectionné n''est pas disponible'
 happening.participate.participantNotFound: 'Participant non trouvé'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
+happening.participationUpdate.action: Modifier
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'

@@ -44,7 +44,8 @@ Happening.prototype.handleRequestParticipateButton = function ()
 };
 
 Happening.prototype.validateParticipation = function () {
-    this.happeningParticipateAction.classList.add('hide');
+    this.enableParticipateAction();
+    this.happeningParticipateAction.textContent = this.happeningParticipateAction.getAttribute('data-label-participation-update');
     this.happeningParticipateIcon.classList.remove('hide');
 };
 

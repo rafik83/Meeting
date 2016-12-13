@@ -59,14 +59,14 @@
                 <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
                 #}
 
-                {% if happening.hasParticipations %}
-
-                {% else %}
-                    <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray happeningParticipateAction">
-                        <i class="icon icon-{{ happening.category.picto }}"></i>
-                        {{ 'happening.participate.action'|trans }}
-                    </a>
-                {% endif %}
+                <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}"
+                   class="btn btn-gray happeningParticipateAction"
+                   data-label-participate="{{ 'happening.participate.action'|trans }}"
+                   data-label-participation-update="{{ 'happening.participationUpdate.action'|trans }}"
+                >
+                    <i class="icon icon-{{ happening.category.picto }}"></i>
+                    {{ happening.hasParticipations ? 'happening.participationUpdate.action'|trans : 'happening.participate.action'|trans }}
+                </a>
             </div>
         </footer>
     </div>
