@@ -36,7 +36,9 @@ class ParticipationCount
      */
     public function getRemaining(Happening $happening)
     {
-        return count($this->happeningParticipationRepository->findByHappening($happening));
+        $participationNumber = $this->happeningParticipationRepository->countParticipationByHappening($happening);
+
+        return $happening->getLimitParticipant() - $participationNumber;
     }
 
     /**
