@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
+use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -24,16 +26,28 @@ class ParticipateHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
+    /** @var QuestionRepositoryInterface */
+    private $questionRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param ParticipantRepositoryInterface            $participantRepository
+     * @param QuestionRepositoryInterface               $questionRepository
+     * @param \DateTimeInterface                        $dateTime
      */
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        QuestionRepositoryInterface $questionRepository,
+        \DateTimeInterface $dateTime
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->participantRepository            = $participantRepository;
+        $this->questionRepository               = $questionRepository;
+        $this->dateTime                         = $dateTime;
     }
 
     /**
@@ -65,10 +79,24 @@ class ParticipateHandler
                     throw new ParticipantNotAvailableException();
                 }
 
+                // Add participant to happening
                 $this->happeningParticipationRepository->add(
                     new HappeningParticipation($participate->happening, $participant)
                 );
             }
+        }
+
+        // Add question
+        if ($participate->happening->isQuestionAllowed() && !empty($participate->question)) {
+            $this->questionRepository->add(
+                new Question(
+                    $participate->happening,
+                    $participate->sheet,
+                    $participate->createdBy,
+                    $this->dateTime,
+                    $participate->question
+                )
+            );
         }
     }
 }

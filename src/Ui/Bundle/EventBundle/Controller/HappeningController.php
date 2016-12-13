@@ -62,7 +62,7 @@ class HappeningController extends Controller
             }
         }
 
-        $participate = new Participate($happening, $participants);
+        $participate = new Participate($happening, $sheet, $this->getUser(), $participants);
 
         // Case : one participant is current user and no question
         if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {

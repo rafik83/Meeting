@@ -83,6 +83,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.happening_question_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NotificationRepository
         arguments:
@@ -418,6 +422,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
     vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
