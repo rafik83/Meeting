@@ -884,6 +884,14 @@ admin_unavailability_mass_update:
         event: \d+
         mass: \d+
 
+admin_unavailability_mass_delete:
+    path: /event/{event}/unavailability/mass/delete/{mass}
+    requirements:
+        event: \d+
+        mass: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Unavailability:deleteMass }
+
 # Users
 admin_users:
     path: /event/{event}/users

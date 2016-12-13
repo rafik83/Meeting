@@ -32,4 +32,9 @@ interface MassRepositoryInterface
      * @return Mass[]
      */
     public function findByEvent(Event $event, $locale);
+
+    /**
+     * @param Mass $mass
+     */
+    public function remove(Mass $mass);
 }

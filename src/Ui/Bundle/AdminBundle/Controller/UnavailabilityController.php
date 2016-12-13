@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Create as CreateCategory;
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Update as UpdateCategory;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create as CreateMass;
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update as UpdateMass;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
@@ -121,6 +122,22 @@ class UnavailabilityController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Event $event
+     * @param Mass  $mass
+     *
+     * @return RedirectResponse
+     */
+    public function deleteMassAction( Event $event, Mass $mass)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $this->get('tactician.commandbus')->handle(new Delete($mass));
+        $this->addFlash('success', 'flash.admin.unavailability.mass.delete.success');
+
+        return $this->redirectToRoute('admin_unavailability_mass_list', ['event' => $event->getId()]);
     }
 
     /**
