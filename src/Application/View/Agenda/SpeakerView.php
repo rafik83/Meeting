@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Happening;
+namespace Proximum\Vimeet\Application\View\Agenda;
 
 use Proximum\Vimeet\Application\View\Speaker\AbstractSpeakerView;
 
-class HappeningSpeakerView extends AbstractSpeakerView
+class SpeakerView extends AbstractSpeakerView
 {
 }

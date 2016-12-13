@@ -1981,6 +1981,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
 
+
+    ##
+    #
+    # Agenda Queries
+    #
+    ##
+    query.agenda.speaker_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler
+
     ##
     # Navigation builder
     ##
