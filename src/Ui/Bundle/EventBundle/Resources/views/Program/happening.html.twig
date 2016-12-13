@@ -5,7 +5,7 @@
     <div class="details">
         {{ include('EventBundle:Happening:speakers.html.twig') }}
 
-        <p>{{ happening.description }}</p>
+        <p>{{ happening.description|nl2br }}</p>
 
         {{ include('EventBundle:Happening:actions.html.twig', {happening: happening, beginHour: happening.beginHour, endHour: happening.endHour}) }}
     </div>
