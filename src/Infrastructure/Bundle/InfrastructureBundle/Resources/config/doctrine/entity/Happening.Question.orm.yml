@@ -16,13 +16,11 @@ Proximum\Vimeet\Domain\Model\Happening\Question:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
             joinColumn:
                 onDelete: CASCADE
-    manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
                 onDelete: CASCADE
-    manyToOne:
-        user:
+        createdBy:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
