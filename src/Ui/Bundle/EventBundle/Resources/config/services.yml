@@ -189,6 +189,13 @@ services:
         tags:
             - { name: form.type }
 
+    form_type.happening_participate_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
     #
     # Event Listener
     #

@@ -1,4 +1,5 @@
-var $ = require('jquery');
+var $                     = require('jquery'),
+    EditableTextIndicator = require('./_EditableTextIndicator');
 
 function Happening(happening, modal)
 {
@@ -60,6 +61,10 @@ Happening.prototype.showModal = function (html) {
     content.html(html);
 
     var form = content.find('form');
+
+    [].forEach.call(this.modal.querySelectorAll('[data-text-max-length-indicator]'), function (element) {
+        new EditableTextIndicator(element, element.getAttribute('data-text-max-length-indicator'), element.getAttribute('data-text-max-length-translations'));
+    });
 
     $(form).on('submit', function () {
         this.handleRequestForm(form);
