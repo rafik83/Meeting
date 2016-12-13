@@ -3,5 +3,5 @@
         <i class="icon icon-Horaire"></i>
         <span>{{ beginHour|date('H:i') }} - {{ endHour|date('H:i') }}</span>
     </p>
-    {{ include('EventBundle:Happening:actions.html.twig', {sheet: sheet, unavailability: unavailablity}) }}
+    {{ include('EventBundle:Happening:actions.html.twig', {sheet: sheet, happening: happening}) }}
 </footer>

@@ -10,21 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\View\Happening\HappeningSpeakerView;
+use Proximum\Vimeet\Application\View\Agenda\SpeakerView;
 
 class SpeakerViewQueryHandler
 {
     /**
      * @param SpeakerViewQuery $query
      *
-     * @return HappeningSpeakerView[]
+     * @return SpeakerView[]
      */
     public function handle(SpeakerViewQuery $query)
     {
         $happeningSpeakerView = [];
 
         foreach ($query->happening->getSpeakers() as $speaker) {
-            $happeningSpeakerView[] = new HappeningSpeakerView(
+            $happeningSpeakerView[] = new SpeakerView(
                 $speaker->getFirstname(),
                 $speaker->getLastname(),
                 $speaker->getPosition($query->locale),
