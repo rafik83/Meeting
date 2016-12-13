@@ -59,7 +59,7 @@ class ParticipationCount
         }
 
         if (isset($this->participationCounts[$happening->getId()])) {
-            $participationCount = $this->participationCounts[$happening->getId()]);
+            $participationCount = $this->participationCounts[$happening->getId()];
         } else {
             $participationCount = $this
                 ->happeningParticipationRepository
