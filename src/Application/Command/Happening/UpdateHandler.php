@@ -33,7 +33,13 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $happening = $update->happening;
-        $happening->update($update->begin, $update->end, $update->category);
+        $happening->update(
+            $update->begin,
+            $update->end,
+            $update->category,
+            $update->allowQuestion,
+            $update->limitParticipant
+        );
 
         foreach ($update->translations as $locale => $translation) {
             $happening->updateTranslation($locale, $translation['title'], $translation['description']);
