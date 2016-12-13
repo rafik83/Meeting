@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 class HappeningView
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var \DateTimeInterface
      */
     private $beginHour;
@@ -56,18 +61,40 @@ class HappeningView
     private $category;
 
     /**
+     * If participants of the current sheet participate
+     *
+     * @var bool
+     */
+    private $hasParticipations = false;
+
+    /**
+     * If the current user participates
+     *
+     * @var bool
+     */
+    private $currentUserParticipate = false;
+
+    /**
+     * @var bool
+     */
+    public $isFull;
+
+    /**
      * HappeningView constructor.
      *
-     * @param int                $code
-     * @param HappeningCategoryView           $category
-     * @param \DateTimeInterface $beginHour
-     * @param \DateTimeInterface $endHour
-     * @param string             $title
-     * @param string             $description
-     * @param string|null        $picture
-     * @param Speaker[]          $speakers
+     * @param int                   $id
+     * @param int                   $code
+     * @param HappeningCategoryView $category
+     * @param \DateTimeInterface    $beginHour
+     * @param \DateTimeInterface    $endHour
+     * @param string                $title
+     * @param string                $description
+     * @param string|null           $picture
+     * @param Speaker[]             $speakers
+     * @param bool                  $isFull
      */
     public function __construct(
+        $id,
         $code,
         HappeningCategoryView $category,
         \DateTimeInterface $beginHour,
@@ -75,8 +102,10 @@ class HappeningView
         $title,
         $description,
         $picture,
-        array $speakers
+        array $speakers,
+        $isFull = false
     ) {
+        $this->id          = $id;
         $this->category    = $category;
         $this->beginHour   = $beginHour;
         $this->endHour     = $endHour;
@@ -85,6 +114,15 @@ class HappeningView
         $this->picture     = $picture;
         $this->speakers    = $speakers;
         $this->code        = $code;
+        $this->isFull      = $isFull;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -165,5 +203,37 @@ class HappeningView
     public function hasPicture()
     {
         return $this->picture !== null;
+    }
+
+    /**
+     * @param bool $currentUserParticipate
+     */
+    public function setCurrentUserParticipate($currentUserParticipate)
+    {
+        $this->currentUserParticipate = $currentUserParticipate;
+    }
+
+    /**
+     * @param bool $hasParticipations
+     */
+    public function setHasParticipation($hasParticipations)
+    {
+        $this->hasParticipations = $hasParticipations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function doesCurrentUserParticipate()
+    {
+        return $this->currentUserParticipate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParticipations()
+    {
+        return $this->hasParticipations;
     }
 }

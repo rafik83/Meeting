@@ -48,7 +48,7 @@ class Create
     /**
      * @var bool
      */
-    public $allowQuestion;
+    public $questionAllowed;
 
     /**
      * @var int|null
@@ -63,7 +63,7 @@ class Create
     public function __construct(Event $event)
     {
         $this->event         = $event;
-        $this->allowQuestion = false;
+        $this->questionAllowed = false;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

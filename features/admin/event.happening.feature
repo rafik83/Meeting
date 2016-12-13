@@ -26,7 +26,7 @@ Feature: See, create and update happening
       | happening_create[translations][en][title] | MyHappening      |
       | happening_create[begin]                   | 09/09/2016 10:10 |
       | happening_create[end]                     | 09/09/2016 12:10 |
-      | happening_create[allowQuestion]           | 1                |
+      | happening_create[questionAllowed]         | 1                |
       | happening_create[limitParticipant]        |                  |
     And I press "form.happening_create.children.submit.label"
     Then I should see "flash.admin.happening.create.success"
@@ -36,11 +36,11 @@ Feature: See, create and update happening
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event/1/happening/1/update"
     When I fill in the following:
-      | happening_update[category]                | 1               |
-      | happening_update[translations][fr][title] | Starting event  |
-      | happening_update[translations][en][title] | Starting event  |
-      | happening_update[allowQuestion]           | 0               |
-      | happening_update[limitParticipant]        | 100             |
+      | happening_update[category]                | 1              |
+      | happening_update[translations][fr][title] | Starting event |
+      | happening_update[translations][en][title] | Starting event |
+      | happening_update[questionAllowed]         | 0              |
+      | happening_update[limitParticipant]        | 100            |
     And I press "form.happening_update.children.submit.label"
     And I should be on this page "/admin/fr/event/1/happening/1/update"
     Then I should see "flash.admin.happening.update.success"

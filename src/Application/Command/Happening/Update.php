@@ -48,7 +48,7 @@ class Update
     /**
      * @var bool
      */
-    public $allowQuestion;
+    public $questionAllowed;
 
     /**
      * @var int|null
@@ -66,7 +66,7 @@ class Update
         $this->category         = $happening->getCategory();
         $this->begin            = $happening->getBegin();
         $this->end              = $happening->getEnd();
-        $this->allowQuestion    = $happening->allowQuestion();
+        $this->questionAllowed  = $happening->isQuestionAllowed();
         $this->limitParticipant = $happening->getLimitParticipant();
 
         foreach ($happening->getEvent()->getLocales() as $locale) {

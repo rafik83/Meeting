@@ -12,28 +12,44 @@ namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Participate
 {
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     public $happening;
 
-    /**
-     * @var Participant[]
-     */
+    /** @var Sheet */
+    public $sheet;
+
+    /** @var User */
+    public $createdBy;
+
+    /** @var Participant[] */
     public $participants;
 
+    /** @var string */
+    public $question;
+
     /**
-     * Participate constructor.
-     *
      * @param Happening $happening
+     * @param Sheet     $sheet
+     * @param User      $createdBy
      * @param array     $participants
+     * @param string    $question
      */
-    public function __construct(Happening $happening, array $participants)
-    {
-        $this->happening    = $happening;
+    public function __construct(
+        Happening $happening,
+        Sheet $sheet,
+        User $createdBy,
+        array $participants,
+        $question = ''
+    ) {
+        $this->happening = $happening;
+        $this->sheet = $sheet;
+        $this->createdBy = $createdBy;
         $this->participants = $participants;
+        $this->question = $question;
     }
 }

@@ -51,7 +51,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $newCategory->setTranslation($newCatTranslation1);
         $newCategory->setTranslation($newCatTranslation2);
 
-
         // Expected
         $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory, false, null);
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
@@ -65,8 +64,8 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningRepository->set($expectedSubEvent)->shouldBeCalled();
 
         // Command
-        $update = new Update($happening);
-        $update->allowQuestion    = false;
+        $update                   = new Update($happening);
+        $update->questionAllowed  = false;
         $update->category         = $newCategory;
         $update->begin            = $newBegin;
         $update->end              = $newEnd;

@@ -52,10 +52,10 @@ abstract class HappeningType extends AbstractType
                     'class' => 'datetimepicker-range-element'
                 ],
             ])
-            ->add('allowQuestion', ChoiceType::class, [
+            ->add('questionAllowed', ChoiceType::class, [
                 'choices'  => [
-                    'form.happening_create.children.allowQuestion.answer.true' => true,
-                    'form.happening_create.children.allowQuestion.answer.false'  => false,
+                    'form.happening_create.children.questionAllowed.answer.true' => true,
+                    'form.happening_create.children.questionAllowed.answer.false'  => false,
                 ],
                 'expanded' => true,
                 'multiple' => false,

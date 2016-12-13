@@ -1,8 +1,11 @@
-<div class="meet {{ happening.category.title|lower }}" data-beginHour="{{ happening.beginHour|date('H:i') }}" data-duration="{{ happening.duration.format('%H:%I') }}">
+<div class="happening meet {{ happening.category.title|lower }}" data-beginHour="{{ happening.beginHour|date('H:i') }}" data-duration="{{ happening.duration.format('%H:%I') }}">
     <header style="background: linear-gradient(to right, {{ happening.category.leftColor }} 0%, {{ happening.category.rightColor }} 100%) !important;">
         <a class="content" href="#{{ happening.title }}">
             <span class="prefix"><i class="icon icon-{{ happening.category.picto }}"></i> N°{{ happening.code }}</span>
-            <p class="title">{{ happening.title }}</p>
+            <p class="title">
+                {{ happening.title }}
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ happening.doesCurrentUserParticipate ? '' : 'hide' }}"></i>
+            </p>
         </a>
     </header>
     <div class="details">
@@ -47,19 +50,24 @@
                 <i class="icon icon-Horaire"></i>
                 <span>{{ happening.beginHour|date('H:i') }} - {{ happening.endHour|date('H:i') }}</span>
             </p>
-            {#
-            <a href="">
-                <i class="icon icon-Document_1"></i>
-                Details
-            </a>
             <div class="actions">
+                {#
                 <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
                 <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+                #}
+
+                {% if happening.hasParticipations %}
+
+                {% else %}
+                    <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}" class="btn btn-gray happeningParticipateAction">
+                        <i class="icon icon-{{ happening.category.picto }}"></i>
+                        {{ 'happening.participate.action'|trans }}
+                    </a>
+                {% endif %}
             </div>
-            #}
         </footer>
     </div>
 </div>

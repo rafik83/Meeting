@@ -57,7 +57,7 @@ class Happening
     /**
      * @var bool
      */
-    private $allowQuestion = false;
+    private $questionAllowed = false;
 
     /**
      * @var int|null
@@ -71,7 +71,7 @@ class Happening
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
-     * @param bool               $allowQuestion
+     * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
      */
     public function __construct(
@@ -79,7 +79,7 @@ class Happening
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
-        $allowQuestion = false,
+        $questionAllowed = false,
         $limitParticipant = null
     ) {
         $this->event            = $event;
@@ -88,7 +88,7 @@ class Happening
         $this->category         = $category;
         $this->translations     = new ArrayCollection();
         $this->talkings         = new ArrayCollection();
-        $this->allowQuestion    = $allowQuestion;
+        $this->questionAllowed    = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
     }
 
@@ -200,20 +200,20 @@ class Happening
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
-     * @param bool               $allowQuestion
+     * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
      */
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
-        $allowQuestion,
+        $questionAllowed,
         $limitParticipant
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
         $this->category         = $category;
-        $this->allowQuestion    = $allowQuestion;
+        $this->questionAllowed    = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
     }
 
@@ -279,23 +279,23 @@ class Happening
     /**
      * @return bool
      */
-    public function allowQuestion()
+    public function isQuestionAllowed()
     {
-        return $this->allowQuestion;
+        return $this->questionAllowed;
     }
 
     /**
-     * @param bool $allowQuestion
+     * @param bool $questionAllowed
      */
-    public function setAllowQuestion($allowQuestion)
+    public function setQuestionAllowed($questionAllowed)
     {
-        $this->allowQuestion = $allowQuestion;
+        $this->questionAllowed = $questionAllowed;
     }
 
     /**
      * @return bool
      */
-    public function doesLimitParticipant()
+    public function isParticipantLimited()
     {
         return $this->limitParticipant !== null;
     }

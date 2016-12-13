@@ -14,7 +14,7 @@ Proximum\Vimeet\Application\Command\Happening\Update:
             - Expression:
                 expression: "this.begin < this.end"
                 message: "validators.happening.startTimeMustBeBeforeEndTime"
-        allowQuestion:
+        questionAllowed:
             - NotNull: ~
         limitParticipant:
             - Type: int

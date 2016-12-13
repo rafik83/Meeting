@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class HappeningParticipationRepository implements HappeningParticipationRepositoryInterface
@@ -130,5 +131,25 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         }
 
         return $participationCounts;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipationsForSheet(Sheet $sheet, $happenings)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->join('participation.happening', 'happening', 'WITH', 'happening IN (:happenings)')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('happenings', $happenings)
+            ->groupBy('participation.happening, participation.participant')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

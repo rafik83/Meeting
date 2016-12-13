@@ -11,7 +11,7 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: datetime
         end:
             type: datetime
-        allowQuestion:
+        questionAllowed:
             type: boolean
             options:
                 default: false

@@ -36,6 +36,10 @@ form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.participate.children.participants.label: 'Qui participe ?'
+form.participate.children.participants.unavailable: 'Indisponible'
+form.participate.children.question.label: 'Poser une question'
+form.participate.children.submit.label: 'Participer'
 form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''accompte'
 form.payment_choice_with_deposit.children.depositMode.deposit: Accompte
 form.payment_choice_with_deposit.children.depositMode.total: Total
