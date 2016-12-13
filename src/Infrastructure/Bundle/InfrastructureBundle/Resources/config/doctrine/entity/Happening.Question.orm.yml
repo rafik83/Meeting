@@ -1,0 +1,28 @@
+Proximum\Vimeet\Domain\Model\Happening\Question:
+    type:  entity
+    table: happening_question
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        content:
+            type: string
+        createdAt:
+            type: datetime
+    manyToOne:
+        happening:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            joinColumn:
+                onDelete: CASCADE
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
