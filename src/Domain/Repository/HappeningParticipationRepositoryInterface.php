@@ -33,4 +33,18 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation
      */
     public function findByHappeningAndParticipant(Happening $happening, Participant $participant);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByParticipant(Participant $participant);
+
+    /**
+     * @param Happening $happening
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByHappening(Happening $happening);
 }
