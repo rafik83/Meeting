@@ -46,10 +46,14 @@ class ParticipationCount
      * @param Event     $event
      * @param Happening $happening
      *
-     * @return int
+     * @return double|int
      */
     public function getRemaining(Event $event, Happening $happening)
     {
+        if (null === $happening->getLimitParticipant()) {
+            return INF;
+        }
+
         if (!$this->event !== $event) {
             $this->event  = $event;
             $this->counts = $this->happeningParticipationRepository->countParticipationByEvent($event);
@@ -68,6 +72,9 @@ class ParticipationCount
      */
     public function isFull(Event $event, Happening $happening)
     {
+        if (null === $happening->getLimitParticipant()) {
+            return false;
+        }
         return $this->getRemaining($event, $happening) === 0;
     }
 }
