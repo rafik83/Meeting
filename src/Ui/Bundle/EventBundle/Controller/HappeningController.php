@@ -47,26 +47,25 @@ class HappeningController extends Controller
         $participants           = $sheet->getParticipants()->toArray();
         $isUserAloneParticipant = $this->isUserAloneParticipant($sheet);
 
-        // Case : current user is not available for this happening, do not show modal
-        if (true === $isUserAloneParticipant) {
-            $availableParticipants = $this
-                ->get('vimeet_infrastructure.repository.participant_repository')
-                ->getAvailableParticipants(
-                    $participants,
-                    $happening->getBegin(),
-                    $happening->getEnd()
-                );
+        $availableParticipants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getAvailableParticipants(
+                $participants,
+                $happening->getBegin(),
+                $happening->getEnd()
+            );
 
-            if (0 === count($availableParticipants)) {
-                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
-            }
+        // Case : current user is not available for this happening, do not show modal
+        if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
+            return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
         }
 
-        $participate = new Participate($happening, $sheet, $this->getUser(), $participants);
+
 
         // Case : one participant is current user and no question
         if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
             try {
+                $participate = new Participate($happening, $sheet, $this->getUser(), $participants);
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
@@ -75,17 +74,22 @@ class HappeningController extends Controller
             return new JsonResponse(['status' => 'ok']);
         }
 
+        $participate = new Participate($happening, $sheet, $this->getUser(), []);
+
         // Create Participate form
         $participateForm = $this->createForm(ParticipateType::class, $participate, [
-            'action'    => $this->generateUrl(
+            'action'                => $this->generateUrl(
                 'event_sheet_happening_participate',
                 [
                     'sheet'     => $sheet->getId(),
                     'happening' => $happening->getId(),
                 ]
             ),
-            'method'    => 'POST',
-            'happening' => $happening,
+            'method'                => 'POST',
+            'happening'             => $happening,
+            'participants'          => $participants,
+            'isParticipantsEnabled' => false === $isUserAloneParticipant,
+            'locale'                => $request->getLocale(),
         ]);
 
         if ($participateForm->handleRequest($request)->isSubmitted() && $participateForm->isValid()) {
@@ -94,11 +98,19 @@ class HappeningController extends Controller
 
                 return new JsonResponse(['status' => 'ok']);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
-                $participateForm->addError(new FormError($this->get('translator')->trans(
+                $participateForm->get('participants')->addError(new FormError($this->get('translator')->trans(
                     true === $isUserAloneParticipant
                     ? 'happening.participate.youAreNotAvailable'
                     : 'happening.participate.participantNotAvailable'
                 )));
+            }
+        }
+
+        $unavailableParticipants = [];
+
+        foreach ($participants as $key => $participant) {
+            if (false === in_array($participant, $availableParticipants)) {
+                $unavailableParticipants[$key] = $participant;
             }
         }
 
@@ -108,9 +120,10 @@ class HappeningController extends Controller
             [
                 'status' => 'show-form',
                 'html'   => $this->renderView($template, [
-                    'title' => $happening->getTitle($request->getLocale()),
-                    'picto' => $happening->getCategory()->getPicto(),
-                    'form'  => $participateForm->createView(),
+                    'title'                   => $happening->getTitle($request->getLocale()),
+                    'picto'                   => $happening->getCategory()->getPicto(),
+                    'form'                    => $participateForm->createView(),
+                    'unavailableParticipants' => $unavailableParticipants,
                 ]),
             ]
         );

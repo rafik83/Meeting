@@ -12,6 +12,24 @@
 <div class="modal-body">
     {{ form_errors(form) }}
 
+    {% if form.participants is defined %}
+        {{ form_label(form.participants) }}
+
+        {% for key, participant in form.participants %}
+            {% if unavailableParticipants[key] is defined %}
+                <div class="checkbox">
+                    <label class="control-label disabled">
+                        {{ form_widget(participant, { attr: { 'disabled': 'disabled' }}) }}
+                        {{ participant.vars.label }}
+                        <span class="label label-default">{{ 'form.participate.children.participants.unavailable'|trans({}, 'forms') }}</span>
+                    </label>
+                </div>
+            {% else %}
+                {{ form_row(participant) }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
     {% if form.question is defined %}
         {{ form_row(form.question) }}
     {% endif %}

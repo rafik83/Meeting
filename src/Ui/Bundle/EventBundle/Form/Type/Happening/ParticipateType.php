@@ -12,27 +12,34 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParticipateType extends AbstractType
 {
     const QUESTION_MAX_LENGTH = 300;
 
-    /**
-     * @var TranslatorAdapter
-     */
+    /** @var TranslatorAdapter */
     private $translator;
 
+    /** @var ParticipantInfoGuesser */
+    private $participantInfoGuesser;
+
     /**
-     * @param TranslatorAdapter $translator
+     * @param TranslatorAdapter      $translator
+     * @param ParticipantInfoGuesser $participantInfoGuesser
      */
-    public function __construct(TranslatorAdapter $translator)
+    public function __construct(TranslatorAdapter $translator, ParticipantInfoGuesser $participantInfoGuesser)
     {
-        $this->translator = $translator;
+        $this->translator             = $translator;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
@@ -71,12 +78,22 @@ class ParticipateType extends AbstractType
                 ]);
         }
 
-//        $builder
-//            ->add('participants', ChoiceType::class, [
-//                'choices'  => $options['participants'],
-//                'multiple' => true,
-//                'expanded' => true,
-//            ]);
+        if (true === $options['isParticipantsEnabled']) {
+            $builder
+                ->add(
+                    'participants',
+                    ChoiceType::class,
+                    [
+                        'choices'  => $options['participants'],
+                        'choice_label' => function (Participant $participant) use ($options) {
+                            return $this->participantInfoGuesser
+                                ->guessParticipantCompleteName($participant, $options['locale']);
+                        },
+                        'multiple' => true,
+                        'expanded' => true,
+                    ]
+                );
+        }
     }
     /**
      * {@inheritdoc}
@@ -85,10 +102,13 @@ class ParticipateType extends AbstractType
     {
         $resolver->setRequired([
             'happening',
-//            'participants',
+            'participants',
+            'isParticipantsEnabled',
+            'locale',
         ]);
 
         $resolver->setAllowedTypes('happening', Happening::class);
+        $resolver->setAllowedTypes('isParticipantsEnabled', 'boolean');
 
         $resolver->setDefaults([
             'data_class'    => Participate::class,
