@@ -26,6 +26,9 @@ class ParticipantFactory
     {
         $user = ($user !== null) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
 
-        return new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true);
+        $sheet->addParticipant($participant);
+
+        return $participant;
     }
 }
