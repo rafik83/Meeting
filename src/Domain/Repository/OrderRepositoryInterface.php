@@ -40,11 +40,10 @@ interface OrderRepositoryInterface
      * @param array  $filters
      * @param int    $page
      * @param int    $limit
-     * @param string $locale
      *
      * @return PaginatedResult
      */
-    public function findByEvent(Event $event, array $filters, $page, $limit, $locale);
+    public function findAndPaginateByEvent(Event $event, array $filters, $page, $limit);
 
     /**
      * @param OrderNumeroView $orderNumeroView
@@ -52,4 +51,11 @@ interface OrderRepositoryInterface
      * @return Order|null
      */
     public function findByNumero(OrderNumeroView $orderNumeroView);
+
+    /**
+     * @param Event $event
+     *
+     * @return Order[]
+     */
+    public function findByEvent(Event $event);
 }
