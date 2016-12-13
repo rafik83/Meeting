@@ -19,17 +19,17 @@ Happening.prototype.onParticipate = function ()
 {
     this.happeningParticipateAction.disabled = true;
     this.happeningParticipateAction.classList.add('disabled');
-    this.handleRequest();
+    this.handleRequestParticipateButton();
 };
 
-Happening.prototype.handleRequest = function ()
+Happening.prototype.handleRequestParticipateButton = function ()
 {
     var href = this.happeningParticipateAction.getAttribute('href');
 
     $.get(href, function (response) {
         if ('show-form' === response.status) {
-            $(this.modal).modal().show().find('.modal-content').html(response.html);
             this.enableParticipateAction();
+            this.showModal(response.html);
         } else if ('error' === response.status) {
             alert(response.message);
             this.enableParticipateAction();
@@ -50,6 +50,48 @@ Happening.prototype.validateParticipation = function () {
 Happening.prototype.enableParticipateAction = function () {
     this.happeningParticipateAction.disabled = false;
     this.happeningParticipateAction.classList.remove('disabled');
+};
+
+Happening.prototype.showModal = function (html) {
+    var modal = $(this.modal);
+    modal.modal().show();
+
+    var content = modal.find('.modal-content');
+    content.html(html);
+
+    var form = content.find('form');
+
+    $(form).on('submit', function () {
+        this.handleRequestForm(form);
+
+        return false;
+    }.bind(this));
+};
+
+Happening.prototype.handleRequestForm = function (form)
+{
+    var action = $(form).attr('action');
+    var data   = $(form).serialize();
+
+    // Put the placeholder during the ajax call to avoid mistake of the user
+    var placeholder = this.modal.getAttribute('data-placeholder');
+    $(this.modal).find('.modal-content').html(placeholder);
+
+    // Update sheets list
+    $.post(action, data, function(response) {
+        if ('show-form' === response.status) {
+            this.showModal(response.html);
+        } else if ('error' === response.status) {
+            alert(response.message);
+            $(this.modal).modal('hide');
+            this.enableParticipateAction();
+        } else {
+            $(this.modal).modal('hide');
+            this.validateParticipation();
+        }
+    }.bind(this));
+
+    return false;
 };
 
 module.exports = Happening;

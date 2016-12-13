@@ -18,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -57,7 +58,7 @@ class HappeningController extends Controller
                 );
 
             if (0 === count($availableParticipants)) {
-                return $this->createJsonResponseYouAreNotAvailable();
+                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
             }
         }
 
@@ -68,7 +69,7 @@ class HappeningController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
-                return $this->createJsonResponseYouAreNotAvailable();
+                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
             }
 
             return new JsonResponse(['status' => 'ok']);
@@ -87,6 +88,20 @@ class HappeningController extends Controller
             'happening' => $happening,
         ]);
 
+        if ($participateForm->handleRequest($request)->isSubmitted() && $participateForm->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($participate);
+
+                return new JsonResponse(['status' => 'ok']);
+            } catch (ParticipantNotAvailableException $participantNotAvailableException) {
+                $participateForm->addError(new FormError($this->get('translator')->trans(
+                    true === $isUserAloneParticipant
+                    ? 'happening.participate.youAreNotAvailable'
+                    : 'happening.participate.participantNotAvailable'
+                )));
+            }
+        }
+
         $template = 'EventBundle:Program/Partials:participate-modal.html.twig';
 
         return new JsonResponse(
@@ -102,14 +117,16 @@ class HappeningController extends Controller
     }
 
     /**
+     * @param string $errorKey
+     *
      * @return JsonResponse
      */
-    private function createJsonResponseYouAreNotAvailable()
+    private function createJsonResponseWithError($errorKey)
     {
         return new JsonResponse(
             [
                 'status'  => 'error',
-                'message' => $this->get('translator')->trans('happening.participate.youAreNotAvailable'),
+                'message' => $this->get('translator')->trans($errorKey),
             ]
         );
     }

@@ -562,7 +562,7 @@ event_order_summary_total:
 #
 happening_program:
     path: /program
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: EventBundle:Program:index }
 
 #
@@ -573,5 +573,5 @@ event_sheet_happening_participate:
     requirements:
         sheet: \d+
         happening: \d+
-    methods:  [GET]
+    methods:  [GET, POST]
     defaults: { _controller: EventBundle:Happening:participate }
