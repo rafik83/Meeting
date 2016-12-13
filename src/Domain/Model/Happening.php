@@ -295,7 +295,7 @@ class Happening
     /**
      * @return bool
      */
-    public function doesLimitParticipant()
+    public function isParticipantLimited()
     {
         return $this->limitParticipant !== null;
     }
