@@ -22,6 +22,11 @@ class ParticipationCount
     private $happeningParticipationRepository;
 
     /**
+     * @var array
+     */
+    private $participationCounts = [];
+
+    /**
      * ParticipationCount constructor.
      *
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
@@ -29,6 +34,17 @@ class ParticipationCount
     public function __construct(HappeningParticipationRepositoryInterface $happeningParticipationRepository)
     {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function loadParticipationCountsFromEvent(Event $event)
+    {
+        $this->participationCounts = $this
+            ->happeningParticipationRepository
+            ->countParticipationByEvent($event)
+        ;
     }
 
     /**
@@ -42,7 +58,14 @@ class ParticipationCount
             return INF;
         }
 
-        $participationCount = $this->happeningParticipationRepository->countParticipationByHappening($happening);
+        if (isset($this->participationCounts[$happening->getId()])) {
+            return $this->participationCounts[$happening->getId()];
+        }
+
+        $participationCount = $this
+            ->happeningParticipationRepository
+            ->countParticipationByHappening($happening)
+        ;
 
         return max(0, $happening->getLimitParticipant() - $participationCount);
     }
