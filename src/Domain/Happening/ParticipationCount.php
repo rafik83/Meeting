@@ -75,6 +75,7 @@ class ParticipationCount
         if (null === $happening->getLimitParticipant()) {
             return false;
         }
+
         return $this->getRemaining($event, $happening) === 0;
     }
 }
