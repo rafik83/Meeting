@@ -37,7 +37,7 @@ class UpdateHandler
             $update->begin,
             $update->end,
             $update->category,
-            $update->allowQuestion,
+            $update->questionAllowed,
             $update->limitParticipant
         );
 

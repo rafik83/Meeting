@@ -38,7 +38,7 @@ class CreateHandler
             $create->begin,
             $create->end,
             $create->category,
-            $create->allowQuestion,
+            $create->questionAllowed,
             $create->limitParticipant
         );
 
