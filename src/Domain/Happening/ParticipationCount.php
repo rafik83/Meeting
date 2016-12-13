@@ -59,7 +59,7 @@ class ParticipationCount
         }
 
         if (isset($this->participationCounts[$happening->getId()])) {
-            return $this->participationCounts[$happening->getId()];
+            return max(0, $happening->getLimitParticipant() - $this->participationCounts[$happening->getId()]);
         }
 
         $participationCount = $this
