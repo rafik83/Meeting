@@ -28,7 +28,6 @@ Happening.prototype.handleRequest = function ()
 
     $.get(href, function (response) {
         if ('show-form' === response.status) {
-            console.log(response);
             $(this.modal).modal().show().find('.modal-content').html(response.html);
             this.enableParticipateAction();
         } else if ('error' === response.status) {

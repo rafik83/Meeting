@@ -62,7 +62,15 @@ class HappeningController extends Controller
 
         $template = 'EventBundle:Program/Partials:participate-modal.html.twig';
 
-        return new JsonResponse(['status' => 'show-form', 'html' => $this->renderView($template)]);
+        return new JsonResponse(
+            [
+                'status' => 'show-form',
+                'html'   => $this->renderView($template, [
+                    'title' => $happening->getTitle($request->getLocale()),
+                    'picto' => $happening->getCategory()->getPicto(),
+                ]),
+            ]
+        );
     }
 
     /**
