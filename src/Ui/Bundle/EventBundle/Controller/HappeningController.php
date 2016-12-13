@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
+use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -61,8 +62,6 @@ class HappeningController extends Controller
             return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
         }
 
-
-
         // Case : one participant is current user and no question
         if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
             try {
@@ -70,6 +69,14 @@ class HappeningController extends Controller
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+            } catch (NotEnoughtRemainingParticipationsException $notEnoughtRemainingParticipationsException) {
+                $remainingParticipations = $notEnoughtRemainingParticipationsException->getRemainingParticipations();
+
+                return $this->createJsonResponseWithError(
+                    'happening.participate.notEnoughtRemainingParticipations',
+                    ['%remaining%' => $remainingParticipations],
+                    $remainingParticipations
+                );
             }
 
             return new JsonResponse(['status' => 'ok']);
@@ -108,6 +115,13 @@ class HappeningController extends Controller
                 $participateForm->get('participants')->addError(new FormError($this->get('translator')->trans(
                     'happening.participate.noParticipantSelected'
                 )));
+            } catch (NotEnoughtRemainingParticipationsException $notEnoughtRemainingParticipationsException) {
+                $remainingParticipations = $notEnoughtRemainingParticipationsException->getRemainingParticipations();
+                $participateForm->get('participants')->addError(new FormError($this->get('translator')->transChoice(
+                    'happening.participate.notEnoughtRemainingParticipations',
+                    $remainingParticipations,
+                    ['%remaining%' => $remainingParticipations]
+                )));
             }
         }
 
@@ -136,16 +150,22 @@ class HappeningController extends Controller
     }
 
     /**
-     * @param string $errorKey
+     * @param string   $errorKey
+     * @param array    $parameters
+     * @param int|null $number
      *
      * @return JsonResponse
      */
-    private function createJsonResponseWithError($errorKey)
+    private function createJsonResponseWithError($errorKey, $parameters = [], $number = null)
     {
+        $translator = $this->get('translator');
+
         return new JsonResponse(
             [
                 'status'  => 'error',
-                'message' => $this->get('translator')->trans($errorKey),
+                'message' => null === $number
+                    ? $translator->trans($errorKey, $parameters)
+                    : $this->get('translator')->transChoice($errorKey, $number, $parameters),
             ]
         );
     }
