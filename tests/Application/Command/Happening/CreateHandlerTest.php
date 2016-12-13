@@ -36,7 +36,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $category->setTranslation($catTranslation2);
 
         // Expected
-        $expectedSubEvent = new Happening($event, $begin, $end, $category);
+        $expectedSubEvent = new Happening($event, $begin, $end, $category, true, 10);
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
 
@@ -49,10 +49,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Command
         $create = new Create($event);
-        $create->category = $category;
-        $create->begin = $begin;
-        $create->end   = $end;
-        $create->translations = [
+        $create->allowQuestion    = true;
+        $create->begin            = $begin;
+        $create->category         = $category;
+        $create->end              = $end;
+        $create->limitParticipant = 10;
+        $create->translations     = [
             'fr' => [
                 'title'       => 'truc',
                 'description' => 'bidule'

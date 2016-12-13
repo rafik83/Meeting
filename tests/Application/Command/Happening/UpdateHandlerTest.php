@@ -38,7 +38,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
 
-        $happening             = new Happening($event, $begin, $end, $category);
+        $happening             = new Happening($event, $begin, $end, $category, true, 10);
         $happeningTranslation  = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
         $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
 
@@ -53,7 +53,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory);
+        $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory, false, null);
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'tset', 'ko');
 
@@ -66,16 +66,18 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Command
         $update = new Update($happening);
-        $update->category = $newCategory;
-        $update->begin = $newBegin;
-        $update->end   = $newEnd;
-        $update->translations = [
+        $update->allowQuestion    = false;
+        $update->category         = $newCategory;
+        $update->begin            = $newBegin;
+        $update->end              = $newEnd;
+        $update->limitParticipant = null;
+        $update->translations     = [
             'fr' => [
-                'title' => 'test',
+                'title'       => 'test',
                 'description' => 'ok',
             ],
             'en' => [
-                'title' => 'tset',
+                'title'       => 'tset',
                 'description' => 'ko',
             ],
         ];

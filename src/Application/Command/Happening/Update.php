@@ -46,16 +46,28 @@ class Update
     public $talkings = [];
 
     /**
+     * @var bool
+     */
+    public $allowQuestion;
+
+    /**
+     * @var int|null
+     */
+    public $limitParticipant;
+
+    /**
      * Update constructor.
      *
      * @param Happening $happening
      */
     public function __construct(Happening $happening)
     {
-        $this->happening = $happening;
-        $this->category  = $happening->getCategory();
-        $this->begin     = $happening->getBegin();
-        $this->end       = $happening->getEnd();
+        $this->happening        = $happening;
+        $this->category         = $happening->getCategory();
+        $this->begin            = $happening->getBegin();
+        $this->end              = $happening->getEnd();
+        $this->allowQuestion    = $happening->allowQuestion();
+        $this->limitParticipant = $happening->getLimitParticipant();
 
         foreach ($happening->getEvent()->getLocales() as $locale) {
             if ($happening->getTranslations()->containsKey($locale)) {

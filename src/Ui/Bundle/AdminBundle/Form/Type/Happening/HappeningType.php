@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -30,11 +32,40 @@ abstract class HappeningType extends AbstractType
 
         $builder
             ->add('category', CategoryType::class, ['event' => $event, 'locale' => $options['locale']])
-            ->add('begin', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
-            ->add('end', DateTimeType::class, ['view_timezone' => $event->getTimeZone()])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,
                 'label'      => false,
+            ])
+            ->add('begin', DateTimePickerType::class, [
+                'format'        => 'd/m/Y H:i',
+                'display_date'  => false,
+                'view_timezone' => $event->getTimeZone(),
+                'attr'  => [
+                    'class' => 'datetimepicker-range-element'
+                ],
+            ])
+            ->add('end', DateTimePickerType::class, [
+                'format'        => 'd/m/Y H:i',
+                'display_date'  => false,
+                'view_timezone' => $event->getTimeZone(),
+                'attr'  => [
+                    'class' => 'datetimepicker-range-element'
+                ],
+            ])
+            ->add('allowQuestion', ChoiceType::class, [
+                'choices'  => [
+                    'form.happening_create.children.allowQuestion.answer.true' => true,
+                    'form.happening_create.children.allowQuestion.answer.false'  => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])
+            ->add('limitParticipant', IntegerType::class, [
+                'required' => false,
+                'attr'     => [
+                    'min' => 0,
+                ],
+                'help' => 'form.happening_create.children.limitParticipant.help'
             ])
             ->add('talkings', CollectionType::class, [
                 'entry_type'     => TalkingType::class,
