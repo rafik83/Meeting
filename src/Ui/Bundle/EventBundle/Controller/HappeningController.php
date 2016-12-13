@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
+use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
@@ -103,6 +104,10 @@ class HappeningController extends Controller
                     ? 'happening.participate.youAreNotAvailable'
                     : 'happening.participate.participantNotAvailable'
                 )));
+            } catch (ParticipantRequiredException $participantRequiredException) {
+                $participateForm->get('participants')->addError(new FormError($this->get('translator')->trans(
+                    'happening.participate.noParticipantSelected'
+                )));
             }
         }
 
@@ -124,6 +129,7 @@ class HappeningController extends Controller
                     'picto'                   => $happening->getCategory()->getPicto(),
                     'form'                    => $participateForm->createView(),
                     'unavailableParticipants' => $unavailableParticipants,
+                    'noAvailableParticipants' => 0 === count($availableParticipants),
                 ]),
             ]
         );
