@@ -75,6 +75,11 @@ class HappeningView
     private $currentUserParticipate = false;
 
     /**
+     * @var bool
+     */
+    public $isFull;
+
+    /**
      * HappeningView constructor.
      *
      * @param int                   $id
@@ -86,6 +91,7 @@ class HappeningView
      * @param string                $description
      * @param string|null           $picture
      * @param Speaker[]             $speakers
+     * @param bool                  $isFull
      */
     public function __construct(
         $id,
@@ -96,7 +102,8 @@ class HappeningView
         $title,
         $description,
         $picture,
-        array $speakers
+        array $speakers,
+        $isFull = false
     ) {
         $this->id          = $id;
         $this->category    = $category;
@@ -107,6 +114,7 @@ class HappeningView
         $this->picture     = $picture;
         $this->speakers    = $speakers;
         $this->code        = $code;
+        $this->isFull      = $isFull;
     }
 
     /**
