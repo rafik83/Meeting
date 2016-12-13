@@ -862,6 +862,36 @@ admin_unavailability_category_update:
         event: \d+
         category: \d+
 
+admin_unavailability_mass_list:
+    path: /event/{event}/unavailability/mass
+    defaults: { _controller: AdminBundle:Unavailability:massList }
+    methods: [GET]
+    requirements:
+        event: \d+
+
+admin_unavailability_mass_create:
+    path: /event/{event}/unavailability/mass/create
+    defaults: { _controller: AdminBundle:Unavailability:createMass }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_unavailability_mass_update:
+    path: /event/{event}/unavailability/mass/update/{mass}
+    defaults: { _controller: AdminBundle:Unavailability:updateMass }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        mass: \d+
+
+admin_unavailability_mass_delete:
+    path: /event/{event}/unavailability/mass/delete/{mass}
+    requirements:
+        event: \d+
+        mass: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Unavailability:deleteMass }
+
 # Users
 admin_users:
     path: /event/{event}/users

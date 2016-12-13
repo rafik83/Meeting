@@ -221,6 +221,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.unavailability.mass_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassRepository
+        arguments:
+                - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1264,6 +1268,24 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Category\Update }
+    command.unavailability.mass.create_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\CreateHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Create }
+    command.unavailability.mass.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
+    command.unavailability.mass.delete_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
 
     #
     # Security

@@ -54,8 +54,8 @@ abstract class HappeningType extends AbstractType
             ])
             ->add('allowQuestion', ChoiceType::class, [
                 'choices'  => [
-                    'form.happening_create.children.allowQuestion.answer.true' => true,
-                    'form.happening_create.children.allowQuestion.answer.false'  => false,
+                    'form.happening_create.children.allowQuestion.answer.true'  => true,
+                    'form.happening_create.children.allowQuestion.answer.false' => false,
                 ],
                 'expanded' => true,
                 'multiple' => false,

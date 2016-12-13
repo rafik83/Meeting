@@ -8,20 +8,22 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass;
 
-use Proximum\Vimeet\Application\Command\Unavailability\Category\Update;
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UpdateType extends CategoryType
+class CreateType extends MassType
 {
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
-            'data_class' => Update::class,
+            'data_class' => Create::class,
         ]);
     }
 
@@ -30,6 +32,6 @@ class UpdateType extends CategoryType
      */
     public function getBlockPrefix()
     {
-        return 'unavailability_category_update';
+        return 'unavailability_mass_create';
     }
 }

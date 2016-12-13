@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass;
 
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Picto\CategoryPictoType;
 use Symfony\Component\Form\AbstractType as BaseAbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-abstract class AbstractType extends BaseAbstractType
+class TranslationType extends BaseAbstractType
 {
     /**
      * {@inheritdoc}
@@ -26,15 +26,17 @@ abstract class AbstractType extends BaseAbstractType
             ->add('title', TextType::class, [
                 'required' => true,
             ])
-            ->add('picto', CategoryPictoType::class, [
-                'required' => true,
-            ])
-            ->add('leftColor', TextType::class, [
-                'required' => true,
-            ])
-            ->add('rightColor', TextType::class, [
-                'required' => true,
+            ->add('description', TextareaType::class, [
+                'required' => false,
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'unavailability_mass_translation';
     }
 }

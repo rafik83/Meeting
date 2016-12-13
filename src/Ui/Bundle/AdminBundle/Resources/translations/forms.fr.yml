@@ -664,6 +664,24 @@ form.update_transaction.children.submit.label: Enregistrer
 form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
+form.unavailability_mass_create.children.begin.label: Début
+form.unavailability_mass_create.children.blocking.label: Bloquant
+form.unavailability_mass_create.children.category.label: 'Catégorie'
+form.unavailability_mass_create.children.end.label: Fin
+form.unavailability_mass_create.children.name.label: 'Nom backoffice'
+form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
+form.unavailability_mass_create.children.submit.label: Enregistrer
+form.unavailability_mass_update.children.begin.label: Début
+form.unavailability_mass_update.children.blocking.label: Bloquant
+form.unavailability_mass_update.children.category.label: 'Catégorie'
+form.unavailability_mass_update.children.end.label: Fin
+form.unavailability_mass_update.children.name.label: 'Nom backoffice'
+form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
+form.unavailability_mass_update.children.submit.label: Enregistrer
+form.unavailability.mass.children.blocking.answer.true: Oui
+form.unavailability.mass.children.blocking.answer.false: Non
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Nom, prénom ou email de l''utilisateur'
 form.user_filter.children.type.label: Type
