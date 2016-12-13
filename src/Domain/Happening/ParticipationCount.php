@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Happening;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class ParticipationCount
