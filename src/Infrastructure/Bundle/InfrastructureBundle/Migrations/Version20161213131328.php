@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
  * This migration create the happening_question table
  * with foreign keys on a user, a sheet and an happening
  */
-class Version20161213092632 extends AbstractMigration
+class Version20161213131328 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,11 +18,10 @@ class Version20161213092632 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE happening_question ADD sheet_id INT DEFAULT NULL, ADD created_by_id INT DEFAULT NULL');
+        $this->addSql('CREATE TABLE happening_question (id INT AUTO_INCREMENT NOT NULL, happening_id INT DEFAULT NULL, sheet_id INT DEFAULT NULL, created_by_id INT DEFAULT NULL, content VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_BCCF876DB7B10E6D (happening_id), INDEX IDX_BCCF876D8B1206A5 (sheet_id), INDEX IDX_BCCF876DB03A8386 (created_by_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE happening_question ADD CONSTRAINT FK_BCCF876DB7B10E6D FOREIGN KEY (happening_id) REFERENCES happening (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE happening_question ADD CONSTRAINT FK_BCCF876D8B1206A5 FOREIGN KEY (sheet_id) REFERENCES sheet (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE happening_question ADD CONSTRAINT FK_BCCF876DB03A8386 FOREIGN KEY (created_by_id) REFERENCES user (id) ON DELETE CASCADE');
-        $this->addSql('CREATE INDEX IDX_BCCF876D8B1206A5 ON happening_question (sheet_id)');
-        $this->addSql('CREATE INDEX IDX_BCCF876DB03A8386 ON happening_question (created_by_id)');
     }
 
     /**
@@ -32,10 +31,6 @@ class Version20161213092632 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE happening_question DROP FOREIGN KEY FK_BCCF876D8B1206A5');
-        $this->addSql('ALTER TABLE happening_question DROP FOREIGN KEY FK_BCCF876DB03A8386');
-        $this->addSql('DROP INDEX IDX_BCCF876D8B1206A5 ON happening_question');
-        $this->addSql('DROP INDEX IDX_BCCF876DB03A8386 ON happening_question');
-        $this->addSql('ALTER TABLE happening_question DROP sheet_id, DROP created_by_id');
+        $this->addSql('DROP TABLE happening_question');
     }
 }
