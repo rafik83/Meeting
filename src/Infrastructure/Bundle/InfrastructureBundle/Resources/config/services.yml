@@ -1287,6 +1287,12 @@ services:
             - '@repository.unavailability.mass_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
+    command.unavailability.mass.delete_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
 
     #
     # Security

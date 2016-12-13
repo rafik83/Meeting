@@ -68,4 +68,13 @@ class MassRepository implements MassRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Mass $mass)
+    {
+        $this->entityManager->remove($mass);
+        $this->entityManager->flush($mass);
+    }
 }

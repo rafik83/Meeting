@@ -449,6 +449,8 @@ admin.unavailability.mass.table.column.name: 'Nom back office'
 admin.unavailability.mass.table.column.title: Titre
 admin.unavailability.mass.table.column.end: Fin
 admin.unavailability.mass.table.content.update: Modifier
+admin.unavailability.mass.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette indisponbilité?'
+admin.unavailability.mass.action.delete: Supprimer
 admin.unavailability.mass.title: 'Indisponibilité de masse'
 admin.unavailability.mass.update: 'Modification d''une indisponibilité de masse'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
