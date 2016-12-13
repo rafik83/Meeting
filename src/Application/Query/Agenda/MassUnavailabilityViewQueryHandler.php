@@ -1,16 +1,36 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 vimeet
+ * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+
 class MassUnavailabilityViewQueryHandler
 {
-
+    /**
+     * @param MassUnavailabilityViewQuery $query
+     *
+     * @return MassUnavailabilityView
+     */
+    public function handle(MassUnavailabilityViewQuery $query)
+    {
+        return new MassUnavailabilityView(
+            $query->mass->getId(),
+            $query->key,
+            $query->mass->getBegin(),
+            $query->mass->getEnd(),
+            $query->mass->getTitle($query->locale),
+            $query->mass->getDescription($query->locale),
+            $query->mass->getCategory()->getPicto(),
+            $query->mass->getCategory()->getLeftColor(),
+            $query->mass->getCategory()->getRightColor()
+        );
+    }
 }

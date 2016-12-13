@@ -18,11 +18,6 @@ class UnavailabilityView
     public $id;
 
     /**
-     * @var string
-     */
-    public $code;
-
-    /**
      * @var \DateTimeInterface
      */
     public $begin;
@@ -34,19 +29,24 @@ class UnavailabilityView
 
     /**
      * @param int                $id
-     * @param string             $code
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      */
     public function __construct(
         $id,
-        $code,
         \DateTimeInterface $begin,
         \DateTimeInterface $end
     ) {
         $this->id    = $id;
-        $this->code  = $code;
         $this->begin = $begin;
         $this->end   = $end;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    public function getDuration()
+    {
+        return $this->end->diff($this->begin);
     }
 }

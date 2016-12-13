@@ -48,6 +48,16 @@ class MassUnavailabilityView
     public $description;
 
     /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
      * @param int                $id
      * @param string             $code
      * @param \DateTimeInterface $begin
@@ -80,4 +90,11 @@ class MassUnavailabilityView
         $this->rightColor  = $rightColor;
     }
 
+    /**
+     * @return \DateInterval
+     */
+    public function getDuration()
+    {
+        return $this->end->diff($this->begin);
+    }
 }

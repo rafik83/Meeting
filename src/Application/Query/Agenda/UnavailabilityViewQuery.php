@@ -20,17 +20,10 @@ class UnavailabilityViewQuery
     public $unavailability;
 
     /**
-     * @var string
-     */
-    public $key;
-
-    /**
      * @param Unavailability $unavailability
-     * @param string         $key
      */
-    public function __construct(Unavailability $unavailability, $key)
+    public function __construct(Unavailability $unavailability)
     {
         $this->unavailability = $unavailability;
-        $this->key            = $key;
     }
 }

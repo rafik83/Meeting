@@ -25,15 +25,23 @@ class DayViewQueryHandler
     private $unavailabilityHandler;
 
     /**
-     * @param HappeningViewQueryHandler $happeningHandler
-     * @param UnavailabilityViewQueryHandler  $unavailabilityHandler
+     * @var MassUnavailabilityViewQueryHandler
+     */
+    private $massHandler;
+
+    /**
+     * @param HappeningViewQueryHandler          $happeningHandler
+     * @param UnavailabilityViewQueryHandler     $unavailabilityHandler
+     * @param MassUnavailabilityViewQueryHandler $massHandler
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
-        UnavailabilityViewQueryHandler $unavailabilityHandler
+        UnavailabilityViewQueryHandler $unavailabilityHandler,
+        MassUnavailabilityViewQueryHandler $massHandler
     ) {
         $this->happeningHandler      = $happeningHandler;
         $this->unavailabilityHandler = $unavailabilityHandler;
+        $this->massHandler           = $massHandler;
     }
 
     /**
@@ -45,6 +53,7 @@ class DayViewQueryHandler
     {
         $happeningViews  = [];
         $unavailabilites = [];
+        $masses          = [];
 
         $key = 1;
         foreach ($query->happenings as $happening) {
@@ -63,14 +72,26 @@ class DayViewQueryHandler
             }
         }
 
-        $key = 1;
         foreach ($query->unavailabilities as $unavailability) {
             if ($unavailability->getBegin() >= $query->day->getStartTime()
                 && $unavailability->getEnd() <= $query->day->getEndTime()
             ) {
-                $happeningViews[] = $this->unavailabilityHandler->handle(
-                    new UnavailabilityViewQuery(
-                        $unavailability,
+                $unavailabilites[] = $this->unavailabilityHandler->handle(
+                    new UnavailabilityViewQuery($unavailability)
+                );
+
+                $key++;
+            }
+        }
+
+        $key = 1;
+        foreach ($query->masses as $mass) {
+            if ($mass->getBegin() >= $query->day->getStartTime()
+                && $mass->getEnd() <= $query->day->getEndTime()
+            ) {
+                $masses[] = $this->massHandler->handle(
+                    new MassUnavailabilityViewQuery(
+                        $mass,
                         $query->locale,
                         $key
                     )
@@ -85,7 +106,8 @@ class DayViewQueryHandler
             $query->day->getEndTime(),
             $query->day->getEvent()->getConfiguration()->getScheduleScale(),
             $happeningViews,
-            $unavailabilites
+            $unavailabilites,
+            $masses
         );
     }
 }

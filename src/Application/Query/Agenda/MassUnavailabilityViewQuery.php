@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+
 class MassUnavailabilityViewQuery
 {
     /**

@@ -10,6 +10,7 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.title: 'Mon agenda'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -267,3 +268,4 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
+unavailability.title: 'Indisponible'

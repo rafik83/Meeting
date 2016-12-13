@@ -560,6 +560,11 @@ event_order_summary_total:
 #
 # Agenda
 #
+event_agenda:
+    path: /agenda
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:index }
+
 happening_program:
     path: /program
     methods: [GET]

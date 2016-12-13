@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class AgendaView
 {
     /**
@@ -18,10 +20,36 @@ class AgendaView
     public $days;
 
     /**
-     * @param array $dayViews
+     * @var Sheet
      */
-    public function __construct(array $dayViews)
+    public $sheet;
+
+    /**
+     * @param array $dayViews
+     * @param Sheet $sheet
+     */
+    public function __construct(array $dayViews, Sheet $sheet)
     {
         $this->days = $dayViews;
     }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfDays()
+    {
+        return count($this->days);
+    }
+
+    /**
+     * In case of one day, take the fullscreen size
+     * If more, display 2 column size by size
+     *
+     * @return int
+     */
+    public function getColSize()
+    {
+        return $this->getNumberOfDays() === 1 ? 12 : 6;
+    }
+
 }

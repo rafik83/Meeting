@@ -38,23 +38,47 @@ class DayView
     public $unavailabilities;
 
     /**
-     * @param \DateTimeInterface   $begin
-     * @param \DateTimeInterface   $end
-     * @param int                  $scale
-     * @param HappeningView[]      $happenings
-     * @param UnavailabilityView[] $unavailabilities
+     * @var MassUnavailabilityView[]
+     */
+    public $masses;
+
+    /**
+     * @param \DateTimeInterface       $begin
+     * @param \DateTimeInterface       $end
+     * @param int                      $scale
+     * @param HappeningView[]          $happenings
+     * @param UnavailabilityView[]     $unavailabilities
+     * @param MassUnavailabilityView[] $masses
      */
     public function __construct(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $scale,
         array $happenings,
-        array $unavailabilities
+        array $unavailabilities,
+        array $masses
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
         $this->scale            = $scale;
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;
+        $this->masses           = $masses;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getDay()
+    {
+        return $this->begin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getScale()
+    {
+        return gmdate('H:i', $this->scale * 60);
     }
 }

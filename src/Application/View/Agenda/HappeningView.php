@@ -87,4 +87,20 @@ class HappeningView
         $this->leftColor   = $leftColor;
         $this->rightColor  = $rightColor;
     }
+
+    /**
+     * @return \DateInterval
+     */
+    public function getDuration()
+    {
+        return $this->end->diff($this->begin);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParticipations()
+    {
+        return true;
+    }
 }

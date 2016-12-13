@@ -23,7 +23,6 @@ class UnavailabilityViewQueryHandler
     {
         return new UnavailabilityView(
             $query->unavailability->getId(),
-            $query->key,
             $query->unavailability->getBegin(),
             $query->unavailability->getEnd()
         );
