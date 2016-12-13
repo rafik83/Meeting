@@ -1,10 +1,11 @@
 var $ = require('jquery');
 
-function Happening(element)
+function Happening(happening, modal)
 {
-    this.element = element;
-    this.happeningParticipateIcon = element.querySelector('.happeningParticipateIcon');
-    this.happeningParticipateAction = element.querySelector('.happeningParticipateAction');
+    this.modal = modal;
+    this.happening = happening;
+    this.happeningParticipateIcon = happening.querySelector('.happeningParticipateIcon');
+    this.happeningParticipateAction = happening.querySelector('.happeningParticipateAction');
 
     if (null !== this.happeningParticipateAction) {
         this.happeningParticipateAction.addEventListener('click', function (event) {
@@ -26,7 +27,11 @@ Happening.prototype.handleRequest = function ()
     var href = this.happeningParticipateAction.getAttribute('href');
 
     $.get(href, function (response) {
-        if ('error' === response.status) {
+        if ('show-form' === response.status) {
+            console.log(response);
+            $(this.modal).modal().show().find('.modal-content').html(response.html);
+            this.enableParticipateAction();
+        } else if ('error' === response.status) {
             alert(response.message);
             this.enableParticipateAction();
         } else {

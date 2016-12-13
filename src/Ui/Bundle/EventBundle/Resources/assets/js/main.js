@@ -159,7 +159,7 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('.happening'), function (element) {
-        new Happening(element);
+        new Happening(element, document.getElementById('happening-modal'));
     });
 
     [].forEach.call(target.querySelectorAll('form'), function (element) {

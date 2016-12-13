@@ -1,0 +1,25 @@
+{#{% form_theme form '@Ui/default.html.twig' %}#}
+
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">
+        <i class="icon-RDV"></i>
+        title
+    </h4>
+</div>
+
+{#{{ form_start(form) }}#}
+{#{{ form_errors(form) }}#}
+<div class="modal-body">
+    {#<div class="modal-content-request">#}
+        content
+    {#</div>#}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'modal.back'|trans }}
+    </button>
+    <button type="submit" class="btn btn-primary pull-right">
+        <i class="icon-Valider_4"></i> Participer
+    </button>
+</div>
+{#{{ form_end(form) }}#}

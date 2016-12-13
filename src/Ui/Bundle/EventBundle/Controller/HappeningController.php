@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableExcep
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,37 +36,54 @@ class HappeningController extends Controller
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         if ($happening->getEvent() !== $event || $sheet->getEvent() !== $event) {
             throw $this->createNotFoundException('Happening or sheet not in this event');
         }
 
-        $participant = $this
-            ->get('vimeet_infrastructure.repository.participant_repository')
-            ->getParticipantForUserAndSheet($this->getUser(), $sheet);
+        $participate            = new Participate($happening, $sheet->getParticipants()->toArray());
+        $isUserAloneParticipant = $this->isUserAloneParticipant($sheet);
 
-        if (null === $participant) {
-            return new JsonResponse(
-                [
-                    'status'  => 'error',
-                    'message' => $this->get('translator')->trans('happening.participate.participantNoFound'),
-                ]
-            );
+        if (true === $isUserAloneParticipant) {
+            try {
+                $this->get('tactician.commandbus')->handle($participate);
+            } catch (ParticipantNotAvailableException $participantNotAvailableException) {
+                return new JsonResponse(
+                    [
+                        'status'  => 'error',
+                        'message' => $this->get('translator')->trans('happening.participate.youAreNotAvailable'),
+                    ]
+                );
+            }
+
+            return new JsonResponse(['status' => 'ok']);
         }
 
-        $participate = new Participate($happening, [$participant]);
+        $template = 'EventBundle:Program/Partials:participate-modal.html.twig';
 
-        try {
-            $this->get('tactician.commandbus')->handle($participate);
-        } catch (ParticipantNotAvailableException $participantNotAvailableException) {
-            return new JsonResponse(
-                [
-                    'status'  => 'error',
-                    'message' => $this->get('translator')->trans('happening.participate.youAreNotAvailable'),
-                ]
-            );
+        return new JsonResponse(['status' => 'show-form', 'html' => $this->renderView($template)]);
+    }
+
+    /**
+     * There is one participant in this sheet and this participant is the current logged user
+     *
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    private function isUserAloneParticipant(Sheet $sheet)
+    {
+        $participants = $sheet->getParticipants();
+
+        if (1 === count($participants)) {
+            $participant = $participants->first();
+
+            if ($participant->getUser() === $this->getUser()) {
+                return true;
+            }
         }
 
-        return new JsonResponse(['status' => 'ok']);
+        return false;
     }
 }
