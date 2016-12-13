@@ -23,16 +23,6 @@ class ParticipationCount
     private $happeningParticipationRepository;
 
     /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * @var HappeningParticipation[]
-     */
-    private $counts;
-
-    /**
      * ParticipationCount constructor.
      *
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
@@ -43,39 +33,32 @@ class ParticipationCount
     }
 
     /**
-     * @param Event     $event
      * @param Happening $happening
      *
      * @return double|int
      */
-    public function getRemaining(Event $event, Happening $happening)
+    public function getRemaining(Happening $happening)
     {
         if (null === $happening->getLimitParticipant()) {
             return INF;
         }
 
-        if (!$this->event !== $event) {
-            $this->event  = $event;
-            $this->counts = $this->happeningParticipationRepository->countParticipationByEvent($event);
-        }
+        $participationCount = $this->happeningParticipationRepository->countParticipationByHappening($happening);
 
-        $count = isset($this->counts[$happening->getId()]) ? $this->counts[$happening->getId()] : 0;
-
-        return max(0, $happening->getLimitParticipant() - $count);
+        return max(0, $happening->getLimitParticipant() - $participationCount);
     }
 
     /**
-     * @param Event     $event
      * @param Happening $happening
      *
      * @return bool
      */
-    public function isFull(Event $event, Happening $happening)
+    public function isFull(Happening $happening)
     {
         if (null === $happening->getLimitParticipant()) {
             return false;
         }
 
-        return $this->getRemaining($event, $happening) === 0;
+        return $this->getRemaining($happening) === 0;
     }
 }

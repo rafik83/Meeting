@@ -43,9 +43,16 @@ interface HappeningParticipationRepositoryInterface
     public function findByParticipant(Participant $participant);
 
     /**
-     * @param Event $event
+     * @param Happening $happening
      *
      * @return int
+     */
+    public function countParticipationByHappening(Happening $happening);
+
+    /**
+     * @param Event $event
+     *
+     * @return array
      */
     public function countParticipationByEvent(Event $event);
 }

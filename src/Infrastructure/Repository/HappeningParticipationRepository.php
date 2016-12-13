@@ -90,6 +90,23 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
+    public function countParticipationByHappening(Happening $happening)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(participation)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening  = :happening')
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countParticipationByEvent(Event $event)
     {
         $participationCounts = [];
