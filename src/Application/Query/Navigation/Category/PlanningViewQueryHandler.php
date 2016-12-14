@@ -15,9 +15,35 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class PlanningViewQueryHandler
 {
+    /**
+     * @var NavigationBuilderInterface
+     */
+    private $navigationBuilder;
+
+    /**
+     * @var HappeningsAccessChecker
+     */
+    private $happeningsAccessChecker;
+
+    /**
+     * PlanningViewQueryHandler constructor.
+     *
+     * @param NavigationBuilderInterface $navigationBuilder
+     * @param HappeningsAccessChecker    $happeningsAccessChecker
+     */
+    public function __construct(
+        NavigationBuilderInterface $navigationBuilder,
+        HappeningsAccessChecker $happeningsAccessChecker
+    ) {
+        $this->navigationBuilder       = $navigationBuilder;
+        $this->happeningsAccessChecker = $happeningsAccessChecker;
+    }
+
     /**
      * @param PlanningViewQuery $planningQuery
      *
@@ -51,9 +77,15 @@ class PlanningViewQueryHandler
 
             $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
 
+            $agendaRoute = null;
+
+            if ($this->happeningsAccessChecker->allowedToAccess($planningQuery->sheet->getEvent())) {
+                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
+            }
+
             $linksView[] = new LinkView(
                 'navigation.links.planning.available_date',
-                null,
+                $agendaRoute,
                 null,
                 new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
             );

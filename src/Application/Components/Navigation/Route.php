@@ -54,6 +54,14 @@ final class Route
         'event_notification_list'
     ];
 
+    const AGENDA = [
+        'event_agenda'
+    ];
+
+    const PROGRAM = [
+        'happening_program'
+    ];
+
     /**
      * @param string $route
      *
@@ -102,5 +110,25 @@ final class Route
     public static function isNotification($route)
     {
         return in_array($route, self::NOTIFICATION);
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isAgenda($route)
+    {
+        return in_array($route, self::AGENDA);
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isProgram($route)
+    {
+        return in_array($route, self::PROGRAM);
     }
 }

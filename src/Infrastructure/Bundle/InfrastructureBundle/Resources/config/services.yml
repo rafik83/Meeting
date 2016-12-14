@@ -2082,6 +2082,7 @@ services:
             - '@sheet.sheet_guesser'
             - '@query.navigation.sheet_submenu_view_query_handler'
             - '@query.navigation.catalog_submenu_view_query_handler'
+            - '@query.navigation.agenda_submenu_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery }
     query.navigation.category_view_query_handler:
@@ -2121,6 +2122,9 @@ services:
             - '@navigation.navigation_builder'
     query.navigation.category_planning_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@domain.key_dates.checker.happenings_access_checker'
     query.navigation.category_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
@@ -2143,6 +2147,10 @@ services:
             - '@repository.cart_row_repository'
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@domain.key_dates.checker.happenings_access_checker'
+    query.navigation.agenda_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
 
     ##
     # Notification query handler
