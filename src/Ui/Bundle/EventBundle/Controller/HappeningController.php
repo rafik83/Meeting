@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableExcep
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -47,7 +48,7 @@ class HappeningController extends Controller
         }
 
         $participants           = $sheet->getParticipants()->toArray();
-        $isUserAloneParticipant = $this->isUserAloneParticipant($sheet);
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
 
         $availableParticipants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
@@ -178,27 +179,5 @@ class HappeningController extends Controller
                     : $this->get('translator')->transChoice($errorKey, $number, $parameters),
             ]
         );
-    }
-
-    /**
-     * There is one participant in this sheet and this participant is the current logged user
-     *
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    private function isUserAloneParticipant(Sheet $sheet)
-    {
-        $participants = $sheet->getParticipants();
-
-        if (1 === count($participants)) {
-            $participant = $participants->first();
-
-            if ($participant->getUser() === $this->getUser()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -25,7 +25,7 @@
                 </header>
                 <div class="meets">
                     {% for happening in day.happenings %}
-                        {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': happening }) }}
+                        {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': happening, 'isUserAloneParticipant': isUserAloneParticipant }) }}
                     {% endfor %}
                     {% for mass in day.masses %}
                         {{ include('EventBundle:Program:mass.html.twig', { 'mass': mass }) }}

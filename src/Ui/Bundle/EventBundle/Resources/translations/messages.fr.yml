@@ -53,6 +53,7 @@ happening.participate.participantNotAvailable: 'Au moins un des participants sé
 happening.participate.participantNotFound: 'Participant non trouvé'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationUpdate.action: Modifier
+happening.participationCancel.action: Annuler
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
