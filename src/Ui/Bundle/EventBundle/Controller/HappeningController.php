@@ -103,7 +103,12 @@ class HappeningController extends Controller
                 );
             }
 
-            return new JsonResponse(['status' => 'ok']);
+            return new JsonResponse([
+                'status' => 'ok',
+                'label' => true === $isUserAloneParticipant && 0 === count($selectedParticipants)
+                    ? 'participate'
+                    : 'cancel',
+            ]);
         }
 
         $participate = new Participate(
@@ -138,7 +143,16 @@ class HappeningController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($participate);
 
-                return new JsonResponse(['status' => 'ok']);
+                $label = 'participate';
+
+                if (0 < count($participate->participants)) {
+                    $label = true === $isUserAloneParticipant ? 'cancel' : 'update';
+                }
+
+                return new JsonResponse([
+                    'status' => 'ok',
+                    'label'  => $label,
+                ]);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 $formOrParticipantsField->addError(new FormError($this->get('translator')->trans(
                     true === $isUserAloneParticipant

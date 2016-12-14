@@ -10,6 +10,7 @@
     {% if happening.hasParticipations or not happening.isFull %}
         <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}"
            class="btn btn-gray happeningParticipateAction"
+           data-picto="{{ ('<i class="icon icon-' ~ happening.picto ~ '"></i>')|escape }}"
            data-label-participate="{{ 'happening.participate.action'|trans }}"
            data-label-participation-update="{{ 'happening.participationUpdate.action'|trans }}"
            data-label-cancel="{{ 'happening.participationCancel.action'|trans }}"

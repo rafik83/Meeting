@@ -8,6 +8,11 @@ function Happening(happening, modal)
     this.happeningParticipateIcon = happening.querySelector('.happeningParticipateIcon');
     this.happeningParticipateAction = happening.querySelector('.happeningParticipateAction');
 
+    this.picto = this.happeningParticipateAction.getAttribute('data-picto');
+    this.labelParticipate = this.happeningParticipateAction.getAttribute('data-label-participate');
+    this.labelUpdate = this.happeningParticipateAction.getAttribute('data-label-participation-update');
+    this.labelCancel = this.happeningParticipateAction.getAttribute('data-label-cancel');
+
     if (null !== this.happeningParticipateAction) {
         this.happeningParticipateAction.addEventListener('click', function (event) {
             event.preventDefault();
@@ -35,22 +40,12 @@ Happening.prototype.handleRequestParticipateButton = function ()
             alert(response.message);
             this.enableParticipateAction();
         } else {
-            this.validateParticipation();
+            this.validateParticipation(response.label);
         }
     }.bind(this))
     .fail(function () {
         this.enableParticipateAction();
     }.bind(this));
-};
-
-Happening.prototype.validateParticipation = function () {
-    this.happeningParticipateAction.classList.add('hide');
-    this.happeningParticipateIcon.classList.remove('hide');
-
-    /* For update */
-    // this.enableParticipateAction();
-    // this.happeningParticipateAction.textContent = this.happeningParticipateAction.getAttribute('data-label-participation-update');
-    // this.happeningParticipateIcon.classList.remove('hide');
 };
 
 Happening.prototype.enableParticipateAction = function () {
@@ -97,11 +92,36 @@ Happening.prototype.handleRequestForm = function (form)
             this.enableParticipateAction();
         } else {
             $(this.modal).modal('hide');
-            this.validateParticipation();
+            this.validateParticipation(response.label);
         }
     }.bind(this));
 
     return false;
+};
+
+Happening.prototype.validateParticipation = function (label) {
+    this.enableParticipateAction();
+
+    console.log(label);
+
+    if (label == undefined) {
+        return;
+    }
+
+    var buttonLabel ='N/A';
+
+    if ('cancel' === label) {
+        buttonLabel = this.labelCancel;
+        this.happeningParticipateIcon.classList.remove('hide');
+    } else if ('update' === label) {
+        buttonLabel = this.labelUpdate;
+        this.happeningParticipateIcon.classList.remove('hide');
+    } else if ('participate' === label) {
+        buttonLabel = this.labelParticipate;
+        this.happeningParticipateIcon.classList.add('hide');
+    }
+
+    this.happeningParticipateAction.textContent = buttonLabel;
 };
 
 module.exports = Happening;
