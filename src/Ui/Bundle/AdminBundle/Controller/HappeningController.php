@@ -92,13 +92,6 @@ class HappeningController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        /**
-         * We do not know why this rule is implemented ¯\_(ツ)_/¯
-         */
-        //if (!$this->get('happening.happening_permission_manager')->isAllowedToBeModified($happening, true)) {
-        //    throw $this->createAccessDeniedException('This happpening can not be modified as it has participant');
-        //}
-
         $update = new UpdateHappening($happening);
         $form   = $this->createForm(UpdateType::class, $update, [
             'event'  => $event,

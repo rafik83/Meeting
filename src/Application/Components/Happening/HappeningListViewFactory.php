@@ -52,9 +52,6 @@ class HappeningListViewFactory
         // Get happenings
         $happenings = $this->happeningRepository->findListByEvent($event, $locale);
 
-        // Load permissions
-        $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
-
         return $this->createFromHappenings($happenings, $locale);
     }
 
@@ -68,9 +65,6 @@ class HappeningListViewFactory
     {
         // Get happenings
         $happenings = $this->happeningRepository->findBySpeaker($speaker, $locale);
-
-        // Load permissions
-        $this->happeningPermissionManager->loadAllowedToBeModified($happenings);
 
         return $this->createFromHappenings($happenings, $locale);
     }
@@ -92,7 +86,7 @@ class HappeningListViewFactory
      * @param Happening $happening
      * @param string    $locale
      *
-     * @return array
+     * @return HappeningListView
      */
     private function createFromHappening(Happening $happening, $locale)
     {
@@ -103,8 +97,13 @@ class HappeningListViewFactory
             $happening->getEnd(),
             $happening->getTitle($locale),
             $happening->isQuestionAllowed(),
-            array_map(function (Speaker $speaker) { return $speaker->getName(); }, $happening->getSpeakers()),
-            $this->happeningPermissionManager->isAllowedToBeModified($happening)
+            array_map(
+                function (Speaker $speaker) {
+                    return $speaker->getName();
+                },
+                $happening->getSpeakers()
+            ),
+            true
         );
     }
 }

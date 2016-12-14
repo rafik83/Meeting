@@ -58,6 +58,7 @@ class HappeningController extends Controller
             return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
         }
 
+        // Case : happening is full
         if (true === $this->get('domain.happening.participation_count')->isFull($happening)) {
             return $this->createJsonResponseWithError('happening.participate.notEnoughtRemainingParticipations', [], 0);
         }
