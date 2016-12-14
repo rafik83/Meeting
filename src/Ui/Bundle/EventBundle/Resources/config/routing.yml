@@ -519,13 +519,6 @@ event_package_payment_pay_remaining:
     methods: [GET]
     defaults: { _controller: EventBundle:Payment:payRemaining }
 
-create_transaction:
-    path: /sheet/{sheet}/create-transaction
-    requirements:
-        sheet: \d+
-    methods: [GET]
-    defaults: { _controller: EventBundle:Payment:createTempTransaction }
-
 event_payment_info:
     path: /sheet/payment
     methods: [GET]
