@@ -108,6 +108,9 @@ admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin
 admin.happening.list.question: 'Question ?'
+admin.happening.list.participation: 'Participants'
+admin.happening.list.limit: 'Max'
+admin.happening.list.no-limit: 'Pas de limite'
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
 admin.happening.menu.link: Programme

@@ -1582,6 +1582,24 @@ services:
             - '@happening.happening_permission_manager'
 
     #
+    # Admin Happening Query
+    #
+    query.happening.admin.speaker_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\SpeakerViewQueryHandler
+    query.happening.admin.happening_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@query.happening.admin.speaker_view_query_handler'
+    query.happening.admin.happening_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@query.happening.admin.happening_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery }
+
+    #
     # Template
     #
     template.template_data_factory:
