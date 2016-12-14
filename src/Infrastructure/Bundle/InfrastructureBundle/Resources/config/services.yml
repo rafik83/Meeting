@@ -2094,6 +2094,7 @@ services:
             - '@query.navigation.category_planning_view_query_handler'
             - '@query.navigation.category_sheet_view_query_handler'
             - '@query.navigation.category_package_view_query_handler'
+            - '@query.navigation.category_program_view_query_handler'
     query.navigation.category_billing_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQueryHandler
         arguments:
@@ -2124,6 +2125,12 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+    query.navigation.category_program_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@domain.key_dates.checker.happenings_access_checker'
+            - '@vimeet_infrastructure.repository.happening_repository'
     query.navigation.catalog_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
         arguments:
