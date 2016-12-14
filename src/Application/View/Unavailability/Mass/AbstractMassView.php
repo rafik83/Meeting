@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Agenda;
+namespace Proximum\Vimeet\Application\View\Unavailability\Mass;
 
-class HappeningView
+abstract class AbstractMassView
 {
     /**
      * @var int
@@ -48,19 +48,14 @@ class HappeningView
     public $description;
 
     /**
-     * @var array
+     * @var string
      */
-    public $speakers;
+    public $leftColor;
 
     /**
-     * @var bool
+     * @var string
      */
-    public $isFull = false;
-
-    /**
-     * @var int|null
-     */
-    public $limitParticipant;
+    public $rightColor;
 
     /**
      * @param int                $id
@@ -69,11 +64,9 @@ class HappeningView
      * @param \DateTimeInterface $end
      * @param string             $title
      * @param string             $description
-     * @param SpeakerView[]      $speakers
      * @param string             $picto
      * @param string             $leftColor
      * @param string             $rightColor
-     * @param null|int           $limitParticipant
      */
     public function __construct(
         $id,
@@ -82,23 +75,19 @@ class HappeningView
         \DateTimeInterface $end,
         $title,
         $description,
-        array $speakers,
         $picto,
         $leftColor,
-        $rightColor,
-        $limitParticipant = null
+        $rightColor
     ) {
-        $this->id               = $id;
-        $this->code             = $code;
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->title            = $title;
-        $this->description      = $description;
-        $this->speakers         = $speakers;
-        $this->picto            = $picto;
-        $this->leftColor        = $leftColor;
-        $this->rightColor       = $rightColor;
-        $this->limitParticipant = $limitParticipant;
+        $this->id          = $id;
+        $this->code        = $code;
+        $this->begin       = $begin;
+        $this->end         = $end;
+        $this->title       = $title;
+        $this->description = $description;
+        $this->picto       = $picto;
+        $this->leftColor   = $leftColor;
+        $this->rightColor  = $rightColor;
     }
 
     /**
@@ -107,13 +96,5 @@ class HappeningView
     public function getDuration()
     {
         return $this->end->diff($this->begin);
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasParticipations()
-    {
-        return true;
     }
 }

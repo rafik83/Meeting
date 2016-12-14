@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Agenda;
+namespace Proximum\Vimeet\Application\View\Happening;
 
 use Proximum\Vimeet\Application\View\Unavailability\Mass\AbstractMassView;
 
