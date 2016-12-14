@@ -13,7 +13,7 @@ role :app, domain, :primary => true
 namespace :app_tasks do
   task :php do
     capifony_pretty_print "--> Restarting PHP"
-    invoke_command "sudo /usr/sbin/service php5-fpm reload", :via => run_method
+    invoke_command "sudo /usr/sbin/service php5.6-fpm reload", :via => run_method
     capifony_puts_ok
   end
 end
