@@ -427,6 +427,7 @@ services:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@domain.happening.participation_count'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
@@ -1901,6 +1902,14 @@ services:
             - '@repository.sheet.completeness_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery }
+
+    query.sheet.dashboard_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler
+        arguments:
+            - '@order.balance'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
+
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:
@@ -2482,3 +2491,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
         arguments:
             - '@session'
+
+    #
+    # Happening
+    #
+    domain.happening.participation_count:
+        class:  Proximum\Vimeet\Domain\Happening\ParticipationCount
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
