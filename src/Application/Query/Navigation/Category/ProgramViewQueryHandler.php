@@ -73,11 +73,10 @@ class ProgramViewQueryHandler
 
         /** @var Happening $happening */
         foreach ($happenings as $happening) {
-            $categoryTitle = $happening->getCategory()->getTitle($programViewQuery->locale);
-            $categories[$categoryTitle] = $happening->getCategory();
+            $categories[$happening->getCategory()->getId()] = $happening->getCategory();
         }
 
-        usort($categories, function(HappeningCategory $previousCategory,HappeningCategory $nextCategory) {
+        usort($categories, function(HappeningCategory $previousCategory, HappeningCategory $nextCategory) {
             return strcmp($previousCategory->getRank(), $nextCategory->getRank());
         });
 
