@@ -103,7 +103,7 @@ package.payment.bankInfo: 'Bank details'
 package.payment.billingAddress: 'Billing address'
 package.payment.deposit.title: Deposit
 package.payment.deposit.toPay: 'You can pay a deposit of %deposit% by selecting payment with deposit'
-package.payment.pay.label: Pay
+package.payment.pay.label: Validate
 package.payment.title: Payment
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'
@@ -147,7 +147,7 @@ package.summary.empty: 'No product has been added'
 package.summary.option: Options
 package.summary.order-list: 'Order list'
 package.summary.pageTitle: 'Summary of your package of participation'
-package.summary.pay: 'Pay participation package'
+package.summary.pay: 'Validate participation package'
 package.summary.promotion.button.label: Validate
 package.summary.promotion.label: 'Offers of discounts'
 package.summary.seeTermsOfSale: 'View general sales conditions'
