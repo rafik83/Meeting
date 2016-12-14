@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandle
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
@@ -34,8 +35,8 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $programView = new ProgramViewQuery($sheet, $user, 'fr');
 
-        $happeningCategoryOne = new Happening\Category($event, 'picto1', 1, '#FFFFFF', '#FFFFFF');
-        $happeningCategoryTwo = new Happening\Category($event, 'picto2', 2, '#FFFFFF', '#FFFFFF');
+        $happeningCategoryOne = $this->createHappeningCategoryMock($event, 'picto1', 1);
+        $happeningCategoryTwo = $this->createHappeningCategoryMock($event, 'picto2', 2);
 
         $happeningCategoryOne->setTranslation(
             new Happening\CategoryTranslation($happeningCategoryOne, 'fr', 'title one')
@@ -73,5 +74,25 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $categoryView = $programViewQueryHandler->handle($programView);
         $this->assertEquals($categoryViewExpected, $categoryView);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $picto
+     * @param int    $id
+     *
+     * @return Happening\Category
+     */
+    public function createHappeningCategoryMock(Event $event, $picto, $id)
+    {
+        $category    = new Happening\Category($event, $picto, 1, '#FFFFFF', '#FFFFFF');
+        $reflection  = new \ReflectionClass(Happening\Category::class);
+
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($category, $id);
+        $property->setAccessible(false);
+
+        return $category;
     }
 }
