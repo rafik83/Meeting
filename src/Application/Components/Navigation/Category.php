@@ -33,6 +33,9 @@ final class Category
     const PLANNING      = 'navigation.category.planning';
     const PLANNING_ICON = 'icon-Calendrier';
 
+    const AGENDA      = 'navigation.category.planning';
+    const AGENDA_ICON = 'icon-Calendrier';
+
     static public $categories = [
         self::MEMBER_SPACE,
         self::BILLING,
