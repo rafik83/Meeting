@@ -15,14 +15,22 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 class MassUnavailabilityViewQuery
 {
     /**
+     * @var Mass
+     */
+    public $mass;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
+    /**
      * @param Mass   $mass
      * @param string $locale
-     * @param string $key
      */
-    public function __construct(Mass $mass, $locale, $key)
+    public function __construct(Mass $mass, $locale)
     {
         $this->mass   = $mass;
         $this->locale = $locale;
-        $this->key    = $key;
     }
 }

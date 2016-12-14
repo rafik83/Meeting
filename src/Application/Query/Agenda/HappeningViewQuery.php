@@ -25,19 +25,12 @@ class HappeningViewQuery
     public $locale;
 
     /**
-     * @var string
-     */
-    public $key;
-
-    /**
      * @param Happening $happening
      * @param string    $locale
-     * @param string    $key
      */
-    public function __construct(Happening $happening, $locale, $key)
+    public function __construct(Happening $happening, $locale)
     {
         $this->happening = $happening;
         $this->locale    = $locale;
-        $this->key       = $key;
     }
 }
