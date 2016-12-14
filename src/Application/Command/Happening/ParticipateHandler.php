@@ -72,7 +72,7 @@ class ParticipateHandler
             $participate->happening
         );
 
-        // If not previous selected participant and not current not selected Participant
+        // If not previous selected participants and 0 new selected participants
         if (0 === count($participate->participants) && 0 === count($previousParticipants)) {
             throw new ParticipantRequiredException();
         }
@@ -121,7 +121,7 @@ class ParticipateHandler
             );
 
             // Add question
-            if (0 < count($participate->participants)&& !empty($participate->question)) {
+            if (0 < count($participate->participants) && !empty($participate->question)) {
                 $this->questionRepository->add(
                     new Question(
                         $participate->happening,

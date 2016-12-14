@@ -70,20 +70,26 @@ class HappeningController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getAvailableParticipantsForHappening($participants, $happening);
 
-        // Case : user alone in sheet and it is new participation, he is selected directly
-        if (true === $isUserAloneParticipant && 0 === count($selectedParticipants)) {
-            $selectedParticipants = $participants;
+        // Case : user alone in sheet
+        if (true === $isUserAloneParticipant) {
+            // and it is new participation, he is selected directly
+            if (0 === count($selectedParticipants)) {
+                $selectedParticipants = $participants;
 
-            // Case : current user is not available for this happening, do not show modal
-            if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
-                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+                // Case : current user is not available for this happening, do not show modal
+                if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
+                    return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+                }
+            } else {
+                // Unselect current user
+                $selectedParticipants = [];
             }
         }
 
         // Case : one participant is current user and no question so no modal
         if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
             try {
-                $participate = new Participate($happening, $sheet, $this->getUser(), $participants);
+                $participate = new Participate($happening, $sheet, $this->getUser(), $selectedParticipants);
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
