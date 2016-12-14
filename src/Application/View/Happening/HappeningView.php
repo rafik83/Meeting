@@ -248,7 +248,7 @@ class HappeningView
     /**
      * Set isFull to true
      */
-    public function setIsFull()
+    public function setFull()
     {
         $this->isFull = true;
     }

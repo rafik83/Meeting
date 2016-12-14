@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Query\Happening;
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\FullHappeningQuery;
+use Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\HappeningParticipationQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQueryHandler;
@@ -41,13 +43,15 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $happeningParticipationQueryHandler = $this->prophesize(HappeningParticipationQueryHandler::class);
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
 
         // Handler
         $handler = new ProgramViewQueryHandler(
             $dayRepository->reveal(),
             $dayViewQueryHandler->reveal(),
             $happeningParticipationQueryHandler->reveal(),
-            $massRepository->reveal()
+            $massRepository->reveal(),
+            $fullHappeningQueryHandler->reveal()
         );
 
         $handler->handle(
@@ -111,12 +115,16 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([]);
 
+        $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
+        $fullHappeningQueryHandler->handle(new FullHappeningQuery($expected, $event))->shouldBeCalled();
+
         // Handler
         $handler = new ProgramViewQueryHandler(
             $dayRepository->reveal(),
             $dayViewQueryHandler->reveal(),
             $happeningParticipationQueryHandler->reveal(),
-            $massRepository->reveal()
+            $massRepository->reveal(),
+            $fullHappeningQueryHandler->reveal()
         );
 
         $result = $handler->handle(

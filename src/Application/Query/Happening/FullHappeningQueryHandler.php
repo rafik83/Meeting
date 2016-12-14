@@ -40,7 +40,7 @@ class FullHappeningQueryHandler
                     if (isset($participationCount[$happening->getId()])
                         && $participationCount[$happening->getId()] >= $happening->limitParticipant
                     ) {
-                        $happening->setIsFull();
+                        $happening->setFull();
                     }
                 }
             }
