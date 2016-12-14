@@ -19,6 +19,7 @@ mail.changeMailOld.subject: 'Email change request'
 mail.completeProfile.body: 'You have been invited as participant on the event %event%. To access it, please click on the link below and chose a password to complete your member area.'
 mail.completeProfile.end: 'Best regards,'
 mail.completeProfile.link: 'Complete your member area'
+mail.completeProfile.subject: '[%event%] Invitation as a participant'
 mail.confirmResetPassword.body: 'Dear %firstname% %lastname%, your password has been changed'
 mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer\n\nBest regards,"
 mail.event.preregister.end: 'Best regards,'

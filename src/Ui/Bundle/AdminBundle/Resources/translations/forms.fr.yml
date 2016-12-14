@@ -217,14 +217,14 @@ form.generate_slot.children.recipes.prototype.children.duration.label: 'Durée (
 form.generate_slot.children.recipes.prototype.children.end.label: à
 form.generate_slot.children.recipes.prototype.children.interval.label: 'Intervalle (en minutes)'
 form.generate_slot.children.submit.label: Enregistrer
-form.happening_create.children.questionAllowed.answer.true: Oui
-form.happening_create.children.questionAllowed.answer.false: Non
-form.happening_create.children.questionAllowed.label: 'Question des participants'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
+form.happening_create.children.questionAllowed.answer.false: Non
+form.happening_create.children.questionAllowed.answer.true: Oui
+form.happening_create.children.questionAllowed.label: 'Question des participants'
 form.happening_create.children.submit.label: Envoyer
 form.happening_create.children.talkings.label: Intervenants
 form.happening_create.children.talkings.label_add: Ajouter
@@ -233,11 +233,11 @@ form.happening_create.children.talkings.prototype.children.position.label: Posit
 form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
-form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
+form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
 form.happening_update.children.talkings.label_add: Ajouter
@@ -623,6 +623,24 @@ form.unavailability_category_update.children.picto.label: Picto
 form.unavailability_category_update.children.rightColor.label: 'Couleur de droite'
 form.unavailability_category_update.children.submit.label: Enregistrer
 form.unavailability_category_update.children.title.label: 'Titre de la catégorie'
+form.unavailability_mass_create.children.begin.label: Début
+form.unavailability_mass_create.children.blocking.label: Bloquant
+form.unavailability_mass_create.children.category.label: Catégorie
+form.unavailability_mass_create.children.end.label: Fin
+form.unavailability_mass_create.children.name.label: 'Nom backoffice'
+form.unavailability_mass_create.children.submit.label: Enregistrer
+form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
+form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_update.children.begin.label: Début
+form.unavailability_mass_update.children.blocking.label: Bloquant
+form.unavailability_mass_update.children.category.label: Catégorie
+form.unavailability_mass_update.children.end.label: Fin
+form.unavailability_mass_update.children.name.label: 'Nom backoffice'
+form.unavailability_mass_update.children.submit.label: Enregistrer
+form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
+form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
+form.unavailability.mass.children.blocking.answer.false: Non
+form.unavailability.mass.children.blocking.answer.true: Oui
 form.update_admin.children.email.label: Email
 form.update_admin.children.events.label: Événements
 form.update_admin.children.firstname.label: Prénom
@@ -664,24 +682,6 @@ form.update_transaction.children.submit.label: Enregistrer
 form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
-form.unavailability_mass_create.children.begin.label: Début
-form.unavailability_mass_create.children.blocking.label: Bloquant
-form.unavailability_mass_create.children.category.label: 'Catégorie'
-form.unavailability_mass_create.children.end.label: Fin
-form.unavailability_mass_create.children.name.label: 'Nom backoffice'
-form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
-form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
-form.unavailability_mass_create.children.submit.label: Enregistrer
-form.unavailability_mass_update.children.begin.label: Début
-form.unavailability_mass_update.children.blocking.label: Bloquant
-form.unavailability_mass_update.children.category.label: 'Catégorie'
-form.unavailability_mass_update.children.end.label: Fin
-form.unavailability_mass_update.children.name.label: 'Nom backoffice'
-form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
-form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
-form.unavailability_mass_update.children.submit.label: Enregistrer
-form.unavailability.mass.children.blocking.answer.true: Oui
-form.unavailability.mass.children.blocking.answer.false: Non
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Nom, prénom ou email de l''utilisateur'
 form.user_filter.children.type.label: Type
