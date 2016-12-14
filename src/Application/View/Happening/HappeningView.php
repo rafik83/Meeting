@@ -260,4 +260,12 @@ class HappeningView
     {
         return $this->isFull;
     }
+
+    /**
+     * @return string
+     */
+    public function getPicto()
+    {
+        return $this->getCategory()->getPicto();
+    }
 }

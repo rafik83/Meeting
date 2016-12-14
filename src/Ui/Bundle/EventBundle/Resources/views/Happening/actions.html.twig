@@ -14,7 +14,7 @@
            data-label-participation-update="{{ 'happening.participationUpdate.action'|trans }}"
            data-label-cancel="{{ 'happening.participationCancel.action'|trans }}"
         >
-            <i class="icon icon-{{ happening.category.picto }}"></i>
+            <i class="icon icon-{{ happening.picto }}"></i>
             {{ (happening.hasParticipations ? (isUserAloneParticipant ? 'happening.participationCancel.action' : 'happening.participationUpdate.action') : 'happening.participate.action')|trans }}
         </a>
     {% elseif happening.isFull %}

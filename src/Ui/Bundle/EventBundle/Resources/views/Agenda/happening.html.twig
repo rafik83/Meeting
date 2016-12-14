@@ -3,6 +3,6 @@
     <div class="details">
         {{ include('EventBundle:Happening:speakers.html.twig', {happening: happening}) }}
         <p>{{ happening.description|nl2br }}</p>
-        {{ include('EventBundle:Happening:footer.html.twig', {'sheet': agenda.sheet, happening: happening, beginHour: happening.begin, endHour: happening.end}) }}
+        {{ include('EventBundle:Happening:footer.html.twig', { 'sheet': agenda.sheet, 'happening': happening, 'beginHour': happening.begin, 'endHour': happening.end, 'isUserAloneParticipant': isUserAloneParticipant }) }}
     </div>
 </div>
