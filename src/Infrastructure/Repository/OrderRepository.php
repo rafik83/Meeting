@@ -95,6 +95,12 @@ class OrderRepository implements OrderRepositoryInterface
                 ->setParameter('product', $filters['product']);
         }
 
+        if (isset($filters['enabled'])) {
+            $queryBuilder
+                ->andWhere('sheet.enable = :enable')
+                ->setParameter('enable', $filters['enabled']);
+        }
+
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
     }
 
@@ -109,7 +115,7 @@ class OrderRepository implements OrderRepositoryInterface
             ->createQueryBuilder()
             ->select('_order')
             ->from(Order::class, '_order', '_order.id')
-            ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->join('_order.sheet', 'sheet', 'WITH', 'sheet.event = :event AND sheet.enable = true')
             ->setParameter('event', $event)
         ;
 

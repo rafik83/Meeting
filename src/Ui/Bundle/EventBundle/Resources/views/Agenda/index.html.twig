@@ -1,0 +1,37 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'Agenda' %}
+
+{% block content %}
+    <div class="agenda-container">
+        <div class="row">
+            {% for day in agenda.days %}
+                <div class="col-md-{{ agenda.colSize }} agenda" data-beginHour="{{ day.begin|date('H:i', event.timeZone) }}" data-endHour="{{ day.end|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.getScale }}">
+                    <header class="agenda-head">
+                        <p>
+                            <i class="icon icon-Calendrier"></i>
+                            {% if loop.first %}
+                            <strong>
+                                {{ 'agenda.title'|trans }}
+                            </strong>
+                            {% endif %}
+                            <span>- {{ day.day|localizeddate('full', 'none')|capitalize }}</span>
+                        </p>
+                    </header>
+                    <div class="meets">
+                        {% for happening in day.happenings %}
+                            {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening }) }}
+                        {% endfor %}
+                        {% for unavailability in day.unavailabilities %}
+                            {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheet': agenda.sheet, 'unavailability': unavailability }) }}
+                        {% endfor %}
+                        {% for mass in day.masses %}
+                            {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
+                        {% endfor %}
+                    </div>
+                    <div class="layout"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

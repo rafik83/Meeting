@@ -1,0 +1,7 @@
+<div class="happening has-details meet" data-beginHour="{{ mass.begin|date('H:i') }}" data-duration="{{ mass.duration.format('%H:%I') }}">
+    {{ include('EventBundle:Unavailability/Mass:header.html.twig', {mass: mass}) }}
+    <div class="details">
+        <p>{{ mass.description|nl2br }}</p>
+        {{ include('EventBundle:Unavailability/Mass:footer.html.twig', {mass: mass}) }}
+    </div>
+</div>

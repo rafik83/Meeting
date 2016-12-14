@@ -54,7 +54,7 @@ interface ParticipantRepositoryInterface
      * @param User  $user
      * @param Sheet $sheet
      *
-     * @return Participant
+     * @return Participant|null
      */
     public function getParticipantForUserAndSheet(User $user, Sheet $sheet);
 
@@ -110,4 +110,13 @@ interface ParticipantRepositoryInterface
      * @return array
      */
     public function countByTypeWithEnabledSheet(Event $event, $locale);
+
+    /**
+     * @param Participant[]      $participants
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipants($participants, \DateTimeInterface $begin, \DateTimeInterface $end);
 }

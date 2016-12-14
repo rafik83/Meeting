@@ -18,7 +18,9 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
@@ -26,6 +28,8 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
+use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
+use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
@@ -34,6 +38,8 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidationDraftMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetValidationValidateMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
@@ -57,15 +63,25 @@ class MailEventSubscriber implements EventSubscriberInterface
     private $sender;
 
     /**
+     * @var ParticipantMailViewQueryHandler
+     */
+    private $participantMailViewQueryHandler;
+
+    /**
      * MailEventSubscriber constructor.
      *
-     * @param MailerInterface $mailer
-     * @param EventSender     $sender
+     * @param MailerInterface                 $mailer
+     * @param EventSender                     $sender
+     * @param ParticipantMailViewQueryHandler $participantMailViewQueryHandler
      */
-    public function __construct(MailerInterface $mailer, EventSender $sender)
-    {
-        $this->mailer = $mailer;
-        $this->sender = $sender;
+    public function __construct(
+        MailerInterface $mailer,
+        EventSender $sender,
+        ParticipantMailViewQueryHandler $participantMailViewQueryHandler
+    ) {
+        $this->mailer                          = $mailer;
+        $this->sender                          = $sender;
+        $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
     }
 
     /**
@@ -77,11 +93,56 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $owner = $event->getSheet()->getOwner();
 
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $owner)
+        );
+
         $mail = new SheetValidatedMail(
             $event->getSheet(),
-            $this->sender->generate(),
+            $this->sender->generate($event->getSheet()->getEvent()),
             $owner->getEmail(),
-            $owner->getLocale()
+            $owner->getLocale(),
+            $participantMailView
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @param SheetDraftEvent $event
+     */
+    public function onSheetValidationDraft(SheetDraftEvent $event)
+    {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
+        );
+
+        $mail = new SheetValidationDraftMail(
+            $event->getSheet(),
+            $this->sender->generate($event->getSheet()->getEvent()),
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale(),
+            $participantMailView
+        );
+
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @param SheetValidationValidateEvent $event
+     */
+    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
+    {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
+        );
+
+        $mail = new SheetValidationValidateMail(
+            $event->getSheet(),
+            $this->sender->generate($event->getSheet()->getEvent()),
+            $event->getSheet()->getOwner()->getEmail(),
+            $event->getSheet()->getOwner()->getLocale(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -92,12 +153,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionConfirmed(TransactionConfirmEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getTransaction()->getSheet(), $event->getUser())
+        );
+
         $mail = new TransactionConfirmMail(
             $event->getTransaction(),
             $event->getUser(),
             $this->sender->generate($event->getTransaction()->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
-            $event->getUser()->getLocale()
+            $event->getUser()->getLocale(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -108,12 +174,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onChangeMailAddressEvent(ChangeMailAddressEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getUser())
+        );
+
         $oldMail = new ChangeOldMailAddressMail(
             $event->getEvent(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
-            $event->getChangeMailToken()->getMail()
+            $event->getChangeMailToken()->getMail(),
+            $participantMailView
         );
 
         $newMail = new ChangeNewMailAddressMail(
@@ -122,7 +193,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getChangeMailToken()->getMail(),
             $event->getUser()->getLocale(),
             $event->getChangeMailToken()->getToken(),
-            $event->getUser()
+            $event->getUser(),
+            $participantMailView
         );
 
         $this->mailer->send($oldMail);
@@ -136,12 +208,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getOrder()->getSheet(), $event->getUser())
+        );
+
         $mail = new OrderConfirmMail(
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getOrder(),
-            $event->getUser()
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -152,13 +228,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetAddParticipant(SheetAddParticipantEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getGuest()->getUser())
+        );
+
         $mail = new AddParticipantMail(
             $event->getSheet()->getEvent(),
             $this->sender->generate($event->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
-            $event->getUser(),
-            $event->getGuest()
+            $event->getGuest()->getUser(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -199,14 +279,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserActivateAccount(UserActivateAccountEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getUser())
+        );
+
         $mail = new UserActivateAccountMail(
             $event->getEvent(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
             $event->getActivateAccountToken()->getToken(),
-            $event->getSender(),
-            $event->getUser()
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -217,12 +300,17 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPassword(UserResetPasswordEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getUser())
+        );
+
         $mail = new UserResetPasswordMail(
             $event->getEvent(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
-            $event->getForgottenPasswordToken()->getToken()
+            $event->getForgottenPasswordToken()->getToken(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -235,12 +323,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPasswordConfirm(ResetPasswordConfirmEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getUser())
+        );
+
         $mail = new ResetPasswordConfirmMail(
             $event->getEvent(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
-            $event->getUser()
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -251,11 +343,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserCompleteProfile(UserCompleteProfileEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getParticipant()->getSheet(), $event->getUser())
+        );
+
         $mail = new UserCompleteProfileMail(
             $event->getParticipant(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
-            $event->getLocale()
+            $event->getLocale(),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -268,12 +365,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserPreRegistered(PreRegisterEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getUser())
+        );
+
         $mail = new PreRegisteredMail(
             $event->getParticipant(),
             $this->sender->generate($event->getParticipant()->getSheet()->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
-            $event->getUser()
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -284,12 +385,16 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserRegistered(UserRegisteredEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery(null, $event->getUser())
+        );
+
         $mail = new RegisterAccountMail(
             $event->getEvent(),
             $this->sender->generate($event->getEvent()),
             $event->getUser()->getEmail(),
             $event->getLocale(),
-            $event->getUser()
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -300,6 +405,10 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onSheetChangeType(SheetChangedTypeEvent $event)
     {
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
+        );
+
         $mail = new SheetChangeTypeMail(
             $event->getSheet()->getEvent(),
             $this->sender->generate($event->getSheet()->getEvent()),
@@ -307,7 +416,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             $event->getLocale(),
             $event->getSheet()->getOwner(),
             $event->getFromTypeTitle(),
-            $event->getSheet()->getType()->getTitle($event->getLocale())
+            $event->getSheet()->getType()->getTitle($event->getLocale()),
+            $participantMailView
         );
 
         $this->mailer->send($mail);
@@ -333,6 +443,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
+            Events::SHEET_VALIDATION_DRAFT             => 'onSheetValidationDraft',
+            Events::SHEET_VALIDATION_VALIDATE          => 'onSheetValidationValidate',
         ];
     }
 }

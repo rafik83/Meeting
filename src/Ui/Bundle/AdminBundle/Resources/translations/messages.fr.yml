@@ -31,6 +31,7 @@ admin.dashboard.link: 'Tableau de bord'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
+admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
@@ -44,6 +45,7 @@ admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
+admin.event.search_facets.link: 'Filtres catalogue'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
@@ -65,9 +67,13 @@ admin.global_nomenclature.title: 'Nomenclatures globales'
 admin.goback.link: Retour
 admin.happening_category.add: Ajouter
 admin.happening_category.addTitle: 'Ajouter une catégorie de conférences'
+admin.happening_category.button.happening: 'Gérer les conférences'
+admin.happening_category.button.speaker: 'Gérer les intervenants'
 admin.happening_category.link: 'Catégories de conférences'
+admin.happening_category.table.column.color: Couleur
 admin.happening_category.table.column.picto: Picto
 admin.happening_category.table.column.position: Position
+admin.happening_category.table.column.rank: Position
 admin.happening_category.table.column.title: Titre
 admin.happening_category.title: 'Catégories de conférences'
 admin.happening_category.update: Modifier
@@ -78,6 +84,8 @@ admin.happening_speaker.action.edit: Modifier
 admin.happening_speaker.action.see: Voir
 admin.happening_speaker.add: Ajouter
 admin.happening_speaker.addTitle: 'Ajouter un intervenant'
+admin.happening_speaker.button.happening: 'Gérer les conférences'
+admin.happening_speaker.button.happening_category: 'Gérer les catégories de conférences'
 admin.happening_speaker.happenings: Conférences
 admin.happening_speaker.link: Intervenants
 admin.happening_speaker.no-result: 'Aucun intervenant.'
@@ -93,11 +101,16 @@ admin.happening_speaker.update: Modifier
 admin.happening_speaker.updateTitle: 'Modifier un intervenant'
 admin.happening.add: Ajouter
 admin.happening.addTitle: 'Ajouter une conférence'
+admin.happening.button.category: 'Gérer les catégories'
+admin.happening.button.speaker: 'Gérer les intervenants'
 admin.happening.link: Conférences
 admin.happening.list.begin: Début
+admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin
+admin.happening.list.question: 'Question ?'
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
+admin.happening.menu.link: Programme
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
@@ -240,11 +253,21 @@ admin.role.ROLE_SUPER_ADMIN: Admin
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
+admin.rule.list.add.title: 'Ajouter une règle'
 admin.rule.list.column.actions: Actions
+admin.rule.list.column.priority: Priorité
 admin.rule.list.column.see: Voit
 admin.rule.list.column.who: Qui
+admin.rule.list.content.category: Catégorie
+admin.rule.list.content.type: Type
 admin.rule.list.title: 'Liste des règles'
 admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
+admin.schedule_day.update.title: 'Définir les jours de l''événement'
+admin.schedule.days.day: Jour
+admin.schedule.days.endTime: 'Heure de fin'
+admin.schedule.days.link: Définir
+admin.schedule.days.startTime: 'Heure de début'
+admin.schedule.days.title: 'Jours de l''événement'
 admin.schedule.link: Agenda
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
@@ -413,7 +436,31 @@ admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.button.mass: 'Indisponibilité de masse'
 admin.type.update.title: 'Modifier le type de participation'
+admin.unavailability.category.add: Ajouter
+admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'
+admin.unavailability.category.link: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.category.table.column.color: Couleur
+admin.unavailability.category.table.column.picto: Picto
+admin.unavailability.category.table.column.title: Titre
+admin.unavailability.category.table.content.update: Modifier
+admin.unavailability.category.title: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.category.update: 'Modification d''une catégorie d''indisponibilité de masse'
+admin.unavailability.mass.add: 'Ajouter'
+admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
+admin.unavailability.mass.link: 'Indisponibilité de masse'
+admin.unavailability.mass.table.column.begin: Debut
+admin.unavailability.mass.table.column.category: Catégorie
+admin.unavailability.mass.table.column.name: 'Nom back office'
+admin.unavailability.mass.table.column.title: Titre
+admin.unavailability.mass.table.column.end: Fin
+admin.unavailability.mass.table.content.update: Modifier
+admin.unavailability.mass.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette indisponbilité?'
+admin.unavailability.mass.action.delete: Supprimer
+admin.unavailability.mass.title: 'Indisponibilité de masse'
+admin.unavailability.mass.update: 'Modification d''une indisponibilité de masse'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
@@ -524,6 +571,8 @@ event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active
 event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
 event.sheet.listOrders.title: 'Liste de vos commandes'
+event.sheet.order.alphabetic: Alphabétique
+event.sheet.order.createdAt: 'Date d''inscription'
 event.sheet.package.column.choices: Choix
 event.sheet.package.column.description: Description
 event.sheet.package.column.label: Intitulé

@@ -1,0 +1,84 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\Mass;
+
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update;
+use Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler;
+use Proximum\Vimeet\Domain\Model\Unavailability\Category;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+
+class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $event    = EventFactory::createEvent();
+        $oldCategory = new Category($event, 'Conference', 'old title', '#AABBCC', '#CCBBAA');
+        $category    = new Category($event, 'Conference', 'title', '#123123', '#312312');
+        $oldBegin    = new \DateTime('10/10/2016 10:00');
+        $oldEnd      = new \DateTime('10/10/2016 12:00');
+        $begin       = new \DateTime('12/10/2016 10:00');
+        $end         = new \DateTime('12/10/2016 12:00');
+
+        // Existing
+        $existing = new Mass(
+            $event,
+            $oldCategory,
+            'old name',
+            $oldBegin,
+            $oldEnd,
+            false
+        );
+        $existing->createTranslation('fr', 'vieux titre', 'vieille description');
+        $existing->createTranslation('en', 'old title', 'old description');
+
+
+        // Expected
+        $expected = new Mass(
+            $event,
+            $category,
+            'name',
+            $begin,
+            $end,
+            true
+        );
+        $expected->createTranslation('fr', 'titre', 'description');
+        $expected->createTranslation('en', 'title', 'description');
+
+
+        // Mock
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massRepository->update($expected)->shouldBeCalled();
+
+        // Create
+        $update               = new Update($existing);
+        $update->category     = $category;
+        $update->begin        = $begin;
+        $update->end          = $end;
+        $update->name         = 'name';
+        $update->blocking     = true;
+        $update->translations = [
+            'fr' => [
+                'title'       => 'titre',
+                'description' => 'description',
+            ],
+            'en' => [
+                'title'       => 'title',
+                'description' => 'description',
+            ]
+        ];
+
+        // Handler
+        $handler = new UpdateHandler($massRepository->reveal());
+        $handler->handle($update);
+    }
+}

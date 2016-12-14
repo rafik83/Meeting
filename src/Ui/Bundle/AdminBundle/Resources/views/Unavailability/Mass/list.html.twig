@@ -1,0 +1,68 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.unavailability.mass.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">
+        {{ 'admin.unavailability.mass.title'|trans }}
+        <div class="pull-right">
+            <a class="btn btn-info" href="{{ path('admin_unavailability_category_list', {event: event.id}) }}">
+                {{ 'admin.unavailability.button.category'|trans }}
+            </a>
+        </div>
+    </h1>
+
+    <div>
+        <a href="{{ path('admin_unavailability_mass_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">
+            {{ 'admin.unavailability.mass.add'|trans }}
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'admin.unavailability.mass.table.column.name'|trans }}</th>
+            <th>{{ 'admin.unavailability.mass.table.column.title'|trans }}</th>
+            <th>{{ 'admin.unavailability.mass.table.column.category'|trans }}</th>
+            <th>{{ 'admin.unavailability.mass.table.column.begin'|trans }}</th>
+            <th>{{ 'admin.unavailability.mass.table.column.end'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for mass in massList %}
+            <tr>
+                <td>{{ mass.name }}</td>
+                <td>{{ mass.title(event.getAvailableLocale(app.request.locale)) }}</td>
+                <td>{{ mass.category.title }}</td>
+                <td>{{ mass.begin|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ mass.end|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <a href="{{ path('admin_unavailability_mass_update', {event: event.id, mass: mass.id}) }}" class="btn btn-default btn-sm">
+                            {{ 'admin.unavailability.mass.table.content.update'|trans }}
+                        </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                {{ macro.delete_button(
+                                path('admin_unavailability_mass_delete', { 'event': event.id, 'mass': mass.id }),
+                                'admin.unavailability.mass.action.delete'|trans,
+                                { 'class': '', 'data-confirm': 'admin.unavailability.mass.action.confirmDelete'|trans }
+                                ) }}
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

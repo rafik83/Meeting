@@ -40,12 +40,12 @@
             </li>
             <li>
                 <a href="{{ path('admin_event_configure_dates', { 'event': event.id }) }}">
-                    {{ 'admin.spot.configure_dates'|trans }}
+                    {{ 'admin.event.configure_dates'|trans }}
                 </a>
             </li>
             <li>
                 <a href="{{ path('admin_event_search_facets', { 'event': event.id }) }}">
-                    {{ 'admin.spot.search_facets.link'|trans }}
+                    {{ 'admin.event.search_facets.link'|trans }}
                 </a>
             </li>
             <li>
@@ -140,7 +140,7 @@
         </ul>
     </li>
     <li class="dropdown-submenu">
-        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.link'|trans }}</a>
+        <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">{{ 'admin.happening.menu.link'|trans }}</a>
         <ul class="dropdown-menu">
             <li>
                 <a href="{{ path('admin_happening_list', { 'event': event.id }) }}">
@@ -155,6 +155,16 @@
             <li>
                 <a href="{{ path('admin_happening_speaker_list', { 'event': event.id }) }}">
                     {{ 'admin.happening_speaker.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_unavailability_category_list', { 'event': event.id }) }}">
+                    {{ 'admin.unavailability.category.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_unavailability_mass_list', { 'event': event.id }) }}">
+                    {{ 'admin.unavailability.mass.link'|trans }}
                 </a>
             </li>
         </ul>

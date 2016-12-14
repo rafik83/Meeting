@@ -6,23 +6,26 @@
 
 {% block list_title 'admin.order.title'|trans %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 {% block content %}
     <h1 class="page-header">{{ block('list_title') }}</h1>
 
+    {{ form_start(filterPartForm) }}
+        {{ form_row(filterPartForm.product, { 'group_attr': { 'class': 'col-md-8' } }) }}
+        {{ form_row(filterPartForm.enabled) }}
+
+        <div class="col-md-2">
+            <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+        </div>
+    {{ form_end(filterPartForm) }}
+
     {{ form_start(filterForm) }}
-    {{ form_row(filterForm.product, { 'group_attr': { 'class': 'col-md-8' } }) }}
-
-    <div class="col-md-2">
-        <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-    </div>
-
-    {{ form_end(filterForm) }}
-
     <table class="table table-hover">
         <thead>
         <tr>
             <th>{{ 'admin.order.id'|trans }}</th>
-            <th>{{ 'admin.order.sheet'|trans }}</th>
+            <th>{{ macro.choice_as_dropdown(filterForm.enabled, false, false, false, false) }}</th>
             <th>{{ 'admin.order.type'|trans }}</th>
             <th>{{ 'admin.order.follower'|trans }}</th>
             <th>{{ 'admin.order.createdAt'|trans }}</th>
@@ -64,5 +67,6 @@
         </tbody>
     </table>
 
+    {{ form_end(filterForm, {'render_rest': false}) }}
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': orders }) }}
 {% endblock content %}

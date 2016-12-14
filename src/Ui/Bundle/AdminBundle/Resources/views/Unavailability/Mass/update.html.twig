@@ -1,0 +1,16 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.unavailability.mass.update'|trans %}
+
+{% block form_title 'admin.unavailability.mass.update'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.name) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.translations) }}
+    {{ form_row(form.begin) }}
+    {{ form_row(form.end) }}
+    {{ form_row(form.blocking) }}
+{% endblock %}
+
+{% block goback_link path('admin_unavailability_mass_list', { 'event': event.id }) %}

@@ -1,0 +1,62 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'program.title'|trans %}
+
+{% block content %}
+    <div class="agenda-container">
+        <div class="row">
+            {% for day in program.days %}
+            <div class="col-md-{{ program.colSize }} agenda" data-beginHour="{{ day.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ day.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.scale }}">
+                <header class="agenda-head">
+                    <p>
+                        {% if not program.hasCategory %}
+                            <i class="icon icon-Conference"></i>
+                            <strong>
+                                {{ 'program.title'|trans }}
+                            </strong>
+                        {% else %}
+                            <i class="icon icon-{{ program.categoryPicto }}"></i>
+                            <strong>
+                                {{ program.categoryTitle }}
+                            </strong>
+                        {% endif %}
+                        <span>- {{ day.day|localizeddate('full', 'none')|capitalize }}</span>
+                    </p>
+                </header>
+                <div class="meets">
+                    {% for happening in day.happenings %}
+                        {{ include('EventBundle:Program:happening.html.twig', { 'sheet': sheet, 'happening': happening }) }}
+                    {% endfor %}
+                </div>
+                <div class="layout"></div>
+                {#
+                <footer class="agenda-foot">
+                    <p>
+                        <i class="icon icon-Deverouiller_1"></i>
+                        <strong>Disponibilité restantes</strong>
+                        <span>- 17 plages horaires</span>
+                    </p>
+                </footer>
+                #}
+            </div>
+            {% endfor %}
+            {#
+            <div class="col-md-6 agenda">
+                <div class="meets">
+                </div>
+                <div class="layout"></div>
+                <footer class="agenda-foot">
+                    <p>
+                        A voir également
+                        <a href="#conferences" class="btn btn-gray">
+                            <i class="icon icon-Conference"></i> Conférences
+                        </a>
+                    </p>
+                </footer>
+            </div>
+            #}
+        </div>
+    </div>
+
+    {{ include('EventBundle:Program/Partials:modal.html.twig', {}, false) }}
+{% endblock %}

@@ -1,0 +1,5 @@
+Proximum\Vimeet\Application\Command\Rule\SeeWhat:
+    properties:
+        priority:
+            - NotNull: ~
+            - Type: { type: integer }

@@ -43,6 +43,7 @@ Feature: Update spanish event
     When I fill in the following:
       | who_see_who_seer    | type:1 |
       | who_see_who_seeable | type:2 |
+      | priority            | 2      |
     And I press "form.who_see_who.children.submit.label"
     Then I should be on this page "/admin/en/event/1/who-see-who/see-what/1"
     And I should see "Who.see_who_but_dont_see"
@@ -114,10 +115,10 @@ Feature: Update spanish event
     And I follow "admin.happening_speaker.add"
     And I should be on this page "/admin/en/event/1/happening/speaker/create"
     When I fill in the following:
-      | create_speaker[firstname]                  | Henry       |
-      | create_speaker[lastname]                   | Dupont      |
-      | create_speaker[translations][es][position] | Developer   |
-      | create_speaker[organization]               | Elao        |
+      | create_speaker[firstname]                  | Henry     |
+      | create_speaker[lastname]                   | Dupont    |
+      | create_speaker[translations][es][position] | Developer |
+      | create_speaker[organization]               | Elao      |
     And I press "form.create_speaker.children.submit.label"
     Then I should see "flash.admin.speaker.create.success"
 
@@ -133,8 +134,8 @@ Feature: Update spanish event
     And I follow "admin.happening_category.add"
     And I should be on this page "/admin/en/event/1/happening/category/create"
     When I fill in the following:
-      | category_create[position]                | 1             |
-      | category_create[picto]                   | picto1        |
+      | category_create[rank]                    | 1             |
+      | category_create[picto]                   | Cafe_1        |
       | category_create[translations][es][title] | CategoryLabel |
     And I press "form.category_create.children.submit.label"
     Then I should see "flash.admin.happening.category.create.success"
@@ -148,6 +149,10 @@ Feature: Update spanish event
     And I fill in the following:
       | happening_create[translations][es][title]       | HappeningTitle       |
       | happening_create[translations][es][description] | HappeningDescription |
+      | happening_create[begin]                         | 09/09/2016 10:10     |
+      | happening_create[end]                           | 09/09/2016 12:10     |
+      | happening_create[questionAllowed]               | 1                    |
+      | happening_create[limitParticipant]              | 15                   |
     And I press "form.happening_create.children.submit.label"
     Then I should see "flash.admin.happening.create.success"
 

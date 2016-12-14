@@ -122,7 +122,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->createQueryBuilder()
             ->select('transaction')
             ->from(Transaction::class, 'transaction')
-            ->join('transaction.sheet', 'sheet')
+            ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.enable = true')
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
         ;

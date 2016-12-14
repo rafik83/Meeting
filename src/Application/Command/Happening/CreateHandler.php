@@ -33,7 +33,14 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $happening = new Happening($create->event, $create->begin, $create->end, $create->category);
+        $happening = new Happening(
+            $create->event,
+            $create->begin,
+            $create->end,
+            $create->category,
+            $create->questionAllowed,
+            $create->limitParticipant
+        );
 
         foreach ($create->translations as $locale => $translation) {
             $happening->setTranslation(new Happening\HappeningTranslation($happening, $locale, $translation['title'], $translation['description']));

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Event\User;
 
 use Proximum\Vimeet\Domain\Model\Event as ProximumEvent;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Symfony\Component\EventDispatcher\Event;
@@ -43,24 +44,32 @@ class ActivateAccountEvent extends Event
     private $locale;
 
     /**
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
      * @param User                 $user
-     * @param User                 $sender
      * @param ProximumEvent        $event
      * @param ActivateAccountToken $activateAccountToken
      * @param string               $locale
+     * @param User                 $sender
+     * @param Sheet                $sheet
      */
     public function __construct(
         User $user,
         ProximumEvent $event,
         ActivateAccountToken $activateAccountToken,
         $locale,
-        User $sender
+        User $sender,
+        Sheet $sheet
     ) {
         $this->user                 = $user;
         $this->event                = $event;
         $this->activateAccountToken = $activateAccountToken;
         $this->locale               = $locale;
         $this->sender               = $sender;
+        $this->sheet                = $sheet;
     }
 
     /**
@@ -101,5 +110,13 @@ class ActivateAccountEvent extends Event
     public function getSender()
     {
         return $this->sender;
+    }
+
+    /**
+     * @return Sheet
+     */
+    public function getSheet()
+    {
+        return $this->sheet;
     }
 }

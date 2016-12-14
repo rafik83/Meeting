@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -87,7 +89,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
         $package  = new Package($event, 'package', $datetime);
         $type->setPackage($package);
-        
+
         $locale = 'fr';
         $route  = 'event_catalog_index';
 
@@ -99,7 +101,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 Category::SHEET_ICON,
                 'sheet.title',
                 'sheet.title.link',
-                true
+                false
             ),
             new SubmenuButtonView(
                 Category::PACKAGE_ICON,
@@ -114,6 +116,9 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
 
+        $catalogAccessChecker = new CatalogAccessChecker(new \DateTime());
+        $happeningAccessChecker = new HappeningsAccessChecker(new \DateTime());
+
         $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
@@ -122,7 +127,9 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new SheetSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $cartRowRepository->reveal()
+            $cartRowRepository->reveal(),
+            $catalogAccessChecker,
+            $happeningAccessChecker
         );
 
         $menuButtonViews = $handler->handle($query);

@@ -32,28 +32,27 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $newEnd   = new \DateTime('2016-01-29 19:00:00');
 
         // Current
-        $category        = new Category($event, 'picto1', 0);
+        $category        = new Category($event, 'picto1', 0, '#AABB56', '#123456');
         $catTranslation1 = new CategoryTranslation($category, 'fr', 'truc');
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
 
-        $happening             = new Happening($event, $begin, $end, $category);
+        $happening             = new Happening($event, $begin, $end, $category, true, 10);
         $happeningTranslation  = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
         $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
 
         $happening->setTranslation($happeningTranslation);
         $happening->setTranslation($happeningTranslation2);
 
-        $newCategory        = new Category($event, 'picto3', 0);
+        $newCategory        = new Category($event, 'picto3', 0, '#123123', '#456456');
         $newCatTranslation1 = new CategoryTranslation($newCategory, 'fr', 'trec');
         $newCatTranslation2 = new CategoryTranslation($newCategory, 'en', 'troc');
         $newCategory->setTranslation($newCatTranslation1);
         $newCategory->setTranslation($newCatTranslation2);
 
-
         // Expected
-        $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory);
+        $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory, false, null);
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'tset', 'ko');
 
@@ -65,17 +64,19 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningRepository->set($expectedSubEvent)->shouldBeCalled();
 
         // Command
-        $update = new Update($happening);
-        $update->category = $newCategory;
-        $update->begin = $newBegin;
-        $update->end   = $newEnd;
-        $update->translations = [
+        $update                   = new Update($happening);
+        $update->questionAllowed  = false;
+        $update->category         = $newCategory;
+        $update->begin            = $newBegin;
+        $update->end              = $newEnd;
+        $update->limitParticipant = null;
+        $update->translations     = [
             'fr' => [
-                'title' => 'test',
+                'title'       => 'test',
                 'description' => 'ok',
             ],
             'en' => [
-                'title' => 'tset',
+                'title'       => 'tset',
                 'description' => 'ko',
             ],
         ];

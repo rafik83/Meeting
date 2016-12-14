@@ -25,7 +25,7 @@ Feature: Edit participant status
     And I should see "admin.sheet.title.count"
     Then I check "sheet_batch_ids_4"
     And I press "form.sheet_batch.children.validate.label"
-    Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com" from "vimeet@proximum.dev"
+    Then the "sheet.validated" mail should be sent to "test_carnot@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can enable or disable participant registration
     Given I am logged with "test@test.com" on admin
@@ -47,17 +47,6 @@ Feature: Edit participant status
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "✓" in the "#sheet-7" element
 
-  Scenario: I can put sheet participation to draft
-    Given I am logged with "test@test.com" on admin
-    And I am on this page "/admin/fr/event"
-    When I go to "/admin/fr/event/1/sheet"
-    Then I should see "admin.sheet.title.count"
-    And I check "sheet_batch_ids_7"
-    When I press "form.sheet_batch.children.validationStateDraft"
-    Then I should be on this page "/admin/fr/event/1/sheet"
-    And I should see "flash.admin.sheet_batch.draft.success"
-    And I should see "event.sheet.validationState.draft" in the "#sheet-7" element
-
   Scenario: I can put sheet participation content to validated
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
@@ -68,20 +57,35 @@ Feature: Edit participant status
     Then I should be on this page "/admin/fr/event/1/sheet"
     And I should see "flash.admin.sheet_batch.validation.validate.success"
     And I should see "event.sheet.validationState.validated" in the "#sheet-7" element
+    And the "sheet.validation.validate" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+
+  Scenario: I can put sheet participation to draft
+    Given I am logged with "test@test.com" on admin
+    And I am on this page "/admin/fr/event"
+    When I go to "/admin/fr/event/1/sheet"
+    Then I should see "admin.sheet.title.count"
+    And I check "sheet_batch_ids_7"
+    When I press "form.sheet_batch.children.validationStateDraft"
+    Then I should be on this page "/admin/fr/event/1/sheet"
+    And I should see "flash.admin.sheet_batch.draft.success"
+    And I should see "event.sheet.validationState.draft" in the "#sheet-7" element
+    And the "sheet.validation.draft" mail should be sent to "test_UI@proximum.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
 
   Scenario: I can use filters, navigate on admin and see my filters was saved
     Given I am logged with "test@test.com" on admin
     And I am on this page "/admin/fr/event"
-    When I go to "/admin/fr/event/1/sheet?type=1&page=1&validationState=draft&state=pending&enabled=1"
+    When I go to "/admin/fr/event/1/sheet?type=1&page=1&validationState=draft&state=pending&enabled=1&orderBy=createdAt"
     Then I should see "form.sheet_filter.children.enabled.label"
     And I should see "form.sheet_filter.children.state.label"
     And I should see "form.sheet_filter.children.type.label"
     And I should see "form.sheet_filter.children.validationState.label"
+    And I should see "form.sheet_filter.children.orderBy.label"
     When I go to this page "/admin/fr/event"
     And I go to "/admin/fr/event/1/sheet"
-    Then I should be on this page "/admin/fr/event/1/sheet?type=1&page=1&validationState=draft&state=pending&enabled=1"
+    Then I should be on this page "/admin/fr/event/1/sheet?type=1&page=1&validationState=draft&state=pending&enabled=1&orderBy=createdAt"
     And I should see "form.sheet_filter.children.enabled.label"
     And I should see "form.sheet_filter.children.state.label"
     And I should see "form.sheet_filter.children.type.label"
     And I should see "form.sheet_filter.children.validationState.label"
+    And I should see "form.sheet_filter.children.orderBy.label"
 

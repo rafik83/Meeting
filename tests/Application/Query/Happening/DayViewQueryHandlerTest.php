@@ -1,0 +1,141 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Query\Happening;
+
+use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\HappeningViewQueryHandler;
+use Proximum\Vimeet\Application\View\Happening\DayView;
+use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
+use Proximum\Vimeet\Application\View\Happening\HappeningView;
+use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Domain\Model\Event\Day;
+
+class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    public function testHandle()
+    {
+        $event     = EventFactory::createEvent();
+        $category  = null;
+        $startTime = new \DateTime('2016-10-12 10:00:00');
+        $endTime   = new \DateTime('2016-10-12 18:00:00');
+        $eventDay  = new Day($event, $startTime, $endTime);
+
+        // Data
+        $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
+        $beginHappening2 = new \DateTime('2016-10-12 15:30:00');
+        $endHappening1   = new \DateTime('2016-10-12 14:00:00');
+        $endHappening2   = new \DateTime('2016-10-12 16:50:00');
+        $categoryH1      = new Happening\Category($event, 'Conference', 1, '#123123', '#123123');
+        $categoryH2      = new Happening\Category($event, 'RDV', 2, '#123123', '#123123');
+        $happening1 = new Happening(
+            $event,
+            $beginHappening1,
+            $endHappening1,
+            $categoryH1
+        );
+
+        $happening2 = new Happening(
+            $event,
+            $beginHappening2,
+            $endHappening2,
+            $categoryH2
+        );
+
+        $reflection = new \ReflectionClass(Happening::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($happening1, 1);
+        $property->setValue($happening2, 2);
+        $property->setAccessible(false);
+
+        $happenings = [
+            $happening1,
+            $happening2,
+        ];
+
+        // Expected
+        $happeningCategoryView = new HappeningCategoryView('title', 'Conference', '#123123', '#123123');
+        $happeningView1 = new HappeningView(
+            1,
+            1,
+            $happeningCategoryView,
+            $beginHappening1,
+            $endHappening1,
+            'title',
+            'description',
+            null,
+            []
+        );
+        $happeningView2 = new HappeningView(
+            2,
+            2,
+            $happeningCategoryView,
+            $beginHappening2,
+            $endHappening2,
+            'title2',
+            'description2',
+            null,
+            []
+        );
+
+        $expected = new DayView(
+            $startTime,
+            $endTime,
+            $event->getConfiguration()->getScheduleScale(),
+            [
+                $happeningView1,
+                $happeningView2,
+            ]
+        );
+
+        // Mock
+        $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $happeningRepository->findByEventAndDayAndCategory(
+            $event,
+            $eventDay->getDay(),
+            $category
+        )->shouldBeCalled()->willReturn($happenings);
+
+        $happeningViewQueryHandler = $this->prophesize(HappeningViewQueryHandler::class);
+        $happeningViewQueryHandler->handle(
+            new HappeningViewQuery(
+                $happening1,
+                'fr',
+                1
+            )
+        )->shouldBeCalled()->willReturn($happeningView1);
+        $happeningViewQueryHandler->handle(
+            new HappeningViewQuery(
+                $happening2,
+                'fr',
+                2
+            )
+        )->shouldBeCalled()->willReturn($happeningView2);
+
+
+        $handler = new DayViewQueryHandler(
+            $happeningRepository->reveal(),
+            $happeningViewQueryHandler->reveal()
+        );
+        $result = $handler->handle(new DayViewQuery(
+            $event,
+            $eventDay,
+            'fr',
+            $category
+        ));
+
+        $this->assertEquals($expected, $result);
+    }
+}

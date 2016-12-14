@@ -13,10 +13,10 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
     AnchorFocuser           = require('./components/_AnchorFocuser');
+    DateTimePicker          = require('./components/_DateTimePicker');
 
 require('elao-form.js');
 require('select2');
-require('eonasdan-bootstrap-datetimepicker');
 require('moment/locale/fr');
 require('moment/locale/en-gb');
 require('./vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox');
@@ -70,21 +70,8 @@ function init(target) {
         });
     });
 
-    $('[data-datatimepicker]').datetimepicker({
-        locale: 'fr',
-        sideBySide: true,
-        allowInputToggle: true,
-        icons: {
-            time: 'glyphicon glyphicon-time',
-            date: 'glyphicon glyphicon-calendar',
-            up: 'glyphicon glyphicon-chevron-up',
-            down: 'glyphicon glyphicon-chevron-down',
-            previous: 'glyphicon glyphicon-chevron-left',
-            next: 'glyphicon glyphicon-chevron-right',
-            today: 'glyphicon glyphicon-screenshot',
-            clear: 'glyphicon glyphicon-trash',
-            close: 'glyphicon glyphicon-remove'
-        }
+    [].forEach.call($('[data-datatimepicker]'), function (element) {
+        new DateTimePicker(element);
     });
 
     /* tablesort */

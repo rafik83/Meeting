@@ -777,6 +777,13 @@ admin_schedule_slot_unlock:
         event: \d+
         meetingSlot: \d+
 
+admin_schedule_days:
+    path: /event/{event}/schedule/days
+    defaults: { _controller: AdminBundle:Schedule:day }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
 #
 # Nomenclature
 #
@@ -829,6 +836,61 @@ admin_event_template_package:
     methods: [GET]
     requirements:
         event: \d+
+
+#
+# Unavailability
+#
+admin_unavailability_category_list:
+    path: /event/{event}/unavailability/category
+    defaults: { _controller: AdminBundle:Unavailability:categoryList }
+    methods: [GET]
+    requirements:
+        event: \d+
+
+admin_unavailability_category_create:
+    path: /event/{event}/unavailability/category/create
+    defaults: { _controller: AdminBundle:Unavailability:createCategory }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_unavailability_category_update:
+    path: /event/{event}/unavailability/category/update/{category}
+    defaults: { _controller: AdminBundle:Unavailability:updateCategory }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        category: \d+
+
+admin_unavailability_mass_list:
+    path: /event/{event}/unavailability/mass
+    defaults: { _controller: AdminBundle:Unavailability:massList }
+    methods: [GET]
+    requirements:
+        event: \d+
+
+admin_unavailability_mass_create:
+    path: /event/{event}/unavailability/mass/create
+    defaults: { _controller: AdminBundle:Unavailability:createMass }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_unavailability_mass_update:
+    path: /event/{event}/unavailability/mass/update/{mass}
+    defaults: { _controller: AdminBundle:Unavailability:updateMass }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        mass: \d+
+
+admin_unavailability_mass_delete:
+    path: /event/{event}/unavailability/mass/delete/{mass}
+    requirements:
+        event: \d+
+        mass: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Unavailability:deleteMass }
 
 # Users
 admin_users:

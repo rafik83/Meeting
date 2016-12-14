@@ -26,6 +26,19 @@ form.admin_lib.children.private.label: Privé
 form.admin_lib.children.required.label: Requis
 form.admin_lib.children.submit.label: Enregistrer
 form.admin_lib.children.tags.label: Tags
+form.admin_schedule_days.children.days.label: 'Jours de l''événement'
+form.admin_schedule_days.children.days.label_add: 'Ajouter un jour'
+form.admin_schedule_days.children.days.label_delete: 'Supprimer ce jour'
+form.admin_schedule_days.children.days.prototype.children.day.label: Jour
+form.admin_schedule_days.children.days.prototype.children.endTime.label: 'Heure fin'
+form.admin_schedule_days.children.days.prototype.children.startTime.label: 'Heure début'
+form.admin_schedule_days.children.submit.label: Valider
+form.admin.picto.Cafe_1: Café
+form.admin.picto.Cocktail: Cocktail
+form.admin.picto.Conference: Micro
+form.admin.picto.Dejeuner: Déjeuner
+form.admin.picto.PresFlash_2: Flash
+form.admin.picto.RDV: Rendez-vous
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -44,13 +57,19 @@ form.billing_update.children.submit.label: Enregistrer
 form.buy_participant.children.data.label: 'Coordonnées du participant'
 form.buy_participant.children.participantData.children.email.label: Email
 form.buy_participant.children.submit.label: Envoyer
+form.category_create.children.leftColor.label: 'Couleur habillage de gauche'
 form.category_create.children.picto.label: Picto
 form.category_create.children.position.label: Position
+form.category_create.children.rank.label: Position
+form.category_create.children.rightColor.label: 'Couleur habillage de droite'
 form.category_create.children.submit.label: Enregistrer
 form.category_create.children.translations.prototype.children.title.label: Titre
 form.category_create.children.types.label: 'Sélectionner les types de participation'
+form.category_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.category_update.children.picto.label: Picto
 form.category_update.children.position.label: Position
+form.category_update.children.rank.label: Position
+form.category_update.children.rightColor.label: 'Couleur habillage de droite'
 form.category_update.children.submit.label: Enregistrer
 form.category_update.children.translations.prototype.children.title.label: Titre
 form.category_update.children.types.label: 'Sélectionner les types de participation'
@@ -198,9 +217,14 @@ form.generate_slot.children.recipes.prototype.children.duration.label: 'Durée (
 form.generate_slot.children.recipes.prototype.children.end.label: à
 form.generate_slot.children.recipes.prototype.children.interval.label: 'Intervalle (en minutes)'
 form.generate_slot.children.submit.label: Enregistrer
+form.happening_create.children.questionAllowed.answer.true: Oui
+form.happening_create.children.questionAllowed.answer.false: Non
+form.happening_create.children.questionAllowed.label: 'Question des participants'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
+form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
+form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.submit.label: Envoyer
 form.happening_create.children.talkings.label: Intervenants
 form.happening_create.children.talkings.label_add: Ajouter
@@ -209,9 +233,11 @@ form.happening_create.children.talkings.prototype.children.position.label: Posit
 form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
+form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
+form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
 form.happening_update.children.talkings.label_add: Ajouter
@@ -266,6 +292,7 @@ form.nomenclature_update_type.children.sort.choice.sort_file: 'Conserver l''ordr
 form.nomenclature_update_type.children.sort.label: Tri
 form.nomenclature_update_type.children.submit.label: Enregistrer
 form.nomenclature_update_type.children.title.label: Titre
+form.order_filter.children.sheet.enabled.label: Fiche
 form.order_find.children.numero.label: 'Entrer le numéro de la commande'
 form.order_find.children.submit.label: Rechercher
 form.order_row.children.description.label: Description
@@ -453,6 +480,7 @@ form.register.children.email.label: E-mail
 form.register.children.password.children.first.label: 'Mot de passe'
 form.register.children.password.children.second.label: 'Ressaisir le mot de passe'
 form.register.children.submit.label: Envoyer
+form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
 form.rule_see_what.not_see_what_column: 'Ne voit pas'
@@ -493,6 +521,7 @@ form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
@@ -584,6 +613,16 @@ form.type_update.children.translations.prototype.children.description.label: Des
 form.type_update.children.translations.prototype.children.title.label: Titre
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_update.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.unavailability_category_create.children.leftColor.label: 'Couleur de gauche'
+form.unavailability_category_create.children.picto.label: Picto
+form.unavailability_category_create.children.rightColor.label: 'Couleur de droite'
+form.unavailability_category_create.children.submit.label: Enregistrer
+form.unavailability_category_create.children.title.label: 'Titre de la catégorie'
+form.unavailability_category_update.children.leftColor.label: 'Couleur de gauche'
+form.unavailability_category_update.children.picto.label: Picto
+form.unavailability_category_update.children.rightColor.label: 'Couleur de droite'
+form.unavailability_category_update.children.submit.label: Enregistrer
+form.unavailability_category_update.children.title.label: 'Titre de la catégorie'
 form.update_admin.children.email.label: Email
 form.update_admin.children.events.label: Événements
 form.update_admin.children.firstname.label: Prénom
@@ -625,11 +664,30 @@ form.update_transaction.children.submit.label: Enregistrer
 form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
+form.unavailability_mass_create.children.begin.label: Début
+form.unavailability_mass_create.children.blocking.label: Bloquant
+form.unavailability_mass_create.children.category.label: 'Catégorie'
+form.unavailability_mass_create.children.end.label: Fin
+form.unavailability_mass_create.children.name.label: 'Nom backoffice'
+form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
+form.unavailability_mass_create.children.submit.label: Enregistrer
+form.unavailability_mass_update.children.begin.label: Début
+form.unavailability_mass_update.children.blocking.label: Bloquant
+form.unavailability_mass_update.children.category.label: 'Catégorie'
+form.unavailability_mass_update.children.end.label: Fin
+form.unavailability_mass_update.children.name.label: 'Nom backoffice'
+form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
+form.unavailability_mass_update.children.submit.label: Enregistrer
+form.unavailability.mass.children.blocking.answer.true: Oui
+form.unavailability.mass.children.blocking.answer.false: Non
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Nom, prénom ou email de l''utilisateur'
 form.user_filter.children.type.label: Type
 form.vatMode.ati: TTC
 form.vatMode.et: HT
+form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter

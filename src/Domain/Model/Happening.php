@@ -55,27 +55,45 @@ class Happening
     private $talkings;
 
     /**
+     * @var bool
+     */
+    private $questionAllowed = false;
+
+    /**
+     * @var int|null
+     */
+    private $limitParticipant;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param bool               $questionAllowed
+     * @param int|null           $limitParticipant
      */
-    public function __construct(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
-    {
-        $this->event        = $event;
-        $this->begin        = $begin;
-        $this->end          = $end;
-        $this->category     = $category;
-        $this->translations = new ArrayCollection();
-        $this->talkings     = new ArrayCollection();
+    public function __construct(
+        Event $event,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        CategoryHappening $category,
+        $questionAllowed = false,
+        $limitParticipant = null
+    ) {
+        $this->event            = $event;
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->category         = $category;
+        $this->translations     = new ArrayCollection();
+        $this->talkings         = new ArrayCollection();
+        $this->questionAllowed    = $questionAllowed;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
-     * Get id.
-     *
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -144,10 +162,22 @@ class Happening
 
     /**
      * @param string $locale
+     *
+     * @return string
      */
     public function getTitle($locale)
     {
-        return $this->getTranslations()->get($locale)->getTitle();
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function getDescription($locale)
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -170,12 +200,21 @@ class Happening
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param bool               $questionAllowed
+     * @param int|null           $limitParticipant
      */
-    public function update(\DateTimeInterface $begin, \DateTimeInterface $end, CategoryHappening $category)
-    {
-        $this->begin    = $begin;
-        $this->end      = $end;
-        $this->category = $category;
+    public function update(
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        CategoryHappening $category,
+        $questionAllowed,
+        $limitParticipant
+    ) {
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->category         = $category;
+        $this->questionAllowed    = $questionAllowed;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
@@ -204,7 +243,9 @@ class Happening
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) { return $talking->getSpeaker(); })
+            ->map(function (Talking $talking) {
+                return $talking->getSpeaker();
+            })
             ->toArray();
     }
 
@@ -233,5 +274,45 @@ class Happening
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isQuestionAllowed()
+    {
+        return $this->questionAllowed;
+    }
+
+    /**
+     * @param bool $questionAllowed
+     */
+    public function setQuestionAllowed($questionAllowed)
+    {
+        $this->questionAllowed = $questionAllowed;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParticipantLimited()
+    {
+        return $this->limitParticipant !== null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLimitParticipant()
+    {
+        return $this->limitParticipant;
+    }
+
+    /**
+     * @param int|null $limitParticipant
+     */
+    public function setLimitParticipant($limitParticipant)
+    {
+        $this->limitParticipant = $limitParticipant;
     }
 }

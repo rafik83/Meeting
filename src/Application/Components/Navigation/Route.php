@@ -12,6 +12,12 @@ namespace Proximum\Vimeet\Application\Components\Navigation;
 
 final class Route
 {
+    const SHEET = [
+        'event_sheet',
+        'event_sheet_locale',
+        'event_sheet_update',
+    ];
+
     const CATALOG = [
         'event_catalog_index',
         'event_catalog_complete_sheet',
@@ -47,6 +53,16 @@ final class Route
     const NOTIFICATION = [
         'event_notification_list'
     ];
+
+    /**
+     * @param string $route
+     *
+     * @return bool
+     */
+    public static function isSheet($route)
+    {
+        return in_array($route, self::SHEET);
+    }
 
     /**
      * @param string $route

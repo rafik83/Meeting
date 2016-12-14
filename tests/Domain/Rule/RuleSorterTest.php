@@ -25,38 +25,38 @@ class RuleSorterTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    new Rule($event, new Category($event), new Category($event), []),
-                    new Rule($event, new Type($event), new Type($event), []),
+                    new Rule($event, new Category($event), new Category($event), [], 1),
+                    new Rule($event, new Type($event), new Type($event), [], 1),
                 ],
                 [
-                    new Rule($event, new Type($event), new Type($event), []),
-                    new Rule($event, new Category($event), new Category($event), []),
-                ],
-            ],
-            [
-                [
-                    new Rule($event, new Category($event), new Category($event), []),
-                    new Rule($event, new Type($event), new Type($event), []),
-                    new Rule($event, new Type($event), new Category($event), []),
-                ],
-                [
-                    new Rule($event, new Type($event), new Type($event), []),
-                    new Rule($event, new Type($event), new Category($event), []),
-                    new Rule($event, new Category($event), new Category($event), []),
+                    new Rule($event, new Type($event), new Type($event), [], 1),
+                    new Rule($event, new Category($event), new Category($event), [], 1),
                 ],
             ],
             [
                 [
-                    new Rule($event, new Category($event), new Category($event), []),
-                    new Rule($event, new Type($event), new Type($event), []),
-                    new Rule($event, new Category($event), new Type($event), []),
-                    new Rule($event, new Type($event), new Category($event), []),
+                    new Rule($event, new Category($event), new Category($event), [], 1),
+                    new Rule($event, new Type($event), new Type($event), [], 1),
+                    new Rule($event, new Type($event), new Category($event), [], 1),
                 ],
                 [
-                    new Rule($event, new Type($event), new Type($event), []),
-                    new Rule($event, new Category($event), new Type($event), []),
-                    new Rule($event, new Type($event), new Category($event), []),
-                    new Rule($event, new Category($event), new Category($event), []),
+                    new Rule($event, new Type($event), new Type($event), [], 1),
+                    new Rule($event, new Type($event), new Category($event), [], 1),
+                    new Rule($event, new Category($event), new Category($event), [], 1),
+                ],
+            ],
+            [
+                [
+                    new Rule($event, new Category($event), new Category($event), [], 1),
+                    new Rule($event, new Type($event), new Type($event), [], 1),
+                    new Rule($event, new Category($event), new Type($event), [], 1),
+                    new Rule($event, new Type($event), new Category($event), [], 1),
+                ],
+                [
+                    new Rule($event, new Type($event), new Type($event), [], 1),
+                    new Rule($event, new Category($event), new Type($event), [], 1),
+                    new Rule($event, new Type($event), new Category($event), [], 1),
+                    new Rule($event, new Category($event), new Category($event), [], 1),
                 ],
             ],
         ];

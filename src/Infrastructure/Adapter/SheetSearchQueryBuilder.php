@@ -173,14 +173,19 @@ class SheetSearchQueryBuilder
             $fields[] = sprintf('content_%s^%s', $this->locale, $this->initialBooster * self::BOOSTER_LOCALE_CONTENT);
         }
 
-        $multiMatch = new MultiMatch();
-        $multiMatch
-            ->setMinimumShouldMatch(self::CONTENT_MINIMUM_SHOULD_MATCH . '%')
-            ->setFields($fields)
-            ->setFuzziness(1)
-            ->setQuery($filters['content']);
+        $boolQuery = new BoolQuery();
 
-        $this->query->addMust($multiMatch);
+        foreach (explode(',', $filters['content']) as $keyword) {
+            $multiMatch = new MultiMatch();
+            $multiMatch
+                ->setFields($fields)
+                ->setFuzziness(1)
+                ->setQuery($keyword);
+
+            $boolQuery->addShould($multiMatch);
+        }
+
+        $this->query->addMust($boolQuery);
     }
 
     /**
@@ -496,8 +501,8 @@ class SheetSearchQueryBuilder
     {
         $nested     = new Nested();
         $boolQuery  = new BoolQuery();
-        $matchQuery = new Term();
-        $matchQuery->setTerm('booleanFilter.key', $predefined);
+        $matchQuery = new Match();
+        $matchQuery->setField('booleanFilter.key', $predefined);
 
         $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
         $this->query->addMust($nested);

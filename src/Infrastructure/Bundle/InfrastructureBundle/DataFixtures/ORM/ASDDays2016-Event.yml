@@ -26,7 +26,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#00398c'
             - '#00398C'
         catalogOnlineDate: "<dateTimeBetween('2016-08-25', 'now')>"
-        happeningsOpenDate: "<dateTimeBetween('now', '2032-07-08')>"
+        happeningsOpenDate: "<dateTimeBetween('2016-07-08', 'now')>"
         schedulePublishDate: "<dateTimeBetween('now', '2032-07-08')>"
         contactFirstName: "Maryse"
         contactLastName: "DURAND"
@@ -103,3 +103,15 @@ Proximum\Vimeet\Domain\Model\Event\ContentTranslation:
             contracts between us and our clients. Any differing conditions or terms of
             buyer are herewith objected to and shall not apply. Any agreement affecting
             the execution of this contract must be in writing.
+
+Proximum\Vimeet\Domain\Model\Event\Day:
+    asd_days_day_1:
+        __construct: false
+        event: '@event_asddays_2016'
+        startTime: <(new DateTime('12-10-2016 08:00:00.000'))>
+        endTime: <(new DateTime('12-10-2016 18:00:00.000'))>
+    asd_days_day_2:
+        __construct: false
+        event: '@event_asddays_2016'
+        startTime: <(new DateTime('13-10-2016 08:00:00.000'))>
+        endTime: <(new DateTime('13-10-2016 18:00:00.000'))>

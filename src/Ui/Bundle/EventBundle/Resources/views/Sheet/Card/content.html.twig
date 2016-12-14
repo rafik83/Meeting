@@ -1,7 +1,9 @@
 {% for object in preview %}
     {% if object.isImage %}
         {% if object.content is not empty %}
-            <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+            <div class="image-placeholder">
+                <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
+            </div>
         {% else %}
             <h3>{{ title }}</h3>
         {% endif %}

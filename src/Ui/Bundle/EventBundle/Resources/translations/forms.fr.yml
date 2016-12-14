@@ -36,6 +36,8 @@ form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.participate.children.question.label: 'Poser une question'
+form.participate.children.submit.label: 'Participer'
 form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''accompte'
 form.payment_choice_with_deposit.children.depositMode.deposit: Accompte
 form.payment_choice_with_deposit.children.depositMode.total: Total
@@ -47,13 +49,13 @@ form.payment_choice.children.paymentMode.bank_transfer: Transfert
 form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bancaire'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
-form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'
+form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.searching: 'Recherche en cours...'
 form.search.content.label: 'Mots clés'
-form.search.localization.label: 'Zones géographiques'
-form.search.localization.search.placeholder: '69, Lyon, France...'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
+form.search.localization.label: 'Zones géographiques'
+form.search.localization.search.placeholder: '69, Lyon, France'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées

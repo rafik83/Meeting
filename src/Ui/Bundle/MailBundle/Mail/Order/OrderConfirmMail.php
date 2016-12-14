@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order;
 
-use Proximum\Vimeet\Application\Components\Mail\Mail;
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\User;
 
-class OrderConfirmMail extends Mail
+class OrderConfirmMail extends UserMail
 {
     /**
      * @var string
@@ -38,33 +38,33 @@ class OrderConfirmMail extends Mail
     private $order;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
      * @var bool
      */
     protected $sendToEmailTeam = true;
 
     /**
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param Order  $order
-     * @param User   $user
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param Order               $order
+     * @param ParticipantInfoView $participantInfoView
      */
     public function __construct(
         $sender,
         $receiver,
         $locale,
         Order $order,
-        User $user
+        ParticipantInfoView $participantInfoView
     ) {
-        parent::__construct($sender, $receiver, $locale, null, null, $order->getSheet()->getEvent());
+        parent::__construct(
+            $sender,
+            $receiver,
+            $locale,
+            $order->getSheet()->getEvent(),
+            $participantInfoView
+        );
 
         $this->order = $order;
-        $this->user  = $user;
     }
 
     /**
@@ -73,13 +73,5 @@ class OrderConfirmMail extends Mail
     public function getOrder()
     {
         return $this->order;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }

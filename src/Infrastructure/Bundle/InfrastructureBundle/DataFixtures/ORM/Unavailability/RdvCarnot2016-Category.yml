@@ -1,0 +1,3 @@
+Proximum\Vimeet\Domain\Model\Unavailability\Category:
+    category_big_meal:
+        __construct: ['@event_rdv_carnot_2016', 'Dejeuner', 'grand dejeuner', '#123213', '#123123']

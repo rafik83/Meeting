@@ -1,6 +1,8 @@
 flash.activate_account.success: 'Your account has been successfully activated'
 flash.admin.activate_account.success: 'Your account has been successfully activated'
 flash.admin.change_password.success: 'Your password has been changed'
+flash.admin.reset_password_token.expired: 'Your request to reset the password has expired. You can do another request.'
+flash.admin.reset_password_token.success: 'You will receive an email allowing you to create a new password'
 flash.admin.sheet.change_type.success: 'The type of participation has been changed'
 flash.billing.update_info.success: 'Your billing information has been updated'
 flash.change_mail_activate.success: 'Your new email is now associated with your account'
