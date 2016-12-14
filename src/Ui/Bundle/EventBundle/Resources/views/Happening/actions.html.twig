@@ -9,7 +9,7 @@
 
     {% if happening.hasParticipations %}
     {% else %}
-        {% if happening.isFull %}
+        {% if not happening.isFull %}
             <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}"
                class="btn btn-gray happeningParticipateAction"
                data-label-participate="{{ 'happening.participate.action'|trans }}"
@@ -18,6 +18,8 @@
                 <i class="icon icon-{{ happening.category.picto }}"></i>
                 {{ happening.hasParticipations ? 'happening.participationUpdate.action'|trans : 'happening.participate.action'|trans }}
             </a>
+        {% else %}
+            <span class="label label-default">{{ 'happening.participate.full'|trans }}</span>
         {% endif %}
     {% endif %}
 </div>

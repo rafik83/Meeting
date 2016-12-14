@@ -77,7 +77,7 @@ class HappeningView
     /**
      * @var bool
      */
-    public $isFull = false;
+    private $isFull;
 
     /**
      * @var int|null
@@ -251,5 +251,13 @@ class HappeningView
     public function setIsFull()
     {
         $this->isFull = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFull()
+    {
+        return $this->isFull;
     }
 }
