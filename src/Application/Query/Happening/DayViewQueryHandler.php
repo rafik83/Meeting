@@ -61,22 +61,19 @@ class DayViewQueryHandler
         $happeningViews = [];
         $massView       = [];
 
-        foreach ($happenings as $key => $happening) {
+        foreach ($happenings as $happening) {
             $happeningViews[] = $this->happeningViewQueryHandler->handle(
-                new HappeningViewQuery($happening, $query->locale, $key + 1)
+                new HappeningViewQuery($happening, $query->locale)
             );
         }
 
-        $key = 1;
         foreach ($query->masses as $mass) {
             if ($mass->getBegin() >= $query->eventDay->getStartTime()
                 && $mass->getEnd() <= $query->eventDay->getEndTime()
             ) {
                 $massView[] = $this->massUnavailabilityViewQueryHandler->handle(
-                    new MassUnavailabilityViewQuery($mass, $query->locale, $key)
+                    new MassUnavailabilityViewQuery($mass, $query->locale)
                 );
-
-                $key++;
             }
         }
 

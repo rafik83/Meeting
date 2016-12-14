@@ -23,11 +23,6 @@ class HappeningView
     public $picto;
 
     /**
-     * @var string
-     */
-    public $code;
-
-    /**
      * @var \DateTimeInterface
      */
     public $begin;
@@ -64,7 +59,6 @@ class HappeningView
 
     /**
      * @param int                $id
-     * @param string             $code
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string             $title
@@ -77,7 +71,6 @@ class HappeningView
      */
     public function __construct(
         $id,
-        $code,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $title,
@@ -89,7 +82,6 @@ class HappeningView
         $limitParticipant = null
     ) {
         $this->id               = $id;
-        $this->code             = $code;
         $this->begin            = $begin;
         $this->end              = $end;
         $this->title            = $title;

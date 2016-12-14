@@ -41,7 +41,6 @@ class HappeningViewQueryHandler
 
         return new HappeningView(
             $happening->getId(),
-            $query->key,
             $happening->getBegin(),
             $happening->getEnd(),
             $happening->getTitle($query->locale),

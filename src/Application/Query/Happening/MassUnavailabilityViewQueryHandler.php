@@ -23,7 +23,6 @@ class MassUnavailabilityViewQueryHandler
     {
         return new MassUnavailabilityView(
             $query->mass->getId(),
-            $query->key,
             $query->mass->getBegin(),
             $query->mass->getEnd(),
             $query->mass->getTitle($query->locale),

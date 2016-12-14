@@ -25,19 +25,12 @@ class MassUnavailabilityViewQuery
     public $locale;
 
     /**
-     * @var string
-     */
-    public $key;
-
-    /**
      * @param Mass   $mass
      * @param string $locale
-     * @param string $key
      */
-    public function __construct(Mass $mass, $locale, $key)
+    public function __construct(Mass $mass, $locale)
     {
         $this->mass   = $mass;
         $this->locale = $locale;
-        $this->key    = $key;
     }
 }

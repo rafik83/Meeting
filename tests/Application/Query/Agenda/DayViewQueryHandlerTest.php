@@ -80,7 +80,6 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $happeningView1 = new HappeningView(
             1,
-            1,
             $beginHappening1,
             $endHappening1,
             'title',
@@ -92,7 +91,6 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $happeningView2 = new HappeningView(
             2,
-            2,
             $beginHappening2,
             $endHappening2,
             'title2',
@@ -103,7 +101,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'rightColor'
         );
 
-        $massView = new MassUnavailabilityView(1, 'code', $beginHappening1, $endHappening1, 'title', 'description', 'picto', 'leftColor', 'rightColor');
+        $massView = new MassUnavailabilityView(1, $beginHappening1, $endHappening1, 'title', 'description', 'picto', 'leftColor', 'rightColor');
         $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2);
 
         $expected = new DayView(
@@ -120,21 +118,19 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $happening1,
-                'fr',
-                1
+                'fr'
             )
         )->shouldBeCalled()->willReturn($happeningView1);
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $happening2,
-                'fr',
-                2
+                'fr'
             )
         )->shouldBeCalled()->willReturn($happeningView2);
 
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, 'fr', 1))->shouldBeCalled()->willReturn($massView);
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, 'fr'))->shouldBeCalled()->willReturn($massView);
         $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability))->shouldBeCalled()->willReturn($unavailabilityView);
 
 
