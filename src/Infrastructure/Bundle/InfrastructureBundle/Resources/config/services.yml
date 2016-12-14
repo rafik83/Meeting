@@ -1579,7 +1579,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Happening\HappeningListViewFactory
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
-            - '@happening.happening_permission_manager'
 
     #
     # Admin Happening Query
