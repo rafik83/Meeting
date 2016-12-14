@@ -49,6 +49,7 @@ class HappeningController extends Controller
         $participants           = $sheet->getParticipants()->toArray();
         $isUserAloneParticipant = $this->isUserAloneParticipant($sheet);
 
+        // @todo : get except this happening
         $availableParticipants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getAvailableParticipants(

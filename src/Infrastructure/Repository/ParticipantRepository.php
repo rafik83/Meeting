@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -196,40 +197,18 @@ class ParticipantRepository implements ParticipantRepositoryInterface
      */
     public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('participant')
-            ->from(Participant::class, 'participant')
-            ->where('participant.sheet = :sheet')
-            ->setParameter('sheet', $sheet);
-
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->andX(
-                // Participant have not already a meeting at this slot (except this one)
-                'NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id = participant OR tp.id = participant) AND m.slot = :slot AND m != :meeting)',
-                // Participant have not unavailability during this slot
-                'NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant = participant AND (u.begin BETWEEN :slot_begin AND :slot_end OR u.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN u.begin AND u.end OR :slot_end BETWEEN u.begin AND u.end))',
-                // Participant have not blocking participation
-                'NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant = participant AND (h.begin BETWEEN :slot_begin AND :slot_end OR h.end BETWEEN :slot_begin AND :slot_end OR :slot_begin BETWEEN h.begin AND h.end OR :slot_end BETWEEN h.begin AND h.end))'
-            )
-        );
-
-        $queryBuilder->setParameter('meeting', $meeting);
-        $queryBuilder->setParameter('slot', $meeting->getSlot());
-        $queryBuilder->setParameter('slot_begin', $meeting->getSlot()->getBegin());
-        $queryBuilder->setParameter('slot_end', $meeting->getSlot()->getEnd());
-
-        return $queryBuilder->getQuery()->getResult();
+        return $this->getAvailableParticipantsForMeeting($sheet->getParticipants()->toArray(), $meeting);
     }
 
     /**
      * {@inheritdoc}
      */
     public function getAvailableParticipants(
-        $participants,
+        array $participants,
         \DateTimeInterface $begin,
-        \DateTimeInterface $end
+        \DateTimeInterface $end,
+        Meeting $exceptedMeeting = null,
+        Happening $exceptedHappening = null
     ) {
         $queryBuilder = $this
             ->entityManager
@@ -241,18 +220,94 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
-                // Participant have not already a meeting at period
-                'NOT EXISTS (SELECT m.id FROM Entity:Meeting m JOIN m.slot slot LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE (fp.id = participant OR tp.id = participant) AND (slot.begin BETWEEN :begin AND :end OR slot.end BETWEEN :begin AND :end OR :begin BETWEEN slot.begin AND slot.end OR :end BETWEEN slot.begin AND slot.end))',
+                // Participant have not already a meeting during this period
+                "NOT EXISTS (
+                    SELECT m.id
+                    FROM Entity:Meeting m
+                    JOIN m.slot slot
+                    LEFT JOIN m.fromParticipants fp
+                    LEFT JOIN m.toParticipants tp
+                    WHERE
+                        TRUE AND
+                        " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : 'TRUE') . "
+                        AND (fp.id = participant OR tp.id = participant)
+                        AND (
+                            slot.begin BETWEEN :begin AND :end
+                            OR slot.end BETWEEN :begin AND :end
+                            OR :begin BETWEEN slot.begin AND slot.end
+                            OR :end BETWEEN slot.begin AND slot.end
+                        )
+                )",
                 // Participant have not unavailability during this period
-                'NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant = participant AND (u.begin BETWEEN :begin AND :end OR u.end BETWEEN :begin AND :end) OR (:begin BETWEEN u.begin AND u.end OR :end BETWEEN u.begin AND u.end))',
-                // Participant have not blocking participation
-                'NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant = participant AND (h.begin BETWEEN :begin AND :end OR h.end BETWEEN :begin AND :end OR :begin BETWEEN h.begin AND h.end OR :end BETWEEN h.begin AND h.end))'
+                "NOT EXISTS (
+                    SELECT u.id
+                    FROM Entity:Unavailability u
+                    WHERE
+                        TRUE AND
+                        u.participant = participant
+                        AND (
+                            u.begin BETWEEN :begin AND :end
+                            OR u.end BETWEEN :begin AND :end
+                            OR :begin BETWEEN u.begin AND u.end
+                            OR :end BETWEEN u.begin AND u.end
+                        )
+                )",
+                // Participant have not happening during this period
+                "NOT EXISTS (
+                    SELECT hp.id
+                    FROM Entity:HappeningParticipation hp
+                    JOIN hp.happening h
+                    WHERE
+                        TRUE AND
+                        " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : 'TRUE') . "
+                        AND hp.participant = participant
+                        AND (
+                            h.begin BETWEEN :begin AND :end
+                            OR h.end BETWEEN :begin AND :end
+                            OR :begin BETWEEN h.begin AND h.end
+                            OR :end BETWEEN h.begin AND h.end
+                        )
+                )"
             )
         );
 
-        $queryBuilder->setParameter('begin', $begin);
-        $queryBuilder->setParameter('end', $end);
+        if (null !== $exceptedMeeting) {
+            $queryBuilder->setParameter('exceptedMeeting', $exceptedMeeting);
+        }
+
+        if (null !== $exceptedHappening) {
+            $queryBuilder->setParameter('exceptedHappening', $exceptedHappening);
+        }
+
+        $queryBuilder
+            ->setParameter('begin', $begin)
+            ->setParameter('end', $end);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting) {
+        return $this->getAvailableParticipants(
+            $participants,
+            $meeting->getSlot()->getBegin(),
+            $meeting->getSlot()->getEnd(),
+            $meeting
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAvailableParticipantsForHappening(array $participants, Happening $happening) {
+        return $this->getAvailableParticipants(
+            $participants,
+            $happening->getBegin(),
+            $happening->getEnd(),
+            null,
+            $happening
+        );
     }
 }
