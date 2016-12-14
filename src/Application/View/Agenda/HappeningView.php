@@ -53,6 +53,16 @@ class HappeningView
     public $speakers;
 
     /**
+     * @var bool
+     */
+    public $isFull = false;
+
+    /**
+     * @var int|null
+     */
+    public $limitParticipant;
+
+    /**
      * @param int                $id
      * @param string             $code
      * @param \DateTimeInterface $begin
@@ -63,6 +73,7 @@ class HappeningView
      * @param string             $picto
      * @param string             $leftColor
      * @param string             $rightColor
+     * @param null|int           $limitParticipant
      */
     public function __construct(
         $id,
@@ -74,18 +85,20 @@ class HappeningView
         array $speakers,
         $picto,
         $leftColor,
-        $rightColor
+        $rightColor,
+        $limitParticipant = null
     ) {
-        $this->id          = $id;
-        $this->code        = $code;
-        $this->begin       = $begin;
-        $this->end         = $end;
-        $this->title       = $title;
-        $this->description = $description;
-        $this->speakers    = $speakers;
-        $this->picto       = $picto;
-        $this->leftColor   = $leftColor;
-        $this->rightColor  = $rightColor;
+        $this->id               = $id;
+        $this->code             = $code;
+        $this->begin            = $begin;
+        $this->end              = $end;
+        $this->title            = $title;
+        $this->description      = $description;
+        $this->speakers         = $speakers;
+        $this->picto            = $picto;
+        $this->leftColor        = $leftColor;
+        $this->rightColor       = $rightColor;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**

@@ -49,7 +49,8 @@ class HappeningViewQueryHandler
             $speakers,
             $happening->getCategory()->getPicto(),
             $happening->getCategory()->getLeftColor(),
-            $happening->getCategory()->getRightColor()
+            $happening->getCategory()->getRightColor(),
+            $happening->getLimitParticipant()
         );
     }
 }

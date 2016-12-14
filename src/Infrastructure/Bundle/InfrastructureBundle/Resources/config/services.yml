@@ -1997,9 +1997,13 @@ services:
             - '@query.happening.day_view_query_handler'
             - '@query.happening.happening_participation_query_handler'
             - '@repository.unavailability.mass_repository'
+            - '@query.happening.full_happening_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
-
+    query.happening.full_happening_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     ##
     #

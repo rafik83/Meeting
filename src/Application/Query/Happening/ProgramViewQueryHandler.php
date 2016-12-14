@@ -38,21 +38,29 @@ class ProgramViewQueryHandler
     private $massRepository;
 
     /**
+     * @var FullHappeningQueryHandler
+     */
+    private $fullHappeningQueryHandler;
+
+    /**
      * @param DayRepositoryInterface             $dayRepository
      * @param DayViewQueryHandler                $dayViewQueryHandler
      * @param HappeningParticipationQueryHandler $happeningParticipationQueryHandler
      * @param MassRepositoryInterface            $massRepository
+     * @param FullHappeningQueryHandler          $fullHappeningQueryHandler
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
         DayViewQueryHandler $dayViewQueryHandler,
         HappeningParticipationQueryHandler $happeningParticipationQueryHandler,
-        MassRepositoryInterface $massRepository
+        MassRepositoryInterface $massRepository,
+        FullHappeningQueryHandler $fullHappeningQueryHandler
     ) {
         $this->dayRepository                      = $dayRepository;
         $this->dayViewQueryHandler                = $dayViewQueryHandler;
         $this->happeningParticipationQueryHandler = $happeningParticipationQueryHandler;
         $this->massRepository                     = $massRepository;
+        $this->fullHappeningQueryHandler          = $fullHappeningQueryHandler;
     }
 
     /**
@@ -103,6 +111,10 @@ class ProgramViewQueryHandler
                 $programViewQuery->sheet,
                 $programViewQuery->user
             )
+        );
+
+        $this->fullHappeningQueryHandler->handle(
+            new FullHappeningQuery($programView, $programViewQuery->event)
         );
 
         return $programView;

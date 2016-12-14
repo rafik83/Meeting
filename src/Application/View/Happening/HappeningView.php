@@ -77,7 +77,12 @@ class HappeningView
     /**
      * @var bool
      */
-    public $isFull;
+    public $isFull = false;
+
+    /**
+     * @var int|null
+     */
+    public $limitParticipant;
 
     /**
      * HappeningView constructor.
@@ -91,6 +96,7 @@ class HappeningView
      * @param string                $description
      * @param string|null           $picture
      * @param Speaker[]             $speakers
+     * @param null|int              $limitParticipant
      * @param bool                  $isFull
      */
     public function __construct(
@@ -103,18 +109,20 @@ class HappeningView
         $description,
         $picture,
         array $speakers,
+        $limitParticipant = null,
         $isFull = false
     ) {
-        $this->id          = $id;
-        $this->category    = $category;
-        $this->beginHour   = $beginHour;
-        $this->endHour     = $endHour;
-        $this->title       = $title;
-        $this->description = $description;
-        $this->picture     = $picture;
-        $this->speakers    = $speakers;
-        $this->code        = $code;
-        $this->isFull      = $isFull;
+        $this->id               = $id;
+        $this->category         = $category;
+        $this->beginHour        = $beginHour;
+        $this->endHour          = $endHour;
+        $this->title            = $title;
+        $this->description      = $description;
+        $this->picture          = $picture;
+        $this->speakers         = $speakers;
+        $this->code             = $code;
+        $this->isFull           = $isFull;
+        $this->limitParticipant = $limitParticipant;
     }
 
     /**
@@ -235,5 +243,13 @@ class HappeningView
     public function hasParticipations()
     {
         return $this->hasParticipations;
+    }
+
+    /**
+     * Set isFull to true
+     */
+    public function setIsFull()
+    {
+        $this->isFull = true;
     }
 }
