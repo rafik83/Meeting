@@ -140,6 +140,9 @@
                         {% if not sheet.isEnabled %}
                             <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
                         {% endif %}
+                        {% if sheet.countParticipant > 1 %}
+                            <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
+                        {% endif %}
                         <br>
                         <small>
                             {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }} <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
