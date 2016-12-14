@@ -1972,6 +1972,12 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserListViewQuery }
+
+    query.catalog.search_facet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.search_facet'
+
     query.mail.participant_mail_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler
         arguments:

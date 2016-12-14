@@ -5,6 +5,14 @@
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
     {% endif %}
 
+    {% if searchForm.objective is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.objective.vars.label|trans({}, searchForm.objective.vars.translation_domain) }}</h3>
+
+            {{ form_widget(searchForm.objective) }}
+        </div>
+    {% endif %}
+
     {% if searchForm.organizationCategory is defined %}
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
@@ -26,7 +34,6 @@
                     data-label-input-too-short="{{ 'form.search.autocomplete.atLeastTwoChars'|trans({}, 'forms') }}"
                     data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
                     data-action="{{ path('event_catalog_search_localization') }}"
-                    data-placeholder="{{ 'form.search.localization.search.placeholder'|trans({}, searchForm.vars.translation_domain) }}"
                     data-minimum-input-length="2"
                     class="form-control">
             </select>
@@ -47,42 +54,11 @@
                     data-label-input-too-short="{{ 'form.search.autocomplete.atLeastThreeChars'|trans({}, 'forms') }}"
                     data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
                     data-action="{{ path('event_catalog_search_keywords') }}"
-                    data-placeholder="{{ 'form.search.keywords.search.placeholder'|trans({}, searchForm.vars.translation_domain) }}"
                     data-minimum-input-length="3"
                     class="form-control">
             </select>
         </div>
     {% endif %}
-
-    {#
-    <form>
-        <div class="filter">
-            <h3 class="collapsed" role="button" data-toggle="collapse" data-target="#collapse-2"
-                aria-expanded="false" aria-controls="collapse-2">Objectifs</h3>
-
-            <div class="collapse" id="collapse-2">
-                <ul>
-                    <li>
-                        <label class="checkbox-inline">
-                            <span class="filter-label"><input type="checkbox" checked="checked">Répondre à mes besoins</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label class="checkbox-inline">
-                            <span class="filter-label"><input type="checkbox">Rechercher mes offres</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label class="checkbox-inline">
-                            <span class="filter-label"><input type="checkbox">Autres</span>
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <button class="btn btn-primary"><i class="icon-Rechercher"></i> Voir les résultats (20)</button>
-    </form>
-    #}
 
     {#
     <div class="actions">
@@ -99,7 +75,7 @@
 <div class="catalog__filters">
 
     <div class="select-all">
-        ({{ total }})
+        <span class="total-result">({{ total }})</span>
         {#
         <label class="checkbox-inline" for="select-all-catalog">
             <input type="checkbox" id="select-all-catalog">

@@ -395,6 +395,18 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $objective
+     *
+     * @return TemplateObject\Nomenclature[]
+     */
+    public function getNomenclatureObjectsByObjective($objective)
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) use ($objective) {
+            return $object instanceof TemplateObject\Nomenclature && $object->getObjective() === $objective;
+        });
+    }
+
+    /**
      * @param $locale
      *
      * @return null|string

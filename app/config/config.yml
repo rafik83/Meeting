@@ -214,6 +214,16 @@ fos_elastica:
                             properties:
                                 key:
                                     type: string
+                        nomenclatureItemsSupply:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        nomenclatureItemsNeeds:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
                         zipcode:
                             type: string
                             index: "not_analyzed"

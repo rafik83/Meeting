@@ -17,16 +17,20 @@ use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
+use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
+use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FollowerChoiceType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 
 class SheetSearchQueryBuilder
 {
@@ -37,25 +41,45 @@ class SheetSearchQueryBuilder
     // Percentage content minimum should match
     const CONTENT_MINIMUM_SHOULD_MATCH = 70;
 
-    /** @var BoolQuery */
+    /**
+     * @var BoolQuery
+     */
     private $query;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $locale;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $initialBooster = 1;
+
+    /**
+     * Array of nomenclature items with all nomenclature objective
+     *
+     * @var array
+     */
+    private $nomenclatureItems;
 
     /**
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
      * @param int    $initialBooster
+     * @param array  $nomenclatureItems
      */
-    public function __construct(Event $event, array $filters, $locale, $initialBooster = 1)
-    {
-        $this->locale         = $locale;
-        $this->initialBooster = $initialBooster;
+    public function __construct(
+        Event $event,
+        array $filters,
+        $locale,
+        $initialBooster = 1,
+        $nomenclatureItems = []
+    ) {
+        $this->locale            = $locale;
+        $this->initialBooster    = $initialBooster;
+        $this->nomenclatureItems = $nomenclatureItems;
 
         $this->query = new BoolQuery();
         $this->matchEvent($event);
@@ -133,6 +157,10 @@ class SheetSearchQueryBuilder
         $this->filterByLocalization($filters);
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
+
+        if (isset($filters[SearchType::FILTER_OBJECTIVE])) {
+            $this->filterByObjective($filters[SearchType::FILTER_OBJECTIVE]);
+        }
     }
 
     /**
@@ -262,7 +290,7 @@ class SheetSearchQueryBuilder
     protected function filterByEnabled(array &$filters)
     {
         if (isset($filters['enabled'])) {
-            $this->query->addMust((new Term())->setTerm('enabled', (bool) $filters['enabled']));
+            $this->query->addMust((new Term())->setTerm('enabled', (bool)$filters['enabled']));
         }
     }
 
@@ -529,6 +557,36 @@ class SheetSearchQueryBuilder
 
             $nested->setQuery($matchPosition);
             $this->query->addMust($nested);
+        }
+    }
+
+    /**
+     * @param array $objectives
+     */
+    private function filterByObjective(array $objectives)
+    {
+        $queryBuilder = new NomenclatureQueryBuilder($this->nomenclatureItems);
+
+        try {
+            if (in_array(Nomenclature::OBJECTIVE_NEED, $objectives) &&
+                in_array(Nomenclature::OBJECTIVE_SUPPLY, $objectives)
+            ) {
+                $this->query->addMust($queryBuilder->filterBySupplyOrder());
+
+                return;
+            }
+
+            if (in_array(Nomenclature::OBJECTIVE_NEED, $objectives)) {
+                $this->query->addMust($queryBuilder->filterByNeed()->getQuery());
+            }
+
+            if (in_array(Nomenclature::OBJECTIVE_SUPPLY, $objectives) &&
+                isset($this->nomenclatureItems[Nomenclature::OBJECTIVE_SUPPLY])
+            ) {
+                $this->query->addMust($queryBuilder->filterBySupply()->getQuery());
+            }
+        } catch (NomenclatureNotFoundException $exception) {
+            return;
         }
     }
 }

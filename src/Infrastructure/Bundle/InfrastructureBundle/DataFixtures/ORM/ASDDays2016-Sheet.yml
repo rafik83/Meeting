@@ -69,9 +69,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 # Media
                 211efd1f: { medias: [{ title: { fr: "Brochure de présentation" }, url: "http://www.onera.fr/brochure-presentation.pdf", type: "document" }, { title: { fr: "Projet Horizon 2020" }, url: "http://www.onera.fr/projet-horizon-2020.pdf", type: "document" }] }
                 # Offre
-                03b394ac: { items: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"] }
+                03b394ac: { items: ["ab93de01","ab93de02","ab93de03","ab93de04"] }
                 # Besoins
-                63ccc105: { items: ["ab93de01","ab93de02","ab93de03","ab93de04","ab93de05","ab93de06","ab93de07"] }
+                63ccc105: { items: ["ab93de05","ab93de06","ab93de07"] }
                 # Description
                 d927a04b: { text: { fr: "Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur." } }
             - '@user_asddays_1'
@@ -93,7 +93,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_asddays_2016'
             - '@event_asddays_2016_type_fournisseur'
-            - []
+            -
+                # Offre
+                03b394ac: { items: ["ab93de06","ab93de05"] }
+                # Besoins
+                63ccc105: { items: [] }
             - '@user_asddays_2'
             - <dateTime()>
         registrationData:
@@ -113,7 +117,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
         __construct:
             - '@event_asddays_2016'
             - '@event_asddays_2016_type_investisseur'
-            - []
+            -
+                # Offre
+                03b394ac: { items: ["ab93de07","ab93de01"] }
+                # Besoins
+                63ccc105: { items: ["ab93de04","ab93de07"] }
             - '@user_asddays_3'
             - <dateTime()>
         registrationData:

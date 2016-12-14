@@ -26,6 +26,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         owner: '@user_test'
         createdAt: <dateTime()>
         lastLoginAt: <dateTime()>
+        inCatalog: true
 
     # Proximum sheets
     proximum_sheet_visiteur:
