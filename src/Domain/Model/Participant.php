@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * "Participant".
  */
@@ -56,6 +58,11 @@ class Participant
     private $registrationComplete = false;
 
     /**
+     * @var ArrayCollection
+     */
+    private $happeningParticipations;
+
+    /**
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
@@ -63,10 +70,11 @@ class Participant
      */
     public function __construct(Sheet $sheet, User $user, array $data, $active)
     {
-        $this->sheet  = $sheet;
-        $this->user   = $user;
-        $this->data   = $data;
-        $this->active = $active;
+        $this->sheet                   = $sheet;
+        $this->user                    = $user;
+        $this->data                    = $data;
+        $this->active                  = $active;
+        $this->happeningParticipations = new ArrayCollection();
     }
 
     /**
@@ -220,5 +228,13 @@ class Participant
         $this->registrationComplete = $registrationComplete;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getHappeningParticipations()
+    {
+        return $this->happeningParticipations;
     }
 }

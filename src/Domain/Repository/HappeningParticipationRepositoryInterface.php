@@ -64,4 +64,10 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation[]
      */
     public function getParticipationsForSheet(Sheet $sheet, $happenings);
+
+    /**
+     * @param Participant $participant
+     * @param Happening   $happening
+     */
+    public function removeParticipantForHappening(Participant $participant, Happening $happening);
 }

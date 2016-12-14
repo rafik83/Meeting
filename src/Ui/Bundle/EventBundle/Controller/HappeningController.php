@@ -47,6 +47,22 @@ class HappeningController extends Controller
             throw $this->createNotFoundException('Happening or sheet not in this event');
         }
 
+        $selectedParticipants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantsForHappening($sheet, $happening);
+
+        $previousQuestion = null;
+
+        if (count($selectedParticipants) > 0 && $happening->isQuestionAllowed()) {
+            $question = $this
+                ->get('vimeet_infrastructure.repository.happening_question_repository')
+                ->getByUserAndHappening($this->getUser(), $happening);
+
+            if (null !== $question) {
+                $previousQuestion = $question->getContent();
+            }
+        }
+
         $participants           = $sheet->getParticipants()->toArray();
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
 
@@ -54,17 +70,17 @@ class HappeningController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getAvailableParticipantsForHappening($participants, $happening);
 
-        // Case : current user is not available for this happening, do not show modal
-        if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
-            return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+        // Case : user alone in sheet and it is new participation, he is selected directly
+        if (true === $isUserAloneParticipant && 0 === count($selectedParticipants)) {
+            $selectedParticipants = $participants;
+
+            // Case : current user is not available for this happening, do not show modal
+            if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
+                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+            }
         }
 
-        // Case : happening is full
-        if (true === $this->get('domain.happening.participation_count')->isFull($happening)) {
-            return $this->createJsonResponseWithError('happening.participate.notEnoughtRemainingParticipations', [], 0);
-        }
-
-        // Case : one participant is current user and no question
+        // Case : one participant is current user and no question so no modal
         if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
             try {
                 $participate = new Participate($happening, $sheet, $this->getUser(), $participants);
@@ -88,7 +104,8 @@ class HappeningController extends Controller
             $happening,
             $sheet,
             $this->getUser(),
-            true === $isUserAloneParticipant ? $participants : []
+            $selectedParticipants,
+            $previousQuestion
         );
 
         // Create Participate form

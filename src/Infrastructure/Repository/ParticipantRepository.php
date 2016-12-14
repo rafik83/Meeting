@@ -344,4 +344,27 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             $happening
         );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsForHappening(Sheet $sheet, Happening $happening)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join(
+                'participant.happeningParticipations',
+                'happeningParticipation',
+                'WITH',
+                'participant.sheet = :sheet AND happeningParticipation.happening = :happening'
+            )
+            ->setParameter('sheet', $sheet)
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

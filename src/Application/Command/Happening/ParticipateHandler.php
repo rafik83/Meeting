@@ -67,7 +67,13 @@ class ParticipateHandler
      */
     public function handle(Participate $participate)
     {
-        if (0 === count($participate->participants)) {
+        $previousParticipants = $this->participantRepository->getParticipantsForHappening(
+            $participate->sheet,
+            $participate->happening
+        );
+
+        // If not previous selected participant and not current not selected Participant
+        if (0 === count($participate->participants) && 0 === count($previousParticipants)) {
             throw new ParticipantRequiredException();
         }
 
@@ -78,39 +84,54 @@ class ParticipateHandler
 
         $remainingParticipations = $this->participationCount->getRemaining($participate->happening);
 
-        if (count($participate->participants) > $remainingParticipations) {
+        if (count($participate->participants) - count($previousParticipants) > $remainingParticipations) {
             throw new NotEnoughtRemainingParticipationsException($remainingParticipations);
         }
 
         foreach ($participate->participants as $participant) {
-            $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndParticipant(
-                $participate->happening,
-                $participant
-            );
+            if (!in_array($participant, $availableParticipants)) {
+                throw new ParticipantNotAvailableException();
+            }
+        }
 
-            if (null === $happeningParticipation) {
-                if (!in_array($participant, $availableParticipants)) {
-                    throw new ParticipantNotAvailableException();
-                }
-
-                // Add participant to happening
+        // Add participants to happening
+        foreach ($participate->participants as $participant) {
+            if (false === in_array($participant, $previousParticipants)) {
                 $this->happeningParticipationRepository->add(
                     new HappeningParticipation($participate->happening, $participant)
                 );
             }
         }
 
-        // Add question
-        if ($participate->happening->isQuestionAllowed() && !empty($participate->question)) {
-            $this->questionRepository->add(
-                new Question(
-                    $participate->happening,
-                    $participate->sheet,
-                    $participate->createdBy,
-                    $this->dateTime,
-                    $participate->question
-                )
+        // Remove deselected participants
+        foreach ($previousParticipants as $participant) {
+            if (false === in_array($participant, $participate->participants)) {
+                $this->happeningParticipationRepository->removeParticipantForHappening(
+                    $participant,
+                    $participate->happening
+                );
+            }
+        }
+
+        if (true === $participate->happening->isQuestionAllowed()) {
+            // Remove previous question
+            $this->questionRepository->removeQuestionFromUserForHappening(
+                $participate->createdBy,
+                $participate->happening
             );
+
+            // Add question
+            if (0 < count($participate->participants)&& !empty($participate->question)) {
+                $this->questionRepository->add(
+                    new Question(
+                        $participate->happening,
+                        $participate->sheet,
+                        $participate->createdBy,
+                        $this->dateTime,
+                        $participate->question
+                    )
+                );
+            }
         }
     }
 }

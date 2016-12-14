@@ -136,4 +136,12 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getAvailableParticipantsForHappening(array $participants, Happening $happening);
+
+    /**
+     * @param Sheet     $sheet
+     * @param Happening $happening
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
 }
