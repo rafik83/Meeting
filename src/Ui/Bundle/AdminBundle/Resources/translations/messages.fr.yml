@@ -27,11 +27,13 @@ admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
+admin.dashboard.link: 'Tableau de bord'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.title: 'Créer un événement'
+admin.event.dashboard.title: 'Tableau de bord'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.page.list.title: 'Liste de mes événements'
@@ -105,6 +107,7 @@ admin.happening.link: Conférences
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin
+admin.happening.list.question: 'Question ?'
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
 admin.happening.menu.link: Programme
@@ -289,6 +292,9 @@ admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
+admin.sheet.dashboard.totalOrders: 'Total des commandes'
+admin.sheet.dashboard.totalPaid: 'Total soldé'
+admin.sheet.dashboard.totalRemainingToPay: 'Total restant'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société
@@ -427,6 +433,8 @@ admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.button.mass: 'Indisponibilité de masse'
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.category.add: Ajouter
 admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'
@@ -437,6 +445,19 @@ admin.unavailability.category.table.column.title: Titre
 admin.unavailability.category.table.content.update: Modifier
 admin.unavailability.category.title: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.category.update: 'Modification d''une catégorie d''indisponibilité de masse'
+admin.unavailability.mass.add: 'Ajouter'
+admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
+admin.unavailability.mass.link: 'Indisponibilité de masse'
+admin.unavailability.mass.table.column.begin: Debut
+admin.unavailability.mass.table.column.category: Catégorie
+admin.unavailability.mass.table.column.name: 'Nom back office'
+admin.unavailability.mass.table.column.title: Titre
+admin.unavailability.mass.table.column.end: Fin
+admin.unavailability.mass.table.content.update: Modifier
+admin.unavailability.mass.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette indisponbilité?'
+admin.unavailability.mass.action.delete: Supprimer
+admin.unavailability.mass.title: 'Indisponibilité de masse'
+admin.unavailability.mass.update: 'Modification d''une indisponibilité de masse'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'
 admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'

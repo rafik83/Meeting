@@ -190,6 +190,12 @@ services:
             - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }
+    form_type_unavailability_category.choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\ChoiceType
+        arguments:
+            - '@repository.unavailability.category_repository'
+        tags:
+            - { name: form.type }
 
     #
     # Helper

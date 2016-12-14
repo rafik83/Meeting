@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
@@ -108,5 +109,24 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->setParameter('state', Transaction::STATE_PAID);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('transaction')
+            ->from(Transaction::class, 'transaction')
+            ->join('transaction.sheet', 'sheet', 'WITH', 'sheet.enable = true')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event)
+        ;
+
+       return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -4,44 +4,34 @@
 
 {% block content %}
     <div class="agenda-container">
-        <header class="agenda-head">
-            <p>
-                <i class="icon icon-Conference"></i>
-                <strong>Conférences</strong>
-                <span>- Jeudi 02 février 2017</span>
-            </p>
-        </header>
         <div class="row">
-            <div class="col-md-6 agenda" {#data-beginHour="{{ happeningList.startTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}"#}>
-                <div class="meets">
+            {% for day in agenda.days %}
+                <div class="col-md-{{ agenda.colSize }} agenda" data-beginHour="{{ day.begin|date('H:i', event.timeZone) }}" data-endHour="{{ day.end|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.getScale }}">
+                    <header class="agenda-head">
+                        <p>
+                            <i class="icon icon-Calendrier"></i>
+                            {% if loop.first %}
+                            <strong>
+                                {{ 'agenda.title'|trans }}
+                            </strong>
+                            {% endif %}
+                            <span>- {{ day.day|localizeddate('full', 'none')|capitalize }}</span>
+                        </p>
+                    </header>
+                    <div class="meets">
+                        {% for happening in day.happenings %}
+                            {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening }) }}
+                        {% endfor %}
+                        {% for unavailability in day.unavailabilities %}
+                            {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheet': agenda.sheet, 'unavailability': unavailability }) }}
+                        {% endfor %}
+                        {% for mass in day.masses %}
+                            {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
+                        {% endfor %}
+                    </div>
+                    <div class="layout"></div>
                 </div>
-                <div class="layout"></div>
-                <footer class="agenda-foot">
-                    <p>
-                        <i class="icon icon-Deverouiller_1"></i>
-                        <strong>Disponibilité restantes</strong>
-                        <span>- 17 plages horaires</span>
-                    </p>
-                </footer>
-            </div>
-            <div class="col-md-6 agenda" {#data-beginHour="{{ happeningList.middleTime|date('H:i', event.timeZone) }}" data-endHour="{{ happeningList.endTime|date('H:i', event.timeZone) }}" data-slotDuration="{{ happeningList.scale }}"#}>
-                <div class="meets">
-                    {#
-                    {% for meeting in happeningList.afternoon %}
-                        {{ include('EventBundle:Agenda:meeting.html.twig', {'meeting': meeting}) }}
-                    {% endfor %}
-                    #}
-                </div>
-                <div class="layout"></div>
-                <footer class="agenda-foot">
-                    <p>
-                        A voir également
-                        <a href="#conferences" class="btn btn-gray">
-                            <i class="icon icon-Conference"></i> Conférences
-                        </a>
-                    </p>
-                </footer>
-            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

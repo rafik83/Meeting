@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Order;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -29,6 +30,16 @@ class Balance
     private $transactionRepository;
 
     /**
+     * @var array
+     */
+    private $transactions = [];
+
+    /**
+     * @var array
+     */
+    private $orders = [];
+
+    /**
      * @param OrderRepositoryInterface       $orderRepository
      * @param TransactionRepositoryInterface $transactionRepository
      */
@@ -41,13 +52,37 @@ class Balance
     }
 
     /**
+     * @param Event $event
+     */
+    public function loadAllTransactions(Event $event)
+    {
+        $this->transactions[$event->getId()] = $this->transactionRepository->findByEvent($event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function loadAllOrders(Event $event)
+    {
+        $orders = $this->orderRepository->findByEvent($event);
+
+        foreach ($orders as $order) {
+            $this->orders[$event->getId()][$order->getSheet()->getId()] = $order;
+        }
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Order[]
      */
     public function getOrders(Sheet $sheet)
     {
-        return $this->orderRepository->findBySheet($sheet);
+        if (!isset($this->orders[$sheet->getEvent()->getId()][$sheet->getId()])) {
+            $this->orders[$sheet->getEvent()->getId()][$sheet->getId()] = $this->orderRepository->findBySheet($sheet);
+        }
+
+        return $this->orders[$sheet->getEvent()->getId()][$sheet->getId()];
     }
 
     /**
@@ -57,7 +92,9 @@ class Balance
      */
     public function getNotCancelledOrders(Sheet $sheet)
     {
-        return array_filter($this->getOrders($sheet), function (Order $order) {
+        $orders = $this->getOrders($sheet);
+
+        return array_filter($orders, function (Order $order) {
             return !$order->isCancelled();
         });
     }
@@ -69,7 +106,11 @@ class Balance
      */
     public function getTransactions(Sheet $sheet)
     {
-        return $this->transactionRepository->findBySheet($sheet);
+        if (!isset($this->transactions[$sheet->getEvent()->getId()][$sheet->getId()])) {
+            $this->transactions[$sheet->getEvent()->getId()][$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
+        }
+
+        return $this->transactions[$sheet->getEvent()->getId()][$sheet->getId()];
     }
 
     /**
@@ -116,6 +157,99 @@ class Balance
         $transactions = $this->getTransactions($sheet);
 
         return array_reduce($transactions, function ($carry, Transaction $transaction) {
+            if ($carry < 0) {
+                return 0;
+            }
+
+            if (!$transaction->isPaid()) {
+                return $carry;
+            }
+
+            if (($carry - $transaction->getAmount()) < 0) {
+                return 0;
+            }
+
+            return $carry - $transaction->getAmount();
+        }, $total);
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return float
+     */
+    public function getTotalPaid(Sheet $sheet)
+    {
+        $totalPaid    = 0;
+        $transactions = $this->getTransactions($sheet);
+
+        foreach ($transactions as $transaction) {
+            if ($transaction->isPaid()) {
+                $totalPaid += $transaction->getAmount();
+            }
+        }
+
+        return $totalPaid;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function getNotCancelledOrdersFromEvent(Event $event)
+    {
+        if (!isset($this->orders[$event->getId()])) {
+            return [];
+        }
+
+        return array_filter($this->orders[$event->getId()], function (Order $order) {
+            return !$order->isCancelled();
+        });
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return float
+     */
+    public function getTransactionsTotalPaid(Event $event)
+    {
+        $totalPaid = 0;
+
+        foreach ($this->transactions[$event->getId()] as $transaction) {
+            if ($transaction->isPaid()) {
+                $totalPaid += $transaction->getAmount();
+            }
+        }
+
+        return $totalPaid;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return float
+     */
+    public function getOrdersTotal(Event $event)
+    {
+        $orders = $this->getNotCancelledOrdersFromEvent($event);
+
+        return array_reduce($orders, function ($carry, Order $order) {
+            return $carry + $order->getTotal();
+        }, 0);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return float
+     */
+    public function getOrdersTotalRemainingToPay(Event $event)
+    {
+        $total = $this->getOrdersTotal($event);
+
+        return array_reduce($this->transactions[$event->getId()], function ($carry, Transaction $transaction) {
             if ($carry < 0) {
                 return 0;
             }
