@@ -36,6 +36,9 @@ final class Category
     const AGENDA      = 'navigation.category.planning';
     const AGENDA_ICON = 'icon-Calendrier';
 
+    const PROGRAM       = 'navigation.category.program';
+    const PROGRAM_ICON  = 'icon-Calendrier';
+
     static public $categories = [
         self::MEMBER_SPACE,
         self::BILLING,
@@ -44,5 +47,6 @@ final class Category
         self::CATALOG,
         self::MEETING,
         self::PLANNING,
+        self::PROGRAM,
     ];
 }

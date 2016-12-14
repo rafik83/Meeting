@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -97,11 +98,42 @@ interface ParticipantRepositoryInterface
     public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
 
     /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEnabledSheet(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function countByTypeWithEnabledSheet(Event $event, $locale);
+
+    /**
      * @param Participant[]      $participants
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      *
      * @return Participant[]
      */
-    public function getAvailableParticipants($participants, \DateTimeInterface $begin, \DateTimeInterface $end);
+    public function getAvailableParticipants(array $participants, \DateTimeInterface $begin, \DateTimeInterface $end);
+
+    /**
+     * @param array   $participants
+     * @param Meeting $meeting
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipantsForMeeting(array $participants, Meeting $meeting);
+
+    /**
+     * @param array     $participants
+     * @param Happening $happening
+     *
+     * @return Participant[]
+     */
+    public function getAvailableParticipantsForHappening(array $participants, Happening $happening);
 }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -85,6 +86,51 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipationByHappening(Happening $happening)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(participation)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening  = :happening')
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipationByEvent(Event $event)
+    {
+        $participationCounts = [];
+
+        $results = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening.id, COUNT(participation)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening', 'WITH', 'happening = participation.happening')
+            ->join('happening.event', 'event', 'WITH', 'event = :event')
+            ->setParameter('event', $event)
+            ->groupBy('happening.id')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        //  Reformat the array to key (happening id) => value (count participation)
+        foreach ($results as $result) {
+            $participationCounts[$result['id']] = $result[1];
+        }
+
+        return $participationCounts;
     }
 
     /**

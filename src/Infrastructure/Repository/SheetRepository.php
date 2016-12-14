@@ -300,4 +300,66 @@ class SheetRepository implements SheetRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEnabledSheetsByEvent(Event $event)
+    {
+        $queryBuilder = $this->queryEnabledSheetsByEvent($event);
+
+        $queryBuilder->select('sheet');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countEnabledSheetsByEvent(Event $event)
+    {
+        $queryBuilder = $this->queryEnabledSheetsByEvent($event);
+
+        $queryBuilder->select('COUNT(sheet)');
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function queryEnabledSheetsByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event')
+            ->andWhere('sheet.enable = true')
+            ->setParameter('event', $event);
+
+        return $queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countEnabledSheetsTypeByEvent(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(sheet) as total, type.id, typeTranslation.title')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->where('sheet.event = :event')
+            ->groupBy('type')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
