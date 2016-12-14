@@ -427,6 +427,7 @@ services:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@domain.happening.participation_count'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
@@ -1989,11 +1990,14 @@ services:
         class: Proximum\Vimeet\Application\Query\Happening\SpeakerViewQueryHandler
     query.happening.category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\CategoryViewQueryHandler
+    query.happening.mass_unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQueryHandler
     query.happening.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@query.happening.happening_view_query_handler'
+            - '@query.happening.mass_unavailability_view_query_handler'
     query.happening.happening_participation_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\HappeningParticipationQueryHandler
         arguments:
@@ -2004,9 +2008,14 @@ services:
             - '@repository.event.day_repository'
             - '@query.happening.day_view_query_handler'
             - '@query.happening.happening_participation_query_handler'
+            - '@repository.unavailability.mass_repository'
+            - '@query.happening.full_happening_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
-
+    query.happening.full_happening_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     ##
     #
@@ -2498,3 +2507,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
         arguments:
             - '@session'
+
+    #
+    # Happening
+    #
+    domain.happening.participation_count:
+        class:  Proximum\Vimeet\Domain\Happening\ParticipationCount
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'

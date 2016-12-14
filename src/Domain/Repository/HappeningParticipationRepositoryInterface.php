@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -42,6 +43,20 @@ interface HappeningParticipationRepositoryInterface
      */
     public function findByParticipant(Participant $participant);
 
+    /**
+     * @param Happening $happening
+     *
+     * @return int
+     */
+    public function countParticipationByHappening(Happening $happening);
+
+    /**
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function countParticipationByEvent(Event $event);
+  
     /**
      * @param Sheet       $sheet
      * @param Happening[] $happenings

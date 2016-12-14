@@ -46,6 +46,11 @@ Happening.prototype.handleRequestParticipateButton = function ()
 Happening.prototype.validateParticipation = function () {
     this.happeningParticipateAction.classList.add('hide');
     this.happeningParticipateIcon.classList.remove('hide');
+
+    /* For update */
+    // this.enableParticipateAction();
+    // this.happeningParticipateAction.textContent = this.happeningParticipateAction.getAttribute('data-label-participation-update');
+    // this.happeningParticipateIcon.classList.remove('hide');
 };
 
 Happening.prototype.enableParticipateAction = function () {

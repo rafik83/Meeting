@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
+use Proximum\Vimeet\Domain\Happening\ParticipationCount;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
@@ -29,6 +31,9 @@ class ParticipateHandler
     /** @var QuestionRepositoryInterface */
     private $questionRepository;
 
+    /** @var ParticipationCount */
+    private $participationCount;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -36,23 +41,27 @@ class ParticipateHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param ParticipantRepositoryInterface            $participantRepository
      * @param QuestionRepositoryInterface               $questionRepository
+     * @param ParticipationCount                        $participationCount
      * @param \DateTimeInterface                        $dateTime
      */
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         ParticipantRepositoryInterface $participantRepository,
         QuestionRepositoryInterface $questionRepository,
+        ParticipationCount $participationCount,
         \DateTimeInterface $dateTime
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->participantRepository            = $participantRepository;
         $this->questionRepository               = $questionRepository;
+        $this->participationCount               = $participationCount;
         $this->dateTime                         = $dateTime;
     }
 
     /**
      * @param Participate $participate
      *
+     * @throws NotEnoughtRemainingParticipationsException
      * @throws ParticipantNotAvailableException
      * @throws ParticipantRequiredException
      */
@@ -62,11 +71,16 @@ class ParticipateHandler
             throw new ParticipantRequiredException();
         }
 
-        $availableParticipants = $this->participantRepository->getAvailableParticipants(
+        $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
             $participate->participants,
-            $participate->happening->getBegin(),
-            $participate->happening->getEnd()
+            $participate->happening
         );
+
+        $remainingParticipations = $this->participationCount->getRemaining($participate->happening);
+
+        if (count($participate->participants) > $remainingParticipations) {
+            throw new NotEnoughtRemainingParticipationsException($remainingParticipations);
+        }
 
         foreach ($participate->participants as $participant) {
             $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndParticipant(
