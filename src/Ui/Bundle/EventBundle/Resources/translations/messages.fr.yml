@@ -10,6 +10,7 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.title: 'Mon agenda'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -33,6 +34,7 @@ catalog.meeting_request.request.refused: 'Demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
+catalog.title: 'Catalogue'
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'
@@ -43,11 +45,20 @@ event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
 gender.man: Monsieur
 gender.woman: Madame
+happening.participate.action: Participer
+happening.participate.full: Complet
+happening.participate.noParticipantSelected: 'Vous n''avez sélectionné aucun participant.'
+happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place de disponible|{1} Il ne reste plus qu''une place disponible|]1,Inf[ Il ne reste plus que %remaining% places disponibles'
+happening.participate.participantNotAvailable: 'Au moins un des participants sélectionné n''est pas disponible'
+happening.participate.participantNotFound: 'Participant non trouvé'
+happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
+happening.participationUpdate.action: Modifier
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
+modal.back: Retour
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
 navigation.category.billing: Facturation
 navigation.category.catalog: 'Catalogue des participants'
@@ -209,6 +220,7 @@ package.summary.totalVat: '+ TVA applicable de %vat%%'
 package.title: 'Forfait de participation'
 package.vatMode.ati: TTC
 package.vatMode.et: HT
+program.title: 'Programme'
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
 pro_forma.date.title: 'Date :'
 pro_forma.number.title: 'N° pro-forma :'
@@ -260,3 +272,4 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
+unavailability.title: 'Indisponible'

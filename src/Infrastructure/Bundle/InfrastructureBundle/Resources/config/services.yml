@@ -83,6 +83,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\HappeningParticipationRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.happening_question_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NotificationRepository
         arguments:
@@ -221,6 +225,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\CategoryRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.unavailability.mass_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassRepository
+        arguments:
+                - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -417,6 +425,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\ParticipateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@domain.happening.participation_count'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
     vimeet_infrastructure.vimeet.application.components.happening.unparticipate_handler:
@@ -1264,6 +1276,24 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Category\Update }
+    command.unavailability.mass.create_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\CreateHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Create }
+    command.unavailability.mass.update_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
+    command.unavailability.mass.delete_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler
+        arguments:
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
 
     #
     # Security
@@ -1734,10 +1764,15 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantsViewQueryHandler
         arguments:
             - '@query.package.participant_view_query_handler'
-            - '@cart_manager'
-            - '@order.merger'
+            - '@package.product.included_participant_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
+    query.package.participant_product_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQueryHandler
+        arguments:
+            - '@package.product.included_participant_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery }
     query.package.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Option\GroupsViewQueryHandler
         arguments:
@@ -1867,6 +1902,26 @@ services:
             - '@repository.sheet.completeness_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery }
+
+    query.sheet.dashboard_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQueryHandler
+        arguments:
+            - '@query.sheet.dashboard_transaction_view_query_handler'
+            - '@query.dashboard.dashboard_sheet_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
+
+    query.sheet.dashboard_transaction_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardTransactionViewQueryHandler
+        arguments:
+            - '@order.balance'
+
+    query.dashboard.dashboard_sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Dashboard\DashboardSheetViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+
     query.catalog.type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler
         arguments:
@@ -1929,11 +1984,6 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
 
-    query.catalog.search_facet_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.search_facet'
-
     #
     # Program query
     #
@@ -1946,18 +1996,65 @@ services:
         class: Proximum\Vimeet\Application\Query\Happening\SpeakerViewQueryHandler
     query.happening.category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\CategoryViewQueryHandler
+    query.happening.mass_unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQueryHandler
     query.happening.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@query.happening.happening_view_query_handler'
+            - '@query.happening.mass_unavailability_view_query_handler'
+    query.happening.happening_participation_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\HappeningParticipationQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
     query.happening.program_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\ProgramViewQueryHandler
         arguments:
             - '@repository.event.day_repository'
             - '@query.happening.day_view_query_handler'
+            - '@query.happening.happening_participation_query_handler'
+            - '@repository.unavailability.mass_repository'
+            - '@query.happening.full_happening_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
+    query.happening.full_happening_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+
+    ##
+    #
+    # Agenda Queries
+    #
+    ##
+    query.agenda.speaker_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler
+    query.agenda.unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
+    query.agenda.mass_unavailability_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
+    query.agenda.happening_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
+        arguments:
+            - '@query.agenda.speaker_view_query_handler'
+    query.agenda.day_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\DayViewQueryHandler
+        arguments:
+            - '@query.agenda.happening_view_query_handler'
+            - '@query.agenda.unavailability_view_query_handler'
+            - '@query.agenda.mass_unavailability_view_query_handler'
+    query.agenda.agenda_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@repository.event.day_repository'
+            - '@query.agenda.day_view_query_handler'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@repository.unavailability.mass_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
     ##
     # Navigation builder
@@ -2043,6 +2140,8 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@domain.key_dates.checker.happenings_access_checker'
 
     ##
     # Notification query handler
@@ -2204,6 +2303,11 @@ services:
     package.planning.quantity_min_guesser:
         class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
         arguments:
+            - '@order.merger'
+    package.product.included_participant_guesser:
+        class: Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser
+        arguments:
+            - '@cart_manager'
             - '@order.merger'
     package.specification.vat_applicable:
         class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
@@ -2409,3 +2513,11 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
         arguments:
             - '@session'
+
+    #
+    # Happening
+    #
+    domain.happening.participation_count:
+        class:  Proximum\Vimeet\Domain\Happening\ParticipationCount
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'

@@ -21,7 +21,7 @@ Feature: Program Happening
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
     When I go to this page "/fr/program"
-    Then I should be on this page "/fr/program/day/1"
+    Then I should be on this page "/fr/program"
     And I should see "Elao Talk"
     And I should see "Conférence 3"
     And I should see "Proximum conf"

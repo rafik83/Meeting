@@ -13,13 +13,19 @@ namespace Proximum\Vimeet\Tests\Application\Query\Happening;
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\FullHappeningQuery;
+use Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\HappeningParticipationQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\DayView;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,20 +34,31 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(MissingEventDayConfigurationException::class);
 
         $event = EventFactory::createEvent();
+        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $sheet = SheetFactory::create($event, $user);
 
         // Mock
         $dayRepository = $this->prophesize(DayRepositoryInterface::class);
         $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn([]);
-
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
+        $happeningParticipationQueryHandler = $this->prophesize(HappeningParticipationQueryHandler::class);
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
+
         // Handler
         $handler = new ProgramViewQueryHandler(
             $dayRepository->reveal(),
-            $dayViewQueryHandler->reveal()
+            $dayViewQueryHandler->reveal(),
+            $happeningParticipationQueryHandler->reveal(),
+            $massRepository->reveal(),
+            $fullHappeningQueryHandler->reveal()
         );
+
         $handler->handle(
             new ProgramViewQuery(
                 $event,
+                $sheet,
+                $user,
                 'fr',
                 null,
                 null
@@ -52,6 +69,8 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $event      = EventFactory::createEvent();
+        $user       = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $sheet      = SheetFactory::create($event, $user);
         $startTime1 = new \DateTime('2016-10-12 10:00:00');
         $endTime1   = new \DateTime('2016-10-12 18:00:00');
         $startTime2 = new \DateTime('2016-10-13 10:00:00');
@@ -79,24 +98,40 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $event,
             $eventDay1,
              'fr',
-            null
+            null,
+            []
         ))->shouldBeCalled()->willReturn($dayView1);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
             $eventDay2,
             'fr',
-            null
+            null,
+            []
         ))->shouldBeCalled()->willReturn($dayView2);
+
+        $happeningParticipationQueryHandler = $this->prophesize(HappeningParticipationQueryHandler::class);
+        $happeningParticipationQueryHandler->handle($expected, $sheet, $user);
+
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([]);
+
+        $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
+        $fullHappeningQueryHandler->handle(new FullHappeningQuery($expected, $event))->shouldBeCalled();
 
         // Handler
         $handler = new ProgramViewQueryHandler(
             $dayRepository->reveal(),
-            $dayViewQueryHandler->reveal()
+            $dayViewQueryHandler->reveal(),
+            $happeningParticipationQueryHandler->reveal(),
+            $massRepository->reveal(),
+            $fullHappeningQueryHandler->reveal()
         );
 
         $result = $handler->handle(
             new ProgramViewQuery(
                 $event,
+                $sheet,
+                $user,
                 'fr',
                 null,
                 null

@@ -1,0 +1,35 @@
+<div class="row">
+    {% for speaker in happening.speakers %}
+        <div class="col-md-4 text-center">
+            {% if speaker.hasCompanyPicture %}
+                <img src="{{ speaker.companyPicture|imagine_filter('program_company_logo') }}"/>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="list list--users">
+                <div class="user clearfix">
+                    {% if speaker.hasPicture %}
+                        <div class="user__avatar">
+                                                <span class="bullet">
+                                                </span>
+                            <div class="avatar">
+                                <img src="{{ speaker.picture|imagine_filter('user_avatar') }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="user__avatar">
+                            <span class="bullet"></span>
+                            <div class="avatar">
+                                <p>{{ speaker.initials }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="user__infos">
+                        <p class="name">{{ speaker.firstname|capitalize }} {{ speaker.lastname|upper }}</p>
+                        <p class="job">{{ speaker.position }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

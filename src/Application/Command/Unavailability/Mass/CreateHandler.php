@@ -1,0 +1,51 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2016 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
+
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+
+class CreateHandler
+{
+    /**
+     * @var MassRepositoryInterface
+     */
+    private $massRepository;
+
+    /**
+     * @param MassRepositoryInterface $massRepository
+     */
+    public function __construct(MassRepositoryInterface $massRepository)
+    {
+        $this->massRepository = $massRepository;
+    }
+
+    /**
+     * @param Create $create
+     */
+    public function handle(Create $create)
+    {
+        $mass = new Mass(
+            $create->event,
+            $create->category,
+            $create->name,
+            $create->begin,
+            $create->end,
+            $create->blocking
+        );
+
+        foreach ($create->translations as $locale => $translation) {
+            $mass->createTranslation($locale, $translation['title'], $translation['description']);
+        }
+
+        $this->massRepository->create($mass);
+    }
+}

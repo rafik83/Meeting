@@ -1,0 +1,22 @@
+Proximum\Vimeet\Application\Command\Unavailability\Mass\Create:
+    properties:
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+                        description: ~
+        blocking:
+            - NotNull: ~
+        category:
+            - NotNull: ~
+        name:
+            - NotBlank: ~
+        begin:
+            - NotNull: ~
+        end:
+            - NotNull: ~
+            - Expression:
+                expression: "this.begin < this.end"
+                message: "validators.unavailability.startTimeMustBeBeforeEndTime"

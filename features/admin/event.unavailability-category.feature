@@ -13,7 +13,6 @@ Feature: See, create and update unavailability category
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml       |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml                |
       | Admin.yml                                                                   |
     And I am logged with "test@test.com" on admin
     When I go to this page "/admin/fr/event/1/unavailability/category"

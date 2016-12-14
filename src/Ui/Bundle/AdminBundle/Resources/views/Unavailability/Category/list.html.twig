@@ -5,7 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.unavailability.category.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.unavailability.category.title'|trans }}
+        <div class="pull-right">
+            <a class="btn btn-info" href="{{ path('admin_unavailability_mass_list', {event: event.id}) }}">
+                {{ 'admin.unavailability.button.mass'|trans }}
+            </a>
+        </div>
+    </h1>
 
     <div>
         <a href="{{ path('admin_unavailability_category_create', { 'event': event.id }) }}" class="btn btn-sm btn-primary new-action">

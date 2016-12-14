@@ -56,6 +56,7 @@ class HappeningViewQueryHandler
         );
 
         return new HappeningView(
+            $happening->getId(),
             $query->key,
             $happeningCategoryView,
             $happening->getBegin(),
@@ -63,7 +64,8 @@ class HappeningViewQueryHandler
             $happening->getTitle($query->locale),
             $happening->getDescription($query->locale),
             null, // Happening Picture
-            $speakerView
+            $speakerView,
+            $happening->getLimitParticipant()
         );
     }
 }

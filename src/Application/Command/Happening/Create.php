@@ -46,13 +46,24 @@ class Create
     public $talkings = [];
 
     /**
+     * @var bool
+     */
+    public $questionAllowed;
+
+    /**
+     * @var int|null
+     */
+    public $limitParticipant;
+
+    /**
      * Create constructor.
      *
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event = $event;
+        $this->event         = $event;
+        $this->questionAllowed = false;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

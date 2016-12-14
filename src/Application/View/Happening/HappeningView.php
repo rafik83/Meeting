@@ -16,6 +16,11 @@ use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 class HappeningView
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var \DateTimeInterface
      */
     private $beginHour;
@@ -56,18 +61,46 @@ class HappeningView
     private $category;
 
     /**
+     * If participants of the current sheet participate
+     *
+     * @var bool
+     */
+    private $hasParticipations = false;
+
+    /**
+     * If the current user participates
+     *
+     * @var bool
+     */
+    private $currentUserParticipate = false;
+
+    /**
+     * @var bool
+     */
+    private $isFull;
+
+    /**
+     * @var int|null
+     */
+    public $limitParticipant;
+
+    /**
      * HappeningView constructor.
      *
-     * @param int                $code
-     * @param HappeningCategoryView           $category
-     * @param \DateTimeInterface $beginHour
-     * @param \DateTimeInterface $endHour
-     * @param string             $title
-     * @param string             $description
-     * @param string|null        $picture
-     * @param Speaker[]          $speakers
+     * @param int                   $id
+     * @param int                   $code
+     * @param HappeningCategoryView $category
+     * @param \DateTimeInterface    $beginHour
+     * @param \DateTimeInterface    $endHour
+     * @param string                $title
+     * @param string                $description
+     * @param string|null           $picture
+     * @param Speaker[]             $speakers
+     * @param null|int              $limitParticipant
+     * @param bool                  $isFull
      */
     public function __construct(
+        $id,
         $code,
         HappeningCategoryView $category,
         \DateTimeInterface $beginHour,
@@ -75,16 +108,29 @@ class HappeningView
         $title,
         $description,
         $picture,
-        array $speakers
+        array $speakers,
+        $limitParticipant = null,
+        $isFull = false
     ) {
-        $this->category    = $category;
-        $this->beginHour   = $beginHour;
-        $this->endHour     = $endHour;
-        $this->title       = $title;
-        $this->description = $description;
-        $this->picture     = $picture;
-        $this->speakers    = $speakers;
-        $this->code        = $code;
+        $this->id               = $id;
+        $this->category         = $category;
+        $this->beginHour        = $beginHour;
+        $this->endHour          = $endHour;
+        $this->title            = $title;
+        $this->description      = $description;
+        $this->picture          = $picture;
+        $this->speakers         = $speakers;
+        $this->code             = $code;
+        $this->isFull           = $isFull;
+        $this->limitParticipant = $limitParticipant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -165,5 +211,53 @@ class HappeningView
     public function hasPicture()
     {
         return $this->picture !== null;
+    }
+
+    /**
+     * @param bool $currentUserParticipate
+     */
+    public function setCurrentUserParticipate($currentUserParticipate)
+    {
+        $this->currentUserParticipate = $currentUserParticipate;
+    }
+
+    /**
+     * @param bool $hasParticipations
+     */
+    public function setHasParticipation($hasParticipations)
+    {
+        $this->hasParticipations = $hasParticipations;
+    }
+
+    /**
+     * @return bool
+     */
+    public function doesCurrentUserParticipate()
+    {
+        return $this->currentUserParticipate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParticipations()
+    {
+        return $this->hasParticipations;
+    }
+
+    /**
+     * Set isFull to true
+     */
+    public function setFull()
+    {
+        $this->isFull = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFull()
+    {
+        return $this->isFull;
     }
 }

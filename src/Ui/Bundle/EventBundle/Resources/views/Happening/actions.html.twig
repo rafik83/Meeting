@@ -1,0 +1,25 @@
+<div class="actions">
+    {#
+    <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
+    <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
+    <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
+    <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
+    <a href="" class="btn btn-gray"><i class="icon icon-Localiser"></i> Localiser</a>
+    #}
+
+    {% if happening.hasParticipations %}
+    {% else %}
+        {% if not happening.isFull %}
+            <a href="{{ path('event_sheet_happening_participate', { sheet: sheet.id, happening: happening.id }) }}"
+               class="btn btn-gray happeningParticipateAction"
+               data-label-participate="{{ 'happening.participate.action'|trans }}"
+               data-label-participation-update="{{ 'happening.participationUpdate.action'|trans }}"
+            >
+                <i class="icon icon-{{ happening.category.picto }}"></i>
+                {{ happening.hasParticipations ? 'happening.participationUpdate.action'|trans : 'happening.participate.action'|trans }}
+            </a>
+        {% else %}
+            <span class="label label-default">{{ 'happening.participate.full'|trans }}</span>
+        {% endif %}
+    {% endif %}
+</div>

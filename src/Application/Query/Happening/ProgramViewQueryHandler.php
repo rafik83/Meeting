@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
-
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 
 class ProgramViewQueryHandler
 {
@@ -28,13 +28,39 @@ class ProgramViewQueryHandler
     private $dayViewQueryHandler;
 
     /**
-     * @param DayRepositoryInterface $dayRepository
-     * @param DayViewQueryHandler    $dayViewQueryHandler
+     * @var HappeningParticipationQueryHandler
      */
-    public function __construct(DayRepositoryInterface $dayRepository, DayViewQueryHandler $dayViewQueryHandler)
-    {
-        $this->dayRepository       = $dayRepository;
-        $this->dayViewQueryHandler = $dayViewQueryHandler;
+    private $happeningParticipationQueryHandler;
+
+    /**
+     * @var MassRepositoryInterface
+     */
+    private $massRepository;
+
+    /**
+     * @var FullHappeningQueryHandler
+     */
+    private $fullHappeningQueryHandler;
+
+    /**
+     * @param DayRepositoryInterface             $dayRepository
+     * @param DayViewQueryHandler                $dayViewQueryHandler
+     * @param HappeningParticipationQueryHandler $happeningParticipationQueryHandler
+     * @param MassRepositoryInterface            $massRepository
+     * @param FullHappeningQueryHandler          $fullHappeningQueryHandler
+     */
+    public function __construct(
+        DayRepositoryInterface $dayRepository,
+        DayViewQueryHandler $dayViewQueryHandler,
+        HappeningParticipationQueryHandler $happeningParticipationQueryHandler,
+        MassRepositoryInterface $massRepository,
+        FullHappeningQueryHandler $fullHappeningQueryHandler
+    ) {
+        $this->dayRepository                      = $dayRepository;
+        $this->dayViewQueryHandler                = $dayViewQueryHandler;
+        $this->happeningParticipationQueryHandler = $happeningParticipationQueryHandler;
+        $this->massRepository                     = $massRepository;
+        $this->fullHappeningQueryHandler          = $fullHappeningQueryHandler;
     }
 
     /**
@@ -51,6 +77,12 @@ class ProgramViewQueryHandler
             throw new MissingEventDayConfigurationException();
         }
 
+        $masses = [];
+
+        if ($programViewQuery->category === null) {
+            $masses = $this->massRepository->findByEvent($programViewQuery->event, $programViewQuery->locale);
+        }
+
         $dayViews = [];
         foreach ($eventDays as $day) {
             $dayViews[] = $this->dayViewQueryHandler->handle(
@@ -58,16 +90,33 @@ class ProgramViewQueryHandler
                     $programViewQuery->event,
                     $day,
                     $programViewQuery->locale,
-                    $programViewQuery->category
+                    $programViewQuery->category,
+                    $masses
                 )
             );
         }
 
-        $categoryTitle = $programViewQuery->category !== null ? $programViewQuery->category->getTitle($programViewQuery->locale) : null;
+        $categoryTitle = $programViewQuery->category !== null
+            ? $programViewQuery->category->getTitle($programViewQuery->locale)
+            : null;
 
-        return new ProgramView(
+        $programView = new ProgramView(
             $dayViews,
             $categoryTitle
         );
+
+        $this->happeningParticipationQueryHandler->handle(
+            new HappeningParticipationQuery(
+                $programView,
+                $programViewQuery->sheet,
+                $programViewQuery->user
+            )
+        );
+
+        $this->fullHappeningQueryHandler->handle(
+            new FullHappeningQuery($programView, $programViewQuery->event)
+        );
+
+        return $programView;
     }
 }

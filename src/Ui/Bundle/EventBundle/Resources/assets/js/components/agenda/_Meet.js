@@ -23,7 +23,9 @@ function Meet(agenda, element) {
     this.toggleOpen = this.toggleOpen.bind(this);
     this.setLayer   = this.setLayer.bind(this);
 
-    this.header.addEventListener('click', this.toggleOpen);
+    if (this.element.classList.contains('has-details')) {
+        this.header.addEventListener('click', this.toggleOpen);
+    }
     this.element.agendaMeet = this;
 }
 

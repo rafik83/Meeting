@@ -81,7 +81,7 @@
         flex-direction: row;
         align-items: center;
         height: 100%;
-        padding: 0 25px;
+        padding: 0 10px 0 25px;
         color: #fff;
 
         &:hover,
@@ -110,6 +110,12 @@
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
+        width: 100%;
+        line-height: 30px;
+      }
+
+      .happeningParticipateIcon {
+        font-size: 30px;
       }
     }
 
