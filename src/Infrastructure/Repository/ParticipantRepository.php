@@ -228,8 +228,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     LEFT JOIN m.fromParticipants fp
                     LEFT JOIN m.toParticipants tp
                     WHERE
-                        TRUE AND
-                        " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : 'TRUE') . "
+                        " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
                         AND (fp.id = participant OR tp.id = participant)
                         AND (
                             slot.begin BETWEEN :begin AND :end
@@ -243,7 +242,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     SELECT u.id
                     FROM Entity:Unavailability u
                     WHERE
-                        TRUE AND
                         u.participant = participant
                         AND (
                             u.begin BETWEEN :begin AND :end
@@ -258,8 +256,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     FROM Entity:HappeningParticipation hp
                     JOIN hp.happening h
                     WHERE
-                        TRUE AND
-                        " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : 'TRUE') . "
+                        " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
                         AND hp.participant = participant
                         AND (
                             h.begin BETWEEN :begin AND :end
