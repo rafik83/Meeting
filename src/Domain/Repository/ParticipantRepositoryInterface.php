@@ -97,6 +97,21 @@ interface ParticipantRepositoryInterface
     public function findAvailableBySheetAndMeeting(Sheet $sheet, Meeting $meeting);
 
     /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEnabledSheet(Event $event);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function countByTypeWithEnabledSheet(Event $event, $locale);
+
+    /**
      * @param Participant[]      $participants
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end

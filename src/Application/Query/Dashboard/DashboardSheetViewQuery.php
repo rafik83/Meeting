@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
  * Copyright (C) 2016 Proximum
  *
@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class DashboardViewQuery
+class DashboardSheetViewQuery
 {
     /**
      * @var Event
@@ -25,7 +25,7 @@ class DashboardViewQuery
     public $locale;
 
     /**
-     * DashboardViewQuery constructor.
+     * DashboardSheetViewQuery constructor.
      *
      * @param Event  $event
      * @param string $locale

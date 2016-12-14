@@ -11,23 +11,31 @@
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
-use Proximum\Vimeet\Domain\Order\Balance;
 
 class DashboardViewQueryHandler
 {
     /**
-     * @var Balance
+     * @var DashboardTransactionViewQueryHandler
      */
-    private $balance;
+    private $dashboardTransactionViewQueryHandler;
+
+    /**
+     * @var DashboardSheetViewQueryHandler
+     */
+    private $dashboardSheetViewQueryHandler;
 
     /**
      * DashboardViewQueryHandler constructor.
      *
-     * @param Balance $balance
+     * @param DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler
+     * @param DashboardSheetViewQueryHandler       $dashboardSheetViewQueryHandler
      */
-    public function __construct(Balance $balance)
-    {
-        $this->balance = $balance;
+    public function __construct(
+        DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler,
+        DashboardSheetViewQueryHandler $dashboardSheetViewQueryHandler
+    ) {
+        $this->dashboardTransactionViewQueryHandler = $dashboardTransactionViewQueryHandler;
+        $this->dashboardSheetViewQueryHandler       = $dashboardSheetViewQueryHandler;
     }
 
     /**
@@ -37,13 +45,14 @@ class DashboardViewQueryHandler
      */
     public function handle(DashboardViewQuery $dashboardViewQuery)
     {
-        $this->balance->loadAllTransactions($dashboardViewQuery->event);
-        $this->balance->loadAllOrders($dashboardViewQuery->event);
+        $dashboardTransactionView = $this->dashboardTransactionViewQueryHandler->handle(
+            new DashboardTransactionViewQuery($dashboardViewQuery->event)
+        );
 
-        $totalOrders         = $this->balance->getOrdersTotal($dashboardViewQuery->event);
-        $totalPaid           = $this->balance->getTransactionsTotalPaid($dashboardViewQuery->event);
-        $totalRemainingToPay = $this->balance->getOrdersTotalRemainingToPay($dashboardViewQuery->event);
+        $dashboardSheetView = $this->dashboardSheetViewQueryHandler->handle(
+            new DashboardSheetViewQuery($dashboardViewQuery->event, $dashboardViewQuery->locale)
+        );
 
-        return new DashboardView($totalOrders, $totalRemainingToPay, $totalPaid);
+        return new DashboardView($dashboardTransactionView, $dashboardSheetView);
     }
 }
