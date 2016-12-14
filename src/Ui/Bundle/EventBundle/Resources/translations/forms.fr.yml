@@ -40,6 +40,7 @@ form.participate.children.participants.label: 'Qui participe ?'
 form.participate.children.participants.unavailable: Indisponible
 form.participate.children.question.label: 'Poser une question'
 form.participate.children.submit.label: Participer
+form.participate.children.submitUpdate.label: Modifier
 form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''accompte'
 form.payment_choice_with_deposit.children.depositMode.deposit: Accompte
 form.payment_choice_with_deposit.children.depositMode.total: Total

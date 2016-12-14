@@ -102,13 +102,11 @@ Happening.prototype.handleRequestForm = function (form)
 Happening.prototype.validateParticipation = function (label) {
     this.enableParticipateAction();
 
-    console.log(label);
-
     if (label == undefined) {
         return;
     }
 
-    var buttonLabel ='N/A';
+    var buttonLabel;
 
     if ('cancel' === label) {
         buttonLabel = this.labelCancel;
@@ -121,7 +119,9 @@ Happening.prototype.validateParticipation = function (label) {
         this.happeningParticipateIcon.classList.add('hide');
     }
 
-    this.happeningParticipateAction.textContent = buttonLabel;
+    if (buttonLabel) {
+        this.happeningParticipateAction.textContent = buttonLabel;
+    }
 };
 
 module.exports = Happening;

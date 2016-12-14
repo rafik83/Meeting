@@ -192,6 +192,7 @@ class HappeningController extends Controller
                     'form'                    => $participateForm->createView(),
                     'unavailableParticipants' => $unavailableParticipants,
                     'noAvailableParticipants' => 0 === count($availableParticipants),
+                    'isUpdate'                => 0 < count($selectedParticipants),
                 ]),
             ]
         );
