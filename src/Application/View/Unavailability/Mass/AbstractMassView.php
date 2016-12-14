@@ -23,11 +23,6 @@ abstract class AbstractMassView
     public $picto;
 
     /**
-     * @var string
-     */
-    public $code;
-
-    /**
      * @var \DateTimeInterface
      */
     public $begin;
@@ -59,7 +54,6 @@ abstract class AbstractMassView
 
     /**
      * @param int                $id
-     * @param string             $code
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string             $title
@@ -70,7 +64,6 @@ abstract class AbstractMassView
      */
     public function __construct(
         $id,
-        $code,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $title,
@@ -80,7 +73,6 @@ abstract class AbstractMassView
         $rightColor
     ) {
         $this->id          = $id;
-        $this->code        = $code;
         $this->begin       = $begin;
         $this->end         = $end;
         $this->title       = $title;

@@ -34,7 +34,7 @@ catalog.meeting_request.request.refused: 'Demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
-catalog.title: 'Catalogue'
+catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.need_help: 'Besoin d''aide'
@@ -67,8 +67,8 @@ navigation.category.happening: 'Gestion de rdv'
 navigation.category.meeting: 'Gestion de rdv'
 navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
-navigation.category.planning: 'Agenda provisoire'
-navigation.category.program: 'Programme'
+navigation.category.planning: Agenda
+navigation.category.program: Programme
 navigation.category.sheet: 'Fiche de présentation'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
@@ -166,7 +166,7 @@ package.payment.bankInfo: 'Coordonnées bancaires'
 package.payment.billingAddress: 'Adresse de facturation'
 package.payment.deposit.title: 'Accompte :'
 package.payment.deposit.toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
-package.payment.pay.label: Payer
+package.payment.pay.label: Valider
 package.payment.title: Paiement
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'
@@ -210,7 +210,7 @@ package.summary.empty: 'Votre panier est vide'
 package.summary.option: Option
 package.summary.order-list: 'Liste des commandes'
 package.summary.pageTitle: 'Récapitulatif de votre forfait de participation'
-package.summary.pay: 'Régler le forfait de participation'
+package.summary.pay: 'Valider le forfait de participation'
 package.summary.promotion.button.label: Valider
 package.summary.promotion.label: 'Offres de réductions'
 package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
@@ -222,7 +222,6 @@ package.summary.totalVat: '+ TVA applicable de %vat%%'
 package.title: 'Forfait de participation'
 package.vatMode.ati: TTC
 package.vatMode.et: HT
-program.title: 'Programme'
 pro_forma.bankInfo.title: 'Coordonnées bancaires'
 pro_forma.date.title: 'Date :'
 pro_forma.number.title: 'N° pro-forma :'
@@ -259,10 +258,10 @@ sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
 sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
-sheet.welcome.packageContent: 'Choisir la formule de participation qui correspond à vos attentes'
-sheet.welcome.sheetContent: 'Compléter votre fiche de présentation qui sera publiée dans le catalogue en ligne. Plus vos informations seront précises, plus vos rendez-vous seront ciblés'
-sheet.welcome.subtitle: 'Pour finaliser votre demande de participation il vous reste à'
-sheet.welcome.title: 'Félicitation, vous venez de terminer la première partie de votre demande de participation.'
+sheet.welcome.packageContent: '3. CHOISISSEZ VOTRE FORMULE'
+sheet.welcome.sheetContent: "1. COMPLÉTEZ VOTRE FICHE\n\n2. SOUMETTEZ LA FICHE POUR VALIDATION"
+sheet.welcome.subtitle: ''
+sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total
@@ -274,4 +273,4 @@ summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
-unavailability.title: 'Indisponible'
+unavailability.title: Indisponible

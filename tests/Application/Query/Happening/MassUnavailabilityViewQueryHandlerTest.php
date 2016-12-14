@@ -37,13 +37,11 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $result = $handler->handle(new MassUnavailabilityViewQuery(
             $mass,
-            'fr',
-            1
+            'fr'
         ));
 
         // Expected
         $expected = new MassUnavailabilityView(
-            1,
             1,
             $begin,
             $end,

@@ -107,6 +107,9 @@ admin.happening.link: Conférences
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin
+admin.happening.list.limit: Max
+admin.happening.list.no-limit: 'Pas de limite'
+admin.happening.list.participation: Participants
 admin.happening.list.question: 'Question ?'
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
@@ -294,10 +297,10 @@ admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
 admin.sheet.dashboard.totalOrders: 'Total des commandes'
 admin.sheet.dashboard.totalPaid: 'Total soldé'
+admin.sheet.dashboard.totalParticipants: 'Total participants'
 admin.sheet.dashboard.totalRemainingToPay: 'Total restant'
 admin.sheet.dashboard.totalSheet: 'Total fiches'
 admin.sheet.dashboard.totalSheetType: 'Total fiches par type'
-admin.sheet.dashboard.totalParticipants: 'Total participants'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société
@@ -436,9 +439,9 @@ admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.button.mass: 'Indisponibilité de masse'
-admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.category.add: Ajouter
 admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'
 admin.unavailability.category.link: 'Catégorie d''indisponibilité de masse'
@@ -448,17 +451,17 @@ admin.unavailability.category.table.column.title: Titre
 admin.unavailability.category.table.content.update: Modifier
 admin.unavailability.category.title: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.category.update: 'Modification d''une catégorie d''indisponibilité de masse'
-admin.unavailability.mass.add: 'Ajouter'
+admin.unavailability.mass.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette indisponbilité?'
+admin.unavailability.mass.action.delete: Supprimer
+admin.unavailability.mass.add: Ajouter
 admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
 admin.unavailability.mass.link: 'Indisponibilité de masse'
 admin.unavailability.mass.table.column.begin: Debut
 admin.unavailability.mass.table.column.category: Catégorie
+admin.unavailability.mass.table.column.end: Fin
 admin.unavailability.mass.table.column.name: 'Nom back office'
 admin.unavailability.mass.table.column.title: Titre
-admin.unavailability.mass.table.column.end: Fin
 admin.unavailability.mass.table.content.update: Modifier
-admin.unavailability.mass.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette indisponbilité?'
-admin.unavailability.mass.action.delete: Supprimer
 admin.unavailability.mass.title: 'Indisponibilité de masse'
 admin.unavailability.mass.update: 'Modification d''une indisponibilité de masse'
 admin.update_admin.title: 'Modifier un utilisateur du backoffice'

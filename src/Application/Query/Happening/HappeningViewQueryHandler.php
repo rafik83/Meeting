@@ -57,7 +57,6 @@ class HappeningViewQueryHandler
 
         return new HappeningView(
             $happening->getId(),
-            $query->key,
             $happeningCategoryView,
             $happening->getBegin(),
             $happening->getEnd(),

@@ -23,22 +23,13 @@ class HappeningListViewFactory
     private $happeningRepository;
 
     /**
-     * @var HappeningPermissionManager
-     */
-    private $happeningPermissionManager;
-
-    /**
      * HappeningListViewFactory constructor.
      *
      * @param HappeningRepositoryInterface $happeningRepository
-     * @param HappeningPermissionManager   $happeningPermissionManager
      */
-    public function __construct(
-        HappeningRepositoryInterface $happeningRepository,
-        HappeningPermissionManager $happeningPermissionManager
-    ) {
-        $this->happeningRepository        = $happeningRepository;
-        $this->happeningPermissionManager = $happeningPermissionManager;
+    public function __construct(HappeningRepositoryInterface $happeningRepository)
+    {
+        $this->happeningRepository = $happeningRepository;
     }
 
     /**

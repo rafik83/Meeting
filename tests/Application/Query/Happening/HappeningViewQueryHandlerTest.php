@@ -43,7 +43,6 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningCategoryView = new HappeningCategoryView('title', 'Conference', '#123123', '#123123');
         $happeningView1 = new HappeningView(
             1,
-            1,
             $happeningCategoryView,
             $beginHappening1,
             $endHappening1,
@@ -70,8 +69,7 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $result = $handler->handle(new HappeningViewQuery(
             $happening1,
-            'fr',
-            1
+            'fr'
         ));
 
         $this->assertEquals($happeningView1, $result);

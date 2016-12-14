@@ -45,7 +45,6 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $happeningView1 = new HappeningView(
             1,
-            1,
             $beginHappening1,
             $endHappening1,
             'title',
@@ -65,8 +64,7 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $result = $handler->handle(new HappeningViewQuery(
             $happening1,
-            'fr',
-            1
+            'fr'
         ));
 
         $this->assertEquals($happeningView1, $result);

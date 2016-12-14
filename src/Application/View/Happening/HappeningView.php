@@ -51,11 +51,6 @@ class HappeningView
     private $speakers;
 
     /**
-     * @var int
-     */
-    private $code;
-
-    /**
      * @var HappeningCategoryView
      */
     private $category;
@@ -88,7 +83,6 @@ class HappeningView
      * HappeningView constructor.
      *
      * @param int                   $id
-     * @param int                   $code
      * @param HappeningCategoryView $category
      * @param \DateTimeInterface    $beginHour
      * @param \DateTimeInterface    $endHour
@@ -101,7 +95,6 @@ class HappeningView
      */
     public function __construct(
         $id,
-        $code,
         HappeningCategoryView $category,
         \DateTimeInterface $beginHour,
         \DateTimeInterface $endHour,
@@ -120,7 +113,6 @@ class HappeningView
         $this->description      = $description;
         $this->picture          = $picture;
         $this->speakers         = $speakers;
-        $this->code             = $code;
         $this->isFull           = $isFull;
         $this->limitParticipant = $limitParticipant;
     }

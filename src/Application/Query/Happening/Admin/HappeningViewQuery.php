@@ -1,14 +1,14 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) 2016 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Happening;
+namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 
@@ -25,8 +25,6 @@ class HappeningViewQuery
     public $locale;
 
     /**
-     * HappeningViewQuery constructor.
-     *
      * @param Happening $happening
      * @param string    $locale
      */

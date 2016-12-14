@@ -71,6 +71,8 @@ class ProgramViewQueryHandler
             $programViewQuery->locale
         );
 
+        $categories = [];
+
         /** @var Happening $happening */
         foreach ($happenings as $happening) {
             $categories[$happening->getCategory()->getId()] = $happening->getCategory();

@@ -21,6 +21,7 @@ admin.happening_speaker.link: Speakers
 admin.happening_speaker.table.column.photo: 'Speaker picture'
 admin.happening.add: Add
 admin.happening.link: Conferences
+admin.meeting_request.from: From
 admin.meeting_request.link: 'Meeting requests'
 admin.meeting.link: Meetings
 admin.menu.link: Menu

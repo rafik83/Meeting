@@ -1,6 +1,6 @@
 <header style="background: linear-gradient(to right, {{ leftColor }} 0%, {{ rightColor }} 100%) !important;">
     <a class="content" href="#{{ happening.title|url_encode }}">
-        <span class="prefix"><i class="icon icon-{{ picto }}"></i> N°{{ happening.code }}</span>
+        <span class="prefix"><i class="icon icon-{{ picto }}"></i></span>
         <p class="title">
             {{ happening.title }}
             <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>

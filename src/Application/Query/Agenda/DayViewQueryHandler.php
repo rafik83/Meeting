@@ -55,7 +55,6 @@ class DayViewQueryHandler
         $unavailabilites = [];
         $masses          = [];
 
-        $key = 1;
         foreach ($query->happenings as $happening) {
             if ($happening->getHappening()->getBegin() >= $query->day->getStartTime()
                 && $happening->getHappening()->getEnd() <= $query->day->getEndTime()
@@ -63,12 +62,9 @@ class DayViewQueryHandler
                 $happeningViews[] = $this->happeningHandler->handle(
                     new HappeningViewQuery(
                         $happening->getHappening(),
-                        $query->locale,
-                        $key
+                        $query->locale
                     )
                 );
-
-                $key++;
             }
         }
 
@@ -79,12 +75,9 @@ class DayViewQueryHandler
                 $unavailabilites[] = $this->unavailabilityHandler->handle(
                     new UnavailabilityViewQuery($unavailability)
                 );
-
-                $key++;
             }
         }
 
-        $key = 1;
         foreach ($query->masses as $mass) {
             if ($mass->getBegin() >= $query->day->getStartTime()
                 && $mass->getEnd() <= $query->day->getEndTime()
@@ -92,12 +85,9 @@ class DayViewQueryHandler
                 $masses[] = $this->massHandler->handle(
                     new MassUnavailabilityViewQuery(
                         $mass,
-                        $query->locale,
-                        $key
+                        $query->locale
                     )
                 );
-
-                $key++;
             }
         }
 
