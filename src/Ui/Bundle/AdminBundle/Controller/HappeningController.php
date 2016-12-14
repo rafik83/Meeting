@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCateg
 use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
 use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
 use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryUpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
@@ -39,13 +40,13 @@ class HappeningController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $happenings = $this
-            ->get('happening.happening_list_view_factory')
-            ->getListByEventAndLocale($event, $event->getAvailableLocale($request->getLocale()));
+        $list = $this->get('tactician.commandbus.query')->handle(
+            new HappeningListViewQuery($event, $event->getAvailableLocale($request->getLocale()))
+        );
 
         return $this->render('AdminBundle:Happening:list.html.twig', [
-            'event'      => $event,
-            'happenings' => $happenings,
+            'event' => $event,
+            'list'  => $list,
         ]);
     }
 
