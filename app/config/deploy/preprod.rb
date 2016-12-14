@@ -8,6 +8,8 @@ set :composer_options, "--verbose --prefer-dist --optimize-autoloader --no-progr
 # Clear *_dev controllers
 set :clear_controllers, false
 
+set :keep_releases, 1
+
 role :app, domain, :primary => true
 
 namespace :app_tasks do
