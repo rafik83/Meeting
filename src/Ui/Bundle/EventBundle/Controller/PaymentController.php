@@ -154,25 +154,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * Only for debug
-     */
-    public function createTempTransactionAction(
-        Request $request,
-        EventDomain $eventDomain,
-        Sheet $sheet
-    ) {
-        $this->denyAccessIfUserNotAllowed($eventDomain->getEvent(), $sheet);
-
-        $transaction = Transaction::createForPaypal($sheet, $this->getUser(), rand(1, 200), new \DateTime());
-        $this->get('repository.transaction')->add($transaction);
-
-        return $this->redirectToRoute(
-            'event_package_payment_prepare_paypal',
-            ['sheet' => $sheet->getId(), 'transaction' => $transaction->getId()]
-        );
-    }
-
-    /**
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
