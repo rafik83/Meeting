@@ -51,9 +51,13 @@ class HappeningController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getParticipantsForHappening($sheet, $happening);
 
-        $previousQuestion = null;
+        $previousQuestion           = null;
+        $isCancelParticipationAlone = false;
+        $isParticipationAlone       = false;
+        $isUpdate                   = count($selectedParticipants) > 0;
+        $isQuestionAllowed          = $happening->isQuestionAllowed();
 
-        if (count($selectedParticipants) > 0 && $happening->isQuestionAllowed()) {
+        if ($isUpdate && $happening->isQuestionAllowed()) {
             $question = $this
                 ->get('vimeet_infrastructure.repository.happening_question_repository')
                 ->getByUserAndHappening($this->getUser(), $happening);
@@ -63,31 +67,39 @@ class HappeningController extends Controller
             }
         }
 
-        $participants           = $sheet->getParticipants()->toArray();
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
+
+        if ($isUserAloneParticipant) {
+            if ($isUpdate) {
+                $isCancelParticipationAlone = true;
+            } else {
+                $isParticipationAlone = true;
+            }
+        }
+
+        $participants = $sheet->getParticipants()->toArray();
 
         $availableParticipants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getAvailableParticipantsForHappening($participants, $happening);
 
-        // Case : user alone in sheet
-        if (true === $isUserAloneParticipant) {
-            // and it is new participation, he is selected directly
-            if (0 === count($selectedParticipants)) {
-                $selectedParticipants = $participants;
+        $noAvailableParticipants = 0 === count($availableParticipants);
 
-                // Case : current user is not available for this happening, do not show modal
-                if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
-                    return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
-                }
-            } else {
-                // Unselect current user
-                $selectedParticipants = [];
+        // Case : user alone in sheet and it is new participation, he is selected directly
+        if ($isParticipationAlone) {
+            $selectedParticipants = $participants;
+
+            // Case : current user is not available for this happening, do not show modal
+            if ($noAvailableParticipants) {
+                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
             }
+        } elseif ($isCancelParticipationAlone) {
+            // Unselect current user
+            $selectedParticipants = [];
         }
 
         // Case : one participant is current user and no question so no modal
-        if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
+        if ($isParticipationAlone && !$isQuestionAllowed || $isCancelParticipationAlone) {
             try {
                 $participate = new Participate($happening, $sheet, $this->getUser(), $selectedParticipants);
                 $this->get('tactician.commandbus')->handle($participate);
@@ -105,9 +117,7 @@ class HappeningController extends Controller
 
             return new JsonResponse([
                 'status' => 'ok',
-                'label' => true === $isUserAloneParticipant && 0 === count($selectedParticipants)
-                    ? 'participate'
-                    : 'cancel',
+                'label'  => $isCancelParticipationAlone ? 'participate' : 'cancel',
             ]);
         }
 
@@ -191,8 +201,8 @@ class HappeningController extends Controller
                     'picto'                   => $happening->getCategory()->getPicto(),
                     'form'                    => $participateForm->createView(),
                     'unavailableParticipants' => $unavailableParticipants,
-                    'noAvailableParticipants' => 0 === count($availableParticipants),
-                    'isUpdate'                => 0 < count($selectedParticipants),
+                    'noAvailableParticipants' => $noAvailableParticipants,
+                    'isUpdate'                => $isUpdate,
                 ]),
             ]
         );
