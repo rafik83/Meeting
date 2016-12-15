@@ -86,9 +86,7 @@ class SheetSubmenuViewQueryHandler
         }
 
         // Program button
-        if ($this->happeningsAccessChecker->allowedToAccess($query->event)
-            && (!$query->sheet->getPackage()->isPassable() || $query->sheet->hasOrders())
-        ) {
+        if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
             $buttonViews[] = new SubmenuButtonView(
                 Category::PLANNING_ICON,
                 'program.title',
