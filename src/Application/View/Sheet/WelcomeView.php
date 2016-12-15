@@ -16,4 +16,25 @@ class WelcomeView
      * @var bool
      */
     public $hasPackage = false;
+
+    /**
+     * @var bool
+     */
+    public $hasProgram = false;
+
+    /**
+     * @return int
+     */
+    public function getColSize()
+    {
+        if ($this->hasPackage && $this->hasProgram) {
+            return 4;
+        }
+
+        if ($this->hasPackage || $this->hasProgram) {
+            return 6;
+        }
+
+        return 12;
+    }
 }

@@ -7,13 +7,13 @@
     </div>
 </div>
 <div class="row modal-welcome">
-    <div class="col-md-{{ popinWelcome.hasPackage ? '6' : '12' }}">
+    <div class="col-md-{{ popinWelcome.colSize }}">
         <div class="text-center custom-modal-content">
             <p class="custom-modal-text">{{ 'sheet.welcome.sheetContent'|trans|nl2br }}</p>
             <div class="custom-modal-button-parent">
                 <div class="custom-modal-button-child">
                     <button type="button" class="btn btn btn-primary" data-dismiss="modal">
-                        <i class="icon-Document_1"></i>
+                        <i class="icon icon-Document_1"></i>
                         {{ 'navigation.category.sheet'|trans }}
                     </button>
                 </div>
@@ -21,14 +21,29 @@
         </div>
     </div>
     {% if popinWelcome.hasPackage %}
-        <div class="col-md-6">
+        <div class="col-md-{{ popinWelcome.colSize }}">
             <div class="text-center custom-modal-content">
                 <p class="custom-modal-text">{{ 'sheet.welcome.packageContent'|trans|nl2br }}</p>
                 <div class="custom-modal-button-parent">
                     <div class="custom-modal-button-child">
                         <a type="button" class="btn btn-primary" href="{{ path('event_package') }}">
-                            <i class="icon-Panier_2"></i>
+                            <i class="icon icon-Panier_2"></i>
                             {{ 'navigation.category.package'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if popinWelcome.hasProgram %}
+        <div class="col-md-{{ popinWelcome.colSize }}">
+            <div class="text-center custom-modal-content">
+                <p class="custom-modal-text">{{ 'sheet.welcome.programContent'|trans|nl2br }}</p>
+                <div class="custom-modal-button-parent">
+                    <div class="custom-modal-button-child">
+                        <a type="button" class="btn btn-primary" href="{{ path('happening_program') }}">
+                            <i class="icon icon-Calendrier"></i>
+                            {{ 'navigation.category.program'|trans }}
                         </a>
                     </div>
                 </div>
