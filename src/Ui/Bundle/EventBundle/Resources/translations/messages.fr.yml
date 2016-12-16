@@ -52,8 +52,8 @@ happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place 
 happening.participate.participantNotAvailable: 'Au moins un des participants sélectionné n''est pas disponible'
 happening.participate.participantNotFound: 'Participant non trouvé'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
-happening.participationUpdate.action: Modifier
 happening.participationCancel.action: Annuler
+happening.participationUpdate.action: Modifier
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
@@ -258,9 +258,9 @@ sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
 sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
-sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
-sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
-sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
+sheet.welcome.packageContent: 'Etape 2 : CHOISISSEZ VOTRE FORMULE'
+sheet.welcome.programContent: 'Etape 3 : CHOISISSEZ VOS CONFÉRENCES'
+sheet.welcome.sheetContent: "Etape 1 :\n\nCOMPLÉTEZ VOTRE FICHE\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
 summary.column.quantity: Quantité
