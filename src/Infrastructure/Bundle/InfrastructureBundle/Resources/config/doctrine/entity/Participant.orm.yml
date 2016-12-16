@@ -26,10 +26,6 @@ Proximum\Vimeet\Domain\Model\Participant:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
-        order:
-            targetEntity: Proximum\Vimeet\Domain\Model\Order
-            joinColumn:
-                onDelete: SET NULL
     oneToMany:
         happeningParticipations:
             targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation

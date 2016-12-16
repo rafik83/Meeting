@@ -258,8 +258,9 @@ sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
 sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
-sheet.welcome.packageContent: '3. CHOISISSEZ VOTRE FORMULE'
-sheet.welcome.sheetContent: "1. COMPLÉTEZ VOTRE FICHE\n\n2. SOUMETTEZ LA FICHE POUR VALIDATION"
+sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
+sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
+sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
 summary.column.quantity: Quantité

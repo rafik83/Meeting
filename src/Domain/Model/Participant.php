@@ -43,11 +43,6 @@ class Participant
     private $active;
 
     /**
-     * @var Order
-     */
-    private $order;
-
-    /**
      * @var int
      */
     private $registrationStep;
@@ -172,22 +167,6 @@ class Participant
     public function setActive($active)
     {
         $this->active = $active;
-    }
-
-    /**
-     * @return Order
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param Order $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
     }
 
     /**

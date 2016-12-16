@@ -218,3 +218,9 @@
 .modal-content-request {
   margin-top: 0;
 }
+
+@media (min-width: 768px) {
+  .modal-dialog-welcom-popin {
+    width: 900px;
+  }
+}

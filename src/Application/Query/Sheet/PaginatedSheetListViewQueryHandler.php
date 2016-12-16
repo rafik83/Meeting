@@ -167,6 +167,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),
+            $sheet->countParticipant(),
             $sheet->getSpot() !== null ? $sheet->getSpot()->getReference() : null,
             $trace
         );
