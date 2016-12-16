@@ -183,6 +183,10 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
      */
     public function getExportableContent()
     {
-        return implode(";", $this->getSearchableContent());
+        $exportableContents = array_map(function ($content) {
+            return str_replace(";", ",", $content);
+        }, $this->getSearchableContent());
+
+        return implode(";", $exportableContents);
     }
 }

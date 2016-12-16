@@ -388,7 +388,7 @@ admin_sheet_export:
     path: /event/{event}/sheet/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:export }
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot

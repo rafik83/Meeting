@@ -355,11 +355,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
 
         // Implode inner content (each item's path):
         $leaves = array_map(function ($leave) {
-            return implode('>', $leave);
+            return implode('>', str_replace('>', '', $leave));
         }, $leaves);
 
         // Implode outer content (all item paths):
-        return implode(",", $leaves);
+        return implode(";", $leaves);
     }
 
     /**

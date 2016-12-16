@@ -192,7 +192,7 @@ class SheetController extends Controller
     {
         // Only super admin & organizers are allowed to export sheets:
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $charset = $request->attributes->get('charset', Charset::WINDOWS_1252);
+        $charset = Charset::WINDOWS_1252;
 
         $serializer = $this->get('serializer');
         $exportContent = $serializer->serialize($event, 'csv', [

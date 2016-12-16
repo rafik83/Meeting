@@ -6,7 +6,9 @@
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <a href="{{ path('admin_sheet_export', { 'event': event.id }) }}" class="btn btn-default pull-right">{{ 'sheet.export.button.label'|trans }}</a>
+            <form action="{{ path('admin_sheet_export', { 'event': event.id }) }}" method="POST" class="pull-right">
+                <input type="submit" value="{{ 'admin.sheet.export.button.label'|trans }}" class="btn btn-default"/>
+            </form>
         {% endif %}
     </h1>
 

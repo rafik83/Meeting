@@ -176,11 +176,21 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
-    public function getCompanyObjects()
+    public function getEditableSheetDataExceptedImageObjects()
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof TemplateObject\Image;
         });
+    }
+
+    /**
+     * @deprecated Use {@link Block::getEditableSheetDataExceptedImageObjects()} instead
+     *
+     * @return TemplateObject[]
+     */
+    public function getCompanyObjects()
+    {
+        return $this->getEditableSheetDataExceptedImageObjects();
     }
 
     /**

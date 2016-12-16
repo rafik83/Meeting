@@ -42,7 +42,7 @@ class EventSheetsNormalizer implements NormalizerInterface
     const COL_PARTICIPANTS      = 'participants';
     const COL_STATUS            = 'status';
     const COL_FOLLOWING         = 'following';
-    const COL_IN_CATALOG        = 'in_catalogue';
+    const COL_IN_CATALOG        = 'in_catalog';
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -136,8 +136,8 @@ class EventSheetsNormalizer implements NormalizerInterface
         $fallbackLocale  = $event->getFallback();
 
         $categories = implode(';', array_map(
-            function (Category $category) use ($locale) {
-                return $category->getTitle($locale);
+            function (Category $category) use ($availableLocale) {
+                return str_replace(';', ',', $category->getTitle($availableLocale));
             },
             $sheet->getType()->getCategories()->toArray()
         ));
@@ -197,7 +197,7 @@ class EventSheetsNormalizer implements NormalizerInterface
     private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
-        foreach ($registrationTemplateData->getObjects() as $registrationObject) {
+        foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
                 if (!isset($this->registrationFields[$key])) {
@@ -224,7 +224,7 @@ class EventSheetsNormalizer implements NormalizerInterface
 
         // Common fields (event ID, event name, etc.)
         foreach (self::getCommonFieldKeys() as $fieldKey) {
-            $translationKey = 'sheet.export.fields.' . $fieldKey;
+            $translationKey = 'admin.sheet.export.fields.' . $fieldKey;
             $input = $rawData[$fieldKey];
 
             $translatedFieldname = $this->convertCharset(
@@ -240,15 +240,15 @@ class EventSheetsNormalizer implements NormalizerInterface
             );
         }
 
-        // Sheet data
-        foreach ($this->sheetFields as $fieldKey => $fieldName) {
+        // Registration data
+        foreach ($this->registrationFields as $fieldKey => $fieldName) {
             $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
             $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
-        // Registration data
-        foreach ($this->registrationFields as $fieldKey => $fieldName) {
+        // Sheet data
+        foreach ($this->sheetFields as $fieldKey => $fieldName) {
             $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
             $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
@@ -311,7 +311,7 @@ class EventSheetsNormalizer implements NormalizerInterface
     {
         $value = (bool) $value;
 
-        return $this->translator->trans(sprintf("sheet.export.%s", $value ? 'yes' : 'no'));
+        return $this->translator->trans(sprintf("admin.sheet.export.%s", $value ? 'yes' : 'no'));
     }
 
     /**

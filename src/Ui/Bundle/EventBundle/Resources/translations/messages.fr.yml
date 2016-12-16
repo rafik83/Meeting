@@ -237,21 +237,6 @@ register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape
 select2.no_results: 'Aucun résultat'
-sheet.export.fields.event_id: ID événement
-sheet.export.fields.event_name: Nom de l'événement
-sheet.export.fields.sheet_id: ID fiche
-sheet.export.fields.owner_id: ID propriétaire
-sheet.export.fields.owner_email: Email propriétaire
-sheet.export.fields.type: Type
-sheet.export.fields.category: Catégorie
-sheet.export.fields.registration_date: Date inscription
-sheet.export.fields.participants: Nombre de participants
-sheet.export.fields.status: Statut fiche
-sheet.export.fields.following: Suivi commercial
-sheet.export.fields.in_catalogue: Ajouté au catalog
-sheet.export.yes: Oui
-sheet.export.no: Non
-sheet.export.button.label: Exporter
 sheet.edit.object: 'Compléter "%label%"'
 sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
 sheet.object.action.add: 'Ajouter:'
