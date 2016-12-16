@@ -768,6 +768,7 @@ NomenclatureObject.prototype.fill = function ()
     this.form.set('nomenclature', this.config.nomenclature);
     this.form.set('mode', this.config.mode);
     this.form.set('objective', this.config.objective);
+    this.form.set('required', this.config.required);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -780,6 +781,7 @@ NomenclatureObject.prototype.save = function ()
     this.config.nomenclature       = this.form.get('nomenclature');
     this.config.mode               = this.form.get('mode');
     this.config.objective          = this.form.get('objective');
+    this.config.required           = this.form.get('required');
 
     this.form.bind('label', this.config.label[this.locale]);
 };

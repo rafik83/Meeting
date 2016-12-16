@@ -21,6 +21,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     const OBJECTIVE_NONE   = 'none';
     const OBJECTIVE_SUPPLY = 'supply';
     const OBJECTIVE_NEED   = 'need';
+
     /**
      * Singles, checkboxes and radios display mode
      */
@@ -305,6 +306,14 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     public function getSearchableContent()
     {
         return $this->getLabelsOfAllSelectedLevels();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequired()
+    {
+        return (bool) $this->getOption('required');
     }
 
     /**
