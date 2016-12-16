@@ -41,8 +41,8 @@ class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
-        $passwordEncoder->encode(Argument::that(function (User $user) use ($user) {
-            return $user->getEmail() === $user->getEmail();
+        $passwordEncoder->encode(Argument::that(function (User $u) use ($user) {
+            return $u->getEmail() === $user->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $userRepository  = $this->prophesize(UserRepositoryInterface::class);
