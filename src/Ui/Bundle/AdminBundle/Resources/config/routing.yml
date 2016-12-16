@@ -944,3 +944,11 @@ admin_messaging_message_update:
         message: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Messaging\Message:update }
+
+# Messaging campaigns
+admin_messaging_campaign_select_sheets:
+    path: /event/{event}/messaging-campaign/select-sheets
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:selectSheets }

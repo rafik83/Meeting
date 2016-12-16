@@ -40,7 +40,11 @@ class FilterSummary
         $selectedFilters = [];
 
         foreach ($filters as $filter => $value) {
-            if ($value === null) {
+            if (null === $value || false === $value) {
+                continue;
+            }
+
+            if (is_array($value) && empty($value)) {
                 continue;
             }
 
@@ -52,9 +56,13 @@ class FilterSummary
             $value = $field->vars['value'];
 
             if (isset($field->vars['choices'])) {
+                $values = (array) $value;
+                $value = '';
                 foreach ($field->vars['choices'] as $choice) {
-                    if ($choice->value === $value) {
-                        $value = $this->translator->trans($choice->label, [], null, $locale);
+                    foreach ($values as $currentValue) {
+                        if ($choice->value === $currentValue) {
+                            $value .= ($value !== '' ? ', ' : '') . $this->translator->trans($choice->label, [], null, $locale);
+                        }
                     }
                 }
             }

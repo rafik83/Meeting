@@ -124,6 +124,23 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function findUnpaginated(Event $event, array $filters, $locale, $orderBy = null)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+
+        $query = $builder->getQuery();
+        if (null !== $orderBy) {
+            $query = $this->getSortedQuery($query, $orderBy);
+        }
+
+        $options = ["size" => 1000];
+
+        return $this->searchable->search($query, $options)->getResults();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalization(Event $event, $filter, $locale)
     {
         $query = new Query();
@@ -350,5 +367,34 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterSheetname->addAggregation($sheetAggregation);
 
         return $filterSheetname;
+    }
+
+    /**
+     * @param Query\BoolQuery   $query
+     * @param array|string|null $orderBy
+     *
+     * @return Query
+     */
+    private function getSortedQuery(Query\BoolQuery $query, $orderBy = null)
+    {
+        if (!$orderBy) {
+            return $query;
+        }
+
+        if (is_string($orderBy)) {
+            $query = new Query($query);
+            $query->addSort([$orderBy => 'asc']);
+
+            return $query;
+        }
+
+        if (is_array($orderBy) && isset($orderBy['field'])) {
+            $query = new Query($query);
+            $query->addSort([$orderBy['field'] => isset($orderBy['sort']) ? $orderBy['sort'] : 'asc']);
+
+            return $query;
+        }
+
+        return $query;
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Elastica\Result;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
@@ -42,6 +43,16 @@ interface SheetSearchAdapterInterface
         $getAggregations,
         $nomenclatureItems = []
     );
+
+    /**
+     * @param Event       $event
+     * @param array       $filters
+     * @param string      $locale
+     * @param string|null $orderBy
+     *
+     * @return Result[]
+     */
+    public function findUnpaginated(Event $event, array $filters, $locale, $orderBy = null);
 
     /**
      * @param Event  $event

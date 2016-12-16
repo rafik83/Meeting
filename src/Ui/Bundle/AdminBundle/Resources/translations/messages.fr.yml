@@ -132,7 +132,13 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.link: Rendez-vous
 admin.menu.link: Menu
+admin.messaging.campaign.menu.create.title: 'Créer une nouvelle campagne'
+admin.messaging.campaign.sheet_list.columns.name: 'Nom de la fiche'
+admin.messaging.campaign.sheet_list.no_data: 'Aucune participation n''a été trouvée pour les critères courants'
+admin.messaging.campaign.sheet_list.success: 'Votre ciblage a été enregistré avec succès'
+admin.messaging.campaign.sheet_list.title: 'Créer mon ciblage'
 admin.messaging.link: Emailing
+admin.messaging.menu.title: Emailing
 admin.messaging.message.content: Contenu
 admin.messaging.message.create.title: 'Créer un nouveau message'
 admin.messaging.message.createdAt: 'Créé le'
@@ -355,6 +361,7 @@ admin.sheet.export.no: Non
 admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
+admin.sheet.filter.template_filters: 'Filtres supplémentaires'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'

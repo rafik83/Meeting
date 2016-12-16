@@ -152,11 +152,24 @@ class SheetSearchQueryBuilder
         $this->filterByCategory($filters);
         $this->filterByFollower($filters);
         $this->filterByPredefined($filters);
+        $this->filterByRegisteredAt($filters);
         $this->filterByInCatalog($filters);
         $this->filterByOrganizationCategory($filters);
         $this->filterByLocalization($filters);
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
+
+        if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
+            $this->filterHasCart();
+        }
+
+        if (isset($filters[Constant::NO_ORDER]) && true === $filters[Constant::NO_ORDER]) {
+            $this->filterNoOrder();
+        }
+
+        if (isset($filters['boolean_filters'])) {
+            $this->filterByBooleanFilter($filters['boolean_filters']);
+        }
 
         if (isset($filters[SearchType::FILTER_OBJECTIVE])) {
             $this->filterByObjective($filters[SearchType::FILTER_OBJECTIVE]);
@@ -269,8 +282,17 @@ class SheetSearchQueryBuilder
      */
     protected function filterByState(array &$filters)
     {
-        if (isset($filters['state']) && in_array($filters['state'], Sheet::getAllStates())) {
-            $this->query->addMust((new Term())->setTerm('state', $filters['state']));
+        /** @var array|string $filters['state'] */
+        if (isset($filters['state'])) {
+            // Cast into array:
+            $states = (array) $filters['state'];
+            $filterByState = new BoolQuery();
+            foreach ($states as $state) {
+                if (in_array($state, Sheet::getAllStates())) {
+                    $filterByState->addShould((new Term())->setTerm('state', $state));
+                }
+            }
+            $this->query->addMust($filterByState);
         }
     }
 
@@ -279,8 +301,16 @@ class SheetSearchQueryBuilder
      */
     protected function filterByValidationState(array &$filters)
     {
-        if (isset($filters['validationState']) && in_array($filters['validationState'], Sheet::getAllValidationStates())) {
-            $this->query->addMust((new Term())->setTerm('validationState', $filters['validationState']));
+        if (isset($filters['validationState'])) {
+            // Cast validationState into array:
+            $validationStates = (array) $filters['validationState'];
+            $filterByValidationState = new BoolQuery();
+            foreach ($validationStates as $validationState) {
+                if (in_array($validationState, Sheet::getAllValidationStates())) {
+                    $filterByValidationState->addShould((new Term())->setTerm('validationState', $validationState));
+                }
+            }
+            $this->query->addMust($filterByValidationState);
         }
     }
 
@@ -326,13 +356,22 @@ class SheetSearchQueryBuilder
      */
     protected function filterByCategory(array &$filters)
     {
-        if (isset($filters['category']) && $filters['category'] instanceof Category) {
+        if (isset($filters['category']) && !empty($filters['category'])) {
+            $categories = $filters['category'];
+            if ($categories instanceof Category) {
+                $categories = [$categories];
+            }
             $nested     = new Nested();
             $boolQuery  = new BoolQuery();
-            $matchQuery = new Match();
-            $matchQuery->setField('categories.id', $filters['category']->getId());
+            foreach ($categories as $category) {
+                if ($category instanceof Category) {
+                    $matchQuery = new Match();
+                    $matchQuery->setField('categories.id', $category->getId());
+                    $boolQuery->addShould($matchQuery);
+                }
+            }
 
-            $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('categories');
+            $nested->setQuery($boolQuery)->setPath('categories');
             $this->query->addMust($nested);
         }
     }
@@ -343,19 +382,28 @@ class SheetSearchQueryBuilder
     protected function filterByFollower(array &$filters)
     {
         if (isset($filters['follower'])) {
-            if ($filters['follower'] instanceof Admin) {
+            if ($filters['follower'] === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
                 $matchFollower = new Term();
-                $matchFollower
-                    ->setTerm('followUp', $filters['follower']->getId());
-
+                $matchFollower->setTerm('followUp', 0);
                 $this->query->addMust($matchFollower);
-            } elseif ($filters['follower'] === FollowerChoiceType::UNASSIGNED_FOLLOWER) {
-                $matchFollower = new Term();
-                $matchFollower
-                    ->setTerm('followUp', 0);
 
-                $this->query->addMust($matchFollower);
+                return;
             }
+
+            $followers = $filters['follower'];
+            if ($followers instanceof Admin) {
+                $followers = [$followers];
+            }
+            $followerQuery = new BoolQuery();
+
+            foreach ($followers as $follower) {
+                if ($follower instanceof Admin) {
+                    $matchFollower = new Term();
+                    $matchFollower->setTerm('followUp', $follower->getId());
+                    $followerQuery->addShould($matchFollower);
+                }
+            }
+            $this->query->addMust($followerQuery);
         }
     }
 
@@ -375,6 +423,27 @@ class SheetSearchQueryBuilder
                 $this->filterHasCart();
             } else {
                 $this->filterByBooleanFilter($filters['predefined']);
+            }
+        }
+    }
+
+    /**
+     * Handle the registeredAt filter ("Registered today" or "Registered this week")
+     *
+     * @param array $filters
+     */
+    protected function filterByRegisteredAt(array &$filters)
+    {
+        if (isset($filters['registeredAt'])) {
+            if ($filters['registeredAt'] === Constant::CREATED_TODAY) {
+                $this->filterCreatedToday();
+
+                return;
+            }
+            if ($filters['registeredAt'] === Constant::CREATED_THIS_WEEK) {
+                $this->filterCreatedThisWeek();
+
+                return;
             }
         }
     }
@@ -523,16 +592,22 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * @param string $predefined
+     * @param string|string[] $booleanFilters
      */
-    protected function filterByBooleanFilter($predefined)
+    protected function filterByBooleanFilter($booleanFilters)
     {
+        $booleanFilters = (array) $booleanFilters;
+
         $nested     = new Nested();
         $boolQuery  = new BoolQuery();
-        $matchQuery = new Match();
-        $matchQuery->setField('booleanFilter.key', $predefined);
 
-        $nested->setQuery($boolQuery->addMust($matchQuery))->setPath('booleanFilter');
+        foreach ($booleanFilters as $filter) {
+            $matchQuery = new Match();
+            $matchQuery->setField('booleanFilter.key', $filter);
+            $boolQuery->addShould($matchQuery);
+        }
+
+        $nested->setQuery($boolQuery)->setPath('booleanFilter');
         $this->query->addMust($nested);
     }
 

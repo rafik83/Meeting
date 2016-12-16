@@ -1,0 +1,72 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'admin.messaging.campaign.sheet_list.title'|trans }}
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ 'admin.messaging.campaign.sheet_list.title'|trans }} ({{ sheets|length }})</h1>
+
+    <div class="row">
+
+        {% if filters_summary|length %}
+            <div class="col-md-12 well">
+                {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_messaging_campaign_select_sheets', { 'event': event.id })
+                }) }}
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-5 well">
+            {% if sheets|length %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>{{ 'admin.messaging.campaign.sheet_list.columns.name'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sheet in sheets %}
+                            <tr>
+                                <td>{{ sheet.id }}</td>
+                                <td>{{ sheet.name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-warning">{{ 'admin.messaging.campaign.sheet_list.no_data'|trans }}</p>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-6 col-md-offset-1 well">
+            {{ form_start(filter_form) }}
+                {{ form_row(filter_form.text) }}
+                {{ form_row(filter_form.validationState) }}
+                {{ form_row(filter_form.state) }}
+                {{ form_row(filter_form.completed) }}
+                {{ form_row(filter_form.type) }}
+                {{ form_row(filter_form.category) }}
+                {{ form_row(filter_form.follower) }}
+                {{ form_row(filter_form.registeredAt) }}
+                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::NO_ORDER')]) }}
+                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')]) }}
+                {{ form_row(filter_form.boolean_filters) }}
+                <div class="form-group">
+                    <div class="col-sm-3">&nbsp;</div>
+                    <div class="col-sm-9">{{ form_widget(filter_form.submit) }}</div>
+                </div>
+            {{ form_end(filter_form) }}
+        </div>
+
+    </div>
+
+{% endblock %}
