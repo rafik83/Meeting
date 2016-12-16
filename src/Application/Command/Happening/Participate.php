@@ -29,27 +29,27 @@ class Participate
     /** @var Participant[] */
     public $participants;
 
-    /** @var string */
+    /** @var null|string */
     public $question;
 
     /**
-     * @param Happening $happening
-     * @param Sheet     $sheet
-     * @param User      $createdBy
-     * @param array     $participants
-     * @param string    $question
+     * @param Happening   $happening
+     * @param Sheet       $sheet
+     * @param User        $createdBy
+     * @param array       $participants
+     * @param null|string $question
      */
     public function __construct(
         Happening $happening,
         Sheet $sheet,
         User $createdBy,
         array $participants,
-        $question = ''
+        $question = null
     ) {
-        $this->happening = $happening;
-        $this->sheet = $sheet;
-        $this->createdBy = $createdBy;
+        $this->happening    = $happening;
+        $this->sheet        = $sheet;
+        $this->createdBy    = $createdBy;
         $this->participants = $participants;
-        $this->question = $question;
+        $this->question     = $question;
     }
 }

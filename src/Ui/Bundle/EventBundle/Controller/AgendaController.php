@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +32,7 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
         try {
+            /** @var AgendaView $agenda */
             $agenda = $this
                 ->get('tactician.commandbus.query')
                 ->handle(
@@ -39,9 +42,12 @@ class AgendaController extends Controller
             throw $this->createNotFoundException('Can not display this page');
         }
 
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $agenda->sheet);
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
-            'event'  => $eventDomain->getEvent(),
-            'agenda' => $agenda,
+            'event'                  => $eventDomain->getEvent(),
+            'agenda'                 => $agenda,
+            'isUserAloneParticipant' => $isUserAloneParticipant,
         ]);
     }
 }

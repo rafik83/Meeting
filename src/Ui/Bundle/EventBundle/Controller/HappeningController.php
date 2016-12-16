@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableExcep
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -46,27 +47,61 @@ class HappeningController extends Controller
             throw $this->createNotFoundException('Happening or sheet not in this event');
         }
 
-        $participants           = $sheet->getParticipants()->toArray();
-        $isUserAloneParticipant = $this->isUserAloneParticipant($sheet);
+        $selectedParticipants = $this
+            ->get('vimeet_infrastructure.repository.participant_repository')
+            ->getParticipantsForHappening($sheet, $happening);
+
+        $previousQuestion           = null;
+        $isCancelParticipationAlone = false;
+        $isParticipationAlone       = false;
+        $isUpdate                   = count($selectedParticipants) > 0;
+        $isQuestionAllowed          = $happening->isQuestionAllowed();
+
+        if ($isUpdate && $happening->isQuestionAllowed()) {
+            $question = $this
+                ->get('vimeet_infrastructure.repository.happening_question_repository')
+                ->getByUserAndHappening($this->getUser(), $happening);
+
+            if (null !== $question) {
+                $previousQuestion = $question->getContent();
+            }
+        }
+
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
+
+        if ($isUserAloneParticipant) {
+            if ($isUpdate) {
+                $isCancelParticipationAlone = true;
+            } else {
+                $isParticipationAlone = true;
+            }
+        }
+
+        $participants = $sheet->getParticipants()->toArray();
 
         $availableParticipants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getAvailableParticipantsForHappening($participants, $happening);
 
-        // Case : current user is not available for this happening, do not show modal
-        if (true === $isUserAloneParticipant && 0 === count($availableParticipants)) {
-            return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+        $noAvailableParticipants = 0 === count($availableParticipants);
+
+        // Case : user alone in sheet and it is new participation, he is selected directly
+        if ($isParticipationAlone) {
+            $selectedParticipants = $participants;
+
+            // Case : current user is not available for this happening, do not show modal
+            if ($noAvailableParticipants) {
+                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+            }
+        } elseif ($isCancelParticipationAlone) {
+            // Unselect current user
+            $selectedParticipants = [];
         }
 
-        // Case : happening is full
-        if (true === $this->get('domain.happening.participation_count')->isFull($happening)) {
-            return $this->createJsonResponseWithError('happening.participate.notEnoughtRemainingParticipations', [], 0);
-        }
-
-        // Case : one participant is current user and no question
-        if (true === $isUserAloneParticipant && false === $happening->isQuestionAllowed()) {
+        // Case : one participant is current user and no question so no modal
+        if ($isParticipationAlone && !$isQuestionAllowed || $isCancelParticipationAlone) {
             try {
-                $participate = new Participate($happening, $sheet, $this->getUser(), $participants);
+                $participate = new Participate($happening, $sheet, $this->getUser(), $selectedParticipants);
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
@@ -80,14 +115,18 @@ class HappeningController extends Controller
                 );
             }
 
-            return new JsonResponse(['status' => 'ok']);
+            return new JsonResponse([
+                'status' => 'ok',
+                'label'  => $isCancelParticipationAlone ? 'participate' : 'cancel',
+            ]);
         }
 
         $participate = new Participate(
             $happening,
             $sheet,
             $this->getUser(),
-            true === $isUserAloneParticipant ? $participants : []
+            $selectedParticipants,
+            $previousQuestion
         );
 
         // Create Participate form
@@ -114,7 +153,16 @@ class HappeningController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($participate);
 
-                return new JsonResponse(['status' => 'ok']);
+                $label = 'participate';
+
+                if (0 < count($participate->participants)) {
+                    $label = true === $isUserAloneParticipant ? 'cancel' : 'update';
+                }
+
+                return new JsonResponse([
+                    'status' => 'ok',
+                    'label'  => $label,
+                ]);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 $formOrParticipantsField->addError(new FormError($this->get('translator')->trans(
                     true === $isUserAloneParticipant
@@ -153,7 +201,8 @@ class HappeningController extends Controller
                     'picto'                   => $happening->getCategory()->getPicto(),
                     'form'                    => $participateForm->createView(),
                     'unavailableParticipants' => $unavailableParticipants,
-                    'noAvailableParticipants' => 0 === count($availableParticipants),
+                    'noAvailableParticipants' => $noAvailableParticipants,
+                    'isUpdate'                => $isUpdate,
                 ]),
             ]
         );
@@ -178,27 +227,5 @@ class HappeningController extends Controller
                     : $this->get('translator')->transChoice($errorKey, $number, $parameters),
             ]
         );
-    }
-
-    /**
-     * There is one participant in this sheet and this participant is the current logged user
-     *
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    private function isUserAloneParticipant(Sheet $sheet)
-    {
-        $participants = $sheet->getParticipants();
-
-        if (1 === count($participants)) {
-            $participant = $participants->first();
-
-            if ($participant->getUser() === $this->getUser()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

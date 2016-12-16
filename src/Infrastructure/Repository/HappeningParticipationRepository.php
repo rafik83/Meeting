@@ -152,4 +152,23 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeParticipantForHappening(Participant $participant, Happening $happening)
+    {
+        $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete(HappeningParticipation::class, 'participation')
+            ->where('participation.participant = :participant')
+            ->andWhere('participation.happening = :happening')
+            ->setParameter('participant', $participant)
+            ->setParameter('happening', $happening)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
 }

@@ -26,3 +26,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
+    oneToMany:
+        happeningParticipations:
+            targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
+            mappedBy: participant

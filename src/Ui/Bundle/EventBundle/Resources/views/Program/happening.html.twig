@@ -7,6 +7,6 @@
 
         <p>{{ happening.description|nl2br }}</p>
 
-        {{ include('EventBundle:Happening:footer.html.twig', {happening: happening, beginHour: happening.beginHour, endHour: happening.endHour}) }}
+        {{ include('EventBundle:Happening:footer.html.twig', { 'happening': happening, 'beginHour': happening.beginHour, 'endHour': happening.endHour, 'isUserAloneParticipant': isUserAloneParticipant}) }}
     </div>
 </div>
