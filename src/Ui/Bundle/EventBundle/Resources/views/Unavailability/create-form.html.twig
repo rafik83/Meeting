@@ -1,0 +1,67 @@
+{% form_theme form '@Ui/default.html.twig' %}
+
+<div class="modal-header">
+    <h4 class="modal-title" id="unavailability-create-modal-title">
+        <i class="icon-Verouiller_1"></i>
+        {{ 'agenda.unavailability.add'|trans }}
+    </h4>
+</div>
+
+{{ form_start(form) }}
+{{ form_errors(form) }}
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2">{{ form_label(form.day) }}</div>
+            <div class="col-md-6">
+                {{ form_errors(form.day) }}
+                {{ form_widget(form.day) }}
+            </div>
+        </div>
+
+        <div class="col-md-12" style="margin-top: 5px;">
+            <div class="col-md-2">{{ form_label(form.time.begin) }}</div>
+            <div class="col-md-6">
+                {{ form_errors(form.time.begin.hour) }}
+                {{ form_errors(form.time.begin.minute) }}
+                <div class="col-md-6">
+                    {{ form_widget(form.time.begin.hour) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_widget(form.time.begin.minute) }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12" style="margin-top: 5px;">
+            <div class="col-md-2">{{ form_label(form.time.end) }}</div>
+            <div class="col-md-6">
+                {{ form_errors(form.time.end.hour) }}
+                {{ form_errors(form.time.end.minute) }}
+                <div class="col-md-6">
+                    {{ form_widget(form.time.end.hour) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_widget(form.time.end.minute) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for key, child in form if key != 'submit'%}
+        {{ form_row(child) }}
+    {% endfor %}
+
+    <div class="validation button">
+        <button type="submit" class="btn btn-primary">
+            <i class="icon-Verouiller_1"></i> {{ 'form.create_unavailability.children.submit.label'|trans({}, 'forms') }}
+        </button>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'agenda.unavailability.back'|trans }}
+    </button>
+</div>
+{{ form_end(form) }}
