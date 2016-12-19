@@ -573,3 +573,11 @@ event_sheet_happening_participate:
         happening: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Happening:participate }
+
+#
+# Unavailability
+#
+event_unavailability_create_modal:
+    path: /agenda/unavailability/create
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Unavailability:create }
