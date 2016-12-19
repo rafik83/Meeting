@@ -946,6 +946,12 @@ admin_messaging_message_update:
     defaults: { _controller: AdminBundle:Messaging\Message:update }
 
 # Messaging campaigns
+admin_messaging_campaign_list:
+    path: /event/{event}/messaging-campaigns
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:list }
 admin_messaging_campaign_select_sheets:
     path: /event/{event}/messaging/campaign/select-sheets
     requirements:

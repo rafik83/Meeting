@@ -137,6 +137,11 @@ admin.messaging.campaign.sheet_list.columns.name: 'Nom de la fiche'
 admin.messaging.campaign.sheet_list.no_data: 'Aucune participation n''a été trouvée pour les critères courants'
 admin.messaging.campaign.sheet_list.success: 'Votre ciblage a été enregistré avec succès'
 admin.messaging.campaign.sheet_list.title: 'Créer mon ciblage'
+admin.messaging.campaign.list.columns.createdAt: 'Date de création'
+admin.messaging.campaign.list.columns.title: 'Titre'
+admin.messaging.campaign.list.no_data: 'Il n''existe pas de campagne d''emailing pour l''événement courant'
+admin.messaging.campaign.list.title: 'Campagnes d''emailing'
+admin.messaging.campaign.menu.list.title: Liste des campagnes
 admin.messaging.link: Emailing
 admin.messaging.menu.title: Emailing
 admin.messaging.message.content: Contenu

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\TargetFilterType;
@@ -66,6 +67,27 @@ class CampaignController extends Controller
             'sheets'          => $sheets,
             'filter_form'     => $filterFormView,
             'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+        ]);
+    }
+
+    /**
+     * Display all messaging campaigns for a given event.
+     *
+     * @param Request $request
+     * @param Event $event
+     *
+     * @return Response
+     */
+    public function listAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN', $event);
+
+        $query     = new ListViewQuery($event);
+        $campaigns = $this->get('tactician.commandbus')->handle($query);
+
+        return $this->render('AdminBundle:Messaging\Campaign:list.html.twig', [
+            'event'     => $event,
+            'campaigns' => $campaigns,
         ]);
     }
 }

@@ -233,6 +233,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.messaging.campaign_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Messaging\CampaignRepository
+        arguments:
+             - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -2020,6 +2024,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
+    query.messaging.campaign_list_handler:
+        class: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQueryHandler
+        arguments:
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
 
     #
     # Program query
