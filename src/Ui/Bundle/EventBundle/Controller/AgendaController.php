@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
@@ -38,6 +39,8 @@ class AgendaController extends Controller
                 ->handle(
                     new AgendaViewQuery($eventDomain->getEvent(), $this->getUser(), $request->getLocale())
                 );
+        } catch (SheetNotFoundException $exception) {
+            throw $this->createNotFoundException('Sheet not found');
         } catch (\Exception $exception) {
             throw $this->createNotFoundException('Can not display this page');
         }

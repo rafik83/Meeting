@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
@@ -270,7 +271,11 @@ class CatalogController extends Controller
      */
     private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        try {
+            $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        } catch (SheetNotFoundException $exception) {
+            throw $this->createNotFoundException('Sheet not found');
+        }
 
         if (!$this->get('catalog.sheet_access_checker')->checkAccess($userSheet, $sheet)) {
             throw $this->createAccessDeniedException();
