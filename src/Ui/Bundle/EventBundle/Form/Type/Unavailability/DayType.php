@@ -13,8 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Intl\DateFormatter;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

@@ -45,7 +45,10 @@ class TimeRangeType extends AbstractType
             $begin->setTimezone(new \DateTimeZone($event->getTimeZone()));
             $end->setTimezone(new \DateTimeZone($event->getTimeZone()));
 
-            for ($hour = intval($begin->format('H')); $hour <= intval($end->format('H')); $hour++) {
+            $beginFormat = intval($begin->format('H'));
+            $endFormat   = intval($end->format('H'));
+
+            for ($hour = $beginFormat; $hour <= $endFormat; $hour++) {
                 $hours[$hour] = $hour;
             }
 
