@@ -1,1 +1,1 @@
-{{ include('EventBundle:Agenda:index.html.twig') }}
+{{ include('EventBundle:Agenda:index.html.twig', {'event': event, 'agenda': agenda, 'isUserAloneParticipant': isUserAloneParticipant, 'form_unavailability': form_unavailability }) }}

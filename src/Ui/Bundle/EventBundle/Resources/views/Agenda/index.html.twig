@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="pull-right mg-tp">
-        <a href="{{ path('event_unavailability_create_modal') }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
+        <a href="{{ path('event_unavailability_create') }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
     </div>
     <div class="agenda-container">
         <div class="row">
@@ -39,7 +39,7 @@
         </div>
     </div>
     <div class="pull-right">
-        <a href="{{ path('event_unavailability_create_modal') }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
+        <a href="{{ path('event_unavailability_create') }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
     </div>
     {{ include('EventBundle:Agenda:modal.html.twig') }}
 {% endblock %}

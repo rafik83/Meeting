@@ -1,4 +1,4 @@
-{% form_theme form '@Ui/default.html.twig' %}
+{% form_theme form_unavailability '@Ui/default.html.twig' %}
 
 <div class="modal-header">
     <h4 class="modal-title" id="unavailability-create-modal-title">
@@ -7,49 +7,51 @@
     </h4>
 </div>
 
-{{ form_start(form) }}
-{{ form_errors(form) }}
+{{ form_start(form_unavailability) }}
+{{ form_errors(form_unavailability) }}
 <div class="modal-body">
     <div class="row">
+        {% if form_unavailability.day is defined %}
         <div class="col-md-12">
-            <div class="col-md-2">{{ form_label(form.day) }}</div>
+            <div class="col-md-2">{{ form_label(form_unavailability.day) }}</div>
             <div class="col-md-6">
-                {{ form_errors(form.day) }}
-                {{ form_widget(form.day) }}
+                {{ form_errors(form_unavailability.day) }}
+                {{ form_widget(form_unavailability.day) }}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="col-md-12" style="margin-top: 5px;">
+            <div class="col-md-2">{{ form_label(form_unavailability.time.begin) }}</div>
+            <div class="col-md-6">
+                {{ form_errors(form_unavailability.time.begin.hour) }}
+                {{ form_errors(form_unavailability.time.begin.minute) }}
+                <div class="col-md-6">
+                    {{ form_widget(form_unavailability.time.begin.hour) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_widget(form_unavailability.time.begin.minute) }}
+                </div>
             </div>
         </div>
 
-        <div class="col-md-12" style="margin-top: 5px;">
-            <div class="col-md-2">{{ form_label(form.time.begin) }}</div>
-            <div class="col-md-6">
-                {{ form_errors(form.time.begin.hour) }}
-                {{ form_errors(form.time.begin.minute) }}
-                <div class="col-md-6">
-                    {{ form_widget(form.time.begin.hour) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_widget(form.time.begin.minute) }}
-                </div>
-            </div>
-        </div>
-
 
         <div class="col-md-12" style="margin-top: 5px;">
-            <div class="col-md-2">{{ form_label(form.time.end) }}</div>
+            <div class="col-md-2">{{ form_label(form_unavailability.time.end) }}</div>
             <div class="col-md-6">
-                {{ form_errors(form.time.end.hour) }}
-                {{ form_errors(form.time.end.minute) }}
+                {{ form_errors(form_unavailability.time.end.hour) }}
+                {{ form_errors(form_unavailability.time.end.minute) }}
                 <div class="col-md-6">
-                    {{ form_widget(form.time.end.hour) }}
+                    {{ form_widget(form_unavailability.time.end.hour) }}
                 </div>
                 <div class="col-md-6">
-                    {{ form_widget(form.time.end.minute) }}
+                    {{ form_widget(form_unavailability.time.end.minute) }}
                 </div>
             </div>
         </div>
     </div>
 
-    {% for key, child in form if key != 'submit'%}
+    {% for key, child in form_unavailability if key != 'submit'%}
         {{ form_row(child) }}
     {% endfor %}
 
@@ -64,4 +66,4 @@
         <i class="icon-Retour"></i>{{ 'agenda.unavailability.back'|trans }}
     </button>
 </div>
-{{ form_end(form) }}
+{{ form_end(form_unavailability) }}

@@ -42,6 +42,7 @@ class CreateType extends AbstractType
     {
         /** @var Sheet $sheet */
         $sheet  = $options['sheet'];
+        /** @var Event $event */
         $event  = $options['event'];
         $locale = $options['locale'];
 
@@ -52,20 +53,25 @@ class CreateType extends AbstractType
             $event->getTimeZone()
         );
 
+        if (count($event->getDays()) > 1) {
+            $builder
+                ->add('day', DayType::class, [
+                    'event'    => $event,
+                    'formater' => $formater,
+                    'locale'   => $locale,
+                    'required' => true,
+                ]);
+        }
+
         $builder
-            ->add('day', DayType::class, [
-                'event'    => $event,
-                'formater' => $formater,
-                'locale'   => $locale,
-                'required' => true,
-            ])
             ->add('time', TimeRangeType::class, [
                 'event'    => $event,
                 'label'    => false,
                 'required' => true,
-            ]);
+            ])
+        ;
 
-        if ($options['isUserAloneParticipant'] === true) {
+        if ($options['isUserAloneParticipant'] !== true) {
             $builder
                 ->add('participants', ChoiceType::class, [
                     'choices'      => $sheet->getParticipants()->toArray(),

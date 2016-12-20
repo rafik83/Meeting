@@ -54,7 +54,7 @@ class UnavailabilityController extends Controller
 
         $create = new Create($event, $sheet, $this->getUser(), $request->getLocale());
         $form   = $this->createForm(CreateType::class, $create, [
-            'action'                 => $this->generateUrl('event_unavailability_create_handle'),
+            'action'                 => $this->generateUrl('event_unavailability_create'),
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'event'                  => $event,
             'locale'                 => $request->getLocale(),
@@ -64,7 +64,7 @@ class UnavailabilityController extends Controller
         // If the page is called by an ajax request, only show the form
         if ($request->isXmlHttpRequest()) {
             return $this->render('EventBundle:Unavailability:create-form.html.twig', [
-                'form' => $form->createView(),
+                'form_unavailability' => $form->createView(),
             ]);
         }
 
@@ -127,9 +127,10 @@ class UnavailabilityController extends Controller
             );
 
         return $this->render('EventBundle:Unavailability:create.html.twig', [
-            'event'                  => $event->getId(),
+            'event'                  => $event,
             'agenda'                 => $agenda,
             'isUserAloneParticipant' => $isUserAloneParticipant,
+            'form_unavailability'    => $form->createView()
         ]);
     }
 }
