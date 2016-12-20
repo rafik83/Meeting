@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedEx
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -68,8 +69,9 @@ class CreateHandler
         $day = $create->day->getDay();
         $dayUTC = clone $day;
 
+        $beginTimeHour = intval($create->time['begin']['hour']) - ($dayUTC->getOffset() / 3600);
         $beginTime = gmmktime(
-            $create->time['begin']['hour'] - ($dayUTC->getOffset() / 3600),
+            $beginTimeHour,
             $create->time['begin']['minute'],
             0,
             intval($day->format('n')),
@@ -77,8 +79,9 @@ class CreateHandler
             intval($day->format('Y'))
         );
 
+        $endTimeHour = intval($create->time['end']['hour']) - ($dayUTC->getOffset() / 3600);
         $endTime = gmmktime(
-            $create->time['end']['hour'] - ($dayUTC->getOffset() / 3600),
+            $endTimeHour,
             $create->time['end']['minute'],
             0,
             intval($day->format('n')),
@@ -119,5 +122,10 @@ class CreateHandler
         // Merger unavailability
 
         // Truncate unavailability with start time and end time of day if out of period
+
+        // Save unavailability
+        foreach ($create->participants as $participant) {
+            $this->unavailabilityRepository->add(new Unavailability($participant, $begin, $end));
+        }
     }
 }
