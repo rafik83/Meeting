@@ -31,11 +31,11 @@ class TimeRangeType extends AbstractType
             $end   = null;
 
             foreach ($days as $day) {
-                if ($begin === null || $begin > $day->getStartTime()) {
+                if ($begin === null || $begin->format('H') > $day->getStartTime()->format('H')) {
                     $begin = $day->getStartTime();
                 }
 
-                if ($end === null || $end < $day->getEndTime()) {
+                if ($end === null || $end->format('H') < $day->getEndTime()->format('H')) {
                     $end = $day->getEndTime();
                 }
             }
