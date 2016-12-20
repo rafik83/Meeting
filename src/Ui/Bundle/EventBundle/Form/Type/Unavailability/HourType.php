@@ -27,7 +27,10 @@ class HourType extends AbstractType
         }
 
         $resolver->setDefaults([
-            'choices' => $hours,
+            'choices'      => $hours,
+            'choice_label' => function ($hour) {
+                return $hour < 10 ? sprintf('0%s', $hour) : $hour;
+            },
         ]);
     }
 
