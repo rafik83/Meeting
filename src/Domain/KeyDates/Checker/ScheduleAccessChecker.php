@@ -21,6 +21,10 @@ class ScheduleAccessChecker extends AccessChecker
      */
     public function allowedToAccess(Event $event)
     {
+        if (null === $event->getConfiguration()->getSchedulePublishDate()) {
+            return false;
+        }
+
         return $this->datetime >= $event->getConfiguration()->getSchedulePublishDate();
     }
 }
