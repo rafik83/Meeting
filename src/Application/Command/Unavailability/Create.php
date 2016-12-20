@@ -51,7 +51,6 @@ class Create
      * @param Sheet  $sheet
      * @param User   $user
      * @param string $locale
-     *
      */
     public function __construct(Event $event, Sheet $sheet, User $user, $locale)
     {
@@ -63,8 +62,9 @@ class Create
         $participant = $sheet->getUserParticipant($user);
 
         if (null !== $participant) {
-            $this->participants = [$participant];
+            $this->participants[] = $participant;
         }
+
         $this->locale = $locale;
     }
 }

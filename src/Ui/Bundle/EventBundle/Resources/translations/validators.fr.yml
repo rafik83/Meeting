@@ -14,7 +14,7 @@ validators.participant.alreadyLinkedToASheet: 'Cette personne possède déjà un
 validators.participant.alreadyLinkedToThisSheet: 'Cette personne est déjà présente sur votre fiche'
 validators.participant.canNotRemoveAllParticipants: 'Vous ne pouvez pas supprimer tous les participants de la fiche'
 validators.type.required: 'Un type de participation est requis'
-validators.unavailability.participantsNotSelected: 'Un participant au moins doit être sélectioné'
+validators.unavailability.participantsNotSelected: 'Un participant au moins doit être sélectionné'
 validators.unavailability.participantsWithConflict: '{1} %participants% participe à un évènement ou un rendez-vous pendant la période sélectionnée, veuillez le déincrire avant de pouvoir poser cette indisponbilité pour lui|]1,Inf[ %participants% participent à un évènement ou un rendez-vous pendant la période sélectionnée, veuillez les déincrire avant de pouvoir poser cette indisponbilité pour eux'
 validators.unavailability.timeOutOfRange.end: 'L''heure de début sélectionnée est hors des heures du %day%'
 validators.unavailability.timeOutOfRange.begin: 'L''heure de fin sélectionnée est hors des heures du %day%'

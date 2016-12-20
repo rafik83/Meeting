@@ -2,9 +2,22 @@ Proximum\Vimeet\Application\Command\Unavailability\Create:
     properties:
         day:
             - NotNull: ~
-        begin:
-            - NotNull: ~
-        end:
-            - NotNull: ~
+        time:
+            - Collection:
+                begin:
+                    - Collection:
+                        hour:
+                            - NotNull: ~
+                        minute:
+                            - NotNull: ~
+                end:
+                    - Collection:
+                        hour:
+                            - NotNull: ~
+                        minute:
+                            - NotNull: ~
         participants:
-            - NotNull: ~
+            - Count:
+                min: 1
+                minMessage: validators.unavailability.participantsNotSelected
+

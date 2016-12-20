@@ -41,6 +41,7 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
         $event = $eventDomain->getEvent();
+        $user  = $this->getUser();
 
         try {
             $sheet = $this
@@ -50,9 +51,9 @@ class UnavailabilityController extends Controller
             throw $this->createNotFoundException('Sheet not found');
         }
 
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
 
-        $create = new Create($event, $sheet, $this->getUser(), $request->getLocale());
+        $create = new Create($event, $sheet, $user, $request->getLocale());
         $form   = $this->createForm(CreateType::class, $create, [
             'action'                 => $this->generateUrl('event_unavailability_create'),
             'isUserAloneParticipant' => $isUserAloneParticipant,
@@ -123,7 +124,7 @@ class UnavailabilityController extends Controller
         $agenda = $this
             ->get('tactician.commandbus.query')
             ->handle(
-                new AgendaViewQuery($event, $this->getUser(), $request->getLocale())
+                new AgendaViewQuery($event, $user, $request->getLocale())
             );
 
         return $this->render('EventBundle:Unavailability:create.html.twig', [
