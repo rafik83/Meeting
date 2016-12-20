@@ -32,7 +32,7 @@ class CreateHandler
     public function __construct(MessageRepositoryInterface $messageRepository, \DateTimeInterface $date)
     {
         $this->messageRepository = $messageRepository;
-        $this->date = $date;
+        $this->date              = $date;
     }
 
     /**
@@ -40,6 +40,8 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $this->messageRepository->add(new Message($command->getEvent(), $this->date, $command->name, $command->subject, $command->content));
+        $this->messageRepository->add(
+            new Message($command->getEvent(), $this->date, $command->name, $command->subject, $command->content)
+        );
     }
 }
