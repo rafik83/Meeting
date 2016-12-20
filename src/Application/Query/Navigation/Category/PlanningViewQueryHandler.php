@@ -134,9 +134,9 @@ class PlanningViewQueryHandler
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      *
-     * @return IntlDateFormatter|null
+     * @return IntlDateFormatter
      */
     private function getFormatter($locale)
     {
