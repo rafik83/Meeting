@@ -16,6 +16,9 @@ Proximum\Vimeet\Application\Command\Unavailability\Create:
                             - NotNull: ~
                         minute:
                             - NotNull: ~
+            - Expression:
+                expression: "this.time['begin']['hour'] <= this.time['end']['hour'] && (this.time['begin']['hour'] == this.time['end']['hour'] && this.time['begin']['minute'] < this.time['end']['minute'])"
+                message: "validators.unavailability.startTimeMustBeBeforeEndTime"
         participants:
             - Count:
                 min: 1
