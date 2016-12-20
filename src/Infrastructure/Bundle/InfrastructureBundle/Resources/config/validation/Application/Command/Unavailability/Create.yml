@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\Unavailability\Create:
+    properties:
+        day:
+            - NotNull: ~
+        begin:
+            - NotNull: ~
+        end:
+            - NotNull: ~
+        participants:
+            - NotNull: ~
