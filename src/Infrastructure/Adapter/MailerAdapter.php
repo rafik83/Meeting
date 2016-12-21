@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -76,5 +76,10 @@ class MailerAdapter implements MailerInterface
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
         $this->mailer->send($message);
+    }
+
+    protected function getMailer()
+    {
+        return $this->mailer;
     }
 }

@@ -100,6 +100,8 @@ flash.meeting_request.edit.success: 'Vous avez bien modifié la demande de rende
 flash.meeting_request.refused.success: 'Vous avez bien refusé la proposition de rendez-vous'
 flash.messaging.message.create.success: 'Le message a bien été enregistré'
 flash.messaging.message.update.success: 'Le message a bien été modifié'
+flash.messaging.campaign.send.success: 'L''emailing a bien été envoyé'
+flash.messaging.campaign.send.failure: 'Une erreur est intervenue durant l''envoi de l''emailing'
 flash.new_password.success: 'Votre mot de passe a été changé'
 flash.package.add_products.empty: 'Pas de produits ajoutés'
 flash.package.add_products.success: 'L''ajout des produits a bien été pris en compte'

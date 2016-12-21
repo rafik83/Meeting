@@ -1348,6 +1348,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage }
 
+    command.messaging.campaign.send_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@repository.messaging.campaign_repository'
+            - '@adapter.sendgrid_api_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+
     #
     # Security
     #
@@ -1594,6 +1603,13 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\MailerAdapter
         arguments:
             - '@mailer'
+            - '@twig'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    adapter.sendgrid_api_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
+        arguments:
+            - '@domain.messaging.sendgrid_api_client'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
@@ -2767,3 +2783,15 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+
+    #
+    # SendGrid API
+    #
+    domain.messaging.sendgrid_api_client.factory:
+        class: Proximum\Vimeet\Domain\Messaging\SendGridApiClientFactory
+        arguments:
+            - '%sendgrid_api_key%'
+
+    domain.messaging.sendgrid_api_client:
+        class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
+        factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']

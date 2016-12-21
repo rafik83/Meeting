@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
@@ -175,7 +176,7 @@ class CampaignController extends Controller
      * Display all messaging campaigns for a given event.
      *
      * @param Request $request
-     * @param Event $event
+     * @param Event   $event
      *
      * @return Response
      */
@@ -190,6 +191,27 @@ class CampaignController extends Controller
         return $this->render('AdminBundle:Messaging\Campaign:list.html.twig', [
             'event'     => $event,
             'campaigns' => $campaigns,
+        ]);
+    }
+
+    /**
+     * Display all messaging campaigns for a given event.
+     *
+     * @param Event    $event
+     * @param Campaign $campaign
+     *
+     * @return RedirectResponse
+     */
+    public function sendAction(Event $event, Campaign $campaign)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        $this->get('tactician.commandbus')->handle(new Send($campaign));
+        $this->addFlash('success', 'flash.messaging.campaign.send.success');
+
+        return $this->redirectToRoute('admin_messaging_campaign_list', [
+            'event' => $event->getId(),
         ]);
     }
 }

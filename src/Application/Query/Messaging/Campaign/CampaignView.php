@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,16 +23,24 @@ class CampaignView
     /** @var \DateTimeInterface */
     public $createdAt;
 
+    /** @var \DateTimeInterface */
+    public $sentAt;
+
+    /** @var \DateTimeInterface */
+    public $sent;
+
     /**
      * @param int                $id
      * @param string             $title
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($id, $title, \DateTimeInterface $createdAt)
+    public function __construct($id, $title, \DateTimeInterface $createdAt, \DateTimeInterface $sentAt = null)
     {
         $this->id        = $id;
         $this->title     = $title;
         $this->createdAt = $createdAt;
+        $this->sentAt    = $sentAt;
+        $this->sent      = (bool) $sentAt;
     }
 
     /**
@@ -45,7 +53,8 @@ class CampaignView
         return new self(
             $campaign->getId(),
             $campaign->getTitle(),
-            $campaign->getCreatedAt()
+            $campaign->getCreatedAt(),
+            $campaign->getSentAt()
         );
     }
 }

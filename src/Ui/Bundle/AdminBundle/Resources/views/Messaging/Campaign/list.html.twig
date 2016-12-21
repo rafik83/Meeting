@@ -19,6 +19,7 @@
                 <tr>
                     <th>{{ 'admin.messaging.campaign.list.columns.title'|trans }}</th>
                     <th>{{ 'admin.messaging.campaign.list.columns.createdAt'|trans }}</th>
+                    <th>{{ 'admin.messaging.campaign.list.columns.sentAt'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,15 @@
                     <tr>
                         <td>{{ campaign.title }}</td>
                         <td>{{ campaign.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        {% if campaign.sent %}
+                            <td>{{ campaign.sentAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        {% else %}
+                            <td>
+                                <a href="{{ path('admin_messaging_campaign_send', { 'event': event.id, 'campaign': campaign.id }) }}">
+                                    {{ 'admin.messaging.campaign.send.title'|trans }}
+                                </a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
