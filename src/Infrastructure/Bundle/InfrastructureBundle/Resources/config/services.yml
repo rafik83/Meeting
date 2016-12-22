@@ -2580,3 +2580,24 @@ services:
         class:  Proximum\Vimeet\Domain\Happening\ParticipationCount
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+
+    #
+    # Serializer: normalizers and encoders
+    #
+    serializer.normalizer.event_sheets:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
+        public: false
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.encoder.csv:
+        class: Proximum\Vimeet\Application\Serializer\Encoder\CsvEncoder
+        arguments:
+            - ";" # delimiter
+        public: false
+        tags:
+            - { name: serializer.encoder }

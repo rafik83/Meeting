@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class Telephone extends EditableObject implements ContentObjectInterface
+class Telephone extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
     /**
      * @param string $telephone
@@ -62,5 +62,21 @@ class Telephone extends EditableObject implements ContentObjectInterface
     public function setContentValue($value)
     {
         $this->setTelephone($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent()
+    {
+        return $this->getContentLabel();
     }
 }

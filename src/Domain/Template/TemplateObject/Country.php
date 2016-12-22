@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Symfony\Component\Intl\Intl;
 
-class Country extends EditableObject implements ContentObjectInterface
+class Country extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
     /**
      * @param string $country
@@ -64,5 +64,21 @@ class Country extends EditableObject implements ContentObjectInterface
     public function getContentValueLocalize($locale)
     {
         return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent()
+    {
+        return $this->getContentLabel();
     }
 }

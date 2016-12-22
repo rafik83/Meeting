@@ -103,7 +103,7 @@ class Sheet implements TraceableInterface
     /**
      * "Suivi commercial"
      *
-     * @var Admin
+     * @var Admin|null
      */
     private $follower;
 
@@ -642,7 +642,7 @@ class Sheet implements TraceableInterface
     /**
      * Get follower
      *
-     * @return Admin
+     * @return Admin|null
      */
     public function getFollower()
     {

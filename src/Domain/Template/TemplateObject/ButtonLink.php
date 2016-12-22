@@ -63,4 +63,12 @@ class ButtonLink extends EditableObject implements ContentObjectInterface
     {
         $this->setUrl($value);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExportable()
+    {
+        return false;
+    }
 }
