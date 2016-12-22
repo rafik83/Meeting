@@ -309,6 +309,11 @@ event_catalog_sheet_meeting_request:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:MeetingRequest:createRequest }
 
+event_catalog_pagination:
+    path: /catalog/pagination
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Catalog:pagination }
+
 #
 # Schedule
 #
