@@ -95,7 +95,7 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ->setParameter('begin', $unavailability->getBegin())
             ->setParameter('end', $unavailability->getEnd());
 
-        if ($unavailability->getId()) {
+        if (null !== $unavailability->getId()) {
             $queryBuilder
                 ->andWhere('unavailability.id != :id')
                 ->setParameter('id', $unavailability->getId());
