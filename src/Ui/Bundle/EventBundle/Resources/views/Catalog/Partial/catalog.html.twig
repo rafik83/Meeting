@@ -1,5 +1,5 @@
 {{ include('EventBundle:Catalog:Partial/search.html.twig', { searchForm: searchForm, typeViews: typeViews, total: paginatedResult.total }, false) }}
 
 <div class="catalog__list catalog__list--block">
-    {{ include('EventBundle:Catalog:Partial/list.html.twig', { paginatedResult: paginatedResult, 'viewer': sheet }, false) }}
+    {{ include('EventBundle:Catalog:Partial/list.html.twig', { paginatedResult: paginatedResult, 'viewer': sheet, seeMoreButton: seeMoreButton }, false) }}
 </div>

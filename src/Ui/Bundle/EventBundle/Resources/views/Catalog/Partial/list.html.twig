@@ -1,10 +1,15 @@
 <div class="row">
     {% for catalogSheetPreviewView in paginatedResult.results %}
         {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', { catalogSheetPreviewView: catalogSheetPreviewView, 'viewer': viewer }) }}
-        {% if loop.index % 3 == 0 %}</div><div class="row">{% endif %}
+        {% if loop.index % 3 == 0 %}
+            </div><div class="row">
+        {% endif %}
     {% else %}
         <div class="col-md-12 important fail text-center">
             {{ 'catalog.noResult'|trans }}
         </div>
     {% endfor %}
 </div>
+{% if seeMoreButton %}
+    <div class="btn btn-default see-more" data-page="{{ paginatedResult.page }}">Voir plus</div>
+{% endif %}
