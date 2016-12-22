@@ -218,3 +218,11 @@ form.user_filter.children.text_search.label: 'Last name, first name or email of 
 form.vatMode.ati: 'Incl. Tax'
 form.vatMode.et: 'Ext. Tax'
 form.who_see_who.children.submit.label: Add
+form.messaging_create_message.children.name.label: Name emailing
+form.messaging_create_message.children.subject.label: Subject
+form.messaging_create_message.children.content.label: Content
+form.messaging_create_message.children.submit.label: Save
+form.messaging_update_message.children.name.label: Name emailing
+form.messaging_update_message.children.subject.label: Subject
+form.messaging_update_message.children.content.label: Content
+form.messaging_update_message.children.submit.label: Save

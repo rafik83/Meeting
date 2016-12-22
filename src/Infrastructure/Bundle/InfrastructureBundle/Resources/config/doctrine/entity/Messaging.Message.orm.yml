@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Messaging\Message:
+    type:  entity
+    table: messaging_message
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        subject:
+            type: string
+        content:
+            type: text
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE

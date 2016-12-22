@@ -84,6 +84,16 @@
 {% endif %}
 
 {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
+    <li class="dropdown-submenu">
+        <a href="{{ path('admin_messaging_message_list', { 'event': event.id }) }}">{{ 'admin.messaging.link'|trans }}</a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_messaging_message_list', { 'event': event.id }) }}">
+                {{ 'admin.messaging.message.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
     <li>
         <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}">
             {{ 'admin.schedule.link'|trans }}
