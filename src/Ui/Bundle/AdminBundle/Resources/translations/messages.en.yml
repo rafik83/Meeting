@@ -25,6 +25,15 @@ admin.meeting_request.from: From
 admin.meeting_request.link: 'Meeting requests'
 admin.meeting.link: Meetings
 admin.menu.link: Menu
+admin.messaging.link: Emailing
+admin.messaging.message.content: Content
+admin.messaging.message.create.title: 'Create a new message'
+admin.messaging.message.createdAt: 'Created at'
+admin.messaging.message.edit.title: 'Edit message %name%'
+admin.messaging.message.link: Messages
+admin.messaging.message.list.edit_link: Edit
+admin.messaging.message.name: 'Name emailing'
+admin.messaging.message.subject: Subject
 admin.new.link: admin.new.link
 admin.nomenclature.table.read: See
 admin.operator_list.table.content.update: Edit
@@ -69,7 +78,7 @@ admin.transaction.state.pending: Pending
 admin.type.link: 'Participation types'
 admin.users.details: 'View the account'
 admin.users.see-sheet: 'See the participation'
-admin.zero-result: admin.zero-result
+admin.zero-result: 'No result'
 and: and
 and_more: 'and %count% other|and %count% others'
 boolean.no: 'No'
@@ -165,12 +174,3 @@ logout.title: Logout
 new_password.title: 'Create a new password'
 register.email_already_exists: 'An account with this email address already exists'
 reset_password.title: 'Request new password'
-admin.messaging.link: Emailing
-admin.messaging.message.link: Messages
-admin.messaging.message.create.title: 'Create a new message'
-admin.messaging.message.name: Name emailing
-admin.messaging.message.subject: Subject
-admin.messaging.message.content: Content
-admin.messaging.message.createdAt: 'Created at'
-admin.messaging.message.list.edit_link: 'Edit'
-admin.messaging.message.edit.title: 'Edit message %name%'
