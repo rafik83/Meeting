@@ -30,7 +30,7 @@ mail.orderConfirm.end: 'Best regards,'
 mail.orderConfirm.linkToProForma: 'View Proforma invoice'
 mail.orderConfirm.subject: 'Your order has been registered'
 mail.participant.profile.link: 'Your member area'
-mail.register.body: '%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created. We are happy to count you among the Vimeet community. You can now connect to your member area on the website of %event%. Best regards,'
+mail.register.body: "%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
 mail.register.subject: 'The access to your member area of %event% has been created'
 mail.resetPassword.body: 'Hello, you have asked for a password modification. Please click on the following link to create a new password:'
 mail.resetPassword.end: 'Best regards,'

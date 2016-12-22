@@ -132,6 +132,15 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.link: Rendez-vous
 admin.menu.link: Menu
+admin.messaging.link: Emailing
+admin.messaging.message.content: Contenu
+admin.messaging.message.create.title: 'Créer un nouveau message'
+admin.messaging.message.createdAt: 'Créé le'
+admin.messaging.message.edit.title: 'Modifier message %name%'
+admin.messaging.message.link: Messages
+admin.messaging.message.list.edit_link: Modifier
+admin.messaging.message.name: 'Nom emailing'
+admin.messaging.message.subject: Sujet
 admin.new.link: Ajouter
 admin.nomenclature.assign.modal.title: 'Assigner à un événement'
 admin.nomenclature.create.button: 'Nouvelle nomenclature'
@@ -328,22 +337,22 @@ admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
-admin.sheet.export.fields.event_id: ID événement
-admin.sheet.export.fields.event_name: Nom de l'événement
-admin.sheet.export.fields.sheet_id: ID fiche
-admin.sheet.export.fields.owner_id: ID propriétaire
-admin.sheet.export.fields.owner_email: Email propriétaire
-admin.sheet.export.fields.type: Type
-admin.sheet.export.fields.category: Catégorie
-admin.sheet.export.fields.registration_date: Date inscription
-admin.sheet.export.fields.participants: Nombre de participants
-admin.sheet.export.fields.status: Statut fiche
-admin.sheet.export.fields.following: Suivi commercial
-admin.sheet.export.fields.in_catalog: Ajouté au catalogue
-admin.sheet.export.yes: Oui
-admin.sheet.export.no: Non
-admin.sheet.export.button.label: Exporter
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
+admin.sheet.export.button.label: Exporter
+admin.sheet.export.fields.category: Catégorie
+admin.sheet.export.fields.event_id: 'ID événement'
+admin.sheet.export.fields.event_name: 'Nom de l''événement'
+admin.sheet.export.fields.following: 'Suivi commercial'
+admin.sheet.export.fields.in_catalog: 'Ajouté au catalogue'
+admin.sheet.export.fields.owner_email: 'Email propriétaire'
+admin.sheet.export.fields.owner_id: 'ID propriétaire'
+admin.sheet.export.fields.participants: 'Nombre de participants'
+admin.sheet.export.fields.registration_date: 'Date inscription'
+admin.sheet.export.fields.sheet_id: 'ID fiche'
+admin.sheet.export.fields.status: 'Statut fiche'
+admin.sheet.export.fields.type: Type
+admin.sheet.export.no: Non
+admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.follower: 'Suivi commercial'
@@ -645,12 +654,3 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
-admin.messaging.link: Emailing
-admin.messaging.message.link: Messages
-admin.messaging.message.create.title: 'Créer un nouveau message'
-admin.messaging.message.name: Nom emailing
-admin.messaging.message.subject: Sujet
-admin.messaging.message.content: Contenu
-admin.messaging.message.createdAt: 'Créé le'
-admin.messaging.message.list.edit_link: 'Modifier'
-admin.messaging.message.edit.title: 'Modifier message %name%'

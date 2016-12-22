@@ -185,7 +185,8 @@ sheet.title: 'Presentation sheet'
 sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the online catalogue of participants. You will still be able to modify it later on'
 sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory feedls marked with an asterisk.'
 sheet.welcome.packageContent: 'Choose the formula of participation.'
-sheet.welcome.sheetContent: 'Complete your presentation sheet that will be advertised in the online catalogue. The more accurate your information is, the more targeted your appointments will be'
+sheet.welcome.programContent: 'Choose your conferences'
+sheet.welcome.sheetContent: "Complete your presentation sheet.\n\nThen\n\nSubmit it for validation"
 sheet.welcome.subtitle: 'To finalise your request you need to'
 sheet.welcome.title: 'TO FINALISE YOUR REQUEST:'
 summary.column.quantity: Quantity
