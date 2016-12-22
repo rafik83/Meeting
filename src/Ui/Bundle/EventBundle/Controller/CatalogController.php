@@ -93,7 +93,7 @@ class CatalogController extends Controller
                     $event,
                     $filters,
                     $request->query->getInt('page', 1),
-                    100,
+                    48,
                     $locale,
                     $sheet
                 )
@@ -101,6 +101,8 @@ class CatalogController extends Controller
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
         }
+
+        $seeMoreButton = count($paginatedResult->results) < $paginatedResult->total;
 
         $searchForm = $this->getFilteredSearchForm(
             $event,
@@ -125,8 +127,96 @@ class CatalogController extends Controller
             'isCatalog'       => true,
             'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
+            'seeMoreButton'   => $seeMoreButton,
             'searchForm'      => $searchForm->createView(),
         ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function paginationAction(Request $request, EventDomain $eventDomain)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $event = $eventDomain->getEvent();
+
+        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
+            throw $this->createNotFoundException();
+        }
+
+        $locale = $request->getLocale();
+
+        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
+        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+
+        if (empty($visibleTypes)) {
+            return $this->render('EventBundle:Catalog:no-visible-type.html.twig', ['event' => $event]);
+        }
+
+        $typeViews = $this->get('tactician.commandbus.query')->handle(
+            new TypeViewQuery($event, $visibleTypes, $locale)
+        );
+
+        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
+            new OrganizationCategoryViewQuery($event, $locale)
+        );
+
+        $positionViews = $this->get('tactician.commandbus.query')->handle(
+            new PositionViewQuery($event, $locale)
+        );
+
+        $filters = $this->getDefaultFilters($typeViews);
+
+        $searchForm = $this->getSearchForm($filters, $typeViews, $organizationCategoryViews, $positionViews, $event, $locale);
+
+        if ($searchForm->handleRequest($request) && $searchForm->isValid()) {
+            $filters = $searchForm->getData();
+        }
+
+        try {
+            /** @var PaginatedResult $paginatedResult */
+            $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+                new PaginatedCatalogSheetPreviewViewQuery(
+                    $event,
+                    $filters,
+                    $request->query->getInt('page', 1),
+                    48,
+                    $locale,
+                    $sheet
+                )
+            );
+        } catch (UnavailableCurrentPageException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
+        }
+
+        $template = 'EventBundle:Catalog:Partial/list.html.twig';
+
+        $seeMoreButton = false;
+
+        if ($paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page)) {
+            $seeMoreButton = true;
+        }
+
+        return new JsonResponse(
+            [
+                'status' => 'show-form',
+                'html'   => $this->renderView($template, [
+                    'paginatedResult' => $paginatedResult,
+                    'seeMoreButton' => $seeMoreButton,
+                    'viewer' =>  $sheet,
+                ]),
+            ]
+        );
     }
 
     /**
