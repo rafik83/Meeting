@@ -10,12 +10,20 @@ function CatalogPagination(element)
 
 CatalogPagination.prototype.load = function ()
 {
+    var newDataPage = (parseInt(this.element.getAttribute('data-page')) + 1);
     $.ajax({
-        url: "catalog/pagination",
-        data: {page: (parseInt(this.element.getAttribute('data-page')) + 1)},
-        dataType: 'html',
-        success: function(html, status) {
-            alert(html);
+        url: document.url,
+        data: {page: newDataPage},
+        dataType: "json",
+        success: function (json) {
+            var seeMoreButton = $('.see-more');
+
+            if (!json.seeMoreButton) {
+                seeMoreButton.hide();
+            }
+
+            $('.catalog__list').append(json.html)
+            seeMoreButton.attr("data-page", newDataPage);
         }
     })
 };
