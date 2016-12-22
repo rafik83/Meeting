@@ -28,10 +28,11 @@ class MinuteType extends AbstractType
         }
 
         $resolver->setDefaults([
-            'choices'      => $minutes,
-            'choice_label' => function ($minute) {
+            'choices'            => $minutes,
+            'choice_label'       => function ($minute) {
                 return $minute < 10 ? sprintf('0%s', $minute) : $minute;
             },
+            'translation_domain' => false,
         ]);
     }
 
