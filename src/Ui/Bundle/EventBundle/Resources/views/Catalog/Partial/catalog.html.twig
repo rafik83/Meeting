@@ -1,6 +1,6 @@
 {{ include('EventBundle:Catalog:Partial/search.html.twig', { searchForm: searchForm, typeViews: typeViews, total: paginatedResult.total }, false) }}
 
-<div class="catalog__list catalog__list--block" id="catalog_list">
+<div class="catalog__list catalog__list--block">
     {{ include('EventBundle:Catalog:Partial/list.html.twig', { paginatedResult: paginatedResult, 'viewer': sheet }, false) }}
 </div>
 {% if seeMoreButton %}
