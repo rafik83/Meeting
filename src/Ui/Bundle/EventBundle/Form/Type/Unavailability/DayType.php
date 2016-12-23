@@ -29,16 +29,16 @@ class DayType extends AbstractType
         $resolver->setAllowedTypes('event', Event::class);
 
         $resolver->setDefaults([
-            'required'           => true,
-            'choices'            => function (Options $options) {
+            'required'                  => true,
+            'choices'                   => function (Options $options) {
                 return $options['event']->getDays();
             },
-            'choice_label'       => function (Options $options) {
+            'choice_label'              => function (Options $options) {
                 return function (Event\Day $day) use ($options) {
                     return $options['formater']->format($day->getDay());
                 };
             },
-            'translation_domain' => false,
+            'choice_translation_domain' => false,
         ]);
     }
 
