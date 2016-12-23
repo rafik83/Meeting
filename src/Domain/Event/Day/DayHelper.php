@@ -13,6 +13,10 @@ namespace Proximum\Vimeet\Domain\Event\Day;
 class DayHelper
 {
     /**
+     * This return an Intl Date Formatter that display the full day
+     * (Name of the day, number, month and year) without the minute
+     * In the given locale and for the given time zone
+     *
      * @param string $locale
      * @param string $timeZone
      *
