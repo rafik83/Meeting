@@ -8,64 +8,69 @@
 </div>
 
 {{ form_start(form_unavailability) }}
-{{ form_errors(form_unavailability) }}
 <div class="modal-body">
     <div class="row">
         {% if form_unavailability.day is defined %}
-        <div class="col-md-12">
-            <div class="col-md-2">{{ form_label(form_unavailability.day) }}</div>
-            <div class="col-md-6">
-                {{ form_errors(form_unavailability.day) }}
-                {{ form_widget(form_unavailability.day) }}
+            <div class="row">
+                <div class="col-md-2 text-center">{{ form_label(form_unavailability.day) }}</div>
+                <div class="col-md-6">
+                    {{ form_errors(form_unavailability.day) }}
+                    {{ form_widget(form_unavailability.day) }}
+                </div>
             </div>
-        </div>
         {% endif %}
 
-        {{ form_errors(form_unavailability.time) }}
-        <div class="col-md-12" style="margin-top: 5px;">
-            <div class="col-md-2">{{ form_label(form_unavailability.time.begin) }}</div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-2 text-center">{{ form_label(form_unavailability.time.begin) }}</div>
+
             <div class="col-md-6">
                 {{ form_errors(form_unavailability.time.begin) }}
                 {{ form_errors(form_unavailability.time.begin.hour) }}
                 {{ form_errors(form_unavailability.time.begin.minute) }}
-                <div class="col-md-6">
-                    {{ form_widget(form_unavailability.time.begin.hour) }}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_widget(form_unavailability.time.begin.hour) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form_unavailability.time.begin.minute) }}
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    {{ form_widget(form_unavailability.time.begin.minute) }}
-                </div>
+
             </div>
         </div>
 
+        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+            <div class="col-md-2 text-center">{{ form_label(form_unavailability.time.end) }}</div>
 
-        <div class="col-md-12" style="margin-top: 5px;">
-            <div class="col-md-2">{{ form_label(form_unavailability.time.end) }}</div>
             <div class="col-md-6">
+                {{ form_errors(form_unavailability.time.end) }}
                 {{ form_errors(form_unavailability.time.end.hour) }}
                 {{ form_errors(form_unavailability.time.end.minute) }}
-                <div class="col-md-6">
-                    {{ form_widget(form_unavailability.time.end.hour) }}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_widget(form_unavailability.time.end.hour) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form_unavailability.time.end.minute) }}
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    {{ form_widget(form_unavailability.time.end.minute) }}
-                </div>
+
             </div>
         </div>
     </div>
-
+    {{ form_errors(form_unavailability) }}
     {% for key, child in form_unavailability if key != 'submit'%}
         {{ form_row(child) }}
     {% endfor %}
-
-    <div class="validation button">
-        <button type="submit" class="btn btn-primary">
-            <i class="icon-Verouiller_1"></i> {{ 'form.create_unavailability.children.submit.label'|trans({}, 'forms') }}
-        </button>
-    </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'agenda.unavailability.back'|trans }}
+        <button type="submit" class="btn btn-primary pull-right">
+            <i class="icon-Verouiller_1"></i> {{ 'form.create_unavailability.children.submit.label'|trans({}, 'forms') }}
+        </button>
     </button>
 </div>
 {{ form_end(form_unavailability) }}
