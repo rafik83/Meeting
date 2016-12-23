@@ -25,7 +25,7 @@ class DayType extends AbstractType
     {
         $resolver->setRequired('event');
         $resolver->setRequired('locale');
-        $resolver->setRequired('formater');
+        $resolver->setRequired('formatter');
         $resolver->setAllowedTypes('event', Event::class);
 
         $resolver->setDefaults([
@@ -35,7 +35,7 @@ class DayType extends AbstractType
             },
             'choice_label'              => function (Options $options) {
                 return function (Event\Day $day) use ($options) {
-                    return $options['formater']->format($day->getDay());
+                    return $options['formatter']->format($day->getDay());
                 };
             },
             'choice_translation_domain' => false,

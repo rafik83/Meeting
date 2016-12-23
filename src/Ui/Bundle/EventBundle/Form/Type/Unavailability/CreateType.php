@@ -50,10 +50,10 @@ class CreateType extends AbstractType
         if (count($event->getDays()) > 1) {
             $builder
                 ->add('day', DayType::class, [
-                    'event'    => $event,
-                    'formater' => DayHelper::getFormatter($locale, $event->getTimeZone()),
-                    'locale'   => $locale,
-                    'required' => true,
+                    'event'     => $event,
+                    'formatter' => DayHelper::getFormatter($locale, $event->getTimeZone()),
+                    'locale'    => $locale,
+                    'required'  => true,
                 ]);
         }
 
