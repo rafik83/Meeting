@@ -559,6 +559,16 @@ class Event implements EventInterface
     }
 
     /**
+     * @param Event\Day[] $days
+     */
+    public function setDays(array $days)
+    {
+        foreach ($days as $day) {
+            $this->days->add($day);
+        }
+    }
+
+    /**
      * @return Event\Day[]
      */
     public function getDays()
