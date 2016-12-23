@@ -256,6 +256,25 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->where('participant IN (:participants)')
             ->setParameter('participants', $participants);
 
+        $unavailabilityConditions = "1 = 1";
+
+        if (false === $exceptAllUnavailabilities) {
+            // Participant have not unavailability during this period
+            $unavailabilityConditions =
+                "NOT EXISTS (
+                    SELECT u.id
+                    FROM Entity:Unavailability u
+                    WHERE
+                        u.participant = participant
+                        AND (
+                            u.begin BETWEEN :begin AND :end
+                            OR u.end BETWEEN :begin AND :end
+                            OR :begin BETWEEN u.begin AND u.end
+                            OR :end BETWEEN u.begin AND u.end
+                        )
+                )";
+        }
+
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
                 // Participant have not already a meeting during this period
@@ -289,29 +308,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR :begin BETWEEN h.begin AND h.end
                             OR :end BETWEEN h.begin AND h.end
                         )
-                )"
+                )",
+                $unavailabilityConditions
             )
         );
-
-        if (false === $exceptAllUnavailabilities) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->andX(
-                     // Participant have not unavailability during this period
-                    "NOT EXISTS (
-                        SELECT u.id
-                        FROM Entity:Unavailability u
-                        WHERE
-                            u.participant = participant
-                            AND (
-                                u.begin BETWEEN :begin AND :end
-                                OR u.end BETWEEN :begin AND :end
-                                OR :begin BETWEEN u.begin AND u.end
-                                OR :end BETWEEN u.begin AND u.end
-                            )
-                    )"
-                )
-            );
-        }
 
         if (null !== $exceptedMeeting) {
             $queryBuilder->setParameter('exceptedMeeting', $exceptedMeeting);
