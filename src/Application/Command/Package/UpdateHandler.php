@@ -42,7 +42,7 @@ class UpdateHandler
             ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())
         ;
 
-        if (isset($update->participantAndPlanning->planning)) {
+        if (null !== $update->participantAndPlanning->planning) {
            $update->package->setPlanning($update->participantAndPlanning->planning);
         }
 
