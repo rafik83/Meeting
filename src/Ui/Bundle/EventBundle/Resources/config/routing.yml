@@ -320,13 +320,6 @@ event_sheet_schedule:
     methods:  [GET]
     defaults: { _controller: EventBundle:Schedule:display }
 
-event_sheet_schedule_add_unavailability:
-    path: /sheet/{sheet}/schedule/unavailability/add
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Schedule:addUnavailability }
-
 event_sheet_schedule_update_unavailability:
     path: /sheet/{sheet}/schedule/unavailability/{unavailability}/update
     requirements:
