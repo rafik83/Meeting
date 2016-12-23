@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Messaging;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Campaign
 {
@@ -23,19 +25,29 @@ class Campaign
     /** @var string */
     private $title;
 
+    /** @var array */
+    private $filters;
+
+    /** @var ArrayCollection|Sheet[] */
+    private $sheets;
+
     /** @var \DateTimeInterface */
     private $createdAt;
 
     /**
      * @param Event              $event
+     * @param array              $filters
      * @param string             $title
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(Event $event, $title, \DateTimeInterface $createdAt)
+    public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt)
     {
         $this->event     = $event;
         $this->title     = $title;
+        $this->filters   = $filters;
         $this->createdAt = $createdAt;
+
+        $this->sheets = new ArrayCollection();
     }
 
     /**
@@ -63,10 +75,34 @@ class Campaign
     }
 
     /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @return ArrayCollection|Sheet[]
+     */
+    public function getSheets()
+    {
+        return $this->sheets;
+    }
+
+    /**
      * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function addSheet(Sheet $sheet)
+    {
+        $this->sheets->set($sheet->getId(), $sheet);
     }
 }

@@ -15,6 +15,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 interface CampaignRepositoryInterface
 {
     /**
+     * Add a new messaging campaign.
+     *
+     * @param Campaign $campaign
+     */
+    public function add(Campaign $campaign);
+
+    /**
      * Find all campaigns for a given event.
      *
      * @param Event $event

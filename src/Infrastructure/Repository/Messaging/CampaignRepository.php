@@ -33,6 +33,15 @@ class CampaignRepository implements CampaignRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function add(Campaign $campaign)
+    {
+        $this->entityManager->persist($campaign);
+        $this->entityManager->flush($campaign);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this->entityManager

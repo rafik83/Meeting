@@ -536,6 +536,8 @@ form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email d
 form.sheet_filter.children.type.label: Type
 form.sheet_comment.children.filter.label: Filtrer
 form.sheet_filter.children.validationState.label: 'Statut fiche'
+form.sheet.messaging_campaign.create.name.label: 'Saisissez un titre pour votre ciblage (Back Office) ...'
+form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler

@@ -2,7 +2,15 @@
 
 {% block content %}
 
-    <h1 class="page-header">{{ 'admin.messaging.campaign.list.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.messaging.campaign.list.title'|trans }}
+        <span class="pull-right">
+            <a href="{{ path('admin_messaging_campaign_select_sheets', { 'event': event.id }) }}" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>
+                {{ 'admin.messaging.campaign.menu.create.title'|trans }}
+            </a>
+        </span>
+    </h1>
 
     {% if campaigns|length %}
 

@@ -92,6 +92,16 @@
                 {{ 'admin.messaging.message.link'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_messaging_campaign_select_sheets', { 'event': event.id }) }}">
+                    {{ 'admin.messaging.campaign.menu.create.title'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_messaging_campaign_list', { 'event': event.id }) }}">
+                    {{ 'admin.messaging.campaign.menu.list.title'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
     <li>
@@ -175,21 +185,6 @@
             <li>
                 <a href="{{ path('admin_unavailability_mass_list', { 'event': event.id }) }}">
                     {{ 'admin.unavailability.mass.link'|trans }}
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li class="dropdown-submenu">
-        <a href="#">{{ 'admin.messaging.menu.title'|trans }}</a>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="{{ path('admin_messaging_campaign_select_sheets', { 'event': event.id }) }}">
-                    {{ 'admin.messaging.campaign.menu.create.title'|trans }}
-                </a>
-            </li>
-            <li>
-                <a href="{{ path('admin_messaging_campaign_list', { 'event': event.id }) }}">
-                    {{ 'admin.messaging.campaign.menu.list.title'|trans }}
                 </a>
             </li>
         </ul>

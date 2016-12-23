@@ -10,6 +10,9 @@ Proximum\Vimeet\Domain\Model\Messaging\Campaign:
         title:
             type: string
             nullable: false
+        filters:
+            type: json_array
+            nullable: true
         createdAt:
             type: datetime
             nullable: false
@@ -19,3 +22,17 @@ Proximum\Vimeet\Domain\Model\Messaging\Campaign:
             joinColumn:
                 onDelete: CASCADE
                 nullable: false
+    manyToMany:
+        sheets:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            indexBy: id
+            joinTable:
+                name: messaging_campaign_sheet
+                joinColumns:
+                    campaign_id:
+                        referencedColumnName: id
+                        onDelete: CASCADE
+                inverseJoinColumns:
+                    sheet_id:
+                        referencedColumnName: id
+                        onDelete: CASCADE

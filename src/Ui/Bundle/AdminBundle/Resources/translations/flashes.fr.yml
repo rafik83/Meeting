@@ -19,6 +19,7 @@ flash.admin.happening.category.update.success: 'La catégorie de sous événemen
 flash.admin.happening.create.success: 'Le sous événement a bien été créé'
 flash.admin.happening.update.success: 'Le sous événement a bien été mis à jour'
 flash.admin.meeting_request.position.success: 'Le rendez-vous a bien été placé'
+flash.admin.messaging.campaign.create.success: 'Campagne d''emailing créée avec succès'
 flash.admin.nomenclature.assign.success: 'La nomenclature a bien été assignée'
 flash.admin.nomenclature.import.success: 'La nomenclature a bien été importée'
 flash.admin.nomenclature.update.success: 'La nomenclature a bien été mise à jour'

@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\CreateCampaignType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\TargetFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -52,21 +55,34 @@ class CampaignController extends Controller
         $filterForm->handleRequest($request);
         $filters = $filterForm->getData();
 
-        if ('POST' == $request->getMethod()) {
-            $this->addFlash('success', 'admin.messaging.campaign.sheet_list.success');
-
-            return $this->redirectToRoute('admin_messaging_campaign_select_sheets', ['event' => $event->getId()]);
-        }
-
         $query          = new SheetListViewQuery($event, $filters, $locale);
         $sheets         = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
 
+        $createCampaignForm = $this->createForm(CreateCampaignType::class, new Create($event, $request->get($filterForm->getName(), [])), [
+            'sheet_ids' => array_map(function (SheetListView $sheet) {
+                return $sheet->id;
+            }, $sheets),
+            'action'    => $this->generateUrl('admin_messaging_campaign_select_sheets', ['event' => $event->getId()]) . '?' . $request->getQueryString(),
+        ]);
+
+        if ('POST' == $request->getMethod()) {
+            $createCampaignForm->handleRequest($request);
+
+            if ($createCampaignForm->isValid()) {
+                $this->get('tactician.commandbus')->handle($createCampaignForm->getData());
+                $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
+
+                return $this->redirectToRoute('admin_messaging_campaign_select_sheets', ['event' => $event->getId()]);
+            }
+        }
+
         return $this->render('AdminBundle:Messaging\Campaign:select_sheets.html.twig', [
-            'event'           => $event,
-            'sheets'          => $sheets,
-            'filter_form'     => $filterFormView,
-            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'event'                => $event,
+            'sheets'               => $sheets,
+            'filter_form'          => $filterFormView,
+            'filters_summary'      => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'create_campaign_form' => $createCampaignForm->createView(),
         ]);
     }
 

@@ -1317,6 +1317,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Message\Update }
 
+    command.messaging.campaign.create_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Create }
+
     #
     # Security
     #
