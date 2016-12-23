@@ -21,14 +21,8 @@ class MinuteType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $minutes = [];
-
-        for ($minute = 0; $minute <= 55; $minute += 5) {
-            $minutes[$minute] = $minute;
-        }
-
         $resolver->setDefaults([
-            'choices'            => $minutes,
+            'choices'            => range(0, 55, 5),
             'choice_label'       => function ($minute) {
                 return $minute < 10 ? sprintf('0%s', $minute) : $minute;
             },
