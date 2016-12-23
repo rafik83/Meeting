@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWit
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -102,8 +103,7 @@ class UnavailabilityController extends Controller
                             $this->get('translator')->trans(
                                 'validators.unavailability.timeOutOfRange.begin',
                                 [
-                                    '%day%' => $this
-                                        ->getFormatter($request->getLocale(), $event->getTimeZone())
+                                    '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
                                         ->format($exception->day->getDay())
                                 ],
                                  'validators'
@@ -116,8 +116,7 @@ class UnavailabilityController extends Controller
                             $this->get('translator')->trans(
                                 'validators.unavailability.timeOutOfRange.end',
                                 [
-                                    '%day%' => $this
-                                        ->getFormatter($request->getLocale(), $event->getTimeZone())
+                                    '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
                                         ->format($exception->day->getDay())
                                 ],
                                 'validators'
@@ -141,21 +140,5 @@ class UnavailabilityController extends Controller
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'form_unavailability'    => $form->createView()
         ]);
-    }
-
-    /**
-     * @param string $locale
-     * @param string $timeZone
-     *
-     * @return \IntlDateFormatter
-     */
-    private function getFormatter($locale, $timeZone)
-    {
-        return \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::FULL,
-            \IntlDateFormatter::NONE,
-            $timeZone
-        );
     }
 }

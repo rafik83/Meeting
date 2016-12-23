@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
+use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -46,18 +47,11 @@ class CreateType extends AbstractType
         $event  = $options['event'];
         $locale = $options['locale'];
 
-        $formater = \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::FULL,
-            \IntlDateFormatter::NONE,
-            $event->getTimeZone()
-        );
-
         if (count($event->getDays()) > 1) {
             $builder
                 ->add('day', DayType::class, [
                     'event'    => $event,
-                    'formater' => $formater,
+                    'formater' => DayHelper::getFormatter($locale, $event->getTimeZone()),
                     'locale'   => $locale,
                     'required' => true,
                 ]);
