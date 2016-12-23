@@ -43,12 +43,15 @@ class ParticipantsSelectedWithMeetingOrHappeningException extends Unavailability
     {
         $names = '';
 
-        foreach ($this->participants as $key => $participant) {
+        $pass = 1;
+        foreach ($this->participants as $participant) {
             $names .= $participant;
 
-            if ($key < $this->getNumberOfConflict()) {
+            if ($pass < $this->getNumberOfConflict()) {
                 $names .=  ", ";
             }
+
+            $pass++;
         }
 
         return $names;
