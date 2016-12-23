@@ -21,11 +21,7 @@ class HourType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $hours = [];
-        for ($hour = 0; $hour <= 23; $hour++) {
-            $hours[$hour] = $hour;
-        }
-
+        $hours = range(0, 23);
         $resolver->setDefaults([
             'choices'            => $hours,
             'choice_label'       => function ($hour) {
