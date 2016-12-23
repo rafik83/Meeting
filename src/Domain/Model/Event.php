@@ -584,6 +584,7 @@ class Event implements EventInterface
         if (empty($days)) {
             throw new DayNotDefinedException();
         }
+
         usort($days, function (Day $day1, Day $day2) {
             return $day1->getDay() > $day2->getDay();
         });
