@@ -596,6 +596,10 @@ class SheetSearchQueryBuilder
      */
     protected function filterByBooleanFilter($booleanFilters)
     {
+        if (empty($booleanFilters)) {
+            return;
+        }
+
         $booleanFilters = (array) $booleanFilters;
 
         $nested     = new Nested();

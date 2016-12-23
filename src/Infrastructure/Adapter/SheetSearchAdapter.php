@@ -17,12 +17,14 @@ use Elastica\Filter\Query as FilterQuery;
 use Elastica\Filter\Term;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
+use Elastica\Result;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
@@ -124,18 +126,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function findUnpaginated(Event $event, array $filters, $locale, $orderBy = null)
+    public function getSheetListView(Event $event, array $filters, $locale)
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
 
-        $query = $builder->getQuery();
-        if (null !== $orderBy) {
-            $query = $this->getSortedQuery($query, $orderBy);
-        }
+        $query = new Query($builder->getQuery());
+        $query->addSort(['sheetName' => 'asc']);
 
         $options = ["size" => 1000];
 
-        return $this->searchable->search($query, $options)->getResults();
+        return array_map(function (Result $sheet) {
+            return new SheetListView($sheet->id, $sheet->sheetName);
+        }, $this->searchable->search($query, $options)->getResults());
     }
 
     /**
@@ -367,34 +369,5 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $filterSheetname->addAggregation($sheetAggregation);
 
         return $filterSheetname;
-    }
-
-    /**
-     * @param Query\BoolQuery   $query
-     * @param array|string|null $orderBy
-     *
-     * @return Query
-     */
-    private function getSortedQuery(Query\BoolQuery $query, $orderBy = null)
-    {
-        if (!$orderBy) {
-            return $query;
-        }
-
-        if (is_string($orderBy)) {
-            $query = new Query($query);
-            $query->addSort([$orderBy => 'asc']);
-
-            return $query;
-        }
-
-        if (is_array($orderBy) && isset($orderBy['field'])) {
-            $query = new Query($query);
-            $query->addSort([$orderBy['field'] => isset($orderBy['sort']) ? $orderBy['sort'] : 'asc']);
-
-            return $query;
-        }
-
-        return $query;
     }
 }

@@ -12,11 +12,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,6 +28,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TargetFilterType extends AbstractType
 {
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
+    /** @var BooleanFiltersBuilder */
+    private $booleanFilterBuilder;
+
+    /**
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param BooleanFiltersBuilder       $booleanFilterBuilder
+     */
+    public function __construct(CategoryRepositoryInterface $categoryRepository, BooleanFiltersBuilder $booleanFilterBuilder)
+    {
+        $this->categoryRepository   = $categoryRepository;
+        $this->booleanFilterBuilder = $booleanFilterBuilder;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -61,14 +80,22 @@ class TargetFilterType extends AbstractType
                 'expanded'    => true,
                 'multiple'    => true,
             ])
-            ->add('category', CategoryChoiceType::class, [
+        ;
+
+        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
+
+        if (!empty($categories)) {
+            $builder->add('category', CategoryChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.category.label',
                 'event'       => $event,
                 'locale'      => $options['locale'],
                 'required'    => false,
                 'expanded'    => true,
                 'multiple'    => true,
-            ])
+            ]);
+        }
+
+        $builder
             ->add('follower', Sheet\FollowerChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.follower.label',
                 'event'       => $event,
@@ -92,15 +119,20 @@ class TargetFilterType extends AbstractType
                 'required'           => false,
                 'translation_domain' => 'messages'
             ])
-            ->add('boolean_filters', Sheet\EventTemplateFiltersType::class, [
+        ;
+
+        $booleanFilters = $this->booleanFilterBuilder->getFilters($event);
+
+        if (!empty($booleanFilters)) {
+            $builder->add('boolean_filters', ChoiceType::class, [
+                'choices'            => array_flip($booleanFilters),
                 'label'              => 'admin.sheet.filter.template_filters',
                 'required'           => false,
-                'event'              => $event,
                 'multiple'           => true,
                 'expanded'           => true,
                 'translation_domain' => 'messages',
-            ])
-        ;
+            ]);
+        }
     }
 
     /**

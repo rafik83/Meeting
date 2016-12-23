@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-use Elastica\Result;
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
@@ -48,11 +48,10 @@ interface SheetSearchAdapterInterface
      * @param Event       $event
      * @param array       $filters
      * @param string      $locale
-     * @param string|null $orderBy
      *
-     * @return Result[]
+     * @return SheetListView[]
      */
-    public function findUnpaginated(Event $event, array $filters, $locale, $orderBy = null);
+    public function getSheetListView(Event $event, array $filters, $locale);
 
     /**
      * @param Event  $event

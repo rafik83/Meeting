@@ -196,9 +196,10 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: form.type }
-    form_type_sheet.template_filters_type:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\EventTemplateFiltersType
+    form_type_sheet.message_campaign_filters_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\TargetFilterType
         arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
             - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }

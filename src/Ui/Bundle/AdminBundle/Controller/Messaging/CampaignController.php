@@ -32,6 +32,7 @@ class CampaignController extends Controller
      */
     public function selectSheetsAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
         $locale = $event->getAvailableLocale($request->getLocale());

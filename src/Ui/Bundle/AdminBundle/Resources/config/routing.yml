@@ -947,7 +947,7 @@ admin_messaging_message_update:
 
 # Messaging campaigns
 admin_messaging_campaign_select_sheets:
-    path: /event/{event}/messaging-campaign/select-sheets
+    path: /event/{event}/messaging/campaign/select-sheets
     requirements:
         event: \d+
     methods: [GET, POST]
