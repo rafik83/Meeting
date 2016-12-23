@@ -263,6 +263,17 @@ admin_category_update:
     defaults: { _controller: AdminBundle:Category:update }
 
 #
+# Agenda
+#
+
+admin_agenda_index:
+    path: /event/{event}/agenda
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:index }
+
+#
 # Meeting
 #
 

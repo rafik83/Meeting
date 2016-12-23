@@ -1,0 +1,35 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}Agenda{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2">
+            <table class="table table-condensed table-bordered table-hover">
+                <tbody>
+                {% for sheet in sheets.results %}
+                    <tr id="sheet-{{ sheet.id }}">
+                        <td>
+
+                            {% if sheet.countParticipant > 1 %}
+                                <span class="label label-info pull-right"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
+                            {% endif %}
+                            <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
+                                {{ sheet.title }}
+                            </a>
+
+                            <br><small>{{ sheet.type }}</small>
+
+                            {% if sheet.follower %}
+                                <br><small><span class="glyphicon glyphicon-arrow-right"></span> {{ sheet.follower }}</small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-10">
+        </div>
+    </div>
+{% endblock %}
