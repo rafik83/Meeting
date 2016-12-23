@@ -10,10 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Unavailability\Add;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\Update;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\AddUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\UpdateUnavailabilityType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -59,43 +57,6 @@ class ScheduleController extends Controller
             'event'                => $eventDomain->getEvent(),
             'participantSchedules' => $participantSchedules,
             'sheet'                => $sheet,
-        ]);
-    }
-
-    /**
-     * @param Request   $request
-     * @param EventDomain $eventDomain
-     * @param Sheet     $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function addUnavailabilityAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        if ($sheet->getEvent() !== $eventDomain->getEvent() || null === $sheet->getUserParticipant($this->getUser())) {
-            throw $this->createNotFoundException('The current User is not allowed to create an unavailibity');
-        }
-
-        $command = new Add();
-        $form    = $this->createForm(AddUnavailabilityType::class, $command, [
-            'action' => $this->generateUrl('event_sheet_schedule_add_unavailability', ['sheet' => $sheet->getId()]),
-            'method' => 'POST',
-            'sheet'  => $sheet,
-            'locale' => $request->getLocale(),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.event.schedule.unavailability.add.success');
-
-            return $this->redirectToRoute('event_sheet_schedule', ['sheet' => $sheet->getId()]);
-        }
-
-        return $this->render('EventBundle:Schedule:addUnavailability.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
         ]);
     }
 

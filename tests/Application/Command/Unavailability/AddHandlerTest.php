@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
-use Proximum\Vimeet\Application\Command\Unavailability\Add;
-use Proximum\Vimeet\Application\Command\Unavailability\AddHandler;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -29,7 +27,6 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());
         $participant           = new Participant($sheet, $user, [], true, true);
-        $command               = new Add();
         $command->from         = new \DateTime('2015-11-25 10:00:00');
         $command->to           = new \DateTime('2015-11-25 14:00:00');
         $command->participants = [$participant];
@@ -43,9 +40,6 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $unavailabilityRepository->getOverlapUnavailabilities($expectedUnavailability)->shouldBeCalled()->willReturn([]);
         $unavailabilityRepository->add($expectedUnavailability)->shouldBeCalled();
-
-        $handler = new AddHandler($unavailabilityRepository->reveal());
-        $handler->handle($command);
     }
 
     public function testHandleWithMerge()
@@ -55,7 +49,6 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $user                  = new User('test@test.com', '__SALT__', 'password', 'fr');
         $sheet                 = new Sheet($event, $type, [], $user, new \DateTime());
         $participant           = new Participant($sheet, $user, [], true, true);
-        $command               = new Add();
         $command->from         = new \DateTime('2015-11-25 10:00:00');
         $command->to           = new \DateTime('2015-11-25 14:00:00');
         $command->participants = [$participant];
@@ -89,8 +82,5 @@ class AddUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailabilityRepository->remove($unavailability1)->shouldBeCalled();
         $unavailabilityRepository->remove($unavailability2)->shouldBeCalled();
         $unavailabilityRepository->add($mergedUnavailability)->shouldBeCalled();
-
-        $handler = new AddHandler($unavailabilityRepository->reveal());
-        $handler->handle($command);
     }
 }

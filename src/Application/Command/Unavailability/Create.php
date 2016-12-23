@@ -32,7 +32,7 @@ class Create
     public $participants;
 
     /**
-     * @var Event\Day|null
+     * @var Event\Day
      */
     public $day;
 
@@ -66,5 +66,31 @@ class Create
         }
 
         $this->locale = $locale;
+    }
+
+    /**
+     * @return bool
+     */
+    public function validateDate()
+    {
+        if (!isset($this->time['begin']['hour'])
+            || !isset($this->time['begin']['minute'])
+            || !isset($this->time['end']['hour'])
+            || !isset($this->time['end']['minute'])
+        ) {
+            return false;
+        }
+
+        if ($this->time['begin']['hour'] < $this->time['end']['hour']) {
+            return true;
+        }
+
+        if ($this->time['begin']['hour'] === $this->time['end']['hour']
+            && $this->time['begin']['minute'] < $this->time['end']['minute']
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
