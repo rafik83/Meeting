@@ -110,7 +110,7 @@ class UnavailabilityController extends Controller
                             )
                         )
                     );
-                } elseif ($exception->isOutOfRangeAtEndOfDay()) {
+                } else {
                     $form->get('time')->get('end')->addError(
                         new FormError(
                             $this->get('translator')->trans(
