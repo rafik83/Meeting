@@ -10,6 +10,8 @@ function CatalogPagination(element)
 
 CatalogPagination.prototype.load = function ()
 {
+    this.element.setAttribute('disabled', 'disabled');
+
     var newDataPage = (parseInt(this.element.getAttribute('data-page')) + 1);
     $.ajax({
         url: document.url,
@@ -18,11 +20,12 @@ CatalogPagination.prototype.load = function ()
         success: function (json) {
             var seeMoreButton = $('.see-more');
 
+            seeMoreButton.removeAttr('disabled');
             if (!json.seeMoreButton) {
                 seeMoreButton.hide();
             }
 
-            $('.catalog__list').append(json.html)
+            $('.catalog__list').append(json.html);
             seeMoreButton.attr("data-page", newDataPage);
         }
     })
