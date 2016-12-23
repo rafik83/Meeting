@@ -21,10 +21,11 @@
         </div>
         {% endif %}
 
+        {{ form_errors(form_unavailability.time) }}
         <div class="col-md-12" style="margin-top: 5px;">
-            {{ form_errors(form_unavailability.time) }}
             <div class="col-md-2">{{ form_label(form_unavailability.time.begin) }}</div>
             <div class="col-md-6">
+                {{ form_errors(form_unavailability.time.begin) }}
                 {{ form_errors(form_unavailability.time.begin.hour) }}
                 {{ form_errors(form_unavailability.time.begin.minute) }}
                 <div class="col-md-6">

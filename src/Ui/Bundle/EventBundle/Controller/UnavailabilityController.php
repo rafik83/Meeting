@@ -90,7 +90,7 @@ class UnavailabilityController extends Controller
                         $this->get('translator')->transChoice(
                             'validators.unavailability.participantsWithConflict',
                             $exception->getNumberOfConflict(),
-                            ['participants' => $exception->getListOfParticipantsName()],
+                            ['%participants%' => $exception->getListOfParticipantsName()],
                             'validators'
                         )
                     )
@@ -101,7 +101,11 @@ class UnavailabilityController extends Controller
                         new FormError(
                             $this->get('translator')->trans(
                                 'validators.unavailability.timeOutOfRange.begin',
-                                ['day' => $exception->day->getDay()->format('D M Y')],
+                                [
+                                    '%day%' => $this
+                                        ->getFormatter($request->getLocale(), $event->getTimeZone())
+                                        ->format($exception->day->getDay())
+                                ],
                                  'validators'
                             )
                         )
@@ -111,7 +115,11 @@ class UnavailabilityController extends Controller
                         new FormError(
                             $this->get('translator')->trans(
                                 'validators.unavailability.timeOutOfRange.end',
-                                ['day' => $exception->day->getDay()->format('D M Y')],
+                                [
+                                    '%day%' => $this
+                                        ->getFormatter($request->getLocale(), $event->getTimeZone())
+                                        ->format($exception->day->getDay())
+                                ],
                                 'validators'
                             )
                         )
@@ -133,5 +141,21 @@ class UnavailabilityController extends Controller
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'form_unavailability'    => $form->createView()
         ]);
+    }
+
+    /**
+     * @param string $locale
+     * @param string $timeZone
+     *
+     * @return \IntlDateFormatter
+     */
+    private function getFormatter($locale, $timeZone)
+    {
+        return \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            $timeZone
+        );
     }
 }
