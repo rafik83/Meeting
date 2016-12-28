@@ -2092,6 +2092,18 @@ services:
             - '@repository.unavailability.mass_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
+    query.agenda.sheet_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
 
     ##
     # Navigation builder
