@@ -75,6 +75,22 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countByParticipant(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(unavailability)')
+            ->from(Unavailability::class, 'unavailability')
+            ->where('unavailability.participant = :participant')
+            ->setParameter('participant', $participant);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getOverlapUnavailabilities(Unavailability $unavailability)
     {
         $queryBuilder = $this

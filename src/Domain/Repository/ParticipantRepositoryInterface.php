@@ -144,4 +144,11 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipantBySheet(Sheet $sheet);
 }

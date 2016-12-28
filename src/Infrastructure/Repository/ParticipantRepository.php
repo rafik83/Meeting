@@ -367,4 +367,20 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipantBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(participant)')
+            ->from(Participant::class, 'participant')
+            ->where('participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

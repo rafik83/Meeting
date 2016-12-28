@@ -43,4 +43,11 @@ interface UnavailabilityRepositoryInterface
      * @return Unavailability[]
      */
     public function getOverlapUnavailabilities(Unavailability $unavailability);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return int
+     */
+    public function countByParticipant(Participant $participant);
 }
