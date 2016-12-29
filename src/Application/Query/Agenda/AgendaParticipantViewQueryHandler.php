@@ -10,24 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
+use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository;
 
-class AgendaViewQueryHandler
+class AgendaParticipantViewQueryHandler
 {
-    /**
-     * @var SheetGuesser
-     */
-    private $sheetGuesser;
-
     /**
      * @var DayRepositoryInterface
      */
@@ -36,7 +29,7 @@ class AgendaViewQueryHandler
     /**
      * @var DayViewQueryHandler
      */
-    private $dayViewQueryHandler;
+    private $agendaDayViewQueryHandler;
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -56,66 +49,46 @@ class AgendaViewQueryHandler
     /**
      * @var MeetingRepositoryInterface
      */
-    private $meetingRepository;
+    private $meetingRepositoryInterface;
 
     /**
-     * @param SheetGuesser                              $sheetGuesser
      * @param DayRepositoryInterface                    $dayRepository
-     * @param DayViewQueryHandler                       $dayViewQueryHandler
+     * @param AgendaDayViewQueryHandler                 $agendaDayViewQueryHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
      * @param MassRepositoryInterface                   $massUnavailabilityRepository
-     * @param MeetingRepositoryInterface                $meetingRepository
+     * @param MeetingRepositoryInterface                $meetingRepositoryInterface
      */
     public function __construct(
-        SheetGuesser $sheetGuesser,
         DayRepositoryInterface $dayRepository,
-        DayViewQueryHandler $dayViewQueryHandler,
+        AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         MassRepositoryInterface $massUnavailabilityRepository,
-        MeetingRepositoryInterface $meetingRepository
+        MeetingRepositoryInterface $meetingRepositoryInterface
     ) {
-        $this->sheetGuesser                     = $sheetGuesser;
         $this->dayRepository                    = $dayRepository;
-        $this->dayViewQueryHandler              = $dayViewQueryHandler;
+        $this->agendaDayViewQueryHandler        = $agendaDayViewQueryHandler;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
         $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
-        $this->meetingRepository = $meetingRepository;
+        $this->meetingRepositoryInterface       = $meetingRepositoryInterface;
     }
 
-    /**
-     * @param AgendaViewQuery $query
-     *
-     * @return AgendaView
-     * @throws \Exception
-     */
-    public function handle(AgendaViewQuery $query)
+    public function handle(AgendaParticipantViewQuery $query)
     {
         $eventDays = $this->dayRepository->findByEvent($query->event);
-        $sheet     = $this->sheetGuesser->getUserSheet($query->user, $query->event, $query->locale);
 
-        if (empty($eventDays)) {
-            return new AgendaView([], $sheet);
-        }
-
-        $participant = $sheet->getUserParticipant($query->user);
-
-        if (!$participant instanceof Participant) {
-            throw new \Exception('Participant not found');
-        }
-
-        $happeningParticipations = $this->happeningParticipationRepository->findByParticipant($participant);
-        $unavailabilites         = $this->unavailabilityRepository->findByParticipant($participant);
+        $happeningParticipations = $this->happeningParticipationRepository->findByParticipant($query->participant);
+        $unavailabilites         = $this->unavailabilityRepository->findByParticipant($query->participant);
         $masses                  = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
-        $meetings                = $this->meetingRepository->findByParticipant($participant);
+        $meetings                = $this->meetingRepositoryInterface->findByParticipant($query->participant);
 
         $dayViews = [];
 
         foreach ($eventDays as $day) {
-            $dayViews[] = $this->dayViewQueryHandler->handle(
-                new DayViewQuery(
+            $dayViews[] = $this->agendaDayViewQueryHandler->handle(
+                $query = new AgendaDayViewQuery(
                     $day,
                     $query->locale,
                     $happeningParticipations,
@@ -126,6 +99,6 @@ class AgendaViewQueryHandler
             );
         }
 
-        return new AgendaView($dayViews, $sheet);
+        return new AgendaParticipantView($dayViews);
     }
 }
