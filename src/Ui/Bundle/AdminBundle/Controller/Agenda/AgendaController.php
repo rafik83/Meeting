@@ -32,22 +32,22 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheets = [];
+        $query = new SheetListViewQuery($event, $request->getLocale());
 
-        if ($request->isXmlHttpRequest() && $test == 0) {
+        /** @var PaginatedResult $sheets */
+        $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
 
-            $query = new SheetListViewQuery($event, $request->getLocale());
-
-            /** @var PaginatedResult $sheets */
-            $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
-
-            return new JsonResponse(
-                [
-                    'html' => $this->renderView('AdminBundle:Agenda:sheets-list.html.twig', [
-                        'sheets' => $sheets,
-                    ]),
-                ]
-            );
-        }
+//        if ($request->isXmlHttpRequest() && $test == 0) {
+//
+//
+//            return new JsonResponse(
+//                [
+//                    'html' => $this->renderView('AdminBundle:Agenda:sheets-list.html.twig', [
+//                        'sheets' => $sheets,
+//                    ]),
+//                ]
+//            );
+//        }
 
         return $this->render('AdminBundle:Agenda:index.html.twig', [
             'event'  => $event,

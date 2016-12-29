@@ -1,7 +1,7 @@
 var $ = require('jquery');
 
 function SheetLoading() {
-    this.load();
+    // this.load();
 }
 
 SheetLoading.prototype.load = function () {
