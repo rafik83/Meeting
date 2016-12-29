@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Query\Agenda\AgendaSheetViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -34,8 +36,19 @@ class AgendaController extends Controller
         $sheets = [];
         $query = new SheetListViewQuery($event, $request->getLocale());
 
+        if ($sheetOpenedId = $request->query->get('sheet')) {
+
+            $agenda = $this
+                ->get('tactician.commandbus.query')
+                ->handle(
+                    new AgendaSheetViewQuery($sheetOpenedId, $request->getLocale())
+                );
+
+            dump($agenda);die;
+        }
         /** @var PaginatedResult $sheets */
         $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
+
 
 //        if ($request->isXmlHttpRequest() && $test == 0) {
 //
@@ -52,6 +65,7 @@ class AgendaController extends Controller
         return $this->render('AdminBundle:Agenda:index.html.twig', [
             'event'  => $event,
             'sheets' => $sheets,
+//            'openedSheets' => $openedSheets,
         ]);
     }
 }
