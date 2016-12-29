@@ -420,4 +420,18 @@ class Request implements MessageSubjectInterface
     {
         return $this->to === $sheet;
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasNoPreference(Sheet $sheet)
+    {
+        if ($this->from === $sheet) {
+            return empty($this->fromParticipants);
+        }
+
+        return empty($this->toParticipants);
+    }
 }
