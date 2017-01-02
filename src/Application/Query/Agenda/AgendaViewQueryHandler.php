@@ -82,7 +82,7 @@ class AgendaViewQueryHandler
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
         $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
-        $this->meetingRepository = $meetingRepository;
+        $this->meetingRepository                = $meetingRepository;
     }
 
     /**

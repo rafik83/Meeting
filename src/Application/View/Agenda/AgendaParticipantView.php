@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\View\Agenda;
 class AgendaParticipantView
 {
     /**
-     * @var 
+     * @var
      */
     public $days;
 

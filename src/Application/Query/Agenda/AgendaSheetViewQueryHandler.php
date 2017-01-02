@@ -35,10 +35,10 @@ class AgendaSheetViewQueryHandler
         SheetRepositoryInterface $sheetRepository,
         AgendaParticipantViewQueryHandler $agendaParticipantViewQueryHandler
     ) {
-        $this->sheetRepository = $sheetRepository;
+        $this->sheetRepository                   = $sheetRepository;
         $this->agendaParticipantViewQueryHandler = $agendaParticipantViewQueryHandler;
     }
-    
+
     public function handle(AgendaSheetViewQuery $agendaSheetViewQuery)
     {
         $sheet = $this->sheetRepository->getSheetById($agendaSheetViewQuery->sheetId);

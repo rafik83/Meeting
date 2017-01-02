@@ -31,6 +31,7 @@ class MeetingViewQueryHandler
     ) {
         $this->requestRepository = $requestRepository;
     }
+
     /**
      * @param MeetingViewQuery $query
      *
@@ -39,7 +40,7 @@ class MeetingViewQueryHandler
     public function handle(MeetingViewQuery $query)
     {
         $fromSheet = $query->meeting->getFromSheet();
-        $toSheet = $query->meeting->getToSheet();
+        $toSheet   = $query->meeting->getToSheet();
 
         $sheetMet = null;
 
@@ -49,7 +50,7 @@ class MeetingViewQueryHandler
             $sheetMet = (null !== $fromSheet ? $fromSheet : $toSheet);
         }
 
-        $requests = $this->requestRepository->getAllRequestBySheet($query->sheet);
+        $requests        = $this->requestRepository->getAllRequestBySheet($query->sheet);
         $matchingRequest = null;
 
         foreach ($requests as $request) {

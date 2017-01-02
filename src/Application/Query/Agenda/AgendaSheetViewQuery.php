@@ -32,6 +32,6 @@ class AgendaSheetViewQuery
     public function __construct($sheetId, $locale)
     {
         $this->sheetId = $sheetId;
-        $this->locale = $locale;
+        $this->locale  = $locale;
     }
 }

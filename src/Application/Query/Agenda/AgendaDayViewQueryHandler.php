@@ -47,9 +47,9 @@ class AgendaDayViewQueryHandler
         MassUnavailabilityViewQueryHandler $massHandler,
         MeetingViewQueryHandler $meetingViewQueryHandler
     ) {
-        $this->happeningHandler      = $happeningHandler;
-        $this->unavailabilityHandler = $unavailabilityHandler;
-        $this->massHandler           = $massHandler;
+        $this->happeningHandler        = $happeningHandler;
+        $this->unavailabilityHandler   = $unavailabilityHandler;
+        $this->massHandler             = $massHandler;
         $this->meetingViewQueryHandler = $meetingViewQueryHandler;
     }
 

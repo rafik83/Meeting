@@ -38,10 +38,10 @@ class MeetingView
     /**
      * MeetingView constructor.
      *
-     * @param Spot               $spot
-     * @param Sheet              $sheetMet
-     * @param int                $id
-     * @param bool               $hasNoPreference
+     * @param Spot  $spot
+     * @param Sheet $sheetMet
+     * @param int   $id
+     * @param bool  $hasNoPreference
      */
     public function __construct(
         Spot $spot,
@@ -49,9 +49,9 @@ class MeetingView
         $id,
         $hasNoPreference
     ) {
-        $this->spot           = $spot;
-        $this->id             = $id;
-        $this->sheetMet       = $sheetMet;
+        $this->spot            = $spot;
+        $this->id              = $id;
+        $this->sheetMet        = $sheetMet;
         $this->hasNoPreference = $hasNoPreference;
     }
 }
