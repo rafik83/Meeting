@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+
     <style>
         .table-no-margin-bottom {
             margin-bottom: 0
@@ -15,11 +16,20 @@
             vertical-align: top;
         }
         .agenda-container {
-            overflow-x: scroll;
-            margin-bottom: 140px;
+            /*margin-bottom: 140px;*/
         }
         .agenda-horizontal {
-            width: 10000000px;
+            white-space: nowrap;
+            overflow: scroll;
+            height: calc(100vh - 200px);
+        }
+        .agenda-horizontal ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .agenda-horizontal ul li {
+            display: inline-block;
         }
         .table-agenda-day td {
             padding: 0 !important;
@@ -190,8 +200,9 @@
 
             <div class="agenda-container">
                 <div class="agenda-horizontal">
+                    <ul>
                     {% for table in 1..3 %}
-                        <table class="table-agenda table-bordered table-condensed pull-left">
+                        <li><table class="table-agenda table-bordered table-condensed pull-left">
                             <thead>
                                 <tr>
                                     <td colspan="4" class="text-center {% if table == 1 %}agenda-sheet-focus{% endif %}">
@@ -258,8 +269,9 @@
                                     {% endfor %}
                                 </tr>
                             </tbody>
-                        </table>
+                        </table></li>
                     {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
