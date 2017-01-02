@@ -54,7 +54,7 @@ class AgendaDayViewQueryHandler
     }
 
     /**
-     * @param DayViewQuery $query
+     * @param AgendaDayViewQuery $query
      *
      * @return DayView
      */
@@ -102,12 +102,13 @@ class AgendaDayViewQueryHandler
         }
 
         foreach ($query->meetings as $meeting) {
-            if ($meeting->getBegin() >= $query->day->getStartTime()
-                && $meeting->getEnd() <= $query->day->getEndTime()
+            if ($meeting->getSlot()->getBegin() >= $query->day->getStartTime()
+                && $meeting->getSlot()->getEnd() <= $query->day->getEndTime()
             ) {
                 $meetings[] = $this->meetingViewQueryHandler->handle(
                     new MeetingViewQuery(
                         $meeting,
+                        $query->sheet,
                         $query->locale
                     )
                 );
