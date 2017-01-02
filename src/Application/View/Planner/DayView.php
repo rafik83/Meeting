@@ -1,0 +1,40 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Planner;
+
+class DayView
+{
+    /** @var int */
+    public $id;
+
+    /** @var int */
+    public $day;
+
+    /** @var int */
+    public $month;
+
+    /** @var int */
+    public $year;
+
+    /**
+     * @param int $id
+     * @param int $day
+     * @param int $month
+     * @param int $year
+     */
+    public function __construct($id, $day, $month, $year)
+    {
+        $this->id    = $id;
+        $this->day   = $day;
+        $this->month = $month;
+        $this->year  = $year;
+    }
+}

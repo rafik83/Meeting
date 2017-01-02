@@ -1,0 +1,52 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Planner;
+
+class SheetView
+{
+    /** @var int */
+    public $id;
+
+    /** @var TypeView */
+    public $type;
+
+    /** @var int */
+    public $planningQuantity;
+
+    /** @var int */
+    public $possibleMeetingsQuantity;
+
+    /**
+     * @param int      $id
+     * @param TypeView $type
+     * @param int      $planningQuantity
+     * @param int      $possibleMeetingsQuantity
+     */
+    public function __construct(
+        $id,
+        TypeView $type,
+        $planningQuantity,
+        $possibleMeetingsQuantity
+    ) {
+        $this->id                       = $id;
+        $this->type                     = $type;
+        $this->planningQuantity         = $planningQuantity;
+        $this->possibleMeetingsQuantity = $possibleMeetingsQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type->id;
+    }
+}
