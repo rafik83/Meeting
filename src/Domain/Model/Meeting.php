@@ -59,6 +59,11 @@ class Meeting implements MessageSubjectInterface
     private $state = self::STATE_SCHEDULED;
 
     /**
+     * @var Spot
+     */
+    private $spot;
+
+    /**
      * Meeting constructor.
      *
      * @param MeetingSlot        $slot
@@ -67,6 +72,7 @@ class Meeting implements MessageSubjectInterface
      * @param Sheet              $toSheet
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
+     * @param Spot               $spot
      */
     public function __construct(
         MeetingSlot $slot,
@@ -74,7 +80,8 @@ class Meeting implements MessageSubjectInterface
         array $fromParticipants,
         Sheet $toSheet,
         array $toParticipants,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        Spot $spot
     ) {
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
@@ -82,6 +89,7 @@ class Meeting implements MessageSubjectInterface
         $this->toSheet          = $toSheet;
         $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->createdAt        = $createdAt;
+        $this->spot             = $spot;
     }
 
     /**
@@ -230,5 +238,13 @@ class Meeting implements MessageSubjectInterface
         $this->state = self::STATE_CANCELED;
 
         return $this;
+    }
+
+    /**
+     * @return Spot
+     */
+    public function getSpot()
+    {
+        return $this->spot;
     }
 }
