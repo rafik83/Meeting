@@ -329,4 +329,12 @@ class Happening
     {
         return $this->participations->toArray();
     }
+
+    /**
+     * @param array $participations
+     */
+    public function setParticipations(array $participations)
+    {
+        $this->participations = new ArrayCollection($participations);
+    }
 }
