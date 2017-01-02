@@ -103,7 +103,7 @@ class SheetListViewQueryHandler
             $requestNumber  = $this->requestRepository->countRequestSentBySheet($sheet);
             $proposalNumber = $this->requestRepository->countPropositionReceivedBySheet($sheet);
             $totalSlots     = $this->getSlotsBySheet($sheetListViewQuery->event, $sheet);
-            $sheetList[] = new SheetView(
+            $sheetList[]    = new SheetView(
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheetListViewQuery->locale),
                 $sheet->getType()->getTitle($sheetListViewQuery->locale),
@@ -122,6 +122,8 @@ class SheetListViewQueryHandler
     }
 
     /**
+     * Get Slots taking account of slots by event multiply by participants on sheet
+     *
      * @param Event $event
      *
      * @return int
@@ -139,19 +141,17 @@ class SheetListViewQueryHandler
      * @param int   $meetingRequestsCount
      * @param int   $totalSlots
      *
-     * @return mixed
+     * @return int
      */
     private function getUsableSlots(Sheet $sheet, Event $event, $meetingRequestsCount, $totalSlots)
     {
         // Total slot taking into account of plannings quantity
         $slotCount = $totalSlots * count($sheet->getPackage()->getPlans());
 
-        $unavailabilitiesCount = $this->getUnavailabilitiesBySheet($sheet);
-
         $sheetSlots = $this->getSlotsBySheet($event, $sheet);
 
         // Count slots where participant is available
-        $availableSlotsCount = $sheetSlots - $unavailabilitiesCount;
+        $availableSlotsCount = $sheetSlots - $this->getUnavailabilitiesBySheet($sheet);
 
         return min($meetingRequestsCount, $slotCount, $availableSlotsCount);
     }
@@ -163,8 +163,7 @@ class SheetListViewQueryHandler
      */
     private function getUnavailabilitiesBySheet(Sheet $sheet)
     {
-        $participants = $sheet->getParticipants();
-
+        $participants          = $sheet->getParticipants();
         $unavailabilitiesCount = 0;
 
         foreach ($participants as $participant) {

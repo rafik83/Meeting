@@ -30,9 +30,9 @@ class SheetView
     public $type;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $clientManagement;
+    public $clientManagement = null;
 
     /**
      * @var int

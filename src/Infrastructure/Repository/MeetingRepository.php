@@ -206,11 +206,4 @@ class MeetingRepository implements MeetingRepositoryInterface
 
         return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
     }
-
-    public function countAcceptedMeetingsFromSheet(Sheet $sheet)
-    {
-        $queryBuilder = new MeetingQueryBuilder($this->entityManager);
-
-        return $queryBuilder->sendBy($sheet)->andWhere()->count()->getIntResult();
-    }
 }
