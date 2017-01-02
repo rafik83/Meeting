@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetListViewQuery

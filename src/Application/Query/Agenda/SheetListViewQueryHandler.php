@@ -107,14 +107,14 @@ class SheetListViewQueryHandler
                 $sheet->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheetListViewQuery->locale),
                 $sheet->getType()->getTitle($sheetListViewQuery->locale),
-                $sheet->getFollower(),
                 count($sheet->getParticipants()),
                 $requestNumber,
                 $proposalNumber,
                 $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
                 $totalSlots,
                 $this->getUsableSlots($sheet, $sheetListViewQuery->event, $requestNumber, $totalSlots),
-                $this->getPlacedAppointmentsNumber($sheet)
+                $this->getPlacedAppointmentsNumber($sheet),
+                $sheet->getFollower()
             );
         }
 

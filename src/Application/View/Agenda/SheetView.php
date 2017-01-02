@@ -75,7 +75,6 @@ class SheetView
      * @param int        $id
      * @param string     $title
      * @param string     $type
-     * @param Admin|null $clientManagement
      * @param int        $countParticipant
      * @param int        $countRequest
      * @param int        $countProposition
@@ -83,19 +82,20 @@ class SheetView
      * @param int        $countSlots
      * @param int        $countUsableSlots
      * @param int        $countPlacedMeetings
+     * @param Admin|null $clientManagement
      */
     public function __construct(
         $id,
         $title,
         $type,
-        $clientManagement,
         $countParticipant,
         $countRequest,
         $countProposition,
         $countValidatedRequest,
         $countSlots,
         $countUsableSlots,
-        $countPlacedMeetings
+        $countPlacedMeetings,
+        Admin $clientManagement = null
     ) {
 
         $this->id                    = $id;
