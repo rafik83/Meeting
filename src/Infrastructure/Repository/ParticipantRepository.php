@@ -234,6 +234,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('enable', true)
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
+
         return $queryBuilder->getQuery()->getResult();
     }
 

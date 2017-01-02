@@ -337,7 +337,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event')
-            ->andWhere('sheet.enable = true')
+            ->andWhere('sheet.enable = :enable')
+            ->setParameter('enable', true)
             ->setParameter('event', $event);
 
         return $queryBuilder;
@@ -356,8 +357,10 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('sheet.type', 'type')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->where('sheet.event = :event')
+            ->andWhere('sheet.enable = :enable')
             ->groupBy('type')
             ->setParameter('event', $event)
+            ->setParameter('enable', true)
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
