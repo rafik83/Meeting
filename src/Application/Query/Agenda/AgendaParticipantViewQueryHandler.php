@@ -89,6 +89,7 @@ class AgendaParticipantViewQueryHandler
         foreach ($eventDays as $day) {
             $dayViews[] = $this->agendaDayViewQueryHandler->handle(
                 $query = new AgendaDayViewQuery(
+                    $query->sheet,
                     $day,
                     $query->locale,
                     $happeningParticipations,
