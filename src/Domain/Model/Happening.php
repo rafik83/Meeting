@@ -327,6 +327,6 @@ class Happening
      */
     public function getParticipations()
     {
-        return $this->participations;
+        return $this->participations->toArray();
     }
 }

@@ -14,19 +14,23 @@ use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCateg
 use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
 use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
 use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
+use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryUpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class HappeningController extends Controller
 {
@@ -109,7 +113,10 @@ class HappeningController extends Controller
             $this->get('tactician.commandbus')->handle($update);
             $this->addFlash('success', 'flash.admin.happening.update.success');
 
-            return $this->redirectToRoute('admin_happening_update', ['event' => $event->getId(), 'happening' => $happening->getId()]);
+            return $this->redirectToRoute('admin_happening_update', [
+                'event'     => $event->getId(),
+                'happening' => $happening->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:Happening:update.html.twig', [
@@ -185,7 +192,10 @@ class HappeningController extends Controller
 
         $update = new UpdateCategory($category);
         $form   = $this->createForm(CategoryUpdateType::class, $update, [
-            'action' => $this->generateUrl('admin_happening_category_update', ['event' => $event->getId(), 'category' => $category->getId()]),
+            'action' => $this->generateUrl('admin_happening_category_update', [
+                'event'    => $event->getId(),
+                'category' => $category->getId(),
+            ]),
             'method' => 'POST',
         ]);
         $form->add('submit', SubmitType::class);
@@ -201,5 +211,40 @@ class HappeningController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function exportAction(Request $request, Event $event)
+    {
+        try {
+            $happeningParticipantViews = $this->get('tactician.commandbus.query')->handle(
+                new HappeningParticipantViewQuery($event, $event->getAvailableLocale($request->getLocale()))
+            );
+        } catch (EmptyHappeningParticipationException $exception) {
+            $this->addFlash('error', 'flash.admin.happening.participation.empty');
+
+            return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
+        }
+
+        $serializer      = $this->get('serializer');
+        $exportedContent = $serializer->serialize($happeningParticipantViews, 'csv', [
+            'locale'  => $event->getAvailableLocale($request->getLocale()),
+            'charset' => Charset::WINDOWS_1252,
+        ]);
+
+        $response    = new Response($exportedContent);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "export_happening_participants_" . date("Y_m_d_His") . ".csv"
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', Charset::WINDOWS_1252));
+
+        return $response;
     }
 }

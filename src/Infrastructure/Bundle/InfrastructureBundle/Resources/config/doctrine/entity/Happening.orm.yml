@@ -31,7 +31,7 @@ Proximum\Vimeet\Domain\Model\Happening:
             orphanRemoval: true
         participations:
             targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
-            mappedBy: participations
+            mappedBy: happening
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
