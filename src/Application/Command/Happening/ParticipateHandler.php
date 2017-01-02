@@ -77,10 +77,14 @@ class ParticipateHandler
             throw new ParticipantRequiredException();
         }
 
-        $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
-            $participate->participants,
-            $participate->happening
-        );
+        $availableParticipants = [];
+
+        if (0 < count($participate->participants)) {
+            $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
+                $participate->participants,
+                $participate->happening
+            );
+        }
 
         $remainingParticipations = $this->participationCount->getRemaining($participate->happening);
 
