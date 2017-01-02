@@ -2594,13 +2594,24 @@ services:
     #
     # Serializer: normalizers and encoders
     #
+    serializer.abstract_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\AbstractNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        abstract: true
+
     serializer.normalizer.event_sheets:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
-        public: false
+        parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.happening_participant:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
+        parent: 'serializer.abstract_normalizer'
         tags:
             - { name: serializer.normalizer }
 

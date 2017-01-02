@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantView;
@@ -112,9 +113,11 @@ class HappeningParticipantViewQueryHandler
      */
     public function buildView(Happening $happening, Participant $participant, $locale)
     {
-        $firstname = $this->participantInfoGuesser->guessParticipantFirstName($participant, $locale);
-        $lastname  = $this->participantInfoGuesser->guessParticipantLastName($participant, $locale);
-        $position  = $this->participantInfoGuesser->guessParticipantPosition($participant, $locale);
+        $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
+
+        $firstname = $infos[Tag::PARTICIPANT_FIRSTNAME];
+        $lastname  = $infos[Tag::PARTICIPANT_LASTNAME];
+        $position  = $infos[Tag::PARTICIPANT_POSITION];
         $sheetName = $this->sheetInfoGuesser->guessSheetTitle($participant->getSheet(), $locale);
 
         $question = $this->questionRepository->findByHappeningAndSheet($happening, $participant->getSheet());

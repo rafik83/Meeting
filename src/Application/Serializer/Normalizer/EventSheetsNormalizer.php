@@ -21,7 +21,8 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * Event sheets normalizer meant to be used as part of {Symfony's Serializer component @link http://symfony.com/doc/current/serializer.html}.
+ * Event sheets normalizer meant to be used as part of {Symfony's Serializer component @link
+ * http://symfony.com/doc/current/serializer.html}.
  *
  * Normalized sheets data are dispatched into three field groups:
  *
@@ -29,7 +30,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * - registration fields ({@link self::$registrationFields})
  * - sheet fields ({@link self::$sheetFields})
  */
-class EventSheetsNormalizer implements NormalizerInterface
+class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
     const COL_EVENT_ID          = 'event_id';
     const COL_EVENT_NAME        = 'event_name';
@@ -49,9 +50,6 @@ class EventSheetsNormalizer implements NormalizerInterface
 
     /** @var TemplateDataFactory */
     private $templateDataFactory;
-
-    /** @var TranslatorInterface */
-    private $translator;
 
     /**
      * List of all sheet fields (merging of the sheet data fields of all normalized sheets)
@@ -73,13 +71,14 @@ class EventSheetsNormalizer implements NormalizerInterface
      * @param TranslatorInterface      $translator
      */
     public function __construct(
+        TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
-        TemplateDataFactory $templateDataFactory,
-        TranslatorInterface $translator
+        TemplateDataFactory $templateDataFactory
     ) {
+        parent::__construct($translator);
+
         $this->sheetRepository     = $sheetRepository;
         $this->templateDataFactory = $templateDataFactory;
-        $this->translator          = $translator;
         $this->sheetFields         = [];
         $this->registrationFields  = [];
     }
@@ -91,7 +90,7 @@ class EventSheetsNormalizer implements NormalizerInterface
      *
      * @param Event $object
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         $rawSheets = [];
         $locale    = $context['locale'];
@@ -100,7 +99,7 @@ class EventSheetsNormalizer implements NormalizerInterface
             $rawSheets[] = $this->getSheetRawData($sheet, $locale);
         }
 
-        $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
+        $charset          = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
         $normalizedSheets = [];
         foreach ($rawSheets as $rawSheet) {
             $normalizedSheets[] = $this->normalizeSheetRawData($rawSheet, $charset);
@@ -118,8 +117,8 @@ class EventSheetsNormalizer implements NormalizerInterface
     }
 
     /**
-     * Return an array of raw data for a given Sheet and locale ('raw' meaning unescaped content, untranslated column names,
-     * not human-readable column names for dynamic columns, etc.)
+     * Return an array of raw data for a given Sheet and locale ('raw' meaning unescaped content, untranslated column
+     * names, not human-readable column names for dynamic columns, etc.)
      *
      * @param Sheet  $sheet
      * @param string $locale
@@ -225,7 +224,7 @@ class EventSheetsNormalizer implements NormalizerInterface
         // Common fields (event ID, event name, etc.)
         foreach (self::getCommonFieldKeys() as $fieldKey) {
             $translationKey = 'admin.sheet.export.fields.' . $fieldKey;
-            $input = $rawData[$fieldKey];
+            $input          = $rawData[$fieldKey];
 
             $translatedFieldname = $this->convertCharset(
                 $this->translator->trans($translationKey),
@@ -242,76 +241,19 @@ class EventSheetsNormalizer implements NormalizerInterface
 
         // Registration data
         foreach ($this->registrationFields as $fieldKey => $fieldName) {
-            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
-            $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
         // Sheet data
         foreach ($this->sheetFields as $fieldKey => $fieldName) {
-            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
-            $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
         return $normalizedData;
-    }
-
-    /**
-     * @param mixed  $input
-     * @param string $inCharset
-     * @param string $outCharset
-     *
-     * @return string
-     */
-    private function convertCharset($input, $inCharset = Charset::UTF_8, $outCharset = Charset::WINDOWS_1252)
-    {
-        if (!$input || !is_string($input)) {
-            return $input;
-        }
-
-        if ($inCharset !== $outCharset) {
-            return iconv($inCharset, $outCharset . "//TRANSLIT", $input);
-        }
-
-        return $input;
-    }
-
-    /**
-     * This is the privileged method to normalize input whose type is not known in advance. It takes care of
-     * boolean conversion to string and label translation, charset encoding, etc.
-     *
-     * @param mixed  $input
-     * @param string $inCharset
-     * @param string $outCharset
-     *
-     * @return mixed
-     */
-    private function normalizeInput($input, $inCharset = Charset::UTF_8, $outCharset = Charset::WINDOWS_1252)
-    {
-        if (is_bool($input)) {
-            return $this->normalizeBoolean($input);
-        }
-
-        if (is_string($input) && $input !== '') {
-            return $this->convertCharset($input, $inCharset, $outCharset);
-        }
-
-        return $input;
-    }
-
-    /**
-     * Takes a boolean and converts it into a translated human readable form.
-     *
-     * @param bool|mixed $value
-     *
-     * @return string
-     */
-    private function normalizeBoolean($value)
-    {
-        $value = (bool) $value;
-
-        return $this->translator->trans(sprintf("admin.sheet.export.%s", $value ? 'yes' : 'no'));
     }
 
     /**

@@ -247,6 +247,7 @@ class HappeningParticipantView
             HappeningParticipantNormalizer::COL_PARTICIPANT_FIRSTNAME => $this->getFirstname(),
             HappeningParticipantNormalizer::COL_PARTICIPANT_LASTNAME  => $this->getLastname(),
             HappeningParticipantNormalizer::COL_PARTICIPANT_EMAIL     => $this->getEmail(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_POSITION  => $this->getPosition(),
             HappeningParticipantNormalizer::COL_QUESTION              => $this->getQuestion(),
         ];
     }
