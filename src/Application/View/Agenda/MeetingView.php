@@ -31,43 +31,27 @@ class MeetingView
     public $spot;
 
     /**
-     * @var \DateTimeInterface
-     */
-    public $begin;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $end;
-
-    /**
      * @var bool
      */
-    public $isNoPreference;
+    public $hasNoPreference;
 
     /**
      * MeetingView constructor.
      *
      * @param Spot               $spot
      * @param Sheet              $sheetMet
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
      * @param int                $id
-     * @param bool               $isNoPreference
+     * @param bool               $hasNoPreference
      */
     public function __construct(
         Spot $spot,
         Sheet $sheetMet,
-        \DateTimeInterface $begin,
-        \DateTimeInterface $end,
         $id,
-        $isNoPreference
+        $hasNoPreference
     ) {
         $this->spot           = $spot;
-        $this->begin          = $begin;
-        $this->end            = $end;
         $this->id             = $id;
         $this->sheetMet       = $sheetMet;
-        $this->isNoPreference = $isNoPreference;
+        $this->hasNoPreference = $hasNoPreference;
     }
 }
