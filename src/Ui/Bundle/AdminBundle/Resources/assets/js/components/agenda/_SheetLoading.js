@@ -1,17 +1,15 @@
 var $ = require('jquery');
 
 function SheetLoading() {
-    // this.load();
+    this.load();
 }
 
 SheetLoading.prototype.load = function () {
-    $.ajax({
-        url: document.url,
-        dataType: "json",
-        success: function (json) {
-            $('.sheets-list').append(json.html);
-        }
-    })
+    $.get(document.url, function (response) {
+        $('.sheets-list').append(response.html);
+    }).fail(function(error) {
+        console.log(error);
+    });
 };
 
 module.exports = SheetLoading;

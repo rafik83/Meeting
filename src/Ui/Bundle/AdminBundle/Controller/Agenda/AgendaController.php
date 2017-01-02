@@ -24,30 +24,26 @@ class AgendaController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return Response
+     * @return Response|JsonResponse
      */
     public function indexAction(Request $request, Event $event)
     {
-        $test = 0;
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
         $sheets = [];
-        $query = new SheetListViewQuery($event, $request->getLocale());
 
-        /** @var PaginatedResult $sheets */
-        $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
+        if ($request->isXmlHttpRequest()) {
+            $query = new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()));
 
-//        if ($request->isXmlHttpRequest() && $test == 0) {
-//
-//
-//            return new JsonResponse(
-//                [
-//                    'html' => $this->renderView('AdminBundle:Agenda:sheets-list.html.twig', [
-//                        'sheets' => $sheets,
-//                    ]),
-//                ]
-//            );
-//        }
+            /** @var PaginatedResult $sheets */
+            $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
+
+            return new JsonResponse([
+                'html' => $this->renderView('AdminBundle:Agenda:sheets-list.html.twig', [
+                    'event'  => $event,
+                    'sheets' => $sheets,
+                ]),
+            ]);
+        }
 
         return $this->render('AdminBundle:Agenda:index.html.twig', [
             'event'  => $event,
