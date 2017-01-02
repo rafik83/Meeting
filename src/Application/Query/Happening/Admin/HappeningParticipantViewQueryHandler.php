@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
+use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantView;
 use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -72,6 +74,9 @@ class HappeningParticipantViewQueryHandler
 
     /**
      * @param HappeningParticipantViewQuery $query
+     *
+     * @return HappeningParticipantListView
+     * @throws EmptyHappeningParticipationException
      */
     public function handle(HappeningParticipantViewQuery $query)
     {
@@ -90,6 +95,12 @@ class HappeningParticipantViewQueryHandler
                 );
             }
         }
+
+        if (count($happeningParticipantViews) === 0) {
+            throw new EmptyHappeningParticipationException();
+        }
+
+        return new HappeningParticipantListView($happeningParticipantViews);
     }
 
     /**

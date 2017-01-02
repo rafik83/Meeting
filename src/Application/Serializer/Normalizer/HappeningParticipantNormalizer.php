@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
-use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class HappeningParticipantNormalizer implements NormalizerInterface
@@ -31,10 +31,18 @@ class HappeningParticipantNormalizer implements NormalizerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param HappeningParticipantListView $object
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        // TODO: Implement normalize() method.
+        $happeningParticipants = [];
+
+        foreach ($object->getHappeningParticipantListView() as $happeningParticipantView) {
+            $happeningParticipants[] = $happeningParticipantView->toArray();
+        }
+
+        return $happeningParticipants;
     }
 
     /**
@@ -42,6 +50,6 @@ class HappeningParticipantNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof Happening && 'csv' === $format;
+        return $data instanceof HappeningParticipantListView && 'csv' === $format;
     }
 }
