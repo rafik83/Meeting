@@ -38,11 +38,33 @@ class MeetingViewQueryHandler
      */
     public function handle(MeetingViewQuery $query)
     {
+        $fromSheet = $query->meeting->getFromSheet();
+        $toSheet = $query->meeting->getToSheet();
+
+        $sheetMet = null;
+
+        if ($fromSheet !== $query->sheet && $toSheet === $query->sheet
+            || $fromSheet == $query->sheet && $toSheet !== $query->sheet
+        ) {
+            $sheetMet = (null !== $fromSheet ? $fromSheet : $toSheet);
+        }
+
+        $requests = $this->requestRepository->getAllRequestBySheet($query->sheet);
+        $matchingRequest = null;
+
+        foreach ($requests as $request) {
+            if (($request->getFromSheet() === $query->sheet && $request->getToSheet() === $sheetMet)
+                || ($request->getToSheet() === $query->sheet && $request->getFromSheet() === $sheetMet)
+            ) {
+                $matchingRequest = $request;
+            }
+        }
+
         return new MeetingView(
             $query->meeting->getSpot(),
+            $sheetMet,
             $query->meeting->getId(),
-            $query->meeting->getOtherSheet(),
-            $query->meeting->hasNoPreference()
+            null !== $matchingRequest ? $matchingRequest->hasNoPreference($query->sheet) : true
         );
     }
 }

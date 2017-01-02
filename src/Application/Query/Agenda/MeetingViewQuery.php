@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MeetingViewQuery
 {
@@ -25,12 +26,19 @@ class MeetingViewQuery
     public $locale;
 
     /**
-     * @param Meeting   $meeting
-     * @param string $locale
+     * @var Sheet
      */
-    public function __construct(Meeting $meeting, $locale)
+    public $sheet;
+
+    /**
+     * @param Meeting $meeting
+     * @param Sheet   $sheet
+     * @param string  $locale
+     */
+    public function __construct(Meeting $meeting, Sheet $sheet, $locale)
     {
         $this->meeting   = $meeting;
         $this->locale = $locale;
+        $this->sheet = $sheet;
     }
 }
