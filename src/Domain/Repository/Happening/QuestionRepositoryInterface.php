@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface QuestionRepositoryInterface
@@ -34,4 +35,12 @@ interface QuestionRepositoryInterface
      * @param Happening $happening
      */
     public function removeQuestionFromUserForHappening(User $user, Happening $happening);
+
+    /**
+     * @param Happening $happening
+     * @param Sheet     $sheet
+     *
+     * @return Question|null
+     */
+    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet);
 }

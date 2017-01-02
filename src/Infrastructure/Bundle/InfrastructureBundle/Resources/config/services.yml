@@ -1615,6 +1615,16 @@ services:
             - '@query.happening.admin.happening_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery }
+    query.happening.admin.happening_participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery }
 
     #
     # Template

@@ -65,6 +65,11 @@ class Happening
     private $limitParticipant;
 
     /**
+     * @var HappeningParticipation[]
+     */
+    private $participations;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
@@ -88,7 +93,8 @@ class Happening
         $this->category         = $category;
         $this->translations     = new ArrayCollection();
         $this->talkings         = new ArrayCollection();
-        $this->questionAllowed    = $questionAllowed;
+        $this->participations   = new ArrayCollection();
+        $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
     }
 
@@ -213,7 +219,7 @@ class Happening
         $this->begin            = $begin;
         $this->end              = $end;
         $this->category         = $category;
-        $this->questionAllowed    = $questionAllowed;
+        $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
     }
 
@@ -314,5 +320,13 @@ class Happening
     public function setLimitParticipant($limitParticipant)
     {
         $this->limitParticipant = $limitParticipant;
+    }
+
+    /**
+     * @return HappeningParticipation[]
+     */
+    public function getParticipations()
+    {
+        return $this->participations;
     }
 }
