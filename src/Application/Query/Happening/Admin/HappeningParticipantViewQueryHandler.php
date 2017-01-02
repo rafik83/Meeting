@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantView;
+use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
@@ -106,9 +107,14 @@ class HappeningParticipantViewQueryHandler
         $sheetName = $this->sheetInfoGuesser->guessSheetTitle($participant->getSheet(), $locale);
 
         $question = $this->questionRepository->findByHappeningAndSheet($happening, $participant->getSheet());
+        $timezone = $participant->getSheet()->getEvent()->getTimeZone();
 
         $happeningParticipantView = new HappeningParticipantView(
-            $happening,
+            $happening->getId(),
+            HappeningDateHelper::getHour($happening->getBegin(), $locale, $timezone),
+            HappeningDateHelper::getHour($happening->getEnd(), $locale, $timezone),
+            HappeningDateHelper::getDay($happening->getBegin(), $locale, $timezone),
+            $happening->getTitle($locale),
             $participant->getSheet()->getId(),
             $participant->getId(),
             $question !== null ? $question->getContent() : '',
