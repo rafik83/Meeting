@@ -19,7 +19,6 @@ use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -29,11 +28,6 @@ class HappeningParticipantViewQueryHandler
      * @var HappeningRepositoryInterface
      */
     private $happeningRepository;
-
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
-    private $happeningParticipationRepository;
 
     /**
      * @var ParticipantInfoGuesser
@@ -54,20 +48,17 @@ class HappeningParticipantViewQueryHandler
      * HappeningParticipantViewQueryHandler constructor.
      *
      * @param HappeningRepositoryInterface              $happeningRepository
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param QuestionRepositoryInterface               $questionRepository
      * @param ParticipantInfoGuesser                    $participantInfoGuesser
      * @param SheetInfoGuesser                          $sheetInfoGuesser
      */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
-        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         QuestionRepositoryInterface $questionRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser
     ) {
         $this->happeningRepository              = $happeningRepository;
-        $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->participantInfoGuesser           = $participantInfoGuesser;
         $this->sheetInfoGuesser                 = $sheetInfoGuesser;
         $this->questionRepository               = $questionRepository;

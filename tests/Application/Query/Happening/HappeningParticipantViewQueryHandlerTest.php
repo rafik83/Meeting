@@ -45,7 +45,6 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
 
         // Mock
         $happeningRepository            = $this->prophesize(HappeningRepositoryInterface::class);
-        $happeningParticipantRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $questionRepository             = $this->prophesize(QuestionRepositoryInterface::class);
         $participantInfoGuesser         = $this->prophesize(ParticipantInfoGuesser::class);
         $sheetInfoGuesser               = $this->prophesize(SheetInfoGuesser::class);
@@ -66,7 +65,6 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
 
         $handler = new HappeningParticipantViewQueryHandler(
             $happeningRepository->reveal(),
-            $happeningParticipantRepository->reveal(),
             $questionRepository->reveal(),
             $participantInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal()
@@ -97,7 +95,6 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
 
         // Mock
         $happeningRepository            = $this->prophesize(HappeningRepositoryInterface::class);
-        $happeningParticipantRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $questionRepository             = $this->prophesize(QuestionRepositoryInterface::class);
         $participantInfoGuesser         = $this->prophesize(ParticipantInfoGuesser::class);
         $sheetInfoGuesser               = $this->prophesize(SheetInfoGuesser::class);
@@ -106,7 +103,6 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
 
         $handler = new HappeningParticipantViewQueryHandler(
             $happeningRepository->reveal(),
-            $happeningParticipantRepository->reveal(),
             $questionRepository->reveal(),
             $participantInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal()
