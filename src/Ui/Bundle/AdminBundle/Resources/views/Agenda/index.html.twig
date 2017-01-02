@@ -5,7 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .table-kpi {
+        .table-no-margin-bottom {
             margin-bottom: 0
         }
         .table-agenda {
@@ -16,6 +16,7 @@
         }
         .agenda-container {
             overflow-x: scroll;
+            margin-bottom: 140px;
         }
         .agenda-horizontal {
             width: 10000000px;
@@ -37,13 +38,14 @@
             height: 65px;
         }
         .slot-label {
-            width:100px;
+            width: 100px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
-        .slot-label-small {
+        .slot-time {
             font-size: 85%;
+            display: inline;
         }
         .sheets-list {
             position: fixed;
@@ -53,6 +55,13 @@
             overflow-y: scroll;
             padding: 10px 0 100px 10px;
         }
+        .sheet-title {
+            display: block;
+            width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
         .happening {
             background: #000000;
             color: #ffffff;
@@ -61,6 +70,24 @@
             background: #999999;
             color: #ffffff;
         }
+        .glyphicon {
+            z-index: 1; /* fix for not having glyphicons on top of request-list */
+        }
+        .requests-list {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 82.5%;
+            background: #eee;
+            padding: 10px 10px 0;
+            border-radius: 10px 0 0 0;
+            z-index: 2; /* fix for not having glyphicons on top of request-list */
+        }
+        .requests-list-scrollable {
+            max-height: 80px;
+            overflow-y: scroll;
+            background-color: #fff;
+        }
     </style>
 {% endblock %}
 
@@ -68,7 +95,7 @@
     <div class="row">
         <div class="col-xs-2">
             <div class="sheets-list">
-                <table class="table-kpi table table-condensed table-hover table-striped">
+                <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
                     <thead>
                         <tr>
                             <th>
@@ -90,15 +117,15 @@
                     {% for sheet in sheets.results %}
                         <tr id="sheet-{{ sheet.id }}">
                             <td>
+                                <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank" title="Voir la fiche" class="pull-right"><span class="glyphicon glyphicon-link"></span></a>
+
                                 {% if sheet.countParticipant > 1 %}
                                     <span class="label label-info pull-right"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
                                 {% endif %}
 
-                                <a href="#">{{ sheet.title }}</a>
+                                <a href="#" class="sheet-title">{{ sheet.title }}</a>
 
-                                <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank" title="Voir la fiche"><span class="glyphicon glyphicon-link"></span></a>
-
-                                <br><small>{{ sheet.type }}</small>
+                                <small>{{ sheet.type }}</small>
 
                                 {% if sheet.follower %}
                                     <br><small><span class="glyphicon glyphicon-arrow-right"></span> {{ sheet.follower }}</small>
@@ -123,22 +150,42 @@
         </div>
 
         <div class="col-xs-10">
-            <div style="position: fixed; bottom: 0;right: 0;width: 83%; background: #ccc; padding: 10px">
+            <div class="requests-list">
                 <p><b>Fiche #1</b> : demandes de RDV</p>
-                <ul class="list-group" style="margin-bottom: 0">
-                    <li class="list-group-item">
-                        <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                        Nom autre fiche 1 - Michel DUPOND
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                        Nom autre fiche 2 - Thierry HENRY, Martine PIERRE
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                        Nom autre fiche 3 - Pas de préférence
-                    </li>
-                </ul>
+                <div class="requests-list-scrollable">
+                    <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 1 - Michel DUPOND
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 2 - Thierry HENRY, Martine PIERRE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 3 - Pas de préférence
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 4 - Pas de préférence
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 5 - Pas de préférence
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
             <div class="agenda-container">
@@ -175,14 +222,14 @@
                                             {% for i in 1..12 if not (j%2 and i == 12) %}
                                                 <tr>
                                                     <td>
-                                                        {% if j==1 and i in [2,5] or j==2 and i == 4 %}
-                                                            <div class="slot {{ i in [2,5] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
+                                                        {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
+                                                            <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
                                                                 <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
 
-                                                                <div class="slot-label slot-label-small">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
 
                                                                 <div class="slot-label">
-                                                                    {% if i==5 %}<span class="glyphicon glyphicon-user" title="Pas de préférences" data-toggle="tooltip"></span>{% endif %}
+                                                                    {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>{% endif %}
                                                                     Nom autre fiche
                                                                 </div>
 
@@ -192,16 +239,15 @@
                                                             </div>
                                                         {% elseif j==1 and i in [3,7,8] %}
                                                             <div class="slot happening">
-                                                                <div class="slot-label slot-label-small">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                <span class="glyphicon glyphicon-bullhorn"></span>
+                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
                                                             </div>
                                                         {% elseif j==3 and i in [1,6] %}
                                                             <div class="slot unavailability">
-                                                                <div class="slot-label slot-label-small">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
                                                             </div>
                                                         {% else %}
                                                             <div class="slot empty-slot">
-                                                                <div class="slot-label slot-label-small">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
                                                             </div>
                                                         {% endif %}
                                                     </td>
