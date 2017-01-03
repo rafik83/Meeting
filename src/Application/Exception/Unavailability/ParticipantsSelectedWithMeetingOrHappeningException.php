@@ -21,7 +21,7 @@ class ParticipantsSelectedWithMeetingOrHappeningException extends Unavailability
     /**
      * @param array $participants
      */
-    public function __construct(array $participants)
+    public function __construct(array $participants = [])
     {
         parent::__construct('Participants selected have meeting or happening conflict with the selected unavailability');
 
@@ -41,19 +41,6 @@ class ParticipantsSelectedWithMeetingOrHappeningException extends Unavailability
      */
     public function getListOfParticipantsName()
     {
-        $names = '';
-
-        $pass = 1;
-        foreach ($this->participants as $participant) {
-            $names .= $participant;
-
-            if ($pass < $this->getNumberOfConflict()) {
-                $names .=  ", ";
-            }
-
-            $pass++;
-        }
-
-        return $names;
+        return implode(', ', $this->participants);
     }
 }
