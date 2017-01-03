@@ -36,3 +36,9 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
         __construct: ['@happening_03', 'fr', 'Conférence 3', "<realText()>"]
     happening_03_translation_en:
         __construct: ['@happening_03', 'en', 'Conférence 3', "<realText()>"]
+
+Proximum\Vimeet\Domain\Model\HappeningParticipation:
+    happening_participation_01:
+        __construct: ['@happening_03', '@participant_asddays_1']
+    happening_participation_02:
+        __construct: ['@happening_02', '@participant_asddays_2']

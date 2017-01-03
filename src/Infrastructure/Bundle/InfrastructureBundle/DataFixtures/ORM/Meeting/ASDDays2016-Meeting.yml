@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
         toSheet: '@sheet_asddays_empty'
         toParticipants: ['@participant_asddays_2']
         createdAt: "<date('2016-10-18 09:00:00', 'Europe/Paris', 'UTC')>"
-        spot: '@asddays_spot_1'
+#        spot: '@asddays_spot_1'
     asddays_meeting_02:
         __construct: false
         slot: '@meeting_slot_day_one_1'
@@ -16,7 +16,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
         toSheet: '@sheet_asddays_empty_with_tag'
         toParticipants: ['@participant_asddays_3']
         createdAt: "<date('2016-10-18 11:00:00', 'Europe/Paris', 'UTC')>"
-        spot: '@asddays_spot_1'
+#        spot: '@asddays_spot_1'
 
 Proximum\Vimeet\Domain\Model\Unavailability:
     unavailability_01:
