@@ -141,7 +141,7 @@
                                 {% endif %}
 
                                 <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank" title="Voir la fiche" class="link-to-sheet"><span class="glyphicon"></span></a>
-                                <a href="#" class="sheet-title">{{ sheet.title }}</a>
+                                <a href="#" class="sheet-title" title="{{ sheet.title }}">{{ sheet.title }}</a>
 
                                 <small>{{ sheet.type }}</small>
 
