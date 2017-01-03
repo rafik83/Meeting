@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -108,8 +107,6 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             $sheetInfoGuesser->reveal()
         );
 
-        $happeningParticipantListView = $handler->handle(
-            new HappeningParticipantViewQuery($event, $locale)
-        );
+        $handler->handle(new HappeningParticipantViewQuery($event, $locale));
     }
 }
