@@ -142,6 +142,12 @@ admin.messaging.campaign.list.columns.title: 'Titre'
 admin.messaging.campaign.list.no_data: 'Il n''existe pas de campagne d''emailing pour l''événement courant'
 admin.messaging.campaign.list.title: 'Campagnes d''emailing'
 admin.messaging.campaign.menu.list.title: Liste des campagnes
+admin.messaging.campaign.recipients.title: Destinataires
+admin.messaging.campaign.selected_sheets: 'Fiches sélectionnées'
+admin.messaging.campaign.selected_filters: 'Filtres sélectionnés'
+admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
+admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
+admin.messaging_campaign.recipients.sheet_owner: 'Propriétaire de la fiche'
 admin.messaging.link: Emailing
 admin.messaging.menu.title: Emailing
 admin.messaging.message.content: Contenu

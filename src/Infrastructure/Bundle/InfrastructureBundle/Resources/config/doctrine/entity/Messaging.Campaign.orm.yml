@@ -13,6 +13,9 @@ Proximum\Vimeet\Domain\Model\Messaging\Campaign:
         filters:
             type: json_array
             nullable: true
+        recipients:
+            type: simple_array
+            nullable: true
         createdAt:
             type: datetime
             nullable: false

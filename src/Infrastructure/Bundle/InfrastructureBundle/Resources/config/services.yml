@@ -1325,6 +1325,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Create }
 
+    command.messaging.campaign.select_recipients_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipientsHandler
+        arguments:
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients }
+
     #
     # Security
     #
@@ -2269,6 +2276,16 @@ services:
             - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery }
+
+    ##
+    # Messaging\Campaign assembler
+    ##
+    assembler.messaging_campaign:
+        class: Proximum\Vimeet\Application\Query\Messaging\Campaign\Assembler\CampaignAssembler
+        arguments:
+            - '@translator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@doctrine.orm.entity_manager'
 
     ##
     # Meeting Request query handler
