@@ -337,8 +337,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event')
-            ->andWhere('sheet.enable = :enable')
-            ->setParameter('enable', true)
+            ->andWhere('sheet.enable = true')
             ->setParameter('event', $event);
 
         return $queryBuilder;
