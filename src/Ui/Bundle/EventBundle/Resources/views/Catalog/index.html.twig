@@ -10,7 +10,14 @@
 
 {% block content %}
     <div class="catalog catalog--advanced">
-        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', { searchForm: searchForm, typeViews: typeViews, paginatedResult: paginatedResult, 'sheet': sheet, seeMoreButton: seeMoreButton }, false) }}
+        {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
+            searchForm: searchForm,
+            typeViews: typeViews,
+            paginatedResult: paginatedResult,
+            'sheet': sheet,
+            seeMoreButton: seeMoreButton,
+            'page': page
+        }, false) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}
