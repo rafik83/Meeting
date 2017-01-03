@@ -24,7 +24,8 @@ class TypeView
      */
     public function __construct($id, $title)
     {
-        $this->id    = $id;
-        $this->title = $title;
+        $this->id        = $id;
+        $this->title     = $title;
+        $this->reference = sprintf('type%s', $id);
     }
 }

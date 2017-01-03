@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Planner;
 
-class DayView
+class Day
 {
     /** @var int */
     public $id;
@@ -24,6 +24,9 @@ class DayView
     /** @var int */
     public $year;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param int $id
      * @param int $day
@@ -32,9 +35,10 @@ class DayView
      */
     public function __construct($id, $day, $month, $year)
     {
-        $this->id    = $id;
-        $this->day   = $day;
-        $this->month = $month;
-        $this->year  = $year;
+        $this->id        = $id;
+        $this->day       = $day;
+        $this->month     = $month;
+        $this->year      = $year;
+        $this->reference = sprintf('day%s', $id);
     }
 }

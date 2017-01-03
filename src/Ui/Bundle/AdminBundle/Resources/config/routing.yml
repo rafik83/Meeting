@@ -944,3 +944,13 @@ admin_messaging_message_update:
         message: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Messaging\Message:update }
+
+#
+# Planner
+#
+admin_export_planner_data:
+    path: /event/{event}/planner/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Export:export }

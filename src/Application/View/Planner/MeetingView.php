@@ -21,6 +21,9 @@ class MeetingView
     /** @var ParticipantView[] */
     public $participantList;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param int               $id
      * @param SheetView[]       $sheetList
@@ -31,5 +34,6 @@ class MeetingView
         $this->id              = $id;
         $this->sheetList       = $sheetList;
         $this->participantList = $participantList;
+        $this->reference       = sprintf('meeting%s', $id);
     }
 }

@@ -24,6 +24,9 @@ class ParticipantView
     /** @var SlotView[] */
     public $unavailabilityList;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param int        $id
      * @param string     $fullName
@@ -36,5 +39,6 @@ class ParticipantView
         $this->fullName           = $fullName;
         $this->sheet              = $sheet;
         $this->unavailabilityList = $unavailabilityList;
+        $this->reference          = sprintf('participant%s', $id);
     }
 }

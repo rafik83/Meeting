@@ -24,27 +24,31 @@ class SlotView
     /** @var int */
     public $minute;
 
-    /** @var DayView */
+    /** @var Day */
     public $day;
 
+    /** @var string */
+    public $reference;
+
     /**
-     * @param int     $id
-     * @param int     $index
-     * @param int     $hour
-     * @param int     $minute
-     * @param DayView $day
+     * @param int $id
+     * @param int $index
+     * @param int $hour
+     * @param int $minute
+     * @param Day $day
      */
     public function __construct(
         $id,
         $index,
         $hour,
         $minute,
-        DayView $day
+        Day $day
     ) {
-        $this->id     = $id;
-        $this->index  = $index;
-        $this->hour   = $hour;
-        $this->minute = $minute;
-        $this->day    = $day;
+        $this->id        = $id;
+        $this->index     = $index;
+        $this->hour      = $hour;
+        $this->minute    = $minute;
+        $this->day       = $day;
+        $this->reference = sprintf('slot%s', $id);
     }
 }

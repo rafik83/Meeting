@@ -24,6 +24,9 @@ class SheetView
     /** @var int */
     public $possibleMeetingsQuantity;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param int      $id
      * @param TypeView $type
@@ -40,6 +43,7 @@ class SheetView
         $this->type                     = $type;
         $this->planningQuantity         = $planningQuantity;
         $this->possibleMeetingsQuantity = $possibleMeetingsQuantity;
+        $this->reference                = sprintf('sheet%s', $id);
     }
 
     /**

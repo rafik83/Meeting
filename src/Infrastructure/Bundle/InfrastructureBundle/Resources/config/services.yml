@@ -2601,3 +2601,36 @@ services:
         public: false
         tags:
             - { name: serializer.encoder }
+
+    #
+    # Planner
+    #
+    query.planner.day_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
+
+    query.planner.planner_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler
+        arguments:
+            - '@query.planner.day_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery }
+
+    #
+    # Planner normalizer
+    #
+    serializer_normalizer_planner.planner_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\PlannerNormalizer
+        calls:
+            - [ setSerializer, [ '@serializer' ] ]
+        tags:
+            - { name: serializer.normalizer }
+    serializer_normalizer_planner.day_list_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\DayListNormalizer
+        calls:
+            - [ setSerializer, [ '@serializer' ] ]
+        tags:
+            - { name: serializer.normalizer }
+    serializer_normalizer_planner.day_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\DayNormalizer
+        tags:
+            - { name: serializer.normalizer }

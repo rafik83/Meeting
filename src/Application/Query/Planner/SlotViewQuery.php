@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Application\View\Planner\DayView;
+use Proximum\Vimeet\Application\View\Planner\Day;
 
 class SlotViewQuery
 {
@@ -21,13 +21,13 @@ class SlotViewQuery
     public $event;
 
     /**
-     * @var DayView[]
+     * @var Day[]
      */
     public $days;
 
     /**
-     * @param Event     $event
-     * @param DayView[] $days
+     * @param Event $event
+     * @param Day[] $days
      */
     public function __construct(Event $event, array $days)
     {

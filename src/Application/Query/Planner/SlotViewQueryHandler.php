@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Application\View\Planner\SlotView;
-use Proximum\Vimeet\Application\View\Planner\DayView;
+use Proximum\Vimeet\Application\View\Planner\Day;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
@@ -62,7 +62,7 @@ class SlotViewQueryHandler
      * @param SlotViewQuery $query
      * @param MeetingSlot   $slot
      *
-     * @return null|DayView
+     * @return null|Day
      */
     public function getCorrespondingDay(SlotViewQuery $query, MeetingSlot $slot)
     {

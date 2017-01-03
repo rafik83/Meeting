@@ -21,6 +21,9 @@ class TypePriorityView
     /** @var int */
     public $priority;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param TypeView $fromType
      * @param TypeView $toType
@@ -28,24 +31,25 @@ class TypePriorityView
      */
     public function __construct(TypeView $fromType, TypeView $toType, $priority)
     {
-        $this->fromType = $fromType;
-        $this->toType   = $toType;
-        $this->priority = $priority;
+        $this->fromType  = $fromType;
+        $this->toType    = $toType;
+        $this->priority  = $priority;
+        $this->reference = sprintf('priorityType%s-%s', $fromType->id, $toType->id);
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getFromType()
     {
-        return $this->fromType->id;
+        return $this->fromType->reference;
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getToType()
     {
-        return $this->toType->id;
+        return $this->toType->reference;
     }
 }

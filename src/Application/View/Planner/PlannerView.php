@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\View\Planner;
 class PlannerView
 {
     /**
-     * @var DayView[]
+     * @var Day[]
      */
     public $dayList;
 
@@ -48,12 +48,12 @@ class PlannerView
     public $meetingList;
 
     /**
-     * @var array|SpotView[]
+     * @var SpotView[]
      */
     public $spotList;
 
     /**
-     * @param DayView[]          $dayList
+     * @param Day[]              $dayList
      * @param SlotView[]         $slotList
      * @param TypeView[]         $typeList
      * @param TypePriorityView[] $typePriorityList
