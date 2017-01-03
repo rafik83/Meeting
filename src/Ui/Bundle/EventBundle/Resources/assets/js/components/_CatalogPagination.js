@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var PubSub = require('pubsub-js');
 
 function CatalogPagination(element)
 {
@@ -18,6 +19,7 @@ CatalogPagination.prototype.load = function ()
         data: {page: newDataPage},
         dataType: "json",
         success: function (json) {
+
             var seeMoreButton = $('.see-more');
 
             seeMoreButton.removeAttr('disabled');
@@ -27,6 +29,8 @@ CatalogPagination.prototype.load = function ()
 
             $('.catalog__list').append(json.html);
             seeMoreButton.attr("data-page", newDataPage);
+
+            PubSub.publish('dom.added', document.getElementById('catalog-page-'+newDataPage));
         }
     })
 };
