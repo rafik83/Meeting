@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner;
 
-use Proximum\Vimeet\Application\View\Planner\Day;
+use Proximum\Vimeet\Application\View\Planner\TypePriorityView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class DayNormalizer implements NormalizerInterface
+class TypePriorityNormalizer implements NormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -21,11 +21,13 @@ class DayNormalizer implements NormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         return [
-            '@id'   => $object->reference,
-            'id'    => $object->id,
-            'day'   => $object->day,
-            'month' => $object->month,
-            'year'  => $object->year,
+            'fromType' => [
+                '@reference' => $object->getFromTypeReference(),
+            ],
+            'toType' => [
+                '@reference' => $object->getToTypeReference(),
+            ],
+            'priority' => $object->priority,
         ];
     }
 
@@ -34,6 +36,6 @@ class DayNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof Day;
+        return $data instanceof TypePriorityView;
     }
 }

@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner;
 
-use Proximum\Vimeet\Application\View\Planner\Day;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class DayNormalizer implements NormalizerInterface
+class SlotNormalizer implements NormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -21,11 +21,14 @@ class DayNormalizer implements NormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         return [
-            '@id'   => $object->reference,
-            'id'    => $object->id,
-            'day'   => $object->day,
-            'month' => $object->month,
-            'year'  => $object->year,
+            '@id'    => $object->reference,
+            'id'     => $object->id,
+            'index'  => $object->index,
+            'hour'   => $object->hour,
+            'minute' => $object->minute,
+            'day'    => [
+                '@reference' => $object->day->reference,
+            ],
         ];
     }
 
@@ -34,6 +37,6 @@ class DayNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof Day;
+        return $data instanceof SlotView;
     }
 }

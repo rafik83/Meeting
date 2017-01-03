@@ -20,11 +20,32 @@ class PlannerViewQueryHandler
     private $dayViewQueryHandler;
 
     /**
-     * @param DayViewQueryHandler $dayViewQueryHandler
+     * @var SlotViewQueryHandler
      */
-    public function __construct(DayViewQueryHandler $dayViewQueryHandler)
-    {
-        $this->dayViewQueryHandler = $dayViewQueryHandler;
+    private $slotViewQueryHandler;
+
+    /**
+     * @var TypeViewQueryHandler
+     */
+    private $typeViewQueryHandler;
+    private $typePriorityViewQueryHandler;
+
+    /**
+     * @param DayViewQueryHandler          $dayViewQueryHandler
+     * @param SlotViewQueryHandler         $slotViewQueryHandler
+     * @param TypeViewQueryHandler         $typeViewQueryHandler
+     * @param TypePriorityViewQueryHandler $typePriorityViewQueryHandler
+     */
+    public function __construct(
+        DayViewQueryHandler $dayViewQueryHandler,
+        SlotViewQueryHandler $slotViewQueryHandler,
+        TypeViewQueryHandler $typeViewQueryHandler,
+        TypePriorityViewQueryHandler $typePriorityViewQueryHandler
+    ) {
+        $this->dayViewQueryHandler  = $dayViewQueryHandler;
+        $this->slotViewQueryHandler = $slotViewQueryHandler;
+        $this->typeViewQueryHandler = $typeViewQueryHandler;
+        $this->typePriorityViewQueryHandler = $typePriorityViewQueryHandler;
     }
 
     /**
@@ -34,8 +55,11 @@ class PlannerViewQueryHandler
      */
     public function handle(PlannerViewQuery $query)
     {
-        $days = $this->dayViewQueryHandler->handle(new DayViewQuery($query->event->getDays()));
+        $days           = $this->dayViewQueryHandler->handle(new DayViewQuery($query->event->getDays()));
+        $slots          = $this->slotViewQueryHandler->handle(new SlotViewQuery($query->event, $days));
+        $types          = $this->typeViewQueryHandler->handle(new TypeViewQuery($query->event, $query->locale));
+        $typePriorities = $this->typePriorityViewQueryHandler->handle(new TypePriorityViewQuery($query->event, $types));
 
-        return new PlannerView($days);
+        return new PlannerView($days, $slots, $types, $typePriorities);
     }
 }

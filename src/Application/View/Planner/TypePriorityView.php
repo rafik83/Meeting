@@ -40,7 +40,7 @@ class TypePriorityView
     /**
      * @return string
      */
-    public function getFromType()
+    public function getFromTypeReference()
     {
         return $this->fromType->reference;
     }
@@ -48,7 +48,7 @@ class TypePriorityView
     /**
      * @return string
      */
-    public function getToType()
+    public function getToTypeReference()
     {
         return $this->toType->reference;
     }

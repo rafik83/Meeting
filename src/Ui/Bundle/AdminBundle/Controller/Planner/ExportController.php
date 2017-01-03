@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\DayNormalizer;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\SlotNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +28,8 @@ class ExportController extends Controller
             new PlannerViewQuery($event, $request->getLocale())
         );
 
-        $normalizers = [
-            $this->get('serializer_normalizer_planner.planner_normalizer'),
-            new DayNormalizer(),
-        ];
-
         $serializer  = new Serializer(
-            $normalizers,
+            [$this->get('serializer_normalizer_planner.planner_normalizer')],
             [new XmlEncoder('MeetingSchedule')]
         );
 
