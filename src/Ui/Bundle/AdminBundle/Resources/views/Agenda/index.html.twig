@@ -71,6 +71,14 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            margin-left: 10px;
+        }
+        .link-to-sheet {
+            margin-right: 6px;
+            float: left;
+        }
+        .link-to-sheet span.glyphicon:before {
+            content: "\e164";
         }
         .happening {
             background: #000000;
@@ -108,31 +116,31 @@
                 <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
                     <thead>
                         <tr>
-                            <th>
+                            <td>
                                 Légende indicateurs
-                                <table class="table table-condensed table-bordered">
+                                <table class="table-no-margin-bottom table table-condensed table-bordered">
                                     <tr>
-                                        <td class="text-center"><a href="#" title="Nombre de demandes" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                        <td class="text-center"><a href="#" title="Nombre de propositions reçues" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                        <td class="text-center"><a href="#" title="Nombre de demandes et propositions acceptées" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                        <td class="text-center"><a href="#" title="Nombre de slots en tenant du nombre de participants" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                        <td class="text-center"><a href="#" title="Nombre de slots utilisables" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                        <td class="text-center"><a href="#" title="Nombre de RDV" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="Nombre de demandes" data-toggle="tooltip"><span class="glyphicon glyphicon-arrow-right"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="Nombre de propositions reçues" data-toggle="tooltip"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="Nombre de demandes et propositions acceptées" data-toggle="tooltip"><span class="glyphicon glyphicon-resize-horizontal"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="Nombre de slots" data-toggle="tooltip"><span class="glyphicon glyphicon-align-justify"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="Nombre de slots utilisables" data-toggle="tooltip"><span class="glyphicon glyphicon-tasks"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="Nombre de RDV" data-toggle="tooltip"><span class="glyphicon glyphicon-ok-circle"></span></a></td>
                                     </tr>
                                 </table>
-                            </th>
+                                <p class="text-muted"><small><span class="glyphicon glyphicon-info-sign"></span> Passer le curseur sur les icones</small></p>
+                            </td>
                         </tr>
                     </thead>
                     <tbody>
                     {% for sheet in sheets.results %}
                         <tr id="sheet-{{ sheet.id }}">
                             <td>
-                                <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank" title="Voir la fiche" class="pull-right"><span class="glyphicon glyphicon-link"></span></a>
-
                                 {% if sheet.countParticipant > 1 %}
                                     <span class="label label-info pull-right"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
                                 {% endif %}
 
+                                <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank" title="Voir la fiche" class="link-to-sheet"><span class="glyphicon"></span></a>
                                 <a href="#" class="sheet-title">{{ sheet.title }}</a>
 
                                 <small>{{ sheet.type }}</small>
@@ -143,12 +151,12 @@
 
                                 <table class="table-no-margin-bottom table table-condensed table-bordered">
                                     <tr>
-                                        <td class="text-center">109</td>
-                                        <td class="text-center">45</td>
-                                        <td class="text-center">66</td>
-                                        <td class="text-center">35</td>
-                                        <td class="text-center">32</td>
-                                        <td class="text-center">8</td>
+                                        <td class="text-center col-xs-2">109</td>
+                                        <td class="text-center col-xs-2">45</td>
+                                        <td class="text-center col-xs-2">66</td>
+                                        <td class="text-center col-xs-2">35</td>
+                                        <td class="text-center col-xs-2">32</td>
+                                        <td class="text-center col-xs-2">8</td>
                                     </tr>
                                 </table>
                             </td>
@@ -241,7 +249,7 @@
 
                                                                 <div class="slot-label">
                                                                     {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>{% endif %}
-                                                                    Nom autre fiche
+                                                                    <a href="#">Nom autre fiche</a>
                                                                 </div>
 
                                                                 <div class="slot-label">
