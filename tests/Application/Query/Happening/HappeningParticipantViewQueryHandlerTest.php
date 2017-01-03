@@ -43,10 +43,10 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         $happening->setParticipations([$participation]);
 
         // Mock
-        $happeningRepository            = $this->prophesize(HappeningRepositoryInterface::class);
-        $questionRepository             = $this->prophesize(QuestionRepositoryInterface::class);
-        $participantInfoGuesser         = $this->prophesize(ParticipantInfoGuesser::class);
-        $sheetInfoGuesser               = $this->prophesize(SheetInfoGuesser::class);
+        $happeningRepository    = $this->prophesize(HappeningRepositoryInterface::class);
+        $questionRepository     = $this->prophesize(QuestionRepositoryInterface::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesser::class);
 
         $happeningRepository->findByEvent($event)->shouldBeCalled()->willReturn([$happening]);
 
@@ -85,18 +85,18 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
     {
         $this->expectException(EmptyHappeningParticipationException::class);
 
-        $event       = EventFactory::createEvent();
-        $locale      = 'fr';
-        $category    = new Happening\Category($event, 'picto', 1, '#000', '#fff');
-        $begin       = new \DateTime();
-        $end         = new \DateTime();
-        $happening   = new Happening($event, $begin, $end, $category);
+        $event     = EventFactory::createEvent();
+        $locale    = 'fr';
+        $category  = new Happening\Category($event, 'picto', 1, '#000', '#fff');
+        $begin     = new \DateTime();
+        $end       = new \DateTime();
+        $happening = new Happening($event, $begin, $end, $category);
 
         // Mock
-        $happeningRepository            = $this->prophesize(HappeningRepositoryInterface::class);
-        $questionRepository             = $this->prophesize(QuestionRepositoryInterface::class);
-        $participantInfoGuesser         = $this->prophesize(ParticipantInfoGuesser::class);
-        $sheetInfoGuesser               = $this->prophesize(SheetInfoGuesser::class);
+        $happeningRepository    = $this->prophesize(HappeningRepositoryInterface::class);
+        $questionRepository     = $this->prophesize(QuestionRepositoryInterface::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesser::class);
 
         $happeningRepository->findByEvent($event)->shouldBeCalled()->willReturn([$happening]);
 
