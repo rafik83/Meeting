@@ -24,7 +24,7 @@ class PlannerNormalizer implements NormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         return [
-            'dayList' => $this->serializer->normalize($object->dayList, $format, $context),
+            'dayList' => ['Day' => $this->serializer->normalize($object->dayList, $format, $context)],
         ];
     }
 

@@ -21,12 +21,10 @@ class DayNormalizer implements NormalizerInterface
     public function normalize($object, $format = null, array $context = [])
     {
         return [
-            'Day' => [
-                'id'    => $object->id,
-                'day'   => $object->day,
-                'month' => $object->month,
-                'year'  => $object->year,
-            ]
+            'id'    => $object->id,
+            'day'   => $object->day,
+            'month' => $object->month,
+            'year'  => $object->year,
         ];
     }
 

@@ -29,7 +29,6 @@ class ExportController extends Controller
 
         $normalizers = [
             $this->get('serializer_normalizer_planner.planner_normalizer'),
-            $this->get('serializer_normalizer_planner.day_list_normalizer'),
             new DayNormalizer(),
         ];
 

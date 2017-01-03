@@ -2624,12 +2624,6 @@ services:
             - [ setSerializer, [ '@serializer' ] ]
         tags:
             - { name: serializer.normalizer }
-    serializer_normalizer_planner.day_list_normalizer:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\DayListNormalizer
-        calls:
-            - [ setSerializer, [ '@serializer' ] ]
-        tags:
-            - { name: serializer.normalizer }
     serializer_normalizer_planner.day_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\DayNormalizer
         tags:
