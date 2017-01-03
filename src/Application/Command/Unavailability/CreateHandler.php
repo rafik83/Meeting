@@ -184,9 +184,7 @@ class CreateHandler
             throw new ParticipantsSelectedWithMeetingOrHappeningException(
                 array_map(function (Participant $participant) use ($locale) {
                     return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
-                },
-                    $participantWithConflict
-                )
+                }, $participantWithConflict)
             );
         }
     }
