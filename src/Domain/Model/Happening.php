@@ -331,7 +331,7 @@ class Happening
     }
 
     /**
-     * @param array $participations
+     * @param HappeningParticipation[] $participations
      */
     public function setParticipations(array $participations)
     {
