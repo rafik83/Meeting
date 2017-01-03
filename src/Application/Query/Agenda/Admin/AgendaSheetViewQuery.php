@@ -8,9 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda;
-
-use Proximum\Vimeet\Domain\Model\Event;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 class AgendaSheetViewQuery
 {
@@ -27,7 +25,8 @@ class AgendaSheetViewQuery
     /**
      * AgendaSheetViewQuery constructor.
      *
-     * @param int $sheetId
+     * @param int    $sheetId
+     * @param string $locale
      */
     public function __construct($sheetId, $locale)
     {

@@ -13,11 +13,13 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             type: datetime
         stateUpdatedAt:
             type: datetime
-    manyToOne:
+    oneToOne:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
+            mappedBy: request
             joinColumn:
                 onDelete: SET NULL
+    manyToOne:
         from:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
@@ -112,5 +113,27 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder->setParameter('ids', $ids);
 
         return array_keys($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * @param Event $event
+     * @param Day   $day
+     *
+     * @return MeetingSlot[]
+     */
+    public function findByEventAndDay(Event $event, Day $day)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.event = :event')
+            ->andWhere('slot.begin BETWEEN :beginDate AND :endDate')
+            ->setParameter('beginDate', $day->getStartTime())
+            ->setParameter('endDate', $day->getEndTime())
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

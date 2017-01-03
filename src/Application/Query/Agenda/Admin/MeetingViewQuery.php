@@ -37,8 +37,8 @@ class MeetingViewQuery
      */
     public function __construct(Meeting $meeting, Sheet $sheet, $locale)
     {
-        $this->meeting   = $meeting;
-        $this->locale = $locale;
-        $this->sheet = $sheet;
+        $this->meeting = $meeting;
+        $this->locale  = $locale;
+        $this->sheet   = $sheet;
     }
 }

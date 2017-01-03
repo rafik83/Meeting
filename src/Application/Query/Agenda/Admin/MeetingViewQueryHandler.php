@@ -35,7 +35,7 @@ class MeetingViewQueryHandler
     /**
      * @param MeetingViewQuery $query
      *
-     * @return MassUnavailabilityView
+     * @return MeetingView
      */
     public function handle(MeetingViewQuery $query)
     {

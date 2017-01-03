@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaSheetView;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -39,6 +39,11 @@ class AgendaSheetViewQueryHandler
         $this->agendaParticipantViewQueryHandler = $agendaParticipantViewQueryHandler;
     }
 
+    /**
+     * @param AgendaSheetViewQuery $agendaSheetViewQuery
+     *
+     * @return AgendaSheetView
+     */
     public function handle(AgendaSheetViewQuery $agendaSheetViewQuery)
     {
         $sheet = $this->sheetRepository->getSheetById($agendaSheetViewQuery->sheetId);

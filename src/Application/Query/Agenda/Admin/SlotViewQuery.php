@@ -1,23 +1,24 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) 2017 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 
-class AgendaDayViewQuery
+class SlotViewQuery
 {
     /**
      * @var Day
@@ -25,9 +26,9 @@ class AgendaDayViewQuery
     public $day;
 
     /**
-     * @var string
+     * @var Event
      */
-    public $locale;
+    public $event;
 
     /**
      * @var HappeningParticipation[]
@@ -55,25 +56,27 @@ class AgendaDayViewQuery
     public $sheet;
 
     /**
-     * @param Sheet                    $sheet
-     * @param Day                      $day
-     * @param string                   $locale
-     * @param HappeningParticipation[] $happenings
-     * @param Unavailability[]         $unavailabilities
-     * @param Mass[]                   $masses
-     * @param array                    $meetings
+     * SlotViewQuery constructor.
+     *
+     * @param Event $event
+     * @param Day   $day
+     * @param Sheet $sheet
+     * @param array $happenings
+     * @param array $unavailabilities
+     * @param array $masses
+     * @param array $meetings
      */
     public function __construct(
-        Sheet $sheet,
+        Event $event,
         Day $day,
-        $locale,
-        array $happenings = [],
-        array $unavailabilities = [],
-        array $masses = [],
-        array $meetings = []
+        Sheet $sheet,
+        array $happenings,
+        array $unavailabilities,
+        array $masses,
+        array $meetings
     ) {
         $this->day              = $day;
-        $this->locale           = $locale;
+        $this->event            = $event;
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;
         $this->masses           = $masses;

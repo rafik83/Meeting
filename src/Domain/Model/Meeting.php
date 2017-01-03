@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class Meeting implements MessageSubjectInterface
 {
@@ -62,6 +63,11 @@ class Meeting implements MessageSubjectInterface
      * @var Spot
      */
     private $spot;
+
+    /**
+     * @var Request
+     */
+    private $request;
 
     /**
      * Meeting constructor.
@@ -246,5 +252,29 @@ class Meeting implements MessageSubjectInterface
     public function getSpot()
     {
         return $this->spot;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Guess what sheet is met
+     *
+     * @param Sheet $sheet
+     *
+     * @return Sheet
+     */
+    public function getSheetMet(Sheet $sheet)
+    {
+        if ($this->fromSheet === $sheet) {
+            return $this->toSheet;
+        }
+
+        return $this->fromSheet;
     }
 }

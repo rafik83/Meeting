@@ -10,83 +10,30 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
+use Proximum\Vimeet\Application\View\Agenda\Slot\AbstractSlotView;
+use Proximum\Vimeet\Domain\Model\Event\Day;
+
 class AgendaDayView
 {
     /**
-     * @var \DateTimeInterface
+     * @var AbstractSlotView[]
      */
-    public $begin;
+    public $slotViews;
 
     /**
-     * @var \DateTimeInterface
+     * @var Day
      */
-    public $end;
+    public $day;
 
     /**
-     * @var int
+     * AgendaDayView constructor.
+     *
+     * @param Day                $day
+     * @param AbstractSlotView[] $slotViews
      */
-    public $scale;
-
-    /**
-     * @var HappeningView[]
-     */
-    public $happenings;
-
-    /**
-     * @var UnavailabilityView[]
-     */
-    public $unavailabilities;
-
-    /**
-     * @var MassUnavailabilityView[]
-     */
-    public $masses;
-
-    /**
-     * @var MeetingView[]
-     */
-    public $meetings;
-
-    /**
-     * @param \DateTimeInterface       $begin
-     * @param \DateTimeInterface       $end
-     * @param int                      $scale
-     * @param HappeningView[]          $happenings
-     * @param UnavailabilityView[]     $unavailabilities
-     * @param MassUnavailabilityView[] $masses
-     * @param MeetingView[]            $meetings
-     */
-    public function __construct(
-        \DateTimeInterface $begin,
-        \DateTimeInterface $end,
-        $scale,
-        array $happenings,
-        array $unavailabilities,
-        array $masses,
-        array $meetings
-    ) {
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->scale            = $scale;
-        $this->happenings       = $happenings;
-        $this->unavailabilities = $unavailabilities;
-        $this->masses           = $masses;
-        $this->meetings         = $meetings;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getDay()
+    public function __construct(Day $day, array $slotViews)
     {
-        return $this->begin;
-    }
-
-    /**
-     * @return string
-     */
-    public function getScale()
-    {
-        return gmdate('H:i', $this->scale * 60);
+        $this->slotViews = $slotViews;
+        $this->day       = $day;
     }
 }

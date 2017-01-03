@@ -11,6 +11,10 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: string
         createdAt:
             type: datetime
+    oneToOne:
+        request:
+          targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
+          inversedBy: meeting
     manyToOne:
         slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot

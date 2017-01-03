@@ -8,11 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Agenda;
+namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
-use Proximum\Vimeet\Application\View\Agenda\AgendaView;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -27,7 +25,7 @@ class AgendaParticipantViewQueryHandler
     private $dayRepository;
 
     /**
-     * @var DayViewQueryHandler
+     * @var AgendaDayViewQueryHandler
      */
     private $agendaDayViewQueryHandler;
 
@@ -75,14 +73,21 @@ class AgendaParticipantViewQueryHandler
         $this->meetingRepositoryInterface       = $meetingRepositoryInterface;
     }
 
+    /**
+     * @param AgendaParticipantViewQuery $query
+     *
+     * @return AgendaParticipantView
+     */
     public function handle(AgendaParticipantViewQuery $query)
     {
         $eventDays = $this->dayRepository->findByEvent($query->event);
 
-        $happeningParticipations = $this->happeningParticipationRepository->findByParticipant($query->participant);
-        $unavailabilites         = $this->unavailabilityRepository->findByParticipant($query->participant);
-        $masses                  = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
-        $meetings                = $this->meetingRepositoryInterface->findByParticipant($query->participant);
+        $happeningParticipations = $this->happeningParticipationRepository
+            ->findByParticipant($query->participant);
+
+        $unavailabilites = $this->unavailabilityRepository->findByParticipant($query->participant);
+        $masses          = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
+        $meetings        = $this->meetingRepositoryInterface->findByParticipant($query->participant);
 
         $dayViews = [];
 
