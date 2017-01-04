@@ -45,6 +45,8 @@ class EventSheetsNormalizer extends AbstractNormalizer implements NormalizerInte
     const COL_FOLLOWING         = 'following';
     const COL_IN_CATALOG        = 'in_catalog';
 
+    protected $normalizerType = 'sheet';
+
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 

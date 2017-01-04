@@ -47,10 +47,10 @@ class HappeningParticipantViewQueryHandler
     /**
      * HappeningParticipantViewQueryHandler constructor.
      *
-     * @param HappeningRepositoryInterface              $happeningRepository
-     * @param QuestionRepositoryInterface               $questionRepository
-     * @param ParticipantInfoGuesser                    $participantInfoGuesser
-     * @param SheetInfoGuesser                          $sheetInfoGuesser
+     * @param HappeningRepositoryInterface $happeningRepository
+     * @param QuestionRepositoryInterface  $questionRepository
+     * @param ParticipantInfoGuesser       $participantInfoGuesser
+     * @param SheetInfoGuesser             $sheetInfoGuesser
      */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
@@ -58,10 +58,10 @@ class HappeningParticipantViewQueryHandler
         ParticipantInfoGuesser $participantInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser
     ) {
-        $this->happeningRepository              = $happeningRepository;
-        $this->participantInfoGuesser           = $participantInfoGuesser;
-        $this->sheetInfoGuesser                 = $sheetInfoGuesser;
-        $this->questionRepository               = $questionRepository;
+        $this->happeningRepository    = $happeningRepository;
+        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->questionRepository     = $questionRepository;
     }
 
     /**

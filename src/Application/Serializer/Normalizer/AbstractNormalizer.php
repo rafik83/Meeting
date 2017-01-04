@@ -21,6 +21,11 @@ abstract class AbstractNormalizer
     protected $translator;
 
     /**
+     * @var string
+     */
+    protected $normalizerType = '';
+
+    /**
      * AbstractNormalizer constructor.
      *
      * @param TranslatorInterface $translator
@@ -84,6 +89,8 @@ abstract class AbstractNormalizer
     {
         $value = (bool) $value;
 
-        return $this->translator->trans(sprintf("admin.sheet.export.%s", $value ? 'yes' : 'no'));
+        return $this->translator->trans(
+            sprintf("admin.%s.export.%s", $this->normalizerType, $value ? 'yes' : 'no')
+        );
     }
 }
