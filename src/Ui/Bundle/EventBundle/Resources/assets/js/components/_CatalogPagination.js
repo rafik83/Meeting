@@ -15,7 +15,7 @@ CatalogPagination.prototype.load = function ()
 
     var newDataPage = (parseInt(this.element.getAttribute('data-page')) + 1);
     $.ajax({
-        url: document.url,
+        url: document.location.href,
         data: {page: newDataPage},
         dataType: "json",
         success: function (json) {
