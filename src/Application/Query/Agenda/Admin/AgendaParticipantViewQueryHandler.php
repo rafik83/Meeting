@@ -12,10 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class AgendaParticipantViewQueryHandler
 {
@@ -30,47 +26,15 @@ class AgendaParticipantViewQueryHandler
     private $agendaDayViewQueryHandler;
 
     /**
-     * @var HappeningParticipationRepositoryInterface
-     */
-    private $happeningParticipationRepository;
-
-    /**
-     * @var UnavailabilityRepositoryInterface
-     */
-    private $unavailabilityRepository;
-
-    /**
-     * @var MassRepositoryInterface
-     */
-    private $massUnavailabilityRepository;
-
-    /**
-     * @var MeetingRepositoryInterface
-     */
-    private $meetingRepositoryInterface;
-
-    /**
-     * @param DayRepositoryInterface                    $dayRepository
-     * @param AgendaDayViewQueryHandler                 $agendaDayViewQueryHandler
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
-     * @param MassRepositoryInterface                   $massUnavailabilityRepository
-     * @param MeetingRepositoryInterface                $meetingRepositoryInterface
+     * @param DayRepositoryInterface    $dayRepository
+     * @param AgendaDayViewQueryHandler $agendaDayViewQueryHandler
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
-        AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
-        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
-        UnavailabilityRepositoryInterface $unavailabilityRepository,
-        MassRepositoryInterface $massUnavailabilityRepository,
-        MeetingRepositoryInterface $meetingRepositoryInterface
+        AgendaDayViewQueryHandler $agendaDayViewQueryHandler
     ) {
-        $this->dayRepository                    = $dayRepository;
-        $this->agendaDayViewQueryHandler        = $agendaDayViewQueryHandler;
-        $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->unavailabilityRepository         = $unavailabilityRepository;
-        $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
-        $this->meetingRepositoryInterface       = $meetingRepositoryInterface;
+        $this->dayRepository             = $dayRepository;
+        $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
     }
 
     /**
@@ -82,13 +46,6 @@ class AgendaParticipantViewQueryHandler
     {
         $eventDays = $this->dayRepository->findByEvent($query->event);
 
-        $happeningParticipations = $this->happeningParticipationRepository
-            ->findByParticipant($query->participant);
-
-        $unavailabilites = $this->unavailabilityRepository->findByParticipant($query->participant);
-        $masses          = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
-        $meetings        = $this->meetingRepositoryInterface->findByParticipant($query->participant);
-
         $dayViews = [];
 
         foreach ($eventDays as $day) {
@@ -96,11 +53,12 @@ class AgendaParticipantViewQueryHandler
                 $query = new AgendaDayViewQuery(
                     $query->sheet,
                     $day,
+                    $query->participant,
                     $query->locale,
-                    $happeningParticipations,
-                    $unavailabilites,
-                    $masses,
-                    $meetings
+                    $query->happeningParticipations,
+                    $query->unavailabilites,
+                    $query->masses,
+                    $query->meetings
                 )
             );
         }

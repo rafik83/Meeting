@@ -70,4 +70,11 @@ interface MeetingRepositoryInterface
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param Event $event
+     *
+     * @return Meeting[]
+     */
+    public function findByEvent(Event $event);
 }

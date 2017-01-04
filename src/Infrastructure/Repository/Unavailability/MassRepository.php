@@ -54,17 +54,23 @@ class MassRepository implements MassRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event, $locale)
+    public function findByEvent(Event $event, $locale = null)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('mass')
-            ->from(Mass::class, 'mass')
-            ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->from(Mass::class, 'mass');
+
+        if ($locale !== null) {
+            $queryBuilder
+                ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
+                ->setParameter('locale', $locale);
+        }
+
+        $queryBuilder
             ->where('mass.event = :event')
-            ->setParameter('event', $event)
-            ->setParameter('locale', $locale);
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

@@ -41,6 +41,7 @@ class AgendaDayViewQueryHandler
                 $query->sheet->getEvent(),
                 $query->day,
                 $query->sheet,
+                $query->participant,
                 $query->happenings,
                 $query->unavailabilities,
                 $query->masses,

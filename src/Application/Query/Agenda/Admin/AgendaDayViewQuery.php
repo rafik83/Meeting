@@ -11,11 +11,12 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 
 class AgendaDayViewQuery
 {
@@ -55,8 +56,14 @@ class AgendaDayViewQuery
     public $sheet;
 
     /**
+     * @var Participant
+     */
+    public $participant;
+
+    /**
      * @param Sheet                    $sheet
      * @param Day                      $day
+     * @param Participant              $participant
      * @param string                   $locale
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
@@ -66,6 +73,7 @@ class AgendaDayViewQuery
     public function __construct(
         Sheet $sheet,
         Day $day,
+        Participant $participant,
         $locale,
         array $happenings = [],
         array $unavailabilities = [],
@@ -79,5 +87,6 @@ class AgendaDayViewQuery
         $this->masses           = $masses;
         $this->meetings         = $meetings;
         $this->sheet            = $sheet;
+        $this->participant      = $participant;
     }
 }

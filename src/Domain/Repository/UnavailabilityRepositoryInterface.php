@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 
@@ -50,4 +51,11 @@ interface UnavailabilityRepositoryInterface
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param Event $event
+     *
+     * @return Unavailability[]
+     */
+    public function findByEvent(Event $event);
 }

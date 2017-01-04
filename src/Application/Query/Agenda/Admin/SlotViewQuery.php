@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -56,20 +57,27 @@ class SlotViewQuery
     public $sheet;
 
     /**
+     * @var Participant
+     */
+    public $participant;
+
+    /**
      * SlotViewQuery constructor.
      *
-     * @param Event $event
-     * @param Day   $day
-     * @param Sheet $sheet
-     * @param array $happenings
-     * @param array $unavailabilities
-     * @param array $masses
-     * @param array $meetings
+     * @param Event       $event
+     * @param Day         $day
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     * @param array       $happenings
+     * @param array       $unavailabilities
+     * @param array       $masses
+     * @param array       $meetings
      */
     public function __construct(
         Event $event,
         Day $day,
         Sheet $sheet,
+        Participant $participant,
         array $happenings,
         array $unavailabilities,
         array $masses,
@@ -82,5 +90,6 @@ class SlotViewQuery
         $this->masses           = $masses;
         $this->meetings         = $meetings;
         $this->sheet            = $sheet;
+        $this->participant      = $participant;
     }
 }

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -116,6 +117,26 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
                 ->andWhere('unavailability.id != :id')
                 ->setParameter('id', $unavailability->getId());
         }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Unavailability[]
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->join('unavailability.participant', 'participant')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.event', 'event', 'WITH', 'event = :event')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

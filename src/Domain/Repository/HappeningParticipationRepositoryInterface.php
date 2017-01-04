@@ -70,4 +70,11 @@ interface HappeningParticipationRepositoryInterface
      * @param Happening   $happening
      */
     public function removeParticipantForHappening(Participant $participant, Happening $happening);
+
+    /**
+     * @param Event $event
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByEvent(Event $event);
 }
