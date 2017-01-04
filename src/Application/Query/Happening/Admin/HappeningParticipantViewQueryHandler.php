@@ -72,7 +72,8 @@ class HappeningParticipantViewQueryHandler
      */
     public function handle(HappeningParticipantViewQuery $query)
     {
-        $happenings = $this->happeningRepository->findByEvent($query->event);
+        // preload happenings with participations and questions
+        $happenings = $this->happeningRepository->findHappeningParticipant($query->event);
 
         $happeningParticipantViews = [];
 
@@ -111,8 +112,8 @@ class HappeningParticipantViewQueryHandler
         $position  = $infos[Tag::PARTICIPANT_POSITION];
         $sheetName = $this->sheetInfoGuesser->guessSheetTitle($participant->getSheet(), $locale);
 
-        $question = $this->questionRepository->findByHappeningAndSheet($happening, $participant->getSheet());
-        $timezone = $participant->getSheet()->getEvent()->getTimeZone();
+        $questions = $happening->getQuestions();
+        $timezone  = $participant->getSheet()->getEvent()->getTimeZone();
 
         $happeningParticipantView = new HappeningParticipantView(
             $happening->getId(),
@@ -122,7 +123,7 @@ class HappeningParticipantViewQueryHandler
             $happening->getTitle($locale),
             $participant->getSheet()->getId(),
             $participant->getId(),
-            $question !== null ? $question->getContent() : '',
+            count($questions) > 0 ? $questions[0]->getContent() : '',
             $participant->getUser()->getEmail(),
             $firstname,
             $lastname,

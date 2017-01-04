@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
+use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\Talking;
 
@@ -70,6 +71,11 @@ class Happening
     private $participations;
 
     /**
+     * @var Question[]
+     */
+    private $questions;
+
+    /**
      * Happening constructor.
      *
      * @param Event              $event
@@ -94,6 +100,7 @@ class Happening
         $this->translations     = new ArrayCollection();
         $this->talkings         = new ArrayCollection();
         $this->participations   = new ArrayCollection();
+        $this->questions        = new ArrayCollection();
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
     }
@@ -328,6 +335,14 @@ class Happening
     public function getParticipations()
     {
         return $this->participations->toArray();
+    }
+
+    /**
+     * @return Happening\Question[]
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 
     /**
