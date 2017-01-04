@@ -133,7 +133,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addSort(['sheetName' => 'asc']);
 
-        $options = ["size" => 1000];
+        $options = ["size" => 100000];
 
         return array_map(function (Result $sheet) {
             return new SheetListView($sheet->id, $sheet->sheetName);
