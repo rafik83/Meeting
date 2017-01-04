@@ -2710,3 +2710,12 @@ services:
             - [ setSerializer, [ '@serializer' ] ]
         tags:
             - { name: serializer.normalizer }
+
+    #
+    # Domain Planner services
+    #
+    planner.planning_quantity_guesser:
+        class: Proximum\Vimeet\Domain\Planner\PlanningQuantityGuesser
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@order.merger'
