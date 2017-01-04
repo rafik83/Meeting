@@ -188,7 +188,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('participations.participant', 'participant')
             ->leftJoin('happening.questions', 'question', 'WITH', 'question.sheet = participant.sheet')
             ->where('happening.event = :event')
-            ->orderBy('happening.begin')
+            ->orderBy('happening.begin, participant.sheet')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
