@@ -145,6 +145,8 @@ class SheetController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
@@ -192,15 +194,16 @@ class SheetController extends Controller
     {
         // Only super admin & organizers are allowed to export sheets:
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $charset = Charset::WINDOWS_1252;
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $charset    = Charset::WINDOWS_1252;
         $serializer = $this->get('serializer');
         $exportContent = $serializer->serialize($event, 'csv', [
-            'locale' => $request->getLocale(),
+            'locale'  => $request->getLocale(),
             'charset' => $charset,
         ]);
 
-        $response = new Response($exportContent);
+        $response    = new Response($exportContent);
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             "export_event_sheets_".date("Y_m_d_His").".csv"
