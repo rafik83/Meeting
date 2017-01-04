@@ -47,10 +47,10 @@ class SheetView
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getType()
+    public function getTypeReference()
     {
-        return $this->type->id;
+        return $this->type->reference;
     }
 }

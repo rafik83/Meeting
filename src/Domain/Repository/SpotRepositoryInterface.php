@@ -27,11 +27,18 @@ interface SpotRepositoryInterface
 
     /**
      * @param Event $event
-     * @param integer $id
+     * @param int   $id
      *
      * @return Spot
      */
     public function find(Event $event, $id);
+
+    /**
+     * @param Event $event
+     *
+     * @return Spot[]
+     */
+    public function getActiveByEvent(Event $event);
 
     /**
      * @param Event $event

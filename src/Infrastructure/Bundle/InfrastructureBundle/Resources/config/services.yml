@@ -2623,6 +2623,29 @@ services:
        arguments:
             - '@repository.rule_repository'
 
+    query.planner.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\SheetViewQueryHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.sheet_repository'
+             - '@vimeet_infrastructure.repository.order_repository'
+             - '@order.merger'
+
+    query.planner.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+
+    query.planner.meeting_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    query.planner.spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Planner\SpotViewQueryHandler
+        arguments:
+             - '@vimeet_infrastructure.repository.spot_repository'
+
     query.planner.planner_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler
         arguments:
@@ -2630,6 +2653,10 @@ services:
             - '@query.planner.slot_view_query_handler'
             - '@query.planner.type_view_query_handler'
             - '@query.planner.type_priority_view_query_handler'
+            - '@query.planner.sheet_view_query_handler'
+            - '@query.planner.participant_view_query_handler'
+            - '@query.planner.meeting_view_query_handler'
+            - '@query.planner.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery }
 
@@ -2653,6 +2680,26 @@ services:
 
     serializer_normalizer_planner.type_priority_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\TypePriorityNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.sheet_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\SheetNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.participant_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\ParticipantNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.meeting_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\MeetingNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer_normalizer_planner.spot_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\SpotNormalizer
         tags:
             - { name: serializer.normalizer }
 

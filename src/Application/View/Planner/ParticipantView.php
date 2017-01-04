@@ -41,4 +41,12 @@ class ParticipantView
         $this->unavailabilityList = $unavailabilityList;
         $this->reference          = sprintf('participant%s', $id);
     }
+
+    /**
+     * @return string
+     */
+    public function getSheetReference()
+    {
+        return $this->sheet->reference;
+    }
 }

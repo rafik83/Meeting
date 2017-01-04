@@ -23,20 +23,66 @@ class PlannerNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        return [
-            'dayList'          => [
-                'Day' => $this->serializer->normalize($object->dayList, $format, $context),
-            ],
-            'slotList'         => [
-                'Slot' => $this->serializer->normalize($object->slotList, $format, $context),
-            ],
-            'typeList'         => [
-                'Type' => $this->serializer->normalize($object->typeList, $format, $context),
-            ],
-            'typePriorityList' => [
-                'TypePriority' => $this->serializer->normalize($object->typePriorityList, $format, $context),
-            ],
+        $data = [
+            'dayList'          => [],
+            'slotList'         => [],
+            'typeList'         => [],
+            'typePriorityList' => [],
+            'sheetList'        => [],
+            'participantList'  => [],
+            'meetingList'      => [],
+            'spotList'         => [],
         ];
+
+        if (!empty($object->dayList)) {
+            $data['dayList'] = [
+                'Day' => $this->serializer->normalize($object->dayList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->slotList)) {
+            $data['slotList'] = [
+                'Slot' => $this->serializer->normalize($object->slotList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->typeList)) {
+            $data['typeList'] = [
+                'Type' => $this->serializer->normalize($object->typeList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->typePriorityList)) {
+            $data['typePriorityList'] = [
+                'TypePriority' => $this->serializer->normalize($object->typePriorityList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->sheetList)) {
+            $data['sheetList'] = [
+                'Sheet' => $this->serializer->normalize($object->sheetList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->participantList)) {
+            $data['participantList'] = [
+                'Participant' => $this->serializer->normalize($object->participantList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->meetingList)) {
+            $data['meetingList'] = [
+                'Meeting' => $this->serializer->normalize($object->meetingList, $format, $context),
+            ];
+        }
+
+        if (!empty($object->spotList)) {
+            $data['spotList'] = [
+                'Spot' => $this->serializer->normalize($object->spotList, $format, $context),
+            ];
+        }
+
+        return $data;
     }
 
     /**

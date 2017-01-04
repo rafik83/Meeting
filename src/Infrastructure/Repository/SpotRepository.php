@@ -72,6 +72,17 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getActiveByEvent(Event $event)
+    {
+        $queryBuilder = new FilteredQueryBuilder($this->entityManager);
+        $queryBuilder->hasEvent($event)->filter(['active' => true]);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByReference(Event $event, $reference)
     {
         $queryBuilder = $this

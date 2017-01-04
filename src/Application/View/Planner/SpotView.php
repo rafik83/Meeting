@@ -16,7 +16,7 @@ class SpotView
     public $id;
 
     /** @var string */
-    public $reference;
+    public $spotReference;
 
     /** @var int */
     public $seatCapacity;
@@ -30,9 +30,12 @@ class SpotView
     /** @var int */
     public $priority;
 
+    /** @var string */
+    public $reference;
+
     /**
      * @param int         $id
-     * @param string      $reference
+     * @param string      $spotReference
      * @param int         $seatCapacity
      * @param int         $meetingCapacity
      * @param SheetView[] $sheetList
@@ -40,18 +43,19 @@ class SpotView
      */
     public function __construct(
         $id,
-        $reference,
+        $spotReference,
         $seatCapacity,
         $meetingCapacity,
         array $sheetList = [],
         $priority
     ) {
         $this->id              = $id;
-        $this->reference       = $reference;
+        $this->spotReference   = $spotReference;
         $this->seatCapacity    = $seatCapacity;
         $this->meetingCapacity = $meetingCapacity;
         $this->sheetList       = $sheetList;
         $this->priority        = $priority;
+        $this->reference       = sprintf('spot%s', $id);
     }
 
     /**
