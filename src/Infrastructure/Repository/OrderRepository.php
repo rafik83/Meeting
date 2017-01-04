@@ -78,6 +78,24 @@ class OrderRepository implements OrderRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findNotCancelledBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(Order::class, '_order', '_order.id')
+            ->where('_order.sheet = :sheet')
+            ->andWhere('_order.cancelled = false')
+            ->setParameter('sheet', $sheet)
+            ->orderBy('_order.createdAt', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findAndPaginateByEvent(Event $event, array $filters, $page, $limit)
     {
         $queryBuilder = $this
