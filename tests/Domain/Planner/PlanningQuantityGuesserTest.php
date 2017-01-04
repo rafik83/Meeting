@@ -1,0 +1,129 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Planner;
+
+use Proximum\Vimeet\Domain\Model\Address;
+use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Planner\PlanningQuantityGuesser;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\Order\BillingInfoFactory;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+
+class PlanningQuantityGuesserTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * Prophecy of Order Merger
+     */
+    private $orderMerger;
+
+    /**
+     * Prophecy of OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     *  Initialize the prophecies
+     */
+    public function setUp()
+    {
+        $this->orderRepository = $this->prophesize(OrderRepositoryInterface::class);
+        $this->orderMerger     = $this->prophesize(Merger::class);
+    }
+
+    public function testGuessWithNoPackage()
+    {
+        $event   = EventFactory::createEvent();
+        $sheet   = SheetFactory::create($event);
+        $package = new Package($event, 'title', new \DateTime());
+        $sheet->getType()->setPackage($package);
+        $package->enable(false, false, false);
+
+        $planningQuantityGuesser = new PlanningQuantityGuesser(
+            $this->orderRepository->reveal(),
+            $this->orderMerger->reveal()
+        );
+
+        $this->assertEquals(0, $planningQuantityGuesser->guess($sheet));
+    }
+
+    public function testGuessWithNoPackageAndParticipant()
+    {
+        $event        = EventFactory::createEvent();
+        $sheet        = SheetFactory::create($event);
+        $participant  = ParticipantFactory::create($sheet);
+        $participant2 = ParticipantFactory::create($sheet);
+        $package = new Package($event, 'title', new \DateTime());
+        $package->enable(false, false, false);
+        $sheet->getType()->setPackage($package);
+
+        $planningQuantityGuesser = new PlanningQuantityGuesser(
+            $this->orderRepository->reveal(),
+            $this->orderMerger->reveal()
+        );
+
+        $this->assertEquals(2, $planningQuantityGuesser->guess($sheet));
+    }
+
+    public function testGuessWithPackageAndNoOrder()
+    {
+        $event   = EventFactory::createEvent();
+        $sheet   = SheetFactory::create($event);
+        $package = new Package($event, 'title', new \DateTime());
+        $sheet->getType()->setPackage($package);
+
+        $this->orderRepository->findNotCancelledBySheet($sheet)->shouldBeCalled()->willReturn([]);
+
+        $planningQuantityGuesser = new PlanningQuantityGuesser(
+            $this->orderRepository->reveal(),
+            $this->orderMerger->reveal()
+        );
+
+        $this->assertEquals(0, $planningQuantityGuesser->guess($sheet));
+    }
+
+    public function testGuessWithPackageAndOrder()
+    {
+        $event   = EventFactory::createEvent();
+        $sheet   = SheetFactory::create($event);
+        $package = new Package($event, 'title', new \DateTime());
+        $sheet->getType()->setPackage($package);
+
+        $order = new Order($sheet, true, BillingInfoFactory::create(), [], new \DateTime());
+        $product = Product::createPlanning($event, 'name', 100, 10);
+        $plan    = Product::createPlan($event, 'plan', '', 200, 20, 50);
+        $plan->includeProduct($product, 1);
+        $order->addRow(new Order\Row(
+            $order,
+            2,
+            $product
+        ));
+        $order->addRow(new Order\Row(
+            $order,
+            1,
+            $plan
+        ));
+
+        $this->orderRepository->findNotCancelledBySheet($sheet)->shouldBeCalled()->willReturn([$order]);
+        $this->orderMerger->merge([$order])->shouldBeCalled()->willReturn($order);
+
+        $planningQuantityGuesser = new PlanningQuantityGuesser(
+            $this->orderRepository->reveal(),
+            $this->orderMerger->reveal()
+        );
+
+        $this->assertEquals(3, $planningQuantityGuesser->guess($sheet));
+    }
+}

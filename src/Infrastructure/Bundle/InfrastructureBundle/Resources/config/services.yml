@@ -2613,3 +2613,12 @@ services:
         public: false
         tags:
             - { name: serializer.encoder }
+
+    #
+    # Domain Planner services
+    #
+    planner.planning_quantity_guesser:
+        class: Proximum\Vimeet\Domain\Planner\PlanningQuantityGuesser
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@order.merger'
