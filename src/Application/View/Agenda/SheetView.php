@@ -30,7 +30,7 @@ class SheetView
     public $type;
 
     /**
-     * @var string
+     * @var Admin|null
      */
     public $clientManagement;
 
@@ -88,7 +88,7 @@ class SheetView
         $id,
         $title,
         $type,
-        $clientManagement,
+        Admin $clientManagement = null,
         $countParticipant,
         $countRequest,
         $countProposition,

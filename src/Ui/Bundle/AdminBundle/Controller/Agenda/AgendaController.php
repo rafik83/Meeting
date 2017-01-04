@@ -10,13 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
-use Proximum\Vimeet\Application\Query\Agenda\AgendaSheetViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,7 +32,7 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $sheets = [];
-        $query = new SheetListViewQuery($event, $request->getLocale());
+        $query  = new SheetListViewQuery($event, $request->getLocale());
 
         if ($sheetOpenedId = $request->query->get('sheet')) {
 
@@ -44,11 +42,9 @@ class AgendaController extends Controller
                     new AgendaSheetViewQuery($sheetOpenedId, $request->getLocale())
                 );
 
-            dump($agenda);die;
         }
         /** @var PaginatedResult $sheets */
         $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
-
 
 //        if ($request->isXmlHttpRequest() && $test == 0) {
 //
