@@ -73,7 +73,7 @@ class CampaignController extends Controller
                 $this->get('tactician.commandbus')->handle($createCampaignForm->getData());
                 $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
 
-                return $this->redirectToRoute('admin_messaging_campaign_select_sheets', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_messaging_campaign_list', ['event' => $event->getId()]);
             }
         }
 
@@ -96,7 +96,8 @@ class CampaignController extends Controller
      */
     public function listAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN', $event);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
         $query     = new ListViewQuery($event);
         $campaigns = $this->get('tactician.commandbus')->handle($query);

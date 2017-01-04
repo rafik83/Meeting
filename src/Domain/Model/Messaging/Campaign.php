@@ -36,8 +36,8 @@ class Campaign
 
     /**
      * @param Event              $event
-     * @param array              $filters
      * @param string             $title
+     * @param array              $filters
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt)
@@ -83,11 +83,11 @@ class Campaign
     }
 
     /**
-     * @return ArrayCollection|Sheet[]
+     * @return Sheet[]
      */
     public function getSheets()
     {
-        return $this->sheets;
+        return $this->sheets->toArray();
     }
 
     /**
