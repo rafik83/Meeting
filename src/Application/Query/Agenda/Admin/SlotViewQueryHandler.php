@@ -86,28 +86,27 @@ class SlotViewQueryHandler
 
         foreach ($slots as $slot) {
             if ($this->hasHappening($slot, $query)) {
-                $slotViews[] = new HappeningUnavailabilitySlotView($slot->getBegin(), $slot->getEnd());
+                $slotViews[] = new HappeningUnavailabilitySlotView($slot);
                 continue;
             }
 
             if ($meeting = $this->hasMeeting($slot, $query)) {
                 $slotViews[] = new MeetingSlotView(
+                    $slot,
                     $meeting->getSpot(),
                     $meeting->getSheetMet($query->sheet),
-                    $slot->getBegin(),
-                    $slot->getEnd(),
                     $meeting->getId(),
                     $meeting->getRequest()->hasNoPreference($query->sheet)
                 );
                 continue;
             }
 
-            if ($this->hasUnavailability($slot, $query)) {
-                $slotViews[] = new UnavailabilitySlotView($slot->getBegin(), $slot->getEnd());
+            if ($this->hasUnavailability($slot, $query) || $this->hasMassUnavailability($slot, $query)) {
+                $slotViews[] = new UnavailabilitySlotView($slot);
                 continue;
             }
 
-            $slotViews[] = new EmptySlotView($slot->getBegin(), $slot->getEnd());
+            $slotViews[] = new EmptySlotView($slot);
         }
 
         return $slotViews;
@@ -141,6 +140,17 @@ class SlotViewQueryHandler
             }
         }
 
+        return false;
+    }
+
+    /**
+     * @param MeetingSlot   $slot
+     * @param SlotViewQuery $query
+     *
+     * @return bool
+     */
+    public function hasMassUnavailability(MeetingSlot $slot, SlotViewQuery $query)
+    {
         foreach ($query->masses as $mass) {
             if ($slot->getBegin() >= $mass->getBegin()
                 && $slot->getBegin() <= $mass->getEnd()

@@ -10,8 +10,15 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Slot;
 
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+
 abstract class AbstractSlotView
 {
+    /**
+     * @var int
+     */
+    public $id;
+
     /**
      * @var \DateTimeInterface
      */
@@ -25,13 +32,13 @@ abstract class AbstractSlotView
     /**
      * AbstractSlotView constructor.
      *
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
+     * @param MeetingSlot $slot
      */
-    public function __construct(\DateTimeInterface $begin, \DateTimeInterface $end)
+    public function __construct(MeetingSlot $slot)
     {
-        $this->begin = $begin;
-        $this->end   = $end;
+        $this->id    = $slot->getId();
+        $this->begin = $slot->getBegin();
+        $this->end   = $slot->getEnd();
     }
 
     /**
