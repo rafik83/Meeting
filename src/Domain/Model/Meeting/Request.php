@@ -132,6 +132,14 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getFromParticipantsArray()
+    {
+        return $this->fromParticipants->toArray();
+    }
+
+    /**
      * @return Sheet
      */
     public function getToSheet()
@@ -145,6 +153,14 @@ class Request implements MessageSubjectInterface
     public function getToParticipants()
     {
         return $this->toParticipants;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getToParticipantsArray()
+    {
+        return $this->toParticipants->toArray();
     }
 
     /**
