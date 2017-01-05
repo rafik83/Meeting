@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
+use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,6 +31,21 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        return $this->render('AdminBundle:Agenda:index.html.twig', [
+            'event'  => $event,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return JsonResponse
+     */
+    public function sheetsListAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $query = new PaginatedSheetListViewQuery(
             $event,
             ['enable' => true],
@@ -39,11 +56,24 @@ class AgendaController extends Controller
         );
 
         /** @var PaginatedResult $sheets */
-        $sheets = $this->get('tactician.commandbus.query')->handle($query);
+        $paginatedResult = $this->get('tactician.commandbus.query')->handle($query);
 
-        return $this->render('AdminBundle:Agenda:index.html.twig', [
-            'event'  => $event,
-            'sheets' => $sheets,
-        ]);
+        $sheetsList = [];
+
+        /** @var SheetListView $sheet */
+        foreach ($paginatedResult->results as $sheet) {
+            $sheetsList[] = [
+                'id'               => $sheet->id,
+                'title'            => $sheet->title,
+                'type'             => $sheet->type,
+                'countParticipant' => $sheet->countParticipant,
+                'url'              => $this->get('router')->generate(
+                    'admin_sheet_details',
+                    ['event' => $event->getId(), 'sheet' => $sheet->id]
+                ),
+            ];
+        }
+
+        return new JsonResponse($sheetsList);
     }
 }
