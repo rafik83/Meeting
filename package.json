@@ -16,7 +16,8 @@
     "pubsub-js": "1.5.3",
     "select2": "4.0.2",
     "tablesort": "4.0.1",
-    "tinymce": "^4.5.1"
+    "tinymce": "^4.5.1",
+    "vue": "^2.1.8"
   },
   "napa": {},
   "scripts": {
@@ -46,7 +47,8 @@
     "bootstrap.tab": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js",
     "bootstrap.tooltip": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip.js",
     "bootstrap.popover": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover.js",
-    "bootstrap.dropdown": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js"
+    "bootstrap.dropdown": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js",
+    "vue": "vue/dist/vue.js"
   },
   "browserify-shim": {
     "bootstrap": {

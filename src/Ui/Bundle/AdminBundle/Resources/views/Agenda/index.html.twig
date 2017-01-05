@@ -6,7 +6,11 @@
 <div class="agenda-container">
     <div class="row">
         <div class="col-xs-2">
+
             <div class="sheets-list">
+                <div id="agenda">
+                    ${ message }
+                </div>
                 <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
                     <thead>
                         <tr>
@@ -193,4 +197,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/agenda.js') }}"></script>
 {% endblock %}
