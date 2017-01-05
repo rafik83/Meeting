@@ -13,7 +13,7 @@ var $                       = require('jquery'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
     AnchorFocuser           = require('./components/_AnchorFocuser'),
     DateTimePicker          = require('./components/_DateTimePicker'),
-    SheetLoading            = require('./components/agenda/_SheetLoading');
+    SheetLoader             = require('./components/agenda/_SheetLoader');
 
 
 require('elao-form.js');
@@ -154,8 +154,8 @@ function init(target) {
         new AnchorFocuser(element, location);
     });
 
-    [].forEach.call(target.querySelectorAll('.sheets-list-container'), function () {
-        new SheetLoading();
+    [].forEach.call(target.querySelectorAll('.sheets-list-container'), function (element) {
+        new SheetLoader(element);
     });
 
 }
