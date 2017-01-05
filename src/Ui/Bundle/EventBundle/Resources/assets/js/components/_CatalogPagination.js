@@ -19,10 +19,10 @@ CatalogPagination.prototype.load = function ()
         data: {page: newDataPage},
         dataType: "json",
         success: function (json) {
-
             var seeMoreButton = $('.see-more');
 
             seeMoreButton.removeAttr('disabled');
+            
             if (!json.seeMoreButton) {
                 seeMoreButton.hide();
             }
