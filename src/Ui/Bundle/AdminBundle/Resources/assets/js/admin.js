@@ -14,6 +14,7 @@ var $                       = require('jquery'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
     AnchorFocuser           = require('./components/_AnchorFocuser');
     DateTimePicker          = require('./components/_DateTimePicker');
+    MessagingMessagePreview = require('./components/_MessagingMessagePreview');
 
 require('elao-form.js');
 require('select2');
@@ -151,7 +152,11 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {
         new AnchorFocuser(element, location);
-    })
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-message-preview]'), function (element) {
+        new MessagingMessagePreview(element, target.querySelector('#preview_template'), target.querySelector('#message_preview'));
+    });
 }
 
 // Call init function when element is added to DOM

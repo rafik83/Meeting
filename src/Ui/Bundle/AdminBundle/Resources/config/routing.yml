@@ -965,3 +965,10 @@ admin_messaging_campaign_select_recipients:
         campaign: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Messaging\Campaign:selectRecipients }
+admin_messaging_campaign_select_message:
+    path: /event/{event}/messaging/campaign/{campaign}/select-message
+    requirements:
+        event: \d+
+        campaign: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:selectMessage }

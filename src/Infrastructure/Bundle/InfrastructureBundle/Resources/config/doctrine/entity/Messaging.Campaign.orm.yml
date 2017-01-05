@@ -25,6 +25,11 @@ Proximum\Vimeet\Domain\Model\Messaging\Campaign:
             joinColumn:
                 onDelete: CASCADE
                 nullable: false
+        message:
+            targetEntity: Proximum\Vimeet\Domain\Model\Messaging\Message
+            joinColumn:
+                onDelete: CASCADE
+                nullable: true
     manyToMany:
         sheets:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

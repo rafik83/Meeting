@@ -142,6 +142,11 @@ admin.messaging.campaign.list.columns.title: 'Titre'
 admin.messaging.campaign.list.no_data: 'Il n''existe pas de campagne d''emailing pour l''événement courant'
 admin.messaging.campaign.list.title: 'Campagnes d''emailing'
 admin.messaging.campaign.menu.list.title: Liste des campagnes
+admin.messaging.campaign.message.title: 'Sélection du message'
+admin.messaging.campaign.message_preview.content: Contenu
+admin.messaging.campaign.message_preview.subject: Sujet
+admin.messaging.campaign.message_preview.title: 'Prévisualisation'
+admin.messaging.campaign.no_message_preview: 'Sélectionnez un message pour obtenir un aperçu'
 admin.messaging.campaign.recipients.title: Destinataires
 admin.messaging.campaign.selected_sheets: 'Fiches sélectionnées'
 admin.messaging.campaign.selected_filters: 'Filtres sélectionnés'
