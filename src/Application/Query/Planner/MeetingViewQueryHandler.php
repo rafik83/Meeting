@@ -66,15 +66,17 @@ class MeetingViewQueryHandler
                 foreach ($request->getFromParticipantsArray() as $participant) {
                     $participantsList[] = $this->getParticipantById($participant->getId());
                 }
+            } else {
+                // No preference on from
             }
 
             if ($request->hasToParticipants()) {
                 foreach ($request->getToParticipantsArray() as $participant) {
                     $participantsList[] = $this->getParticipantById($participant->getId());
                 }
+            } else {
+                // not preference on to
             }
-
-            // TO DO, deal with no preference
 
             $meetingViews[] = new MeetingView(
                 $request->getId(),

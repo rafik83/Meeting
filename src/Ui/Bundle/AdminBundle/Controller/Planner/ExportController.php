@@ -20,19 +20,20 @@ use Symfony\Component\Serializer\Serializer;
 
 class ExportController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
     public function exportAction(Request $request, Event $event)
     {
-        $planner = $this->get('tactician.commandbus.query')->handle(
-            new PlannerViewQuery($event, $request->getLocale())
-        );
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $serializer  = new Serializer(
-            [$this->get('serializer_normalizer_planner.planner_normalizer')],
-            [new XmlEncoder('MeetingSchedule')]
-        );
+        $content  = $this->get('service_planner.exporter')->getXML($event, $request->getLocale());
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'xml');
 
-        $content = $serializer->serialize($planner, 'xml');
-
-        return new Response($content);
+        return $response;
     }
 }

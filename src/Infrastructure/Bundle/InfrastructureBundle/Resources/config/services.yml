@@ -2605,6 +2605,12 @@ services:
     #
     # Planner
     #
+    service_planner.exporter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Planner\Exporter
+        arguments:
+            - '@query.planner.planner_view_query_handler'
+            - '@serializer_normalizer_planner.planner_normalizer'
+
     query.planner.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
 
@@ -2626,9 +2632,8 @@ services:
     query.planner.sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\SheetViewQueryHandler
         arguments:
-             - '@vimeet_infrastructure.repository.sheet_repository'
-             - '@vimeet_infrastructure.repository.order_repository'
-             - '@order.merger'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.planner.indicator_calculator'
 
     query.planner.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler
@@ -2719,3 +2724,20 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
+
+    domain.planner.indicator_calculator:
+        class: Proximum\Vimeet\Domain\Planner\IndicatorCalculator
+        arguments:
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@planner.planning_quantity_guesser'
+            - '@domain.meeting.slot.slot_availability'
+
+    domain.meeting.slot.slot_availability:
+        class: Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@repository.unavailability.mass_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'

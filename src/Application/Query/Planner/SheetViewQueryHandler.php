@@ -13,8 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Planner;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Order\Merger;
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class SheetViewQueryHandler
@@ -30,23 +29,20 @@ class SheetViewQueryHandler
     private $types = [];
 
     /**
-     * @var Merger
+     * @var IndicatorCalculator
      */
-    private $orderMerger;
+    private $indicatorCalculator;
 
     /**
      * @param SheetRepositoryInterface $sheetRepository
-     * @param OrderRepositoryInterface $orderRepository
-     * @param Merger                   $orderMerger
+     * @param IndicatorCalculator      $indicatorCalculator
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        OrderRepositoryInterface $orderRepository,
-        Merger $orderMerger
+        IndicatorCalculator $indicatorCalculator
     ) {
-        $this->sheetRepository = $sheetRepository;
-        $this->orderRepository = $orderRepository;
-        $this->orderMerger     = $orderMerger;
+        $this->sheetRepository     = $sheetRepository;
+        $this->indicatorCalculator = $indicatorCalculator;
     }
 
     /**
@@ -63,24 +59,13 @@ class SheetViewQueryHandler
 
         /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
-            $planning = 0;
+            $indicator = $this->indicatorCalculator->getIndicator($sheet);
 
-            if (!$sheet->getPackage()->isPassable()) {
-                $planning = $sheet->countParticipant();
-            } else {
-                $orders   = $this->orderRepository->findBySheet($sheet);
-                if (0 < count($orders)) {
-                    $orderMerge = $this->orderMerger->merge($orders);
-                    $planning = $orderMerge->countPlanning();
-                }
-            }
-
-            // TO DO, get the possible meeting quantity
             $sheetViews[] = new SheetView(
                 $sheet->getId(),
                 $this->types[$sheet->getType()->getId()],
-                $planning,
-                1
+                $indicator->sheetsPlanningQuantity,
+                $indicator->possibleMeetingsQuantity
             );
         }
 
