@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Exception\Planner\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Planner\MeetingView;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class MeetingViewQueryHandler
@@ -63,11 +64,19 @@ class MeetingViewQueryHandler
             $participantsList = [];
 
             if ($request->hasFromParticipants()) {
+                /** @var Participant $participant */
                 foreach ($request->getFromParticipantsArray() as $participant) {
                     $participantsList[] = $this->getParticipantById($participant->getId());
                 }
             } else {
                 // No preference on from
+                // If sheet has only one participant
+                if ($request->getFromSheet()->countParticipant() === 1) {
+                    /** @var Participant $participant */
+                    foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
+                        $participantsList[] = $this->getParticipantById($participant->getId());
+                    }
+                }
             }
 
             if ($request->hasToParticipants()) {
@@ -76,6 +85,13 @@ class MeetingViewQueryHandler
                 }
             } else {
                 // not preference on to
+                // If sheet has only one participant
+                if ($request->getToSheet()->countParticipant() === 1) {
+                    /** @var Participant $participant */
+                    foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
+                        $participantsList[] = $this->getParticipantById($participant->getId());
+                    }
+                }
             }
 
             $meetingViews[] = new MeetingView(
