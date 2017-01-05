@@ -58,17 +58,24 @@ class AgendaController extends Controller
      * @param Request $request
      * @param Event   $event
      * @param Sheet   $sheet
+     *
+     * @return JsonResponse
      */
     public function sheetAction(Request $request, Event $event, Sheet $sheet)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-//        if ($request->isXmlHttpRequest()) {
-            $agendaSheetView = $this->get('tactician.commandbus.query')->handle(
-                new AgendaSheetViewQuery($sheet, $event->getAvailableLocale($request->getLocale()))
-            );
+        if ($sheet->getEvent() !== $event) {
+            return new JsonResponse('Sheet are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
-            dump($agendaSheetView); die;
+//        if ($request->isXmlHttpRequest()) {
+        $agendaSheetView = $this->get('tactician.commandbus.query')->handle(
+            new AgendaSheetViewQuery($sheet, $event->getAvailableLocale($request->getLocale()))
+        );
+
+//        dump($agendaSheetView);
+//        die;
 //        }
     }
 }
