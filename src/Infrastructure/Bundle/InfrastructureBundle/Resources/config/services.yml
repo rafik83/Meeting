@@ -2623,7 +2623,6 @@ services:
     domain.planner.indicator_calculator:
         class: Proximum\Vimeet\Domain\Planner\IndicatorCalculator
         arguments:
-            - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@planner.planning_quantity_guesser'

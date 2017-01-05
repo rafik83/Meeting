@@ -15,16 +15,10 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository;
 
 class IndicatorCalculator
 {
-    /**
-     * @var UnavailabilityRepositoryInterface
-     */
-    private $unavailabilityRepository;
-
     /**
      * @var RequestRepositoryInterface
      */
@@ -51,20 +45,17 @@ class IndicatorCalculator
     private $slotAvailability;
 
     /**
-     * @param UnavailabilityRepositoryInterface $unavailabilityRepository
      * @param RequestRepositoryInterface        $requestRepository
      * @param MeetingSlotRepository             $slotRepository
      * @param PlanningQuantityGuesser           $planningQuantityGuesser
      * @param SlotAvailability                  $slotAvailability
      */
     public function __construct(
-        UnavailabilityRepositoryInterface $unavailabilityRepository,
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepository $slotRepository,
         PlanningQuantityGuesser $planningQuantityGuesser,
         SlotAvailability $slotAvailability
     ) {
-        $this->unavailabilityRepository = $unavailabilityRepository;
         $this->requestRepository        = $requestRepository;
         $this->slotRepository           = $slotRepository;
         $this->planningQuantityGuesser  = $planningQuantityGuesser;
