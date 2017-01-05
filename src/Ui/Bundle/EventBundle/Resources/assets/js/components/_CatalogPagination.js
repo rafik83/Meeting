@@ -5,18 +5,19 @@ function CatalogPagination(element)
 {
     this.element = element;
     this.element.addEventListener('click', function () {
-        this.load()
+        this.loadNextPage()
     }.bind(this, this.element));
 }
 
-CatalogPagination.prototype.load = function ()
+CatalogPagination.prototype.loadNextPage = function ()
 {
     this.element.setAttribute('disabled', 'disabled');
 
-    var newDataPage = (parseInt(this.element.getAttribute('data-page')) + 1);
+    var page = (parseInt(this.element.getAttribute('data-page')) + 1);
+
     $.ajax({
         url: document.location.href,
-        data: {page: newDataPage},
+        data: {page: page},
         dataType: "json",
         success: function (json) {
             var seeMoreButton = $('.see-more');
@@ -27,10 +28,12 @@ CatalogPagination.prototype.load = function ()
                 seeMoreButton.hide();
             }
 
-            $('.catalog__list').append(json.html);
-            seeMoreButton.attr("data-page", newDataPage);
+            var pageId = 'catalog-page-' + page;
 
-            PubSub.publish('dom.added', document.getElementById('catalog-page-'+newDataPage));
+            $('.catalog__list').append('<div id="catalog-page-' + pageId + '">' + json.html + '</div>');
+            seeMoreButton.attr("data-page", page);
+
+            PubSub.publish('dom.added', document.getElementById(pageId));
         }
     })
 };

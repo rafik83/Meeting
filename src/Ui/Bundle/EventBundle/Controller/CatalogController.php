@@ -127,7 +127,7 @@ class CatalogController extends Controller
             if ($page > 1) {
                 return new JsonResponse(
                     [
-                        'html'   => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
+                        'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
                             'paginatedResult' => $paginatedResult,
                             'viewer' =>  $sheet,
                             'page'   => $page
