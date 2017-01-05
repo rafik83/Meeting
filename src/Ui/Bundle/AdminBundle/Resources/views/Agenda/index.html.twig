@@ -3,14 +3,11 @@
 {% block title %}Agenda{% endblock %}
 
 {% block content %}
-<div class="agenda-container">
+<div id="agenda" class="agenda-container">
     <div class="row">
         <div class="col-xs-2">
 
             <div class="sheets-list">
-                <div id="agenda">
-                    ${ message }
-                </div>
                 <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
                     <thead>
                         <tr>
@@ -31,43 +28,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for sheet in sheets.results %}
-                        <tr id="sheet-{{ sheet.id }}">
+                        <tr v-for="sheet in sheets">
                             <td>
-                                {% if sheet.countParticipant > 1 %}
-                                    <span class="label label-info pull-right"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
-                                {% endif %}
+                                {#{% if sheet.countParticipant > 1 %}#}
+                                    {#<span class="label label-info pull-right"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>#}
+                                {#{% endif %}#}
 
-                                <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank" title="Voir la fiche" class="link-to-sheet"><span class="glyphicon"></span></a>
-                                <a href="#" class="sheet-title" title="{{ sheet.title }}">{{ sheet.title }}</a>
+                                <a :href="sheet.url" target="_blank" title="Voir la fiche" class="link-to-sheet"><span class="glyphicon"></span></a>
+                                <a href="#" class="sheet-title" :title="sheet.title" v-on:click="showAgenda(sheet)">${ sheet.title }</a>
 
-                                <small>{{ sheet.type }}</small>
+                                <small>${ sheet.type }</small>
 
-                                {% if sheet.follower %}
-                                    <br><small><span class="glyphicon glyphicon-arrow-right"></span> {{ sheet.follower }}</small>
-                                {% endif %}
+                                {#{% if sheet.follower %}#}
+                                    {#<br><small><span class="glyphicon glyphicon-arrow-right"></span> {{ sheet.follower }}</small>#}
+                                {#{% endif %}#}
 
-                                <table class="table-no-margin-bottom table table-condensed table-bordered">
-                                    <tr>
-                                        <td class="text-center col-xs-2">109</td>
-                                        <td class="text-center col-xs-2">45</td>
-                                        <td class="text-center col-xs-2">66</td>
-                                        <td class="text-center col-xs-2">35</td>
-                                        <td class="text-center col-xs-2">32</td>
-                                        <td class="text-center col-xs-2">8</td>
-                                    </tr>
-                                </table>
+                                {#<table class="table-no-margin-bottom table table-condensed table-bordered">#}
+                                    {#<tr>#}
+                                        {#<td class="text-center col-xs-2">109</td>#}
+                                        {#<td class="text-center col-xs-2">45</td>#}
+                                        {#<td class="text-center col-xs-2">66</td>#}
+                                        {#<td class="text-center col-xs-2">35</td>#}
+                                        {#<td class="text-center col-xs-2">32</td>#}
+                                        {#<td class="text-center col-xs-2">8</td>#}
+                                    {#</tr>#}
+                                {#</table>#}
                             </td>
                         </tr>
-                    {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="col-xs-10">
-            <div class="requests-list">
-                <p><b>Adam Maillet S.A.</b><br>RDV validés</p>
+            <div class="requests-list" v-if="focus">
+                <p><b>${ focus.title }</b><br>RDV validés</p>
                 <div class="requests-list-scrollable">
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
                         <tr>
@@ -122,17 +117,13 @@
 
             <div class="agenda-horizontal">
                 <ul>
-                {% for table in 1..3 %}
-                    <li><table class="table-agenda table-bordered table-condensed pull-left">
+                {% set table = 1 %}
+                    <li v-for="sheet in agendas"><table class="table-agenda table-bordered table-condensed pull-left">
                         <thead>
                             <tr>
-                                <td colspan="4" class="text-center {% if table == 1 %}agenda-sheet-focus{% endif %}">
-                                    <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
-                                    {% if table == 1 %}
-                                        <b>Adam Maillet S.A.</b>
-                                    {% else %}
-                                        <a href="#">Nom de la fiche #{{ table }}</a>
-                                    {% endif %}
+                                <td colspan="4" v-bind:class="{ 'text-center': true, 'agenda-sheet-focus': sheet == focus }">
+                                    <a href="#" class="pull-right" v-on:click="closeAgenda(sheet)"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="#" v-on:click="focusAgenda(sheet)">${ sheet.title }</a>
                                 </td>
                             </tr>
                             <tr>
@@ -191,7 +182,6 @@
                             </tr>
                         </tbody>
                     </table></li>
-                {% endfor %}
                 </ul>
             </div>
         </div>
