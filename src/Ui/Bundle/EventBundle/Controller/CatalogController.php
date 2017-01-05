@@ -122,7 +122,6 @@ class CatalogController extends Controller
         );
 
         if ($request->isXmlHttpRequest()) {
-
             $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
 
             if ($page > 1) {
