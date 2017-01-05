@@ -6,6 +6,7 @@
   },
   "private": true,
   "dependencies": {
+    "axios": "^0.15.3",
     "bootstrap-sass": "3.3.6",
     "elao-form.js": "0.1.*",
     "eonasdan-bootstrap-datetimepicker": "4.15.35",
