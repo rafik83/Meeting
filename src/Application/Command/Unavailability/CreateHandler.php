@@ -213,101 +213,16 @@ class CreateHandler
      */
     private function prepareBeginAndEnd(Create $create)
     {
-        // Clone the selected day
-        // Recreate a day with the timezone of the event
-        // To be able to get the offset between the two dates
-        // Then remove this offset to the hour selected by the user
-        // To be able to recreate UTC dates
-        $day          = $create->day->getDay();
-        $endTime      = $create->day->getStartTime();
-        $dayTimeZonedBegin = $this->getDateTimeForDate(
-            $day->format('Y'),
-            $day->format('n'),
-            $day->format('j'),
-            $day->format('H'),
-            $day->format('i'),
-            $create->event->getTimeZone()
-        );
-        $dayTimeZonedEnd = $this->getDateTimeForDate(
-            $endTime->format('Y'),
-            $endTime->format('n'),
-            $endTime->format('j'),
-            $endTime->format('H'),
-            $endTime->format('i'),
-            $create->event->getTimeZone()
-        );
+        $dayCloned = clone $create->day->getDay();
+        $dayCloned->setTimeZone(new \DateTimeZone($create->event->getTimeZone()));
 
-        $offsetInHour = $dayTimeZonedBegin->getOffset() / 3600;
+        $begin = clone $dayCloned;
+        $begin->modify(sprintf('%s:%s', $create->time['begin']['hour'], $create->time['begin']['minute']));
+        $begin->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
-        // BEGIN
-        // THIS IS IMPORTANT TO GET THE CORRECT DAY ON THE TIMEZONED DAY
-        if (intval($endTime->format('H')) + $offsetInHour < 0) {
-            $dayTimeZonedBegin->modify('-1 day');
-        }
-        if (intval($endTime->format('H')) + $offsetInHour > 24) {
-            $dayTimeZonedBegin->modify('+1 day');
-        }
-        //
-
-        // END
-        // THIS IS IMPORTANT TO GET THE CORRECT DAY ON THE TIMEZONED DAY
-        if (intval($endTime->format('H')) + $offsetInHour < 0) {
-            $dayTimeZonedEnd->modify('-1 day');
-        }
-        if (intval($endTime->format('H')) + $offsetInHour > 24) {
-            $dayTimeZonedEnd->modify('+1 day');
-        }
-        //
-
-        $beginTimeHour = intval($create->time['begin']['hour']) - $offsetInHour;
-        $beginTimeDay  = intval($dayTimeZonedBegin->format('j'));
-
-        // In case of a negative hour, cause by a starting early event
-        // Reduce the day by one
-        // And change the negative hour to it correct position on the previous day
-        if ($beginTimeHour < 0) {
-            $beginTimeDay--;
-            $beginTimeHour = 24 + $beginTimeHour;
-        }
-
-        // In case of a > 24 hour, cause by a starting late event
-        // Increase the day by one
-        // And change the > 24 hour to it correct position on the next day
-        if ($beginTimeHour > 24) {
-            $beginTimeHour = ($beginTimeHour - 24);
-            $beginTimeDay += 1;
-        }
-
-        $begin = $this->getDateTimeForDate(
-            $day->format('Y'),
-            $day->format('n'),
-            $beginTimeDay,
-            $beginTimeHour,
-            $create->time['begin']['minute']
-        );
-
-        $endTimeHour = intval($create->time['end']['hour']) - $offsetInHour;
-        $endTimeDay  = intval($dayTimeZonedEnd->format('j'));
-
-        // In case of a negative hour, cause by a starting early event
-        // Reduce the day by one
-        // And change the negative hour to it correct position on the previous day
-        if ($endTimeHour < 0) {
-            $endTimeDay--;
-            $endTimeHour = 24 + $endTimeHour;
-        }
-        if ($endTimeHour >= 24) {
-            $endTimeHour = ($endTimeHour - 24);
-            $endTimeDay += 1;
-        }
-
-        $end = $this->getDateTimeForDate(
-            $day->format('Y'),
-            $day->format('n'),
-            $endTimeDay,
-            $endTimeHour,
-            $create->time['end']['minute']
-        );
+        $end = clone $dayCloned;
+        $end->modify(sprintf('%s:%s', $create->time['end']['hour'], $create->time['end']['minute']));
+        $end->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
         return [$begin, $end];
     }

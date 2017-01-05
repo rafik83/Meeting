@@ -27,30 +27,32 @@ class TimeRangeType extends AbstractType
         $days  = $event->getDays();
 
         if (!empty($days)) {
-            $begin = null;
-            $end   = null;
 
-            foreach ($days as $day) {
-                if ($begin === null || $begin->format('H') > $day->getStartTime()->format('H')) {
-                    $begin = $day->getStartTime();
-                }
+            $begins = array_map(function (Event\Day $day) use ($event) {
+                $clone = $day->getStartTime();
+                $clone->setTimezone(new \DateTimeZone($event->getTimeZone()));
 
-                if ($end === null || $end->format('H') < $day->getEndTime()->format('H')) {
-                    $end = $day->getEndTime();
-                }
-            }
+                return $clone;
+            }, $days);
 
-            $hours = [];
+            usort($begins, function (\DateTime $one, \DateTime $another) {
+                return intval($one->format('H')) - intval($another->format('H'));
+            });
 
-            $begin->setTimezone(new \DateTimeZone($event->getTimeZone()));
-            $end->setTimezone(new \DateTimeZone($event->getTimeZone()));
+            $ends = array_map(function (Event\Day $day) use ($event) {
+                $clone = $day->getEndTime();
+                $clone->setTimezone(new \DateTimeZone($event->getTimeZone()));
 
-            $beginFormat = intval($begin->format('H'));
-            $endFormat   = intval($end->format('H'));
+                return $clone;
+            }, $days);
 
-            for ($hour = $beginFormat; $hour <= $endFormat; $hour++) {
-                $hours[$hour] = $hour;
-            }
+            usort($ends, function (\DateTime $one, \DateTime $another) {
+                return  intval($another->format('H')) - intval($one->format('H'));
+            });
+
+            $beginHour = $begins[0]->format('H');
+            $endHour   = $ends[0]->format('H');
+            $hours     = range($beginHour, $endHour);
 
             $builder
                 ->add('begin', TimeType::class, [
