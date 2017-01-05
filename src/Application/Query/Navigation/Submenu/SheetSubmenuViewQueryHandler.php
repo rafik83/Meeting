@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class SheetSubmenuViewQueryHandler
 {
@@ -24,10 +23,6 @@ class SheetSubmenuViewQueryHandler
      * @var NavigationBuilderInterface
      */
     private $navigationBuilder;
-    /**
-     * @var CartRowRepositoryInterface
-     */
-    private $cartRowRepository;
 
     /**
      * @var CatalogAccessChecker
@@ -40,23 +35,28 @@ class SheetSubmenuViewQueryHandler
     private $happeningsAccessChecker;
 
     /**
+     * @var PackageSubmenuButtonViewQueryHandler
+     */
+    private $packageSubmenuButtonViewQueryHandler;
+
+    /**
      * SheetSubmenuViewQueryHandler constructor.
      *
-     * @param NavigationBuilderInterface $navigationBuilder
-     * @param CartRowRepositoryInterface $cartRowRepository
-     * @param CatalogAccessChecker       $catalogAccessChecker
-     * @param HappeningsAccessChecker    $happeningsAccessChecker
+     * @param NavigationBuilderInterface           $navigationBuilder
+     * @param PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
+     * @param CatalogAccessChecker                 $catalogAccessChecker
+     * @param HappeningsAccessChecker              $happeningsAccessChecker
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        CartRowRepositoryInterface $cartRowRepository,
-        CatalogAccessChecker       $catalogAccessChecker,
-        HappeningsAccessChecker    $happeningsAccessChecker
+        PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler,
+        CatalogAccessChecker $catalogAccessChecker,
+        HappeningsAccessChecker $happeningsAccessChecker
     ) {
-        $this->navigationBuilder       = $navigationBuilder;
-        $this->cartRowRepository       = $cartRowRepository;
-        $this->catalogAccessChecker    = $catalogAccessChecker;
-        $this->happeningsAccessChecker = $happeningsAccessChecker;
+        $this->navigationBuilder                    = $navigationBuilder;
+        $this->packageSubmenuButtonViewQueryHandler = $packageSubmenuButtonViewQueryHandler;
+        $this->catalogAccessChecker                 = $catalogAccessChecker;
+        $this->happeningsAccessChecker              = $happeningsAccessChecker;
     }
 
     /**
@@ -95,22 +95,13 @@ class SheetSubmenuViewQueryHandler
             );
         }
 
-        $package = $query->sheet->getPackage();
-
         // Package button
-        if ((!$query->sheet->hasNotCancelledOrders() || $this->cartRowRepository->hasProducts($query->sheet))
-            && $package !== null
-            && $package->isPassable() === true
-        ) {
-            $hasProductsInCartRow = $this->cartRowRepository->hasProducts($query->sheet);
+        $packageSubmenuButtonView = $this->packageSubmenuButtonViewQueryHandler->handle(
+            new PackageSubmenuButtonViewQuery($query->sheet, $query->route)
+        );
 
-            $buttonViews[] = new SubmenuButtonView(
-                Category::PACKAGE_ICON,
-                'package.title',
-                $this->navigationBuilder->getRoute('event_package'),
-                Route::isPackage($query->route),
-                $hasProductsInCartRow === true
-            );
+        if (null !== $packageSubmenuButtonView) {
+            $buttonViews[] = $packageSubmenuButtonView;
         }
 
         return $buttonViews;
