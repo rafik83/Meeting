@@ -1,3 +1,4 @@
+account.profile.updateAvatar.error: 'An error occured during the loading of your photo0'
 'Bad credentials.': 'Bad credentials.'
 package.planning.quantity: 'Quantity must be between %min% and %max%'
 package.plans.notBlank: 'You must select a formula.'
