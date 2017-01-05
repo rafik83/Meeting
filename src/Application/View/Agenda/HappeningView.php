@@ -58,6 +58,16 @@ class HappeningView
     public $limitParticipant;
 
     /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
      * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end

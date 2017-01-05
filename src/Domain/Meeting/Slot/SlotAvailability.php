@@ -145,19 +145,19 @@ class SlotAvailability
     private function autoLoading(Event $event)
     {
         if ($this->happenings === null) {
-            $this->happenings = $this->happeningParticipationRepository->findByEvent($event);
+            $this->happenings = $this->happeningParticipationRepository->getByEvent($event);
         }
 
         if ($this->meetings === null) {
-            $this->meetings = $this->meetingRepositoryInterface->findByEvent($event);
+            $this->meetings = $this->meetingRepositoryInterface->getAllByEvent($event);
         }
 
         if ($this->unavailability === null) {
-            $this->unavailability = $this->unavailabilityRepository->findByEvent($event);
+            $this->unavailability = $this->unavailabilityRepository->getByEvent($event);
         }
 
         if ($this->massUnavailability === null) {
-            $this->massUnavailability = $this->massUnavailabilityRepository->findByEvent($event);
+            $this->massUnavailability = $this->massUnavailabilityRepository->findByEvent($event, $event->getFallback());
         }
     }
 
@@ -238,7 +238,7 @@ class SlotAvailability
             if (!$meeting->hasFromParticipant($participant) || !$meeting->hasToParticipant($participant)) {
                 continue;
             }
-            
+
             if ($meeting->getSlot() === $slot) {
                 return $meeting;
             }

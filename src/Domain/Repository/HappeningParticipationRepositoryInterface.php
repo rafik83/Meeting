@@ -53,6 +53,13 @@ interface HappeningParticipationRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return HappeningParticipation[]
+     */
+    public function getByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
      * @return array
      */
     public function countParticipationByEvent(Event $event);

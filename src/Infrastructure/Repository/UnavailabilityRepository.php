@@ -76,6 +76,24 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->join('unavailability.participant', 'participant')
+            ->join('participant.sheet', 'sheet')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countByParticipant(Participant $participant)
     {
         $queryBuilder = $this
@@ -117,26 +135,6 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
                 ->andWhere('unavailability.id != :id')
                 ->setParameter('id', $unavailability->getId());
         }
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return Unavailability[]
-     */
-    public function findByEvent(Event $event)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('unavailability')
-            ->from(Unavailability::class, 'unavailability')
-            ->join('unavailability.participant', 'participant')
-            ->join('participant.sheet', 'sheet')
-            ->join('sheet.event', 'event', 'WITH', 'event = :event')
-            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

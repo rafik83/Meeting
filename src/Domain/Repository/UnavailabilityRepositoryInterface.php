@@ -32,6 +32,20 @@ interface UnavailabilityRepositoryInterface
     public function remove(Unavailability $unavailability);
 
     /**
+     * @param Event $event
+     *
+     * @return Unavailability[]
+     */
+    public function getByEvent(Event $event);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return int
+     */
+    public function countByParticipant(Participant $participant);
+
+    /**
      * @param Participant $participant
      *
      * @return Unavailability[]
