@@ -76,26 +76,19 @@ class UnavailabilityController extends Controller
 
                 return $this->redirectToRoute('event_agenda');
             } catch (NoParticipantSelectedException $exception) {
-                $form->get('participants')->addError(
-                    new FormError(
-                        $this->get('translator')->trans(
-                            'validators.unavailability.participantsNotSelected',
-                            [],
-                            'validators'
-                        )
-                    )
-                );
+                if ($form->has('participants')) {
+                    $form->get('participants')->addError($this->createNoParticipantSelectedExceptionError());
+                } else {
+                    $form->addError($this->createNoParticipantSelectedExceptionError());
+                }
             } catch (ParticipantsSelectedWithMeetingOrHappeningException $exception) {
-                $form->get('participants')->addError(
-                    new FormError(
-                        $this->get('translator')->transChoice(
-                            'validators.unavailability.participantsWithConflict',
-                            $exception->getNumberOfConflict(),
-                            ['%participants%' => $exception->getListOfParticipantsName()],
-                            'validators'
-                        )
-                    )
-                );
+                if ($form->has('participants')) {
+                    $form->get('participants')->addError(
+                        $this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception)
+                    );
+                } else {
+                    $form->addError($this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception));
+                }
             } catch (TimeOutOfRangeException $exception) {
                 if ($exception->isOutOfRangeAtBeginOfDay()) {
                     $form->get('time')->get('begin')->addError(
@@ -140,5 +133,33 @@ class UnavailabilityController extends Controller
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'form_unavailability'    => $form->createView()
         ]);
+    }
+
+    /**
+     * @param ParticipantsSelectedWithMeetingOrHappeningException $exception
+     *
+     * @return FormError
+     */
+    private function createParticipantsSelectedWithMeetingOrHappeningExceptionError(
+        ParticipantsSelectedWithMeetingOrHappeningException $exception
+    ) {
+        return new FormError(
+            $this->get('translator')->transChoice(
+                'validators.unavailability.participantsWithConflict',
+                $exception->getNumberOfConflict(),
+                ['%participants%' => $exception->getListOfParticipantsName()],
+                'validators'
+            )
+        );
+    }
+
+    /**
+     * @return FormError
+     */
+    private function createNoParticipantSelectedExceptionError()
+    {
+        return new FormError(
+            $this->get('translator')->trans('validators.unavailability.participantsNotSelected', [], 'validators')
+        );
     }
 }
