@@ -2,114 +2,8 @@
 
 {% block title %}Agenda{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-
-    <style>
-        .table-no-margin-bottom {
-            margin-bottom: 0
-        }
-        .table-agenda {
-            margin-right: 10px;
-        }
-        .table-agenda td {
-            vertical-align: top;
-        }
-        .agenda-container {
-            /*margin-bottom: 140px;*/
-        }
-        .agenda-horizontal {
-            white-space: nowrap;
-            overflow: scroll;
-            height: calc(100vh - 200px);
-        }
-        .agenda-horizontal ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        .agenda-horizontal ul li {
-            display: inline-block;
-        }
-        .table-agenda-day td {
-            padding: 0 !important;
-        }
-        .agenda-sheet-focus {
-            background: #32b5fc;
-        }
-        .meeting {
-            background: #32b5fc;
-        }
-        .meeting-common {
-            background: #ffe237;
-        }
-        .slot {
-            padding: 4px;
-            height: 65px;
-        }
-        .slot-label {
-            width: 100px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .slot-time {
-            font-size: 85%;
-            display: inline;
-        }
-        .sheets-list {
-            position: fixed;
-            top: 50px;
-            left: 0px;
-            height: 100%;
-            width: 17%;
-            overflow-y: scroll;
-            padding: 10px 0 100px 10px;
-        }
-        .sheet-title {
-            display: block;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            margin-left: 10px;
-        }
-        .link-to-sheet {
-            margin-right: 6px;
-            float: left;
-        }
-        .link-to-sheet span.glyphicon:before {
-            content: "\e164";
-        }
-        .happening {
-            background: #000000;
-            color: #ffffff;
-        }
-        .unavailability {
-            background: #999999;
-            color: #ffffff;
-        }
-        .glyphicon {
-            z-index: 1; /* fix for not having glyphicons on top of request-list */
-        }
-        .requests-list {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 82.5%;
-            background: #eee;
-            padding: 10px 10px 0;
-            border-radius: 10px 0 0 0;
-            z-index: 2; /* fix for not having glyphicons on top of request-list */
-        }
-        .requests-list-scrollable {
-            max-height: 140px;
-            overflow-y: scroll;
-            background-color: #fff;
-        }
-    </style>
-{% endblock %}
-
 {% block content %}
+<div class="agenda-container">
     <div class="row">
         <div class="col-xs-2">
             <div class="sheets-list">
@@ -169,119 +63,134 @@
 
         <div class="col-xs-10">
             <div class="requests-list">
-                <p><b>Fiche #1</b> : RDV validés</p>
+                <p><b>Adam Maillet S.A.</b><br>RDV validés</p>
                 <div class="requests-list-scrollable">
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
                         <tr>
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 1 - Michel DUPOND
+                                Nom autre fiche 1<br>
+                                <i class="icon icon-Profil_1"></i> Richard HANNA
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 2 - Thierry HENRY, Martine PIERRE
+                                Nom autre fiche 2<br>
+                                <i class="icon icon-Profil_1"></i> Richard HANNA, Dimitri FRUIT
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 3 - Pas de préférence
+                                Nom autre fiche 3 <span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 4 - Pas de préférence
+                                Nom autre fiche 4 <span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 5 - Pas de préférence
+                                Nom autre fiche 5 <span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 6<br>
+                                <i class="icon icon-Profil_1"></i> Richard HANNA, Dimitri FRUIT
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                                Nom autre fiche 7<br>
+                                <i class="icon icon-Profil_1"></i> Dimitri FRUIT
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
 
-            <div class="agenda-container">
-                <div class="agenda-horizontal">
-                    <ul>
-                    {% for table in 1..3 %}
-                        <li><table class="table-agenda table-bordered table-condensed pull-left">
-                            <thead>
-                                <tr>
-                                    <td colspan="4" class="text-center {% if table == 1 %}agenda-sheet-focus{% endif %}">
-                                        <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
-                                        {% if table == 1 %}
-                                            <b>Fiche #{{ table }}</b>
-                                        {% else %}
-                                            <a href="#">Fiche #{{ table }}</a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="text-center">Richard HANNA</th>
-                                    <th colspan="2" class="text-center">Dimitri FRUIT</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">J1</th>
-                                    <th class="text-center">J2</th>
-                                    <th class="text-center">J1</th>
-                                    <th class="text-center">J2</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    {% for j in 1..4 %}
-                                    <td>
-                                        <table class="table-agenda-day table table-condensed">
-                                            {% for i in 1..12 if not (j%2 and i == 12) %}
-                                                <tr>
-                                                    <td>
-                                                        {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
-                                                            <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
-                                                                <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
+            <div class="agenda-horizontal">
+                <ul>
+                {% for table in 1..3 %}
+                    <li><table class="table-agenda table-bordered table-condensed pull-left">
+                        <thead>
+                            <tr>
+                                <td colspan="4" class="text-center {% if table == 1 %}agenda-sheet-focus{% endif %}">
+                                    <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+                                    {% if table == 1 %}
+                                        <b>Adam Maillet S.A.</b>
+                                    {% else %}
+                                        <a href="#">Nom de la fiche #{{ table }}</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="text-center">Richard HANNA</th>
+                                <th colspan="2" class="text-center">Dimitri FRUIT</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">J1</th>
+                                <th class="text-center">J2</th>
+                                <th class="text-center">J1</th>
+                                <th class="text-center">J2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for j in 1..4 %}
+                                <td>
+                                    <table class="table-agenda-day table table-condensed">
+                                        {% for i in 1..12 if not (j%2 and i == 12) %}
+                                            <tr>
+                                                <td>
+                                                    {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
+                                                        <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
+                                                            <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
 
-                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
 
-                                                                <div class="slot-label">
-                                                                    {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>{% endif %}
-                                                                    <a href="#" title="Nom autre fiche" data-toggle="tooltip">Nom autre fiche</a>
-                                                                </div>
+                                                            <div class="slot-label">
+                                                                {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="Pas de préférences" data-toggle="tooltip"></span>{% endif %}
+                                                                <a href="#" title="Nom autre fiche" data-toggle="tooltip">Nom autre fiche</a>
+                                                            </div>
 
-                                                                <div class="slot-label">
-                                                                    <small><span class="glyphicon glyphicon-map-marker"></span> A{{ i ~ j }}0000</small>
-                                                                </div>
+                                                            <div class="slot-label">
+                                                                <small><span class="glyphicon glyphicon-map-marker"></span> A{{ i ~ j }}0000</small>
                                                             </div>
-                                                        {% elseif j==1 and i in [3,7,8] %}
-                                                            <div class="slot happening">
-                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                            </div>
-                                                        {% elseif j==3 and i in [1,6] %}
-                                                            <div class="slot unavailability">
-                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                            </div>
-                                                        {% else %}
-                                                            <div class="slot empty-slot">
-                                                                <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                            </div>
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        </table>
-                                    </td>
-                                    {% endfor %}
-                                </tr>
-                            </tbody>
-                        </table></li>
-                    {% endfor %}
-                    </ul>
-                </div>
+                                                        </div>
+                                                    {% elseif j==1 and i in [3,7,8] %}
+                                                        <div class="slot happening">
+                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                        </div>
+                                                    {% elseif j==3 and i in [1,6] %}
+                                                        <div class="slot unavailability">
+                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="slot empty-slot">
+                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                        </div>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table></li>
+                {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
