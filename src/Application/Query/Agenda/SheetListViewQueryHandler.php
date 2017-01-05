@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
