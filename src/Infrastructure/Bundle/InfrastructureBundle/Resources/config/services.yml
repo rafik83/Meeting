@@ -2102,10 +2102,8 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@domain.planner.indicator_calculator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
     query.agenda.agenda_sheet_view_query_handler:
@@ -2656,3 +2654,30 @@ services:
         public: false
         tags:
             - { name: serializer.encoder }
+
+    #
+    # Domain Planner services
+    #
+    planner.planning_quantity_guesser:
+        class: Proximum\Vimeet\Domain\Planner\PlanningQuantityGuesser
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@order.merger'
+    domain.planner.indicator_calculator:
+        class: Proximum\Vimeet\Domain\Planner\IndicatorCalculator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@planner.planning_quantity_guesser'
+            - '@domain.meeting.slot.slot_availability'
+
+    #
+    # Slot Availability
+    #
+    domain.meeting.slot.slot_availability:
+        class: Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@repository.unavailability.mass_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'

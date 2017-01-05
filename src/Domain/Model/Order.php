@@ -534,6 +534,31 @@ class Order
     }
 
     /**
+     * @return int
+     */
+    public function countPlanning()
+    {
+        $planning = 0;
+
+        /** @var Row $orderRow */
+        foreach ($this->rows as $orderRow) {
+            if (null !== $orderRow->getProduct()
+                && $orderRow->getProduct()->getType() === Product::TYPE_PLANNING
+            ) {
+                $planning += $orderRow->getQuantity();
+            }
+        }
+
+        $plan = $this->getPlan();
+
+        if ($plan instanceof Product && $plan->getType() === Product::TYPE_PLAN) {
+            $planning += $plan->getIncludedPlanningQuantity();
+        }
+
+        return $planning;
+    }
+
+    /**
      * @param Product $product
      *
      * @return bool

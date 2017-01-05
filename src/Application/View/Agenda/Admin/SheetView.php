@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Agenda;
+namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 
@@ -30,9 +30,9 @@ class SheetView
     public $type;
 
     /**
-     * @var Admin|null
+     * @var string|null
      */
-    public $clientManagement;
+    public $follower = null;
 
     /**
      * @var int
@@ -67,50 +67,49 @@ class SheetView
     /**
      * @var int
      */
-    public $countUsableSlots;
+    public $possibleMeetingQuantity;
 
     /**
-     * SheetListView constructor.
+     * SheetView constructor.
      *
      * @param int        $id
      * @param string     $title
      * @param string     $type
-     * @param Admin|null $clientManagement
      * @param int        $countParticipant
      * @param int        $countRequest
      * @param int        $countProposition
      * @param int        $countValidatedRequest
      * @param int        $countSlots
-     * @param int        $countUsableSlots
+     * @param int        $possibleMeetingQuantity
      * @param int        $countPlacedMeetings
+     * @param Admin|null $follower
      */
     public function __construct(
         $id,
         $title,
         $type,
-        Admin $clientManagement = null,
         $countParticipant,
         $countRequest,
         $countProposition,
         $countValidatedRequest,
         $countSlots,
-        $countUsableSlots,
-        $countPlacedMeetings
+        $possibleMeetingQuantity,
+        $countPlacedMeetings,
+        Admin $follower = null
     ) {
+        $this->id                      = $id;
+        $this->title                   = $title;
+        $this->type                    = $type;
+        $this->countParticipant        = $countParticipant;
+        $this->countRequest            = $countRequest;
+        $this->countProposition        = $countProposition;
+        $this->countValidatedRequest   = $countValidatedRequest;
+        $this->countSlots              = $countSlots;
+        $this->countPlacedMeetings     = $countPlacedMeetings;
+        $this->possibleMeetingQuantity = $possibleMeetingQuantity;
 
-        $this->id                    = $id;
-        $this->title                 = $title;
-        $this->type                  = $type;
-        $this->countParticipant      = $countParticipant;
-        $this->countRequest          = $countRequest;
-        $this->countProposition      = $countProposition;
-        $this->countValidatedRequest = $countValidatedRequest;
-        $this->countSlots            = $countSlots;
-        $this->countPlacedMeetings   = $countPlacedMeetings;
-        $this->countUsableSlots      = $countUsableSlots;
-
-        if (null !== $clientManagement) {
-            $this->clientManagement = $clientManagement->getDisplayName();
+        if (null !== $follower) {
+            $this->follower = $follower->getDisplayName();
         }
     }
 }
