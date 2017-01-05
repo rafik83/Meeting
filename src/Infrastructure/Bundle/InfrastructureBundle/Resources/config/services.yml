@@ -2071,10 +2071,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
     query.agenda.mass_unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
-    query.agenda.meetings_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
         arguments:
@@ -2116,7 +2112,7 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaSheetViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery }
     query.agenda.agenda_participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaParticipantViewQueryHandler
         arguments:
@@ -2134,10 +2130,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\SlotViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@query.agenda.happening_view_query_handler'
-            - '@query.agenda.unavailability_view_query_handler'
-            - '@query.agenda.mass_unavailability_view_query_handler'
-            - '@query.agenda.meetings_view_query_handler'
+            - '@domain.meeting.slot.slot_availability'
 
     ##
     # Navigation builder

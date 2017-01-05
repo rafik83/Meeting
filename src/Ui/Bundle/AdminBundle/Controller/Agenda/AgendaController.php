@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +37,7 @@ class AgendaController extends Controller
             $query = new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()));
 
             /** @var PaginatedResult $sheets */
-            $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle($query);
+            $sheets = $this->get('tactician.commandbus.query')->handle($query);
 
             return new JsonResponse([
                 'html' => $this->renderView('AdminBundle:Agenda:sheets-list.html.twig', [
@@ -50,5 +52,23 @@ class AgendaController extends Controller
             'sheets' => $sheets,
 //            'openedSheets' => $openedSheets,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Sheet   $sheet
+     */
+    public function sheetAction(Request $request, Event $event, Sheet $sheet)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+//        if ($request->isXmlHttpRequest()) {
+            $agendaSheetView = $this->get('tactician.commandbus.query')->handle(
+                new AgendaSheetViewQuery($sheet, $event->getAvailableLocale($request->getLocale()))
+            );
+
+            dump($agendaSheetView); die;
+//        }
     }
 }

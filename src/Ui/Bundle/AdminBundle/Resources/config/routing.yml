@@ -273,6 +273,14 @@ admin_agenda_index:
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Agenda:index }
 
+admin_agenda_sheet:
+    path: /event/{event}/agenda/sheet/{sheet}
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
+
 #
 # Meeting
 #

@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class AgendaSheetViewQuery
 {
     /**
-     * @var int
+     * @var Sheet
      */
-    public $sheetId;
+    public $sheet;
 
     /**
      * @var string
@@ -25,12 +27,12 @@ class AgendaSheetViewQuery
     /**
      * AgendaSheetViewQuery constructor.
      *
-     * @param int    $sheetId
+     * @param Sheet  $sheet
      * @param string $locale
      */
-    public function __construct($sheetId, $locale)
+    public function __construct(Sheet $sheet, $locale)
     {
-        $this->sheetId = $sheetId;
-        $this->locale  = $locale;
+        $this->sheet  = $sheet;
+        $this->locale = $locale;
     }
 }
