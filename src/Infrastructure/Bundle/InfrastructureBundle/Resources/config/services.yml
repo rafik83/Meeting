@@ -2634,7 +2634,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.meeting.slot.slot_availability'
 
     query.planner.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
