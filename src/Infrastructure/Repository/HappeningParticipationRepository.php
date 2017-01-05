@@ -189,24 +189,4 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         $this->entityManager->flush();
     }
-
-    /**
-     * @param Event $event
-     *
-     * @return HappeningParticipation[]
-     */
-    public function findByEvent(Event $event)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('participation')
-            ->from(HappeningParticipation::class, 'participation')
-            ->join('participation.participant', 'participant')
-            ->join('participant.sheet', 'sheet')
-            ->join('sheet.event', 'event', 'WITH', 'event = :event')
-            ->setParameter('event', $event);
-
-        $queryBuilder->getQuery()->getResult();
-    }
 }
