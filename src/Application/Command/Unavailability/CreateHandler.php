@@ -114,47 +114,6 @@ class CreateHandler
     }
 
     /**
-     * @param string|int $year
-     * @param string|int $month
-     * @param string|int $day
-     * @param string|int $hour
-     * @param string|int $minute
-     *
-     * @return string
-     */
-    private function getStringifyDate($year, $month, $day, $hour, $minute)
-    {
-        return sprintf(
-            '%s-%s-%s %s:%s:00.000',
-            $year,
-            $month,
-            $day,
-            $hour,
-            $minute
-        );
-    }
-
-    /**
-     * @param string|int $year
-     * @param string|int $month
-     * @param string|int $day
-     * @param string|int $hour
-     * @param string|int $minute
-     * @param string     $timeZone
-     *
-     * @return \DateTimeInterface
-     */
-    private function getDateTimeForDate($year, $month, $day, $hour, $minute, $timeZone = null)
-    {
-        $stringDate = $this->getStringifyDate($year, $month, $day, $hour, $minute);
-
-        return $timeZone !== null
-            ? new \DateTime($stringDate, new \DateTimeZone($timeZone))
-            : new \DateTime($stringDate)
-        ;
-    }
-
-    /**
      * @param Create             $create
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
