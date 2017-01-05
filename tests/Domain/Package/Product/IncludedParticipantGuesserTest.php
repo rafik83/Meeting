@@ -31,7 +31,7 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $event       = EventFactory::createEvent();
         $sheet       = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
+        ParticipantFactory::create($sheet);
 
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = new Merger();
@@ -55,7 +55,7 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $event       = EventFactory::createEvent();
         $sheet       = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
+        ParticipantFactory::create($sheet);
 
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = new Merger();
@@ -84,7 +84,7 @@ class IncludedParticipantGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $event       = EventFactory::createEvent();
         $sheet       = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
+        ParticipantFactory::create($sheet);
 
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = new Merger();
