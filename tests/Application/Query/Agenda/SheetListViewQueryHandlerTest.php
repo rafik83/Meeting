@@ -14,19 +14,18 @@ use DateTime;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler;
-use Proximum\Vimeet\Application\View\Agenda\SheetView;
+use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Planner\IndicatorCalculator;
+use Proximum\Vimeet\Domain\Planner\IndicatorView;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -34,58 +33,43 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
-        $user = new User('email@email.com', 'salt', 'password', 'fr');
-        $event = (new EventFactory())->createEvent();
-        $sheet = (new SheetFactory())->create($event);
+        $user    = new User('email@email.com', 'salt', 'password', 'fr');
+        $event   = EventFactory::createEvent();
+        $type    = new Type($event);
+        $package = new Package($event, 'title', new DateTime());
+        $type->setPackage($package);
+        $sheet = SheetFactory::create($event, null, null, $type);
 
         $participant = $this->createParticipantMock($sheet, $user, 1);
         $sheet->addParticipant($participant);
 
-        $sheetRepository          = $this->prophesize(SheetRepositoryInterface::class);
-        $meetingRepository        = $this->prophesize(MeetingRepositoryInterface::class);
-        $requestRepository        = $this->prophesize(RequestRepositoryInterface::class);
-        $meetingSlotRepository    = $this->prophesize(MeetingSlotRepositoryInterface::class);
-        $participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
-        $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
-        $sheetInfoGuesser         = $this->prophesize(SheetInfoGuesser::class);
-
-        $sheet->updateType((new Type($event))->setPackage(new Package($event, 'title', new DateTime())));
+        $sheetRepository   = $this->prophesize(SheetRepositoryInterface::class);
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
 
         $product = new Product($event, 'plan', 'name', 'img.png', 10, 1, 1, 1, true);
         $sheet->getPackage()->setPlans([$product]);
 
-        $sheetRepository->getEnabledSheetsByEvent($event)->shouldBeCalled()->willReturn([$sheet]);
+        $sheetRepository->getSheetsInCatalogByEvent($event)->shouldBeCalled()->willReturn([$sheet]);
         $requestRepository->countRequestSentBySheet($sheet)->shouldBeCalled()->willReturn(50);
         $requestRepository->countPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn(100);
-        $participantRepository->countParticipantBySheet($sheet)->shouldBeCalled()->willReturn(5);
-        $meetingSlotRepository->countByEvent($event)->shouldBeCalled()->willReturn(10);
         $sheetInfoGuesser->guessSheetTitle($sheet, 'fr')->shouldBeCalled()->willReturn('Titre fiche');
         $requestRepository->countApprovedPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn(22);
-        $unavailabilityRepository->countByParticipant($participant)->shouldBeCalled()->willReturn(1);
         $meetingRepository->countByParticipant($participant)->shouldBeCalled()->willReturn(55);
 
-        $expectedView = new SheetView(
-            $sheet->getId(),
-            'Titre fiche',
-            '',
-            1,
-            50,
-            100,
-            22,
-            50,
-            49,
-            55
-        );
+        $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
+        $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(new IndicatorView(10, 2, 3, 4, 5));
+
+        $expectedView = new SheetView($sheet->getId(), 'Titre fiche', '', 1, 50, 100, 22, 10, 5, 55);
 
         $query   = new SheetListViewQuery($event, 'fr');
         $handler = new SheetListViewQueryHandler(
             $sheetRepository->reveal(),
             $meetingRepository->reveal(),
             $requestRepository->reveal(),
-            $meetingSlotRepository->reveal(),
-            $participantRepository->reveal(),
-            $unavailabilityRepository->reveal(),
-            $sheetInfoGuesser->reveal()
+            $sheetInfoGuesser->reveal(),
+            $indicatorCalculator->reveal()
         );
 
         $view = $handler->handle($query);
