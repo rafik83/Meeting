@@ -24,6 +24,7 @@ event.info.contact: 'Useful information'
 gender.man: Mr
 gender.woman: Mrs
 login.forgotPassword: 'Forgotten password?'
+login.forgot_password: 'Forgotten password?'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'

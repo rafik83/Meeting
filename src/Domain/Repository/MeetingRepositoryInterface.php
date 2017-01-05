@@ -39,6 +39,13 @@ interface MeetingRepositoryInterface
     public function getByEvent(Event $event, $page, $limit, $locale);
 
     /**
+     * @param Event  $event
+     *
+     * @return Meeting[]
+     */
+    public function getAllByEvent(Event $event);
+
+    /**
      * @param Participant $participant
      *
      * @return Meeting[]
