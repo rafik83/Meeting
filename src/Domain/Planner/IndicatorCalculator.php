@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Planner;
 
+use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -45,21 +46,29 @@ class IndicatorCalculator
     private $planningQuantityGuesser;
 
     /**
+     * @var SlotAvailability
+     */
+    private $slotAvailability;
+
+    /**
      * @param UnavailabilityRepositoryInterface $unavailabilityRepository
      * @param RequestRepositoryInterface        $requestRepository
      * @param MeetingSlotRepository             $slotRepository
      * @param PlanningQuantityGuesser           $planningQuantityGuesser
+     * @param SlotAvailability                  $slotAvailability
      */
     public function __construct(
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepository $slotRepository,
-        PlanningQuantityGuesser $planningQuantityGuesser
+        PlanningQuantityGuesser $planningQuantityGuesser,
+        SlotAvailability $slotAvailability
     ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
         $this->requestRepository        = $requestRepository;
         $this->slotRepository           = $slotRepository;
-        $this->planningQuantityGuesser = $planningQuantityGuesser;
+        $this->planningQuantityGuesser  = $planningQuantityGuesser;
+        $this->slotAvailability         = $slotAvailability;
     }
 
     /**
@@ -72,18 +81,31 @@ class IndicatorCalculator
         $this->slots = $slots;
     }
 
+    /**
+     * @param Sheet $sheet
+     *
+     * @return IndicatorView
+     */
     public function getIndicator(Sheet $sheet)
     {
         if (null === $this->slots) {
-            $this->slots = $this->slotRepository->countByEvent($sheet->getEvent());
+            $this->slots = $this->slotRepository->findByEvent($sheet->getEvent());
         }
 
         $participantsCount    = $sheet->countParticipant();
         $meetingRequestsCount = $this->requestRepository->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
         $planningQuantity     = $this->planningQuantityGuesser->guess($sheet);
+        $unavailabilities     = [];
 
-        // To check with other service
-        $unavailabilitiesCount = 0;
+        foreach ($sheet->getParticipants()->toArray() as $participant) {
+            foreach ($this->slots as $slot) {
+                if (!$this->slotAvailability->isAvailable($slot, $participant)->isAvailable()) {
+                    $unavailabilities[] = $slot;
+                }
+            }
+        }
+
+        $unavailabilitiesCount = count($unavailabilities);
 
         return new IndicatorView(
             count($this->slots),
