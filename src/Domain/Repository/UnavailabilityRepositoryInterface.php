@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 
@@ -29,6 +30,13 @@ interface UnavailabilityRepositoryInterface
      * @param Unavailability $unavailability
      */
     public function remove(Unavailability $unavailability);
+
+    /**
+     * @param Event $event
+     *
+     * @return Unavailability[]
+     */
+    public function getByEvent(Event $event);
 
     /**
      * @param Participant $participant
