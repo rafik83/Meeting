@@ -225,6 +225,8 @@ admin.plan.name: Nom
 admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
+admin.planner.index: Planification
+admin.planner.export: Exporter
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
