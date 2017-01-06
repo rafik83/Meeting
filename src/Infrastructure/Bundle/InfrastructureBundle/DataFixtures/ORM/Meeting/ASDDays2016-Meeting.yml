@@ -1,3 +1,23 @@
+Proximum\Vimeet\Domain\Model\Meeting\Request:
+    meeting_request_01:
+        __construct:
+            - '@sheet_asddays_1'
+            - ['@participant_asddays_1']
+            - '@sheet_asddays_empty'
+            - ['@participant_asddays_2']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@user_test'
+        state: 'approved'
+    meeting_request_02:
+        __construct:
+            - '@sheet_asddays_1'
+            - ['@participant_asddays_1']
+            - '@sheet_asddays_empty_with_tag'
+            - ['@participant_asddays_3']
+            - <dateTimeBetween('-3 days', 'now')>
+            - '@user_test'
+        state: 'approved'
+
 Proximum\Vimeet\Domain\Model\Meeting:
     asddays_meeting_01:
         __construct: false
@@ -6,21 +26,23 @@ Proximum\Vimeet\Domain\Model\Meeting:
         fromParticipants: ['@participant_asddays_1']
         toSheet: '@sheet_asddays_empty'
         toParticipants: ['@participant_asddays_2']
-        createdAt: "<date('2016-10-12 09:00:00', 'Europe/Paris', 'UTC')>"
+        createdAt: <(new DateTime('2016-10-12 09:00:00'))>
         spot: '@asddays_spot_1'
+        request: '@meeting_request_01'
     asddays_meeting_02:
         __construct: false
-        slot: '@meeting_slot_day_one_1'
+        slot: '@meeting_slot_day_one_2'
         fromSheet: '@sheet_asddays_1'
         fromParticipants: ['@participant_asddays_1']
         toSheet: '@sheet_asddays_empty_with_tag'
         toParticipants: ['@participant_asddays_3']
-        createdAt: "<date('2016-10-12 11:00:00', 'Europe/Paris', 'UTC')>"
+        createdAt: <(new DateTime('2016-10-12 11:00:00'))>
         spot: '@asddays_spot_1'
+        request: '@meeting_request_02'
 
 Proximum\Vimeet\Domain\Model\Unavailability:
     unavailability_01:
         __construct:
             - '@participant_asddays_1'
-            - "<date('2016-10-12 10:00:00', 'Europe/Paris', 'UTC')>"
-            - "<date('2016-10-12 11:00:00', 'Europe/Paris', 'UTC')>"
+            - <(new DateTime('2016-10-12 10:00:00'))>
+            - <(new DateTime('2016-10-12 11:00:00'))>
