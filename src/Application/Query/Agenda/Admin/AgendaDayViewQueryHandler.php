@@ -49,6 +49,6 @@ class AgendaDayViewQueryHandler
             )
         );
 
-        return new AgendaDayView($query->day, $slotViews);
+        return new AgendaDayView($query->dayNumber, $slotViews);
     }
 }

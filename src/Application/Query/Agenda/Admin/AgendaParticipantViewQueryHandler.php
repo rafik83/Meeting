@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaParticipantView;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class AgendaParticipantViewQueryHandler
 {
@@ -24,17 +25,24 @@ class AgendaParticipantViewQueryHandler
      * @var AgendaDayViewQueryHandler
      */
     private $agendaDayViewQueryHandler;
+    /**
+     * @var ParticipantInfoGuesser
+     */
+    private $participantInfoGuesser;
 
     /**
      * @param DayRepositoryInterface    $dayRepository
      * @param AgendaDayViewQueryHandler $agendaDayViewQueryHandler
+     * @param ParticipantInfoGuesser    $participantInfoGuesser
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
-        AgendaDayViewQueryHandler $agendaDayViewQueryHandler
+        AgendaDayViewQueryHandler $agendaDayViewQueryHandler,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->dayRepository             = $dayRepository;
         $this->agendaDayViewQueryHandler = $agendaDayViewQueryHandler;
+        $this->participantInfoGuesser    = $participantInfoGuesser;
     }
 
     /**
@@ -48,11 +56,12 @@ class AgendaParticipantViewQueryHandler
 
         $dayViews = [];
 
-        foreach ($eventDays as $day) {
+        foreach ($eventDays as $dayNumber => $day) {
             $dayViews[] = $this->agendaDayViewQueryHandler->handle(
                 new AgendaDayViewQuery(
                     $query->sheet,
                     $day,
+                    $dayNumber,
                     $query->participant,
                     $query->locale,
                     $query->happeningParticipations,
@@ -63,6 +72,12 @@ class AgendaParticipantViewQueryHandler
             );
         }
 
-        return new AgendaParticipantView($dayViews);
+        $fullname = $this->participantInfoGuesser->guessParticipantCompleteName($query->participant, $query->locale);
+
+        return new AgendaParticipantView(
+            $query->participant->getId(),
+            $fullname,
+            $dayViews
+        );
     }
 }

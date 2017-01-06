@@ -30,15 +30,22 @@ abstract class AbstractSlotView
     public $end;
 
     /**
+     * @var string
+     */
+    public $type;
+
+    /**
      * AbstractSlotView constructor.
      *
      * @param MeetingSlot $slot
+     * @param string      $type
      */
-    public function __construct(MeetingSlot $slot)
+    public function __construct(MeetingSlot $slot, $type)
     {
         $this->id    = $slot->getId();
         $this->begin = $slot->getBegin();
         $this->end   = $slot->getEnd();
+        $this->type  = $type;
     }
 
     /**

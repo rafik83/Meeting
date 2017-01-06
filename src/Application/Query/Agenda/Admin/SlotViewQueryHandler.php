@@ -67,7 +67,7 @@ class SlotViewQueryHandler
             $slotAvailabilityView = $this->slotAvailability->isAvailable($slot, $query->participant);
 
             if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
-                $slotViews[] = new HappeningUnavailabilitySlotView($slot);
+                $slotViews[] = new HappeningUnavailabilitySlotView($slot, $slotAvailabilityView->type);
                 continue;
             }
 
@@ -76,8 +76,10 @@ class SlotViewQueryHandler
             ) {
                 $slotViews[] = new MeetingSlotView(
                     $slot,
-                    $slotAvailabilityView->meeting->getSpot(),
-                    $slotAvailabilityView->meeting->getSheetMet($query->sheet),
+                    $slotAvailabilityView->type,
+                    $slotAvailabilityView->meeting->getSpot()->getId(),
+                    $slotAvailabilityView->meeting->getSpot()->getReference(),
+                    $slotAvailabilityView->meeting->getSheetMet($query->sheet)->getId(),
                     $slotAvailabilityView->meeting->getId(),
                     $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet)
                 );
@@ -85,16 +87,16 @@ class SlotViewQueryHandler
             }
 
             if ($slotAvailabilityView->type === SlotAvailability::UNAVAILABILITY) {
-                $slotViews[] = new UnavailabilitySlotView($slot);
+                $slotViews[] = new UnavailabilitySlotView($slot, $slotAvailabilityView->type);
                 continue;
             }
 
             if ($slotAvailabilityView->type === SlotAvailability::MASS_UNAVAILABILITY) {
-                $slotViews[] = new MassUnavailabilitySlotView($slot);
+                $slotViews[] = new MassUnavailabilitySlotView($slot, $slotAvailabilityView->type);
                 continue;
             }
 
-            $slotViews[] = new EmptySlotView($slot);
+            $slotViews[] = new EmptySlotView($slot, $slotAvailabilityView->type);
         }
 
         return $slotViews;

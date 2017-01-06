@@ -11,29 +11,30 @@
 namespace Proximum\Vimeet\Application\View\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\Slot\AbstractSlotView;
-use Proximum\Vimeet\Domain\Model\Event\Day;
 
 class AgendaDayView
 {
     /**
      * @var AbstractSlotView[]
      */
-    public $slotViews;
+    public $slots;
 
     /**
-     * @var Day
+     * Day number incremented
+     *
+     * @var int
      */
     public $day;
 
     /**
      * AgendaDayView constructor.
      *
-     * @param Day                $day
-     * @param AbstractSlotView[] $slotViews
+     * @param int                $day
+     * @param AbstractSlotView[] $slots
      */
-    public function __construct(Day $day, array $slotViews)
+    public function __construct($day, array $slots)
     {
-        $this->slotViews = $slotViews;
-        $this->day       = $day;
+        $this->slots = $slots;
+        $this->day   = $day;
     }
 }

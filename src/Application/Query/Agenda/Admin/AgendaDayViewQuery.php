@@ -26,6 +26,11 @@ class AgendaDayViewQuery
     public $day;
 
     /**
+     * @var int
+     */
+    public $dayNumber;
+
+    /**
      * @var string
      */
     public $locale;
@@ -63,6 +68,7 @@ class AgendaDayViewQuery
     /**
      * @param Sheet                    $sheet
      * @param Day                      $day
+     * @param int                      $dayNumber
      * @param Participant              $participant
      * @param string                   $locale
      * @param HappeningParticipation[] $happenings
@@ -73,6 +79,7 @@ class AgendaDayViewQuery
     public function __construct(
         Sheet $sheet,
         Day $day,
+        $dayNumber,
         Participant $participant,
         $locale,
         array $happenings = [],
@@ -81,6 +88,7 @@ class AgendaDayViewQuery
         array $meetings = []
     ) {
         $this->day              = $day;
+        $this->dayNumber        = $dayNumber;
         $this->locale           = $locale;
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;

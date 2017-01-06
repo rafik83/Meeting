@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\View\Agenda\Slot;
 
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Spot;
 
 class MeetingSlotView extends AbstractSlotView
 {
@@ -24,10 +23,10 @@ class MeetingSlotView extends AbstractSlotView
     /**
      * @var Sheet
      */
-    public $sheetMet;
+    public $sheetMetId;
 
     /**
-     * @var Spot
+     * @var int
      */
     public $spot;
 
@@ -37,26 +36,36 @@ class MeetingSlotView extends AbstractSlotView
     public $hasNoPreference;
 
     /**
+     * @var string
+     */
+    public $spotRef;
+
+    /**
      * MeetingView constructor.
      *
      * @param MeetingSlot $slot
-     * @param Spot        $spot
-     * @param Sheet       $sheetMet
+     * @param string      $type
+     * @param int         $spot
+     * @param string      $spotRef
+     * @param int         $sheetMetId
      * @param int         $meetingId
      * @param bool        $hasNoPreference
      */
     public function __construct(
         MeetingSlot $slot,
-        Spot $spot,
-        Sheet $sheetMet,
+        $type,
+        $spot,
+        $spotRef,
+        $sheetMetId,
         $meetingId,
         $hasNoPreference
     ) {
-        parent::__construct($slot);
+        parent::__construct($slot, $type);
 
         $this->spot            = $spot;
         $this->meetingId       = $meetingId;
-        $this->sheetMet        = $sheetMet;
+        $this->sheetMetId      = $sheetMetId;
         $this->hasNoPreference = $hasNoPreference;
+        $this->spotRef         = $spotRef;
     }
 }
