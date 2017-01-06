@@ -128,8 +128,8 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->createQueryBuilder()
             ->select('slot')
             ->from(MeetingSlot::class, 'slot')
-            ->where('slot.event = :event')
-            ->andWhere('slot.begin BETWEEN :beginDate AND :endDate')
+            ->where('slot.begin >= :beginDate AND slot.end <= :endDate')
+            ->andWhere('slot.event = :event')
             ->setParameter('beginDate', $day->getStartTime())
             ->setParameter('endDate', $day->getEndTime())
             ->setParameter('event', $event);

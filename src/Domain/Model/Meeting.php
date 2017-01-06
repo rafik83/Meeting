@@ -263,11 +263,19 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
-     * Guess what sheet is met
+     * @param Request $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * Guess what sheet is met by the given sheet
      *
      * @param Sheet $sheet
      *
-     * @return Sheet
+     * @return Sheet|null
      */
     public function getSheetMet(Sheet $sheet)
     {

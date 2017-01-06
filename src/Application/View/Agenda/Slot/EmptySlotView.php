@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Slot;
 
-class EmptySlotView
+class EmptySlotView extends AbstractSlotView
 {
 }

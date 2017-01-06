@@ -235,7 +235,7 @@ class SlotAvailability
     private function hasMeeting(MeetingSlot $slot, Participant $participant)
     {
         foreach ($this->meetings as $meeting) {
-            if (!$meeting->hasFromParticipant($participant) || !$meeting->hasToParticipant($participant)) {
+            if (!$meeting->hasFromParticipant($participant) && !$meeting->hasToParticipant($participant)) {
                 continue;
             }
 
