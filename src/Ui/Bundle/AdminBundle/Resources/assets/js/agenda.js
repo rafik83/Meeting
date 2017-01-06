@@ -53,12 +53,12 @@ new Vue({
          */
         loadSheets: function () {
             this.$http.get(this.getSheetsEndpoint())
-                .then((response) => {
+                .then(function(response) {
                     this.sheets = response.data;
-                })
-                .catch((error) => {
+                }.bind(this))
+                .catch(function(error) {
                     console.log(error);
-                });
+                }.bind(this));
         },
 
         /**
