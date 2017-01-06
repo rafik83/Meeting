@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use DateTime;
+use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQueryHandler;
@@ -47,6 +49,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $sheetInfoGuesser  = $this->prophesize(SheetInfoGuesser::class);
+        $routerInterface   = $this->prophesize(RouterInterface::class);
 
         $product = new Product($event, 'plan', 'name', 'img.png', 10, 1, 1, 1, true);
         $sheet->getPackage()->setPlans([$product]);
@@ -61,7 +64,9 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
         $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(new IndicatorView(10, 2, 3, 4, 5));
 
-        $expectedView = new SheetView($sheet->getId(), 'Titre fiche', '', 1, 50, 100, 22, 10, 5, 55);
+        $routerInterface->generate('admin_sheet_details', Argument::any())->willReturn('/my-url');
+
+        $expectedView = new SheetView($sheet->getId(), 'Titre fiche', '', 1, 50, 100, 22, 10, 5, 55, null, '/my-url');
 
         $query   = new SheetListViewQuery($event, 'fr');
         $handler = new SheetListViewQueryHandler(
@@ -69,7 +74,8 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal(),
             $requestRepository->reveal(),
             $sheetInfoGuesser->reveal(),
-            $indicatorCalculator->reveal()
+            $indicatorCalculator->reveal(),
+            $routerInterface->reveal()
         );
 
         $view = $handler->handle($query);
