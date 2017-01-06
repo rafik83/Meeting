@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Application\View\Planner\ParticipantView;
+use Proximum\Vimeet\Application\View\Planner\SheetView;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 
 class MeetingViewQuery
 {
@@ -20,24 +23,31 @@ class MeetingViewQuery
     public $event;
 
     /**
-     * @var array
+     * @var SheetView[]
      */
     public $sheets;
 
     /**
-     * @var array
+     * @var ParticipantView[]
      */
     public $participants;
 
     /**
-     * @param Event $event
-     * @param array $sheets
-     * @param array $participants
+     * @var SlotView[]
      */
-    public function __construct(Event $event, array $sheets, array $participants)
+    public $slots;
+
+    /**
+     * @param Event             $event
+     * @param SheetView[]       $sheets
+     * @param ParticipantView[] $participants
+     * @param SlotView[]        $slots
+     */
+    public function __construct(Event $event, array $sheets, array $participants, array $slots)
     {
         $this->event        = $event;
         $this->sheets       = $sheets;
         $this->participants = $participants;
+        $this->slots        = $slots;
     }
 }
