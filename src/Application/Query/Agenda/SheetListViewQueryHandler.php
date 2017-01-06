@@ -61,11 +61,11 @@ class SheetListViewQueryHandler
         SheetInfoGuesser $sheetInfoGuesser,
         IndicatorCalculator $indicatorCalculator
     ) {
-        $this->meetingRepository        = $meetingRepository;
-        $this->sheetRepository          = $sheetRepository;
-        $this->requestRepository        = $requestRepository;
-        $this->sheetInfoGuesser         = $sheetInfoGuesser;
-        $this->indicatorCalculator      = $indicatorCalculator;
+        $this->meetingRepository   = $meetingRepository;
+        $this->sheetRepository     = $sheetRepository;
+        $this->requestRepository   = $requestRepository;
+        $this->sheetInfoGuesser    = $sheetInfoGuesser;
+        $this->indicatorCalculator = $indicatorCalculator;
     }
 
     /**
@@ -75,8 +75,11 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $sheetListViewQuery)
     {
+        $locale    = $sheetListViewQuery->locale;
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
+
+        $this->sortSheetsByTitle($sheets, $locale);
 
         foreach ($sheets as $sheet) {
             // Count the request per sheet
@@ -89,8 +92,8 @@ class SheetListViewQueryHandler
 
             $sheetList[] = new SheetView(
                 $sheet->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheetListViewQuery->locale),
-                $sheet->getType()->getTitle($sheetListViewQuery->locale),
+                $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+                $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
                 $request,
                 $propositions,
@@ -103,6 +106,20 @@ class SheetListViewQueryHandler
         }
 
         return $sheetList;
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     * @param string  $locale
+     */
+    private function sortSheetsByTitle(&$sheets, $locale)
+    {
+        usort($sheets, function ($one, $other) use ($locale) {
+            $oneTitle   = $this->sheetInfoGuesser->guessSheetTitle($one, $locale);
+            $otherTitle = $this->sheetInfoGuesser->guessSheetTitle($other, $locale);
+
+            return strcmp($oneTitle, $otherTitle);
+        });
     }
 
     /**
