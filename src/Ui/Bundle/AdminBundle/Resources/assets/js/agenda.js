@@ -1,19 +1,58 @@
 var Vue   = require('vue'),
     axios = require('axios');
 
+/**
+ * Pass axios to Vue
+ */
 Vue.prototype.$http = axios;
 
-var app = new Vue({
+new Vue({
     el: '#agenda',
+
+    /**
+     * Customs delimiters to avoid collision with Twig
+     */
     delimiters: ['${', '}'],
+
     data: {
+        /**
+         * Array of sheets
+         */
         sheets: [],
+
+        /**
+         * opened sheet
+         */
         agendas: [],
+
+        /**
+         * Sheet focused
+         */
         focus: null
     },
+
+    /**
+     * When Vue app is ready
+     */
+    mounted: function () {
+        this.$nextTick(function () {
+            this.init();
+        });
+    },
+
     methods: {
+        /**
+         * Init methods
+         */
+        init: function () {
+            this.loadSheets();
+        },
+
+        /**
+         * Load sheets data
+         */
         loadSheets: function () {
-            axios.get('/app_dev.php/admin/fr/event/2/agenda/sheets')
+            this.$http.get(this.getSheetsEndpoint())
                 .then((response) => {
                     this.sheets = response.data;
                 })
@@ -21,10 +60,22 @@ var app = new Vue({
                     console.log(error);
                 });
         },
+
+        /**
+         * Show agenda of given sheet
+         *
+         * @param sheet
+         */
         showAgenda: function(sheet) {
             this.agendas.push(sheet);
             this.focus = sheet;
         },
+
+        /**
+         * Close given sheet agenda
+         *
+         * @param sheet
+         */
         closeAgenda: function (sheet) {
             this.agendas.splice(this.agendas.indexOf(sheet), 1);
 
@@ -32,10 +83,24 @@ var app = new Vue({
                 this.focus = null;
             }
         },
+
+        /**
+         * Focus to a given sheet agenda
+         *
+         * @param sheet
+         */
         focusAgenda: function (sheet) {
             this.focus = sheet;
+        },
+
+        /**
+         * Returns /admin/fr/event/1/agenda/sheets
+         * or      /app_dev.php/admin/fr/event/2/agenda/sheets
+         *
+         * @returns {string}
+         */
+        getSheetsEndpoint: function() {
+            return document.location.pathname + '/sheets';
         }
     }
 });
-
-app.loadSheets();
