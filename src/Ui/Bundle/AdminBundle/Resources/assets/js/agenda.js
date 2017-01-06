@@ -66,9 +66,22 @@ new Vue({
          *
          * @param sheet
          */
-        showAgenda: function(sheet) {
-            this.agendas.push(sheet);
+        showAgenda: function (sheet) {
+            if(-1 === this.findSheetAgenda(sheet)) {
+                this.agendas.push(sheet);
+            }
+
             this.focus = sheet;
+        },
+
+        /**
+         * Find index of sheet in agendas
+         *
+         * @param sheet
+         * @returns {Number}
+         */
+        findSheetAgenda: function (sheet) {
+            return this.agendas.indexOf(sheet);
         },
 
         /**
@@ -77,7 +90,7 @@ new Vue({
          * @param sheet
          */
         closeAgenda: function (sheet) {
-            this.agendas.splice(this.agendas.indexOf(sheet), 1);
+            this.agendas.splice(this.findSheetAgenda(sheet), 1);
 
             if (this.focus == sheet) {
                 this.focus = null;
@@ -99,7 +112,7 @@ new Vue({
          *
          * @returns {string}
          */
-        getSheetsEndpoint: function() {
+        getSheetsEndpoint: function () {
             return document.location.pathname + '/sheets';
         }
     }
