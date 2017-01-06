@@ -47,9 +47,9 @@ class SlotViewQueryHandler
             if (null !== $day) {
                 $slotViews[] = new SlotView(
                     $slot->getId(),
-                    'index' . $slot->getId(),
-                    $slot->getBegin()->format('H'),
-                    $slot->getBegin()->format('i'),
+                    $slot->getId(), // index should be int
+                    $slot->getBegin()->format('G'), // 24-hour format of an hour without leading zeros
+                    intval($slot->getBegin()->format('i')), // to remove leading zero
                     $day
                 );
             }
