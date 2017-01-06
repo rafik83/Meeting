@@ -1,4 +1,8 @@
 .agenda-container {
+  [v-cloak] {
+    display: none;
+  }
+
   .table-no-margin-bottom {
     margin-bottom: 0
   }
