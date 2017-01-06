@@ -79,8 +79,6 @@ class SheetListViewQueryHandler
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
-        $this->sortSheetsByTitle($sheets, $locale);
-
         foreach ($sheets as $sheet) {
             // Count the request per sheet
             $request = $this->requestRepository->countRequestSentBySheet($sheet);
@@ -105,20 +103,18 @@ class SheetListViewQueryHandler
             );
         }
 
+        $this->sortSheetsByTitle($sheetList);
+
         return $sheetList;
     }
 
     /**
-     * @param Sheet[] $sheets
-     * @param string  $locale
+     * @param SheetView[] $sheetList
      */
-    private function sortSheetsByTitle(&$sheets, $locale)
+    private function sortSheetsByTitle(array &$sheetList)
     {
-        usort($sheets, function ($one, $other) use ($locale) {
-            $oneTitle   = $this->sheetInfoGuesser->guessSheetTitle($one, $locale);
-            $otherTitle = $this->sheetInfoGuesser->guessSheetTitle($other, $locale);
-
-            return strcmp($oneTitle, $otherTitle);
+        usort($sheetList, function (SheetView $one, SheetView $other) {
+            return strcmp($one->title, $other->title);
         });
     }
 
