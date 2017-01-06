@@ -40,20 +40,18 @@
 
                                 <small>${ sheet.type }</small>
 
-                                {#{% if sheet.follower %}#}
-                                    {#<br><small><span class="glyphicon glyphicon-arrow-right"></span> {{ sheet.follower }}</small>#}
-                                {#{% endif %}#}
+                                <div v-if="sheet.follower != null"><small><span class="glyphicon glyphicon-arrow-right"></span> ${ sheet.follower }</small></div>
 
-                                {#<table class="table-no-margin-bottom table table-condensed table-bordered">#}
-                                    {#<tr>#}
-                                        {#<td class="text-center col-xs-2">109</td>#}
-                                        {#<td class="text-center col-xs-2">45</td>#}
-                                        {#<td class="text-center col-xs-2">66</td>#}
-                                        {#<td class="text-center col-xs-2">35</td>#}
-                                        {#<td class="text-center col-xs-2">32</td>#}
-                                        {#<td class="text-center col-xs-2">8</td>#}
-                                    {#</tr>#}
-                                {#</table>#}
+                                <table class="table-no-margin-bottom table table-condensed table-bordered">
+                                    <tr>
+                                        <td class="text-center col-xs-2">${ sheet.countRequest }</td>
+                                        <td class="text-center col-xs-2">${ sheet.countProposition }</td>
+                                        <td class="text-center col-xs-2">${ sheet.countValidatedRequest }</td>
+                                        <td class="text-center col-xs-2">${ sheet.countSlots }</td>
+                                        <td class="text-center col-xs-2">${ sheet.possibleMeetingQuantity }</td>
+                                        <td class="text-center col-xs-2">${ sheet.countPlacedMeetings }</td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                     </tbody>
