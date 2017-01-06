@@ -104,7 +104,7 @@ class SheetListViewQueryHandler
                 count($sheet->getParticipants()),
                 $request,
                 $propositions,
-                $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
+                $indicator->meetingRequestsCount,
                 $indicator->slotTotal,
                 $indicator->possibleMeetingsQuantity,
                 $this->getPlacedMeetingsNumber($sheet),
