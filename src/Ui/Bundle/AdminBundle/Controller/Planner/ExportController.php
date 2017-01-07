@@ -11,10 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\XmlFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class ExportController extends Controller
 {
@@ -22,20 +21,17 @@ class ExportController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return Response
+     * @return XmlFileResponse
      */
     public function exportAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $content     = $this->get('service_planner.exporter')->getXML($event, $request->getLocale());
-        $response    = new Response($content);
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+        $content  = $this->get('service_planner.exporter')->getXML($event, $request->getLocale());
+        $response = new XmlFileResponse(
+            $content,
             sprintf("export_planner_%s_%s.xml", $event->getId(), date("Y_m_d_His"))
         );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', 'xml');
 
         return $response;
     }
