@@ -40,6 +40,8 @@ class LocalFileStorageAdapter implements FileStorageInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function upload($file)
     {

@@ -390,6 +390,18 @@ admin_sheet_export:
         event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:export }
+admin_sheet_import:
+    path: /event/{event}/sheet/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet:import }
+admin_sheet_import_mapping:
+    path: /event/{event}/sheet/import/mapping
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Sheet:importMapping }
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot
     requirements:

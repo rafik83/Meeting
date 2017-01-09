@@ -6,9 +6,12 @@
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <form action="{{ path('admin_sheet_export', { 'event': event.id }) }}" method="POST" class="pull-right">
-                <input type="submit" value="{{ 'admin.sheet.export.button.label'|trans }}" class="btn btn-default"/>
-            </form>
+            <div class="pull-right">
+                <form action="{{ path('admin_sheet_export', { 'event': event.id }) }}" method="POST" class="pull-right">
+                    <input type="submit" value="{{ 'admin.sheet.export.button.label'|trans }}" class="btn btn-default"/>
+                </form>
+                <a class="btn btn-default" href="{{ path('admin_sheet_import', {'event': event.id}) }}">{{ 'admin.sheet.import.button.label'|trans }}</a>
+            </div>
         {% endif %}
     </h1>
 
@@ -30,231 +33,234 @@
     </div>
 
     {{ form_start(batch_form, { 'attr': { 'data-batch': true } }) }}
-        {{ form_errors(batch_form) }}
+    {{ form_errors(batch_form) }}
 
-        <div class="row filters">
-            <div class="col-md-4">
-                {% embed 'AdminBundle:Common:batch.html.twig' %}
-                    {% block actions %}
-                        <li>{{ form_widget(batch_form.accept) }}</li>
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#validate-comment">
-                                {{ 'admin.sheet.validate'|trans }}
-                            </a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
-                                {{ 'admin.sheet.commercialFollowUp'|trans }}
-                            </a>
-                        </li>
-
-                        {% if batch_form.enable is defined or batch_form.disable is defined %}
-                            <li role="separator" class="divider"></li>
-                        {% endif %}
-
-                        {% if batch_form.enable is defined %}
-                            <li>{{ form_widget(batch_form.enable) }}</li>
-                        {% endif %}
-
-                        {% if batch_form.disable is defined %}
-                            <li>{{ form_widget(batch_form.disable) }}</li>
-                        {% endif %}
-
-                        {% if batch_form.addCatalog is defined or batch_form.removeCatalog is defined %}
-                            <li role="separator" class="divider"></li>
-                        {% endif %}
-
-                        {% if batch_form.addCatalog is defined %}
-                            <li>{{ form_widget(batch_form.addCatalog) }}</li>
-                        {% endif %}
-
-                        {% if batch_form.removeCatalog is defined %}
-                            <li>{{ form_widget(batch_form.removeCatalog) }}</li>
-                        {% endif %}
-
-                        {% if batch_form.validationStateDraft is defined or batch_form.validationStateValidate is defined %}
-                            <li role="separator" class="divider"></li>
-                        {% endif %}
-
-                        {% if batch_form.validationStateDraft is defined %}
-                            <li>{{ form_widget(batch_form.validationStateDraft) }}</li>
-                        {% endif %}
-
-                        {% if batch_form.validationStateValidate is defined %}
-                            <li>{{ form_widget(batch_form.validationStateValidate) }}</li>
-                        {% endif %}
-                    {% endblock actions %}
-                {% endembed %}
-            </div>
-            <div class="col-md-4">
-                {{ include('AdminBundle:Common:filters_summary.html.twig', {
-                    filters:   filters_summary,
-                    resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
-                }) }}
-            </div>
-        </div>
-
-        {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
-
-        <table class="table table-hover selectable-row filterable">
-            <thead>
-            <tr>
-                <th class="minwidth">
-                    <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" />
-                </th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.enabled) }}
-                </th>
-
-                {% if hasCategories %}
-                    <th nowrap="nowrap">
-                        {{ macro.choice_as_dropdown(filter_form.category) }}
-                    </th>
-                {% endif %}
-
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.type) }}
-                </th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.validationState) }}
-                </th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.completed) }}
-                </th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.state) }}
-                </th>
-                <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
-                <th>{{ 'admin.sheet.createdAt'|trans }}</th>
-                <th>{{ 'admin.sheet.spot'|trans }}</th>
-                <th nowrap="nowrap">
-                    {{ macro.choice_as_dropdown(filter_form.follower) }}
-                </th>
-                <th class="col-md-1"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for sheet in sheets.results %}
-                <tr id="sheet-{{ sheet.id }}">
-                    <td>
-                        {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
-                    </td>
-                    <td>
-                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
-                            {{ sheet.title }}
+    <div class="row filters">
+        <div class="col-md-4">
+            {% embed 'AdminBundle:Common:batch.html.twig' %}
+                {% block actions %}
+                    <li>{{ form_widget(batch_form.accept) }}</li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#validate-comment">
+                            {{ 'admin.sheet.validate'|trans }}
                         </a>
-                        {% if not sheet.isEnabled %}
-                            <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
-                        {% endif %}
-                        {% if sheet.countParticipant > 1 %}
-                            <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
-                        {% endif %}
-                        <br>
-                        <small>
-                            {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }} <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
-                        </small>
-                    </td>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
+                            {{ 'admin.sheet.commercialFollowUp'|trans }}
+                        </a>
+                    </li>
 
-                    {% if hasCategories %}
-                        <td>{{ sheet.categories|join(', ') }}</td>
+                    {% if batch_form.enable is defined or batch_form.disable is defined %}
+                        <li role="separator" class="divider"></li>
                     {% endif %}
 
-                    <td>{{ sheet.type }}</td>
-                    <td>
-                        {{ macro.state_label(
-                            ('event.sheet.validationState.' ~ sheet.validationState)|trans,
-                            sheet.validationState,
-                            {
-                                'draft': 'default',
-                                'pending': 'warning',
-                                'validated': 'success'
-                            }
-                        ) }}
-                    </td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-{{ sheet.completenessStatus }}" role="progressbar" aria-valuenow="{{ sheet.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ sheet.completeness }}%;">
-                                {{ sheet.completeness }}%
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        {{ macro.state_label(
-                            ('event.sheet.state.' ~ sheet.state)|trans,
-                            sheet.state,
-                            {
-                                'pending': 'default',
-                                'accepted': 'warning',
-                                'validated': 'success'
-                            },
-                            sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
-                        ) }}
-                    </td>
-                    <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
-                    <td>
-                        <small>
-                            {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}
-                        </small>
-                    </td>
-                    <td>
-                        <div {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}class="updatable" data-type="string" data-url="{{ path('admin_sheet_assign_spot', {'event': event.id, 'sheet': sheet.id}) }}" data-update="{{ { 'value': sheet.spotReference }|json_encode }}" {% endif %}>
-                            {% if sheet.spotReference != null %}
-                                {{ sheet.spotReference }}
-                            {% endif %}
-                        </div>
-                    </td>
-                    <td>{{ sheet.follower }}</td>
-                    <td class="text-right">
-                        {{ macro.btnGroupAndRightMenuDropdown({
-                            ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
-                            ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
-                        }) }}
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="{{ hasCategories ? 11 : 12 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                    {% if batch_form.enable is defined %}
+                        <li>{{ form_widget(batch_form.enable) }}</li>
+                    {% endif %}
 
-        {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+                    {% if batch_form.disable is defined %}
+                        <li>{{ form_widget(batch_form.disable) }}</li>
+                    {% endif %}
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{ 'admin.sheet.commercialFollowUp'|trans }}</h4>
+                    {% if batch_form.addCatalog is defined or batch_form.removeCatalog is defined %}
+                        <li role="separator" class="divider"></li>
+                    {% endif %}
+
+                    {% if batch_form.addCatalog is defined %}
+                        <li>{{ form_widget(batch_form.addCatalog) }}</li>
+                    {% endif %}
+
+                    {% if batch_form.removeCatalog is defined %}
+                        <li>{{ form_widget(batch_form.removeCatalog) }}</li>
+                    {% endif %}
+
+                    {% if batch_form.validationStateDraft is defined or batch_form.validationStateValidate is defined %}
+                        <li role="separator" class="divider"></li>
+                    {% endif %}
+
+                    {% if batch_form.validationStateDraft is defined %}
+                        <li>{{ form_widget(batch_form.validationStateDraft) }}</li>
+                    {% endif %}
+
+                    {% if batch_form.validationStateValidate is defined %}
+                        <li>{{ form_widget(batch_form.validationStateValidate) }}</li>
+                    {% endif %}
+                {% endblock actions %}
+            {% endembed %}
+        </div>
+        <div class="col-md-4">
+            {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                filters:   filters_summary,
+                resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
+            }) }}
+        </div>
+    </div>
+
+    {% set hasCategories = filter_form.category.vars.choices|length > 1 %}
+
+    <table class="table table-hover selectable-row filterable">
+        <thead>
+        <tr>
+            <th class="minwidth">
+                <input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}"/>
+            </th>
+            <th nowrap="nowrap">
+                {{ macro.choice_as_dropdown(filter_form.enabled) }}
+            </th>
+
+            {% if hasCategories %}
+                <th nowrap="nowrap">
+                    {{ macro.choice_as_dropdown(filter_form.category) }}
+                </th>
+            {% endif %}
+
+            <th nowrap="nowrap">
+                {{ macro.choice_as_dropdown(filter_form.type) }}
+            </th>
+            <th nowrap="nowrap">
+                {{ macro.choice_as_dropdown(filter_form.validationState) }}
+            </th>
+            <th nowrap="nowrap">
+                {{ macro.choice_as_dropdown(filter_form.completed) }}
+            </th>
+            <th nowrap="nowrap">
+                {{ macro.choice_as_dropdown(filter_form.state) }}
+            </th>
+            <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
+            <th>{{ 'admin.sheet.createdAt'|trans }}</th>
+            <th>{{ 'admin.sheet.spot'|trans }}</th>
+            <th nowrap="nowrap">
+                {{ macro.choice_as_dropdown(filter_form.follower) }}
+            </th>
+            <th class="col-md-1"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sheet in sheets.results %}
+            <tr id="sheet-{{ sheet.id }}">
+                <td>
+                    {{ form_widget(batch_form.ids[sheet.id], { 'attr': { 'title': sheet.title } }) }}
+                </td>
+                <td>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
+                        {{ sheet.title }}
+                    </a>
+                    {% if not sheet.isEnabled %}
+                        <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
+                    {% endif %}
+                    {% if sheet.countParticipant > 1 %}
+                        <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
+                    {% endif %}
+                    <br>
+                    <small>
+                        {{ sheet.owner.firstname }} {{ sheet.owner.lastname|upper }}
+                        <a href="mailto:{{ sheet.owner.email }}">{{ sheet.owner.email }}</a>
+                    </small>
+                </td>
+
+                {% if hasCategories %}
+                    <td>{{ sheet.categories|join(', ') }}</td>
+                {% endif %}
+
+                <td>{{ sheet.type }}</td>
+                <td>
+                    {{ macro.state_label(
+                    ('event.sheet.validationState.' ~ sheet.validationState)|trans,
+                    sheet.validationState,
+                    {
+                        'draft': 'default',
+                        'pending': 'warning',
+                        'validated': 'success'
+                    }
+                    ) }}
+                </td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-{{ sheet.completenessStatus }}" role="progressbar" aria-valuenow="{{ sheet.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ sheet.completeness }}%;">
+                            {{ sheet.completeness }}%
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        {{ form_row(batch_form.follower) }}
+                </td>
+                <td>
+                    {{ macro.state_label(
+                    ('event.sheet.state.' ~ sheet.state)|trans,
+                    sheet.state,
+                    {
+                        'pending': 'default',
+                        'accepted': 'warning',
+                        'validated': 'success'
+                    },
+                    sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                    ) }}
+                </td>
+                <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
+                <td>
+                    <small>
+                        {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale) }}
+                    </small>
+                </td>
+                <td>
+                    <div {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}class="updatable" data-type="string" data-url="{{ path('admin_sheet_assign_spot', {'event': event.id, 'sheet': sheet.id}) }}" data-update="{{ { 'value': sheet.spotReference }|json_encode }}" {% endif %}>
+                        {% if sheet.spotReference != null %}
+                            {{ sheet.spotReference }}
+                        {% endif %}
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
-                        {{ form_widget(batch_form.assign) }}
-                    </div>
+                </td>
+                <td>{{ sheet.follower }}</td>
+                <td class="text-right">
+                    {{ macro.btnGroupAndRightMenuDropdown({
+                        ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
+                        ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
+                    }) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="{{ hasCategories ? 11 : 12 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{ 'admin.sheet.commercialFollowUp'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batch_form.follower) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                    {{ form_widget(batch_form.assign) }}
                 </div>
             </div>
         </div>
-        <div class="modal fade" tabindex="-1" role="dialog" id="validate-comment">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Valider les fiches</h4>
-                    </div>
-                    <div class="modal-body">
-                        {{ form_row(batch_form.validateComment) }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                        {{ form_widget(batch_form.validate) }}
-                    </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="validate-comment">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Valider les fiches</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batch_form.validateComment) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    {{ form_widget(batch_form.validate) }}
                 </div>
             </div>
         </div>
+    </div>
     {{ form_end(batch_form) }}
 {% endblock content %}
