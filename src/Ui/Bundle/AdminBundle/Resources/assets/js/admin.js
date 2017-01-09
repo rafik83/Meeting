@@ -12,9 +12,7 @@ var $                       = require('jquery'),
     Update                  = require('./components/_Update'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
     AnchorFocuser           = require('./components/_AnchorFocuser'),
-    DateTimePicker          = require('./components/_DateTimePicker'),
-    SheetLoader             = require('./components/agenda/_SheetLoader');
-
+    DateTimePicker          = require('./components/_DateTimePicker');
 
 require('elao-form.js');
 require('select2');
