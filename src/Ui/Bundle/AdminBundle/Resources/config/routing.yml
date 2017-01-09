@@ -545,6 +545,12 @@ admin_happening_category_update:
         category: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Happening:updateCategory }
+admin_happening_export:
+    path: /event/{event}/happening/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Happening:export }
 
 #
 # Happening Speaker

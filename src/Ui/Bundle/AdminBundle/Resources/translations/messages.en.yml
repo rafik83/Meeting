@@ -5,15 +5,61 @@ admin.account.link: 'My account'
 admin.account.title: 'My account'
 admin.account.update_password.title: 'Change my password'
 admin.activateAccount.password.title: 'Creation of a password for your account as contributor'
+admin.admin_list.filter.empty_filter: 'Empty all filters'
+admin.admin_list.link: Users
+admin.admin_list.table.content.admin.events.none: None
+admin.admin_list.table.content.super_admin.events.all: All
 admin.admin_list.table.content.update: Edit
+admin.admin_list.table.title.actions: Actions
+admin.admin_list.table.title.email: Email
+admin.admin_list.table.title.events: Events
+admin.admin_list.table.title.firstname: Firstname
+admin.admin_list.table.title.lastname: Lastname
+admin.admin_list.table.title.role: Type
+admin.admin_list.title: 'List of backoffice users'
+admin.batch_actions.plural: 'Batch actions on %count% items'
+admin.batch_actions.single: 'Batch actions on one item'
 admin.cancel: Cancel
 admin.category.add: Add
 admin.category.link: 'Participation categories'
+admin.category.update: Update
+admin.check-all: 'Check all'
+admin.common.close: Close
+admin.create_admin.title: 'Create a new backoffice user'
+admin.dashboard.link: Dashboard
+admin.event.billing.configuration.link: 'Billing information'
+admin.event.configuration.key_dates.title: 'Key date of the event'
+admin.event.configure_dates: 'Key dates'
+admin.event.create.title: 'Create an event'
+admin.event.dashboard.title: Dashboard
+admin.event.languages: Language
+admin.event.page.list.title: 'List of my events'
+admin.event.practicalInfo.link: 'Practical informations'
+admin.event.practicalInfo.update.title: 'Update practical informations'
+admin.event.search_facet.enabled.label: Activated
+admin.event.search_facet.title: 'Catalog filters'
+admin.event.search_facets.link: 'Catalog filters'
 admin.event.see_on_front.link: 'See on front'
 admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
+admin.event.template.link: Templates
+admin.event.template.registration: Registration
+admin.event.template.sheet: Presentation
+admin.event.title: Title
 admin.event.update.link: Update
+admin.event.update.title: 'Update the event'
+admin.event.vatMode.ati: VAT
+admin.events.link: 'My events'
+admin.filter: Filter
+admin.filter_by: 'Filter by'
+admin.filters.all: All
+admin.filters.reset: 'Reset all the filters'
+admin.goback.link: 'Go back'
 admin.happening_category.add: Add
+admin.happening_category.table.column.color: Color
+admin.happening_category.table.column.picto: Picto
+admin.happening_category.table.column.title: Title
+admin.happening_category.update: Update
 admin.happening_speaker.action.see: See
 admin.happening_speaker.add: Add
 admin.happening_speaker.addTitle: 'Add Speaker'
@@ -21,8 +67,14 @@ admin.happening_speaker.link: Speakers
 admin.happening_speaker.table.column.photo: 'Speaker picture'
 admin.happening.add: Add
 admin.happening.link: Conferences
+admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request.from: From
 admin.meeting_request.link: 'Meeting requests'
+admin.meeting_request.state.approved: Approved
+admin.meeting_request.state.cancelled: Cancelled
+admin.meeting_request.state.refused: Refused
+admin.meeting_request.state.sent: sent
+admin.meeting_request.to: To
 admin.meeting.link: Meetings
 admin.menu.link: Menu
 admin.messaging.link: Emailing
@@ -81,7 +133,9 @@ admin.users.see-sheet: 'See the participation'
 admin.zero-result: 'No result'
 and: and
 and_more: 'and %count% other|and %count% others'
+boolean.false: 'No'
 boolean.no: 'No'
+boolean.true: 'Yes'
 boolean.yes: 'Yes'
 change_password.link: 'Change password'
 change_password.title: 'Change password'

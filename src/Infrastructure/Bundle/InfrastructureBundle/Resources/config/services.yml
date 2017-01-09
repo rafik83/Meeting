@@ -1615,6 +1615,15 @@ services:
             - '@query.happening.admin.happening_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery }
+    query.happening.admin.happening_participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery }
 
     #
     # Template
@@ -2228,13 +2237,19 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@repository.cart_row_repository'
+            - '@query.navigation.package_submenu_button_view_query_handler'
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@domain.key_dates.checker.happenings_access_checker'
     query.navigation.agenda_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+            - '@query.navigation.package_submenu_button_view_query_handler'
+    query.navigation.package_submenu_button_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@repository.cart_row_repository'
 
     ##
     # Notification query handler
@@ -2632,13 +2647,24 @@ services:
     #
     # Serializer: normalizers and encoders
     #
+    serializer.abstract_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\AbstractNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        abstract: true
+
     serializer.normalizer.event_sheets:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
-        public: false
+        parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.happening_participant:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
+        parent: 'serializer.abstract_normalizer'
         tags:
             - { name: serializer.normalizer }
 
