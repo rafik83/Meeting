@@ -91,6 +91,25 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
+    public function checkAnyParticipation(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation.id')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->where('participation.participant = :participant')
+            ->setParameter('participant', $participant)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function countParticipationByHappening(Happening $happening)
     {
         $queryBuilder = $this
