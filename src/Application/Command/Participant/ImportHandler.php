@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
 
 class ImportHandler
 {
@@ -20,13 +21,30 @@ class ImportHandler
     private $localFileStorageAdapter;
 
     /**
+     * @var SessionAdapter
+     */
+    private $session;
+
+    /**
+     * @var string
+     */
+    private $publicDir;
+
+    /**
      * ImportHandler constructor.
      *
      * @param FileStorageInterface $localFileStorageAdapter
+     * @param SessionAdapter       $session
+     * @param string               $publicDir
      */
-    public function __construct(FileStorageInterface $localFileStorageAdapter)
-    {
+    public function __construct(
+        FileStorageInterface $localFileStorageAdapter,
+        SessionAdapter $session,
+        $publicDir
+    ) {
         $this->localFileStorageAdapter = $localFileStorageAdapter;
+        $this->session                 = $session;
+        $this->publicDir               = $publicDir;
     }
 
     /**
@@ -35,5 +53,9 @@ class ImportHandler
     public function handle(Import $command)
     {
         $filePath = $this->localFileStorageAdapter->upload($command->file); //TODO: catch exception
+
+        $handle = fopen($this->publicDir . $filePath, 'r');
+
+        $this->session->set(Import::PARTICIPANT_IMPORT_FILE, $handle);
     }
 }

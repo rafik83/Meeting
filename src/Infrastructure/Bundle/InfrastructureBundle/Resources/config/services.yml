@@ -290,6 +290,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\ImportHandler
         arguments:
             - '@adapter.local_file_storage'
+            - '@adapter.session'
+            - '%kernel.root_dir%/../web'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import }
     command.event.update_handler:
@@ -1340,6 +1342,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter
         arguments:
             - '@router'
+    adapter.session:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter
+        arguments:
+            - '@session'
     adapter.local_file_storage:
         class: Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter
         arguments:

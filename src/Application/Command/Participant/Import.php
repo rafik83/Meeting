@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Import
 {
+    const PARTICIPANT_IMPORT_FILE = 'participant_import_file';
+
     /**
      * @var Type
      */
