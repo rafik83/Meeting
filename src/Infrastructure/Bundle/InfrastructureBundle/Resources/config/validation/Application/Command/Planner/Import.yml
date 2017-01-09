@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Planner\Import:
+    properties:
+        file:
+            - NotNull: ~
+            - File:
+                mimeTypes: ['application/xml', 'text/xml']
