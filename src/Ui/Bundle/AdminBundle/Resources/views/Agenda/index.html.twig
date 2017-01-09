@@ -68,46 +68,7 @@
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
                                 Nom autre fiche 1<br>
-                                <i class="icon icon-Profil_1"></i> Richard HANNA
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 2<br>
-                                <i class="icon icon-Profil_1"></i> Richard HANNA, Dimitri FRUIT
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 3 <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 4 <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 5 <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 6<br>
-                                <i class="icon icon-Profil_1"></i> Richard HANNA, Dimitri FRUIT
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 7<br>
-                                <i class="icon icon-Profil_1"></i> Dimitri FRUIT
+                                <i class="icon icon-Profil_1"></i> Prénom NOM
                             </td>
                         </tr>
                     </table>
@@ -124,7 +85,58 @@
                                 <a href="#" v-on:click="focusAgenda(sheet)">${ sheet.title }</a>
                             </div>
                             <div class="panel-body">
-                                <div v-for="participant in sheet.participants">${ participant.fullname }</div>
+                                <table class="table-agenda table-condensed">
+                                    <tr>
+                                        <td v-for="participant in sheet.participants" v-bind:colspan="participant.days.length">
+                                            <p class="text-center">${ participant.fullname }</p>
+
+                                            <table>
+                                                <tr>
+                                                    <td v-for="day in participant.days">
+                                                        <div class="text-center">${ day.day+1 }</div>
+                                                        <table class="table-agenda-day table table-bordered table-condensed">
+                                                            <tr v-for="slot in day.slots">
+                                                                <td>
+                                                                    <div class="slot empty-slot" v-if="slot.type === 'slot_available'">
+                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <br>${ slot.type }
+                                                                    </div>
+
+                                                                    <div class="slot unavailability" v-if="slot.type === 'unavailability'">
+                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <br>${ slot.type }
+                                                                    </div>
+
+                                                                    <div class="slot happening" v-if="slot.type === 'happening_unavailability'">
+                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <br>${ slot.type }
+                                                                    </div>
+
+                                                                    <div class="slot meeting" v-if="slot.type === 'meeting_unavailability'">
+                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <br>${ slot.type }
+
+                                                                        <div class="slot-label">
+                                                                            <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip" v-show="slot.hasNoPreference === true"></span>
+                                                                            <a href="#" :title="slot.sheetMetTitle" data-toggle="tooltip">${ slot.sheetMetTitle }</a>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="slot mass-unavailability" v-if="slot.type === 'mass_unavailability'">
+                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <br>${ slot.type }
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div class="text-center" v-show="sheet.participants === undefined">Chargement en cours...</div>
 
                                 {#
                                 <table class="table-agenda table-bordered table-condensed pull-left">

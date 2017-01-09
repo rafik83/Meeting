@@ -58,16 +58,22 @@ new Vue({
                 }.bind(this))
                 .catch(function(error) {
                     console.log(error);
-                }.bind(this));
+                });
         },
 
+        /**
+         * Load sheet agenda data
+         *
+         * @param sheet
+         */
         loadAgenda: function (sheet) {
             this.$http.get(this.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
-                    var sheetId = this.findSheetAgenda(sheet);
+                    var participants                   = response.data.participants;
+                    var sheetId                        = this.findSheetAgenda(sheet);
                     this.agendas[sheetId].participants = [];
 
-                    response.data.participants.forEach(function (participant) {
+                    participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);
                     }.bind(this));
 
@@ -75,7 +81,7 @@ new Vue({
                 }.bind(this))
                 .catch(function(error) {
                     console.log(error);
-                }.bind(this));
+                });
         },
 
         /**
@@ -92,6 +98,12 @@ new Vue({
             this.focusAgenda(sheet);
         },
 
+        /**
+         * Find index of a sheet
+         *
+         * @param sheet
+         * @returns {Number}
+         */
         findSheet: function (sheet) {
             return this.sheets.indexOf(sheet);
         },
