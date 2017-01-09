@@ -234,6 +234,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('enable', true)
             ->setParameter('event', $event)
             ->setParameter('locale', $locale);
+
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -363,6 +364,27 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             )
             ->setParameter('sheet', $sheet)
             ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsByEvent(Event $event, $locale)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.enable = :enable AND sheet.event = :event')
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('enable', true)
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale)
         ;
 
         return $queryBuilder->getQuery()->getResult();

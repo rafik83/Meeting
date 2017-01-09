@@ -144,4 +144,12 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsByEvent(Event $event, $locale);
 }
