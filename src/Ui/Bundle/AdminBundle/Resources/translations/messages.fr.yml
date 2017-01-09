@@ -348,7 +348,6 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
-admin.sheet.export.button.label: Exporter
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -362,6 +361,8 @@ admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.no: Non
+admin.sheet.export.participant.button.label: 'Exporter participants'
+admin.sheet.export.sheet.button.label: 'Exporter fiches'
 admin.sheet.export.yes: Oui
 admin.happening.export.fields.happening_id: 'ID Conférence'
 admin.happening.export.fields.happening_name: 'Titre conférence'

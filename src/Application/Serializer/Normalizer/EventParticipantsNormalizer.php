@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Nomenclature\Charset;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -39,13 +38,6 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
      * @var ParticipantRepositoryInterface
      */
     private $participantRepository;
-
-    /**
-     * List of all sheet fields (merging of the sheet data fields of all normalized sheets)
-     *
-     * @var array (key => label)
-     */
-    private $sheetFields;
 
     /**
      * List of all registration fields (merging of the registration data fields of all normalized sheets)
@@ -86,7 +78,6 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
         parent::__construct($translator);
 
         $this->participantRepository            = $participantRepository;
-        $this->sheetFields                      = [];
         $this->registrationFields               = [];
         $this->sheetInfoGuesser                 = $sheetInfoGuesser;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
