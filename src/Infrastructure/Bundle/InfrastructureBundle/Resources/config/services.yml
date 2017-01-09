@@ -2100,6 +2100,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@domain.planner.indicator_calculator'
+            - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery }
     query.agenda.agenda_sheet_view_query_handler:

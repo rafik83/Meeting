@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -46,6 +47,11 @@ class SheetListViewQueryHandler
     private $indicatorCalculator;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * SheetListViewQueryHandler constructor.
      *
      * @param SheetRepositoryInterface   $sheetRepository
@@ -53,19 +59,22 @@ class SheetListViewQueryHandler
      * @param RequestRepositoryInterface $requestRepository
      * @param SheetInfoGuesser           $sheetInfoGuesser
      * @param IndicatorCalculator        $indicatorCalculator
+     * @param RouterInterface            $router
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         MeetingRepositoryInterface $meetingRepository,
         RequestRepositoryInterface $requestRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        IndicatorCalculator $indicatorCalculator
+        IndicatorCalculator $indicatorCalculator,
+        RouterInterface $router
     ) {
-        $this->meetingRepository        = $meetingRepository;
-        $this->sheetRepository          = $sheetRepository;
-        $this->requestRepository        = $requestRepository;
-        $this->sheetInfoGuesser         = $sheetInfoGuesser;
-        $this->indicatorCalculator      = $indicatorCalculator;
+        $this->meetingRepository   = $meetingRepository;
+        $this->sheetRepository     = $sheetRepository;
+        $this->requestRepository   = $requestRepository;
+        $this->sheetInfoGuesser    = $sheetInfoGuesser;
+        $this->indicatorCalculator = $indicatorCalculator;
+        $this->router              = $router;
     }
 
     /**
@@ -75,6 +84,7 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $sheetListViewQuery)
     {
+        $locale    = $sheetListViewQuery->locale;
         $sheetList = [];
         $sheets    = $this->sheetRepository->getSheetsInCatalogByEvent($sheetListViewQuery->event);
 
@@ -89,20 +99,36 @@ class SheetListViewQueryHandler
 
             $sheetList[] = new SheetView(
                 $sheet->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($sheet, $sheetListViewQuery->locale),
-                $sheet->getType()->getTitle($sheetListViewQuery->locale),
+                $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+                $sheet->getType()->getTitle($locale),
                 count($sheet->getParticipants()),
                 $request,
                 $propositions,
-                $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
+                $indicator->meetingRequestsCount,
                 $indicator->slotTotal,
                 $indicator->possibleMeetingsQuantity,
                 $this->getPlacedMeetingsNumber($sheet),
-                $sheet->getFollower()
+                null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
+                $this->router->generate(
+                    'admin_sheet_details',
+                    ['sheet' => $sheet->getId(), 'event' => $sheetListViewQuery->event->getId()]
+                )
             );
         }
 
+        $this->sortSheetsByTitle($sheetList);
+
         return $sheetList;
+    }
+
+    /**
+     * @param SheetView[] $sheetList
+     */
+    private function sortSheetsByTitle(array &$sheetList)
+    {
+        usort($sheetList, function (SheetView $one, SheetView $other) {
+            return strcmp($one->title, $other->title);
+        });
     }
 
     /**

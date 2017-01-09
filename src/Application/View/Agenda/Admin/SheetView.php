@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
-use Proximum\Vimeet\Domain\Model\Admin;
-
 class SheetView
 {
     /**
@@ -32,7 +30,7 @@ class SheetView
     /**
      * @var string|null
      */
-    public $follower = null;
+    public $follower;
 
     /**
      * @var int
@@ -72,17 +70,18 @@ class SheetView
     /**
      * SheetView constructor.
      *
-     * @param int        $id
-     * @param string     $title
-     * @param string     $type
-     * @param int        $countParticipant
-     * @param int        $countRequest
-     * @param int        $countProposition
-     * @param int        $countValidatedRequest
-     * @param int        $countSlots
-     * @param int        $possibleMeetingQuantity
-     * @param int        $countPlacedMeetings
-     * @param Admin|null $follower
+     * @param int         $id
+     * @param string      $title
+     * @param string      $type
+     * @param int         $countParticipant
+     * @param int         $countRequest
+     * @param int         $countProposition
+     * @param int         $countValidatedRequest
+     * @param int         $countSlots
+     * @param int         $possibleMeetingQuantity
+     * @param int         $countPlacedMeetings
+     * @param string|null $follower
+     * @param string      $url of the sheet details in Admin
      */
     public function __construct(
         $id,
@@ -95,7 +94,8 @@ class SheetView
         $countSlots,
         $possibleMeetingQuantity,
         $countPlacedMeetings,
-        Admin $follower = null
+        $follower,
+        $url
     ) {
         $this->id                      = $id;
         $this->title                   = $title;
@@ -107,9 +107,7 @@ class SheetView
         $this->countSlots              = $countSlots;
         $this->countPlacedMeetings     = $countPlacedMeetings;
         $this->possibleMeetingQuantity = $possibleMeetingQuantity;
-
-        if (null !== $follower) {
-            $this->follower = $follower->getDisplayName();
-        }
+        $this->url                     = $url;
+        $this->follower                = $follower;
     }
 }
