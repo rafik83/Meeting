@@ -72,6 +72,23 @@ class MassRepository implements MassRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findBlockingByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('mass')
+            ->from(Mass::class, 'mass')
+            ->where('mass.event = :event')
+            ->andWhere('mass.blocking = true')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(Mass $mass)
     {
         $this->entityManager->remove($mass);

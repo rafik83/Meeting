@@ -34,6 +34,13 @@ interface MassRepositoryInterface
     public function findByEvent(Event $event, $locale);
 
     /**
+     * @param Event $event
+     *
+     * @return Mass[]
+     */
+    public function findBlockingByEvent(Event $event);
+
+    /**
      * @param Mass $mass
      */
     public function remove(Mass $mass);

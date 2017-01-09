@@ -157,7 +157,7 @@ class SlotAvailability
         }
 
         if ($this->massUnavailability === null) {
-            $this->massUnavailability = $this->massUnavailabilityRepository->findByEvent($event, $event->getFallback());
+            $this->massUnavailability = $this->massUnavailabilityRepository->findBlockingByEvent($event);
         }
     }
 
@@ -191,6 +191,14 @@ class SlotAvailability
             ) {
                 return true;
             }
+
+            if ($unavailability->getBegin() >= $slot->getBegin() && $unavailability->getBegin() <= $slot->getEnd()) {
+                return true;
+            }
+
+            if ($unavailability->getEnd() >= $slot->getBegin() && $unavailability->getEnd() <= $slot->getEnd()) {
+                return true;
+            }
         }
 
         return false;
@@ -221,6 +229,14 @@ class SlotAvailability
             ) {
                 return true;
             }
+
+            if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() <= $slot->getEnd()) {
+                return true;
+            }
+
+            if ($mass->getEnd() >= $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
+                return true;
+            }
         }
 
         return false;
@@ -235,10 +251,10 @@ class SlotAvailability
     private function hasMeeting(MeetingSlot $slot, Participant $participant)
     {
         foreach ($this->meetings as $meeting) {
-            if (!$meeting->hasFromParticipant($participant) || !$meeting->hasToParticipant($participant)) {
+            if (!$meeting->hasFromParticipant($participant) && !$meeting->hasToParticipant($participant)) {
                 continue;
             }
-            
+
             if ($meeting->getSlot() === $slot) {
                 return $meeting;
             }
@@ -256,25 +272,30 @@ class SlotAvailability
     private function hasHappening(MeetingSlot $slot, Participant $participant)
     {
         foreach ($this->happenings as $happening) {
+            $happeningBegin = $happening->getHappening()->getBegin();
+            $happeningEnd   = $happening->getHappening()->getEnd();
+
             if ($happening->getParticipant() !== $participant) {
                 continue;
             }
 
-            if ($slot->getBegin() >= $happening->getHappening()->getBegin()
-                && $slot->getBegin() <= $happening->getHappening()->getEnd()
-            ) {
+            if ($slot->getBegin() >= $happeningBegin && $slot->getBegin() <= $happeningEnd) {
                 return true;
             }
 
-            if ($slot->getEnd() >= $happening->getHappening()->getBegin()
-                && $slot->getEnd() <= $happening->getHappening()->getEnd()
-            ) {
+            if ($slot->getEnd() >= $happeningBegin && $slot->getEnd() <= $happeningEnd) {
                 return true;
             }
 
-            if ($slot->getBegin() >= $happening->getHappening()->getBegin()
-                && $slot->getEnd() <= $happening->getHappening()->getEnd()
-            ) {
+            if ($slot->getBegin() >= $happeningBegin && $slot->getEnd() <= $happeningEnd) {
+                return true;
+            }
+
+            if ($happeningBegin >= $slot->getBegin() && $happeningBegin <= $slot->getEnd()) {
+                return true;
+            }
+
+            if ($happeningEnd >= $slot->getBegin() && $happeningEnd <= $slot->getEnd()) {
                 return true;
             }
         }
