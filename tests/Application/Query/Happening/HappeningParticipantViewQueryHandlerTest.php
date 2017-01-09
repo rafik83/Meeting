@@ -48,7 +48,7 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesser::class);
 
-        $happeningRepository->findByEvent($event)->shouldBeCalled()->willReturn([$happening]);
+        $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([$happening]);
 
         $participantInfoGuesser->guessParticipantInfos($participant, $locale)
             ->shouldBeCalled()
@@ -85,12 +85,8 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
     {
         $this->expectException(EmptyHappeningParticipationException::class);
 
-        $event     = EventFactory::createEvent();
-        $locale    = 'fr';
-        $category  = new Happening\Category($event, 'picto', 1, '#000', '#fff');
-        $begin     = new \DateTime();
-        $end       = new \DateTime();
-        $happening = new Happening($event, $begin, $end, $category);
+        $event  = EventFactory::createEvent();
+        $locale = 'fr';
 
         // Mock
         $happeningRepository    = $this->prophesize(HappeningRepositoryInterface::class);
@@ -98,7 +94,7 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesser::class);
 
-        $happeningRepository->findByEvent($event)->shouldBeCalled()->willReturn([$happening]);
+        $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([]);
 
         $handler = new HappeningParticipantViewQueryHandler(
             $happeningRepository->reveal(),
@@ -106,6 +102,8 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
             $participantInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal()
         );
+
+        $this->expectException(EmptyHappeningParticipationException::class);
 
         $handler->handle(new HappeningParticipantViewQuery($event, $locale));
     }
