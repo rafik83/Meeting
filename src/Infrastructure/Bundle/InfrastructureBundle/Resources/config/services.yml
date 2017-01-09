@@ -2115,7 +2115,6 @@ services:
     query.agenda.agenda_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQueryHandler
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@query.agenda.agenda_participant_view_query_handler'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'

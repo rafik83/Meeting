@@ -58,15 +58,12 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository->countRequestSentBySheet($sheet)->shouldBeCalled()->willReturn(50);
         $requestRepository->countPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn(100);
         $sheetInfoGuesser->guessSheetTitle($sheet, 'fr')->shouldBeCalled()->willReturn('Titre fiche');
-        $requestRepository->countApprovedPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn(22);
         $meetingRepository->countByParticipant($participant)->shouldBeCalled()->willReturn(55);
 
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
         $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(new IndicatorView(10, 2, 3, 4, 5));
 
         $routerInterface->generate('admin_sheet_details', Argument::any())->willReturn('/my-url');
-
-        $expectedView = new SheetView($sheet->getId(), 'Titre fiche', '', 1, 50, 100, 22, 10, 5, 55, null, '/my-url');
 
         $query   = new SheetListViewQuery($event, 'fr');
         $handler = new SheetListViewQueryHandler(
@@ -79,6 +76,21 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $view = $handler->handle($query);
+
+        $expectedView = new SheetView(
+            $sheet->getId(),
+            'Titre fiche',
+            '',
+            1,
+            50,
+            100,
+            5,
+            10,
+            5,
+            55,
+            null,
+            '/my-url'
+        );
 
         $this->assertEquals($expectedView, $view[0]);
     }

@@ -13,17 +13,11 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 use Proximum\Vimeet\Application\View\Agenda\AgendaSheetView;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
 class AgendaSheetViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
     /**
      * @var AgendaParticipantViewQueryHandler
      */
@@ -50,9 +44,6 @@ class AgendaSheetViewQueryHandler
     private $meetingRepositoryInterface;
 
     /**
-     * AgendaSheetViewQueryHandler constructor.
-     *
-     * @param SheetRepositoryInterface                  $sheetRepository
      * @param AgendaParticipantViewQueryHandler         $agendaParticipantViewQueryHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
@@ -60,14 +51,12 @@ class AgendaSheetViewQueryHandler
      * @param MeetingRepositoryInterface                $meetingRepositoryInterface
      */
     public function __construct(
-        SheetRepositoryInterface $sheetRepository,
         AgendaParticipantViewQueryHandler $agendaParticipantViewQueryHandler,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         MassRepositoryInterface $massUnavailabilityRepository,
         MeetingRepositoryInterface $meetingRepositoryInterface
     ) {
-        $this->sheetRepository                   = $sheetRepository;
         $this->agendaParticipantViewQueryHandler = $agendaParticipantViewQueryHandler;
         $this->happeningParticipationRepository  = $happeningParticipationRepository;
         $this->unavailabilityRepository          = $unavailabilityRepository;
