@@ -2349,6 +2349,10 @@ services:
             - '@repository.messaging.message_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\ListQuery }
+    query.messaging.message.preview_handler:
+        class: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQuery }
 
     #
     # Elastic Transformer

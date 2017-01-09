@@ -17,9 +17,21 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageEntityType extends AbstractType
 {
+    /** @var UrlGeneratorInterface */
+    private $urlGenerator;
+
+    /**
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,8 +54,10 @@ class MessageEntityType extends AbstractType
             'choice_label' => 'name',
             'choice_attr' => function(Message $message) {
                 return [
-                    'data-subject'         => $message->getSubject(),
-                    'data-content'         => $message->getContent(),
+                    'data-preview-url'     => $this->urlGenerator->generate('admin_messaging_message_preview', [
+                        'message' => $message->getId(),
+                        'event'   => $message->getEvent()->getId(),
+                    ]),
                     'data-message-preview' => 1,
                 ];
             },

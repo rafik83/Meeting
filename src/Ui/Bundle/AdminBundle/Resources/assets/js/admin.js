@@ -155,7 +155,7 @@ function init(target) {
     });
 
     [].forEach.call(target.querySelectorAll('[data-message-preview]'), function (element) {
-        new MessagingMessagePreview(element, target.querySelector('#preview_template'), target.querySelector('#message_preview'));
+        new MessagingMessagePreview(element, target.querySelector('#message_preview_iframe'), target.querySelector('#no_preview_text'));
     });
 }
 

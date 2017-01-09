@@ -945,6 +945,14 @@ admin_messaging_message_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Messaging\Message:update }
 
+admin_messaging_message_preview:
+    path: /event/{event}/messaging/message/preview/{message}
+    requirements:
+        event: \d+
+        message: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Messaging\Message:preview }
+
 # Messaging campaigns
 admin_messaging_campaign_list:
     path: /event/{event}/messaging-campaigns

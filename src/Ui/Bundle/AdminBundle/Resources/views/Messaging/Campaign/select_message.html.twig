@@ -9,28 +9,17 @@
     <h1 class="page-header">{{ 'admin.messaging.campaign.message.title'|trans }}</h1>
 
     <div class="row">
-        <div class="col-md-6 well">
+        <div class="col-md-5 well">
             <form method="post">
                 {{ form_row(form.message, {'label': false}) }}
                 {{ form_rest(form) }}
             </form>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <h2>{{ 'admin.messaging.campaign.message_preview.title'|trans }}</h2>
-            <div id="message_preview">
-                <p class="text-warning">{{ 'admin.messaging.campaign.no_message_preview'|trans }}</p>
-            </div>
+            <p class="text-warning" id="no_preview_text">{{ 'admin.messaging.campaign.no_message_preview'|trans }}</p>
+            <iframe id="message_preview_iframe" src="about:blank" style="display:none; width:100%"></iframe>
         </div>
     </div>
-
-    <template id="preview_template">
-        <h3>{{ 'admin.messaging.campaign.message_preview.subject'|trans }}</h3>
-
-        <div>#subject#</div>
-
-        <h3>{{ 'admin.messaging.campaign.message_preview.content'|trans }}</h3>
-
-        <div>#content#</div>
-    </template>
 
 {% endblock %}
