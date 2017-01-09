@@ -71,55 +71,60 @@ class MeetingViewQueryHandler
         $meetingViews = [];
 
         foreach ($this->requests as $request) {
-            $sheetsList = [
-                $this->getSheetById($request->getFromSheet()->getId()),
-                $this->getSheetById($request->getToSheet()->getId()),
-            ];
+            try {
+                $sheetsList = [
+                    $this->getSheetById($request->getFromSheet()->getId()),
+                    $this->getSheetById($request->getToSheet()->getId()),
+                ];
 
-            $participantsList = [];
+                $participantsList = [];
 
-            if ($request->hasFromParticipants()) {
-                /** @var Participant $participant */
-                foreach ($request->getFromParticipantsArray() as $participant) {
-                    $participantsList[] = $this->getParticipantById($participant->getId());
-                }
-            } else {
-                // No preference on from
-                // If sheet has only one participant
-                if ($request->getFromSheet()->countParticipant() === 1) {
+                if ($request->hasFromParticipants()) {
                     /** @var Participant $participant */
-                    foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
+                    foreach ($request->getFromParticipantsArray() as $participant) {
                         $participantsList[] = $this->getParticipantById($participant->getId());
                     }
                 } else {
-                    $this->resetRecursiveDepth();
-                    $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
+                    // No preference on from
+                    // If sheet has only one participant
+                    if ($request->getFromSheet()->countParticipant() === 1) {
+                        /** @var Participant $participant */
+                        foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
+                            $participantsList[] = $this->getParticipantById($participant->getId());
+                        }
+                    } else {
+                        $this->resetRecursiveDepth();
+                        $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
+                    }
                 }
-            }
 
-            if ($request->hasToParticipants()) {
-                foreach ($request->getToParticipantsArray() as $participant) {
-                    $participantsList[] = $this->getParticipantById($participant->getId());
-                }
-            } else {
-                // not preference on to
-                // If sheet has only one participant
-                if ($request->getToSheet()->countParticipant() === 1) {
-                    /** @var Participant $participant */
-                    foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
+                if ($request->hasToParticipants()) {
+                    foreach ($request->getToParticipantsArray() as $participant) {
                         $participantsList[] = $this->getParticipantById($participant->getId());
                     }
                 } else {
-                    $this->resetRecursiveDepth();
-                    $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
+                    // not preference on to
+                    // If sheet has only one participant
+                    if ($request->getToSheet()->countParticipant() === 1) {
+                        /** @var Participant $participant */
+                        foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
+                            $participantsList[] = $this->getParticipantById($participant->getId());
+                        }
+                    } else {
+                        $this->resetRecursiveDepth();
+                        $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
+                    }
                 }
-            }
 
-            $meetingViews[] = new MeetingView(
-                $request->getId(),
-                $sheetsList,
-                $participantsList
-            );
+                $meetingViews[] = new MeetingView(
+                    $request->getId(),
+                    $sheetsList,
+                    $participantsList
+                );
+            } catch (SheetNotFoundException $exception) {
+                // In case of a sheet not in catalog but with meeting request
+                continue;
+            }
         }
 
         return $meetingViews;

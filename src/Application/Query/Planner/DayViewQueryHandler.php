@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Planner;
 
+use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\View\Planner\Day;
 
 class DayViewQueryHandler
@@ -18,10 +19,15 @@ class DayViewQueryHandler
      * @param DayViewQuery $query
      *
      * @return Day[]
+     * @throws DayNotConfiguredException
      */
     public function handle(DayViewQuery $query)
     {
         $days = [];
+
+        if (empty($query->days)) {
+            throw new DayNotConfiguredException();
+        }
 
         foreach ($query->days as $day) {
             $days[] = new Day(

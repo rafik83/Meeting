@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Planner;
 
+use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\Day;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -34,6 +35,7 @@ class SlotViewQueryHandler
      * @param SlotViewQuery $query
      *
      * @return SlotView[]
+     * @throws SlotNotConfiguredException
      */
     public function handle(SlotViewQuery $query)
     {
@@ -53,6 +55,11 @@ class SlotViewQueryHandler
                     $day
                 );
             }
+        }
+
+        // In case of slot nof configured and of slot out of the days
+        if (empty($slots) || empty($slotViews)) {
+            throw new SlotNotConfiguredException();
         }
 
         return $slotViews;
