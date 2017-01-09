@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AbstractSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\EmptySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\HappeningUnavailabilitySlotView;
@@ -32,17 +33,25 @@ class SlotViewQueryHandler
     private $slotAvailability;
 
     /**
+     * @var SheetInfoGuesser
+     */
+    private $sheetInfoGuesser;
+
+    /**
      * SlotViewQueryHandler constructor.
      *
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      * @param SlotAvailability               $slotAvailability
+     * @param SheetInfoGuesser               $sheetInfoGuesser
      */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        SlotAvailability $slotAvailability
+        SlotAvailability $slotAvailability,
+        SheetInfoGuesser $sheetInfoGuesser
     ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->slotAvailability      = $slotAvailability;
+        $this->sheetInfoGuesser      = $sheetInfoGuesser;
     }
 
     /**
@@ -74,12 +83,15 @@ class SlotViewQueryHandler
             if ($slotAvailabilityView->type === SlotAvailability::MEETING_UNAVAILABILITY
                 && $slotAvailabilityView->meeting !== null
             ) {
+                $sheetMet = $slotAvailabilityView->meeting->getSheetMet($query->sheet);
+
                 $slotViews[] = new MeetingSlotView(
                     $slot,
                     $slotAvailabilityView->type,
                     $slotAvailabilityView->meeting->getSpot()->getId(),
                     $slotAvailabilityView->meeting->getSpot()->getReference(),
-                    $slotAvailabilityView->meeting->getSheetMet($query->sheet)->getId(),
+                    $sheetMet->getId(),
+                    $this->sheetInfoGuesser->guessSheetTitle($sheetMet),
                     $slotAvailabilityView->meeting->getId(),
                     $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet)
                 );
