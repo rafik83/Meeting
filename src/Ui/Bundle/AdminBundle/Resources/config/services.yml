@@ -196,6 +196,18 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: form.type }
+    form_type_messaging_message.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type }
+    form_type_messaging_message.update_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\UpdateType
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type }
 
     #
     # Helper
@@ -204,6 +216,11 @@ services:
         class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
         arguments:
             - '@twig.extension.intl'
+
+    ui.helper.messaging_message_placeholder_helper:
+        class: Proximum\Vimeet\Ui\Helper\Messaging\MessagePlaceholderHelper
+        arguments:
+            - '@translator'
 
     #
     # Subscriber

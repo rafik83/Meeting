@@ -39,6 +39,7 @@ tinymce.init({
     plugins: ['lists link textcolor colorpicker code'],
     toolbar1: "bold italic strikethrough underline | forecolor backcolor | formatselect fontsizeselect",
     toolbar2: "alignleft aligncenter alignright | bullist numlist | link code template | undo redo | removeformat",
+    toolbar3: "tags links",
     toolbar_items_size: 'small',
     removed_menuitems: 'newdocument',
     font_formats: 'Default=openSans;Script=dancingScriptRegular;',
@@ -51,5 +52,26 @@ tinymce.init({
     style_formats: [
         {title: 'Body end title', block: 'h2', classes: 'endtitle'},
         {title: 'Body offset left', block: 'p', classes: 'offset-left'}
-    ]
+    ],
+    // Add toolbar listboxes for tags and links
+    setup: function (editor) {
+        var placeholders = JSON.parse(editor.getElement().getAttribute('data-placeholders'));
+        // Réf.: https://www.tinymce.com/docs/demo/custom-toolbar-listbox/
+        editor.addButton('tags', {
+            type: 'listbox',
+            text: placeholders.labels.tags,
+            onselect: function (e) {
+                editor.insertContent(this.value());
+            },
+            values: placeholders.tags
+        });
+        editor.addButton('links', {
+            type: 'listbox',
+            text: placeholders.labels.links,
+            onselect: function (e) {
+                editor.insertContent('<a href="' + this.value() + '">' + this.text() + '</a>');
+            },
+            values: placeholders.links
+        });
+    }
 });
