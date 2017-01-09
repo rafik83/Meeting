@@ -21,9 +21,6 @@ Proximum\Vimeet\Domain\Model\Spot:
         sheets:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             mappedBy: spot
-        meetings:
-            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
-            mappedBy: spot
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

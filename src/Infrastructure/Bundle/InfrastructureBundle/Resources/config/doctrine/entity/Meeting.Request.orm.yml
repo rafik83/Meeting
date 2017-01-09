@@ -16,7 +16,7 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
     oneToOne:
         meeting:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting
-            mappedBy: request
+            inversedBy: request
             joinColumn:
                 onDelete: SET NULL
     manyToOne:

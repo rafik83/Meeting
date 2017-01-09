@@ -13,8 +13,8 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: datetime
     oneToOne:
         request:
-          targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
-          inversedBy: meeting
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
+            mappedBy: meeting
     manyToOne:
         slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
@@ -30,7 +30,8 @@ Proximum\Vimeet\Domain\Model\Meeting:
                 onDelete: CASCADE
         spot:
             targetEntity: Proximum\Vimeet\Domain\Model\Spot
-            inversedBy: meetings
+            joinColumn:
+                onDelete: CASCADE
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

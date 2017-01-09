@@ -59,11 +59,6 @@ class Spot
     private $sheets;
 
     /**
-     * @var Meeting[]
-     */
-    private $meetings;
-
-    /**
      * Spot constructor.
      *
      * @param string $reference
@@ -88,7 +83,6 @@ class Spot
         $this->seatCapacity    = $seatCapacity;
         $this->active          = $active;
         $this->sheets          = new ArrayCollection();
-        $this->meetings        = new ArrayCollection();
     }
 
     /**
@@ -221,13 +215,5 @@ class Spot
     public function getSheets()
     {
         return $this->sheets->toArray();
-    }
-
-    /**
-     * @return Meeting[]
-     */
-    public function getMeetings()
-    {
-        return $this->meetings;
     }
 }
