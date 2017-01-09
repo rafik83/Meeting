@@ -218,6 +218,15 @@ admin.package.table.column.event: Evènement
 admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
+admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
+admin.participant.export.fields.participant_created_at: 'Creation Participant'
+admin.participant.export.fields.participant_email: 'Email Participant'
+admin.participant.export.fields.participant_id: 'ID Participant'
+admin.participant.export.fields.participant_type: 'Type Participant'
+admin.participant.export.fields.sheet_id: 'ID Fiche'
+admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.sheet.export.no: Non
+admin.sheet.export.yes: Oui
 admin.partner.create.title: 'Créer un nouveau partenaire'
 admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'
