@@ -118,6 +118,10 @@ class SlotAvailability
     {
         $this->autoLoading($participant->getSheet()->getEvent());
 
+        if (($meeting = $this->hasMeeting($slot, $participant)) !== false) {
+            return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
+        }
+
         if ($this->hasUnavailability($slot, $participant)) {
             return new SlotAvailabilityView(self::UNAVAILABILITY);
         }
@@ -128,10 +132,6 @@ class SlotAvailability
 
         if ($this->hasMassUnavailability($slot)) {
             return new SlotAvailabilityView(self::MASS_UNAVAILABILITY);
-        }
-
-        if (($meeting = $this->hasMeeting($slot, $participant)) !== false) {
-            return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
         }
 
         return new SlotAvailabilityView(self::SLOT_AVAILABLE);

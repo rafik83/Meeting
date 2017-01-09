@@ -32,6 +32,11 @@ abstract class AbstractSlotView
     /**
      * @var string
      */
+    public $beginEndHour;
+
+    /**
+     * @var string
+     */
     public $type;
 
     /**
@@ -42,10 +47,11 @@ abstract class AbstractSlotView
      */
     public function __construct(MeetingSlot $slot, $type)
     {
-        $this->id    = $slot->getId();
-        $this->begin = $slot->getBegin();
-        $this->end   = $slot->getEnd();
-        $this->type  = $type;
+        $this->id           = $slot->getId();
+        $this->begin        = $slot->getBegin();
+        $this->end          = $slot->getEnd();
+        $this->beginEndHour = $slot->getBegin()->format('H:i') . ' - ' . $slot->getEnd()->format('H:i');
+        $this->type         = $type;
     }
 
     /**
