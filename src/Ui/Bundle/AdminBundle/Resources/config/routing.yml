@@ -384,12 +384,18 @@ admin_sheet_batch:
         event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:batch }
-admin_sheet_export:
-    path: /event/{event}/sheet/export
+admin_sheet_export_sheet:
+    path: /event/{event}/sheet/exportSheet
     requirements:
         event: \d+
     methods: [POST]
-    defaults: { _controller: AdminBundle:Sheet:export }
+    defaults: { _controller: AdminBundle:Sheet:exportSheet }
+admin_sheet_export_participant:
+    path: /event/{event}/sheet/exportParticipant
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Sheet:exportParticipant }
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot
     requirements:
