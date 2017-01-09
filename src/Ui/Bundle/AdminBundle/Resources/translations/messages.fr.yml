@@ -102,6 +102,7 @@ admin.happening_speaker.updateTitle: 'Modifier un intervenant'
 admin.happening.add: Ajouter
 admin.happening.addTitle: 'Ajouter une conférence'
 admin.happening.button.category: 'Gérer les catégories'
+admin.happening.button.export: 'Exporter les participants'
 admin.happening.button.speaker: 'Gérer les intervenants'
 admin.happening.link: Conférences
 admin.happening.list.begin: Début
@@ -353,6 +354,19 @@ admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.no: Non
 admin.sheet.export.yes: Oui
+admin.happening.export.fields.happening_id: 'ID Conférence'
+admin.happening.export.fields.happening_name: 'Titre conférence'
+admin.happening.export.fields.happening_day: 'Jour'
+admin.happening.export.fields.happening_begin_hour: 'Heure de début'
+admin.happening.export.fields.happening_end_hour: 'Heure de fin'
+admin.happening.export.fields.sheet_id: 'ID Fiche'
+admin.happening.export.fields.sheet_name: 'Titre fiche'
+admin.happening.export.fields.participant_id: 'ID Participant'
+admin.happening.export.fields.participant_email: 'Email'
+admin.happening.export.fields.participant_firstname: 'Prénom'
+admin.happening.export.fields.participant_lastname: 'Nom'
+admin.happening.export.fields.participant_position: 'Fonction'
+admin.happening.export.fields.question: 'Question'
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.follower: 'Suivi commercial'
