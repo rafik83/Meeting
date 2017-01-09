@@ -2740,3 +2740,14 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+
+
+    #
+    # Form extension
+    #
+    form_extension.confirm_extension:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Extension\ConfirmExtension
+        arguments:
+             - '@translator'
+        tags:
+            - { name: form.type_extension,  extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
