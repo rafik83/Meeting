@@ -117,70 +117,77 @@
             <div class="agenda-horizontal">
                 <ul>
                 {% set table = 1 %}
-                    <li v-for="sheet in agendas"><table class="table-agenda table-bordered table-condensed pull-left">
-                        <thead>
-                            <tr>
-                                <td colspan="4" v-bind:class="{ 'text-center': true, 'agenda-sheet-focus': sheet == focus }">
-                                    <a href="#" class="pull-right" v-on:click="closeAgenda(sheet)"><span class="glyphicon glyphicon-remove"></span></a>
-                                    <a href="#" v-on:click="focusAgenda(sheet)">${ sheet.title }</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-center">Richard HANNA</th>
-                                <th colspan="2" class="text-center">Dimitri FRUIT</th>
-                            </tr>
-                            <tr>
-                                <th class="text-center">J1</th>
-                                <th class="text-center">J2</th>
-                                <th class="text-center">J1</th>
-                                <th class="text-center">J2</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                {% for j in 1..4 %}
-                                <td>
-                                    <table class="table-agenda-day table table-condensed">
-                                        {% for i in 1..12 if not (j%2 and i == 12) %}
-                                            <tr>
-                                                <td>
-                                                    {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
-                                                        <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
-                                                            <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
+                    <li v-for="sheet in agendas">
+                        <div class="panel panel-default">
+                            <div v-bind:class="{ 'panel-heading': true, 'agenda-sheet-focus': sheet == focus }">
+                                <a href="#" class="pull-right" v-on:click="closeAgenda(sheet)"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a href="#" v-on:click="focusAgenda(sheet)">${ sheet.title }</a>
+                            </div>
+                            <div class="panel-body">
+                                <div v-for="participant in sheet.participants">${ participant.fullname }</div>
 
-                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                {#
+                                <table class="table-agenda table-bordered table-condensed pull-left">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" v-for="participant in sheet.participants">${ participant.fullname }</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center">J1</th>
+                                            <th class="text-center">J2</th>
+                                            <th class="text-center">J1</th>
+                                            <th class="text-center">J2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for j in 1..4 %}
+                                            <td>
+                                                <table class="table-agenda-day table table-condensed">
+                                                    {% for i in 1..12 if not (j%2 and i == 12) %}
+                                                        <tr>
+                                                            <td>
+                                                                {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
+                                                                    <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
+                                                                        <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
 
-                                                            <div class="slot-label">
-                                                                {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>{% endif %}
-                                                                <a href="#" title="Nom autre fiche" data-toggle="tooltip">Nom autre fiche</a>
-                                                            </div>
+                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
 
-                                                            <div class="slot-label">
-                                                                <small><span class="glyphicon glyphicon-map-marker"></span> A{{ i ~ j }}0000</small>
-                                                            </div>
-                                                        </div>
-                                                    {% elseif j==1 and i in [3,7,8] %}
-                                                        <div class="slot happening">
-                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                        </div>
-                                                    {% elseif j==3 and i in [1,6] %}
-                                                        <div class="slot unavailability">
-                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="slot empty-slot">
-                                                            <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                        </div>
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </table>
-                                </td>
-                                {% endfor %}
-                            </tr>
-                        </tbody>
-                    </table></li>
+                                                                        <div class="slot-label">
+                                                                            {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>{% endif %}
+                                                                            <a href="#" title="Nom autre fiche" data-toggle="tooltip">Nom autre fiche</a>
+                                                                        </div>
+
+                                                                        <div class="slot-label">
+                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> A{{ i ~ j }}0000</small>
+                                                                        </div>
+                                                                    </div>
+                                                                {% elseif j==1 and i in [3,7,8] %}
+                                                                    <div class="slot happening">
+                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                                    </div>
+                                                                {% elseif j==3 and i in [1,6] %}
+                                                                    <div class="slot unavailability">
+                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="slot empty-slot">
+                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            </td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                #}
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

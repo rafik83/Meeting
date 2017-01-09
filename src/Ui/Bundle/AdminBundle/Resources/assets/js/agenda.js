@@ -61,6 +61,23 @@ new Vue({
                 }.bind(this));
         },
 
+        loadAgenda: function (sheet) {
+            this.$http.get(this.getSheetAgendaEndpoint(sheet))
+                .then(function(response) {
+                    var sheetId = this.findSheetAgenda(sheet);
+                    this.agendas[sheetId].participants = [];
+
+                    response.data.participants.forEach(function (participant) {
+                        this.agendas[sheetId].participants.push(participant);
+                    }.bind(this));
+
+                    this.$forceUpdate();
+                }.bind(this))
+                .catch(function(error) {
+                    console.log(error);
+                }.bind(this));
+        },
+
         /**
          * Show agenda of given sheet
          *
@@ -71,7 +88,12 @@ new Vue({
                 this.agendas.push(sheet);
             }
 
-            this.focus = sheet;
+            this.loadAgenda(sheet);
+            this.focusAgenda(sheet);
+        },
+
+        findSheet: function (sheet) {
+            return this.sheets.indexOf(sheet);
         },
 
         /**
@@ -107,13 +129,23 @@ new Vue({
         },
 
         /**
-         * Returns /admin/fr/event/1/agenda/sheets
-         * or      /app_dev.php/admin/fr/event/2/agenda/sheets
+         * Returns /admin/fr/event/{event_id}/agenda/sheets
+         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheets
          *
          * @returns {string}
          */
         getSheetsEndpoint: function () {
             return document.location.pathname + '/sheets';
+        },
+
+        /**
+         * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
+         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
+         *
+         * @returns {string}
+         */
+        getSheetAgendaEndpoint: function (sheet) {
+            return document.location.pathname + '/sheet/' + sheet.id;
         }
     }
 });
