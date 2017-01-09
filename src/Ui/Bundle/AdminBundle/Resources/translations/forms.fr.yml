@@ -348,6 +348,9 @@ form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
 form.planning.add_with_participant: 'Ajouter un pack de rendez-vous supplémentaire avec le participant'
+form.planner_import.children.file.label: 'Solution à importer'
+form.planner_import.children.submit.label: 'Importer'
+form.planner_import.confirm.submit.label: 'L''import d''une nouvelle solution a pour effet de supprimer l''ensemble des rendez-vous positionnés de l''événement, êtes-vous sûr de vouloir réaliser cette action ?'
 form.position_meeting.children.fromParticipants.label: Participants
 form.position_meeting.children.slot.label: 'Créneau de rendez-vous'
 form.position_meeting.children.submit.label: Placer
