@@ -397,7 +397,7 @@ admin_sheet_import:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Sheet:import }
 admin_sheet_import_mapping:
-    path: /event/{event}/sheet/import/mapping
+    path: /event/{event}/sheet/{type}/import/mapping
     requirements:
         event: \d+
     methods: [GET, POST]

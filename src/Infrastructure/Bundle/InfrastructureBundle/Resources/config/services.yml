@@ -1767,6 +1767,14 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
+    query.participant.import.import_mapping_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQueryHandler
+        arguments:
+            - '@serializer.decoder.csv'
+            - '@adapter.session'
+            - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery }
     query.package.plan_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Plan\PlanViewQueryHandler
         arguments:
@@ -2639,3 +2647,11 @@ services:
         public: false
         tags:
             - { name: serializer.encoder }
+
+    serializer.decoder.csv:
+        class: Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder
+        arguments:
+            - ";" # delimiter
+        public: false
+        tags:
+            - { name: serializer.decoder }

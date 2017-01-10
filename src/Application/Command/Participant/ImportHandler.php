@@ -54,8 +54,7 @@ class ImportHandler
     {
         $filePath = $this->localFileStorageAdapter->upload($command->file); //TODO: catch exception
 
-        $handle = fopen($this->publicDir . $filePath, 'r');
-
-        $this->session->set(Import::PARTICIPANT_IMPORT_FILE, $handle);
+        $this->session->set(Import::PARTICIPANT_IMPORT_FILE, $this->publicDir . $filePath);
+        $this->session->set(Import::PARTICIPANT_IMPORT_CHARSET, $command->charset);
     }
 }

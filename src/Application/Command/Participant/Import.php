@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Import
 {
-    const PARTICIPANT_IMPORT_FILE = 'participant_import_file';
+    const PARTICIPANT_IMPORT_FILE    = 'participant_import_file';
+    const PARTICIPANT_IMPORT_CHARSET = 'participant_import_charset';
 
     /**
      * @var Type
@@ -26,4 +27,9 @@ class Import
      * @var UploadedFile
      */
     public $file;
+
+    /**
+     * @var string
+     */
+    public $charset;
 }

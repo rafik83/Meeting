@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Import;
+use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -20,11 +21,15 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
+use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
@@ -389,7 +394,10 @@ class SheetController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($import);
 
-            return $this->redirectToRoute('admin_sheet_import_mapping', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_sheet_import_mapping', [
+                'event' => $event->getId(),
+                'type'  => $import->type->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:Sheet:import.html.twig', [
@@ -401,10 +409,39 @@ class SheetController extends Controller
     /**
      * @param Request $request
      * @param Event   $event
+     * @param Type    $type
+     *
+     * @return Response
      */
-    public function importMappingAction(Request $request, Event $event)
+    public function importMappingAction(Request $request, Event $event, Type $type)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
+        $availableLocale = $event->getAvailableLocale($request->getLocale());
+
+        $query = new ImportMappingViewQuery($type, $availableLocale);
+
+        /** @var ImportMappingView $importMappingView */
+        $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+
+        $command = new ImportMapping();
+
+        $form = $this->createForm(ImportMappingType::class, $command, [
+            'locale'              => $availableLocale,
+            'registrationHeaders' => $importMappingView->registrationHeaders,
+            'csvHeaders'          => $importMappingView->csvHeaders,
+            'submit'              => true,
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            
+        }
+
+        return $this->render('AdminBundle:Sheet:importMapping.html.twig', [
+            'form'  => $form->createView(),
+            'event' => $event,
+        ]);
     }
 
     /**

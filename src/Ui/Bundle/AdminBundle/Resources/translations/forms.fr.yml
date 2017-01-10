@@ -347,6 +347,10 @@ form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
+form.participant_import.children.type.label: Type
+form.participant_import.children.file.label: 'Fichier CSV'
+form.participant_import.children.submit.label: Importer
+form.participant_import.children.charset.label: Encodage
 form.planning.add_with_participant: 'Ajouter un pack de rendez-vous supplémentaire avec le participant'
 form.position_meeting.children.fromParticipants.label: Participants
 form.position_meeting.children.slot.label: 'Créneau de rendez-vous'

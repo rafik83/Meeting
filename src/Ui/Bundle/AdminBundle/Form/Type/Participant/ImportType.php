@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant;
 use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CharsetChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -35,7 +36,8 @@ class ImportType extends AbstractType
             ])
             ->add('file', FileType::class, [
                 'required' => true,
-            ]);
+            ])
+            ->add('charset', CharsetChoiceType::class);
     }
 
     /**

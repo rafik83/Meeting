@@ -196,6 +196,10 @@ services:
             - '@repository.unavailability.category_repository'
         tags:
             - { name: form.type }
+    form_type_participant.import_mapping_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType
+        tags:
+            - { name: form.type }
 
     #
     # Helper
