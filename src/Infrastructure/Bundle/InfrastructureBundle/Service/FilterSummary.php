@@ -40,7 +40,7 @@ class FilterSummary
         $selectedFilters = [];
 
         foreach ($filters as $filter => $value) {
-            if (null === $value || false === $value) {
+            if (null === $value) {
                 continue;
             }
 
@@ -53,6 +53,13 @@ class FilterSummary
             }
 
             $field = $formView->children[$filter];
+            $isCheckbox = isset($field->vars['checked']);
+
+            // Ignore unchecked checkboxes:
+            if ($isCheckbox && false === $field->vars['checked']) {
+                continue;
+            }
+
             $value = $field->vars['value'];
 
             if (isset($field->vars['choices'])) {
@@ -65,6 +72,10 @@ class FilterSummary
                         }
                     }
                 }
+            }
+
+            if ($isCheckbox) {
+                $value = $this->translator->trans('boolean.yes');
             }
 
             $label = $this->translator->trans($field->vars['label'], [], $field->vars['translation_domain'], $locale);
