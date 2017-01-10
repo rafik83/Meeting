@@ -101,6 +101,22 @@ new Vue({
         },
 
         /**
+         * Show agenda of given sheet id
+         *
+         * @param sheetMetId
+         */
+        showAgendaForSheetId: function (sheetMetId) {
+            var sheet = this.findSheetBySheetId(sheetMetId);
+
+            if (null === sheet) {
+                console.log('Sheet id = ' + sheetMetId + ' not found');
+                return;
+            }
+
+            this.showAgenda(sheet);
+        },
+
+        /**
          * Find index of a sheet
          *
          * @param sheet
@@ -121,10 +137,26 @@ new Vue({
         },
 
         /**
+         * Find Sheet or returns null
+         *
+         * @param sheetId
+         * @returns {null|sheet}
+         */
+        findSheetBySheetId: function (sheetId) {
+            for (var sheetIndex = 0; sheetIndex < this.sheets.length; sheetIndex++) {
+                if (this.sheets[sheetIndex].id === sheetId) {
+                    return this.sheets[sheetIndex];
+                }
+            }
+
+            return null;
+        },
+
+        /**
          * Find Sheet in opened Agendas or returns null
          *
          * @param sheetId
-         * @returns {null|*}
+         * @returns {null|sheet}
          */
         findSheetAgendaBySheetId: function (sheetId) {
             for (var agendaIndex = 0; agendaIndex < this.agendas.length; agendaIndex++) {
