@@ -110,6 +110,7 @@
                                                                     </div>
 
                                                                     <div class="slot meeting" v-if="slot.type === 'meeting_unavailability'">
+                                                                        {#<a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>#}
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
 
                                                                         <div class="slot-label">
@@ -134,66 +135,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
-                                {#
-                                <table class="table-agenda table-bordered table-condensed pull-left">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" v-for="participant in sheet.participants">${ participant.fullname }</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-center">J1</th>
-                                            <th class="text-center">J2</th>
-                                            <th class="text-center">J1</th>
-                                            <th class="text-center">J2</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            {% for j in 1..4 %}
-                                            <td>
-                                                <table class="table-agenda-day table table-condensed">
-                                                    {% for i in 1..12 if not (j%2 and i == 12) %}
-                                                        <tr>
-                                                            <td>
-                                                                {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
-                                                                    <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
-                                                                        <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
-
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-
-                                                                        <div class="slot-label">
-                                                                            {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}"></span>{% endif %}
-                                                                            <a href="#" title="Nom autre fiche">Nom autre fiche</a>
-                                                                        </div>
-
-                                                                        <div class="slot-label">
-                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> A{{ i ~ j }}0000</small>
-                                                                        </div>
-                                                                    </div>
-                                                                {% elseif j==1 and i in [3,7,8] %}
-                                                                    <div class="slot happening">
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                    </div>
-                                                                {% elseif j==3 and i in [1,6] %}
-                                                                    <div class="slot unavailability">
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                    </div>
-                                                                {% else %}
-                                                                    <div class="slot empty-slot">
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                    </div>
-                                                                {% endif %}
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </table>
-                                            </td>
-                                            {% endfor %}
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                #}
                             </div>
                         </div>
                     </li>
