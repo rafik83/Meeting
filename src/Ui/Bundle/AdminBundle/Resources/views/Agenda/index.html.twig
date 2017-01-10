@@ -115,7 +115,10 @@
                                                                         <div class="slot-label">
                                                                             <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip" v-show="slot.hasNoPreference === true"></span>
                                                                             <a href="#" v-bind:title="slot.sheetMetTitle">${ slot.sheetMetTitle }</a>
-                                                                            ${ slot.meetingId }
+                                                                        </div>
+
+                                                                        <div class="slot-label">
+                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> ${ slot.spotReference }</small>
                                                                         </div>
                                                                     </div>
 

@@ -42,7 +42,7 @@ class MeetingSlotView extends AbstractSlotView
     /**
      * @var string
      */
-    public $spotRef;
+    public $spotReference;
 
     /**
      * MeetingView constructor.
@@ -50,7 +50,7 @@ class MeetingSlotView extends AbstractSlotView
      * @param MeetingSlot $slot
      * @param string      $type
      * @param int         $spot
-     * @param string      $spotRef
+     * @param string      $spotReference
      * @param int         $sheetMetId
      * @param string      $sheetMetTitle
      * @param int         $meetingId
@@ -60,7 +60,7 @@ class MeetingSlotView extends AbstractSlotView
         MeetingSlot $slot,
         $type,
         $spot,
-        $spotRef,
+        $spotReference,
         $sheetMetId,
         $sheetMetTitle,
         $meetingId,
@@ -73,6 +73,6 @@ class MeetingSlotView extends AbstractSlotView
         $this->sheetMetId      = $sheetMetId;
         $this->sheetMetTitle   = $sheetMetTitle;
         $this->hasNoPreference = $hasNoPreference;
-        $this->spotRef         = $spotRef;
+        $this->spotReference   = $spotReference;
     }
 }
