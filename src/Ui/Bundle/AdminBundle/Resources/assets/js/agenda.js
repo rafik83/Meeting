@@ -77,7 +77,7 @@ new Vue({
                         this.agendas[sheetId].participants.push(participant);
                     }.bind(this));
 
-                    this.highlightMeetingsInCommon(sheet);
+                    this.highlightMeetingsInCommon(sheet, true);
                     this.$forceUpdate();
                 }.bind(this))
                 .catch(function(error) {
@@ -95,6 +95,7 @@ new Vue({
                 this.agendas.push(sheet);
             }
 
+            this.highlightMeetingsInCommon(sheet, true);
             this.loadAgenda(sheet);
             this.focusAgenda(sheet);
         },
@@ -141,6 +142,7 @@ new Vue({
          * @param sheet
          */
         closeAgenda: function (sheet) {
+            this.highlightMeetingsInCommon(sheet, false);
             this.agendas.splice(this.findSheetAgenda(sheet), 1);
 
             if (this.focus == sheet) {
@@ -166,6 +168,11 @@ new Vue({
         findMeetings: function (sheet) {
             var sheetId      = this.findSheetAgenda(sheet);
             var participants = this.agendas[sheetId].participants;
+
+            if (this.agendas[sheetId].participants === undefined) {
+                return [];
+            }
+
             var meetings = [];
 
             for (var participantIndex = 0; participantIndex < participants.length; participantIndex++) {
@@ -187,8 +194,9 @@ new Vue({
          * Highlight meetings in common in opened agendas with the given sheet
          *
          * @param sheet
+         * @param {boolean} state
          */
-        highlightMeetingsInCommon: function (sheet) {
+        highlightMeetingsInCommon: function (sheet, state) {
             var meetings = this.findMeetings(sheet);
 
             for (var meetingIndex = 0; meetingIndex < meetings.length; meetingIndex++) {
@@ -199,8 +207,8 @@ new Vue({
 
                     for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
                         if (meetingsSheetMet[meetingSheetMetIndex].meetingId === meetings[meetingIndex].meetingId) {
-                            meetings[meetingIndex].highlight = true;
-                            meetingsSheetMet[meetingSheetMetIndex].highlight = true;
+                            meetings[meetingIndex].highlight = state;
+                            meetingsSheetMet[meetingSheetMetIndex].highlight = state;
                         }
                     }
                 }
