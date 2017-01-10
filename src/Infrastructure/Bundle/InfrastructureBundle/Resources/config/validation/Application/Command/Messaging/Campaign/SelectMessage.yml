@@ -1,4 +1,4 @@
 Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage:
     properties:
         message:
-            - NotBlank: { message: 'validators.sheet.messaging_campaign.message' }
+            - NotNull: { message: 'validators.sheet.messaging_campaign.message' }

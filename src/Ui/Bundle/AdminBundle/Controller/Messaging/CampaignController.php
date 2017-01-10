@@ -147,7 +147,8 @@ class CampaignController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
-        $form = $this->createForm(SelectMessageType::class, new SelectMessage($campaign), [
+        $selectMessage = new SelectMessage($campaign);
+        $form = $this->createForm(SelectMessageType::class, $selectMessage, [
             'event' => $event,
         ]);
         $form->add('submit', SubmitType::class, [
@@ -156,7 +157,7 @@ class CampaignController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isValid()) {
-            $this->get('tactician.commandbus')->handle($form->getData());
+            $this->get('tactician.commandbus')->handle($selectMessage);
             $this->addFlash('success', 'flash.admin.messaging.campaign.message.success');
 
             return $this->redirectToRoute('admin_messaging_campaign_list', [

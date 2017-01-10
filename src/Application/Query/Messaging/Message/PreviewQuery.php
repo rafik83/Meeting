@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Message;
 
-
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
 class PreviewQuery

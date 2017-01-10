@@ -29,7 +29,8 @@ function MessagingMessagePreview (element, targetIFrame, defaultTextContainer)
     this.element.addEventListener('click', this.updatePreview.bind(this));
 }
 
-MessagingMessagePreview.prototype.updatePreview = function() {
+MessagingMessagePreview.prototype.updatePreview = function()
+{
 
     this.defaultTextContainer.style.display = 'none';
     var url = this.element.getAttribute('data-preview-url');
