@@ -15,12 +15,12 @@
                                 {{ 'admin.agenda.indicators-caption'|trans }}
                                 <table class="table-no-margin-bottom table table-condensed table-bordered">
                                     <tr>
-                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countRequest'|trans }}" data-toggle="tooltip"><span class="glyphicon glyphicon-arrow-right"></span></a></td>
-                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countProposition'|trans }}" data-toggle="tooltip"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countValidatedRequest'|trans }}" data-toggle="tooltip"><span class="glyphicon glyphicon-resize-horizontal"></span></a></td>
-                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countSlots'|trans }}" data-toggle="tooltip"><span class="glyphicon glyphicon-align-justify"></span></a></td>
-                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.possibleMeetingQuantity'|trans }}" data-toggle="tooltip"><span class="glyphicon glyphicon-tasks"></span></a></td>
-                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countPlacedMeetings'|trans }}" data-toggle="tooltip"><span class="glyphicon glyphicon-ok-circle"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countRequest'|trans }}"><span class="glyphicon glyphicon-arrow-right"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countProposition'|trans }}"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countValidatedRequest'|trans }}"><span class="glyphicon glyphicon-resize-horizontal"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countSlots'|trans }}"><span class="glyphicon glyphicon-align-justify"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.possibleMeetingQuantity'|trans }}"><span class="glyphicon glyphicon-tasks"></span></a></td>
+                                        <td class="text-center col-xs-2"><a href="#" title="{{ 'admin.agenda.countPlacedMeetings'|trans }}"><span class="glyphicon glyphicon-ok-circle"></span></a></td>
                                     </tr>
                                 </table>
                                 <p class="text-muted"><small><span class="glyphicon glyphicon-info-sign"></span> {{ 'admin.agenda.indicators-help'|trans }}</small></p>
@@ -87,44 +87,44 @@
                             <div class="panel-body">
                                 <table class="table-agenda table-condensed">
                                     <tr>
-                                        <td v-for="participant in sheet.participants" v-bind:colspan="participant.days.length">
+                                        <td v-for="participant in sheet.participants">
                                             <p class="text-center">${ participant.fullname }</p>
 
-                                            <table>
+                                            <table class="table">
                                                 <tr>
-                                                    <td v-for="day in participant.days">
-                                                        <div class="text-center">${ day.day+1 }</div>
+                                                    <td v-for="day in participant.days" class="col-xs-6">
+                                                        <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day+1 }</div>
                                                         <table class="table-agenda-day table table-bordered table-condensed">
                                                             <tr v-for="slot in day.slots">
                                                                 <td>
                                                                     <div class="slot empty-slot" v-if="slot.type === 'slot_available'">
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                        <br>${ slot.type }
                                                                     </div>
 
                                                                     <div class="slot unavailability" v-if="slot.type === 'unavailability'">
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                        <br>${ slot.type }
                                                                     </div>
 
                                                                     <div class="slot happening" v-if="slot.type === 'happening_unavailability'">
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                        <br>${ slot.type }
                                                                     </div>
 
                                                                     <div class="slot meeting" v-if="slot.type === 'meeting_unavailability'">
+                                                                        {#<a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>#}
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                        <br>${ slot.type }
 
                                                                         <div class="slot-label">
-                                                                            <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip" v-show="slot.hasNoPreference === true"></span>
-                                                                            <a href="#" :title="slot.sheetMetTitle" data-toggle="tooltip">${ slot.sheetMetTitle }</a>
+                                                                            <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>
+                                                                            <a href="#" v-bind:title="slot.sheetMetTitle">${ slot.sheetMetTitle }</a>
+                                                                        </div>
+
+                                                                        <div class="slot-label">
+                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> ${ slot.spotReference }</small>
                                                                         </div>
                                                                     </div>
 
                                                                     <div class="slot mass-unavailability" v-if="slot.type === 'mass_unavailability'">
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                        <br>${ slot.type }
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -135,68 +135,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
-                                <div class="text-center" v-show="sheet.participants === undefined">Chargement en cours...</div>
-
-                                {#
-                                <table class="table-agenda table-bordered table-condensed pull-left">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" v-for="participant in sheet.participants">${ participant.fullname }</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-center">J1</th>
-                                            <th class="text-center">J2</th>
-                                            <th class="text-center">J1</th>
-                                            <th class="text-center">J2</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            {% for j in 1..4 %}
-                                            <td>
-                                                <table class="table-agenda-day table table-condensed">
-                                                    {% for i in 1..12 if not (j%2 and i == 12) %}
-                                                        <tr>
-                                                            <td>
-                                                                {% if j==1 and i in [2,5,10] or j==2 and i == 4 %}
-                                                                    <div class="slot {{ i in [2,5,10] ? 'meeting' : '' }}{{ i == 4 ? 'meeting meeting-common' : '' }}">
-                                                                        <a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>
-
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-
-                                                                        <div class="slot-label">
-                                                                            {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>{% endif %}
-                                                                            <a href="#" title="Nom autre fiche" data-toggle="tooltip">Nom autre fiche</a>
-                                                                        </div>
-
-                                                                        <div class="slot-label">
-                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> A{{ i ~ j }}0000</small>
-                                                                        </div>
-                                                                    </div>
-                                                                {% elseif j==1 and i in [3,7,8] %}
-                                                                    <div class="slot happening">
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                    </div>
-                                                                {% elseif j==3 and i in [1,6] %}
-                                                                    <div class="slot unavailability">
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                    </div>
-                                                                {% else %}
-                                                                    <div class="slot empty-slot">
-                                                                        <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
-                                                                    </div>
-                                                                {% endif %}
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </table>
-                                            </td>
-                                            {% endfor %}
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                #}
                             </div>
                         </div>
                     </li>

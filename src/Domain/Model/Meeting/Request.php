@@ -429,9 +429,13 @@ class Request implements MessageSubjectInterface
     public function hasNoPreference(Sheet $sheet)
     {
         if ($this->from === $sheet) {
-            return empty($this->fromParticipants);
+            return $this->fromParticipants->isEmpty();
         }
 
-        return empty($this->toParticipants);
+        if ($this->to === $sheet) {
+            return $this->toParticipants->isEmpty();
+        }
+
+        throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
     }
 }
