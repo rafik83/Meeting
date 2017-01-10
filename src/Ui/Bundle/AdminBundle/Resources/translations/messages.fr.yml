@@ -225,6 +225,10 @@ admin.participant.export.fields.participant_id: 'ID Participant'
 admin.participant.export.fields.participant_type: 'Type Participant'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.participant.export.happening.subscriber.no: Non
+admin.participant.export.happening.subscriber.yes: Oui
+admin.participant.export.no: Non
+admin.participant.export.yes: Oui
 admin.sheet.export.no: Non
 admin.sheet.export.yes: Oui
 admin.partner.create.title: 'Créer un nouveau partenaire'
