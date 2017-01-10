@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c6b05e2d916cbcbad3d8ce214e915197",
-    "content-hash": "0ff9e805b159ea17abe452a7f6efffd7",
+    "content-hash": "6384b0eadf897be9634e684387928acf",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3799,11 +3798,7 @@
                 "mail",
                 "mailer"
             ],
-<<<<<<< HEAD
-            "time": "2016-12-29 10:02:40"
-=======
             "time": "2016-12-29T10:02:40+00:00"
->>>>>>> ddea2bb... Send emailing via SendGrid Api
         },
         {
             "name": "symfony/monolog-bundle",
@@ -4206,11 +4201,7 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-<<<<<<< HEAD
-            "time": "2016-12-20 04:44:33"
-=======
             "time": "2016-12-20T04:44:33+00:00"
->>>>>>> ddea2bb... Send emailing via SendGrid Api
         },
         {
             "name": "symfony/symfony",
