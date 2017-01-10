@@ -46,10 +46,6 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        if (!$request->isXmlHttpRequest()) {
-            $this->createAccessDeniedException();
-        }
-
         $sheets = $this->get('query.agenda.sheet_list_view_query_handler')->handle(
             new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()))
         );
@@ -71,10 +67,6 @@ class AgendaController extends Controller
         if ($sheet->getEvent() !== $event) {
             return new JsonResponse('Sheet are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-//        if (!$request->isXmlHttpRequest()) {
-//            throw $this->createAccessDeniedException();
-//        }
 
         $agendaSheetView = $this->get('tactician.commandbus.query')->handle(
             new AgendaSheetViewQuery($sheet, $event->getAvailableLocale($request->getLocale()))
