@@ -2609,7 +2609,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Planner\Exporter
         arguments:
             - '@query.planner.planner_view_query_handler'
-            - '@serializer_normalizer_planner.planner_normalizer'
+            - '@serializer'
 
     query.planner.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler
@@ -2711,8 +2711,6 @@ services:
 
     serializer_normalizer_planner.planner_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\PlannerNormalizer
-        calls:
-            - [ setSerializer, [ '@serializer' ] ]
         tags:
             - { name: serializer.normalizer }
 

@@ -13,8 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Pla
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\PlannerNormalizer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Serializer;
 
 class Exporter
@@ -25,18 +23,18 @@ class Exporter
     private $plannerHandler;
 
     /**
-     * @var PlannerNormalizer
+     * @var Serializer
      */
-    private $plannerNormalizer;
+    private $serializer;
 
     /**
      * @param PlannerViewQueryHandler $plannerHandler
-     * @param PlannerNormalizer       $plannerNormalizer
+     * @param Serializer              $serializer
      */
-    public function __construct(PlannerViewQueryHandler $plannerHandler, PlannerNormalizer $plannerNormalizer)
+    public function __construct(PlannerViewQueryHandler $plannerHandler, Serializer $serializer)
     {
-        $this->plannerHandler    = $plannerHandler;
-        $this->plannerNormalizer = $plannerNormalizer;
+        $this->plannerHandler = $plannerHandler;
+        $this->serializer     = $serializer;
     }
 
     /**
@@ -48,13 +46,7 @@ class Exporter
     public function getXML(Event $event, $locale)
     {
         $planner = $this->plannerHandler->handle(new PlannerViewQuery($event, $locale));
-
-        $serializer  = new Serializer(
-            [$this->plannerNormalizer],
-            [new XmlEncoder('MeetingSchedule')]
-        );
-
-        $content = $serializer->serialize($planner, 'xml');
+        $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => 'MeetingSchedule']);
 
         return $content;
     }
