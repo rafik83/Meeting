@@ -22,6 +22,13 @@ interface CampaignRepositoryInterface
     public function add(Campaign $campaign);
 
     /**
+     * Update a given campaign.
+     *
+     * @param Campaign $campaign
+     */
+    public function set(Campaign $campaign);
+
+    /**
      * Find all campaigns for a given event.
      *
      * @param Event $event
