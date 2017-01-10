@@ -59,6 +59,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
             __DIR__ . '/ASDDays2016-Notifications.yml',
             __DIR__ . '/ASDDays2016-SearchFacet.yml',
             __DIR__ . '/ASDDays2016-Happening.yml',
+            __DIR__ . '/ASDDays2016-Messaging-Campaign.yml',
             __DIR__ . '/Spanish-Event.yml',
             __DIR__ . '/Spanish-Nomenclature.yml',
             __DIR__ . '/Spanish-Template.yml',

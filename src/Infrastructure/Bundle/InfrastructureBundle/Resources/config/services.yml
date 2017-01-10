@@ -233,6 +233,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.messaging.campaign_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Messaging\CampaignRepository
+        arguments:
+             - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -1313,6 +1317,28 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Message\Update }
 
+    command.messaging.campaign.create_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Create }
+
+    command.messaging.campaign.select_recipients_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipientsHandler
+        arguments:
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients }
+
+    command.messaging.campaign.select_message_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessageHandler
+        arguments:
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage }
+
     #
     # Security
     #
@@ -2020,6 +2046,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
+    query.messaging.campaign_list_handler:
+        class: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQueryHandler
+        arguments:
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery }
 
     #
     # Program query
@@ -2253,6 +2285,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery }
 
     ##
+    # Messaging\Campaign assembler
+    ##
+    assembler.messaging_campaign:
+        class: Proximum\Vimeet\Application\Query\Messaging\Campaign\Assembler\CampaignAssembler
+        arguments:
+            - '@translator'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@doctrine.orm.entity_manager'
+
+    ##
     # Meeting Request query handler
     ##
     query.meeting_request.meeting_request_list_view_query_handler:
@@ -2307,6 +2349,10 @@ services:
             - '@repository.messaging.message_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\ListQuery }
+    query.messaging.message.preview_handler:
+        class: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQuery }
 
     #
     # Elastic Transformer

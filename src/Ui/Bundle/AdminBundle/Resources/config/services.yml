@@ -203,6 +203,13 @@ services:
             - '@infrastructure.service.boolean_filters_builder'
         tags:
             - { name: form.type }
+    form_type_sheet.messaging_message_entity_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\MessageEntityType
+        arguments:
+            - '@repository.messaging.message_repository'
+            - '@router'
+        tags:
+            - { name: form.type }
 
     #
     # Helper

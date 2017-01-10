@@ -25,22 +25,33 @@
 
         <div class="col-md-6">
             {% if sheets|length %}
+                {{ form_start(create_campaign_form, { 'attr': { 'data-batch': true } }) }}
+                {{ form_errors(create_campaign_form.sheetIds) }}
+                <div class="col-md-6">
+                    {{ form_widget(create_campaign_form.name, { 'label': false, 'attr': {'placeholder': 'form.sheet.messaging_campaign.create.name.label'|trans({}, 'forms')} }) }}
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="{{ 'form.sheet.messaging_campaign.create.submit.label'|trans({}, 'forms') }}" class="btn btn-primary"/>
+                </div>
+                
                 <table class="table table-condensed">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th><input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" /></th>
                             <th>{{ 'admin.messaging.campaign.sheet_list.columns.name'|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for sheet in sheets %}
                             <tr>
-                                <td>{{ sheet.id }}</td>
+                                <td>{{ form_widget(create_campaign_form.sheetIds[sheet.id]) }}</td>
                                 <td>{{ sheet.name }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                <input type="submit" value="{{ 'form.sheet.messaging_campaign.create.submit.label'|trans({}, 'forms') }}" class="btn btn-primary"/>
+                {{ form_end(create_campaign_form) }}
             {% else %}
                 <p class="text-warning">{{ 'admin.messaging.campaign.sheet_list.no_data'|trans }}</p>
             {% endif %}
