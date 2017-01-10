@@ -1332,6 +1332,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients }
 
+    command.messaging.campaign.select_message_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessageHandler
+        arguments:
+            - '@repository.messaging.campaign_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage }
+
     #
     # Security
     #
@@ -2342,6 +2349,10 @@ services:
             - '@repository.messaging.message_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\ListQuery }
+    query.messaging.message.preview_handler:
+        class: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQueryHandler
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQuery }
 
     #
     # Elastic Transformer

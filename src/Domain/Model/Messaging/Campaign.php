@@ -35,6 +35,9 @@ class Campaign
     /** @var ArrayCollection|Sheet[] */
     private $sheets;
 
+    /** @var Message|null */
+    private $message;
+
     /**
      * @var string[]
      *
@@ -103,6 +106,14 @@ class Campaign
     }
 
     /**
+     * @return Message|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
      * @return \DateTimeInterface
      */
     public function getCreatedAt()
@@ -116,6 +127,18 @@ class Campaign
     public function addSheet(Sheet $sheet)
     {
         $this->sheets->set($sheet->getId(), $sheet);
+    }
+
+    /**
+     * @param Message $message
+     */
+    public function setMessage(Message $message)
+    {
+        if ($message->getEvent() !== $this->event) {
+            throw new \InvalidArgumentException();
+        }
+
+        $this->message = $message;
     }
 
     /**
