@@ -103,7 +103,7 @@ new Vue({
         /**
          * Show agenda of given sheet id
          *
-         * @param sheetMetId
+         * @param {int} sheetMetId
          */
         showAgendaForSheetId: function (sheetMetId) {
             var sheet = this.findSheetBySheetId(sheetMetId);
@@ -139,8 +139,8 @@ new Vue({
         /**
          * Find Sheet or returns null
          *
-         * @param sheetId
-         * @returns {null|sheet}
+         * @param {int} sheetId
+         * @returns null|sheet
          */
         findSheetBySheetId: function (sheetId) {
             for (var sheetIndex = 0; sheetIndex < this.sheets.length; sheetIndex++) {
@@ -156,7 +156,7 @@ new Vue({
          * Find Sheet in opened Agendas or returns null
          *
          * @param sheetId
-         * @returns {null|sheet}
+         * @returns null|sheet
          */
         findSheetAgendaBySheetId: function (sheetId) {
             for (var agendaIndex = 0; agendaIndex < this.agendas.length; agendaIndex++) {
@@ -195,7 +195,7 @@ new Vue({
          * Find meetings for the given sheet
          *
          * @param sheet
-         * @returns {Array}
+         * @returns {Array} of meeting slots
          */
         findMeetings: function (sheet) {
             var sheetId      = this.findSheetAgenda(sheet);
