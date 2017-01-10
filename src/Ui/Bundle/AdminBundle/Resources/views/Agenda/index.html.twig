@@ -93,7 +93,7 @@
                                             <table>
                                                 <tr>
                                                     <td v-for="day in participant.days">
-                                                        <div class="text-center">${ day.day+1 }</div>
+                                                        <div class="text-center">{{ 'admin.agenda.dayPrefix'|trans }}${ day.day+1 }</div>
                                                         <table class="table-agenda-day table table-bordered table-condensed">
                                                             <tr v-for="slot in day.slots">
                                                                 <td>
@@ -135,8 +135,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
-                                <div class="text-center" v-show="sheet.participants === undefined">Chargement en cours...</div>
 
                                 {#
                                 <table class="table-agenda table-bordered table-condensed pull-left">
