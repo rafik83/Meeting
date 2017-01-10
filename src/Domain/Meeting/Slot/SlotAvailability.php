@@ -174,29 +174,23 @@ class SlotAvailability
                 continue;
             }
 
-            if ($slot->getBegin() >= $unavailability->getBegin()
-                && $slot->getBegin() <= $unavailability->getEnd()
-            ) {
+            if ($slot->getBegin() >= $unavailability->getBegin() && $slot->getBegin() < $unavailability->getEnd()) {
                 return true;
             }
 
-            if ($slot->getEnd() >= $unavailability->getBegin()
-                && $slot->getEnd() <= $unavailability->getEnd()
-            ) {
+            if ($slot->getEnd() > $unavailability->getBegin() && $slot->getEnd() <= $unavailability->getEnd()) {
                 return true;
             }
 
-            if ($slot->getBegin() >= $unavailability->getBegin()
-                && $slot->getEnd() <= $unavailability->getEnd()
-            ) {
+            if ($slot->getBegin() >= $unavailability->getBegin() && $slot->getEnd() <= $unavailability->getEnd()) {
                 return true;
             }
 
-            if ($unavailability->getBegin() >= $slot->getBegin() && $unavailability->getBegin() <= $slot->getEnd()) {
+            if ($unavailability->getBegin() >= $slot->getBegin() && $unavailability->getBegin() < $slot->getEnd()) {
                 return true;
             }
 
-            if ($unavailability->getEnd() >= $slot->getBegin() && $unavailability->getEnd() <= $slot->getEnd()) {
+            if ($unavailability->getEnd() > $slot->getBegin() && $unavailability->getEnd() <= $slot->getEnd()) {
                 return true;
             }
         }
@@ -212,29 +206,23 @@ class SlotAvailability
     private function hasMassUnavailability(MeetingSlot $slot)
     {
         foreach ($this->massUnavailability as $mass) {
-            if ($slot->getBegin() >= $mass->getBegin()
-                && $slot->getBegin() <= $mass->getEnd()
-            ) {
+            if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
                 return true;
             }
 
-            if ($slot->getEnd() >= $mass->getBegin()
-                && $slot->getEnd() <= $mass->getEnd()
-            ) {
+            if ($slot->getEnd() > $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
                 return true;
             }
 
-            if ($slot->getBegin() >= $mass->getBegin()
-                && $slot->getEnd() <= $mass->getEnd()
-            ) {
+            if ($slot->getBegin() >= $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
                 return true;
             }
 
-            if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() <= $slot->getEnd()) {
+            if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() < $slot->getEnd()) {
                 return true;
             }
 
-            if ($mass->getEnd() >= $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
+            if ($mass->getEnd() > $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
                 return true;
             }
         }
@@ -279,23 +267,23 @@ class SlotAvailability
                 continue;
             }
 
-            if ($slot->getBegin() >= $happeningBegin && $slot->getBegin() <= $happeningEnd) {
+            if ($slot->getBegin() >= $happeningBegin && $slot->getBegin() < $happeningEnd) {
                 return true;
             }
 
-            if ($slot->getEnd() >= $happeningBegin && $slot->getEnd() <= $happeningEnd) {
+            if ($slot->getEnd() > $happeningBegin && $slot->getEnd() <= $happeningEnd) {
                 return true;
             }
 
-            if ($slot->getBegin() >= $happeningBegin && $slot->getEnd() <= $happeningEnd) {
+            if ($slot->getBegin() >= $happeningBegin && $slot->getEnd() < $happeningEnd) {
                 return true;
             }
 
-            if ($happeningBegin >= $slot->getBegin() && $happeningBegin <= $slot->getEnd()) {
+            if ($happeningBegin >= $slot->getBegin() && $happeningBegin < $slot->getEnd()) {
                 return true;
             }
 
-            if ($happeningEnd >= $slot->getBegin() && $happeningEnd <= $slot->getEnd()) {
+            if ($happeningEnd > $slot->getBegin() && $happeningEnd <= $slot->getEnd()) {
                 return true;
             }
         }

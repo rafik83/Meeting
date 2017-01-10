@@ -49,7 +49,7 @@ class MeetingSlotView extends AbstractSlotView
      *
      * @param MeetingSlot $slot
      * @param string      $type
-     * @param int         $spot
+     * @param int         $spotId
      * @param string      $spotReference
      * @param int         $sheetMetId
      * @param string      $sheetMetTitle
@@ -59,7 +59,7 @@ class MeetingSlotView extends AbstractSlotView
     public function __construct(
         MeetingSlot $slot,
         $type,
-        $spot,
+        $spotId,
         $spotReference,
         $sheetMetId,
         $sheetMetTitle,
@@ -68,7 +68,7 @@ class MeetingSlotView extends AbstractSlotView
     ) {
         parent::__construct($slot, $type);
 
-        $this->spot            = $spot;
+        $this->spot            = $spotId;
         $this->meetingId       = $meetingId;
         $this->sheetMetId      = $sheetMetId;
         $this->sheetMetTitle   = $sheetMetTitle;
