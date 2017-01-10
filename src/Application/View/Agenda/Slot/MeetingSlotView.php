@@ -32,7 +32,7 @@ class MeetingSlotView extends AbstractSlotView
     /**
      * @var int
      */
-    public $spot;
+    public $spotId;
 
     /**
      * @var bool
@@ -68,7 +68,7 @@ class MeetingSlotView extends AbstractSlotView
     ) {
         parent::__construct($slot, $type);
 
-        $this->spot            = $spotId;
+        $this->spotId          = $spotId;
         $this->meetingId       = $meetingId;
         $this->sheetMetId      = $sheetMetId;
         $this->sheetMetTitle   = $sheetMetTitle;
