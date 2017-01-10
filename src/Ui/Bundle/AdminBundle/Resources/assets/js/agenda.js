@@ -77,6 +77,7 @@ new Vue({
                         this.agendas[sheetId].participants.push(participant);
                     }.bind(this));
 
+                    this.highlightMeetingsInCommon(sheet);
                     this.$forceUpdate();
                 }.bind(this))
                 .catch(function(error) {
@@ -119,6 +120,22 @@ new Vue({
         },
 
         /**
+         * Find Sheet in opened Agendas or returns null
+         *
+         * @param sheetId
+         * @returns {null|*}
+         */
+        findSheetAgendaBySheetId: function (sheetId) {
+            for (var agendaIndex = 0; agendaIndex < this.agendas.length; agendaIndex++) {
+                if (this.agendas[agendaIndex].id === sheetId) {
+                    return this.agendas[agendaIndex];
+                }
+            }
+
+            return null;
+        },
+
+        /**
          * Close given sheet agenda
          *
          * @param sheet
@@ -138,6 +155,56 @@ new Vue({
          */
         focusAgenda: function (sheet) {
             this.focus = sheet;
+        },
+
+        /**
+         * Find meetings for the given sheet
+         *
+         * @param sheet
+         * @returns {Array}
+         */
+        findMeetings: function (sheet) {
+            var sheetId      = this.findSheetAgenda(sheet);
+            var participants = this.agendas[sheetId].participants;
+            var meetings = [];
+
+            for (var participantIndex = 0; participantIndex < participants.length; participantIndex++) {
+                for (var dayIndex = 0; dayIndex < participants[participantIndex].days.length; dayIndex++) {
+                    for (var slotIndex = 0; slotIndex < participants[participantIndex].days[dayIndex].slots.length; slotIndex++) {
+                        var slot = participants[participantIndex].days[dayIndex].slots[slotIndex];
+
+                        if ('meeting_unavailability' === slot.type) {
+                            meetings.push(slot);
+                        }
+                    }
+                }
+            }
+
+            return meetings;
+        },
+
+        /**
+         * Highlight meetings in common in opened agendas with the given sheet
+         *
+         * @param sheet
+         */
+        highlightMeetingsInCommon: function (sheet) {
+            var meetings = this.findMeetings(sheet);
+
+            for (var meetingIndex = 0; meetingIndex < meetings.length; meetingIndex++) {
+                var sheetMet = this.findSheetAgendaBySheetId(meetings[meetingIndex].sheetMetId);
+
+                if (null !== sheetMet) {
+                    var meetingsSheetMet = this.findMeetings(sheetMet);
+
+                    for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
+                        if (meetingsSheetMet[meetingSheetMetIndex].meetingId === meetings[meetingIndex].meetingId) {
+                            meetings[meetingIndex].highlight = true;
+                            meetingsSheetMet[meetingSheetMetIndex].highlight = true;
+                        }
+                    }
+                }
+            }
         },
 
         /**
