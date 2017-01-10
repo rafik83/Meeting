@@ -132,19 +132,24 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
         $fallbackLocale  = $event->getFallback();
         $sheet           = $participant->getSheet();
 
-        $happeningSubscriber = $this
-            ->happeningParticipationRepository
-            ->checkAnyParticipation($participant) ? 'Oui' : 'Non';
+
+        $timeFormatter = \IntlDateFormatter::create(
+            $availableLocale,
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            $event->getTimeZone()
+        );
+
 
         // 1. Common fields (sheet ID, participant ID, etc.)
         $rawData = [
             self::COL_SHEET_ID               => $sheet->getId(),
-            self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($locale),
-            self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+            self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($availableLocale),
+            self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
             self::COL_PARTICIPANT_ID         => $participant->getId(),
             self::COL_PARTICIPANT_EMAIL      => $participant->getUser()->getEmail(),
-            self::COL_PARTICIPANT_CREATED_AT => $sheet->getCreatedAt()->format('d/m/Y'),
-            self::COL_HAPPENING_SUBSCRIBER   => $happeningSubscriber,
+            self::COL_PARTICIPANT_CREATED_AT => $timeFormatter->format($sheet->getCreatedAt()),
+            self::COL_HAPPENING_SUBSCRIBER   => $this->getHappeningSubscriberData($participant),
         ];
 
         // 2. Registration data
@@ -162,14 +167,19 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
     private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
     {
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
+
         foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
+
                 if (!isset($this->registrationFields[$key])) {
-                    $fieldName                      =
-                        $registrationObject->getExportableFieldname($availableLocale, $fallbackLocale);
+                    $fieldName = $registrationObject->getExportableFieldname(
+                        $availableLocale,
+                        $fallbackLocale
+                    );
                     $this->registrationFields[$key] = $fieldName;
                 }
+
                 $rawData[$key] = $registrationObject->getExportableContent();
             }
         }
@@ -230,5 +240,21 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
             self::COL_PARTICIPANT_CREATED_AT,
             self::COL_HAPPENING_SUBSCRIBER,
         ];
+    }
+
+    /**
+     * @param Participant $participant
+     *
+     * @return string
+     */
+    private function getHappeningSubscriberData(Participant $participant)
+    {
+        $transKeyHappeningSubscriber = 'admin.participant.export.happening.subscriber.';
+
+        $happeningSubscriber = $this
+            ->happeningParticipationRepository
+            ->checkAnyParticipation($participant) ? 'yes' : 'no';
+
+        return $this->translator->trans($transKeyHappeningSubscriber . $happeningSubscriber);
     }
 }
