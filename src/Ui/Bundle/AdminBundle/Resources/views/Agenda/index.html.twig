@@ -113,7 +113,7 @@
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
 
                                                                         <div class="slot-label">
-                                                                            <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip" v-show="slot.hasNoPreference === true"></span>
+                                                                            <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>
                                                                             <a href="#" v-bind:title="slot.sheetMetTitle">${ slot.sheetMetTitle }</a>
                                                                         </div>
 
@@ -163,8 +163,8 @@
                                                                         <div class="slot-label slot-time">{{ i+8+j%2 }}h00 - {{ i+9+j%2 }}h00</div>
 
                                                                         <div class="slot-label">
-                                                                            {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" data-toggle="tooltip"></span>{% endif %}
-                                                                            <a href="#" title="Nom autre fiche" data-toggle="tooltip">Nom autre fiche</a>
+                                                                            {% if i==5 %}<span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}"></span>{% endif %}
+                                                                            <a href="#" title="Nom autre fiche">Nom autre fiche</a>
                                                                         </div>
 
                                                                         <div class="slot-label">
