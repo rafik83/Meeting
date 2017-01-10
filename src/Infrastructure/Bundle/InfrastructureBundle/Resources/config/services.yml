@@ -1619,6 +1619,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
