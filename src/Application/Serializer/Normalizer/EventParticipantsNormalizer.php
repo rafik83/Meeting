@@ -135,7 +135,7 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
 
         $timeFormatter = \IntlDateFormatter::create(
             $availableLocale,
-            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
             $event->getTimeZone()
         );
