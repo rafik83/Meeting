@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Slot;
 
+use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 abstract class AbstractSlotView
@@ -50,8 +51,24 @@ abstract class AbstractSlotView
         $this->id           = $slot->getId();
         $this->begin        = $slot->getBegin();
         $this->end          = $slot->getEnd();
-        $this->beginEndHour = $slot->getBegin()->format('H:i') . ' - ' . $slot->getEnd()->format('H:i');
+        $this->beginEndHour = $this->getFormattedHour($slot);
         $this->type         = $type;
+    }
+
+    /**
+     * Get slot date formatted like that "10:00 - 10:30"
+     *
+     * @param MeetingSlot $slot
+     *
+     * @return string
+     */
+    private function getFormattedHour(MeetingSlot $slot)
+    {
+        return sprintf(
+            '%s - %s',
+            HappeningDateHelper::getHour($slot->getBegin(), null, $slot->getEvent()->getTimeZone()),
+            HappeningDateHelper::getHour($slot->getEnd(), null, $slot->getEvent()->getTimeZone())
+        );
     }
 
     /**
