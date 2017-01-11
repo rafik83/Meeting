@@ -153,22 +153,22 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
         ];
 
         // 2. Registration data
-        $this->addRegistrationRawData($rawData, $sheet, $availableLocale, $fallbackLocale);
+        $this->addRegistrationRawData($rawData, $participant, $availableLocale, $fallbackLocale);
 
         return $rawData;
     }
 
     /**
      * @param array  $rawData
-     * @param Sheet  $sheet
+     * @param Participant $participant
      * @param string $availableLocale
      * @param string $fallbackLocale
      */
-    private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
+    private function addRegistrationRawData(&$rawData, Participant $participant, $availableLocale, $fallbackLocale)
     {
-        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $availableLocale);
 
-        foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
+        foreach ($registrationTemplateData->getProfileObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
 
