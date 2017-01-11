@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
 use Proximum\Vimeet\Application\View\Agenda\AgendaSheetView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -131,7 +132,7 @@ class AgendaSheetViewQueryHandler
             );
         }
 
-        usort($requests, function ($first, $second) {
+        usort($requests, function (RequestView $first,RequestView $second) {
             return strcmp($first->sheetMetTitle, $second->sheetMetTitle);
         });
 
