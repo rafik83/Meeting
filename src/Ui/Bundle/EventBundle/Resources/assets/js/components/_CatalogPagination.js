@@ -30,10 +30,10 @@ CatalogPagination.prototype.loadNextPage = function ()
 
             var pageId = 'catalog-page-' + page;
 
-            $('.catalog__list').append('<div id="catalog-page-' + pageId + '">' + json.html + '</div>');
+            $('.catalog__list').append('<div id="' + pageId + '">' + json.html + '</div>');
             seeMoreButton.attr("data-page", page);
 
-            PubSub.publish('dom.added', document.getElementById("catalog-page-" + pageId));
+            PubSub.publish('dom.added', document.getElementById(pageId));
         }
     })
 };
