@@ -57,7 +57,7 @@ class PlanningViewQueryHandler
         $selectedPlan    = null;
 
         if ($planningViewQuery->sheet->hasOrders()) {
-            $order        = $this->orderMerger->merge($planningViewQuery->sheet->getOrders());
+            $order        = $this->orderMerger->merge($planningViewQuery->sheet->getNotCancelledOrders());
             $selectedPlan = $order->getPlan();
         } else {
             $selectedPlan = $cart->getPlanRow() !== null ? $cart->getPlanRow()->getProduct() : null;

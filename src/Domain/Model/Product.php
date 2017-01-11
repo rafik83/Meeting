@@ -603,6 +603,18 @@ class Product
     }
 
     /**
+     * Get the number of planning included in this product
+     *
+     * @return int
+     */
+    public function getIncludedPlanningQuantity()
+    {
+        $included = $this->getIncludedPlanningProduct();
+
+        return $included ? $included->getQuantity() : 0;
+    }
+
+    /**
      * @return boolean|ProductIncluded
      */
     public function getIncludedPlanningProduct()

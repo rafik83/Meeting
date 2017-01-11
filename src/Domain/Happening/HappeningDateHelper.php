@@ -12,15 +12,21 @@ namespace Proximum\Vimeet\Domain\Happening;
 
 class HappeningDateHelper
 {
+    const DEFAULT_LOCALE = 'fr';
+
     /**
      * @param \DateTimeInterface $datetime
-     * @param string             $locale
+     * @param string|null        $locale
      * @param string             $timeZone
      *
      * @return string
      */
     public static function getHour(\DateTimeInterface $datetime, $locale, $timeZone)
     {
+        if (null === $locale) {
+            $locale = self::DEFAULT_LOCALE;
+        }
+
         $dateFormatter = \IntlDateFormatter::create(
             $locale,
             \IntlDateFormatter::NONE,

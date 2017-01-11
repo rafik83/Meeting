@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 interface MeetingSlotRepositoryInterface
@@ -46,4 +47,12 @@ interface MeetingSlotRepositoryInterface
      * @return array
      */
     public function findAvailableSlotIdByParticipantsIds(array $ids, $ignoreMeetings = false);
+
+    /**
+     * @param Event $event
+     * @param Day   $day
+     *
+     * @return MeetingSlot[]
+     */
+    public function findByEventAndDay(Event $event, Day $day);
 }
