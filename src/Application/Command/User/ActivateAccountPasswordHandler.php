@@ -83,6 +83,5 @@ class ActivateAccountPasswordHandler
             $participant->setActive(true);
             $this->participantRepository->set($participant);
         }
-
     }
 }
