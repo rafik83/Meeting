@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
-use Proximum\Vimeet\Domain\Model\Participant;
-
 class RequestView
 {
     /**
@@ -25,24 +23,24 @@ class RequestView
     public $sheetMetId;
 
     /**
-     * @var Participant[]
+     * @var ParticipantView[]
      */
     public $participants;
 
     /**
      * RequestView constructor.
      *
-     * @param string        $sheetMetTitle
-     * @param int           $sheetMetId
-     * @param Participant[] $participants
+     * @param string            $sheetMetTitle
+     * @param int               $sheetMetId
+     * @param ParticipantView[] $participants
      */
     public function __construct(
         $sheetMetTitle,
         $sheetMetId,
         array $participants
     ) {
-        $this->sheetMetTitle   = $sheetMetTitle;
-        $this->sheetMetId      = $sheetMetId;
-        $this->participants    = $participants;
+        $this->sheetMetTitle = $sheetMetTitle;
+        $this->sheetMetId    = $sheetMetId;
+        $this->participants  = $participants;
     }
 }
