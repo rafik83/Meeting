@@ -58,8 +58,8 @@ class SendHandler
 
             if (true === $sendToParticipants) {
                 foreach ($sheet->getParticipants() as $participant) {
-                    if (!in_array($participant, $receivers)) {
-                        $receivers[] = $participant->getUser();
+                    if (!in_array($participant->getUser(), $receivers)) {
+                        $receivers[] = $participant;
                     }
                 }
             }

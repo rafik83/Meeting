@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use SendGrid\Content;
 use SendGrid\Email;
@@ -79,7 +80,7 @@ class SendGridApiAdapter
         $mail->addContent(new Content('text/html', $this->render($message)));
         $mail->setFrom(new Email(null, $sender));
 
-        if (!$receiver instanceof User && !$receiver instanceof BillingInfo) {
+        if (!$receiver instanceof MailRecipientInterface) {
             throw new \InvalidArgumentException('Each emailing receiver must either be an instance of User or BillingInfo.');
         }
 
