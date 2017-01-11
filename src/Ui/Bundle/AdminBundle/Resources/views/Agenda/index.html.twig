@@ -68,11 +68,12 @@
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
                                 ${ request.sheetMetTitle }<br>
                                 <span v-for="requestParticipant in request.participants">
-                                    <i class="icon icon-Profil_1"></i>${ requestParticipant.fullName }
+                                <i class="icon icon-Profil_1"></i>
+                                    ${ requestParticipant.fullName }
                                 </span>
 
                                 <span v-if="request.participants.length == 0">
-                                    <i class="icon icon-Profil_1"></i>{{ 'admin.agenda.requestsList.noPreference'|trans }}
+                                    {{ 'admin.agenda.requestsList.noPreference'|trans }}
                                 </span>
                             </td>
                         </tr>
