@@ -166,7 +166,9 @@ class EventParticipantsNormalizer extends AbstractNormalizer implements Normaliz
      */
     private function addRegistrationRawData(&$rawData, Participant $participant, $availableLocale, $fallbackLocale)
     {
-        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $availableLocale);
+        $registrationTemplateData = $this
+            ->templateDataFactory
+            ->createRegistrationFromParticipant($participant, $availableLocale);
 
         foreach ($registrationTemplateData->getProfileObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
