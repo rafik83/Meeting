@@ -33,7 +33,7 @@ CatalogPagination.prototype.loadNextPage = function ()
             $('.catalog__list').append('<div id="catalog-page-' + pageId + '">' + json.html + '</div>');
             seeMoreButton.attr("data-page", page);
 
-            PubSub.publish('dom.added', document.getElementById(pageId));
+            PubSub.publish('dom.added', document.getElementById("catalog-page-" + pageId));
         }
     })
 };
