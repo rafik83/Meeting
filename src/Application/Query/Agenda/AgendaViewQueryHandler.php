@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -78,6 +79,8 @@ class AgendaViewQueryHandler
      * @param AgendaViewQuery $query
      *
      * @return AgendaView
+     *
+     * @throws SheetNotFoundException
      * @throws \Exception
      */
     public function handle(AgendaViewQuery $query)

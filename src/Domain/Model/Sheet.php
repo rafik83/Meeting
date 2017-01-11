@@ -456,7 +456,8 @@ class Sheet implements TraceableInterface
     public function getUserParticipant(User $user)
     {
         foreach ($this->participants as $participant) {
-            if ($participant->getUser() === $user) {
+            // To avoid __isInitialized__: false
+            if ($participant->getUser()->getId() === $user->getId()) {
                 return $participant;
             }
         }

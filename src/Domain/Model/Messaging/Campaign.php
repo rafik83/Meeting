@@ -1,0 +1,179 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet website.
+ *
+ * Copyright © Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Model\Messaging;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
+class Campaign
+{
+    const RECIPIENT_SHEET_OWNER     = 'sheet_owner';
+    const RECIPIENT_PARTICIPANTS    = 'participants';
+    const RECIPIENT_BILLING_CONTACT = 'billing_contact';
+
+    /** @var int */
+    private $id;
+
+    /** @var Event */
+    private $event;
+
+    /** @var string */
+    private $title;
+
+    /** @var array */
+    private $filters;
+
+    /** @var ArrayCollection|Sheet[] */
+    private $sheets;
+
+    /** @var Message|null */
+    private $message;
+
+    /**
+     * @var string[]
+     *
+     * @see self::getRecipientChoices
+     */
+    private $recipients;
+
+    /** @var \DateTimeInterface */
+    private $createdAt;
+
+    /**
+     * @param Event              $event
+     * @param string             $title
+     * @param array              $filters
+     * @param \DateTimeInterface $createdAt
+     */
+    public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt)
+    {
+        $this->event     = $event;
+        $this->title     = $title;
+        $this->filters   = $filters;
+        $this->createdAt = $createdAt;
+
+        $this->sheets = new ArrayCollection();
+        $this->recipients = [];
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return $this->sheets->toArray();
+    }
+
+    /**
+     * @return Message|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function addSheet(Sheet $sheet)
+    {
+        $this->sheets->set($sheet->getId(), $sheet);
+    }
+
+    /**
+     * @param Message $message
+     */
+    public function setMessage(Message $message)
+    {
+        if ($message->getEvent() !== $this->event) {
+            throw new \InvalidArgumentException();
+        }
+
+        $this->message = $message;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getRecipientChoices()
+    {
+        return [
+            self::RECIPIENT_SHEET_OWNER,
+            self::RECIPIENT_PARTICIPANTS,
+            self::RECIPIENT_BILLING_CONTACT,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRecipients()
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * @param $recipient
+     *
+     * @throw \InvalidArgumentException When $recipient does not belong to self::getRecipientChoices()
+     */
+    public function addRecipient($recipient)
+    {
+        if (!in_array($recipient, self::getRecipientChoices())) {
+            throw new \InvalidArgumentException();
+        }
+
+        if (!in_array($recipient, $this->recipients)) {
+            $this->recipients[] = $recipient;
+        }
+    }
+}

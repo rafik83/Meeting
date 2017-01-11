@@ -1,0 +1,25 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'admin.messaging.campaign.message.title'|trans }}
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ 'admin.messaging.campaign.message.title'|trans }}</h1>
+
+    <div class="row">
+        <div class="col-md-5 well">
+            <form method="post">
+                {{ form_row(form.message, {'label': false}) }}
+                {{ form_rest(form) }}
+            </form>
+        </div>
+        <div class="col-md-7">
+            <h2>{{ 'admin.messaging.campaign.message_preview.title'|trans }}</h2>
+            <p class="text-warning" id="no_preview_text">{{ 'admin.messaging.campaign.no_message_preview'|trans }}</p>
+            <iframe id="message_preview_iframe" src="about:blank" style="display:none; width:100%; height: 600px;"></iframe>
+        </div>
+    </div>
+
+{% endblock %}

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 
@@ -558,6 +559,16 @@ class Event implements EventInterface
     }
 
     /**
+     * @param Event\Day[] $days
+     */
+    public function setDays(array $days)
+    {
+        foreach ($days as $day) {
+            $this->days->add($day);
+        }
+    }
+
+    /**
      * @return Event\Day[]
      */
     public function getDays()
@@ -569,5 +580,25 @@ class Event implements EventInterface
         });
 
         return $days;
+    }
+
+    /**
+     * @return Event\Day
+     *
+     * @throws DayNotDefinedException
+     */
+    public function getFirstDay()
+    {
+        $days = $this->days->toArray();
+
+        if (empty($days)) {
+            throw new DayNotDefinedException();
+        }
+
+        usort($days, function (Day $day1, Day $day2) {
+            return $day1->getDay() > $day2->getDay();
+        });
+
+        return reset($days);
     }
 }

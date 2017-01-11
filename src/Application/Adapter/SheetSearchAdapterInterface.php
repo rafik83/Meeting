@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
@@ -42,6 +43,15 @@ interface SheetSearchAdapterInterface
         $getAggregations,
         $nomenclatureItems = []
     );
+
+    /**
+     * @param Event       $event
+     * @param array       $filters
+     * @param string      $locale
+     *
+     * @return SheetListView[]
+     */
+    public function getSheetListView(Event $event, array $filters, $locale);
 
     /**
      * @param Event  $event
