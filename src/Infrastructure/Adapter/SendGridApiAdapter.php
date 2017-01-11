@@ -74,11 +74,9 @@ class SendGridApiAdapter
      */
     private function transform(Message $message, $sender, $receiver)
     {
-        // $template = $this->twig->loadTemplate($mail->getTemplate()); // TODO Habillage ?
-
         $mail = new Mail();
         $mail->setSubject($message->getSubject());
-        $mail->addContent(new Content('text/html', $message->getContent()));
+        $mail->addContent(new Content('text/html', $this->render($message)));
         $mail->setFrom(new Email(null, $sender));
 
         if (!$receiver instanceof User && !$receiver instanceof BillingInfo) {
@@ -91,5 +89,17 @@ class SendGridApiAdapter
         $mail->addPersonalization($personalization);
 
         return $mail;
+    }
+
+    /**
+     * Renders a Message.
+     *
+     * @param Message $message
+     *
+     * @return string
+     */
+    private function render(Message $message)
+    {
+        return $this->twig->load($message->getTemplate())->render(['mail' => $message]);
     }
 }

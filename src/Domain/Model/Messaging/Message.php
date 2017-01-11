@@ -45,6 +45,17 @@ class Message
     private $createdAt;
 
     /**
+     * @var string
+     */
+    private static $template = 'MailBundle:Mail:base.html.twig';
+
+    /**
+     * @var string
+     * @todo dynamic value
+     */
+    private static $locale = 'fr';
+
+    /**
      * @param Event              $event
      * @param \DateTimeInterface $createdAt
      * @param string             $name
@@ -118,5 +129,15 @@ class Message
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    public function getTemplate()
+    {
+        return self::$template;
+    }
+
+    public function getLocale()
+    {
+        return self::$locale;
     }
 }
