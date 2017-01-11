@@ -39,9 +39,12 @@ class UpdateHandler
             ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
             ->setPlans(array_values($update->plans->plans))
             ->setParticipant($update->participantAndPlanning->participant)
-            ->setPlanning($update->participantAndPlanning->planning)
             ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())
         ;
+
+        if (null !== $update->participantAndPlanning->planning) {
+           $update->package->setPlanning($update->participantAndPlanning->planning);
+        }
 
         foreach ($update->package->getEvent()->getLocales() as $locale) {
             $update->package->translate(
