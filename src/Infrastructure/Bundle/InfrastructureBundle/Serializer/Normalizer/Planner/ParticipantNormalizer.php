@@ -25,7 +25,7 @@ class ParticipantNormalizer implements NormalizerInterface
             '@id'                => $object->reference,
             'id'                 => $object->id,
             'fullName'           => $object->fullName,
-            'sheet'              => $object->getSheetReference(),
+            'sheet'              => ['@reference' => $object->getSheetReference()],
             'unavailabilityList' => []
         ];
 
