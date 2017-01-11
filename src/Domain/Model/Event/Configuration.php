@@ -310,7 +310,7 @@ class Configuration
     /**
      * Get catalogOnlineDate
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getCatalogOnlineDate()
     {
@@ -320,7 +320,7 @@ class Configuration
     /**
      * Get happeningsOpenDate
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getHappeningsOpenDate()
     {
@@ -330,7 +330,7 @@ class Configuration
     /**
      * Get schedulePublishDate
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getSchedulePublishDate()
     {

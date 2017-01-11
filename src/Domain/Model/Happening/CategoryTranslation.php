@@ -37,12 +37,4 @@ class CategoryTranslation extends AbstractCategoryTranslation
 
         return $this;
     }
-
-    /**
-     * @return CategoryTranslation[]
-     */
-    public function getTranslations()
-    {
-        return $this->translations->toArray();
-    }
 }

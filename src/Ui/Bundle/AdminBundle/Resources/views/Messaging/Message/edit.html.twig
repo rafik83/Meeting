@@ -1,0 +1,21 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% set page_title = 'admin.messaging.message.edit.title'|trans({'%name%': message.name }) %}
+
+{% block title page_title %}
+
+{% block form_title page_title %}
+
+{% block form_content %}
+    {{ form_row(form.name) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.content) }}
+{% endblock %}
+
+{% block goback_link path('admin_messaging_message_list', {event: event.id}) %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/tinymce/tinymce.js') }}"></script>
+    <script src="{{ asset('assets/js/tinymce.js') }}"></script>
+{% endblock %}

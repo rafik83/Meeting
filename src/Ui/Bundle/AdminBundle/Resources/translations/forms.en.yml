@@ -116,6 +116,14 @@ form.login.children.rememberMe.label: 'Remember me 30 days'
 form.login.children.submit.label: Login
 form.login.children.username.label: Email
 form.meeting_update.children.submit.label: Save
+form.messaging_create_message.children.content.label: Content
+form.messaging_create_message.children.name.label: 'Name emailing'
+form.messaging_create_message.children.subject.label: Subject
+form.messaging_create_message.children.submit.label: Save
+form.messaging_update_message.children.content.label: Content
+form.messaging_update_message.children.name.label: 'Name emailing'
+form.messaging_update_message.children.subject.label: Subject
+form.messaging_update_message.children.submit.label: Save
 form.new_password.children.password.children.first.label: 'New password'
 form.new_password.children.password.children.second.label: 'Confirm new password'
 form.new_password.children.submit.label: Validate

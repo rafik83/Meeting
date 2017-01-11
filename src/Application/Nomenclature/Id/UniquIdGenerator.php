@@ -17,6 +17,6 @@ class UniquIdGenerator implements IdGeneratorInterface
      */
     public function generate()
     {
-        return uniqid();
+        return uniqid('u');
     }
 }

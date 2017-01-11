@@ -383,7 +383,24 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         array $participants,
         \DateTimeInterface $begin,
         \DateTimeInterface $end
-    ) {
+    )
+    {
         return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
+    }
+  
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipantBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(participant)')
+            ->from(Participant::class, 'participant')
+            ->where('participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 }

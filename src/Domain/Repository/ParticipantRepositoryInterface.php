@@ -163,4 +163,11 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getParticipantsWithoutMeetingAndHappening(array $participants, \DateTimeInterface $begin, \DateTimeInterface $end);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipantBySheet(Sheet $sheet);
 }

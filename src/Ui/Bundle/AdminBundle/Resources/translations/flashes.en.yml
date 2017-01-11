@@ -14,6 +14,8 @@ flash.event.register.already_known.login: 'You are already registered for this e
 flash.event.register.already_known.message: 'YOUR EMAIL IS ALREADY REGISTERED! you attended one of our events, you can retrieve your profile data and save valuable time!'
 flash.event.register.success: 'Your account has been created'
 flash.meeting_request.edit.success: 'You have changed the meeting request'
+flash.messaging.message.create.success: 'Message successfully created'
+flash.messaging.message.update.success: 'Message successfully updated'
 flash.new_password.success: 'Your password has been changed'
 flash.package.final_step.success: 'Your package information has been saved'
 flash.package.payment_mode.success: 'Your mode of payment has been taken into account'

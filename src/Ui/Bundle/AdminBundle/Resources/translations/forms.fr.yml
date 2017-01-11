@@ -275,6 +275,14 @@ form.meeting_request_update_to.children.submit.label: Envoyer
 form.meeting_update.children.message.label: Message
 form.meeting_update.children.participants.label: Participants
 form.meeting_update.children.submit.label: Enregistrer
+form.messaging_create_message.children.content.label: Contenu
+form.messaging_create_message.children.name.label: 'Nom emailing'
+form.messaging_create_message.children.subject.label: Sujet
+form.messaging_create_message.children.submit.label: Enregistrer
+form.messaging_update_message.children.content.label: Contenu
+form.messaging_update_message.children.name.label: 'Nom emailing'
+form.messaging_update_message.children.subject.label: Sujet
+form.messaging_update_message.children.submit.label: Enregistrer
 form.new_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.new_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.new_password.children.submit.label: Envoyez

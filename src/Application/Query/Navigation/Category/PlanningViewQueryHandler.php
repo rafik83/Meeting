@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class PlanningViewQueryHandler
@@ -29,6 +30,11 @@ class PlanningViewQueryHandler
      * @var HappeningsAccessChecker
      */
     private $happeningsAccessChecker;
+
+    /**
+     * @var null|IntlDateFormatter
+     */
+    private $formatter = null;
 
     /**
      * PlanningViewQueryHandler constructor.
@@ -51,48 +57,72 @@ class PlanningViewQueryHandler
      */
     public function handle(PlanningViewQuery $planningQuery)
     {
-        $schedulePublishDate = $planningQuery
-            ->sheet
-            ->getEvent()
-            ->getConfiguration()
-            ->getSchedulePublishDate();
+        $linkViews = [];
 
-        $happeningOpenDate = $planningQuery
-            ->sheet
+        $linkViews[] = $this->getHappeningAvailableDateLinkView($planningQuery->sheet, $planningQuery->locale);
+
+        $schedulePublishDateLinkView = $this->getSchedulePublishDateLinkView(
+            $planningQuery->sheet,
+            $planningQuery->locale
+        );
+
+        if (null !== $schedulePublishDateLinkView) {
+            $linkViews[] = $schedulePublishDateLinkView;
+        }
+
+        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linkViews);
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return LinkView
+     */
+    private function getHappeningAvailableDateLinkView(Sheet $sheet, $locale)
+    {
+        $happeningOpenDate = $sheet
             ->getEvent()
             ->getConfiguration()
             ->getHappeningsOpenDate();
 
-        $linksView = [];
-
-        if ($schedulePublishDate === null) {
-            $linksView[] = new LinkView('navigation.links.incoming', null);
-        } else {
-            $formatter = new IntlDateFormatter(
-                $planningQuery->locale,
-                IntlDateFormatter::LONG,
-                IntlDateFormatter::LONG
-            );
-            $formatter->setPattern('d MMMM Y');
-
-            $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
+        if (null !== $happeningOpenDate) {
+            $happeningOpenDateFormatted = $this->getFormatter($locale)->format($happeningOpenDate);
 
             $agendaRoute = null;
 
-            if ($this->happeningsAccessChecker->allowedToAccess($planningQuery->sheet->getEvent())) {
+            if ($this->happeningsAccessChecker->allowedToAccess($sheet->getEvent())) {
                 $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
             }
 
-            $linksView[] = new LinkView(
+            return new LinkView(
                 'navigation.links.planning.available_date',
                 $agendaRoute,
                 null,
                 new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
             );
+        }
 
-            $schedulePublishDateFormatted = $formatter->format($schedulePublishDate);
+        return new LinkView('navigation.links.incoming', null);
+    }
 
-            $linksView[] = new LinkView(
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return null|LinkView
+     */
+    private function getSchedulePublishDateLinkView(Sheet $sheet, $locale)
+    {
+        $schedulePublishDate = $sheet
+            ->getEvent()
+            ->getConfiguration()
+            ->getSchedulePublishDate();
+
+        if ($schedulePublishDate !== null) {
+            $schedulePublishDateFormatted = $this->getFormatter($locale)->format($schedulePublishDate);
+
+            return new LinkView(
                 'navigation.links.planning.final_date',
                 null,
                 null,
@@ -100,6 +130,27 @@ class PlanningViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linksView);
+        return null;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return IntlDateFormatter
+     */
+    private function getFormatter($locale)
+    {
+        if (null !== $this->formatter) {
+            return $this->formatter;
+        }
+
+        $this->formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::LONG
+        );
+        $this->formatter->setPattern('d MMMM Y');
+
+        return $this->formatter;
     }
 }

@@ -21,16 +21,18 @@ mail.completeProfile.end: 'Best regards,'
 mail.completeProfile.link: 'Complete your member area'
 mail.completeProfile.subject: '[%event%] Invitation as a participant'
 mail.confirmResetPassword.body: 'Dear %firstname% %lastname%, your password has been changed'
+mail.confirmResetPassword.subject: 'Your password has been changed'
 mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer\n\nBest regards,"
 mail.event.preregister.end: 'Best regards,'
 mail.event.preregister.link: 'Your member area'
 mail.event.preregister.subject: 'You are pre-registered to %event%'
+mail.footer.contact: Contact
 mail.orderConfirm.body: "Dear participant,\n\nYour order %orderNumero% placed on %orderDate% has been registered.\n\nPlease follow the link below to acces your proforma.\n\nA final invoice will be sent at the end of the event."
 mail.orderConfirm.end: 'Best regards,'
 mail.orderConfirm.linkToProForma: 'View Proforma invoice'
 mail.orderConfirm.subject: 'Your order has been registered'
 mail.participant.profile.link: 'Your member area'
-mail.register.body: '%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created. We are happy to count you among the Vimeet community. You can now connect to your member area on the website of %event%. Best regards,'
+mail.register.body: "%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
 mail.register.subject: 'The access to your member area of %event% has been created'
 mail.resetPassword.body: 'Hello, you have asked for a password modification. Please click on the following link to create a new password:'
 mail.resetPassword.end: 'Best regards,'
@@ -41,10 +43,12 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation sent'
 mail.sheet.change_type.body: "%firstname% %lastname%, \n\nYour participation has been converted from %fromType% to %toType%.\n\nRegards,"
 mail.sheet.change_type.end: 'Regards,'
 mail.sheet.change_type.subject: '[%event%] Your participation has been converted'
+mail.sheet.show.link: 'See the presentation sheet'
 mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo acess the details of the presentation sheet, please click on the link below"
 mail.sheet.submitted.end: 'Regards,'
 mail.sheet.submitted.link: 'View sheet'
 mail.sheet.submitted.subject: 'Sheet %sheetName% finalized'
 mail.sheet.validated.body: "%firstname% %lastname%,\n\nWe are pleased to confirm your participation in the event %event% and we thank you for your confidence.\n\nOur entire team will be at your disposal to make your participation a success."
 mail.sheet.validated.subject: 'Your registration as %participationType% for %event% is validated'
+mail.sheet.validation.validate.body: 'Hello %firstname% %lastname%, your presentation sheet has been validated'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"

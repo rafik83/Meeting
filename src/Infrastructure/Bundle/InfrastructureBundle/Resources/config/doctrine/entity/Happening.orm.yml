@@ -29,6 +29,14 @@ Proximum\Vimeet\Domain\Model\Happening:
             mappedBy: happening
             cascade: ['persist', 'remove']
             orphanRemoval: true
+        participations:
+            targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
+            mappedBy: happening
+        questions:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Question
+            mappedBy: happening
+            joinColumn:
+                onDelete: CASCADE
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
