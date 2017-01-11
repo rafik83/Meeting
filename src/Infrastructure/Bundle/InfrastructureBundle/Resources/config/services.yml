@@ -374,12 +374,6 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Category\Create }
-    vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler:
-        class: Proximum\Vimeet\Application\Command\Unavailability\AddHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Add }
     vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler
         arguments:
