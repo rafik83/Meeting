@@ -1,0 +1,42 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet website.
+ *
+ * Copyright © Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Adapter;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+class EventUrlGenerator implements EventUrlGeneratorInterface
+{
+    /** @var string http|https */
+    private $scheme;
+
+    /** @var UrlGeneratorInterface */
+    private $urlGenerator;
+
+    /**
+     * @param string                $scheme
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct($scheme, UrlGeneratorInterface $urlGenerator)
+    {
+        $this->scheme       = $scheme;
+        $this->urlGenerator = $urlGenerator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateEventAbsoluteUrl(Event $event, $routeName, $parameters = [])
+    {
+        return sprintf('%s://%s%s', $this->scheme, $event->getDomain(), $this->urlGenerator->generate($routeName, $parameters));
+    }
+}

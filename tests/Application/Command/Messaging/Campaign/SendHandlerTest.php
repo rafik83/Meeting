@@ -11,6 +11,7 @@
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
+use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
@@ -20,7 +21,6 @@ use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use SendGrid\Mail;
 
 class SendHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,8 +43,6 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $twig = $this->prophesize(\Twig_Environment::class);
         $twig->load($message->getTemplate())->willReturn($template);
 
-        $billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
-        $campaignRepository    = $this->prophesize(CampaignRepositoryInterface::class);
         $mailer                = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
             $twig->reveal(),
@@ -54,7 +52,8 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
-            $mailer
+            $mailer,
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
@@ -79,7 +78,8 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
-            $mailer
+            $mailer,
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
@@ -105,7 +105,8 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
-            $mailer
+            $mailer,
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
@@ -132,7 +133,8 @@ class SendHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new SendHandler(
             $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
-            $mailer
+            $mailer,
+            $this->prophesize(SubstitutionsProvider::class)->reveal()
         );
 
         $handler->handle(new Send($campaign));
