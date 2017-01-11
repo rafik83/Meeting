@@ -58,17 +58,22 @@
                 </table>
             </div>
         </div>
-
         <div class="col-xs-10">
             <div class="requests-list" v-if="focus">
                 <p><b>${ focus.title }</b><br>{{ 'admin.agenda.requestsList.title'|trans }}</p>
                 <div class="requests-list-scrollable">
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
-                        <tr>
+                        <tr v-for="request in focus.requests">
                             <td>
                                 <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 1<br>
-                                <i class="icon icon-Profil_1"></i> Prénom NOM
+                                ${ request.sheetMetTitle }<br>
+                                <span v-for="requestParticipant in request.participants">
+                                    <i class="icon icon-Profil_1"></i>${ requestParticipant.fullName }
+                                </span>
+
+                                <span v-if="request.participants.length == 0">
+                                    <i class="icon icon-Profil_1"></i>{{ 'admin.agenda.requestsList.noPreference'|trans }}
+                                </span>
                             </td>
                         </tr>
                     </table>
