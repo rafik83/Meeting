@@ -99,9 +99,9 @@ class UnavailabilityController extends Controller
                                 'validators.unavailability.timeOutOfRange.begin',
                                 [
                                     '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
-                                        ->format($exception->day->getDay())
+                                        ->format($exception->day->getDay()),
                                 ],
-                                 'validators'
+                                'validators'
                             )
                         )
                     );
