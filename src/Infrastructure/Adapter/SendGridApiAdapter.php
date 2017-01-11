@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
@@ -21,11 +22,27 @@ use SendGrid\Personalization;
 
 class SendGridApiAdapter
 {
+    /**
+     * @var SendGridApiClient
+     */
     private $client;
+
+    /**
+     * @var \Twig_Environment
+     */
     private $twig;
+
+    /**
+     * @var TranslatorInterface
+     */
     private $translator;
 
-    public function __construct(SendGridApiClient $client, \Twig_Environment $twig, TranslatorAdapter $translator)
+    /**
+     * @param SendGridApiClient   $client
+     * @param Twig_Environment    $twig
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(SendGridApiClient $client, \Twig_Environment $twig, TranslatorInterface $translator)
     {
         $this->client     = $client;
         $this->twig       = $twig;
@@ -33,23 +50,36 @@ class SendGridApiAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * Sends an emailing message to a given list of users.
+     *
+     * @param Message              $message   The message to send
+     * @param string               $sender    The message sender
+     * @param (User|BillingInfo)[] $receivers The message receivers
      */
-    public function send(Message $message, $from, array $receivers)
+    public function send(Message $message, $sender, array $receivers)
     {
         foreach ($receivers as $receiver) {
-            $this->client->send($this->transform($message, $from, $receiver));
+            $this->client->send($this->transform($message, $sender, $receiver));
         }
     }
 
-    private function transform(Message $message, $from, $receiver)
+    /**
+     * Transforms a Message to a sendgrid Mail.
+     *
+     * @param Message          $message
+     * @param string           $sender
+     * @param User|BillingInfo $receiver
+     *
+     * @return Mail
+     */
+    private function transform(Message $message, $sender, $receiver)
     {
         // $template = $this->twig->loadTemplate($mail->getTemplate()); // TODO Habillage ?
 
         $mail = new Mail();
         $mail->setSubject($message->getSubject());
         $mail->addContent(new Content('text/html', $message->getContent()));
-        $mail->setFrom(new Email(null, $from));
+        $mail->setFrom(new Email(null, $sender));
 
         if (!$receiver instanceof User && !$receiver instanceof BillingInfo) {
             throw new \InvalidArgumentException('Each emailing receiver must either be an instance of User or BillingInfo.');

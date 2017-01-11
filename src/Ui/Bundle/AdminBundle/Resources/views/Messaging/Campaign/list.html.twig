@@ -31,9 +31,10 @@
                             <td>{{ campaign.sentAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                         {% else %}
                             <td>
-                                <a href="{{ path('admin_messaging_campaign_send', { 'event': event.id, 'campaign': campaign.id }) }}">
-                                    {{ 'admin.messaging.campaign.send.title'|trans }}
-                                </a>
+                                <form action="{{ path('admin_messaging_campaign_send', { 'event': event.id, 'campaign': campaign.id }) }}" method="POST">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('send_campaign') }}">
+                                    <button class="btn btn-danger" type="submit" title="Delete">{{ 'admin.messaging.campaign.send.title'|trans }}</button>
+                                </form>
                             </td>
                         {% endif %}
                     </tr>

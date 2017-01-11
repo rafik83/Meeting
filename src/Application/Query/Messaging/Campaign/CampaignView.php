@@ -26,7 +26,7 @@ class CampaignView
     /** @var \DateTimeInterface */
     public $sentAt;
 
-    /** @var \DateTimeInterface */
+    /** @var bool */
     public $sent;
 
     /**

@@ -1017,5 +1017,5 @@ admin_messaging_campaign_send:
     requirements:
         event: \d+
         campaign: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: AdminBundle:Messaging\Campaign:send }

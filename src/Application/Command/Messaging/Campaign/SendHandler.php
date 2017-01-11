@@ -42,22 +42,25 @@ class SendHandler
      */
     public function handle(Send $command)
     {
-        $receivers = [];
-        $campaign  = $command->getCampaign();
-        $sheets    = $campaign->getSheets();
+        $receivers  = [];
+        $campaign   = $command->getCampaign();
+        $sheets     = $campaign->getSheets();
+        $recipients = $campaign->getRecipients();
 
-        $sendToParticipants    = in_array(Campaign::RECIPIENT_PARTICIPANTS, $campaign->getRecipients(), true);
-        $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $campaign->getRecipients(), true);
-        $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $campaign->getRecipients(), true);
+        $sendToParticipants    = in_array(Campaign::RECIPIENT_PARTICIPANTS, $recipients, true);
+        $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
+        $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);
 
         foreach ($sheets as $sheet) {
+            if (true === $sendToOwners) {
+                $receivers[] = $sheet->getOwner();
+            }
+
             if (true === $sendToParticipants) {
                 foreach ($sheet->getParticipants() as $participant) {
-                    if ($participant->isOwnerParticipant() && !$sendToOwners) {
-                        continue;
+                    if (!in_array($participant, $receivers)) {
+                        $receivers[] = $participant->getUser();
                     }
-
-                    $receivers[] = $participant->getUser();
                 }
             }
         }

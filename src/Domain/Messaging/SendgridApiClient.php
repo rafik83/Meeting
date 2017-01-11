@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Messaging;
 use SendGrid\Client;
 use SendGrid\Mail;
 
-final class SendgridApiClient extends Client
+final class SendGridApiClient extends Client
 {
     public function send(Mail $mail)
     {

@@ -28,6 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 class CampaignController extends Controller
 {
@@ -195,17 +196,28 @@ class CampaignController extends Controller
     }
 
     /**
-     * Display all messaging campaigns for a given event.
+     * Sends a given messaging Campaign.
      *
      * @param Event    $event
      * @param Campaign $campaign
      *
      * @return RedirectResponse
      */
-    public function sendAction(Event $event, Campaign $campaign)
+    public function sendAction(Request $request, Event $event, Campaign $campaign)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        $token = $request->request->get('_token');
+        $token = $token ? new CsrfToken('send_campaign', $token) : null;
+
+        if (!$token || !$this->get('security.csrf.token_manager')->isTokenValid($token)) {
+            $this->addFlash('error', 'flash.messaging.campaign.send.failure');
+
+            return $this->redirectToRoute('admin_messaging_campaign_list', [
+                'event' => $event->getId(),
+            ]);
+        }
 
         $this->get('tactician.commandbus')->handle(new Send($campaign));
         $this->addFlash('success', 'flash.messaging.campaign.send.success');
