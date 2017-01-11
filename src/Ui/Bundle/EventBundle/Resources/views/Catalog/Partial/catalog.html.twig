@@ -1,5 +1,10 @@
 {{ include('EventBundle:Catalog:Partial/search.html.twig', { searchForm: searchForm, typeViews: typeViews, total: paginatedResult.total }, false) }}
 
 <div class="catalog__list catalog__list--block">
-    {{ include('EventBundle:Catalog:Partial/list.html.twig', { paginatedResult: paginatedResult, 'viewer': sheet }, false) }}
+    {{ include('EventBundle:Catalog:Partial/list.html.twig', { paginatedResult: paginatedResult, 'viewer': sheet, 'page': page }, false) }}
 </div>
+{% if seeMoreButton %}
+    <div class="col-md-12 text-center see-more-align" >
+        <div class="btn btn-default see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>
+    </div>
+{% endif %}

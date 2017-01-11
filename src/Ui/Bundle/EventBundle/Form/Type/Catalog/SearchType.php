@@ -177,9 +177,10 @@ class SearchType extends AbstractType
         $resolver->setAllowedTypes('event', Event::class);
 
         $resolver->setDefaults([
-            'required'        => false,
-            'method'          => 'GET',
-            'csrf_protection' => false,
+            'required'           => false,
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'allow_extra_fields' => true,
         ]);
     }
 

@@ -3,7 +3,6 @@ var $                       = require('jquery'),
     tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
     CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
-    Sortable                = require('./components/_Sortable'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
     Batch                   = require('./components/_Batch'),
@@ -12,7 +11,7 @@ var $                       = require('jquery'),
     SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
-    AnchorFocuser           = require('./components/_AnchorFocuser');
+    AnchorFocuser           = require('./components/_AnchorFocuser'),
     DateTimePicker          = require('./components/_DateTimePicker');
     MessagingMessagePreview = require('./components/_MessagingMessagePreview');
 

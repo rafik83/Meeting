@@ -23,13 +23,17 @@ event.info.close: Close
 event.info.contact: 'Useful information'
 gender.man: Mr
 gender.woman: Mrs
+login.connect: Login
+login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
+login.memberArea: 'Member area'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'
 navigation.category.member_space: 'Member area'
 navigation.category.package: 'Package of participation'
 navigation.category.planning: 'Planning & Attendance'
+navigation.category.program: Program
 navigation.category.sheet: 'Presentation Sheet'
 navigation.close: Close
 navigation.links.billing.billing_info: 'Billing information'
@@ -38,11 +42,16 @@ navigation.links.catalog.available_date: 'Available on the'
 navigation.links.catalog.incoming: 'Coming soon'
 navigation.links.catalog.sheet_not_in_catalog: 'Your participation is awaiting validation'
 navigation.links.happening.accept: 'Accepted requests'
+navigation.links.happening.approved: Approved
 navigation.links.happening.decline: 'Refused requests'
 navigation.links.happening.open_date: 'Available on the'
 navigation.links.happening.proposal: 'Proposals received'
+navigation.links.happening.refused: Refused
+navigation.links.happening.sent: Pending
 navigation.links.happening.waiting: 'Requests pending'
 navigation.links.incoming: 'Coming soon'
+navigation.links.meetingRequest.approved: Accepted
+navigation.links.meetingRequest.open_date: 'Available on'
 navigation.links.member_space.avatar: 'Profile picture'
 navigation.links.member_space.company: 'Compagny / Organization'
 navigation.links.member_space.profile: Profile
@@ -167,7 +176,9 @@ pro_forma.vatNumber.title: 'VAT number'
 register.already_registered: 'Already registered?'
 register.finalize: Complete
 register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all"
+register.register: Registration
 register.register_as: 'Register as:'
+register.step: Step
 select2.no_results: 'No results'
 sheet.edit.object: Edit
 sheet.object.action.add: Add
@@ -175,11 +186,14 @@ sheet.object.action.backToSheet: 'Back to sheet'
 sheet.object.action.edit: Edit
 sheet.object.action.remove: Delete
 sheet.object.image.remove: 'Delete image'
+sheet.object.option.buyable.label: 'Chargeable option'
 sheet.object.showLess.title: 'See more'
 sheet.object.showMore.title: 'See less'
 sheet.participant.remove: 'Remove from the sheet'
 sheet.participant.sendInvite: 'Send Invitation'
+sheet.submit.completeYourSheet: 'Complete my sheet'
 sheet.submit.validation: 'Submit for validation'
+sheet.submit.validation.moreInfoOnPending: 'You submit to validation your sheet'
 sheet.submit.validation.pending: 'Awaiting for validation'
 sheet.title: 'Presentation sheet'
 sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the online catalogue of participants. You will still be able to modify it later on'
@@ -193,7 +207,9 @@ summary.column.quantity: Quantity
 summary.column.title: Title
 summary.column.total: Total
 summary.column.unitPrice: 'Unit price'
+summary.group.option.title: Options
 summary.product.included: Included
+summary.promotionCode.free: Free
 summary.promotionCode.title: 'Offers of discounts'
 summary.total: Total
 summary.totalToPay: 'Total to pay'

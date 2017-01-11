@@ -36,6 +36,13 @@ interface OrderRepositoryInterface
     public function findBySheet(Sheet $sheet);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Order[]
+     */
+    public function findNotCancelledBySheet(Sheet $sheet);
+
+    /**
      * @param Event  $event
      * @param array  $filters
      * @param int    $page

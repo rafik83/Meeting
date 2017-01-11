@@ -11,6 +11,10 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: string
         createdAt:
             type: datetime
+    oneToOne:
+        request:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
+            mappedBy: meeting
     manyToOne:
         slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
@@ -22,6 +26,10 @@ Proximum\Vimeet\Domain\Model\Meeting:
                 onDelete: CASCADE
         toSheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
+        spot:
+            targetEntity: Proximum\Vimeet\Domain\Model\Spot
             joinColumn:
                 onDelete: CASCADE
     manyToMany:

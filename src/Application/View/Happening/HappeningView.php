@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\View\Happening;
 
 use DateInterval;
-use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
 class HappeningView
 {
@@ -82,16 +81,16 @@ class HappeningView
     /**
      * HappeningView constructor.
      *
-     * @param int                   $id
-     * @param HappeningCategoryView $category
-     * @param \DateTimeInterface    $beginHour
-     * @param \DateTimeInterface    $endHour
-     * @param string                $title
-     * @param string                $description
-     * @param string|null           $picture
-     * @param Speaker[]             $speakers
-     * @param null|int              $limitParticipant
-     * @param bool                  $isFull
+     * @param int                    $id
+     * @param HappeningCategoryView  $category
+     * @param \DateTimeInterface     $beginHour
+     * @param \DateTimeInterface     $endHour
+     * @param string                 $title
+     * @param string                 $description
+     * @param string|null            $picture
+     * @param HappeningSpeakerView[] $speakers
+     * @param null|int               $limitParticipant
+     * @param bool                   $isFull
      */
     public function __construct(
         $id,
@@ -123,14 +122,6 @@ class HappeningView
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCode()
-    {
-        return $this->code;
     }
 
     /**

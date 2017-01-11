@@ -11,6 +11,9 @@ account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 agenda.title: 'Mon agenda'
+agenda.unavailability.add: 'Ajouter une indisponibilité'
+agenda.unavailability.back: 'Retour'
+agenda.unavailability.back: 'Retour'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -34,6 +37,7 @@ catalog.meeting_request.request.refused: 'Demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
+catalog.seeMore: 'Voir plus'
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
@@ -57,6 +61,7 @@ happening.participationUpdate.action: Modifier
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
+login.forgot_password: 'Mot de passe oublié ?'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
 modal.back: Retour

@@ -14,6 +14,7 @@ Proximum\Vimeet\Domain\Model\Happening\Question:
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            inversedBy: questions
             joinColumn:
                 onDelete: CASCADE
         sheet:

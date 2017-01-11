@@ -68,4 +68,11 @@ interface HappeningRepositoryInterface
      * @return Happening[]
      */
     public function findBySpeaker(Speaker $speaker, $locale);
+
+    /**
+     * @param Event $event
+     *
+     * @return Happening[]
+     */
+    public function findHappeningParticipant(Event $event);
 }

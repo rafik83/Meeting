@@ -138,6 +138,11 @@
         <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">{{ 'admin.meeting.link'|trans }}</a>
         <ul class="dropdown-menu">
             <li>
+                <a href="{{ path('admin_agenda_index', { 'event': event.id }) }}">
+                    {{ 'admin.agenda.link'|trans }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}">
                 {{ 'admin.meeting_request.link'|trans }}
                 </a>
