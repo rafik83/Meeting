@@ -245,7 +245,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         Meeting $exceptedMeeting = null,
-        Happening $exceptedHappening = null
+        Happening $exceptedHappening = null,
+        $exceptAllUnavailabilities = false
     ) {
         $queryBuilder = $this
             ->entityManager
@@ -254,6 +255,25 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from(Participant::class, 'participant')
             ->where('participant IN (:participants)')
             ->setParameter('participants', $participants);
+
+        $unavailabilityConditions = "1 = 1";
+
+        if (false === $exceptAllUnavailabilities) {
+            // Participant have not unavailability during this period
+            $unavailabilityConditions =
+                "NOT EXISTS (
+                    SELECT u.id
+                    FROM Entity:Unavailability u
+                    WHERE
+                        u.participant = participant
+                        AND (
+                            u.begin BETWEEN :begin AND :end
+                            OR u.end BETWEEN :begin AND :end
+                            OR :begin BETWEEN u.begin AND u.end
+                            OR :end BETWEEN u.begin AND u.end
+                        )
+                )";
+        }
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
@@ -274,19 +294,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR :end BETWEEN slot.begin AND slot.end
                         )
                 )",
-                // Participant have not unavailability during this period
-                "NOT EXISTS (
-                    SELECT u.id
-                    FROM Entity:Unavailability u
-                    WHERE
-                        u.participant = participant
-                        AND (
-                            u.begin BETWEEN :begin AND :end
-                            OR u.end BETWEEN :begin AND :end
-                            OR :begin BETWEEN u.begin AND u.end
-                            OR :end BETWEEN u.begin AND u.end
-                        )
-                )",
                 // Participant have not happening during this period
                 "NOT EXISTS (
                     SELECT hp.id
@@ -301,7 +308,8 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR :begin BETWEEN h.begin AND h.end
                             OR :end BETWEEN h.begin AND h.end
                         )
-                )"
+                )",
+                $unavailabilityConditions
             )
         );
 
@@ -368,6 +376,18 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsWithoutMeetingAndHappening(
+        array $participants,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end
+    )
+    {
+        return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
+    }
+  
     /**
      * {@inheritdoc}
      */

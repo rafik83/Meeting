@@ -1298,6 +1298,14 @@ services:
             - '@repository.unavailability.mass_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete }
+    command.unavailability.create_handler:
+        class: Proximum\Vimeet\Application\Command\Unavailability\CreateHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
 
     command.messaging.message.create_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler

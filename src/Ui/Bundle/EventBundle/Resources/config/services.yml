@@ -198,6 +198,12 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: form.type }
+    form_type_unavailability.create_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: form.type }
 
     #
     # Event Listener
