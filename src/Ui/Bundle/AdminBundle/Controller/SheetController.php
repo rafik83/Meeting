@@ -20,9 +20,9 @@ use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -425,7 +425,13 @@ class SheetController extends Controller
         /** @var ImportMappingView $importMappingView */
         $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
 
-        $command = new ImportMapping();
+        $command = new ImportMapping(
+            $event,
+            $type,
+            $availableLocale,
+            $importMappingView->csvHeaders,
+            $importMappingView->registrationHeaders
+        );
 
         $form = $this->createForm(ImportMappingType::class, $command, [
             'locale'              => $availableLocale,
@@ -435,7 +441,7 @@ class SheetController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            
+            $this->get('tactician.commandbus')->handle($command);
         }
 
         return $this->render('AdminBundle:Sheet:importMapping.html.twig', [

@@ -22,10 +22,10 @@ class MappingType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        foreach ($options['csvHeaders'] as $csvHeader) {
-            $builder->add(str_replace(' ', '_', $csvHeader), ChoiceType::class, [
+        foreach ($options['csvHeaders'] as $key => $csvHeader) {
+            $builder->add($key, ChoiceType::class, [
                 'label'   => $csvHeader,
-                'choices' => $options['registrationHeaders'],
+                'choices' => array_flip($options['registrationHeaders']),
             ]);
         }
     }

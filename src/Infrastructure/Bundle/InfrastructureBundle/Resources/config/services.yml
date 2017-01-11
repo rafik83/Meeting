@@ -286,7 +286,7 @@ services:
             - '@components.participant.participant_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Delete }
-    application.command.participant.import_handler:
+    command.participant.import_handler:
         class: Proximum\Vimeet\Application\Command\Participant\ImportHandler
         arguments:
             - '@adapter.local_file_storage'
@@ -294,6 +294,14 @@ services:
             - '%kernel.root_dir%/../web'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import }
+    command.participant.import_mapping_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\ImportMappingHandler
+        arguments:
+            - '@serializer.decoder.csv'
+            - '@adapter.session'
+            - '@serializer.denormalizer.participant'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ImportMapping }
     command.event.update_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
         arguments:
@@ -2637,6 +2645,16 @@ services:
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.denormalizer.participant:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.template_data_factory'
+            - '@account.synchronizer'
+            - '@datetime'
         tags:
             - { name: serializer.normalizer }
 

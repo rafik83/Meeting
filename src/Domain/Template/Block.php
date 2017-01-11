@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 
 class Block extends AbstractChild
 {
@@ -208,7 +209,7 @@ class Block extends AbstractChild
      */
     public function getPreviewAvailableObjects()
     {
-        return array_filter($this->getObjects(), function(TemplateObject $object) {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object instanceof TemplateObject\Image || $object instanceof TemplateObject\EditableText;
         });
     }
@@ -261,7 +262,7 @@ class Block extends AbstractChild
     public function getBlock($index)
     {
         $blocks = $this->getBlocks();
-        $index  = (int) $index - 1;
+        $index  = (int)$index - 1;
 
         return isset($blocks[$index]) ? $blocks[$index] : null;
     }

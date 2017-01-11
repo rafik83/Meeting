@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
 
 class ImportHandler
@@ -54,7 +56,14 @@ class ImportHandler
     {
         $filePath = $this->localFileStorageAdapter->upload($command->file); //TODO: catch exception
 
-        $this->session->set(Import::PARTICIPANT_IMPORT_FILE, $this->publicDir . $filePath);
-        $this->session->set(Import::PARTICIPANT_IMPORT_CHARSET, $command->charset);
+        $filename = Charset::convert(
+            $this->publicDir . $filePath,
+            $command->charset,
+            Charset::UTF_8,
+            $this->publicDir . $filePath
+        );
+
+        $this->session->set(ParticipantImportTag::PARTICIPANT_IMPORT_FILE, $filename);
+        $this->session->set(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET, $command->charset);
     }
 }

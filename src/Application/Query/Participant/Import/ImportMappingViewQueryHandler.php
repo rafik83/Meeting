@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
-use Proximum\Vimeet\Application\Command\Participant\Import;
+use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
-use Proximum\Vimeet\Application\View\Participant\MappingView;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
@@ -59,16 +59,24 @@ class ImportMappingViewQueryHandler
      */
     public function handle(ImportMappingViewQuery $query)
     {
-        $csvHeaders          = $this->csvDecoder->decodeHeaders($this->session->get(Import::PARTICIPANT_IMPORT_FILE));
-        $registrationHeaders = [];
+        $csvHeaders = $this->csvDecoder->decodeHeaders($this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE));
+
+        $registrationHeaders = [
+            ParticipantImportTag::REGISTRATION_FIELD_IGNORE,
+            ParticipantImportTag::REGISTRATION_FIELD_MAIL,
+        ];
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);
 
-        $templateObjects = $registrationTemplate->getObjects();
+        $templateObjects = $registrationTemplate->getProfileObjects();
 
         foreach ($templateObjects as $object) {
-            $label                 = $object->getLabel($query->locale);
-            $registrationHeaders[] = $label;
+            if ($object instanceof ContentObjectInterface) {
+                $label = $object->getLabel($query->locale);
+                if ($label !== null) {
+                    $registrationHeaders[$object->getKey()] = $label;
+                }
+            }
         }
 
         return new ImportMappingView($csvHeaders, $registrationHeaders);

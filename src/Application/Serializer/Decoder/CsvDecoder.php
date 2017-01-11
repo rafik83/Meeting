@@ -38,7 +38,17 @@ class CsvDecoder implements DecoderInterface
      */
     public function decode($data, $format, array $context = [])
     {
-        // TODO: Implement decode() method.
+        $file = new \SplFileObject($data);
+        $file->setFlags(SplFileObject::READ_CSV);
+        $file->setCsvControl($this->delimiter);
+
+        $csvData = [];
+
+        while ($file->eof() === false) {
+            $csvData[] = $file->fgetcsv();
+        }
+
+        return array_slice($csvData, 1);
     }
 
     /**

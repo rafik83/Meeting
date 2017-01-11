@@ -26,6 +26,7 @@ class ImportMappingType extends AbstractType
             ->add('mappings', MappingType::class, [
                 'csvHeaders'          => $options['csvHeaders'],
                 'registrationHeaders' => $options['registrationHeaders'],
+                'label'               => false,
             ]);
     }
 

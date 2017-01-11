@@ -219,6 +219,7 @@ admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
 admin.participant_import.title: "Importer les participants"
+admin.participant_import_mapping.title: 'Mapping entre colonne du fichier et champ vimeet'
 admin.partner.create.title: 'Créer un nouveau partenaire'
 admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'
