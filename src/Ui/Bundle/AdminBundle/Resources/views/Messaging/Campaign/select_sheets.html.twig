@@ -64,12 +64,17 @@
                 {{ form_row(filter_form.validationState) }}
                 {{ form_row(filter_form.state) }}
                 {{ form_row(filter_form.completed) }}
+                {{ form_row(filter_form.inCatalog) }}
                 {{ form_row(filter_form.type) }}
                 {% if filter_form.category is defined %}
                     {{ form_row(filter_form.category) }}
                 {% endif %}
                 {{ form_row(filter_form.follower) }}
                 {{ form_row(filter_form.registeredAt) }}
+                {{ form_row(filter_form.hasHappeningParticipation) }}
+                {{ form_row(filter_form.hasPositiveBalance) }}
+                {{ form_row(filter_form.hasNoMeetingRequest) }}
+                {{ form_row(filter_form.hasPendingMeetingPropositions) }}
                 {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::NO_ORDER')]) }}
                 {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')]) }}
                 {% if filter_form.boolean_filters is defined %}

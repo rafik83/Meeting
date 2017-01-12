@@ -86,6 +86,7 @@ form.change_password.children.submit.label: Envoyer
 form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
+form.common.choices.all: 'Tout sélectionner'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -531,6 +532,11 @@ form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
+form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
+form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
+form.sheet_filter.children.hasPositiveBalance.label: 'Solde restant dû > 0'
+form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'

@@ -158,6 +158,7 @@ class SheetSearchQueryBuilder
         $this->filterByLocalization($filters);
         $this->filterByPosition($filters);
         $this->filterByContent($filters);
+        $this->filterByHasHappeningParticipation($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart();
@@ -173,6 +174,18 @@ class SheetSearchQueryBuilder
 
         if (isset($filters[SearchType::FILTER_OBJECTIVE])) {
             $this->filterByObjective($filters[SearchType::FILTER_OBJECTIVE]);
+        }
+
+        if (isset($filters['hasPositiveBalance']) && true === $filters['hasPositiveBalance']) {
+            $this->filterByPositiveBalance();
+        }
+
+        if (isset($filters['hasNoMeetingRequest']) && true === $filters['hasNoMeetingRequest']) {
+            $this->filterByNoMeetingRequest();
+        }
+
+        if (isset($filters['hasPendingMeetingPropositions']) && true === $filters['hasPendingMeetingPropositions']) {
+            $this->filterByHasPendingMeetingProposition();
         }
     }
 
@@ -667,5 +680,32 @@ class SheetSearchQueryBuilder
         } catch (NomenclatureNotFoundException $exception) {
             return;
         }
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByHasHappeningParticipation(array &$filters)
+    {
+        if (isset($filters['hasHappeningParticipation'])) {
+            $this->query->addMust((new Term())->setTerm('hasHappeningParticipation', (bool)$filters['hasHappeningParticipation']));
+        }
+    }
+
+    private function filterByPositiveBalance()
+    {
+        $positiveRange = new Range();
+        $positiveRange->addField('balance', ['gt' => 0]);
+        $this->query->addMust($positiveRange);
+    }
+
+    private function filterByNoMeetingRequest()
+    {
+        $this->query->addMust((new Term())->setTerm('hasMeetingRequest', false));
+    }
+
+    private function filterByHasPendingMeetingProposition()
+    {
+        $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', true));
     }
 }

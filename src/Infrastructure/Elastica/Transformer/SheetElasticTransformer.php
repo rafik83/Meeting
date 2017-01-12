@@ -18,7 +18,10 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -48,26 +51,50 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     private $cartRowRepository;
 
     /**
+     * @var HappeningParticipationRepositoryInterface
+     */
+    private $happeningParticipationRepository;
+
+    /**
+     * @var RequestRepositoryInterface
+     */
+    private $meetingRequestRepository;
+
+    /**
      * @var TemplateDataFactory
      */
     private $templateDataFactory;
 
     /**
-     * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param ParticipantInfoGuesser     $participantInfoGuesser
-     * @param CartRowRepositoryInterface $cartRowRepository
-     * @param TemplateDataFactory        $templateDataFactory
+     * @var Balance
+     */
+    private $orderBalance;
+
+    /**
+     * @param SheetInfoGuesser                          $sheetInfoGuesser
+     * @param ParticipantInfoGuesser                    $participantInfoGuesser
+     * @param CartRowRepositoryInterface                $cartRowRepository
+     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
+     * @param RequestRepositoryInterface                $meetingRequestRepository
+     * @param TemplateDataFactory                       $templateDataFactory
+     * @param Balance                                   $orderBalance
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         CartRowRepositoryInterface $cartRowRepository,
-        TemplateDataFactory $templateDataFactory
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
+        RequestRepositoryInterface $meetingRequestRepository,
+        TemplateDataFactory $templateDataFactory,
+        Balance $orderBalance
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->cartRowRepository      = $cartRowRepository;
         $this->templateDataFactory    = $templateDataFactory;
+        $this->orderBalance           = $orderBalance;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
+        $this->meetingRequestRepository         = $meetingRequestRepository;
     }
 
     /**
@@ -146,6 +173,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'participants'            => $participants,
                 'event'                   => $sheet->getEvent()->getId(),
                 'owner'                   => $owner,
+                'balance'                 => $this->orderBalance->getTotal($sheet),
                 'createdAt'               => $sheet->getCreatedAt()->format('c'),
                 'inCatalog'               => $sheet->isInCatalog(),
                 'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
@@ -161,6 +189,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'nomenclatureItemsSupply' => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
                 'nomenclatureItemsNeeds'  => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_NEED),
                 'keywords'                => $this->buildKeywords($sheet),
+                'hasHappeningParticipation'    => $this->happeningParticipationRepository->hasParticipationsBySheet($sheet),
+                'hasMeetingRequest'            => $this->meetingRequestRepository->hasRequestSentBySheet($sheet),
+                'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
             ],
             $contentByLocale
         ));

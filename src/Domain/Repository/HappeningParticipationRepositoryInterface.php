@@ -63,6 +63,20 @@ interface HappeningParticipationRepositoryInterface
      * @return array
      */
     public function countParticipationByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipationsBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasParticipationsBySheet(Sheet $sheet);
   
     /**
      * @param Sheet       $sheet

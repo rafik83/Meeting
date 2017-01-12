@@ -2428,7 +2428,10 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
             - '@repository.cart_row_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@template.template_data_factory'
+            - '@order.balance'
 
     #
     # Product Transformer
