@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -190,7 +191,7 @@ class SheetController extends Controller
      *
      * @return Response
      */
-    public function exportAction(Request $request, Event $event)
+    public function exportSheetAction(Request $request, Event $event)
     {
         // Only super admin & organizers are allowed to export sheets:
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -207,6 +208,37 @@ class SheetController extends Controller
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             "export_event_sheets_".date("Y_m_d_His").".csv"
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function exportParticipantAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $charset    = Charset::WINDOWS_1252;
+        $normaliserView = new EventParticipantsNormalizerView($event);
+
+        $serializer = $this->get('serializer');
+        $exportContent = $serializer->serialize($normaliserView, 'csv', [
+            'locale'  => $request->getLocale(),
+            'charset' => $charset,
+        ]);
+
+        $response    = new Response($exportContent);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "export_event_participant_".date("Y_m_d_His").".csv"
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));

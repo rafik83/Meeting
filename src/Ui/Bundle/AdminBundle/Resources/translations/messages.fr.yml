@@ -257,6 +257,19 @@ admin.package.table.column.event: Evènement
 admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
+admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
+admin.participant.export.fields.participant_created_at: 'Creation Participant'
+admin.participant.export.fields.participant_email: 'Email Participant'
+admin.participant.export.fields.participant_id: 'ID Participant'
+admin.participant.export.fields.participant_type: 'Type Participant'
+admin.participant.export.fields.sheet_id: 'ID Fiche'
+admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.participant.export.happening.subscriber.no: Non
+admin.participant.export.happening.subscriber.yes: Oui
+admin.participant.export.no: Non
+admin.participant.export.yes: Oui
+admin.sheet.export.no: Non
+admin.sheet.export.yes: Oui
 admin.partner.create.title: 'Créer un nouveau partenaire'
 admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'
@@ -378,7 +391,6 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
-admin.sheet.export.button.label: Exporter
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -392,6 +404,8 @@ admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.no: Non
+admin.sheet.export.participant.button.label: 'Exporter participants'
+admin.sheet.export.sheet.button.label: 'Exporter fiches'
 admin.sheet.export.yes: Oui
 admin.happening.export.fields.happening_id: 'ID Conférence'
 admin.happening.export.fields.happening_name: 'Titre conférence'
