@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Campaign;
 
-use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
 class CampaignView
 {

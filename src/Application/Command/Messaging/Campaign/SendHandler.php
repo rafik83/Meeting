@@ -84,7 +84,7 @@ class SendHandler
      * @param string[] $recipients The Campaign recipients
      *
      * @return array $receivers An array where keys are receivers email addresses
-     *                          and values {@link MailRecipientInterface} instances
+     *               and values {@link MailRecipientInterface} instances
      */
     private function getReceivers(array $sheets, array $recipients)
     {

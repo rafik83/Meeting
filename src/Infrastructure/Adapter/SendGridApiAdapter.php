@@ -12,10 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
-use Proximum\Vimeet\Domain\Model\BillingInfo;
-use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use SendGrid\Content;
 use SendGrid\Email;
 use SendGrid\Mail;
