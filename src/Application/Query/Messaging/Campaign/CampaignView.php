@@ -20,6 +20,12 @@ class CampaignView
     /** @var string */
     public $title;
 
+    /** @var Sheet[] */
+    public $sheets;
+
+    /** @var string[] */
+    public $recipients;
+
     /** @var \DateTimeInterface */
     public $createdAt;
 
@@ -34,13 +40,15 @@ class CampaignView
      * @param string             $title
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct($id, $title, \DateTimeInterface $createdAt, \DateTimeInterface $sentAt = null)
+    public function __construct($id, $title, $recipients = [], $sheets = [], \DateTimeInterface $createdAt, \DateTimeInterface $sentAt = null)
     {
-        $this->id        = $id;
-        $this->title     = $title;
-        $this->createdAt = $createdAt;
-        $this->sentAt    = $sentAt;
-        $this->sent      = (bool) $sentAt;
+        $this->id         = $id;
+        $this->title      = $title;
+        $this->sheets     = $sheets;
+        $this->recipients = $recipients;
+        $this->createdAt  = $createdAt;
+        $this->sentAt     = $sentAt;
+        $this->sent       = (bool) $sentAt;
     }
 
     /**
@@ -53,6 +61,8 @@ class CampaignView
         return new self(
             $campaign->getId(),
             $campaign->getTitle(),
+            $campaign->getSheets(),
+            $campaign->getRecipients(),
             $campaign->getCreatedAt(),
             $campaign->getSentAt()
         );
