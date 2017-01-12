@@ -118,7 +118,6 @@ class AgendaSheetViewQueryHandler
             ->requestRepository
             ->getUnassignedRequestsBySheetAndEvent(
                 $query->sheet,
-                $query->sheet->getEvent(),
                 Request::STATE_APPROVED
             );
 
@@ -132,7 +131,7 @@ class AgendaSheetViewQueryHandler
             );
         }
 
-        usort($requests, function (RequestView $first,RequestView $second) {
+        usort($requests, function (RequestView $first, RequestView $second) {
             return strcmp($first->sheetMetTitle, $second->sheetMetTitle);
         });
 

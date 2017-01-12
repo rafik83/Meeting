@@ -39,7 +39,6 @@ class RequestViewQueryHandler
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
-
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
@@ -65,7 +64,7 @@ class RequestViewQueryHandler
      * @param Sheet   $sheet
      * @param string  $locale
      *
-     * @return array
+     * @return ParticipantView[]
      */
     public function getParticipantViews(Request $request, Sheet $sheet, $locale)
     {
@@ -73,7 +72,6 @@ class RequestViewQueryHandler
         $participants     = $request->getParticipants($sheet);
 
         foreach ($participants as $participant) {
-
             $participantViews[] = new ParticipantView(
                 $participant->getId(),
                 $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale)
