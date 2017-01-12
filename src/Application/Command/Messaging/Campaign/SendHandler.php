@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 
 class SendHandler
 {
@@ -24,18 +25,30 @@ class SendHandler
     private $billingInfoRepository;
 
     /**
+     * @var CampaignRepositoryInterface
+     */
+    private $campaignRepository;
+
+    /**
      * @var SendGridApiAdapter
      */
     private $mailer;
 
+    /**
+     * @var EventSender
+     */
+    private $senderProvider;
+
     public function __construct(
         BillingInfoRepositoryInterface $billingInfoRepository,
         CampaignRepositoryInterface $campaignRepository,
-        SendGridApiAdapter $mailer
+        SendGridApiAdapter $mailer,
+        EventSender $senderProvider
     ) {
         $this->billingInfoRepository = $billingInfoRepository;
         $this->campaignRepository    = $campaignRepository;
         $this->mailer                = $mailer;
+        $this->senderProvider        = $senderProvider;
     }
 
     /**
@@ -83,7 +96,7 @@ class SendHandler
             $receivers = array_merge($receivers, $this->billingInfoRepository->getBySheets($sheets));
         }
 
-        $this->mailer->send($message, sprintf('no-reply@%s', $campaign->getEvent()->getDomain()), $receivers);
+        $this->mailer->send($message, $this->senderProvider->generate($campaign->getEvent()) , $receivers);
 
         $campaign->markAsSent();
         $this->campaignRepository->set($campaign);
