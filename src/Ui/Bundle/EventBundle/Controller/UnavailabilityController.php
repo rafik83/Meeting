@@ -146,10 +146,9 @@ class UnavailabilityController extends Controller
      */
     public function removeAction(Request $request, EventDomain $eventDomain, Unavailability $unavailability)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
-
         $event = $eventDomain->getEvent();
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
 
         try {
             $sheet = $this
