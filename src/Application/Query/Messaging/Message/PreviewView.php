@@ -10,11 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Message;
 
-
-use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class PreviewView
 {
+    /** @var Event */
+    public $event;
+
+    /** @var string */
+    public $locale;
+
     /** @var string */
     public $subject;
 
@@ -22,22 +27,16 @@ class PreviewView
     public $content;
 
     /**
+     * @param Event  $event
+     * @param string $locale
      * @param string $subject
      * @param string $content
      */
-    public function __construct($subject, $content)
+    public function __construct($event, $locale, $subject, $content)
     {
+        $this->event   = $event;
+        $this->locale  = $locale;
         $this->subject = $subject;
         $this->content = $content;
-    }
-
-    /**
-     * @param Message $message
-     *
-     * @return PreviewView
-     */
-    public static function createFromMessage(Message $message)
-    {
-        return new self($message->getSubject(), $message->getContent());
     }
 }

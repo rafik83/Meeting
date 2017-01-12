@@ -1,5 +1,7 @@
-<h1>{{ message.subject }}</h1>
+{% extends 'MailBundle:Mail:base.html.twig' %}
 
-<div>
-    {{ message.content|html }}
-</div>
+{% block body %}
+    <h1>{{ mail.subject }}</h1>
+
+    {{ mail.content|html }}
+{% endblock %}

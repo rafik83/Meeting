@@ -17,19 +17,16 @@ class PreviewQuery
     /** @var Message */
     public $message;
 
-    /**
-     * @param Message $message
-     */
-    public function __construct(Message $message)
-    {
-        $this->message = $message;
-    }
+    /** @var string */
+    public $locale;
 
     /**
-     * @return Message
+     * @param Message $message
+     * @param string  $locale
      */
-    public function getMessage()
+    public function __construct(Message $message, $locale)
     {
-        return $this->message;
+        $this->message = $message;
+        $this->locale  = $locale;
     }
 }
