@@ -73,16 +73,12 @@ class SendGridApiAdapter
      *
      * @return Mail
      */
-    private function transform(Message $message, $sender, $receiver)
+    private function transform(Message $message, $sender, MailRecipientInterface $receiver)
     {
         $mail = new Mail();
         $mail->setSubject($message->getSubject());
         $mail->addContent(new Content('text/html', $this->render($message)));
         $mail->setFrom(new Email(null, $sender));
-
-        if (!$receiver instanceof MailRecipientInterface) {
-            throw new \InvalidArgumentException('Each emailing receiver must either be an instance of User or BillingInfo.');
-        }
 
         $personalization = new Personalization();
         $personalization->addTo(new Email(null, $receiver->getEmail()));
