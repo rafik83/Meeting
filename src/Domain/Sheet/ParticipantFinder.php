@@ -1,0 +1,50 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Sheet;
+
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+
+/**
+ * ParticipantFinder add method to find the participant of a sheet with its id
+ */
+final class ParticipantFinder
+{
+    /**
+     * @param Sheet $sheet
+     * @param int   $id
+     *
+     * @return bool
+     */
+    public static function hasParticipantWithId(Sheet $sheet, $id)
+    {
+        return null !== self::getParticipantWithId($sheet, $id);
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param int   $id
+     *
+     * @return null|Participant
+     */
+    public static function getParticipantWithId(Sheet $sheet, $id)
+    {
+        $participants = $sheet->getParticipants()->toArray();
+
+        foreach ($participants as $participant) {
+            if ($id === $participant->getId()) {
+                return $participant;
+            }
+        }
+
+        return null;
+    }
+}
