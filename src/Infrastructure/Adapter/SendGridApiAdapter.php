@@ -76,7 +76,7 @@ class SendGridApiAdapter
         $mail = new Mail();
         $mail->setSubject($message->getSubject());
         $mail->addContent(new Content('text/html', $this->render($message)));
-        $mail->setFrom(new Email(null, $sender));
+        $mail->setFrom(new Email($message->getEvent()->getTitle(), $sender));
 
         $personalization = new Personalization();
         $personalization->addTo(new Email(null, $receiver->getEmail()));
