@@ -14,7 +14,7 @@ class Compose
 {
     const TAG_EVENT_NAME         = '%event%';
     const TAG_PARTICIPANT        = '%participant%';
-    const TAG_PARTICIPATION_TYPE = '%participationType';
+    const TAG_PARTICIPATION_TYPE = '%participationType%';
 
     const LINK_SHEET             = '%sheetLink%';
     const LINK_PACKAGE           = '%packageLink%';
