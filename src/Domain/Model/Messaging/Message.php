@@ -47,11 +47,10 @@ class Message
     /**
      * @var string
      */
-    private static $template = 'MailBundle:Mail:base.html.twig';
+    private static $template = 'MailBundle:Mail:Messaging/emailing.html.twig';
 
     /**
      * @var string
-     * @todo dynamic value
      */
     private static $locale = 'fr';
 
