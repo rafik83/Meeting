@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Campaign;
 
+use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 
 class CampaignView
@@ -20,8 +21,8 @@ class CampaignView
     /** @var string */
     public $title;
 
-    /** @var Sheet[] */
-    public $sheets;
+    /** @var Message|null */
+    public $message;
 
     /** @var string[] */
     public $recipients;
@@ -36,18 +37,27 @@ class CampaignView
     public $sent;
 
     /**
-     * @param int                $id
-     * @param string             $title
-     * @param \DateTimeInterface $createdAt
+     * @param int                     $id
+     * @param string                  $title
+     * @param Message|null            $message
+     * @param \DateTimeInterface      $createdAt
+     * @param \DateTimeInterface|null $sentAt
+     * @param string[]                $recipients
      */
-    public function __construct($id, $title, $recipients = [], $sheets = [], \DateTimeInterface $createdAt, \DateTimeInterface $sentAt = null)
-    {
+    public function __construct(
+        $id,
+        $title,
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $sentAt = null,
+        Message $message = null,
+        $recipients = []
+    ) {
         $this->id         = $id;
         $this->title      = $title;
-        $this->sheets     = $sheets;
-        $this->recipients = $recipients;
         $this->createdAt  = $createdAt;
         $this->sentAt     = $sentAt;
+        $this->message    = $message;
+        $this->recipients = $recipients;
         $this->sent       = (bool) $sentAt;
     }
 
@@ -61,10 +71,10 @@ class CampaignView
         return new self(
             $campaign->getId(),
             $campaign->getTitle(),
-            $campaign->getSheets(),
-            $campaign->getRecipients(),
             $campaign->getCreatedAt(),
-            $campaign->getSentAt()
+            $campaign->getSentAt(),
+            $campaign->getMessage(),
+            $campaign->getRecipients()
         );
     }
 }
