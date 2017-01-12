@@ -1,7 +1,15 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
-{% block body %}
-    <h1>{{ mail.subject }}</h1>
+{% block previewSubject %}
+<table width="100%" style="background: #fff; border: 1px solid #eee">
+    <tr>
+        <td style="padding: 20px; font-family: Helvetica, sans-serif; font-size: 15px;">
+            <small>{{ 'admin.messaging.campaign.message_preview.subject'|trans }} :</small> {{ mail.subject }}
+        </td>
+    </tr>
+</table>
+{% endblock %}
 
+{% block body %}
     {{ mail.content|html }}
 {% endblock %}
