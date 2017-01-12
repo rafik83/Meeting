@@ -321,7 +321,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->andWhere('request.to = :sheet OR request.from = :sheet')
             ->andWhere('request.state = :state')
             ->setParameter('sheet', $sheet)
-            ->setParameter('state', $state);
+            ->setParameter('state', $state)
         ;
 
         return $queryBuilder->getQuery()->getResult();
