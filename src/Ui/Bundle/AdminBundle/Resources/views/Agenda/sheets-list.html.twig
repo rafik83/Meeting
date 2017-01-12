@@ -1,0 +1,41 @@
+{% for sheet in sheets %}
+    <tr id="sheet-{{ sheet.id }}">
+        <td>
+            {% if sheet.countParticipant > 1 %}
+                <span class="label label-info pull-right">
+                                <i class="icon icon-Profil_1"></i>{{ sheet.countParticipant }}
+                            </span>
+            {% endif %}
+
+            <a href="?sheet={{ sheet.id }}">
+                {{ sheet.title }}
+            </a>
+
+            <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" target="_blank"
+               title="Voir la fiche">
+                <span class="glyphicon glyphicon-link"></span>
+            </a>
+
+            <br>
+            <small>{{ sheet.type }}</small>
+
+            {% if sheet.follower is not null %}
+                <br>
+                <small>
+                    <span class="glyphicon glyphicon-arrow-right"></span> {{ sheet.follower }}
+                </small>
+            {% endif %}
+
+            <table class="table-kpi table table-condensed table-bordered">
+                <tr>
+                    <td class="text-center">{{ sheet.countRequest }}</td>
+                    <td class="text-center">{{ sheet.countProposition }}</td>
+                    <td class="text-center">{{ sheet.countValidatedRequest }}</td>
+                    <td class="text-center">{{ sheet.countSlots }}</td>
+                    <td class="text-center">{{ sheet.possibleMeetingQuantity }}</td>
+                    <td class="text-center">{{ sheet.countPlacedMeetings }}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+{% endfor %}

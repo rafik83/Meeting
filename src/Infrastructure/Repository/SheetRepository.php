@@ -30,9 +30,9 @@ class SheetRepository implements SheetRepositoryInterface
      *
      * @param EntityManager $entityManager
      */
-    public function __construct(EntityManager $entityManager) {
+    public function __construct(EntityManager $entityManager)
+    {
         $this->entityManager  = $entityManager;
-
     }
 
     /**
@@ -64,6 +64,24 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participants')
             ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsInCatalogByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participants')
+            ->where('sheet.event = :event')
+            ->andWhere('sheet.inCatalog = true')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -356,8 +374,10 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('sheet.type', 'type')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->where('sheet.event = :event')
+            ->andWhere('sheet.enable = :enable')
             ->groupBy('type')
             ->setParameter('event', $event)
+            ->setParameter('enable', true)
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();

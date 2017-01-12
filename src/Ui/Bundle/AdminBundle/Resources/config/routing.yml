@@ -263,6 +263,32 @@ admin_category_update:
     defaults: { _controller: AdminBundle:Category:update }
 
 #
+# Agenda
+#
+
+admin_agenda_index:
+    path: /event/{event}/agenda
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:index }
+
+admin_agenda_sheets_list:
+    path: /event/{event}/agenda/sheets
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:sheetsList }
+
+admin_agenda_sheet:
+    path: /event/{event}/agenda/sheet/{sheet}
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
+
+#
 # Meeting
 #
 
@@ -950,3 +976,39 @@ admin_messaging_message_update:
         message: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Messaging\Message:update }
+
+admin_messaging_message_preview:
+    path: /event/{event}/messaging/message/preview/{message}
+    requirements:
+        event: \d+
+        message: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Messaging\Message:preview }
+
+# Messaging campaigns
+admin_messaging_campaign_list:
+    path: /event/{event}/messaging-campaigns
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:list }
+admin_messaging_campaign_select_sheets:
+    path: /event/{event}/messaging/campaign/select-sheets
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:selectSheets }
+admin_messaging_campaign_select_recipients:
+    path: /event/{event}/messaging/campaign/{campaign}/select-recipients
+    requirements:
+        event: \d+
+        campaign: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:selectRecipients }
+admin_messaging_campaign_select_message:
+    path: /event/{event}/messaging/campaign/{campaign}/select-message
+    requirements:
+        event: \d+
+        campaign: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:selectMessage }
