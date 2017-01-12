@@ -59,19 +59,30 @@
             </div>
         </div>
         <div class="col-xs-10">
+
             <div class="requests-list" v-if="focus">
-                <p><b>${ focus.title }</b><br>{{ 'admin.agenda.requestsList.title'|trans }}</p>
+                <p>
+                    <b>${ focus.title }</b>
+                    <br>{{ 'admin.agenda.requestsList.title'|trans }}
+                </p>
+
                 <div class="requests-list-scrollable">
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
+                        <tr v-if="focus.requests == undefined || focus.requests.length === 0">
+                            <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
+                        </tr>
                         <tr v-for="request in focus.requests">
                             <td>
+                                {#<span class="glyphicon glyphicon-cog"></span>#}
+
                                 <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)">
-                                    <span class="glyphicon glyphicon-cog"></span>
                                     ${ request.sheetMetTitle }
                                 </a>
                                 <br>
-                                <span v-for="requestParticipant in request.participants">
+
                                 <i class="icon icon-Profil_1"></i>
+
+                                <span v-for="requestParticipant in request.participants">
                                     ${ requestParticipant.fullName }
                                 </span>
 
