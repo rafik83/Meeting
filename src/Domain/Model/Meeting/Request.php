@@ -438,4 +438,40 @@ class Request implements MessageSubjectInterface
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet
+     */
+    public function getSheetMet(Sheet $sheet)
+    {
+        if ($this->isSender($sheet)) {
+            return $this->to;
+        }
+
+        if ($this->isReceiver($sheet)) {
+            return $this->from;
+        }
+
+        throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    public function getParticipants(Sheet $sheet)
+    {
+        if ($this->isSender($sheet)) {
+            return $this->fromParticipants;
+        }
+
+        if ($this->isReceiver($sheet)) {
+            return $this->toParticipants;
+        }
+
+        throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
 }

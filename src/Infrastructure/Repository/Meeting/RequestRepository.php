@@ -310,6 +310,26 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('request.meeting IS NULL')
+            ->andWhere('request.to = :sheet OR request.from = :sheet')
+            ->andWhere('request.state = :state')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('state', $state)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestBetweenSheetsWithStates(Sheet $one, Sheet $another, array $states)
     {
         $queryBuilder = $this

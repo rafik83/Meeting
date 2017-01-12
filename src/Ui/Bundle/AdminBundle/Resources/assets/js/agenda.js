@@ -70,11 +70,17 @@ new Vue({
             this.$http.get(this.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
                     var participants                   = response.data.participants;
+                    var requests                       = response.data.requests;
                     var sheetId                        = this.findSheetAgenda(sheet);
                     this.agendas[sheetId].participants = [];
+                    this.agendas[sheetId].requests     = [];
 
                     participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);
+                    }.bind(this));
+
+                    requests.forEach(function (request) {
+                        this.agendas[sheetId].requests.push(request);
                     }.bind(this));
 
                     this.highlightMeetingsInCommon(sheet, true);

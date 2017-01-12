@@ -175,4 +175,12 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $state
+     *
+     * @return Request[]
+     */
+    public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state);
 }
