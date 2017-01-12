@@ -3,7 +3,6 @@ var $                       = require('jquery'),
     tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
     CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
-    Sortable                = require('./components/_Sortable'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
     Batch                   = require('./components/_Batch'),
@@ -12,8 +11,9 @@ var $                       = require('jquery'),
     SortableCollection      = require('./components/_SortableCollection'),
     Update                  = require('./components/_Update'),
     PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
-    AnchorFocuser           = require('./components/_AnchorFocuser');
+    AnchorFocuser           = require('./components/_AnchorFocuser'),
     DateTimePicker          = require('./components/_DateTimePicker');
+    MessagingMessagePreview = require('./components/_MessagingMessagePreview');
 
 require('elao-form.js');
 require('select2');
@@ -151,7 +151,11 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {
         new AnchorFocuser(element, location);
-    })
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-message-preview]'), function (element) {
+        new MessagingMessagePreview(element, target.querySelector('#message_preview_iframe'), target.querySelector('#no_preview_text'));
+    });
 }
 
 // Call init function when element is added to DOM

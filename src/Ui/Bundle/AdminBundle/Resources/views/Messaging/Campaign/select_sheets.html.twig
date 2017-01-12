@@ -1,0 +1,87 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'admin.messaging.campaign.sheet_list.title'|trans }}
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="page-header">{{ 'admin.messaging.campaign.sheet_list.title'|trans }} ({{ sheets|length }})</h1>
+
+    <div class="row">
+
+        {% if filters_summary|length %}
+            <div class="col-md-12 well">
+                {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                    filters:   filters_summary,
+                    resetLink: path('admin_messaging_campaign_select_sheets', { 'event': event.id })
+                }) }}
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            {% if sheets|length %}
+                {{ form_start(create_campaign_form, { 'attr': { 'data-batch': true } }) }}
+                {{ form_errors(create_campaign_form.sheetIds) }}
+                <div class="col-md-6">
+                    {{ form_widget(create_campaign_form.name, { 'label': false, 'attr': {'placeholder': 'form.sheet.messaging_campaign.create.name.label'|trans({}, 'forms')} }) }}
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="{{ 'form.sheet.messaging_campaign.create.submit.label'|trans({}, 'forms') }}" class="btn btn-primary"/>
+                </div>
+                
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" data-batch-all="tbody input[type=checkbox]" title="{{ 'admin.check-all'|trans }}" /></th>
+                            <th>{{ 'admin.messaging.campaign.sheet_list.columns.name'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sheet in sheets %}
+                            <tr>
+                                <td>{{ form_widget(create_campaign_form.sheetIds[sheet.id]) }}</td>
+                                <td>{{ sheet.name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <input type="submit" value="{{ 'form.sheet.messaging_campaign.create.submit.label'|trans({}, 'forms') }}" class="btn btn-primary"/>
+                {{ form_end(create_campaign_form) }}
+            {% else %}
+                <p class="text-warning">{{ 'admin.messaging.campaign.sheet_list.no_data'|trans }}</p>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-6 well">
+            {{ form_start(filter_form) }}
+                {{ form_row(filter_form.text) }}
+                {{ form_row(filter_form.validationState) }}
+                {{ form_row(filter_form.state) }}
+                {{ form_row(filter_form.completed) }}
+                {{ form_row(filter_form.type) }}
+                {% if filter_form.category is defined %}
+                    {{ form_row(filter_form.category) }}
+                {% endif %}
+                {{ form_row(filter_form.follower) }}
+                {{ form_row(filter_form.registeredAt) }}
+                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::NO_ORDER')]) }}
+                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')]) }}
+                {% if filter_form.boolean_filters is defined %}
+                    {{ form_row(filter_form.boolean_filters) }}
+                {% endif %}
+                <div class="form-group">
+                    <div class="col-sm-3">&nbsp;</div>
+                    <div class="col-sm-9">{{ form_widget(filter_form.submit) }}</div>
+                </div>
+            {{ form_end(filter_form) }}
+        </div>
+
+    </div>
+
+{% endblock %}

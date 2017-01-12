@@ -26,12 +26,12 @@ class ParticipantAndPlanning
     public $enabled;
 
     /**
-     * @var Product
+     * @var Product|null
      */
     public $participant;
 
     /**
-     * @var Product
+     * @var Product|null
      */
     public $planning;
 

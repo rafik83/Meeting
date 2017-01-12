@@ -1,0 +1,7 @@
+Proximum\Vimeet\Domain\Model\Messaging\Campaign:
+    campaign{1..5}:
+        __construct:
+            - '@event_asddays_2016'
+            - 'My campaign #<current()>'
+            - []
+            - '<dateTimeBetween("-10 days", "now")>'

@@ -17,12 +17,14 @@ use Elastica\Filter\Query as FilterQuery;
 use Elastica\Filter\Term;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
+use Elastica\Result;
 use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
@@ -119,6 +121,23 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $result->getNbResults(),
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetListView(Event $event, array $filters, $locale)
+    {
+        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+
+        $query = new Query($builder->getQuery());
+        $query->addSort(['sheetName' => 'asc']);
+
+        $options = ["size" => 100000];
+
+        return array_map(function (Result $sheet) {
+            return new SheetListView($sheet->id, $sheet->sheetName);
+        }, $this->searchable->search($query, $options)->getResults());
     }
 
     /**

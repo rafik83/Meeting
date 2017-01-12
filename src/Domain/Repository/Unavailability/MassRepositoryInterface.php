@@ -27,11 +27,11 @@ interface MassRepositoryInterface
 
     /**
      * @param Event  $event
-     * @param string $locale
+     * @param string|null $locale
      *
      * @return Mass[]
      */
-    public function findByEvent(Event $event, $locale);
+    public function findByEvent(Event $event, $locale = null);
 
     /**
      * @param Event $event
