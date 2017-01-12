@@ -42,7 +42,6 @@ final class Events
     const USER_ACCOUNT_ACTIVATED               = 'user.account_activated';
     const USER_PASSWORD_RESET                  = 'user.password_reset';
     const USER_PROFILE_COMPLETED               = 'user.profile_completed';
-    const TRANSACTION_CONFIRMED                = 'transaction.confirm';
     const SHEET_ENABLE_DISABLE                 = 'sheet.enable_disable';
     const SHEET_CATALOG                        = 'sheet.catalog';
     const REGISTRATION_STEP                    = 'user.registration.step';
@@ -54,4 +53,5 @@ final class Events
     const TRANSACTION_CREATED                  = 'transaction.created';
     const TRANSACTION_UPDATED                  = 'transaction.updated';
     const TRANSACTION_REMOVED                  = 'transaction.removed';
+    const TRANSACTION_CONFIRMED                = 'transaction.confirm';
 }

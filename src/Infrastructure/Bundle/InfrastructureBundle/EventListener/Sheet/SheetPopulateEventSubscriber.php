@@ -14,6 +14,10 @@ use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SheetPopulateEventSubscriber implements EventSubscriberInterface
@@ -48,13 +52,49 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param TransactionCreatedEvent $event
+     */
+    public function onTransactionCreated(TransactionCreatedEvent $event)
+    {
+        $this->persister->replaceOne($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param TransactionUpdatedEvent $event
+     */
+    public function onTransactionUpdated(TransactionUpdatedEvent $event)
+    {
+        $this->persister->replaceOne($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param TransactionConfirmEvent $event
+     */
+    public function onTransactionConfirmed(TransactionConfirmEvent $event)
+    {
+        $this->persister->replaceOne($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param TransactionRemovedEvent $event
+     */
+    public function onTransactionRemoved(TransactionRemovedEvent $event)
+    {
+        $this->persister->replaceOne($event->getTransaction()->getSheet());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            Events::ORDER_CONFIRMED   => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE => 'onPackageStep',
+            Events::ORDER_CONFIRMED       => 'onOrderConfirmed',
+            Events::PACKAGE_STEP_DONE     => 'onPackageStep',
+            Events::TRANSACTION_CREATED   => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED   => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED   => 'onTransactionRemoved',
         ];
     }
 }
