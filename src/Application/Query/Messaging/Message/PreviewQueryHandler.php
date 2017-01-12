@@ -19,6 +19,11 @@ class PreviewQueryHandler
      */
     public function handle(PreviewQuery $query)
     {
-        return PreviewView::createFromMessage($query->getMessage());
+        return new PreviewView(
+            $query->message->getEvent(),
+            $query->locale,
+            $query->message->getSubject(),
+            $query->message->getContent()
+        );
     }
 }
