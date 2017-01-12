@@ -1,0 +1,66 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet website.
+ *
+ * Copyright © Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Repository\Messaging;
+
+use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
+
+class CampaignRepository implements CampaignRepositoryInterface
+{
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(Campaign $campaign)
+    {
+        $this->entityManager->persist($campaign);
+        $this->entityManager->flush($campaign);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Campaign $campaign)
+    {
+        $this->entityManager->flush($campaign);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->from(Campaign::class, 'campaign')
+            ->select('campaign')
+            ->where('campaign.event = :event')
+            ->orderBy('campaign.createdAt', 'DESC')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+}

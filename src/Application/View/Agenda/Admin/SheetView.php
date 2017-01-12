@@ -66,6 +66,11 @@ class SheetView
      * @var int
      */
     public $possibleMeetingQuantity;
+    
+    /**
+     * @var string
+     */
+    public $url;
 
     /**
      * SheetView constructor.
