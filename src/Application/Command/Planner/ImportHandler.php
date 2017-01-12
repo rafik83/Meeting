@@ -237,7 +237,7 @@ class ImportHandler
             }
         }
 
-        $meeting = new Meeting($slot, $sheetFrom, $participantsFrom, $sheetTo, $participantsTo, $this->dateTime);
+        $meeting = new Meeting($slot, $sheetFrom, $participantsFrom, $sheetTo, $participantsTo, $this->dateTime, $spot);
 
         $this->entityManagerAdapter->persist($meeting);
     }
