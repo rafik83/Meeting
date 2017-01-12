@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Campaign;
 
+use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
@@ -46,6 +47,19 @@ class SendHandler
         $campaign   = $command->getCampaign();
         $sheets     = $campaign->getSheets();
         $recipients = $campaign->getRecipients();
+        $message    = $campaign->getMessage();
+
+        if (!$sheets) {
+            throw new CampaignSendingFailedException('flash.messaging.campaign.send.failure.no_sheet');
+        }
+
+        if (!$message) {
+            throw new CampaignSendingFailedException('flash.messaging.campaign.send.failure.no_message');
+        }
+
+        if (!$recipients) {
+            throw new CampaignSendingFailedException('flash.messaging.campaign.send.failure.no_recipient');
+        }
 
         $sendToParticipants    = in_array(Campaign::RECIPIENT_PARTICIPANTS, $recipients, true);
         $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
@@ -69,7 +83,7 @@ class SendHandler
             $receivers = array_merge($receivers, $this->billingInfoRepository->getBySheets($sheets));
         }
 
-        $this->mailer->send($campaign->getMessage(), sprintf('no-reply@%s', $campaign->getEvent()->getDomain()), $receivers);
+        $this->mailer->send($message, sprintf('no-reply@%s', $campaign->getEvent()->getDomain()), $receivers);
 
         $campaign->markAsSent();
         $this->campaignRepository->set($campaign);
