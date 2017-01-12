@@ -53,9 +53,9 @@ class SendGridApiAdapter
     /**
      * Sends an emailing message to a given list of users.
      *
-     * @param Message              $message   The message to send
-     * @param string               $sender    The message sender
-     * @param (User|BillingInfo)[] $receivers The message receivers
+     * @param Message                  $message   The message to send
+     * @param string                   $sender    The message sender
+     * @param MailRecipientInterface[] $receivers The message receivers
      */
     public function send(Message $message, $sender, array $receivers)
     {
@@ -67,9 +67,9 @@ class SendGridApiAdapter
     /**
      * Transforms a Message to a sendgrid Mail.
      *
-     * @param Message          $message
-     * @param string           $sender
-     * @param User|BillingInfo $receiver
+     * @param Message                $message
+     * @param string                 $sender
+     * @param MailRecipientInterface $receiver
      *
      * @return Mail
      */

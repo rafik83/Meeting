@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Messaging\Campaign;
 use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
@@ -78,25 +79,28 @@ class SendHandler
         $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
         $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);
 
+        $addReceivers = function ($newReceivers) use (&$receivers) {
+            /** @var MailRecipientInterface */
+            foreach ($newReceivers as $receiver) {
+                $receivers[$receiver->getEmail()] = $receiver;
+            }
+        };
+
         foreach ($sheets as $sheet) {
             if (true === $sendToOwners) {
-                $receivers[] = $sheet->getOwner();
+                $addReceivers([$sheet->getOwner()]);
             }
 
             if (true === $sendToParticipants) {
-                foreach ($sheet->getParticipants() as $participant) {
-                    if (!in_array($participant->getUser(), $receivers)) {
-                        $receivers[] = $participant;
-                    }
-                }
+                $addReceivers($sheet->getParticipants());
             }
         }
 
         if (true === $sendToBillingContacts) {
-            $receivers = array_merge($receivers, $this->billingInfoRepository->getBySheets($sheets));
+            $addReceivers($this->billingInfoRepository->getBySheets($sheets));
         }
 
-        $this->mailer->send($message, $this->senderProvider->generate($campaign->getEvent()) , $receivers);
+        $this->mailer->send($message, $this->senderProvider->generate($campaign->getEvent()), $receivers);
 
         $campaign->markAsSent();
         $this->campaignRepository->set($campaign);
