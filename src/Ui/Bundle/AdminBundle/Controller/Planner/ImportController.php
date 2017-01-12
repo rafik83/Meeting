@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,9 +39,20 @@ class ImportController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('admin_planner', [
-                'event' => $event->getId(),
-            ]);
+            try {
+                $this->get('tactician.commandbus')->handle($import);
+                $this->addFlash('success', 'flash.admin.planner.import.success');
+
+                return $this->redirectToRoute('admin_planner', [
+                    'event' => $event->getId(),
+                ]);
+            } catch (InvalidXmlException $exception) {
+                $form->get('file')->addError(
+                    new FormError(
+                        'validators.planner.import.invalidXml'
+                    )
+                );
+            }
         }
 
         return $this->render('AdminBundle:Planner/Import:form.html.twig', [
