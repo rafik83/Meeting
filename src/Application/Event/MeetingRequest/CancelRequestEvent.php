@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Event\MeetingRequest;
 
-class CreateRequestEvent extends AbstractRequestEvent
+class CancelRequestEvent extends AbstractRequestEvent
 {
 }

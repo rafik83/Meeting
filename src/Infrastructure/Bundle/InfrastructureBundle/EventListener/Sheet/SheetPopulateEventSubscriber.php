@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
@@ -105,19 +106,30 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param CancelRequestEvent $event
+     */
+    public function onMeetingRequestCanceled(CancelRequestEvent $event)
+    {
+        // Update "from" and "to" sheets of the meeting request
+        $this->updateSheetIndexation($event->getRequest()->getFromSheet());
+        $this->updateSheetIndexation($event->getRequest()->getToSheet());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            Events::ORDER_CONFIRMED         => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE       => 'onPackageStep',
-            Events::TRANSACTION_CREATED     => 'onTransactionCreated',
-            Events::TRANSACTION_UPDATED     => 'onTransactionUpdated',
-            Events::TRANSACTION_CONFIRMED   => 'onTransactionConfirmed',
-            Events::TRANSACTION_REMOVED     => 'onTransactionRemoved',
-            Events::HAPPENING_PARTICIPATED  => 'onHappeningParticipated',
-            Events::MEETING_REQUEST_CREATED => 'onMeetingRequestCreated',
+            Events::ORDER_CONFIRMED          => 'onOrderConfirmed',
+            Events::PACKAGE_STEP_DONE        => 'onPackageStep',
+            Events::TRANSACTION_CREATED      => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED      => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED    => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED      => 'onTransactionRemoved',
+            Events::HAPPENING_PARTICIPATED   => 'onHappeningParticipated',
+            Events::MEETING_REQUEST_CREATED  => 'onMeetingRequestCreated',
+            Events::MEETING_REQUEST_CANCELED => 'onMeetingRequestCanceled',
         ];
     }
 
