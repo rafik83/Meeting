@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
@@ -84,17 +85,26 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param ParticipateEvent $event
+     */
+    public function onHappeningParticipated(ParticipateEvent $event)
+    {
+        $this->persister->replaceOne($event->getSheet());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            Events::ORDER_CONFIRMED       => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE     => 'onPackageStep',
-            Events::TRANSACTION_CREATED   => 'onTransactionCreated',
-            Events::TRANSACTION_UPDATED   => 'onTransactionUpdated',
-            Events::TRANSACTION_CONFIRMED => 'onTransactionConfirmed',
-            Events::TRANSACTION_REMOVED   => 'onTransactionRemoved',
+            Events::ORDER_CONFIRMED        => 'onOrderConfirmed',
+            Events::PACKAGE_STEP_DONE      => 'onPackageStep',
+            Events::TRANSACTION_CREATED    => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED    => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED  => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED    => 'onTransactionRemoved',
+            Events::HAPPENING_PARTICIPATED => 'onHappeningParticipated',
         ];
     }
 }

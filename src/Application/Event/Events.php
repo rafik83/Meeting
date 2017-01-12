@@ -54,4 +54,5 @@ final class Events
     const TRANSACTION_UPDATED                  = 'transaction.updated';
     const TRANSACTION_REMOVED                  = 'transaction.removed';
     const TRANSACTION_CONFIRMED                = 'transaction.confirm';
+    const HAPPENING_PARTICIPATED               = 'happening.participated';
 }

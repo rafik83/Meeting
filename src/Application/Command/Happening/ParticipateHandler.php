@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
@@ -19,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ParticipateHandler
 {
@@ -37,11 +40,15 @@ class ParticipateHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var DelayedEventDispatcher */
+    private $eventDispatcher;
+
     /**
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param ParticipantRepositoryInterface            $participantRepository
      * @param QuestionRepositoryInterface               $questionRepository
      * @param ParticipationCount                        $participationCount
+     * @param DelayedEventDispatcher                    $eventDispatcher
      * @param \DateTimeInterface                        $dateTime
      */
     public function __construct(
@@ -49,12 +56,14 @@ class ParticipateHandler
         ParticipantRepositoryInterface $participantRepository,
         QuestionRepositoryInterface $questionRepository,
         ParticipationCount $participationCount,
+        DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->participantRepository            = $participantRepository;
         $this->questionRepository               = $questionRepository;
         $this->participationCount               = $participationCount;
+        $this->eventDispatcher                  = $eventDispatcher;
         $this->dateTime                         = $dateTime;
     }
 
@@ -116,6 +125,11 @@ class ParticipateHandler
                 );
             }
         }
+
+        $this->eventDispatcher->dispatch(
+            Events::HAPPENING_PARTICIPATED,
+            new ParticipateEvent($participate->sheet, $participate->participants, $participate->happening)
+        );
 
         if (true === $participate->happening->isQuestionAllowed()) {
             // Remove previous question
