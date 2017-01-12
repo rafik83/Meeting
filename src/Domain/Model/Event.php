@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Model\Event\Day;
 /**
  * "Evènement".
  */
-class Event implements EventInterface
+class Event implements EventInterface, TraceableInterface
 {
     /**
      * All Taxes Include : prices include taxes, no additional taxes computed
@@ -569,5 +569,13 @@ class Event implements EventInterface
         });
 
         return $days;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTraceableName()
+    {
+        return 'event';
     }
 }

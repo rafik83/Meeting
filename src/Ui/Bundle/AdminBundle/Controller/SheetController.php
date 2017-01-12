@@ -428,6 +428,7 @@ class SheetController extends Controller
         $command = new ImportMapping(
             $event,
             $type,
+            $this->getUser(),
             $availableLocale,
             $importMappingView->csvHeaders,
             $importMappingView->registrationHeaders

@@ -300,6 +300,8 @@ services:
             - '@serializer.decoder.csv'
             - '@adapter.session'
             - '@serializer.denormalizer.participant'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ImportMapping }
     command.event.update_handler:

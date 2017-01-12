@@ -28,6 +28,7 @@ class Trace
     const CHANGED_TYPE        = 'changed_type';
     const VALIDATION_DRAFT    = 'validation_draft';
     const VALIDATION_VALIDATE = 'validation_validate';
+    const PARTICIPANT_IMPORTED = 'participant_imported';
 
     /**
      * @var int

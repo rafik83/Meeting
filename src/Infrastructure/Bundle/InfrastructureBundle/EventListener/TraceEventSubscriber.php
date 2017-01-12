@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
@@ -139,6 +140,20 @@ class TraceEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param ParticipantImportedEvent $event
+     */
+    public function onParticipantImported(ParticipantImportedEvent $event)
+    {
+        $this->addTrace(
+            $event->getEvent(),
+            Trace::PARTICIPANT_IMPORTED,
+            $event->getDate(),
+            '',
+            $event->getAdmin()
+        );
+    }
+
+    /**
      * @param TraceableInterface $traceable
      * @param string             $action
      * @param DateTimeInterface  $date
@@ -176,6 +191,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_CHANGED_TYPE        => 'onSheetChangedType',
             Events::SHEET_VALIDATION_DRAFT    => 'onSheetValidationDraft',
             Events::SHEET_VALIDATION_VALIDATE => 'onSheetValidationValidate',
+            Events::PARTICIPANT_IMPORTED       => 'onParticipantImported',
         ];
     }
 }

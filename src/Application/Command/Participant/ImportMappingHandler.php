@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -35,20 +38,36 @@ class ImportMappingHandler
     private $denormalizer;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+    /**
+     * @var \DateTimeInterface
+     */
+    private $date;
+
+
+    /**
      * ImportMappingHandler constructor.
      *
-     * @param DecoderInterface      $csvDecoder
-     * @param SessionInterface      $session
+     * @param DecoderInterface $csvDecoder
+     * @param SessionInterface $session
      * @param DenormalizerInterface $denormalizer
+     * @param DelayedEventDispatcher $eventDispatcher
+     * @param \DateTimeInterface $date
      */
     public function __construct(
         DecoderInterface $csvDecoder,
         SessionInterface $session,
-        DenormalizerInterface $denormalizer
+        DenormalizerInterface $denormalizer,
+        DelayedEventDispatcher $eventDispatcher,
+        \DateTimeInterface $date
     ) {
         $this->session      = $session;
         $this->csvDecoder   = $csvDecoder;
         $this->denormalizer = $denormalizer;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->date = $date;
     }
 
     /**
@@ -68,6 +87,12 @@ class ImportMappingHandler
             'type'                => $importMapping->type,
             'locale'              => $importMapping->locale,
         ]);
+
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_IMPORTED, new ParticipantImportedEvent(
+            $importMapping->admin,
+            $importMapping->event,
+            $this->date
+        ));
     }
 
     /**

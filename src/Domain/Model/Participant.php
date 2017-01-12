@@ -58,6 +58,11 @@ class Participant
     private $happeningParticipations;
 
     /**
+     * @var bool
+     */
+    private $imported = false;
+
+    /**
      * @param Sheet $sheet
      * @param User  $user
      * @param array $data
@@ -216,4 +221,27 @@ class Participant
     {
         return $this->happeningParticipations;
     }
+
+    /**
+     * @return bool
+     */
+    public function isImported()
+    {
+        return $this->imported;
+    }
+
+    /**
+     * @param bool $imported
+     *
+     * @return $this
+     */
+    public function setImported($imported)
+    {
+        $this->imported = $imported;
+
+        return $this;
+    }
+
+
+
 }

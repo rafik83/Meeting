@@ -54,4 +54,5 @@ final class Events
     const TRANSACTION_CREATED                  = 'transaction.created';
     const TRANSACTION_UPDATED                  = 'transaction.updated';
     const TRANSACTION_REMOVED                  = 'transaction.removed';
+    const PARTICIPANT_IMPORTED                 = 'participant.imported';
 }
