@@ -178,10 +178,9 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet  $sheet
-     * @param Event  $event
      * @param string $state
      *
      * @return Request[]
      */
-    public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, Event $event, $state);
+    public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state);
 }
