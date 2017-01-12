@@ -50,8 +50,14 @@ class MeetingView
      * @param \DateTimeInterface $slotBegin
      * @param \DateTimeInterface $slotEnd
      */
-    public function __construct($id, $sheetNameFrom, $sheetNameTo, \DateTimeInterface $createdAt, \DateTimeInterface $slotBegin, \DateTimeInterface $slotEnd)
-    {
+    public function __construct(
+        $id,
+        $sheetNameFrom,
+        $sheetNameTo,
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $slotBegin,
+        \DateTimeInterface $slotEnd
+    ) {
         $this->id            = $id;
         $this->sheetNameFrom = $sheetNameFrom;
         $this->sheetNameTo   = $sheetNameTo;

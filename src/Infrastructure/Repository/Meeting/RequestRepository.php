@@ -48,8 +48,11 @@ class RequestRepository implements RequestRepositoryInterface
      * @param Paginator        $paginator
      * @param SheetInfoGuesser $sheetInfoGuesser
      */
-    public function __construct(EntityManager $entityManager, Paginator $paginator, SheetInfoGuesser $sheetInfoGuesser)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        Paginator $paginator,
+        SheetInfoGuesser $sheetInfoGuesser
+    ) {
         $this->entityManager    = $entityManager;
         $this->paginator        = $paginator;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
@@ -189,6 +192,26 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
         return $queryBuilder->receivedBy($sheet)->pending()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRequestSentBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->sendBy($sheet)->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+
+        return $queryBuilder->receivedBy($sheet)->count()->getIntResult();
     }
 
     /**

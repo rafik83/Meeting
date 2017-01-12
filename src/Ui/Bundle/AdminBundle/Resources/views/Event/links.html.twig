@@ -92,6 +92,11 @@
                 {{ 'admin.messaging.message.link'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_messaging_campaign_list', { 'event': event.id }) }}">
+                    {{ 'admin.messaging.campaign.menu.list.title'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
     <li>
@@ -132,6 +137,11 @@
     <li class="dropdown-submenu">
         <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">{{ 'admin.meeting.link'|trans }}</a>
         <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_agenda_index', { 'event': event.id }) }}">
+                    {{ 'admin.agenda.link'|trans }}
+                </a>
+            </li>
             <li>
                 <a href="{{ path('admin_meeting_request_list', { 'event': event.id }) }}">
                 {{ 'admin.meeting_request.link'|trans }}
