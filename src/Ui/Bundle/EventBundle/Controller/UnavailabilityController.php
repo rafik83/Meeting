@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
+use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
@@ -18,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -97,9 +99,9 @@ class UnavailabilityController extends Controller
                                 'validators.unavailability.timeOutOfRange.begin',
                                 [
                                     '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
-                                        ->format($exception->day->getDay())
+                                        ->format($exception->day->getDay()),
                                 ],
-                                 'validators'
+                                'validators'
                             )
                         )
                     );
@@ -133,6 +135,36 @@ class UnavailabilityController extends Controller
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'form_unavailability'    => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Request        $request
+     * @param EventDomain    $eventDomain
+     * @param Unavailability $unavailability
+     *
+     * @return RedirectResponse
+     */
+    public function removeAction(Request $request, EventDomain $eventDomain, Unavailability $unavailability)
+    {
+        $event = $eventDomain->getEvent();
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
+
+        try {
+            $sheet = $this
+                ->get('sheet.sheet_guesser')
+                ->getUserSheet($this->getUser(), $event, $request->getLocale());
+        } catch (SheetNotFoundException $exception) {
+            throw $this->createNotFoundException('Sheet not found');
+        }
+
+        if ($sheet != $unavailability->getParticipant()->getSheet()) {
+            throw $this->createAccessDeniedException('This user can not remove this unavailability');
+        }
+
+        $this->get('tactician.commandbus')->handle(new Remove($unavailability));
+
+        return $this->redirectToRoute('event_agenda');
     }
 
     /**

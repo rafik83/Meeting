@@ -574,3 +574,10 @@ event_unavailability_create:
     path: /agenda/unavailability/create
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Unavailability:create }
+
+event_unavailability_remove:
+    path: /agenda/unavailability/{unavailability}/remove
+    methods: [DELETE]
+    requirements:
+        unavailability: \d+
+    defaults: { _controller: EventBundle:Unavailability:remove }

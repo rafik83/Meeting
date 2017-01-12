@@ -1,6 +1,6 @@
 @event @agenda @unavailability
 Feature: Unavailability
-  As a participant, I can add an unavailability
+  As a participant, I can add and remove an unavailability
 
   Scenario: I can add an unavailability
     Given the database is empty
@@ -37,3 +37,11 @@ Feature: Unavailability
     And I press "form.create_unavailability.children.submit.label"
     Then I should be on this page "/fr/agenda"
     And I should see "unavailability.title"
+
+  Scenario: I can remove an unavailability
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I go to this page "/fr/agenda"
+    And I should see "unavailability.title"
+    When I press "agenda.unavailability.remove"
+    Then I should be on this page "/fr/agenda"
+    And I should not see "unavailability.title"
