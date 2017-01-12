@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
@@ -32,20 +31,13 @@ class SendGridApiAdapter
     private $twig;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @param SendGridApiClient   $client
      * @param Twig_Environment    $twig
-     * @param TranslatorInterface $translator
      */
-    public function __construct(SendGridApiClient $client, \Twig_Environment $twig, TranslatorInterface $translator)
+    public function __construct(SendGridApiClient $client, \Twig_Environment $twig)
     {
-        $this->client     = $client;
-        $this->twig       = $twig;
-        $this->translator = $translator;
+        $this->client = $client;
+        $this->twig   = $twig;
     }
 
     /**
