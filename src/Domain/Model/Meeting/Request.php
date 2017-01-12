@@ -465,11 +465,11 @@ class Request implements MessageSubjectInterface
     public function getParticipants(Sheet $sheet)
     {
         if ($this->isSender($sheet)) {
-            return $this->toParticipants;
+            return $this->fromParticipants;
         }
 
         if ($this->isReceiver($sheet)) {
-            return $this->fromParticipants;
+            return $this->toParticipants;
         }
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');

@@ -65,8 +65,11 @@
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
                         <tr v-for="request in focus.requests">
                             <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                ${ request.sheetMetTitle }<br>
+                                <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)">
+                                    <span class="glyphicon glyphicon-cog"></span>
+                                    ${ request.sheetMetTitle }
+                                </a>
+                                <br>
                                 <span v-for="requestParticipant in request.participants">
                                 <i class="icon icon-Profil_1"></i>
                                     ${ requestParticipant.fullName }
