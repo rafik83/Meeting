@@ -23,7 +23,7 @@ final class Events
     const USER_MAIL_CHANGED                    = 'change_mail';
     const MEETING_PARTICIPANT_ADDED            = 'meeting.participant.added';
     const MEETING_PARTICIPANT_REMOVED          = 'meeting.participant.removed';
-    const REQUEST_SENT                         = 'meeting_request.sent';
+    const MEETING_REQUEST_CREATED              = 'meeting_request.created';
     const REQUEST_REFUSED                      = 'meeting_request.refused';
     const REQUEST_CANCELED                     = 'meeting_request.canceled';
     const REQUEST_ACCEPTED                     = 'meeting_request.accepted';

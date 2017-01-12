@@ -13,12 +13,14 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SheetPopulateEventSubscriber implements EventSubscriberInterface
@@ -41,7 +43,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onPackageStep(StepDoneEvent $event)
     {
-        $this->persister->replaceOne($event->getSheet());
+        $this->updateSheetIndexation($event->getSheet());
     }
 
     /**
@@ -49,7 +51,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
-        $this->persister->replaceOne($event->getOrder()->getSheet());
+        $this->updateSheetIndexation($event->getOrder()->getSheet());
     }
 
     /**
@@ -57,7 +59,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionCreated(TransactionCreatedEvent $event)
     {
-        $this->persister->replaceOne($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
     }
 
     /**
@@ -65,7 +67,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionUpdated(TransactionUpdatedEvent $event)
     {
-        $this->persister->replaceOne($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
     }
 
     /**
@@ -73,7 +75,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionConfirmed(TransactionConfirmEvent $event)
     {
-        $this->persister->replaceOne($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
     }
 
     /**
@@ -81,7 +83,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onTransactionRemoved(TransactionRemovedEvent $event)
     {
-        $this->persister->replaceOne($event->getTransaction()->getSheet());
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
     }
 
     /**
@@ -89,7 +91,17 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onHappeningParticipated(ParticipateEvent $event)
     {
-        $this->persister->replaceOne($event->getSheet());
+        $this->updateSheetIndexation($event->getSheet());
+    }
+
+    /**
+     * @param CreateRequestEvent $event
+     */
+    public function onMeetingRequestCreated(CreateRequestEvent $event)
+    {
+        // Update "from" and "to" sheets of the meeting request
+        $this->updateSheetIndexation($event->getRequest()->getFromSheet());
+        $this->updateSheetIndexation($event->getRequest()->getToSheet());
     }
 
     /**
@@ -98,13 +110,22 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::ORDER_CONFIRMED        => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE      => 'onPackageStep',
-            Events::TRANSACTION_CREATED    => 'onTransactionCreated',
-            Events::TRANSACTION_UPDATED    => 'onTransactionUpdated',
-            Events::TRANSACTION_CONFIRMED  => 'onTransactionConfirmed',
-            Events::TRANSACTION_REMOVED    => 'onTransactionRemoved',
-            Events::HAPPENING_PARTICIPATED => 'onHappeningParticipated',
+            Events::ORDER_CONFIRMED         => 'onOrderConfirmed',
+            Events::PACKAGE_STEP_DONE       => 'onPackageStep',
+            Events::TRANSACTION_CREATED     => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED     => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED   => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED     => 'onTransactionRemoved',
+            Events::HAPPENING_PARTICIPATED  => 'onHappeningParticipated',
+            Events::MEETING_REQUEST_CREATED => 'onMeetingRequestCreated',
         ];
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    private function updateSheetIndexation(Sheet $sheet)
+    {
+        $this->persister->replaceOne($sheet);
     }
 }

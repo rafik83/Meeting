@@ -1,0 +1,36 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) 2017 Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Event\MeetingRequest;
+
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Symfony\Component\EventDispatcher\Event;
+
+class CreateRequestEvent extends Event
+{
+    /** @var Request */
+    private $request;
+
+    /**
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+}
