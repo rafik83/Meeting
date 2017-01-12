@@ -3,4 +3,4 @@ Proximum\Vimeet\Application\Command\Planner\Import:
         file:
             - NotNull: ~
             - File:
-                mimeTypes: ['application/xml', 'text/xml']
+                mimeTypes: ['application/xml', 'text/xml', 'text/html']
