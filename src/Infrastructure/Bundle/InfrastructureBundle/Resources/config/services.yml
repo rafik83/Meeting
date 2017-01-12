@@ -1313,6 +1313,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Message\Update }
 
+    command.planner.import_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@adapter.entity_manager_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
+
     #
     # Security
     #
@@ -1345,6 +1359,14 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
+    adapter.entity_manager_adapter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\EntityManagerAdapter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter.serializer_adapter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter
+        arguments:
+            - '@serializer'
 
     #
     # Components
@@ -2711,6 +2733,14 @@ services:
 
     serializer_normalizer_planner.planner_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner\PlannerNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    #
+    # Planner Denormalizer
+    #
+    serializer_denormalizer_planner.planner_denormalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Denormalizer\Planner\PlannerDenormalizer
         tags:
             - { name: serializer.normalizer }
 
