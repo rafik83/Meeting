@@ -101,6 +101,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->join('participation.happening', 'happening')
             ->where('participation.participant = :participant')
             ->setParameter('participant', $participant)
+            ->setMaxResults(1)
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
