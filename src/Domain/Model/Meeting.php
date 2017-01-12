@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class Meeting implements MessageSubjectInterface
 {
@@ -59,6 +60,16 @@ class Meeting implements MessageSubjectInterface
     private $state = self::STATE_SCHEDULED;
 
     /**
+     * @var Spot
+     */
+    private $spot;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * Meeting constructor.
      *
      * @param MeetingSlot        $slot
@@ -67,6 +78,7 @@ class Meeting implements MessageSubjectInterface
      * @param Sheet              $toSheet
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
+     * @param Spot               $spot
      */
     public function __construct(
         MeetingSlot $slot,
@@ -74,7 +86,8 @@ class Meeting implements MessageSubjectInterface
         array $fromParticipants,
         Sheet $toSheet,
         array $toParticipants,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        Spot $spot
     ) {
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
@@ -82,6 +95,7 @@ class Meeting implements MessageSubjectInterface
         $this->toSheet          = $toSheet;
         $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->createdAt        = $createdAt;
+        $this->spot             = $spot;
     }
 
     /**
@@ -230,5 +244,45 @@ class Meeting implements MessageSubjectInterface
         $this->state = self::STATE_CANCELED;
 
         return $this;
+    }
+
+    /**
+     * @return Spot
+     */
+    public function getSpot()
+    {
+        return $this->spot;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * Guess what sheet is met by the given sheet
+     *
+     * @param Sheet $sheet
+     *
+     * @return Sheet|null
+     */
+    public function getSheetMet(Sheet $sheet)
+    {
+        if ($this->fromSheet === $sheet) {
+            return $this->toSheet;
+        }
+
+        return $this->fromSheet;
     }
 }

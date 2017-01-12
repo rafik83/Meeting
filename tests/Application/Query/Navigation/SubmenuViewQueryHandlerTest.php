@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Navigation;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
@@ -23,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -113,8 +114,8 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Mock
-        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
+        $navigationBuilder                    = $this->prophesize(NavigationBuilderInterface::class);
+        $packageSubmenuButtonViewQueryHandler = $this->prophesize(PackageSubmenuButtonViewQueryHandler::class);
 
         $catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
         $catalogAccessChecker->allowedToAccess($event)->shouldNotBeCalled();
@@ -124,13 +125,22 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
-        $navigationBuilder->getRoute('event_package')->shouldBeCalled()
-            ->willReturn('package.title.link');
-
+        $packageSubmenuButtonViewQueryHandler
+            ->handle(new PackageSubmenuButtonViewQuery($sheet, $route))
+            ->shouldBeCalled()
+            ->willReturn(
+                new SubmenuButtonView(
+                    Category::PACKAGE_ICON,
+                    'package.title',
+                    'package.title.link',
+                    false,
+                    null
+                )
+            );
 
         $handler = new SheetSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $cartRowRepository->reveal(),
+            $packageSubmenuButtonViewQueryHandler->reveal(),
             $catalogAccessChecker->reveal(),
             $happeningAccessChecker->reveal()
         );
@@ -181,7 +191,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
+        $packageSubmenuButtonViewQueryHandler = $this->prophesize(PackageSubmenuButtonViewQueryHandler::class);
 
         $catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
         $catalogAccessChecker->allowedToAccess($event)->shouldNotBeCalled();
@@ -191,16 +201,25 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
-        $navigationBuilder->getRoute('event_package')->shouldBeCalled()
-            ->willReturn('package.title.link');
-
         $navigationBuilder->getRoute('happening_program')->shouldBeCalled()
             ->willReturn('program.title.link');
 
+        $packageSubmenuButtonViewQueryHandler
+            ->handle(new PackageSubmenuButtonViewQuery($sheet, $route))
+            ->shouldBeCalled()
+            ->willReturn(
+                new SubmenuButtonView(
+                    Category::PACKAGE_ICON,
+                    'package.title',
+                    'package.title.link',
+                    false,
+                    null
+                )
+            );
 
         $handler = new SheetSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $cartRowRepository->reveal(),
+            $packageSubmenuButtonViewQueryHandler->reveal(),
             $catalogAccessChecker->reveal(),
             $happeningAccessChecker->reveal()
         );
@@ -259,7 +278,7 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-        $cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
+        $packageSubmenuButtonViewQueryHandler = $this->prophesize(PackageSubmenuButtonViewQueryHandler::class);
 
         $catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
         $catalogAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
@@ -269,22 +288,31 @@ class SubmenuViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $navigationBuilder->getRoute('event_sheet')->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
-        $navigationBuilder->getRoute('event_package')->shouldBeCalled()
-            ->willReturn('package.title.link');
-
         $navigationBuilder->getRoute('event_catalog_index')->shouldBeCalled()
             ->willReturn('catalog.title.link');
 
         $navigationBuilder->getRoute('happening_program')->shouldBeCalled()
             ->willReturn('program.title.link');
 
-
         $handler = new SheetSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $cartRowRepository->reveal(),
+            $packageSubmenuButtonViewQueryHandler->reveal(),
             $catalogAccessChecker->reveal(),
             $happeningAccessChecker->reveal()
         );
+
+        $packageSubmenuButtonViewQueryHandler
+            ->handle(new PackageSubmenuButtonViewQuery($sheet, $route))
+            ->shouldBeCalled()
+            ->willReturn(
+                new SubmenuButtonView(
+                    Category::PACKAGE_ICON,
+                    'package.title',
+                    'package.title.link',
+                    false,
+                    null
+                )
+            );
 
         $menuButtonViews = $handler->handle($query);
 

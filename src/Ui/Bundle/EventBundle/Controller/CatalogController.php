@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
@@ -86,20 +87,28 @@ class CatalogController extends Controller
             $filters = $searchForm->getData();
         }
 
+        $page = $request->query->getInt('page', 1);
+
         try {
             /** @var PaginatedResult $paginatedResult */
             $paginatedResult = $this->get('tactician.commandbus.query')->handle(
                 new PaginatedCatalogSheetPreviewViewQuery(
                     $event,
                     $filters,
-                    $request->query->getInt('page', 1),
-                    100,
+                    $page,
+                    48,
                     $locale,
                     $sheet
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
             throw $this->createNotFoundException($exception->getMessage());
+        }
+
+        $seeMoreButton = false;
+
+        if ($paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page)) {
+            $seeMoreButton = true;
         }
 
         $searchForm = $this->getFilteredSearchForm(
@@ -115,6 +124,20 @@ class CatalogController extends Controller
 
         if ($request->isXmlHttpRequest()) {
             $template = 'EventBundle:Catalog:Partial/catalog.html.twig';
+
+            if ($page > 1) {
+                return new JsonResponse(
+                    [
+                        'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
+                            'paginatedResult' => $paginatedResult,
+                            'viewer' =>  $sheet,
+                            'page'   => $page
+                        ]),
+                        'seeMoreButton' => $seeMoreButton,
+                    ]
+                );
+            }
+
         } else {
             $template = 'EventBundle:Catalog:index.html.twig';
         }
@@ -122,9 +145,11 @@ class CatalogController extends Controller
         return $this->render($template, [
             'event'           => $event,
             'sheet'           => $sheet,
+            'page'            => 1,
             'isCatalog'       => true,
             'typeViews'       => $typeViews,
             'paginatedResult' => $paginatedResult,
+            'seeMoreButton'   => $seeMoreButton,
             'searchForm'      => $searchForm->createView(),
         ]);
     }
@@ -270,7 +295,11 @@ class CatalogController extends Controller
      */
     private function sheetInfos(Event $event, Sheet $sheet, $locale)
     {
-        $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        try {
+            $userSheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        } catch (SheetNotFoundException $exception) {
+            throw $this->createNotFoundException('Sheet not found');
+        }
 
         if (!$this->get('catalog.sheet_access_checker')->checkAccess($userSheet, $sheet)) {
             throw $this->createAccessDeniedException();

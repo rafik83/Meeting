@@ -141,8 +141,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->orderBy('happening.begin')
             ->setParameter('event', $event)
             ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
-            ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')))
-        ;
+            ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')));
 
         if ($category !== null) {
             $queryBuilder
@@ -168,6 +167,29 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->join('happening.talkings', 'talking')
             ->join('talking.speaker', 'speaker', 'WITH', 'talking.speaker = :speaker')
             ->setParameter('speaker', $speaker);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Happening[]
+     */
+    public function findHappeningParticipant(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translations')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translations')
+            ->join('happening.participations', 'participations')
+            ->join('participations.participant', 'participant')
+            ->join('participant.user', 'user')
+            ->where('happening.event = :event')
+            ->orderBy('happening.begin')
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }

@@ -374,8 +374,10 @@ class SheetRepository implements SheetRepositoryInterface
             ->join('sheet.type', 'type')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->where('sheet.event = :event')
+            ->andWhere('sheet.enable = :enable')
             ->groupBy('type')
             ->setParameter('event', $event)
+            ->setParameter('enable', true)
             ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
