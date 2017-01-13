@@ -39,9 +39,9 @@ class EntityManagerAdapter implements EntityManagerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function flush()
+    public function flush($entity = null)
     {
-        $this->entityManager->flush();
+        $this->entityManager->flush($entity);
     }
 
     /**
@@ -50,5 +50,13 @@ class EntityManagerAdapter implements EntityManagerAdapterInterface
     public function clear()
     {
         $this->entityManager->clear();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function detach($entity)
+    {
+        $this->entityManager->detach($entity);
     }
 }
