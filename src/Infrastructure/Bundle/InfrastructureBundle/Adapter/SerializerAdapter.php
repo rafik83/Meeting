@@ -33,7 +33,7 @@ class SerializerAdapter implements SerializerAdapterInterface
      */
     public function deserialize($data, $type, $format, array $context = [])
     {
-        $this->serializer->deserialize($data, $type, $format, $context);
+        return $this->serializer->deserialize($data, $type, $format, $context);
     }
 
     /**
@@ -41,6 +41,6 @@ class SerializerAdapter implements SerializerAdapterInterface
      */
     public function serialize($data, $format, array $context = [])
     {
-        $this->serializer->serialize($data, $format, $context);
+        return $this->serializer->serialize($data, $format, $context);
     }
 }
