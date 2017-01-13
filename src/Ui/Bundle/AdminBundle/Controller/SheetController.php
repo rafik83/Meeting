@@ -29,9 +29,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
-use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -476,6 +476,11 @@ class SheetController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.sheet.import_mapping.success');
+
+            return $this->redirectToRoute('admin_sheet_import_mapping', [
+                'event' => $event->getId(),
+                'type'  => $type->getId(),
+            ]);
         }
 
         return $this->render('AdminBundle:Sheet:importMapping.html.twig', [

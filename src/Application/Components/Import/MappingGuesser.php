@@ -20,31 +20,13 @@ class MappingGuesser
     private $mappings;
 
     /**
-     * Array of keys
-     *
-     * @var array
-     */
-    private $mappedIn;
-
-    /**
-     * Array of keys
-     *
-     * @var array
-     */
-    private $mappedOut;
-
-    /**
      * MappingGuesser constructor.
      *
      * @param array $mappings
-     * @param array $mappedIn
-     * @param array $mappedOut
      */
-    public function __construct(array $mappings, array $mappedIn, array $mappedOut)
+    public function __construct(array $mappings)
     {
         $this->mappings  = $mappings;
-        $this->mappedIn  = $mappedIn;
-        $this->mappedOut = $mappedOut;
     }
 
     /**

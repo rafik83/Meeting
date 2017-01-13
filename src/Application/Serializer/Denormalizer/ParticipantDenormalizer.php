@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -95,11 +94,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $participants = $this->participantRepository->findByEvent($context['event']);
         $users        = $this->userRepository->all();
 
-        $mappingGuesser = new MappingGuesser(
-            $context['mappings'],
-            $context['csvHeaders'],
-            $context['registrationHeaders']
-        );
+        $mappingGuesser = new MappingGuesser($context['mappings']);
 
         $mappedMailCsvColumn = $mappingGuesser->getMappedInKey(ParticipantImportTag::REGISTRATION_FIELD_MAIL);
 
