@@ -150,15 +150,26 @@ class ImportHandler
     {
         $event = $import->event;
         $this->prepareRequestSheetSlotAndSpot($event);
+        $toFlush = [];
 
         $index = 1;
         foreach ($plannerResult->meetings as $meetingResult) {
-            $this->handleMeeting($meetingResult);
+            $meeting = $this->handleMeeting($meetingResult);
+
+            if (null !== $meeting) {
+                $toClear[] = $meeting;
+            }
 
             // Each 20 meetings, flush and clear to optimize the insertion
             if (0 === ($index % 20)) {
                 $this->entityManagerAdapter->flush();
-                $this->entityManagerAdapter->clear();
+
+                /** @var Meeting $flush */
+                foreach ($toFlush as $flush) {
+                    $this->entityManagerAdapter->detach($flush);
+                }
+
+                $toFlush = [];
             }
 
             $index++;
@@ -197,6 +208,8 @@ class ImportHandler
 
     /**
      * @param MeetingResult $meetingResult
+     *
+     * @return Meeting|null
      */
     private function handleMeeting(MeetingResult $meetingResult)
     {
@@ -208,9 +221,10 @@ class ImportHandler
             || null === $meetingResult->slot
             || !isset($this->slots[$meetingResult->slot->id])
         ) {
-            return; // Early return if element to create the meeting are not present in the db
+            return null; // Early return if element to create the meeting are not present in the db
         }
 
+        $request   = $this->requests[$meetingResult->requestId];
         $sheetFrom = $this->sheets[$meetingResult->sheetFrom->id];
         $sheetTo   = $this->sheets[$meetingResult->sheetTo->id];
         $spot      = $this->spots[$meetingResult->spot->id];
@@ -224,21 +238,24 @@ class ImportHandler
             $participantFrom = ParticipantFinder::getParticipantWithId($sheetFrom, $participant->id);
             $participantTo   = ParticipantFinder::getParticipantWithId($sheetTo, $participant->id);
 
-            if (null !== $participantFrom) {
+            if (null !== $participantFrom && $request->hasFromParticipant($participantFrom)) {
                 $participantsFrom[] = $participantFrom;
             }
 
-            if (null !== $participantTo) {
+            if (null !== $participantTo && $request->hasToParticipant($participantTo)) {
                 $participantsTo[] = $participantTo;
             }
 
-            if (null === $participantFrom && $participantTo === null) {
-                return; // Early return if participant of the meeting not found
+            if ((null === $participantFrom && $participantTo === null)) {
+                return null; // Early return if participant of the meeting not found
             }
         }
 
         $meeting = new Meeting($slot, $sheetFrom, $participantsFrom, $sheetTo, $participantsTo, $this->dateTime, $spot);
+        $meeting->setRequest($request);
 
         $this->entityManagerAdapter->persist($meeting);
+
+        return $meeting;
     }
 }
