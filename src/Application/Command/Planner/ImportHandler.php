@@ -157,7 +157,7 @@ class ImportHandler
             $meeting = $this->handleMeeting($meetingResult);
 
             if (null !== $meeting) {
-                $toClear[] = $meeting;
+                $toFlush[] = $meeting;
             }
 
             // Each 20 meetings, flush and clear to optimize the insertion
