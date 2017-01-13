@@ -374,12 +374,6 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Category\Create }
-    vimeet_infrastructure.vimeet.application.command.unavailability.add_unavailability_handler:
-        class: Proximum\Vimeet\Application\Command\Unavailability\AddHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.unavailability_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Add }
     vimeet_infrastructure.vimeet.application.command.unavailability.update_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\UpdateHandler
         arguments:
@@ -2183,8 +2177,17 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.request_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery }
+    query.agenda.request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery }
     query.agenda.agenda_participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaParticipantViewQueryHandler
         arguments:
@@ -2746,6 +2749,17 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.event_participants:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantsNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
         tags:
             - { name: serializer.normalizer }
 

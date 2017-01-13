@@ -112,11 +112,13 @@ class MessageController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $messageView = $this->get('tactician.commandbus')->handle(new PreviewQuery($message));
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $messageView = $this->get('tactician.commandbus')->handle(new PreviewQuery($message, $locale));
 
         return $this->render('AdminBundle:Messaging\Message:preview.html.twig', [
-            'event'   => $event,
-            'message' => $messageView,
+            'event' => $event,
+            'mail'  => $messageView,
         ]);
     }
 }

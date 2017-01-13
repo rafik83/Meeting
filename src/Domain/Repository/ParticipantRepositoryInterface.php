@@ -163,6 +163,14 @@ interface ParticipantRepositoryInterface
     public function getParticipantsBySheetId($id);
 
     /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsByEvent(Event $event, $locale);
+
+    /**
      * @param Participant[]      $participants
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end

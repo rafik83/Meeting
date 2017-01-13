@@ -31,6 +31,8 @@ admin.agenda.countPlacedMeetings: 'Nombre de RDV'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.requestsList.title: 'RDV validés'
+admin.agenda.requestsList.noPreference: 'Pas de préférence'
+admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.dayPrefix: 'J'
 admin.agenda.noPreference: 'Pas de préférences'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
@@ -170,6 +172,19 @@ admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la 
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
 admin.messaging_campaign.recipients.sheet_owner: 'Propriétaire de la fiche'
 admin.messaging.link: Emailing
+admin.messaging.message.compose.links.activateAccount: 'Activation du compte'
+admin.messaging.message.compose.links.agenda: 'Agenda'
+admin.messaging.message.compose.links.catalog: 'Catalogue'
+admin.messaging.message.compose.links.label: 'Liens personnalisés'
+admin.messaging.message.compose.links.meetingRequest: 'Gestion RDV'
+admin.messaging.message.compose.links.orders: 'Liste des commandes'
+admin.messaging.message.compose.links.package: 'Forfait'
+admin.messaging.message.compose.links.program: 'Programme'
+admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
+admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
+admin.messaging.message.compose.tags.label: 'Tags'
+admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
+admin.messaging.message.compose.tags.participationType: 'Type de participation'
 admin.messaging.menu.title: Emailing
 admin.messaging.message.content: Contenu
 admin.messaging.message.create.title: 'Créer un nouveau message'
@@ -255,6 +270,19 @@ admin.package.table.column.event: Evènement
 admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
+admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
+admin.participant.export.fields.participant_created_at: 'Creation Participant'
+admin.participant.export.fields.participant_email: 'Email Participant'
+admin.participant.export.fields.participant_id: 'ID Participant'
+admin.participant.export.fields.participant_type: 'Type Participant'
+admin.participant.export.fields.sheet_id: 'ID Fiche'
+admin.participant.export.fields.sheet_name: 'Nom Fiche'
+admin.participant.export.happening.subscriber.no: Non
+admin.participant.export.happening.subscriber.yes: Oui
+admin.participant.export.no: Non
+admin.participant.export.yes: Oui
+admin.sheet.export.no: Non
+admin.sheet.export.yes: Oui
 admin.partner.create.title: 'Créer un nouveau partenaire'
 admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'
@@ -383,7 +411,6 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
-admin.sheet.export.button.label: Exporter
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -397,6 +424,8 @@ admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.no: Non
+admin.sheet.export.participant.button.label: 'Exporter participants'
+admin.sheet.export.sheet.button.label: 'Exporter fiches'
 admin.sheet.export.yes: Oui
 admin.happening.export.fields.happening_id: 'ID Conférence'
 admin.happening.export.fields.happening_name: 'Titre conférence'

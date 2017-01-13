@@ -28,7 +28,6 @@ require('select2');
 function init (target) {
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
-    $('[data-confirm]', target).each(function (key, element) { new Confirm(element); });
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {

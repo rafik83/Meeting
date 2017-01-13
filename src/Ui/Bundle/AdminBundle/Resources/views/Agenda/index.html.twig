@@ -58,17 +58,37 @@
                 </table>
             </div>
         </div>
-
         <div class="col-xs-10">
+
             <div class="requests-list" v-if="focus">
-                <p><b>${ focus.title }</b><br>{{ 'admin.agenda.requestsList.title'|trans }}</p>
+                <p>
+                    <b>${ focus.title }</b>
+                    <br>{{ 'admin.agenda.requestsList.title'|trans }}
+                </p>
+
                 <div class="requests-list-scrollable">
                     <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
-                        <tr>
+                        <tr v-if="focus.requests == undefined || focus.requests.length === 0">
+                            <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
+                        </tr>
+                        <tr v-for="request in focus.requests">
                             <td>
-                                <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
-                                Nom autre fiche 1<br>
-                                <i class="icon icon-Profil_1"></i> Prénom NOM
+                                {#<span class="glyphicon glyphicon-cog"></span>#}
+
+                                <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)">
+                                    ${ request.sheetMetTitle }
+                                </a>
+                                <br>
+
+                                <i class="icon icon-Profil_1"></i>
+
+                                <span v-for="requestParticipant in request.participants">
+                                    ${ requestParticipant.fullName }
+                                </span>
+
+                                <span v-if="request.participants.length == 0">
+                                    {{ 'admin.agenda.requestsList.noPreference'|trans }}
+                                </span>
                             </td>
                         </tr>
                     </table>
