@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * "Participant".
  */
-class Participant
+class Participant implements MailRecipientInterface
 {
     /**
      * @var int
@@ -215,5 +215,21 @@ class Participant
     public function getHappeningParticipations()
     {
         return $this->happeningParticipations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullname()
+    {
+        return $this->user->getFullname();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->user->getEmail();
     }
 }

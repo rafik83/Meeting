@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -48,6 +48,9 @@ class Campaign
     /** @var \DateTimeInterface */
     private $createdAt;
 
+    /** @var \DateTimeInterface|null */
+    private $sentAt;
+
     /**
      * @param Event              $event
      * @param string             $title
@@ -61,7 +64,7 @@ class Campaign
         $this->filters   = $filters;
         $this->createdAt = $createdAt;
 
-        $this->sheets = new ArrayCollection();
+        $this->sheets     = new ArrayCollection();
         $this->recipients = [];
     }
 
@@ -122,6 +125,14 @@ class Campaign
     }
 
     /**
+     * @return \DateTimeInterface|null
+     */
+    public function getSentAt()
+    {
+        return $this->sentAt;
+    }
+
+    /**
      * @param Sheet $sheet
      */
     public function addSheet(Sheet $sheet)
@@ -175,5 +186,10 @@ class Campaign
         if (!in_array($recipient, $this->recipients)) {
             $this->recipients[] = $recipient;
         }
+    }
+
+    public function markAsSent(\DateTimeInterface $sentAt = null)
+    {
+        $this->sentAt = $sentAt ?: new \DateTime();
     }
 }

@@ -156,6 +156,7 @@ admin.messaging.campaign.sheet_list.no_data: 'Aucune participation n''a été tr
 admin.messaging.campaign.sheet_list.success: 'Votre ciblage a été enregistré avec succès'
 admin.messaging.campaign.sheet_list.title: 'Créer mon ciblage'
 admin.messaging.campaign.list.columns.createdAt: 'Date de création'
+admin.messaging.campaign.list.columns.sentAt: 'Date d''envoi'
 admin.messaging.campaign.list.columns.title: 'Titre'
 admin.messaging.campaign.list.no_data: 'Il n''existe pas de campagne d''emailing pour l''événement courant'
 admin.messaging.campaign.list.title: 'Campagnes d''emailing'
@@ -171,6 +172,7 @@ admin.messaging.campaign.selected_filters: 'Filtres sélectionnés'
 admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
 admin.messaging_campaign.recipients.sheet_owner: 'Propriétaire de la fiche'
+admin.messaging.campaign.send.title: Envoyer
 admin.messaging.link: Emailing
 admin.messaging.message.compose.links.activateAccount: 'Activation du compte'
 admin.messaging.message.compose.links.agenda: 'Agenda'

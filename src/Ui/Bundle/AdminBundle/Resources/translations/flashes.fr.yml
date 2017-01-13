@@ -100,6 +100,12 @@ flash.meeting_request.edit.success: 'Vous avez bien modifié la demande de rende
 flash.meeting_request.refused.success: 'Vous avez bien refusé la proposition de rendez-vous'
 flash.messaging.message.create.success: 'Le message a bien été enregistré'
 flash.messaging.message.update.success: 'Le message a bien été modifié'
+flash.messaging.campaign.send.success: 'L''emailing a bien été envoyé'
+flash.messaging.campaign.send.failure: "Une erreur est intervenue durant l'envoi: %reason%"
+flash.messaging.campaign.send.failure.no_sheet: 'Emailing "%title%" ne peut pas être envoyé car il n''a pas de sheet.'
+flash.messaging.campaign.send.failure.no_message: 'Emailing "%title%" ne peut pas être envoyé car il n''a pas de message.'
+flash.messaging.campaign.send.failure.no_recipient: 'Emailing "%title%" ne peut pas être envoyé car il n''a pas de récipient.'
+flash.messaging.campaign.send.failure.invalid_csrf: 'Emailing "%title%" n''a pas pû être envoyé car le CSRF token est invalide, veuillez rafraîchir la page.'
 flash.new_password.success: 'Votre mot de passe a été changé'
 flash.package.add_products.empty: 'Pas de produits ajoutés'
 flash.package.add_products.success: 'L''ajout des produits a bien été pris en compte'
