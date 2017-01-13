@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
+use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -47,15 +48,14 @@ class ImportMappingHandler
      */
     private $date;
 
-
     /**
      * ImportMappingHandler constructor.
      *
-     * @param DecoderInterface $csvDecoder
-     * @param SessionInterface $session
-     * @param DenormalizerInterface $denormalizer
+     * @param DecoderInterface       $csvDecoder
+     * @param SessionInterface       $session
+     * @param DenormalizerInterface  $denormalizer
      * @param DelayedEventDispatcher $eventDispatcher
-     * @param \DateTimeInterface $date
+     * @param \DateTimeInterface     $date
      */
     public function __construct(
         DecoderInterface $csvDecoder,
@@ -64,11 +64,11 @@ class ImportMappingHandler
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $date
     ) {
-        $this->session      = $session;
-        $this->csvDecoder   = $csvDecoder;
-        $this->denormalizer = $denormalizer;
+        $this->session         = $session;
+        $this->csvDecoder      = $csvDecoder;
+        $this->denormalizer    = $denormalizer;
         $this->eventDispatcher = $eventDispatcher;
-        $this->date = $date;
+        $this->date            = $date;
     }
 
     /**
@@ -78,9 +78,9 @@ class ImportMappingHandler
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
 
-        $csvData = $this->csvDecoder->decode($filename, 'csv');
+        $csvData = $this->csvDecoder->decode($filename, CsvDecoder::FORMAT);
 
-        $this->denormalizer->denormalize($csvData, Participant::class, 'csv', [
+        $this->denormalizer->denormalize($csvData, Participant::class, ParticipantDenormalizer::FORMAT, [
             'csvHeaders'          => $importMapping->csvHeaders,
             'registrationHeaders' => $importMapping->registrationHeaders,
             'mappings'            => $this->removeIgnoreFields($importMapping->mappings),
