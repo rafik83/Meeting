@@ -21,12 +21,6 @@ class CampaignView
     /** @var string */
     public $title;
 
-    /** @var Message|null */
-    public $message;
-
-    /** @var string[] */
-    public $recipients;
-
     /** @var \DateTimeInterface */
     public $createdAt;
 
@@ -34,31 +28,37 @@ class CampaignView
     public $sentAt;
 
     /** @var bool */
+    public $hasMessage;
+
+    /** @var bool */
+    public $hasRecipients;
+
+    /** @var bool */
     public $sent;
 
     /**
      * @param int                     $id
      * @param string                  $title
-     * @param Message|null            $message
      * @param \DateTimeInterface      $createdAt
      * @param \DateTimeInterface|null $sentAt
-     * @param string[]                $recipients
+     * @param bool                    $hasMessage
+     * @param bool                    $hasRecipients
      */
     public function __construct(
         $id,
         $title,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $sentAt = null,
-        Message $message = null,
-        $recipients = []
+        $hasMessage = false,
+        $hasRecipients = false
     ) {
-        $this->id         = $id;
-        $this->title      = $title;
-        $this->createdAt  = $createdAt;
-        $this->sentAt     = $sentAt;
-        $this->message    = $message;
-        $this->recipients = $recipients;
-        $this->sent       = (bool) $sentAt;
+        $this->id            = $id;
+        $this->title         = $title;
+        $this->createdAt     = $createdAt;
+        $this->sentAt        = $sentAt;
+        $this->hasMessage    = $hasMessage;
+        $this->hasRecipients = $hasRecipients;
+        $this->sent          = (bool) $sentAt;
     }
 
     /**
@@ -73,8 +73,8 @@ class CampaignView
             $campaign->getTitle(),
             $campaign->getCreatedAt(),
             $campaign->getSentAt(),
-            $campaign->getMessage(),
-            $campaign->getRecipients()
+            (bool) $campaign->getMessage(),
+            (bool) $campaign->getRecipients()
         );
     }
 }

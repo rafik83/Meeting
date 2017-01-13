@@ -40,6 +40,12 @@ class SendHandler
      */
     private $senderProvider;
 
+    /**
+     * @param BillingInfoRepositoryInterface $billingInfoRepository
+     * @param CampaignRepositoryInterface    $campaignRepository
+     * @param SendGridApiAdapter             $mailer
+     * @param EventSender                    $senderProvider
+     */
     public function __construct(
         BillingInfoRepositoryInterface $billingInfoRepository,
         CampaignRepositoryInterface $campaignRepository,

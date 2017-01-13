@@ -30,7 +30,7 @@
                         <td>
                             {% if campaign.sent %}
                                 {{ campaign.sentAt|localizeddate('medium', 'short', app.request.locale) }}
-                            {% elseif campaign.recipients is not empty and campaign.message is not null %}
+                            {% elseif campaign.hasRecipients and campaign.hasMessage %}
                                 <form action="{{ path('admin_messaging_campaign_send', { 'event': event.id, 'campaign': campaign.id }) }}" method="POST">
                                     <input type="hidden" name="_token" value="{{ csrf_token('send_campaign') }}">
                                     <button class="btn btn-primary" type="submit">{{ 'admin.messaging.campaign.send.title'|trans }}</button>
