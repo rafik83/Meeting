@@ -48,11 +48,6 @@ class ImportMapping
     public $type;
 
     /**
-     * @var bool
-     */
-    public $isEmailInMapping;
-
-    /**
      * @var Admin
      */
     public $admin;
@@ -82,4 +77,13 @@ class ImportMapping
         $this->locale              = $locale;
         $this->admin = $admin;
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmailInMappings()
+    {
+        return in_array(ParticipantImportTag::REGISTRATION_FIELD_MAIL, $this->mappings, true);
+    }
+
 }

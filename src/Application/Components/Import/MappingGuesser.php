@@ -42,14 +42,13 @@ class MappingGuesser
     }
 
     /**
-     * @param string $mappedOutValue
+     * @param $mappedOutKey
      *
-     * @return int|false
+     * @return false|int
      */
-    public function getMappedInKey($mappedOutValue)
+    public function getMappedInKey($mappedOutKey)
     {
-        $mappedOutKey = array_search($mappedOutValue, $this->mappedOut);
-        $mappedInKey  = array_search($mappedOutKey, $this->mappings);
+        $mappedInKey = array_search($mappedOutKey, $this->mappings);
 
         return $mappedInKey;
     }

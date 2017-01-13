@@ -1367,6 +1367,10 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
+    adapter.validator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter
+        arguments:
+            - '@validator'
 
     #
     # Components
@@ -1727,6 +1731,10 @@ services:
             -  '@package.product.template_product_guesser'
         tags:
             - { name: validator.constraint_validator }
+    validator.email_validator:
+        class: Proximum\Vimeet\Domain\Account\EmailValidator
+        arguments:
+            - '@adapter.validator_adapter'
 
     #
     # Account
@@ -2654,7 +2662,9 @@ services:
         class: Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@template.template_data_factory'
+            - '@validator.email_validator'
             - '@account.synchronizer'
             - '@datetime'
         tags:

@@ -62,8 +62,8 @@ class ImportMappingViewQueryHandler
         $csvHeaders = $this->csvDecoder->decodeHeaders($this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE));
 
         $registrationHeaders = [
-            ParticipantImportTag::REGISTRATION_FIELD_IGNORE,
-            ParticipantImportTag::REGISTRATION_FIELD_MAIL,
+            ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
+            ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
         ];
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);

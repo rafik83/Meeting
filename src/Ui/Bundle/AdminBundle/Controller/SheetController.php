@@ -443,6 +443,7 @@ class SheetController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
+            $this->addFlash('success', 'flash.admin.sheet.import_mapping.success');
         }
 
         return $this->render('AdminBundle:Sheet:importMapping.html.twig', [

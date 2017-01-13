@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -93,6 +94,7 @@ class ImportMappingHandler
             $importMapping->event,
             $this->date
         ));
+
     }
 
     /**

@@ -12,13 +12,19 @@ namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Application\Components\Import\MappingGuesser;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
+use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ParticipantDenormalizer implements DenormalizerInterface
@@ -46,16 +52,30 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private $dateTime;
 
     /**
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
+     * @var EmailValidator
+     */
+    private $emailValidator;
+
+    /**
      * ParticipantDenormalizer constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param UserRepositoryInterface        $userRepository
      * @param TemplateDataFactory            $templateDataFactory
+     * @param EmailValidator                 $emailValidator
      * @param Synchronizer                   $synchronizer
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
+        UserRepositoryInterface $userRepository,
         TemplateDataFactory $templateDataFactory,
+        EmailValidator $emailValidator,
         Synchronizer $synchronizer,
         \DateTimeInterface $dateTime
     ) {
@@ -63,6 +83,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->templateDataFactory   = $templateDataFactory;
         $this->synchronizer          = $synchronizer;
         $this->dateTime              = $dateTime;
+        $this->userRepository        = $userRepository;
+        $this->emailValidator        = $emailValidator;
     }
 
     /**
@@ -71,6 +93,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         $participants = $this->participantRepository->findByEvent($context['event']);
+        $users        = $this->userRepository->all();
 
         $mappingGuesser = new MappingGuesser(
             $context['mappings'],
@@ -89,26 +112,35 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['locale']
         );
 
-        foreach ($data as $row) {
-            $email = $row[$mappedMailCsvColumn];
 
-            if ($this->isAlreadyRegister($email, $participants)) {
+        foreach ($data as $row) {
+            if (!array_key_exists($mappedMailCsvColumn, $row)) {
                 continue;
             }
 
-            foreach ($row as $key => $column) {
-                $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
+            $email = $row[$mappedMailCsvColumn];
 
-                $templateObject = $registrationTemplate->getObject($registrationObjectKey);
-
-                if ($templateObject instanceof ContentObjectInterface) {
-                    $templateObject->setContentValue($column);
-                }
+            if ($this->emailValidator->validate($email) === false) {
+                continue;
+            }
+            if ($this->isAlreadyParticipant($email, $participants)) {
+                continue;
             }
 
-            $user        = new User($email, null, null, $context['locale']);
-            $sheet       = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+            $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
+
+            // handle create entities
+            if (($user = $this->hasUserAccount($email, $users)) === false) {
+                $user = new User($email, '', '', $context['locale']);
+                $user->setAccount(new User\Account());
+            }
+
+            $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+            $sheet->setRegistrationData([]);
+
             $participant = new Participant($sheet, $user, $registrationTemplate->getData(), false);
+            $participant->setImported(true);
+
 
             $this->participantRepository->add($participant);
 
@@ -130,7 +162,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return bool
      */
-    private function isAlreadyRegister($email, array $participants)
+    private function isAlreadyParticipant($email, array $participants)
     {
         foreach ($participants as $participant) {
             if ($participant->getUser()->getEmail() === $email) {
@@ -139,5 +171,59 @@ class ParticipantDenormalizer implements DenormalizerInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string $email
+     * @param User[] $users
+     *
+     * @return User|false
+     */
+    private function hasUserAccount($email, array $users)
+    {
+        foreach ($users as $user) {
+            if ($user->getEmail() === $email) {
+                return $user;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array          $row
+     * @param MappingGuesser $mappingGuesser
+     * @param TemplateData   $registrationTemplate
+     * @param array          $context
+     */
+    private function handleRow(
+        array $row,
+        MappingGuesser $mappingGuesser,
+        TemplateData $registrationTemplate,
+        array $context
+    ) {
+        foreach ($row as $key => $column) {
+            $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
+
+            if ($registrationObjectKey === false
+                || $registrationObjectKey === ParticipantImportTag::REGISTRATION_FIELD_MAIL
+            ) {
+                continue;
+            }
+
+            $templateObject = $registrationTemplate->getObject($registrationObjectKey);
+
+            if ($templateObject instanceof ContentObjectInterface) {
+                try {
+                    $validator = ObjectValidatorFactory::create($templateObject);
+
+                    if ($validator->validate($column, ['locale' => $context['locale']])) {
+                        $templateObject->setContentValue($column);
+                    }
+                } catch (ObjectValidatorNotExistException $exception) {
+                    $templateObject->setContentValue($column);
+                }
+            }
+        }
     }
 }
