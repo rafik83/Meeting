@@ -17,6 +17,13 @@ class Version20170113094502 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('DELETE FROM meeting_request_from_participants');
+        $this->addSql('DELETE FROM meeting_request_to_participants');
+        $this->addSql('DELETE FROM meeting_from_participants');
+        $this->addSql('DELETE FROM meeting_to_participants');
+        $this->addSql('DELETE FROM meeting_message');
+        $this->addSql('DELETE FROM meeting_request');
+        $this->addSql('DELETE FROM meeting');
         $this->addSql('ALTER TABLE meeting_request DROP FOREIGN KEY FK_A345C71267433D9C');
         $this->addSql('DROP INDEX UNIQ_A345C71267433D9C ON meeting_request');
         $this->addSql('ALTER TABLE meeting_request DROP meeting_id');
