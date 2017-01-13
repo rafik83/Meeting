@@ -17,6 +17,7 @@ class Version20170113094502 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->addSql('SET foreign_key_checks = 0');
         $this->addSql('DELETE FROM meeting_request_from_participants');
         $this->addSql('DELETE FROM meeting_request_to_participants');
         $this->addSql('DELETE FROM meeting_from_participants');
@@ -30,6 +31,7 @@ class Version20170113094502 extends AbstractMigration
         $this->addSql('ALTER TABLE meeting ADD request_id INT NOT NULL');
         $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E139427EB8A5 FOREIGN KEY (request_id) REFERENCES meeting_request (id) ON DELETE CASCADE');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F515E139427EB8A5 ON meeting (request_id)');
+        $this->addSql('SET foreign_key_checks = 1');
     }
 
     /**
