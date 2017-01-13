@@ -30,6 +30,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
 {
@@ -266,7 +267,18 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $toSheet       = SheetFactory::create($this->event);
         $toParticipant = ParticipantFactory::create($toSheet);
         $spot          = SpotFactory::create($this->event);
-        $meeting       = new Meeting($meetingSlot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $beginS, $spot);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting       = new Meeting(
+            $request,
+            $meetingSlot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $beginS,
+            $spot
+        );
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
@@ -305,7 +317,9 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $end     = new \DateTime('2016-10-12 10:00:00.000');
         $slot    = new MeetingSlot($this->event, $begin, $end);
         $spot    = SpotFactory::create($this->event);
-        $meeting = new Meeting($slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting = new Meeting($request, $slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting]);
@@ -335,11 +349,22 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $toSheet       = SheetFactory::create($this->event);
         $toParticipant = ParticipantFactory::create($toSheet);
-        $begin   = new \DateTime('2016-10-12 09:00:00.000');
-        $end     = new \DateTime('2016-10-12 10:00:00.000');
-        $slot    = new MeetingSlot($this->event, $begin, $end);
-        $spot    = SpotFactory::create($this->event);
-        $meeting = new Meeting($slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $begin         = new \DateTime('2016-10-12 09:00:00.000');
+        $end           = new \DateTime('2016-10-12 10:00:00.000');
+        $slot          = new MeetingSlot($this->event, $begin, $end);
+        $spot          = SpotFactory::create($this->event);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting       = new Meeting(
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $begin,
+            $spot
+        );
 
         $beginS         = new \DateTime('2016-10-12 08:00:00.000');
         $endS           = new \DateTime('2016-10-12 09:00:00.000');
@@ -347,7 +372,17 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $toSheet2       = SheetFactory::create($this->event);
         $toParticipant2 = ParticipantFactory::create($toSheet);
         $spot2          = SpotFactory::create($this->event, 'ref2');
-        $meeting2       = new Meeting($meetingSlot, $this->sheet, [$this->participant], $toSheet2, [$toParticipant2], $beginS, $spot2);
+        $request2       = new Meeting\Request($this->sheet, [], $toSheet2, [], new \DateTime(), $user);
+        $meeting2       = new Meeting(
+            $request2,
+            $meetingSlot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet2,
+            [$toParticipant2],
+            $beginS,
+            $spot2
+        );
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([$meeting2, $meeting]);
@@ -604,11 +639,22 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $toSheet       = SheetFactory::create($this->event);
         $toParticipant = ParticipantFactory::create($toSheet);
-        $begin   = new \DateTime('2016-10-12 09:00:00.000');
-        $end     = new \DateTime('2016-10-12 10:00:00.000');
-        $slot    = new MeetingSlot($this->event, $begin, $end);
-        $spot    = SpotFactory::create($this->event);
-        $meeting = new Meeting($slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $begin         = new \DateTime('2016-10-12 09:00:00.000');
+        $end           = new \DateTime('2016-10-12 10:00:00.000');
+        $slot          = new MeetingSlot($this->event, $begin, $end);
+        $spot          = SpotFactory::create($this->event);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting       = new Meeting(
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $begin,
+            $spot
+        );
 
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
         $endM           = new \DateTime('2016-10-12 10:45:00.000');
@@ -642,11 +688,22 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $toSheet       = SheetFactory::create($this->event);
         $toParticipant = ParticipantFactory::create($toSheet);
-        $begin   = new \DateTime('2016-10-12 09:00:00.000');
-        $end     = new \DateTime('2016-10-12 10:00:00.000');
-        $slot    = new MeetingSlot($this->event, $begin, $end);
-        $spot    = SpotFactory::create($this->event);
-        $meeting = new Meeting($slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $begin         = new \DateTime('2016-10-12 09:00:00.000');
+        $end           = new \DateTime('2016-10-12 10:00:00.000');
+        $slot          = new MeetingSlot($this->event, $begin, $end);
+        $spot          = SpotFactory::create($this->event);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting       = new Meeting(
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $begin,
+            $spot
+        );
 
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
@@ -683,11 +740,22 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $toSheet       = SheetFactory::create($this->event);
         $toParticipant = ParticipantFactory::create($toSheet);
-        $begin   = new \DateTime('2016-10-12 09:00:00.000');
-        $end     = new \DateTime('2016-10-12 10:00:00.000');
-        $slot    = new MeetingSlot($this->event, $begin, $end);
-        $spot    = SpotFactory::create($this->event);
-        $meeting = new Meeting($slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $begin         = new \DateTime('2016-10-12 09:00:00.000');
+        $end           = new \DateTime('2016-10-12 10:00:00.000');
+        $slot          = new MeetingSlot($this->event, $begin, $end);
+        $spot          = SpotFactory::create($this->event);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting       = new Meeting(
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $begin,
+            $spot
+        );
 
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
         $beginM   = new \DateTime('2016-10-12 09:30:00.000');
@@ -725,11 +793,22 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         // The result should be MEETING_UNAVAILABILITY
         $toSheet       = SheetFactory::create($this->event);
         $toParticipant = ParticipantFactory::create($toSheet);
-        $begin   = new \DateTime('2016-10-12 09:00:00.000');
-        $end     = new \DateTime('2016-10-12 10:00:00.000');
-        $slot    = new MeetingSlot($this->event, $begin, $end);
-        $spot   = SpotFactory::create($this->event);
-        $meeting = new Meeting($slot, $this->sheet, [$this->participant], $toSheet, [$toParticipant], $begin, $spot);
+        $begin         = new \DateTime('2016-10-12 09:00:00.000');
+        $end           = new \DateTime('2016-10-12 10:00:00.000');
+        $slot          = new MeetingSlot($this->event, $begin, $end);
+        $spot          = SpotFactory::create($this->event);
+        $user          = UserFactory::create();
+        $request       = new Meeting\Request($this->sheet, [], $toSheet, [], new \DateTime(), $user);
+        $meeting       = new Meeting(
+            $request,
+            $slot,
+            $this->sheet,
+            [$this->participant],
+            $toSheet,
+            [$toParticipant],
+            $begin,
+            $spot
+        );
 
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
         $beginM   = new \DateTime('2016-10-12 09:30:00.000');
