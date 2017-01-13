@@ -124,7 +124,7 @@
     z-index: 2; /* fix for not having glyphicons on top of request-list */
 
     .requests-list-scrollable {
-      max-height: 200px;
+      height: 200px;
       overflow-y: scroll;
       background-color: #fff;
       font-size: 85%;
