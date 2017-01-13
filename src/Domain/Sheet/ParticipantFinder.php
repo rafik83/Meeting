@@ -39,6 +39,7 @@ final class ParticipantFinder
     {
         $participants = $sheet->getParticipants()->toArray();
 
+        /** @var Participant $participant */
         foreach ($participants as $participant) {
             if ($id === $participant->getId()) {
                 return $participant;
