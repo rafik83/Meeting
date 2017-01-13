@@ -17,7 +17,7 @@ use SendGrid\Response;
 /**
  * Wrapper around the SendGrid Web API client.
  */
-final class SendGridApiClient extends Client
+class SendGridApiClient extends Client
 {
     /**
      * Sends an email through the SendGrid Web API.
