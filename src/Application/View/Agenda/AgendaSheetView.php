@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
+use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
+
 class AgendaSheetView
 {
     /**
@@ -18,12 +20,19 @@ class AgendaSheetView
     public $participants;
 
     /**
+     * @var RequestView[]
+     */
+    public $requests;
+
+    /**
      * AgendaSheetView constructor.
      *
      * @param AgendaParticipantView[] $participants
+     * @param RequestView[]           $requests
      */
-    public function __construct(array $participants)
+    public function __construct(array $participants, array $requests)
     {
         $this->participants = $participants;
+        $this->requests     = $requests;
     }
 }

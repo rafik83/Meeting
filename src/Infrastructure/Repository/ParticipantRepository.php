@@ -231,6 +231,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('enable', true);
 
+
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
@@ -394,9 +395,6 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParticipantsWithoutMeetingAndHappening(
         array $participants,
         \DateTimeInterface $begin,
@@ -409,9 +407,28 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countParticipantBySheet(Sheet $sheet)
+    public function getParticipantsByEvent(Event $event, $locale)
     {
         $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.enable = true AND sheet.event = :event')
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function countParticipantBySheet(Sheet $sheet)
+    {
+            $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('COUNT(participant)')

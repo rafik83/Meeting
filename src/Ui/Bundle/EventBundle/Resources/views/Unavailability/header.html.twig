@@ -2,7 +2,13 @@
     <div class="content">
         <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
         <p class="title">
+            {{ unavailability.begin|date('H:i') ~ ' - ' ~ unavailability.end|date('H:i') }}
+            -
             {{ 'unavailability.title'|trans }}
         </p>
+        <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-primary btn-sm btn-inactive">{{ 'agenda.unavailability.remove'|trans }}</button>
+        </form>
     </div>
 </header>
