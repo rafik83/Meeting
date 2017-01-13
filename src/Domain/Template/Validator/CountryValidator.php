@@ -9,6 +9,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\Validator;
 
+use Proximum\Vimeet\Domain\Template\Validator\Error\CountryError;
 use Symfony\Component\Intl\Intl;
 
 class CountryValidator implements ObjectValidatorInterface
@@ -20,6 +21,6 @@ class CountryValidator implements ObjectValidatorInterface
     {
         $countries = Intl::getRegionBundle()->getCountryNames($options['locale']);
 
-        return array_key_exists($data, $countries);
+        return new CountryError($data, array_key_exists($data, $countries));
     }
 }

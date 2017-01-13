@@ -59,6 +59,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @var EmailValidator
      */
     private $emailValidator;
+    /**
+     * @var ParticipantImportLogger
+     */
+    private $importLogger;
 
     /**
      * ParticipantDenormalizer constructor.
@@ -68,7 +72,9 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param TemplateDataFactory            $templateDataFactory
      * @param EmailValidator                 $emailValidator
      * @param Synchronizer                   $synchronizer
+     * @param ParticipantImportLogger        $importLogger
      * @param \DateTimeInterface             $dateTime
+     *
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
@@ -76,6 +82,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         TemplateDataFactory $templateDataFactory,
         EmailValidator $emailValidator,
         Synchronizer $synchronizer,
+        ParticipantImportLogger $importLogger,
         \DateTimeInterface $dateTime
     ) {
         $this->participantRepository = $participantRepository;
@@ -84,6 +91,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->dateTime              = $dateTime;
         $this->userRepository        = $userRepository;
         $this->emailValidator        = $emailValidator;
+        $this->importLogger          = $importLogger;
     }
 
     /**
@@ -93,6 +101,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
     {
         $participants = $this->participantRepository->findByEvent($context['event']);
         $users        = $this->userRepository->all();
+
+        $this->importLogger->init(count($participants), count($data));
 
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
@@ -127,6 +137,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
             if (($user = $this->hasUserAccount($email, $users)) === false) {
                 $user = new User($email, '', '', $context['locale']);
                 $user->setAccount(new User\Account());
+
+                $this->importLogger->userImported();
             }
 
             $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
@@ -208,10 +220,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             if ($templateObject instanceof ContentObjectInterface) {
                 try {
-                    $validator = ObjectValidatorFactory::create($templateObject);
+                    $validator      = ObjectValidatorFactory::create($templateObject);
+                    $validatorError = $validator->validate($column, ['locale' => $context['locale']]);
 
-                    if ($validator->validate($column, ['locale' => $context['locale']])) {
+                    if (!$validatorError->hasError()) {
                         $templateObject->setContentValue($column);
+                    } else {
+                        $this->importLogger->addError(key($row), $validatorError, $row, $context['locale']);
                     }
                 } catch (ObjectValidatorNotExistException $exception) {
                     $templateObject->setContentValue($column);

@@ -9,6 +9,8 @@
 
 namespace Proximum\Vimeet\Domain\Template\Validator;
 
+use Proximum\Vimeet\Domain\Template\Validator\Error\TelephoneError;
+
 class TelephoneValidator implements ObjectValidatorInterface
 {
     /**
@@ -16,6 +18,8 @@ class TelephoneValidator implements ObjectValidatorInterface
      */
     public function validate($data, array $options = [])
     {
-        return preg_match('#^\+(?!(?:\d*-){5,})(?!(?:\d* ){5,})[\d- /.]+$#', $data) !== false;
+        $validation = preg_match('#^\+(?!(?:\d*-){5,})(?!(?:\d* ){5,})[\d- /.]+$#', $data) !== false;
+
+        return new TelephoneError($data, $validation);
     }
 }

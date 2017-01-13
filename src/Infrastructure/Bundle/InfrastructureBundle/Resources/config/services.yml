@@ -2793,9 +2793,15 @@ services:
             - '@template.template_data_factory'
             - '@validator.email_validator'
             - '@account.synchronizer'
+            - '@serializer.denormalizer.participant_import_logger'
             - '@datetime'
         tags:
             - { name: serializer.normalizer }
+
+    serializer.denormalizer.participant_import_logger:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     serializer.encoder.csv:
         class: Proximum\Vimeet\Application\Serializer\Encoder\CsvEncoder
