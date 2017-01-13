@@ -53,7 +53,7 @@ class MeetingRequestViewQueryHandler
 
         return new MeetingRequestView(
             $sheet,
-            $this->sheetInfoGuesser->guessSheetName($sheet, $query->locale),
+            $this->sheetInfoGuesser->guessSheetTitle($sheet, $query->locale),
             $this->getFilterState($query),
             $sheet->getType()->getTitle($query->locale),
             $query->meetingRequest->getCreatedAt(),
