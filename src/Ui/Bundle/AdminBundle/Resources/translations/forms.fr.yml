@@ -515,6 +515,7 @@ form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
+form.select_recipients.children.recipients.label: Destinataires
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
@@ -530,6 +531,7 @@ form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.completed.label: Complétude
+form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
@@ -537,7 +539,12 @@ form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
+form.sheet_comment.children.filter.label: Filtrer
 form.sheet_filter.children.validationState.label: 'Statut fiche'
+form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
+form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
+form.sheet.messaging_campaign.message.submit.label: 'Terminer'
+form.sheet.messaging_campaign.recipients.submit.label: 'Valider'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler

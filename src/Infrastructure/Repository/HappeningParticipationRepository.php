@@ -91,6 +91,26 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
+    public function checkAnyParticipation(Participant $participant)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation.id')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->where('participation.participant = :participant')
+            ->setParameter('participant', $participant)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function countParticipationByHappening(Happening $happening)
     {
         $queryBuilder = $this
@@ -103,6 +123,24 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         ;
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening')
+            ->where('happening.event = :event')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

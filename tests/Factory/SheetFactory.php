@@ -19,18 +19,19 @@ use Proximum\Vimeet\Domain\Model\User;
 class SheetFactory
 {
     /**
-     * @param Event    $event
-     * @param User     $user
+     * @param Event|null    $event
+     * @param User|null     $user
+     * @param DateTime|null $datetime
+     * @param Type|null     $type
      *
-     * @param DateTime $datetime
      *
      * @return Sheet
      */
-    public static function create(Event $event = null, User $user = null, DateTime $datetime = null)
+    public static function create(Event $event = null, User $user = null, DateTime $datetime = null, Type $type = null)
     {
         $event = ($event !== null) ? $event : EventFactory::createEvent();
 
-        $type     = new Type($event);
+        $type     = $type !== null ? $type : new Type($event);
         $user     = ($user !== null) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
         $datetime = ($datetime !== null) ? $datetime : new DateTime();
 

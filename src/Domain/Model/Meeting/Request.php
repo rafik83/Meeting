@@ -420,4 +420,58 @@ class Request implements MessageSubjectInterface
     {
         return $this->to === $sheet;
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasNoPreference(Sheet $sheet)
+    {
+        if ($this->from === $sheet) {
+            return $this->fromParticipants->isEmpty();
+        }
+
+        if ($this->to === $sheet) {
+            return $this->toParticipants->isEmpty();
+        }
+
+        throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet
+     */
+    public function getSheetMet(Sheet $sheet)
+    {
+        if ($this->isSender($sheet)) {
+            return $this->to;
+        }
+
+        if ($this->isReceiver($sheet)) {
+            return $this->from;
+        }
+
+        throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    public function getParticipants(Sheet $sheet)
+    {
+        if ($this->isSender($sheet)) {
+            return $this->fromParticipants;
+        }
+
+        if ($this->isReceiver($sheet)) {
+            return $this->toParticipants;
+        }
+
+        throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
 }

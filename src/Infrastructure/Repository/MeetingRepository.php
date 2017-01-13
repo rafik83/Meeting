@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -104,6 +103,25 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getAllByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->setParameter('event', $event)
+            ->where('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByParticipant(Participant $participant)
     {
         $queryBuilder = $this
@@ -126,39 +144,36 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteAll(Event $event)
+    public function countByParticipant(Participant $participant)
     {
-        // Get event meetings
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting.id')
-            ->from(Meeting::class, 'meeting', 'meeting.id')
-            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
-            ->setParameter('event', $event);
+            ->select('COUNT(meeting)')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet')
+            ->join('meeting.toSheet', 'toSheet')
+            ->leftJoin('meeting.fromParticipants', 'fromParticipant')
+            ->leftJoin('meeting.toParticipants', 'toParticipant')
+            ->where('fromParticipant = :participant OR toParticipant = :participant')
+            ->setParameter('participant', $participant)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
 
-        $meetingsIds = array_keys($queryBuilder->getQuery()->getResult());
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 
-        // Set event requests meeting relation to null
-        $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->update(Request::class, 'request')
-            ->set('request.meeting', 'NULL')
-            ->where('request.meeting IN (:meetingsIds)')
-            ->setParameter('meetingsIds', $meetingsIds)
-            ->getQuery()
-            ->execute();
-
-        $this->entityManager->flush();
-
-        // Delete event meetings
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteAll(Event $event)
+    {
         $this
             ->entityManager
             ->createQueryBuilder()
             ->delete(Meeting::class, 'meeting')
-            ->where('meeting.id IN (:meetingsIds)')
-            ->setParameter('meetingsIds', $meetingsIds)
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
+            ->setParameter('event', $event)
             ->getQuery()
             ->execute();
 

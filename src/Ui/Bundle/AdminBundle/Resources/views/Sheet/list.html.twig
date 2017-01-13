@@ -6,12 +6,15 @@
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <div class="pull-right">
-                <form action="{{ path('admin_sheet_export', { 'event': event.id }) }}" method="POST" class="pull-right">
-                    <input type="submit" value="{{ 'admin.sheet.export.button.label'|trans }}" class="btn btn-default"/>
-                </form>
-                <a class="btn btn-default" href="{{ path('admin_sheet_import', {'event': event.id}) }}">{{ 'admin.sheet.import.button.label'|trans }}</a>
-            </div>
+            <form action="{{ path('admin_sheet_export_participant', { 'event': event.id }) }}" method="GET" class="pull-right" style="margin-left: 10px;">
+                <input type="submit" value="{{ 'admin.sheet.export.participant.button.label'|trans }}" class="btn btn-sm btn-default"/>
+            </form>
+
+            <form action="{{ path('admin_sheet_export_sheet', { 'event': event.id }) }}" method="GET" class="pull-right">
+                <input type="submit" value="{{ 'admin.sheet.export.sheet.button.label'|trans }}" class="btn btn-sm btn-default"/>
+            </form>
+
+            <a class="btn btn-default pull-right" style="display: block;" href="{{ path('admin_sheet_import', {'event': event.id}) }}">{{ 'admin.sheet.import.button.label'|trans }}</a>
         {% endif %}
     </h1>
 

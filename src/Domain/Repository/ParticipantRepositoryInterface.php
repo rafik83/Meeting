@@ -123,10 +123,20 @@ interface ParticipantRepositoryInterface
      * @param Participant[]      $participants
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param Meeting|null       $exceptedMeeting
+     * @param Happening|null     $exceptedHappening
+     * @param bool               $exceptAllUnavailabilities
      *
      * @return Participant[]
      */
-    public function getAvailableParticipants(array $participants, \DateTimeInterface $begin, \DateTimeInterface $end);
+    public function getAvailableParticipants(
+        array $participants,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        Meeting $exceptedMeeting = null,
+        Happening $exceptedHappening = null,
+        $exceptAllUnavailabilities = false
+    );
 
     /**
      * @param array   $participants
@@ -151,4 +161,32 @@ interface ParticipantRepositoryInterface
      * @return Participant[]
      */
     public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsByEvent(Event $event, $locale);
+
+    /**
+     * @param Participant[]      $participants
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsWithoutMeetingAndHappening(
+        array $participants,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end
+    );
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipantBySheet(Sheet $sheet);
 }

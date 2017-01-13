@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 use Proximum\Vimeet\Application\Command\Messaging\Message\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Message\Update;
 use Proximum\Vimeet\Application\Query\Messaging\Message\ListQuery;
+use Proximum\Vimeet\Application\Query\Messaging\Message\PreviewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType;
@@ -97,6 +98,27 @@ class MessageController extends Controller
             'event'   => $event,
             'message' => $message,
             'form'    => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Message $message
+     *
+     * @return Response
+     */
+    public function previewAction(Request $request, Event $event, Message $message)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $messageView = $this->get('tactician.commandbus')->handle(new PreviewQuery($message, $locale));
+
+        return $this->render('AdminBundle:Messaging\Message:preview.html.twig', [
+            'event' => $event,
+            'mail'  => $messageView,
         ]);
     }
 }
