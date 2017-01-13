@@ -72,6 +72,7 @@ class Meeting implements MessageSubjectInterface
     /**
      * Meeting constructor.
      *
+     * @param Request            $request
      * @param MeetingSlot        $slot
      * @param Sheet              $fromSheet
      * @param array              $fromParticipants
@@ -81,6 +82,7 @@ class Meeting implements MessageSubjectInterface
      * @param Spot               $spot
      */
     public function __construct(
+        Request $request,
         MeetingSlot $slot,
         Sheet $fromSheet,
         array $fromParticipants,
@@ -89,6 +91,7 @@ class Meeting implements MessageSubjectInterface
         \DateTimeInterface $createdAt,
         Spot $spot
     ) {
+        $this->request          = $request;
         $this->slot             = $slot;
         $this->fromSheet        = $fromSheet;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
@@ -260,14 +263,6 @@ class Meeting implements MessageSubjectInterface
     public function getRequest()
     {
         return $this->request;
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function setRequest($request)
-    {
-        $this->request = $request;
     }
 
     /**
