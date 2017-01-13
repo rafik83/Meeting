@@ -169,37 +169,12 @@ class MeetingRepository implements MeetingRepositoryInterface
      */
     public function deleteAll(Event $event)
     {
-        // Get event meetings
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('meeting.id')
-            ->from(Meeting::class, 'meeting', 'meeting.id')
-            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
-            ->setParameter('event', $event);
-
-        $meetingsIds = array_keys($queryBuilder->getQuery()->getResult());
-
-        // Set event requests meeting relation to null
-        $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->update(Request::class, 'request')
-            ->set('request.meeting', 'NULL')
-            ->where('request.meeting IN (:meetingsIds)')
-            ->setParameter('meetingsIds', $meetingsIds)
-            ->getQuery()
-            ->execute();
-
-        $this->entityManager->flush();
-
-        // Delete event meetings
         $this
             ->entityManager
             ->createQueryBuilder()
             ->delete(Meeting::class, 'meeting')
-            ->where('meeting.id IN (:meetingsIds)')
-            ->setParameter('meetingsIds', $meetingsIds)
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
+            ->setParameter('event', $event)
             ->getQuery()
             ->execute();
 

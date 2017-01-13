@@ -242,8 +242,9 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event)
-            ->where('request.meeting IS NULL');
+            ->setParameter('event', $event);
+
+        $this->requestsWithoutMeeting($queryBuilder);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -261,8 +262,9 @@ class RequestRepository implements RequestRepositoryInterface
             ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
             ->setParameter('event', $event)
-            ->where('request.meeting IS NULL')
             ->orderBy('request.createdAt', 'DESC');
+
+        $this->requestsWithoutMeeting($queryBuilder);
 
         if (!empty($filter) && isset($filter['state'])) {
             $queryBuilder
@@ -338,12 +340,12 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
-            ->where('request.meeting IS NULL')
             ->andWhere('request.to = :sheet OR request.from = :sheet')
             ->andWhere('request.state = :state')
             ->setParameter('sheet', $sheet)
-            ->setParameter('state', $state)
-        ;
+            ->setParameter('state', $state);
+
+        $this->requestsWithoutMeeting($queryBuilder);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -465,5 +467,15 @@ class RequestRepository implements RequestRepositoryInterface
             // set sheet
             $queryBuilder->setParameter('sheet', $sheet);
         }
+    }
+
+    /**
+     * Filter Requests that are not attached to Meeting
+     *
+     * @param QueryBuilder $queryBuilder
+     */
+    private function requestsWithoutMeeting(QueryBuilder &$queryBuilder)
+    {
+        $queryBuilder->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)');
     }
 }

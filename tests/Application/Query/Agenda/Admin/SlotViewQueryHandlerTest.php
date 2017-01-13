@@ -110,23 +110,21 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setValue($sheet2, 2);
         $property->setAccessible(false);
 
-
         $participant  = ParticipantFactory::create($sheet, $user);
         $participant2 = ParticipantFactory::create($sheet2, $user2);
         $slot         = new MeetingSlot($event, new \DateTime('2016-10-12 11:00:00.000'), new \DateTime('2016-10-12 12:00:00.000'), false);
 
-
-        $spot         = new Spot('ref', $event, 2, 3, 4, true);
-        $reflectionS  = new \ReflectionClass(Spot::class);
-        $propertyS    = $reflectionS->getProperty('id');
-        $propertyS->setAccessible(true);
-        $propertyS->setValue($spot, 10);
-        $propertyS->setAccessible(false);
-
+        $spot           = new Spot('ref', $event, 2, 3, 4, true);
+        $reflectionSpot = new \ReflectionClass(Spot::class);
+        $propertySpot   = $reflectionSpot->getProperty('id');
+        $propertySpot->setAccessible(true);
+        $propertySpot->setValue($spot, 10);
+        $propertySpot->setAccessible(false);
 
         $request = new Request($sheet, [], $sheet2, [$participant2], new \DateTime(), $user);
-        $meeting = new Meeting($slot, $sheet, [$participant], $sheet2, [$participant2], new \DateTime(), $spot);
-        $meeting->setRequest($request);
+        $meeting = new Meeting(
+            $request, $slot, $sheet, [$participant], $sheet2, [$participant2], new \DateTime(), $spot
+        );
 
         $reflectionM  = new \ReflectionClass(Meeting::class);
         $propertyM = $reflectionM->getProperty('id');

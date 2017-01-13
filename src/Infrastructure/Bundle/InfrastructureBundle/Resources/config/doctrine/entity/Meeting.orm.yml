@@ -14,7 +14,10 @@ Proximum\Vimeet\Domain\Model\Meeting:
     oneToOne:
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
-            mappedBy: meeting
+            inversedBy: meeting
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
     manyToOne:
         slot:
             targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
