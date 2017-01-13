@@ -9,7 +9,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Validator;
 
-
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class GenderValidator implements ObjectValidatorInterface

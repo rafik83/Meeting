@@ -241,7 +241,4 @@ class Participant
 
         return $this;
     }
-
-
-
 }

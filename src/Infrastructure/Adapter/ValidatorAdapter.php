@@ -9,7 +9,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
@@ -32,7 +31,7 @@ class ValidatorAdapter implements ValidatorInterface
     }
 
     /**
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $constraintType
      *
      * @return mixed

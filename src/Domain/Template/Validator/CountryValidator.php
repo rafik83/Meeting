@@ -13,7 +13,6 @@ use Symfony\Component\Intl\Intl;
 
 class CountryValidator implements ObjectValidatorInterface
 {
-
     /**
      * {@inheritdoc}
      */

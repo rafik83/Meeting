@@ -262,7 +262,7 @@ class Block extends AbstractChild
     public function getBlock($index)
     {
         $blocks = $this->getBlocks();
-        $index  = (int)$index - 1;
+        $index  = (int) $index - 1;
 
         return isset($blocks[$index]) ? $blocks[$index] : null;
     }

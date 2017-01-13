@@ -9,7 +9,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Validator;
 
-
 interface ObjectValidatorInterface
 {
     /**

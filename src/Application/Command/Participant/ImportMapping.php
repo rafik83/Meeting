@@ -18,16 +18,22 @@ use Proximum\Vimeet\Domain\Model\Type;
 class ImportMapping
 {
     /**
+     * A mapping array of csv headers keys and their registration headers key
+     *
      * @var array
      */
     public $mappings;
 
     /**
+     * Array of CSV headers column
+     *
      * @var array
      */
     public $csvHeaders;
 
     /**
+     * Array of template registration block keys
+     *
      * @var array
      */
     public $registrationHeaders;
@@ -55,12 +61,12 @@ class ImportMapping
     /**
      * ImportMapping constructor.
      *
-     * @param Event $event
-     * @param Type $type
-     * @param Admin $admin
-     * @param       $locale
-     * @param array $csvHeaders
-     * @param array $registrationHeaders
+     * @param Event  $event
+     * @param Type   $type
+     * @param Admin  $admin
+     * @param string $locale
+     * @param array  $csvHeaders
+     * @param array  $registrationHeaders
      */
     public function __construct(
         Event $event,
@@ -68,14 +74,14 @@ class ImportMapping
         Admin $admin,
         $locale,
         array $csvHeaders,
-        array $registrationHeaders)
-    {
+        array $registrationHeaders
+    ) {
         $this->csvHeaders          = $csvHeaders;
         $this->registrationHeaders = $registrationHeaders;
         $this->event               = $event;
         $this->type                = $type;
         $this->locale              = $locale;
-        $this->admin = $admin;
+        $this->admin               = $admin;
     }
 
     /**
@@ -85,5 +91,4 @@ class ImportMapping
     {
         return in_array(ParticipantImportTag::REGISTRATION_FIELD_MAIL, $this->mappings, true);
     }
-
 }

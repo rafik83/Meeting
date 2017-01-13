@@ -9,7 +9,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Validator;
 
-
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 

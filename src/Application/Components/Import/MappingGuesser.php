@@ -13,16 +13,22 @@ namespace Proximum\Vimeet\Application\Components\Import;
 class MappingGuesser
 {
     /**
+     * A mapping array of mappedIn keys and their mappedOut keys
+     *
      * @var array
      */
     private $mappings;
 
     /**
+     * Array of keys
+     *
      * @var array
      */
     private $mappedIn;
 
     /**
+     * Array of keys
+     *
      * @var array
      */
     private $mappedOut;

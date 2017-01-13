@@ -112,7 +112,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['locale']
         );
 
-
         foreach ($data as $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row)) {
                 continue;
@@ -140,7 +139,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             $participant = new Participant($sheet, $user, $registrationTemplate->getData(), false);
             $participant->setImported(true);
-
 
             $this->participantRepository->add($participant);
 

@@ -9,7 +9,6 @@
 
 namespace Proximum\Vimeet\Domain\Template\Validator;
 
-
 class TelephoneValidator implements ObjectValidatorInterface
 {
     /**

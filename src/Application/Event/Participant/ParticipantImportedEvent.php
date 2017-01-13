@@ -31,12 +31,11 @@ class ParticipantImportedEvent extends EventDispatcher\Event
      */
     private $date;
 
-
     /**
      * ParticipantImportedEvent constructor.
      *
-     * @param Admin $admin
-     * @param Event $event
+     * @param Admin              $admin
+     * @param Event              $event
      * @param \DateTimeInterface $date
      */
     public function __construct(Admin $admin, Event $event, \DateTimeInterface $date)
@@ -69,5 +68,4 @@ class ParticipantImportedEvent extends EventDispatcher\Event
     {
         return $this->date;
     }
-
 }

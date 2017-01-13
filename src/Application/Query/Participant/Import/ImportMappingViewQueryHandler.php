@@ -63,7 +63,7 @@ class ImportMappingViewQueryHandler
 
         $registrationHeaders = [
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
-            ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
+            ParticipantImportTag::REGISTRATION_FIELD_MAIL   => 'form.participant_import.field.mail',
         ];
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);

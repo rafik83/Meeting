@@ -13,11 +13,15 @@ namespace Proximum\Vimeet\Application\View\Participant;
 class ImportMappingView
 {
     /**
+     * Array of CSV headers column
+     *
      * @var array
      */
     public $csvHeaders;
 
     /**
+     * Array of template registration block keys
+     *
      * @var array
      */
     public $registrationHeaders;

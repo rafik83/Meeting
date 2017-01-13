@@ -9,7 +9,6 @@
 
 namespace Proximum\Vimeet\Domain\Account;
 
-
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 
 class EmailValidator
