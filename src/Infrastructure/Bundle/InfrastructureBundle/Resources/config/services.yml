@@ -2115,6 +2115,13 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler
     query.agenda.mass_unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler
+    query.agenda.meeting.participant_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQueryHandler
+    query.agenda.meeting_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler
+        arguments:
+            - '@query.agenda.meeting.participant_view_query_handler'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
         arguments:
@@ -2125,6 +2132,7 @@ services:
             - '@query.agenda.happening_view_query_handler'
             - '@query.agenda.unavailability_view_query_handler'
             - '@query.agenda.mass_unavailability_view_query_handler'
+            - '@query.agenda.meeting_view_query_handler'
     query.agenda.agenda_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler
         arguments:
@@ -2134,6 +2142,8 @@ services:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
     query.agenda.sheet_list_view_query_handler:
@@ -2614,6 +2624,11 @@ services:
     domain.key_dates.checker.catalog_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments: ['@datetime']
+
+    domain.key_dates.checker.meeting_published_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
+        arguments:
+            - '@datetime'
 
     #
     # Nomenclature
