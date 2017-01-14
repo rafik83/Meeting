@@ -15,6 +15,7 @@ agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: 'Retour'
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
 agenda.unavailability.remove: 'Supprimer'
+agenda.meeting.details: Details
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
