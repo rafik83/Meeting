@@ -3,55 +3,100 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) 2017 Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\ParticipantView;
 
-class MeetingView
+class MeetingView extends AbstractTimeEntityView
 {
     /**
      * @var int
      */
-    public $id;
+    public $sheetMetId;
 
     /**
-     * @var Sheet
+     * @var string
      */
-    public $sheetMet;
+    public $spotRef;
 
     /**
-     * @var Spot
+     * @var ParticipantView[]
      */
-    public $spot;
+    public $participants;
 
     /**
-     * @var bool
+     * @var \DateTimeInterface
      */
-    public $hasNoPreference;
+    public $begin;
 
     /**
-     * MeetingView constructor.
-     *
-     * @param Spot  $spot
-     * @param Sheet $sheetMet
-     * @param int   $id
-     * @param bool  $hasNoPreference
+     * @var \DateTimeInterface
+     */
+    public $end;
+
+    /**
+     * @var string
+     */
+    public $sheetMetTitle;
+
+    /**
+     * @var string
+     */
+    public $timeZone;
+
+    /**
+     * @var string
+     */
+    public $leftColor;
+
+    /**
+     * @var string
+     */
+    public $rightColor;
+
+    /**
+     * @param int                $sheetMetId
+     * @param string             $sheetMetTitle
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param string             $spotRef
+     * @param string             $timeZone
+     * @param string             $leftColor
+     * @param string             $rightColor
+     * @param array              $participants
      */
     public function __construct(
-        Spot $spot,
-        Sheet $sheetMet,
-        $id,
-        $hasNoPreference
+        $sheetMetId,
+        $sheetMetTitle,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        $spotRef,
+        $timeZone,
+        $leftColor,
+        $rightColor,
+        array $participants
     ) {
-        $this->spot            = $spot;
-        $this->id              = $id;
-        $this->sheetMet        = $sheetMet;
-        $this->hasNoPreference = $hasNoPreference;
+        $this->sheetMetId    = $sheetMetId;
+        $this->sheetMetTitle = $sheetMetTitle;
+        $this->spotRef       = $spotRef;
+        $this->begin         = $begin;
+        $this->end           = $end;
+        $this->timeZone      = $timeZone;
+        $this->leftColor     = $leftColor;
+        $this->rightColor    = $rightColor;
+        $this->participants  = $participants;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    public function getDuration()
+    {
+        return $this->end->diff($this->begin);
     }
 }
