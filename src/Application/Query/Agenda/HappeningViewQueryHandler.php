@@ -49,6 +49,7 @@ class HappeningViewQueryHandler
             $happening->getCategory()->getPicto(),
             $happening->getCategory()->getLeftColor(),
             $happening->getCategory()->getRightColor(),
+            $query->event->getTimeZone(),
             $happening->getLimitParticipant()
         );
     }

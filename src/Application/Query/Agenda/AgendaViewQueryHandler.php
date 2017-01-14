@@ -13,9 +13,11 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
@@ -52,12 +54,19 @@ class AgendaViewQueryHandler
     private $massUnavailabilityRepository;
 
     /**
+     * @var MeetingRepositoryInterface
+     */
+    private $meetingRepository;
+
+    /**
      * @param SheetGuesser                              $sheetGuesser
      * @param DayRepositoryInterface                    $dayRepository
      * @param DayViewQueryHandler                       $dayViewQueryHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
      * @param MassRepositoryInterface                   $massUnavailabilityRepository
+     * @param MeetingRepositoryInterface                $meetingRepository
+     * @param MeetingPublishedAccessChecker             $meetingPublishedAccessChecker
      */
     public function __construct(
         SheetGuesser $sheetGuesser,
@@ -65,7 +74,9 @@ class AgendaViewQueryHandler
         DayViewQueryHandler $dayViewQueryHandler,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
-        MassRepositoryInterface $massUnavailabilityRepository
+        MassRepositoryInterface $massUnavailabilityRepository,
+        MeetingRepositoryInterface $meetingRepository,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
         $this->sheetGuesser                     = $sheetGuesser;
         $this->dayRepository                    = $dayRepository;
@@ -73,6 +84,8 @@ class AgendaViewQueryHandler
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->unavailabilityRepository         = $unavailabilityRepository;
         $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
+        $this->meetingRepository                = $meetingRepository;
+        $this->meetingPublishedAccessChecker    = $meetingPublishedAccessChecker;
     }
 
     /**
@@ -101,6 +114,11 @@ class AgendaViewQueryHandler
         $happeningParticipations = $this->happeningParticipationRepository->findByParticipant($participant);
         $unavailabilites         = $this->unavailabilityRepository->findByParticipant($participant);
         $masses                  = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
+        $meetings                = [];
+
+        if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
+            $meetings = $this->meetingRepository->findByParticipant($participant);
+        }
 
         $dayViews = [];
 
@@ -108,10 +126,13 @@ class AgendaViewQueryHandler
             $dayViews[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
                     $day,
+                    $sheet,
+                    $query->event,
                     $query->locale,
                     $happeningParticipations,
                     $unavailabilites,
-                    $masses
+                    $masses,
+                    $meetings
                 )
             );
         }
