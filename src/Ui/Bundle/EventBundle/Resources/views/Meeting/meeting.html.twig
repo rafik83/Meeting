@@ -8,6 +8,15 @@
         </a>
     </header>
     <div class="details">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="list list--users">
+                    {% for participantView in meeting.participants %}
+                        {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
         <footer>
             <p class="hours">
                 <i class="icon icon-Horaire"></i>

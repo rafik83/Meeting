@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingViewQueryHandler
 {
@@ -21,22 +23,29 @@ class MeetingViewQueryHandler
      */
     private $participantHandler;
 
-
     /**
      * @var SheetInfoGuesser
      */
     private $sheetInfoGuesser;
 
     /**
+     * @var RuleRepositoryInterface
+     */
+    private $ruleRepository;
+
+    /**
      * @param ParticipantViewQueryHandler $participantHandler
      * @param SheetInfoGuesser            $sheetInfoGuesser
+     * @param RuleRepositoryInterface     $ruleRepository
      */
     public function __construct(
         ParticipantViewQueryHandler $participantHandler,
-        SheetInfoGuesser $sheetInfoGuesser
+        SheetInfoGuesser $sheetInfoGuesser,
+        RuleRepositoryInterface $ruleRepository
     ) {
         $this->participantHandler = $participantHandler;
         $this->sheetInfoGuesser   = $sheetInfoGuesser;
+        $this->ruleRepository     = $ruleRepository;
     }
 
     /**
@@ -46,15 +55,23 @@ class MeetingViewQueryHandler
      */
     public function handle(MeetingViewQuery $query)
     {
-        $sheetMet = $query->meeting->getSheetMet($query->currentSheet);
+        $sheetMet     = $query->meeting->getSheetMet($query->currentSheet);
+        $rules        = $this
+            ->ruleRepository
+            ->getBySeerTypeAndSeeableType($query->currentSheet->getType(), $sheetMet->getType());
+        $participants = [];
 
         if ($sheetMet === $query->meeting->getFromSheet()) {
             foreach ($query->meeting->getFromParticipants() as $participant) {
-
+                $participants[] = $this
+                    ->participantHandler
+                    ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
             }
         } elseif ($sheetMet === $query->meeting->getToSheet()) {
             foreach ($query->meeting->getToParticipants() as $participant) {
-
+                $participants[] = $this
+                    ->participantHandler
+                    ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
             }
         }
 
@@ -67,7 +84,7 @@ class MeetingViewQueryHandler
             $query->event->getTimeZone(),
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
-            []
+            $participants
         );
 
         return $meeting;
