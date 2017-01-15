@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Rule;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardListView;
+use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Rule\Exception\NoRuleException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
@@ -96,6 +97,27 @@ class Applyer
                 if (!in_array($tag, $composedRule->tags)) {
                     $cardView->$equivalentVariable = '';
                 }
+            }
+        }
+    }
+
+    /**
+     * @param CardView $cardView
+     * @param array    $rules
+     */
+    public function appluRuleForParticipantCard(CardView &$cardView, array $rules)
+    {
+        // This try catch should not exist has there should always be a rule in the $rules
+        // But to test it, there it is
+        try {
+            $composedRule = $this->composer->compose($rules);
+        } catch (NoRuleException $exception) {
+            return ;
+        }
+
+        foreach ($this->tagMapping as $tag => $equivalentVariable) {
+            if (!in_array($tag, $composedRule->tags)) {
+                $cardView->$equivalentVariable = '';
             }
         }
     }
