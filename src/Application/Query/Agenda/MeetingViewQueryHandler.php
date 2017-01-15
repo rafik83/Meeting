@@ -62,13 +62,13 @@ class MeetingViewQueryHandler
         $participants = [];
 
         if ($sheetMet === $query->meeting->getFromSheet()) {
-            foreach ($query->meeting->getFromParticipants() as $participant) {
+            foreach ($query->meeting->getFromParticipants()->toArray() as $participant) {
                 $participants[] = $this
                     ->participantHandler
                     ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
             }
         } elseif ($sheetMet === $query->meeting->getToSheet()) {
-            foreach ($query->meeting->getToParticipants() as $participant) {
+            foreach ($query->meeting->getToParticipants()->toArray() as $participant) {
                 $participants[] = $this
                     ->participantHandler
                     ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
