@@ -10,6 +10,7 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.meeting.details: Details
 agenda.title: 'Mon agenda'
 agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: 'Retour'
