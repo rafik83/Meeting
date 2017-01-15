@@ -37,6 +37,7 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $result = $handler->handle(new MassUnavailabilityViewQuery(
             $mass,
+            $event,
             'fr'
         ));
 
@@ -49,7 +50,8 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'description',
             'picto',
             'leftColor',
-            'rightColor'
+            'rightColor',
+            'Europe/Paris'
         );
 
         $this->assertEquals($expected, $result);

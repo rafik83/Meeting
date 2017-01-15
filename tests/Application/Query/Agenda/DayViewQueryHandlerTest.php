@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use Hautelook\AliceBundle\Tests\Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\MassUnavailabilityViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
@@ -87,7 +89,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [],
             'picto',
             'leftColor',
-            'rightColor'
+            'rightColor',
+            'Europe/Paris'
         );
         $happeningView2 = new HappeningView(
             2,
@@ -98,11 +101,12 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [],
             'picto',
             'leftColor',
-            'rightColor'
+            'rightColor',
+            'Europe/Paris'
         );
 
-        $massView = new MassUnavailabilityView(1, $beginHappening1, $endHappening1, 'title', 'description', 'picto', 'leftColor', 'rightColor');
-        $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2);
+        $massView = new MassUnavailabilityView(1, $beginHappening1, $endHappening1, 'title', 'description', 'picto', 'leftColor', 'rightColor', 'Europe/Paris');
+        $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2, 'Europe/Paris');
 
         $expected = new DayView(
             $startTime,
@@ -110,7 +114,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getConfiguration()->getScheduleScale(),
             [$happeningView1, $happeningView2],
             [$unavailabilityView],
-            [$massView]
+            [$massView],
+            []
         );
 
         // Mock
@@ -118,29 +123,36 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $happening1,
+                $event,
                 'fr'
             )
         )->shouldBeCalled()->willReturn($happeningView1);
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $happening2,
+                $event,
                 'fr'
             )
         )->shouldBeCalled()->willReturn($happeningView2);
 
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, 'fr'))->shouldBeCalled()->willReturn($massView);
-        $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability))->shouldBeCalled()->willReturn($unavailabilityView);
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldBeCalled()->willReturn($unavailabilityView);
 
+        $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
+        $meetingHandler->handle()->shouldNotBeCalled();
 
         $handler = new DayViewQueryHandler(
             $happeningViewQueryHandler->reveal(),
             $unavailabilityHandler->reveal(),
-            $massHandler->reveal()
+            $massHandler->reveal(),
+            $meetingHandler->reveal()
         );
         $result = $handler->handle(new DayViewQuery(
             $eventDay,
+            $sheet,
+            $event,
             'fr',
             [$participation1, $participation2],
             [$unavailability],
