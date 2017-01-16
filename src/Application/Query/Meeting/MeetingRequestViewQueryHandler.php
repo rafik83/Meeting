@@ -58,7 +58,8 @@ class MeetingRequestViewQueryHandler
             $sheet->getType()->getTitle($query->locale),
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
-            $previews
+            $previews,
+            $query->isMeetingPublished
         );
     }
 

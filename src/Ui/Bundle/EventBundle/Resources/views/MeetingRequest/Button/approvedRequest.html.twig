@@ -1,4 +1,4 @@
-{% if meetingRequest.hasMeeting %}
+{% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}
     <div class="btn btn-gray accept">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
     </div>

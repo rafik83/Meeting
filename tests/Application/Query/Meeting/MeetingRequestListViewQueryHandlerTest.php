@@ -16,11 +16,13 @@ use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Tests\Domain\KeyDates\Checker\MeetingPublishedAccessCheckerTest;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +42,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user);
 
-        $query = new MeetingRequestListViewQuery($sheet, 'fr');
+        $query = new MeetingRequestListViewQuery($event, $sheet, 'fr');
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -50,6 +52,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Mock
         $meetingRequestRepository       = $this->prophesize(RequestRepositoryInterface::class);
         $meetingRequestViewQueryHandler = $this->prophesize(MeetingRequestViewQueryHandler::class);
+        $meetingPublishedAccessChecker  = $this->prophesize(MeetingPublishedAccessChecker::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [])
@@ -60,14 +63,18 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
-                'fr'
+                'fr',
+                false
             ))
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
 
+        $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
-            $meetingRequestViewQueryHandler->reveal()
+            $meetingRequestViewQueryHandler->reveal(),
+            $meetingPublishedAccessChecker->reveal()
         );
 
         $handler->handle($query);
