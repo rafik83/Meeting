@@ -40,7 +40,7 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($cardView);
         $ruleApplyer          = $this->prophesize(Applyer::class);
-        $ruleApplyer->appluRuleForParticipantCard($cardView, $rules)->shouldBeCalled();
+        $ruleApplyer->applyRuleForParticipantCard($cardView, $rules)->shouldBeCalled();
 
         $participantHandler = new ParticipantViewQueryHandler($ruleApplyer->reveal(), $cardViewQueryHandler->reveal());
         $result = $participantHandler->handle(new ParticipantViewQuery($participant, $rules, 'fr'));
