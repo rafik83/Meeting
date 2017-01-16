@@ -61,18 +61,10 @@ class MeetingViewQueryHandler
             ->getBySeerTypeAndSeeableType($query->currentSheet->getType(), $sheetMet->getType());
         $participants = [];
 
-        if ($sheetMet === $query->meeting->getFromSheet()) {
-            foreach ($query->meeting->getFromParticipants()->toArray() as $participant) {
-                $participants[] = $this
-                    ->participantHandler
-                    ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
-            }
-        } elseif ($sheetMet === $query->meeting->getToSheet()) {
-            foreach ($query->meeting->getToParticipants()->toArray() as $participant) {
-                $participants[] = $this
-                    ->participantHandler
-                    ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
-            }
+        foreach ($query->meeting->getParticipants($sheetMet) as $participant) {
+            $participants[] = $this
+                ->participantHandler
+                ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
         }
 
         $meeting  = new MeetingView(
