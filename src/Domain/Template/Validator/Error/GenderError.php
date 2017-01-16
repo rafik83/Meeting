@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Validator\Error;
 
 class GenderError extends ValidatorError
 {
-    const MESSAGE = 'admin.sheet.participant_import.gender.error';
+    const MESSAGE = 'validators.admin.sheet.participant_import.gender.error';
 
     /**
      * GenderError constructor.

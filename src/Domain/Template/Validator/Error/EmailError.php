@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Validator\Error;
 
 class EmailError extends ValidatorError
 {
-    const MESSAGE = 'admin.sheet.participant_import.email.error';
+    const MESSAGE = 'validators.admin.sheet.participant_import.email.error';
 
     /**
      * EmailError constructor.

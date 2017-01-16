@@ -74,15 +74,21 @@ class ParticipantImportLogger
     /**
      * @param int            $row
      * @param ValidatorError $validatorError
-     * @param array          $data
+     * @param array|string   $data
      * @param string         $locale
      */
-    public function addError($row, ValidatorError $validatorError, array $data, $locale)
+    public function addError($row, ValidatorError $validatorError, $data, $locale)
     {
-        $newError = array_merge([
+        $newError = [
             $row,
-            $this->translatorAdapter->trans($validatorError->getMessage(), [], null, $locale),
-        ], $data);
+            $this->translatorAdapter->trans($validatorError->getMessage(), [], 'validators', $locale),
+        ];
+
+        if (is_array($data)) {
+            $newError = array_merge($newError, $data);
+        } else {
+            $newError[] = $data;
+        }
 
         $this->errors[] = implode(';', $newError);
     }

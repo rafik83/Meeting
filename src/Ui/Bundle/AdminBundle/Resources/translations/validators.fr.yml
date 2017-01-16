@@ -51,3 +51,7 @@ validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
 validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.unavailability.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
 validators.whitespace: 'Ce champ ne doit pas contenir d''espace'
+validators.admin.sheet.participant_import.email.error: "Adresse email invalide"
+validators.admin.sheet.participant_import.telephone.error: "Telephone invalide"
+validators.admin.sheet.participant_import.gender.error: "Genre invalide doit être man/woman"
+validators.admin.sheet.import_participant.error.country: "Code ISO invalide"

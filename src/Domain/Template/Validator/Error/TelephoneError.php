@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Validator\Error;
 
 class TelephoneError extends ValidatorError
 {
-    const MESSAGE = 'admin.sheet.participant_import.telephone.error';
+    const MESSAGE = 'validators.admin.sheet.participant_import.telephone.error';
 
     /**
      * TelephoneError constructor.

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\Validator\Error;
 
 class CountryError extends ValidatorError
 {
-    const MESSAGE = 'admin.sheet.import_participant.error.country';
+    const MESSAGE = 'validators.admin.sheet.import_participant.error.country';
 
     /**
      * CountryError constructor.

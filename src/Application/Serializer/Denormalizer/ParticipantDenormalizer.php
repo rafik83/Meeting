@@ -115,7 +115,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['locale']
         );
 
-        foreach ($data as $row) {
+        foreach ($data as $key => $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row)) {
                 continue;
             }
@@ -123,7 +123,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $email = $row[$mappedMailCsvColumn];
 
             if ($this->emailValidator->validate($email) === false) {
-                $this->importLogger->addError(key($row), new EmailError($email, true), $row, $context['locale']);
+                $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
                 continue;
             }
 
@@ -136,9 +136,9 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 $this->createEntities($context, $email, $registrationTemplate);
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
-                    key($row),
+                    $key,
                     $exception->getValidatorError(),
-                    $row,
+                    $exception->getValidatorError()->getData(),
                     $context['locale']
                 );
             }
