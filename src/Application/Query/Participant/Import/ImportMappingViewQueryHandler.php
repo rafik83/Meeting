@@ -59,7 +59,9 @@ class ImportMappingViewQueryHandler
      */
     public function handle(ImportMappingViewQuery $query)
     {
-        $csvHeaders = $this->csvDecoder->decodeHeaders($this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE));
+        $csvHeaders = $this->csvDecoder->decodeHeaders(
+            $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)
+        );
 
         $registrationHeaders = [
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',

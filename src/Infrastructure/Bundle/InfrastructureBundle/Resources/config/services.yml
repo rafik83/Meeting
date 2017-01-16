@@ -295,7 +295,7 @@ services:
         arguments:
             - '@adapter.local_file_storage'
             - '@adapter.session'
-            - '%kernel.root_dir%/../web'
+            - '%kernel.root_dir%/../var/participants_imports'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import }
     command.participant.import_mapping_handler:
@@ -2763,6 +2763,7 @@ services:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\EventSheetsNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
         tags:
@@ -2772,6 +2773,7 @@ services:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantsNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'

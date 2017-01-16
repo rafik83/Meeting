@@ -17,11 +17,12 @@ interface FileStorageInterface
     /**
      * Upload a file and return a string identifier
      *
-     * @param mixed $file
+     * @param mixed  $file
+     * @param string $directoryPath
      *
      * @return string
      */
-    public function upload($file);
+    public function upload($file, $directoryPath = null);
 
     /**
      * @param string $identifier

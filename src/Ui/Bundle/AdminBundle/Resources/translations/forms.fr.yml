@@ -710,6 +710,6 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
-form.participant_import.field.mail: Mail
+form.participant_import.field.mail: Email
 form.participant_import.field.ignore: Ignorer
 form.import_mapping.children.submit.label: Importer

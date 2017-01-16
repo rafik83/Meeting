@@ -43,7 +43,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
      *
      * @throws \Exception
      */
-    public function upload($file)
+    public function upload($file, $directoryPath = null)
     {
         if (null === $file) {
             return;
@@ -53,8 +53,9 @@ class LocalFileStorageAdapter implements FileStorageInterface
             throw new \Exception(sprintf('"%s" expected, "%s" given.', UploadedFile::class, is_object($file) ? get_class($file) : gettype($file)));
         }
 
-        $path      = sprintf('/uploads/%s/%s', $this->dateTime->format('Y'), $this->dateTime->format('m'));
-        $directory = $this->publicDir . $path;
+        $path = sprintf('/uploads/%s/%s', $this->dateTime->format('Y'), $this->dateTime->format('m'));
+
+        $directory = ($directoryPath === null) ? $this->publicDir . $path : $directoryPath . $path;
         $extension = '.' . $file->getClientOriginalExtension();
         $prefix    = uniqid() . '_';
         $filename  = $prefix . Transliterator::urlize(basename($file->getClientOriginalName(), $extension)) . $extension;
