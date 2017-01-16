@@ -24,6 +24,8 @@ admin.agenda.countRequest: 'Nombre de demandes'
 admin.agenda.countSlots: 'Nombre de slots'
 admin.agenda.countValidatedRequest: 'Nombre de demandes et propositions acceptées'
 admin.agenda.dayPrefix: D
+admin.agenda.export.link: Export
+admin.agenda.export.participant_schedules: 'Export des participants et plannings'
 admin.agenda.indicators-caption: 'Légende indicateurs'
 admin.agenda.indicators-help: 'Passer le curseur sur les icones'
 admin.agenda.link: 'Gestion des rendez-vous'
@@ -43,6 +45,8 @@ admin.category.link: 'Catégories de participation'
 admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
+admin.common.export.yes: Oui
+admin.common.export.no: Non
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.event.billing.configuration.link: 'Information facturation'
@@ -296,6 +300,20 @@ admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non
 admin.participant.export.yes: Oui
+admin.participant_schedule.export.fields.participantId: 'ID participant'
+admin.participant_schedule.export.fields.title: Titre
+admin.participant_schedule.export.fields.firstName: Prénom
+admin.participant_schedule.export.fields.lastName: Nom
+admin.participant_schedule.export.fields.companyName: 'Titre de la fiche'
+admin.participant_schedule.export.fields.type: 'Type de participation'
+admin.participant_schedule.export.fields.description: Description
+admin.participant_schedule.export.fields.position: Fonction
+admin.participant_schedule.export.fields.phonePrefix: 'Préfixe de téléphone'
+admin.participant_schedule.export.fields.phoneNumber: 'Numéro de téléphone'
+admin.participant_schedule.export.fields.email: 'Adresse email'
+admin.participant_schedule.export.fields.mobilePhonePrefix: 'Préfixe numéro de mobile'
+admin.participant_schedule.export.fields.mobilePhone: 'Numéro de mobile'
+admin.participant_schedule.export.fields.schedule: Planning
 admin.partner.create.title: 'Créer un nouveau partenaire'
 admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'

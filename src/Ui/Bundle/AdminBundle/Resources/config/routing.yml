@@ -288,6 +288,20 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_export_participant_index:
+    path: /event/{event}/agenda/export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:index }
+
+admin_agenda_export_participant_export:
+    path: /event/{event}/agenda/do-export-participants
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
+
 #
 # Meeting
 #

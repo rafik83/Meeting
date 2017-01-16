@@ -2757,6 +2757,16 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.event_participant_schedules:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantSchedulesNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'

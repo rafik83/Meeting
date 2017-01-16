@@ -1,0 +1,15 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.agenda.export.link'|trans %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <a href="{{ path('admin_agenda_export_participant_export', { 'event': event.id }) }}" class="btn btn-default">
+                {{ 'admin.agenda.export.participant_schedules'|trans }}
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

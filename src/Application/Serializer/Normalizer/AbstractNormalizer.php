@@ -23,7 +23,7 @@ abstract class AbstractNormalizer
     /**
      * @var string
      */
-    protected $normalizerType = '';
+    protected $normalizerType = 'common';
 
     /**
      * AbstractNormalizer constructor.
