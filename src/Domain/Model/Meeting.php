@@ -280,4 +280,12 @@ class Meeting implements MessageSubjectInterface
 
         return $this->fromSheet;
     }
+
+    /**
+     * @return int
+     */
+    public function countParticipants()
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
+    }
 }
