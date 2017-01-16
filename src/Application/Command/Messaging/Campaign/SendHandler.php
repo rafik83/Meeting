@@ -91,7 +91,12 @@ class SendHandler
         $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
         $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);
 
-        $addReceivers = function (Sheet $sheet, array $newReceivers) use (&$receivers) {
+        $receivers    = [];
+        $addReceivers = function (Sheet $sheet, $newReceivers) use (&$receivers) {
+            if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
+                return;
+            }
+
             /* @var MailRecipientInterface */
             foreach ($newReceivers as $receiver) {
                 $emailAddress = $receiver->getEmail();

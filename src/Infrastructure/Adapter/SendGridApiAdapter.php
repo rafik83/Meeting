@@ -96,8 +96,8 @@ class SendGridApiAdapter
     /**
      * Adds receivers and substitutions to a given SendGrid Mail.
      *
-     * @param Message $message
-     * @param array   $receivers An array of ReceiverView instances indexed by email
+     * @param Mail  $mail
+     * @param array $receivers An array of ReceiverView instances indexed by email
      *
      * @return Mail
      */
