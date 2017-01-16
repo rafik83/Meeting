@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use SendGrid\Mail;
+use SendGrid\Response;
 
 class SendGridApiAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +33,7 @@ class SendGridApiAdapterTest extends \PHPUnit_Framework_TestCase
         $twig->load($message->getTemplate())->shouldBeCalled()->willReturn($template);
 
         $client = $this->prophesize(SendGridApiClient::class);
-        $client->send(Argument::type(Mail::class))->shouldBeCalledTimes(1);
+        $client->send(Argument::type(Mail::class))->shouldBeCalledTimes(1)->willReturn(new Response(202, false, []));
 
         $adapter = new SendGridApiAdapter($client->reveal(), $twig->reveal());
         $adapter->send($message, 'no-reply@vimeet.com', [$receiver]);

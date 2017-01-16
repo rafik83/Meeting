@@ -1348,7 +1348,6 @@ services:
             - '@repository.billing_info_repository'
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
-            - '@event_sender'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
 
@@ -1606,6 +1605,7 @@ services:
         arguments:
             - '@domain.messaging.sendgrid_api_client'
             - '@twig'
+            - '@event_sender'
 
     #
     # Proforma component
