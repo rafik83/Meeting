@@ -18,23 +18,23 @@ admin.admin_list.table.title.firstname: Prénom
 admin.admin_list.table.title.lastname: Nom
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'Liste des utilisateurs du backoffice'
-admin.agenda.link: 'Gestion des rendez-vous'
-admin.agenda.title: 'Gestion des rendez-vous'
+admin.agenda.countPlacedMeetings: 'Nombre de RDV'
+admin.agenda.countProposition: 'Nombre de propositions reçues'
+admin.agenda.countRequest: 'Nombre de demandes'
+admin.agenda.countSlots: 'Nombre de slots'
+admin.agenda.countValidatedRequest: 'Nombre de demandes et propositions acceptées'
+admin.agenda.dayPrefix: D
 admin.agenda.indicators-caption: 'Légende indicateurs'
 admin.agenda.indicators-help: 'Passer le curseur sur les icones'
-admin.agenda.countRequest: 'Nombre de demandes'
-admin.agenda.countProposition: 'Nombre de propositions reçues'
-admin.agenda.countValidatedRequest: 'Nombre de demandes et propositions acceptées'
-admin.agenda.countSlots: 'Nombre de slots'
+admin.agenda.link: 'Gestion des rendez-vous'
+admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
-admin.agenda.countPlacedMeetings: 'Nombre de RDV'
+admin.agenda.requestsList.noPreference: 'Pas de préférence'
+admin.agenda.requestsList.title: 'RDV validés'
+admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
-admin.agenda.requestsList.title: 'RDV validés'
-admin.agenda.requestsList.noPreference: 'Pas de préférence'
-admin.agenda.requestsList.zeroResult: 'Pas de résultat'
-admin.agenda.dayPrefix: 'J'
-admin.agenda.noPreference: 'Pas de préférences'
+admin.agenda.title: 'Gestion des rendez-vous'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler
@@ -121,6 +121,19 @@ admin.happening.addTitle: 'Ajouter une conférence'
 admin.happening.button.category: 'Gérer les catégories'
 admin.happening.button.export: 'Exporter les participants'
 admin.happening.button.speaker: 'Gérer les intervenants'
+admin.happening.export.fields.happening_begin_hour: 'Heure de début'
+admin.happening.export.fields.happening_day: Jour
+admin.happening.export.fields.happening_end_hour: 'Heure de fin'
+admin.happening.export.fields.happening_id: 'ID Conférence'
+admin.happening.export.fields.happening_name: 'Titre conférence'
+admin.happening.export.fields.participant_email: Email
+admin.happening.export.fields.participant_firstname: Prénom
+admin.happening.export.fields.participant_id: 'ID Participant'
+admin.happening.export.fields.participant_lastname: Nom
+admin.happening.export.fields.participant_position: Fonction
+admin.happening.export.fields.question: Question
+admin.happening.export.fields.sheet_id: 'ID Fiche'
+admin.happening.export.fields.sheet_name: 'Titre fiche'
 admin.happening.link: Conférences
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
@@ -150,42 +163,44 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.link: Rendez-vous
 admin.menu.link: Menu
+admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
+admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
+admin.messaging_campaign.recipients.sheet_owner: 'Propriétaire de la fiche'
+admin.messaging.campaign.list.columns.createdAt: 'Date de création'
+admin.messaging.campaign.list.columns.sentAt: 'Date d''envoi'
+admin.messaging.campaign.list.columns.title: Titre
+admin.messaging.campaign.list.no_data: 'Il n''existe pas de campagne d''emailing pour l''événement courant'
+admin.messaging.campaign.list.title: 'Campagnes d''emailing'
 admin.messaging.campaign.menu.create.title: 'Créer une nouvelle campagne'
+admin.messaging.campaign.menu.list.title: 'Liste des campagnes'
+admin.messaging.campaign.message_preview.content: Contenu
+admin.messaging.campaign.message_preview.subject: Sujet
+admin.messaging.campaign.message_preview.title: Prévisualisation
+admin.messaging.campaign.message.title: 'Sélection du message'
+admin.messaging.campaign.no_message_preview: 'Sélectionnez un message pour obtenir un aperçu'
+admin.messaging.campaign.recipients.title: Destinataires
+admin.messaging.campaign.selected_filters: 'Filtres sélectionnés'
+admin.messaging.campaign.selected_sheets: 'Fiches sélectionnées'
+admin.messaging.campaign.send.title: Envoyer
 admin.messaging.campaign.sheet_list.columns.name: 'Nom de la fiche'
 admin.messaging.campaign.sheet_list.no_data: 'Aucune participation n''a été trouvée pour les critères courants'
 admin.messaging.campaign.sheet_list.success: 'Votre ciblage a été enregistré avec succès'
 admin.messaging.campaign.sheet_list.title: 'Créer mon ciblage'
-admin.messaging.campaign.list.columns.createdAt: 'Date de création'
-admin.messaging.campaign.list.columns.title: 'Titre'
-admin.messaging.campaign.list.no_data: 'Il n''existe pas de campagne d''emailing pour l''événement courant'
-admin.messaging.campaign.list.title: 'Campagnes d''emailing'
-admin.messaging.campaign.menu.list.title: Liste des campagnes
-admin.messaging.campaign.message.title: 'Sélection du message'
-admin.messaging.campaign.message_preview.content: Contenu
-admin.messaging.campaign.message_preview.subject: Sujet
-admin.messaging.campaign.message_preview.title: 'Prévisualisation'
-admin.messaging.campaign.no_message_preview: 'Sélectionnez un message pour obtenir un aperçu'
-admin.messaging.campaign.recipients.title: Destinataires
-admin.messaging.campaign.selected_sheets: 'Fiches sélectionnées'
-admin.messaging.campaign.selected_filters: 'Filtres sélectionnés'
-admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
-admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
-admin.messaging_campaign.recipients.sheet_owner: 'Propriétaire de la fiche'
 admin.messaging.link: Emailing
+admin.messaging.menu.title: Emailing
 admin.messaging.message.compose.links.activateAccount: 'Activation du compte'
-admin.messaging.message.compose.links.agenda: 'Agenda'
-admin.messaging.message.compose.links.catalog: 'Catalogue'
+admin.messaging.message.compose.links.agenda: Agenda
+admin.messaging.message.compose.links.catalog: Catalogue
 admin.messaging.message.compose.links.label: 'Liens personnalisés'
 admin.messaging.message.compose.links.meetingRequest: 'Gestion RDV'
 admin.messaging.message.compose.links.orders: 'Liste des commandes'
-admin.messaging.message.compose.links.package: 'Forfait'
-admin.messaging.message.compose.links.program: 'Programme'
+admin.messaging.message.compose.links.package: Forfait
+admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
-admin.messaging.message.compose.tags.label: 'Tags'
+admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
 admin.messaging.message.compose.tags.participationType: 'Type de participation'
-admin.messaging.menu.title: Emailing
 admin.messaging.message.content: Contenu
 admin.messaging.message.create.title: 'Créer un nouveau message'
 admin.messaging.message.createdAt: 'Créé le'
@@ -281,8 +296,6 @@ admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non
 admin.participant.export.yes: Oui
-admin.sheet.export.no: Non
-admin.sheet.export.yes: Oui
 admin.partner.create.title: 'Créer un nouveau partenaire'
 admin.partner.update.title: 'Editer un partenaire'
 admin.plan_create.title: 'Ajouter une formule au catalogue'
@@ -406,6 +419,7 @@ admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
+admin.sheet.export.button.label: Exporter
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -422,19 +436,6 @@ admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
 admin.sheet.export.yes: Oui
-admin.happening.export.fields.happening_id: 'ID Conférence'
-admin.happening.export.fields.happening_name: 'Titre conférence'
-admin.happening.export.fields.happening_day: 'Jour'
-admin.happening.export.fields.happening_begin_hour: 'Heure de début'
-admin.happening.export.fields.happening_end_hour: 'Heure de fin'
-admin.happening.export.fields.sheet_id: 'ID Fiche'
-admin.happening.export.fields.sheet_name: 'Titre fiche'
-admin.happening.export.fields.participant_id: 'ID Participant'
-admin.happening.export.fields.participant_email: 'Email'
-admin.happening.export.fields.participant_firstname: 'Prénom'
-admin.happening.export.fields.participant_lastname: 'Nom'
-admin.happening.export.fields.participant_position: 'Fonction'
-admin.happening.export.fields.question: 'Question'
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.filter.template_filters: 'Filtres supplémentaires'

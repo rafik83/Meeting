@@ -38,7 +38,7 @@ form.admin.picto.Cocktail: Cocktail
 form.admin.picto.Conference: Micro
 form.admin.picto.Dejeuner: Déjeuner
 form.admin.picto.PresFlash_2: Flash
-form.admin.picto.RDV: Rendez-vous
+form.admin.picto.RDV: Meeting
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
@@ -523,6 +523,7 @@ form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
 form.sheet_batch.children.validationStateDraft.label: 'Remettre la fiche en brouillon'
 form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de la fiche'
+form.sheet_comment.children.filter.label: Filtrer
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie
@@ -535,12 +536,7 @@ form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
-form.sheet_comment.children.filter.label: Filtrer
 form.sheet_filter.children.validationState.label: 'Statut fiche'
-form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
-form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
-form.sheet.messaging_campaign.message.submit.label: 'Terminer'
-form.sheet.messaging_campaign.recipients.submit.label: 'Valider'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler
@@ -558,6 +554,10 @@ form.sheet_template_update.children.close.label: Annuler
 form.sheet_template_update.children.fallback.label: 'Langue par defaut'
 form.sheet_template_update.children.submit.label: Enregistrer
 form.sheet_template_update.children.title.label: Titre
+form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
+form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
+form.sheet.messaging_campaign.message.submit.label: Terminer
+form.sheet.messaging_campaign.recipients.submit.label: Valider
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.recipes.label: 'Identifiants du lot'

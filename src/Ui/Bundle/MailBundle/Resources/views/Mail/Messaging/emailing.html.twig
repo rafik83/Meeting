@@ -1,0 +1,5 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    {{ mail.content|html }}
+{% endblock %}

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,6 +45,22 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBySheets($sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('billing_info')
+            ->from(BillingInfo::class, 'billing_info')
+            ->where('billing_info.sheet IN (:sheets)')
+            ->setParameter('sheets', $sheets);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
