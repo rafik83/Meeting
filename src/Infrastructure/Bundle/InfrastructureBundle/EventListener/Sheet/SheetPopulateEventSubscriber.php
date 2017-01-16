@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
@@ -48,17 +49,18 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::ORDER_CONFIRMED          => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE        => 'onPackageStep',
-            Events::TRANSACTION_CREATED      => 'onTransactionCreated',
-            Events::TRANSACTION_UPDATED      => 'onTransactionUpdated',
-            Events::TRANSACTION_CONFIRMED    => 'onTransactionConfirmed',
-            Events::TRANSACTION_REMOVED      => 'onTransactionRemoved',
-            Events::HAPPENING_PARTICIPATED   => 'onHappeningParticipated',
-            Events::MEETING_REQUEST_CREATED  => 'onMeetingRequestCreated',
-            Events::MEETING_REQUEST_CANCELED => 'onMeetingRequestCanceled',
-            Events::MEETING_REQUEST_REFUSED  => 'onMeetingRequestRefused',
-            Events::MEETING_REQUEST_APPROVED => 'onMeetingRequestApproved',
+            Events::ORDER_CONFIRMED            => 'onOrderConfirmed',
+            Events::PACKAGE_STEP_DONE          => 'onPackageStep',
+            Events::TRANSACTION_CREATED        => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED        => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED      => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED        => 'onTransactionRemoved',
+            Events::HAPPENING_PARTICIPATED     => 'onHappeningParticipated',
+            Events::MEETING_REQUEST_CREATED    => 'onMeetingRequestCreated',
+            Events::MEETING_REQUEST_CANCELED   => 'onMeetingRequestCanceled',
+            Events::MEETING_REQUEST_REFUSED    => 'onMeetingRequestRefused',
+            Events::MEETING_REQUEST_APPROVED   => 'onMeetingRequestApproved',
+            Events::MEETING_REQUEST_UNAPPROVED => 'onMeetingRequestUnapproved',
         ];
     }
 
@@ -146,6 +148,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      * @param ApprovedRequestEvent $event
      */
     public function onMeetingRequestApproved(ApprovedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param UnapprovedRequestEvent $event
+     */
+    public function onMeetingRequestUnapproved(UnapprovedRequestEvent $event)
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
