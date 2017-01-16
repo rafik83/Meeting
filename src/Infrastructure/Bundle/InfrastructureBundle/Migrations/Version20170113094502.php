@@ -17,12 +17,20 @@ class Version20170113094502 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE meeting_request DROP FOREIGN KEY FK_A345C71267433D9C');
-        $this->addSql('DROP INDEX UNIQ_A345C71267433D9C ON meeting_request');
-        $this->addSql('ALTER TABLE meeting_request DROP meeting_id');
-        $this->addSql('ALTER TABLE meeting ADD request_id INT NOT NULL');
+        $this->addSql('SET foreign_key_checks = 0');
+        $this->addSql('DROP TABLE meeting_request');
+        $this->addSql('DROP TABLE meeting');
+        $this->addSql('CREATE TABLE meeting_request (id INT AUTO_INCREMENT NOT NULL, from_id INT DEFAULT NULL, to_id INT DEFAULT NULL, creator_id INT DEFAULT NULL, state VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, state_updated_at DATETIME NOT NULL, INDEX IDX_A345C71278CED90B (from_id), INDEX IDX_A345C71230354A65 (to_id), INDEX IDX_A345C71261220EA6 (creator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE meeting (id INT AUTO_INCREMENT NOT NULL, request_id INT NOT NULL, slot_id INT DEFAULT NULL, from_sheet_id INT DEFAULT NULL, to_sheet_id INT DEFAULT NULL, spot_id INT DEFAULT NULL, state VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_F515E139427EB8A5 (request_id), INDEX IDX_F515E13959E5119C (slot_id), INDEX IDX_F515E139CDFDE63F (from_sheet_id), INDEX IDX_F515E139464B980B (to_sheet_id), INDEX IDX_F515E1392DF1D37C (spot_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE meeting_request ADD CONSTRAINT FK_A345C71278CED90B FOREIGN KEY (from_id) REFERENCES sheet (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE meeting_request ADD CONSTRAINT FK_A345C71230354A65 FOREIGN KEY (to_id) REFERENCES sheet (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE meeting_request ADD CONSTRAINT FK_A345C71261220EA6 FOREIGN KEY (creator_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E139427EB8A5 FOREIGN KEY (request_id) REFERENCES meeting_request (id) ON DELETE CASCADE');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_F515E139427EB8A5 ON meeting (request_id)');
+        $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E13959E5119C FOREIGN KEY (slot_id) REFERENCES meeting_slot (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E139CDFDE63F FOREIGN KEY (from_sheet_id) REFERENCES sheet (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E139464B980B FOREIGN KEY (to_sheet_id) REFERENCES sheet (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE meeting ADD CONSTRAINT FK_F515E1392DF1D37C FOREIGN KEY (spot_id) REFERENCES spot (id) ON DELETE CASCADE');
+        $this->addSql('SET foreign_key_checks = 1');
     }
 
     /**
@@ -30,13 +38,6 @@ class Version20170113094502 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('ALTER TABLE meeting DROP FOREIGN KEY FK_F515E139427EB8A5');
-        $this->addSql('DROP INDEX UNIQ_F515E139427EB8A5 ON meeting');
-        $this->addSql('ALTER TABLE meeting DROP request_id');
-        $this->addSql('ALTER TABLE meeting_request ADD meeting_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE meeting_request ADD CONSTRAINT FK_A345C71267433D9C FOREIGN KEY (meeting_id) REFERENCES meeting (id) ON DELETE SET NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_A345C71267433D9C ON meeting_request (meeting_id)');
+        // nothing to do
     }
 }

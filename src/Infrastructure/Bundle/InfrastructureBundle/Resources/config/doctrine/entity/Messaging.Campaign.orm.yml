@@ -19,6 +19,9 @@ Proximum\Vimeet\Domain\Model\Messaging\Campaign:
         createdAt:
             type: datetime
             nullable: false
+        sentAt:
+            type: datetime
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
