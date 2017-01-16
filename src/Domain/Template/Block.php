@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Pagerfanta\View\Template\Template;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -181,6 +182,19 @@ class Block extends AbstractChild
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof TemplateObject\Image;
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getParticipantAndSheetDataExceptedImageObject()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isEditable() &&
+                ($object->hasTag(Tag::SHEET_DATA) || $object->hasTag(Tag::PARTICIPANT_DATA)
+                && !$object instanceof TemplateObject\Image
+                );
         });
     }
 

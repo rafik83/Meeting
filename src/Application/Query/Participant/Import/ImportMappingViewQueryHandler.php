@@ -68,7 +68,7 @@ class ImportMappingViewQueryHandler
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);
 
-        $templateObjects = $registrationTemplate->getProfileObjects();
+        $templateObjects = $registrationTemplate->getParticipantAndSheetDataExceptedImageObject();
 
         foreach ($templateObjects as $object) {
             if ($object instanceof ContentObjectInterface) {

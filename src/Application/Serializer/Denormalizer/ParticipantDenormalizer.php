@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Application\Components\Import\MappingGuesser;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -142,7 +143,9 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
-            $sheet->setRegistrationData([]);
+            $sheet->setRegistrationData([$registrationTemplate->getData()]);
+
+            $this->importLogger->sheetImported();
 
             $participant = new Participant($sheet, $user, $registrationTemplate->getData(), false);
             $participant->setImported(true);

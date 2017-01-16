@@ -55,10 +55,10 @@ class ParticipantImportLogger
     }
 
     /**
-     * @param array $databaseParticipations
-     * @param array $fileParticipations
+     * @param $databaseParticipations
+     * @param $fileParticipations
      */
-    public function init(array $databaseParticipations, array $fileParticipations)
+    public function init($databaseParticipations, $fileParticipations)
     {
         $this->databaseParticipations = $databaseParticipations;
         $this->fileParticipations     = $fileParticipations;
