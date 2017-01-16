@@ -2797,6 +2797,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '@validator.email_validator'
             - '@account.synchronizer'

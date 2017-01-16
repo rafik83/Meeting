@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -68,20 +69,26 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private $importLogger;
 
     /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
+    /**
      * ParticipantDenormalizer constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
+     * @param SheetRepositoryInterface       $sheetRepository
      * @param UserRepositoryInterface        $userRepository
      * @param TemplateDataFactory            $templateDataFactory
      * @param EmailValidator                 $emailValidator
      * @param Synchronizer                   $synchronizer
      * @param ParticipantImportLogger        $importLogger
      * @param \DateTimeInterface             $dateTime
-     *
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
+        SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
         EmailValidator $emailValidator,
         Synchronizer $synchronizer,
@@ -95,6 +102,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->userRepository        = $userRepository;
         $this->emailValidator        = $emailValidator;
         $this->importLogger          = $importLogger;
+        $this->sheetRepository       = $sheetRepository;
     }
 
     /**
@@ -245,11 +253,14 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $user = new User($email, '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
+            $this->userRepository->add($user);
             $this->importLogger->userImported();
         }
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
         $sheet->setRegistrationData([$registrationTemplate->getData()]);
+
+        $this->sheetRepository->add($sheet);
 
         $this->importLogger->sheetImported();
 
