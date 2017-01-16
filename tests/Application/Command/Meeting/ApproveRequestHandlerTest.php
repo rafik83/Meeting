@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -68,10 +69,13 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
@@ -120,10 +124,13 @@ class ApproveRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
         $permissionManager->isAllowedToApprove($user3, $request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);

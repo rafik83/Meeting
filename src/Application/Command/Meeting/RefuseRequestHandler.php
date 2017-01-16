@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -81,7 +81,7 @@ class RefuseRequestHandler
         // Dispatch event
         $this->eventDispatcher->dispatch(
             Events::MEETING_REQUEST_REFUSED,
-            new RequestRefusedEvent(
+            new RefusedRequestEvent(
                 $refuseRequest->emitter,
                 $refuseRequest->request,
                 $this->createdAt,

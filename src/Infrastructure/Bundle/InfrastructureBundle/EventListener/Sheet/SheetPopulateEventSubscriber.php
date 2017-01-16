@@ -13,12 +13,13 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
-use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
-use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
@@ -57,6 +58,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::MEETING_REQUEST_CREATED  => 'onMeetingRequestCreated',
             Events::MEETING_REQUEST_CANCELED => 'onMeetingRequestCanceled',
             Events::MEETING_REQUEST_REFUSED  => 'onMeetingRequestRefused',
+            Events::MEETING_REQUEST_APPROVED => 'onMeetingRequestApproved',
         ];
     }
 
@@ -93,9 +95,9 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param TransactionConfirmEvent $event
+     * @param TransactionConfirmedEvent $event
      */
-    public function onTransactionConfirmed(TransactionConfirmEvent $event)
+    public function onTransactionConfirmed(TransactionConfirmedEvent $event)
     {
         $this->updateSheetIndexation($event->getTransaction()->getSheet());
     }
@@ -133,9 +135,17 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param RequestRefusedEvent $event
+     * @param RefusedRequestEvent $event
      */
-    public function onMeetingRequestRefused(RequestRefusedEvent $event)
+    public function onMeetingRequestRefused(RefusedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param ApprovedRequestEvent $event
+     */
+    public function onMeetingRequestApproved(ApprovedRequestEvent $event)
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
