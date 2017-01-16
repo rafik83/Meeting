@@ -45,4 +45,12 @@ class SessionAdapter implements SessionInterface
     {
         $this->session->set($key, $data);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove($key)
+    {
+        $this->session->remove($key);
+    }
 }

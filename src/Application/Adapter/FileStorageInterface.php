@@ -26,10 +26,11 @@ interface FileStorageInterface
 
     /**
      * @param string $identifier
+     * @param bool   $fullPath
      *
      * @return FileStorageInterface
      */
-    public function remove($identifier);
+    public function remove($identifier, $fullPath = false);
 
     /**
      * @param string      $identifier

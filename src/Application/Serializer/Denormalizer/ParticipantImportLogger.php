@@ -15,6 +15,12 @@ use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
 class ParticipantImportLogger
 {
+    const DATABASE_PARTICIPATIONS = 'data_participations';
+    const FILE_PARTICIPATIONS     = 'file_participations';
+    const CREATED_SHEETS          = 'created_sheets';
+    const CREATED_USERS           = 'created_users';
+    const IMPORT_ERRORS           = 'import_errors';
+    const SESSION_FLASH           = 'session_flash';
     /**
      * @var int
      */
@@ -39,6 +45,7 @@ class ParticipantImportLogger
      * @var array
      */
     private $errors = [];
+
     /**
      * @var TranslatorAdapter
      */
@@ -55,8 +62,8 @@ class ParticipantImportLogger
     }
 
     /**
-     * @param $databaseParticipations
-     * @param $fileParticipations
+     * @param int $databaseParticipations
+     * @param int $fileParticipations
      */
     public function init($databaseParticipations, $fileParticipations)
     {
@@ -88,5 +95,19 @@ class ParticipantImportLogger
     public function sheetImported()
     {
         $this->createdSheets++;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            self::DATABASE_PARTICIPATIONS => $this->databaseParticipations,
+            self::FILE_PARTICIPATIONS     => $this->fileParticipations,
+            self::CREATED_SHEETS          => $this->createdSheets,
+            self::CREATED_USERS           => $this->createdUsers,
+            self::IMPORT_ERRORS           => $this->errors,
+        ];
     }
 }

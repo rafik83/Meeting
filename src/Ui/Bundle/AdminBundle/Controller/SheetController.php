@@ -38,6 +38,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterFullType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\FilterPartType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -234,10 +235,10 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $charset    = Charset::WINDOWS_1252;
+        $charset        = Charset::WINDOWS_1252;
         $normaliserView = new EventParticipantsNormalizerView($event);
 
-        $serializer = $this->get('serializer');
+        $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($normaliserView, 'csv', [
             'locale'  => $request->getLocale(),
             'charset' => $charset,
@@ -246,7 +247,7 @@ class SheetController extends Controller
         $response    = new Response($exportContent);
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_participant_".date("Y_m_d_His").".csv"
+            "export_event_participant_" . date("Y_m_d_His") . ".csv"
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
@@ -475,9 +476,8 @@ class SheetController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.sheet.import_mapping.success');
 
-            return $this->redirectToRoute('admin_sheet_import_mapping', [
+            return $this->redirectToRoute('admin_sheet_import_result', [
                 'event' => $event->getId(),
                 'type'  => $type->getId(),
             ]);
@@ -486,6 +486,25 @@ class SheetController extends Controller
         return $this->render('AdminBundle:Sheet:importMapping.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
+        ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Response
+     */
+    public function importResultAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        $participantDenormalizerView = $this->get('query.participant.import.import_result_view_query_handler')
+            ->handle();
+
+        return $this->render('AdminBundle:Sheet:importResult.html.twig', [
+            'event' => $event,
+            'view'  => $participantDenormalizerView,
         ]);
     }
 

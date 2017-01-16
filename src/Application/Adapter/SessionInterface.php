@@ -26,4 +26,9 @@ interface SessionInterface
      * @return
      */
     public function set($key, $data);
+
+    /**
+     * @param string $key
+     */
+    public function remove($key);
 }

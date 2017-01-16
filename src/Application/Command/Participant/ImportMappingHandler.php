@@ -16,8 +16,10 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
+use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -49,26 +51,39 @@ class ImportMappingHandler
     private $date;
 
     /**
+     * @var LocalFileStorageAdapter
+     */
+    private $localFileStorage;
+
+    /**
+     * @var string
+     */
+    private $directoryPath;
+
+    /**
      * ImportMappingHandler constructor.
      *
-     * @param DecoderInterface       $csvDecoder
-     * @param SessionInterface       $session
-     * @param DenormalizerInterface  $denormalizer
-     * @param DelayedEventDispatcher $eventDispatcher
-     * @param \DateTimeInterface     $date
+     * @param DecoderInterface        $csvDecoder
+     * @param SessionInterface        $session
+     * @param DenormalizerInterface   $denormalizer
+     * @param DelayedEventDispatcher  $eventDispatcher
+     * @param LocalFileStorageAdapter $localFileStorage
+     * @param \DateTimeInterface      $date
      */
     public function __construct(
         DecoderInterface $csvDecoder,
         SessionInterface $session,
         DenormalizerInterface $denormalizer,
         DelayedEventDispatcher $eventDispatcher,
+        LocalFileStorageAdapter $localFileStorage,
         \DateTimeInterface $date
     ) {
-        $this->session         = $session;
-        $this->csvDecoder      = $csvDecoder;
-        $this->denormalizer    = $denormalizer;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->date            = $date;
+        $this->session          = $session;
+        $this->csvDecoder       = $csvDecoder;
+        $this->denormalizer     = $denormalizer;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->date             = $date;
+        $this->localFileStorage = $localFileStorage;
     }
 
     /**
@@ -80,7 +95,7 @@ class ImportMappingHandler
 
         $csvData = $this->csvDecoder->decode($filename, CsvDecoder::FORMAT);
 
-        $this->denormalizer->denormalize($csvData, Participant::class, ParticipantDenormalizer::FORMAT, [
+        $importLogger = $this->denormalizer->denormalize($csvData, Participant::class, ParticipantDenormalizer::FORMAT, [
             'csvHeaders'          => $importMapping->csvHeaders,
             'registrationHeaders' => $importMapping->registrationHeaders,
             'mappings'            => $this->removeIgnoreFields($importMapping->mappings),
@@ -95,6 +110,15 @@ class ImportMappingHandler
             $this->date
         ));
 
+        $this->session->set(ParticipantImportLogger::SESSION_FLASH, $importLogger->toArray());
+
+        $this->localFileStorage->remove(
+            $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE),
+            true
+        );
+
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET);
     }
 
     /**

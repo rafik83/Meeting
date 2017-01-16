@@ -272,6 +272,12 @@ admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
 admin.participant_import.title: "Importer les participants"
 admin.participant_import_mapping.title: "Correspondance entre colonnes du fichier et champs de l'inscription"
+admin.participant_import_result.title.label: "Resultat de l'importation des participants"
+admin.participant_import_result.database_participations: "Nombre de participations existantes"
+admin.participant_import_result.file_participations: "Nombre de participations dans le fichier"
+admin.participant_import_result.created_sheets: "Nombre de fiches importées"
+admin.participant_import_result.created_users: "Nombre d'utilisateurs importés"
+admin.participant_import_result.errors: "Liste des erreurs dans le fichier"
 admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
 admin.participant.export.fields.participant_created_at: 'Creation Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'

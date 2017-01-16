@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Application\Components\Import\MappingGuesser;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectContentException;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\Validator\Error\EmailError;
 use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -60,6 +61,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @var EmailValidator
      */
     private $emailValidator;
+
     /**
      * @var ParticipantImportLogger
      */
@@ -101,17 +103,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         $participants = $this->participantRepository->findByEvent($context['event']);
-        $users        = $this->userRepository->all();
 
         $this->importLogger->init(count($participants), count($data));
 
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
         $mappedMailCsvColumn = $mappingGuesser->getMappedInKey(ParticipantImportTag::REGISTRATION_FIELD_MAIL);
-
-        if ($mappedMailCsvColumn === false) {
-            throw new \Exception('Mail field not set'); // TODO: Custom exception
-        }
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType(
             $context['type'],
@@ -126,34 +123,28 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $email = $row[$mappedMailCsvColumn];
 
             if ($this->emailValidator->validate($email) === false) {
+                $this->importLogger->addError(key($row), new EmailError($email, true), $row, $context['locale']);
                 continue;
             }
+
             if ($this->isAlreadyParticipant($email, $participants)) {
                 continue;
             }
 
-            $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
-
-            // handle create entities
-            if (($user = $this->hasUserAccount($email, $users)) === false) {
-                $user = new User($email, '', '', $context['locale']);
-                $user->setAccount(new User\Account());
-
-                $this->importLogger->userImported();
+            try {
+                $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
+                $this->createEntities($context, $email, $registrationTemplate);
+            } catch (InvalidObjectContentException $exception) {
+                $this->importLogger->addError(
+                    key($row),
+                    $exception->getValidatorError(),
+                    $row,
+                    $context['locale']
+                );
             }
-
-            $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
-            $sheet->setRegistrationData([$registrationTemplate->getData()]);
-
-            $this->importLogger->sheetImported();
-
-            $participant = new Participant($sheet, $user, $registrationTemplate->getData(), false);
-            $participant->setImported(true);
-
-            $this->participantRepository->add($participant);
-
-            $this->synchronizer->set($registrationTemplate, $user);
         }
+
+        return $this->importLogger;
     }
 
     /**
@@ -203,6 +194,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param MappingGuesser $mappingGuesser
      * @param TemplateData   $registrationTemplate
      * @param array          $context
+     *
+     * @throws InvalidObjectContentException
      */
     private function handleRow(
         array $row,
@@ -229,12 +222,42 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     if (!$validatorError->hasError()) {
                         $templateObject->setContentValue($column);
                     } else {
-                        $this->importLogger->addError(key($row), $validatorError, $row, $context['locale']);
+                        throw new InvalidObjectContentException($validatorError);
                     }
                 } catch (ObjectValidatorNotExistException $exception) {
                     $templateObject->setContentValue($column);
                 }
             }
         }
+    }
+
+    /**
+     * @param array        $context
+     * @param string       $email
+     * @param TemplateData $registrationTemplate
+     */
+    private function createEntities(array $context, $email, $registrationTemplate)
+    {
+        $users = $this->userRepository->all();
+
+        // handle create entities
+        if (($user = $this->hasUserAccount($email, $users)) === false) {
+            $user = new User($email, '', '', $context['locale']);
+            $user->setAccount(new User\Account());
+
+            $this->importLogger->userImported();
+        }
+
+        $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+        $sheet->setRegistrationData([$registrationTemplate->getData()]);
+
+        $this->importLogger->sheetImported();
+
+        $participant = new Participant($sheet, $user, $registrationTemplate->getData(), false);
+        $participant->setImported(true);
+
+        $this->participantRepository->add($participant);
+
+        $this->synchronizer->set($registrationTemplate, $user);
     }
 }

@@ -305,6 +305,7 @@ services:
             - '@adapter.session'
             - '@serializer.denormalizer.participant'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@adapter.local_file_storage'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ImportMapping }
@@ -1822,6 +1823,10 @@ services:
             - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery }
+    query.participant.import.import_result_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Participant\Import\ImportResultViewQueryHandler
+        arguments:
+            - '@adapter.session'
     query.package.plan_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Plan\PlanViewQueryHandler
         arguments:
