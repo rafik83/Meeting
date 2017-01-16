@@ -56,11 +56,6 @@ class ImportMappingHandler
     private $localFileStorage;
 
     /**
-     * @var string
-     */
-    private $directoryPath;
-
-    /**
      * ImportMappingHandler constructor.
      *
      * @param DecoderInterface        $csvDecoder

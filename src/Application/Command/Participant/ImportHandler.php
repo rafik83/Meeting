@@ -54,7 +54,7 @@ class ImportHandler
      */
     public function handle(Import $command)
     {
-        $filePath = $this->localFileStorageAdapter->upload($command->file, $this->publicDir); //TODO: catch exception
+        $filePath = $this->localFileStorageAdapter->upload($command->file, $this->publicDir);
 
         $filename = Charset::convert(
             $this->publicDir . $filePath,
