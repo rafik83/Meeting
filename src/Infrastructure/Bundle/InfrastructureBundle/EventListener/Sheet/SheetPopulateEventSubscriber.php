@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -38,6 +39,25 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     public function __construct(ObjectPersister $persister)
     {
         $this->persister = $persister;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            Events::ORDER_CONFIRMED          => 'onOrderConfirmed',
+            Events::PACKAGE_STEP_DONE        => 'onPackageStep',
+            Events::TRANSACTION_CREATED      => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED      => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED    => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED      => 'onTransactionRemoved',
+            Events::HAPPENING_PARTICIPATED   => 'onHappeningParticipated',
+            Events::MEETING_REQUEST_CREATED  => 'onMeetingRequestCreated',
+            Events::MEETING_REQUEST_CANCELED => 'onMeetingRequestCanceled',
+            Events::MEETING_REQUEST_REFUSED  => 'onMeetingRequestRefused',
+        ];
     }
 
     /**
@@ -101,9 +121,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onMeetingRequestCreated(CreateRequestEvent $event)
     {
-        // Update "from" and "to" sheets of the meeting request
-        $this->updateSheetIndexation($event->getRequest()->getFromSheet());
-        $this->updateSheetIndexation($event->getRequest()->getToSheet());
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
 
     /**
@@ -111,9 +129,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onMeetingRequestCanceled(CancelRequestEvent $event)
     {
-        // Update "from" and "to" sheets of the meeting request
-        $this->updateSheetIndexation($event->getRequest()->getFromSheet());
-        $this->updateSheetIndexation($event->getRequest()->getToSheet());
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
 
     /**
@@ -121,28 +137,18 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onMeetingRequestRefused(RequestRefusedEvent $event)
     {
-        // Update "from" and "to" sheets of the meeting request
-        $this->updateSheetIndexation($event->getRequest()->getFromSheet());
-        $this->updateSheetIndexation($event->getRequest()->getToSheet());
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
 
     /**
-     * {@inheritdoc}
+     * Update "from" and "to" sheets of the meeting request
+     *
+     * @param Request $request
      */
-    public static function getSubscribedEvents()
+    private function updateSheetsIndexationFromRequest(Request $request)
     {
-        return [
-            Events::ORDER_CONFIRMED          => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE        => 'onPackageStep',
-            Events::TRANSACTION_CREATED      => 'onTransactionCreated',
-            Events::TRANSACTION_UPDATED      => 'onTransactionUpdated',
-            Events::TRANSACTION_CONFIRMED    => 'onTransactionConfirmed',
-            Events::TRANSACTION_REMOVED      => 'onTransactionRemoved',
-            Events::HAPPENING_PARTICIPATED   => 'onHappeningParticipated',
-            Events::MEETING_REQUEST_CREATED  => 'onMeetingRequestCreated',
-            Events::MEETING_REQUEST_CANCELED => 'onMeetingRequestCanceled',
-            Events::MEETING_REQUEST_REFUSED  => 'onMeetingRequestRefused',
-        ];
+        $this->updateSheetIndexation($request->getFromSheet());
+        $this->updateSheetIndexation($request->getToSheet());
     }
 
     /**
