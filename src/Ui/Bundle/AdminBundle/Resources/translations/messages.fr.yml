@@ -35,6 +35,7 @@ admin.agenda.requestsList.zeroResult: 'Pas de résultat'
 admin.agenda.sheet.loader: 'Chargement des fiches'
 admin.agenda.sheet.see: 'Voir la fiche'
 admin.agenda.title: 'Gestion des rendez-vous'
+admin.agenda.usableSlots: 'Créneaux utilisables'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler

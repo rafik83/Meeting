@@ -105,8 +105,8 @@ class SheetListViewQueryHandler
                 $request,
                 $propositions,
                 $indicator->meetingRequestsCount,
-                $indicator->slotTotal,
-                $indicator->possibleMeetingsQuantity,
+                $indicator->slotCount,
+                $indicator->usableSlots,
                 $this->getPlacedMeetingsNumber($sheet),
                 null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
                 $this->router->generate(
