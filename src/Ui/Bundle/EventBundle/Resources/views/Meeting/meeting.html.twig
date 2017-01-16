@@ -9,6 +9,13 @@
     </header>
     <div class="details">
         <div class="row">
+            {#
+                <div class="col-md-4">
+                    {% if meeting.hasPicture %}
+                        <img src="{{ meeting.picture }}"/>
+                    {% endif %}
+                </div>
+            #}
             <div class="col-md-12">
                 <div class="list list--users">
                     {% for participantView in meeting.participants %}
@@ -17,6 +24,9 @@
                 </div>
             </div>
         </div>
+        {#
+            <p>{{ meeting.description }}</p>
+        #}
         <footer>
             <p class="hours">
                 <i class="icon icon-Horaire"></i>
@@ -27,7 +37,13 @@
                 {{ 'agenda.meeting.details'|trans }}
             </a>
             <div class="actions">
-                <span class="btn btn-gray"><i class="icon icon-Localiser"></i> {{ meeting.spotRef }}</span>
+                {#
+                    <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
+                    <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
+                    <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
+                    <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
+                #}
+                <i class="icon icon-Localiser"></i> {{ meeting.spotRef }}
             </div>
         </footer>
     </div>
