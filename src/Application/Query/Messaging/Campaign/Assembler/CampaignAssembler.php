@@ -55,7 +55,7 @@ class CampaignAssembler
         Constant::NO_ORDER => 'admin.sheet.filter.no_order',
         Constant::HAS_CART => 'admin.sheet.filter.has_cart',
         'boolean_filters'  => 'admin.sheet.filter.template_filters',
-        'hasPositiveBalance'            => 'form.sheet_filter.children.hasPositiveBalance.label',
+        'hasRemainingToPay'             => 'form.sheet_filter.children.hasRemainingToPay.label',
         'hasHappeningParticipation'     => 'form.sheet_filter.children.hasHappeningParticipation.label',
         'hasNoMeetingRequest'           => 'form.sheet_filter.children.hasNoMeetingRequest.label',
         'hasPendingMeetingPropositions' => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
@@ -164,7 +164,7 @@ class CampaignAssembler
                     case 'inCatalog':
                     case Constant::NO_ORDER:
                     case Constant::HAS_CART:
-                    case 'hasPositiveBalance':
+                    case 'hasRemainingToPay':
                     case 'hasHappeningParticipation':
                     case 'hasNoMeetingRequest':
                     case 'hasPendingMeetingPropositions':

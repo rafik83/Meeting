@@ -89,8 +89,8 @@ class TargetFilterType extends AbstractType
                 'label'       => 'form.sheet_filter.children.hasHappeningParticipation.label',
                 'required'    => false,
             ])
-            ->add('hasPositiveBalance', CheckboxType::class, [
-                'label'       => 'form.sheet_filter.children.hasPositiveBalance.label',
+            ->add('hasRemainingToPay', CheckboxType::class, [
+                'label'       => 'form.sheet_filter.children.hasRemainingToPay.label',
                 'required'    => false,
             ])
             ->add('hasNoMeetingRequest', CheckboxType::class, [

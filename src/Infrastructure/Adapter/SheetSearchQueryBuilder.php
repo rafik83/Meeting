@@ -176,8 +176,8 @@ class SheetSearchQueryBuilder
             $this->filterByObjective($filters[SearchType::FILTER_OBJECTIVE]);
         }
 
-        if (isset($filters['hasPositiveBalance']) && true === $filters['hasPositiveBalance']) {
-            $this->filterByPositiveBalance();
+        if (isset($filters['hasRemainingToPay']) && true === $filters['hasRemainingToPay']) {
+            $this->filterByHasRemainingToPay();
         }
 
         if (isset($filters['hasNoMeetingRequest']) && true === $filters['hasNoMeetingRequest']) {
@@ -692,10 +692,10 @@ class SheetSearchQueryBuilder
         }
     }
 
-    private function filterByPositiveBalance()
+    private function filterByHasRemainingToPay()
     {
         $positiveRange = new Range();
-        $positiveRange->addField('balance', ['gt' => 0]);
+        $positiveRange->addField('remainingToPay', ['gt' => 0]);
         $this->query->addMust($positiveRange);
     }
 
