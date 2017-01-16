@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnRefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
+use Proximum\Vimeet\Application\Event\Order\OrderUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
@@ -51,6 +52,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     {
         return [
             Events::ORDER_CONFIRMED            => 'onOrderConfirmed',
+            Events::ORDER_UPDATED              => 'onOrderUpdated',
             Events::PACKAGE_STEP_DONE          => 'onPackageStep',
             Events::TRANSACTION_CREATED        => 'onTransactionCreated',
             Events::TRANSACTION_UPDATED        => 'onTransactionUpdated',
@@ -78,6 +80,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      * @param OrderConfirmEvent $event
      */
     public function onOrderConfirmed(OrderConfirmEvent $event)
+    {
+        $this->updateSheetIndexation($event->getOrder()->getSheet());
+    }
+
+    /**
+     * @param OrderUpdatedEvent $event
+     */
+    public function onOrderUpdated(OrderUpdatedEvent $event)
     {
         $this->updateSheetIndexation($event->getOrder()->getSheet());
     }

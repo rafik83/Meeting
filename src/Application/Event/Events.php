@@ -39,6 +39,7 @@ final class Events
     const EVENT_LOCALE_CHANGED                 = 'event.locale_changed';
     const USER_RESET_PASSWORD_CONFIRMED        = 'user.reset_password.confirm';
     const ORDER_CONFIRMED                      = 'order.confirm';
+    const ORDER_UPDATED                        = 'order.updated';
     const ADMIN_ACCOUNT_ACTIVATED              = 'admin.account_activated';
     const ADMIN_PASSWORD_RESET                 = 'admin.password_reset';
     const USER_ACCOUNT_ACTIVATED               = 'user.account_activated';

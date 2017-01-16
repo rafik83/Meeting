@@ -1219,6 +1219,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToProduct }
 
@@ -1226,6 +1227,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToGroup }
 
@@ -1233,6 +1235,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\UpdateRow }
 
@@ -1240,6 +1243,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
 
