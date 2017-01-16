@@ -25,7 +25,7 @@ final class Events
     const MEETING_PARTICIPANT_REMOVED          = 'meeting.participant.removed';
     const MEETING_REQUEST_CREATED              = 'meeting_request.created';
     const MEETING_REQUEST_CANCELED             = 'meeting_request.canceled';
-    const REQUEST_REFUSED                      = 'meeting_request.refused';
+    const MEETING_REQUEST_REFUSED              = 'meeting_request.refused';
     const REQUEST_ACCEPTED                     = 'meeting_request.accepted';
     const MEETING_CANCELED                     = 'meeting.canceled';
     const REQUEST_PARTICIPANT_ADDED            = 'meeting_request.participant.added';

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\Meeting\RequestRefusedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
@@ -116,6 +117,16 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param RequestRefusedEvent $event
+     */
+    public function onMeetingRequestRefused(RequestRefusedEvent $event)
+    {
+        // Update "from" and "to" sheets of the meeting request
+        $this->updateSheetIndexation($event->getRequest()->getFromSheet());
+        $this->updateSheetIndexation($event->getRequest()->getToSheet());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -130,6 +141,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::HAPPENING_PARTICIPATED   => 'onHappeningParticipated',
             Events::MEETING_REQUEST_CREATED  => 'onMeetingRequestCreated',
             Events::MEETING_REQUEST_CANCELED => 'onMeetingRequestCanceled',
+            Events::MEETING_REQUEST_REFUSED  => 'onMeetingRequestRefused',
         ];
     }
 
