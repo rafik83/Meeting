@@ -238,11 +238,11 @@ class ImportHandler
             $participantFrom = ParticipantFinder::getParticipantWithId($sheetFrom, $participant->id);
             $participantTo   = ParticipantFinder::getParticipantWithId($sheetTo, $participant->id);
 
-            if (null !== $participantFrom && $request->hasFromParticipant($participantFrom)) {
+            if (null !== $participantFrom) {
                 $participantsFrom[] = $participantFrom;
             }
 
-            if (null !== $participantTo && $request->hasToParticipant($participantTo)) {
+            if (null !== $participantTo) {
                 $participantsTo[] = $participantTo;
             }
 
