@@ -126,11 +126,6 @@ class ParticipateHandler
             }
         }
 
-        $this->eventDispatcher->dispatch(
-            Events::HAPPENING_PARTICIPATED,
-            new ParticipateEvent($participate->sheet, $participate->participants, $participate->happening)
-        );
-
         if (true === $participate->happening->isQuestionAllowed()) {
             // Remove previous question
             $this->questionRepository->removeQuestionFromUserForHappening(
@@ -151,5 +146,10 @@ class ParticipateHandler
                 );
             }
         }
+
+        $this->eventDispatcher->dispatch(
+            Events::HAPPENING_PARTICIPATED,
+            new ParticipateEvent($participate->sheet, $participate->participants, $participate->happening)
+        );
     }
 }

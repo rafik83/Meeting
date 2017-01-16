@@ -96,11 +96,6 @@ class ApproveRequestHandler
 
         $this->requestRepository->set($approveRequest->request->approve($this->datetime));
 
-        $this->eventDispatcher->dispatch(
-            Events::MEETING_REQUEST_APPROVED,
-            new ApprovedRequestEvent($approveRequest->request)
-        );
-
         // Add message
         if ($approveRequest->description) {
             $this->messageRepository->add(new Message(
@@ -110,5 +105,10 @@ class ApproveRequestHandler
                 $this->datetime
             ));
         }
+
+        $this->eventDispatcher->dispatch(
+            Events::MEETING_REQUEST_APPROVED,
+            new ApprovedRequestEvent($approveRequest->request)
+        );
     }
 }

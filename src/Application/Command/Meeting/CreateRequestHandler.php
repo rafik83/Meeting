@@ -79,11 +79,6 @@ class CreateRequestHandler
 
         $this->requestRepository->add($request);
 
-        $this->eventDispatcher->dispatch(
-            Events::MEETING_REQUEST_CREATED,
-            new CreateRequestEvent($request)
-        );
-
         // Add message
         if ($createRequest->description) {
             $this->messageRepository->add(new Message(
@@ -93,6 +88,11 @@ class CreateRequestHandler
                 $this->dateTime
             ));
         }
+
+        $this->eventDispatcher->dispatch(
+            Events::MEETING_REQUEST_CREATED,
+            new CreateRequestEvent($request)
+        );
 
         return new CreateRequestResult($request);
     }
