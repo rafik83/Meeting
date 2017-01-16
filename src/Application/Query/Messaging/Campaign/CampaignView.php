@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,16 +23,41 @@ class CampaignView
     /** @var \DateTimeInterface */
     public $createdAt;
 
+    /** @var \DateTimeInterface */
+    public $sentAt;
+
+    /** @var bool */
+    public $hasMessage;
+
+    /** @var bool */
+    public $hasRecipients;
+
+    /** @var bool */
+    public $sent;
+
     /**
-     * @param int                $id
-     * @param string             $title
-     * @param \DateTimeInterface $createdAt
+     * @param int                     $id
+     * @param string                  $title
+     * @param \DateTimeInterface      $createdAt
+     * @param \DateTimeInterface|null $sentAt
+     * @param bool                    $hasMessage
+     * @param bool                    $hasRecipients
      */
-    public function __construct($id, $title, \DateTimeInterface $createdAt)
-    {
-        $this->id        = $id;
-        $this->title     = $title;
-        $this->createdAt = $createdAt;
+    public function __construct(
+        $id,
+        $title,
+        \DateTimeInterface $createdAt,
+        \DateTimeInterface $sentAt = null,
+        $hasMessage = false,
+        $hasRecipients = false
+    ) {
+        $this->id            = $id;
+        $this->title         = $title;
+        $this->createdAt     = $createdAt;
+        $this->sentAt        = $sentAt;
+        $this->hasMessage    = $hasMessage;
+        $this->hasRecipients = $hasRecipients;
+        $this->sent          = (bool) $sentAt;
     }
 
     /**
@@ -45,7 +70,10 @@ class CampaignView
         return new self(
             $campaign->getId(),
             $campaign->getTitle(),
-            $campaign->getCreatedAt()
+            $campaign->getCreatedAt(),
+            $campaign->getSentAt(),
+            (bool) $campaign->getMessage(),
+            (bool) $campaign->getRecipients()
         );
     }
 }

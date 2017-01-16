@@ -1341,7 +1341,15 @@ services:
             - '@repository.messaging.campaign_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage }
-
+    command.messaging.campaign.send_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@repository.messaging.campaign_repository'
+            - '@adapter.sendgrid_api_adapter'
+            - '@event_sender'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
     command.planner.import_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
         arguments:
@@ -1612,6 +1620,12 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    adapter.sendgrid_api_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
+        arguments:
+            - '@domain.messaging.sendgrid_api_client'
+            - '@twig'
 
     #
     # Proforma component
@@ -2925,7 +2939,6 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
 
-
     #
     # Form extension
     #
@@ -2935,3 +2948,15 @@ services:
              - '@translator'
         tags:
             - { name: form.type_extension,  extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+    #
+    # SendGrid API
+    #
+    domain.messaging.sendgrid_api_client.factory:
+        class: Proximum\Vimeet\Domain\Messaging\SendGridApiClientFactory
+        arguments:
+            - '%sendgrid_api_key%'
+
+    domain.messaging.sendgrid_api_client:
+        class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
+        factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']
