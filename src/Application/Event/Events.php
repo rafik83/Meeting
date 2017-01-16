@@ -28,6 +28,7 @@ final class Events
     const MEETING_REQUEST_REFUSED              = 'meeting_request.refused';
     const MEETING_REQUEST_APPROVED             = 'meeting_request.approved';
     const MEETING_REQUEST_UNAPPROVED           = 'meeting_request.unapproved';
+    const MEETING_REQUEST_UNREFUSED            = 'meeting_request.unrefused';
     const MEETING_CANCELED                     = 'meeting.canceled';
     const REQUEST_PARTICIPANT_ADDED            = 'meeting_request.participant.added';
     const REQUEST_PARTICIPANT_REMOVED          = 'meeting_request.participant.removed';

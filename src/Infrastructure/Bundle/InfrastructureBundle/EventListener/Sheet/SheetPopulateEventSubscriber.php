@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnRefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
@@ -61,6 +62,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::MEETING_REQUEST_REFUSED    => 'onMeetingRequestRefused',
             Events::MEETING_REQUEST_APPROVED   => 'onMeetingRequestApproved',
             Events::MEETING_REQUEST_UNAPPROVED => 'onMeetingRequestUnapproved',
+            Events::MEETING_REQUEST_UNREFUSED  => 'onMeetingRequestUnrefused',
         ];
     }
 
@@ -156,6 +158,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      * @param UnapprovedRequestEvent $event
      */
     public function onMeetingRequestUnapproved(UnapprovedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param UnRefusedRequestEvent $event
+     */
+    public function onMeetingRequestUnrefused(UnRefusedRequestEvent $event)
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
