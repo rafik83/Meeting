@@ -3,6 +3,9 @@ Proximum\Vimeet\Application\Command\Participant\ImportMapping:
         - Expression:
             expression: "this.isEmailInMappings() === true"
             message: "validators.participant_imported.empty_mail_mapping"
+        - Expression:
+            expression: "this.isOnlyOneEmailMapping() === true"
+            message: "validators.participant_imported.duplicate_mail_mapping"
     properties:
         mappings:
             - Valid: ~

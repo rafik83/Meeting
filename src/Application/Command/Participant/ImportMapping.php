@@ -91,4 +91,14 @@ class ImportMapping
     {
         return in_array(ParticipantImportTag::REGISTRATION_FIELD_MAIL, $this->mappings, true);
     }
+
+    /**
+     * @return bool
+     */
+    public function isOnlyOneEmailMapping()
+    {
+        $mappingsValuesCount = array_count_values($this->mappings);
+
+        return $mappingsValuesCount[ParticipantImportTag::REGISTRATION_FIELD_MAIL] <= 1;
+    }
 }
