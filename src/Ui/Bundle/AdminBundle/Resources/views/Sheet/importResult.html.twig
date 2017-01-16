@@ -51,7 +51,7 @@
             {% endblock goback %}
         </div>
         <div class="col-sm-9 text-right">
-
+            <a class="btn btn-primary" href="{{ path('admin_sheet', {'event': event.getId}) }}">{{ 'admin.sheet.see_list'|trans }}</a>
         </div>
     </div>
 {% endblock %}
