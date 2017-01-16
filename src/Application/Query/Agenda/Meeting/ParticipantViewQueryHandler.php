@@ -47,7 +47,7 @@ class ParticipantViewQueryHandler
         $card = $this->cardViewQueryHandler->handle(
             new CardViewQuery($query->participant, $query->locale, false)
         );
-        $this->ruleApplyer->appluRuleForParticipantCard($card, $query->rules);
+        $this->ruleApplyer->applyRuleForParticipantCard($card, $query->rules);
 
         return new ParticipantView($card);
     }

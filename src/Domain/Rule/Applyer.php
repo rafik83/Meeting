@@ -105,7 +105,7 @@ class Applyer
      * @param CardView $cardView
      * @param array    $rules
      */
-    public function appluRuleForParticipantCard(CardView &$cardView, array $rules)
+    public function applyRuleForParticipantCard(CardView &$cardView, array $rules)
     {
         // This try catch should not exist has there should always be a rule in the $rules
         // But to test it, there it is
