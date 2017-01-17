@@ -20,7 +20,7 @@ class Remove
     public $meetingSlot;
 
     /**
-     * Lock constructor.
+     * Remove constructor.
      *
      * @param MeetingSlot $meetingSlot
      */
