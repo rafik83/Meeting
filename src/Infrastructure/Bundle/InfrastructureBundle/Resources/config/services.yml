@@ -430,6 +430,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@domain.happening.participation_count'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
@@ -444,6 +445,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CreateRequest }
@@ -470,6 +472,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }
@@ -487,6 +490,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
@@ -503,6 +507,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CancelRequest }
     command.meeting.un_approve_meeting_request_handler:
@@ -510,6 +515,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
@@ -1207,6 +1213,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToProduct }
 
@@ -1214,6 +1221,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToGroup }
 
@@ -1221,6 +1229,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\UpdateRow }
 
@@ -1228,6 +1237,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
 

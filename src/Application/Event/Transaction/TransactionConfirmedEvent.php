@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Event\Transaction;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 
-class TransactionConfirmEvent extends AbstractTransactionEvent
+class TransactionConfirmedEvent extends AbstractTransactionEvent
 {
     /**
      * @var User
@@ -21,8 +21,6 @@ class TransactionConfirmEvent extends AbstractTransactionEvent
     private $user;
 
     /**
-     * TransactionConfirmEvent constructor.
-     *
      * @param User        $user
      * @param Transaction $transaction
      */

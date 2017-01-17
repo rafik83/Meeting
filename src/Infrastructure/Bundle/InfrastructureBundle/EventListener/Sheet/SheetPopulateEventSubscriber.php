@@ -12,8 +12,22 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\UnRefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
+use Proximum\Vimeet\Application\Event\Order\OrderUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionUpdatedEvent;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SheetPopulateEventSubscriber implements EventSubscriberInterface
@@ -32,11 +46,34 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            Events::ORDER_CONFIRMED            => 'onOrderConfirmed',
+            Events::ORDER_UPDATED              => 'onOrderUpdated',
+            Events::PACKAGE_STEP_DONE          => 'onPackageStep',
+            Events::TRANSACTION_CREATED        => 'onTransactionCreated',
+            Events::TRANSACTION_UPDATED        => 'onTransactionUpdated',
+            Events::TRANSACTION_CONFIRMED      => 'onTransactionConfirmed',
+            Events::TRANSACTION_REMOVED        => 'onTransactionRemoved',
+            Events::HAPPENING_PARTICIPATED     => 'onHappeningParticipated',
+            Events::MEETING_REQUEST_CREATED    => 'onMeetingRequestCreated',
+            Events::MEETING_REQUEST_CANCELED   => 'onMeetingRequestCanceled',
+            Events::MEETING_REQUEST_REFUSED    => 'onMeetingRequestRefused',
+            Events::MEETING_REQUEST_APPROVED   => 'onMeetingRequestApproved',
+            Events::MEETING_REQUEST_UNAPPROVED => 'onMeetingRequestUnapproved',
+            Events::MEETING_REQUEST_UNREFUSED  => 'onMeetingRequestUnrefused',
+        ];
+    }
+
+    /**
      * @param StepDoneEvent $event
      */
     public function onPackageStep(StepDoneEvent $event)
     {
-        $this->persister->replaceOne($event->getSheet());
+        $this->updateSheetIndexation($event->getSheet());
     }
 
     /**
@@ -44,17 +81,121 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onOrderConfirmed(OrderConfirmEvent $event)
     {
-        $this->persister->replaceOne($event->getOrder()->getSheet());
+        $this->updateSheetIndexation($event->getOrder()->getSheet());
     }
 
     /**
-     * {@inheritdoc}
+     * @param OrderUpdatedEvent $event
      */
-    public static function getSubscribedEvents()
+    public function onOrderUpdated(OrderUpdatedEvent $event)
     {
-        return [
-            Events::ORDER_CONFIRMED   => 'onOrderConfirmed',
-            Events::PACKAGE_STEP_DONE => 'onPackageStep',
-        ];
+        $this->updateSheetIndexation($event->getOrder()->getSheet());
+    }
+
+    /**
+     * @param TransactionCreatedEvent $event
+     */
+    public function onTransactionCreated(TransactionCreatedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param TransactionUpdatedEvent $event
+     */
+    public function onTransactionUpdated(TransactionUpdatedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param TransactionConfirmedEvent $event
+     */
+    public function onTransactionConfirmed(TransactionConfirmedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param TransactionRemovedEvent $event
+     */
+    public function onTransactionRemoved(TransactionRemovedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getTransaction()->getSheet());
+    }
+
+    /**
+     * @param ParticipateEvent $event
+     */
+    public function onHappeningParticipated(ParticipateEvent $event)
+    {
+        $this->updateSheetIndexation($event->getSheet());
+    }
+
+    /**
+     * @param CreateRequestEvent $event
+     */
+    public function onMeetingRequestCreated(CreateRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param CancelRequestEvent $event
+     */
+    public function onMeetingRequestCanceled(CancelRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param RefusedRequestEvent $event
+     */
+    public function onMeetingRequestRefused(RefusedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param ApprovedRequestEvent $event
+     */
+    public function onMeetingRequestApproved(ApprovedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param UnapprovedRequestEvent $event
+     */
+    public function onMeetingRequestUnapproved(UnapprovedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * @param UnRefusedRequestEvent $event
+     */
+    public function onMeetingRequestUnrefused(UnRefusedRequestEvent $event)
+    {
+        $this->updateSheetsIndexationFromRequest($event->getRequest());
+    }
+
+    /**
+     * Update "from" and "to" sheets of the meeting request
+     *
+     * @param Request $request
+     */
+    private function updateSheetsIndexationFromRequest(Request $request)
+    {
+        $this->updateSheetIndexation($request->getFromSheet());
+        $this->updateSheetIndexation($request->getToSheet());
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    private function updateSheetIndexation(Sheet $sheet)
+    {
+        $this->persister->replaceOne($sheet);
     }
 }
