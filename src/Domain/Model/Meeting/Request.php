@@ -278,7 +278,7 @@ class Request implements MessageSubjectInterface
      *
      * @return Request
      */
-    public function setMeeting($meeting)
+    public function setMeeting(Meeting $meeting)
     {
         $this->meeting = $meeting;
 
@@ -473,5 +473,13 @@ class Request implements MessageSubjectInterface
         }
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMeeting()
+    {
+        return $this->meeting !== null;
     }
 }

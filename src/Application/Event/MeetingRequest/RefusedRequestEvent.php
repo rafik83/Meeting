@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Event\Meeting;
+namespace Proximum\Vimeet\Application\Event\MeetingRequest;
 
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher\Event;
 
-class RequestRefusedEvent extends Event
+class RefusedRequestEvent extends Event
 {
     /**
      * @var User

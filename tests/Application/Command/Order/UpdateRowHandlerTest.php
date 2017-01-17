@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Order\UpdateRowHandler;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateRowHandlerTest extends \PHPUnit_Framework_TestCase
@@ -48,8 +49,10 @@ class UpdateRowHandlerTest extends \PHPUnit_Framework_TestCase
 
         $updateRow = new UpdateRow($row);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         // Handler
-        $handler = new UpdateRowHandler($rowRepository->reveal());
+        $handler = new UpdateRowHandler($rowRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($updateRow);
     }
 }
