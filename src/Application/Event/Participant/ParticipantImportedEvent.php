@@ -30,6 +30,10 @@ class ParticipantImportedEvent extends EventDispatcher\Event
      * @var \DateTimeInterface
      */
     private $date;
+    /**
+     * @var array
+     */
+    private $sheets;
 
     /**
      * ParticipantImportedEvent constructor.
@@ -37,12 +41,14 @@ class ParticipantImportedEvent extends EventDispatcher\Event
      * @param Admin              $admin
      * @param Event              $event
      * @param \DateTimeInterface $date
+     * @param array              $sheets
      */
-    public function __construct(Admin $admin, Event $event, \DateTimeInterface $date)
+    public function __construct(Admin $admin, Event $event, \DateTimeInterface $date, array $sheets)
     {
-        $this->admin = $admin;
-        $this->event = $event;
-        $this->date  = $date;
+        $this->admin  = $admin;
+        $this->event  = $event;
+        $this->date   = $date;
+        $this->sheets = $sheets;
     }
 
     /**
@@ -67,5 +73,13 @@ class ParticipantImportedEvent extends EventDispatcher\Event
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSheets()
+    {
+        return $this->sheets;
     }
 }

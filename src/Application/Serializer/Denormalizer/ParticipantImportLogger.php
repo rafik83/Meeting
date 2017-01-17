@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\Validator\Error\ValidatorError;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
@@ -50,6 +51,11 @@ class ParticipantImportLogger
      * @var TranslatorAdapter
      */
     private $translatorAdapter;
+
+    /**
+     * @var Sheet[] $sheets
+     */
+    private $sheets = [];
 
     /**
      * ParticipantImportLogger constructor.
@@ -98,8 +104,12 @@ class ParticipantImportLogger
         $this->createdUsers++;
     }
 
-    public function sheetImported()
+    /**
+     * @param $sheet
+     */
+    public function sheetImported(Sheet $sheet)
     {
+        $this->sheets[] = $sheet;
         $this->createdSheets++;
     }
 
@@ -115,5 +125,13 @@ class ParticipantImportLogger
             self::CREATED_USERS           => $this->createdUsers,
             self::IMPORT_ERRORS           => $this->errors,
         ];
+    }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return $this->sheets;
     }
 }

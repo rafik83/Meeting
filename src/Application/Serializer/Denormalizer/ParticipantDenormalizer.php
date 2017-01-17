@@ -313,7 +313,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
 
-        $this->importLogger->sheetImported();
+        $this->importLogger->sheetImported($sheet);
 
         $this->synchronizer->set($registrationTemplate, $user);
     }

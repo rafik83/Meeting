@@ -99,12 +99,6 @@ class ImportMappingHandler
             'locale'              => $importMapping->locale,
         ]);
 
-        $this->eventDispatcher->dispatch(Events::PARTICIPANT_IMPORTED, new ParticipantImportedEvent(
-            $importMapping->admin,
-            $importMapping->event,
-            $this->date
-        ));
-
         $this->session->set(ParticipantImportLogger::SESSION_FLASH, $importLogger->toArray());
 
         $this->localFileStorage->remove(
@@ -114,6 +108,13 @@ class ImportMappingHandler
 
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET);
+
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_IMPORTED, new ParticipantImportedEvent(
+            $importMapping->admin,
+            $importMapping->event,
+            $this->date,
+            $importLogger->getSheets()
+        ));
     }
 
     /**
