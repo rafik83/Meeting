@@ -2795,8 +2795,6 @@ services:
     #
     serializer.abstract_normalizer:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\AbstractNormalizer
-        arguments:
-            - '@vimeet_infrastructure.adapter.translator_adapter'
         abstract: true
 
     serializer.normalizer.event_sheets:
@@ -2824,6 +2822,8 @@ services:
     serializer.normalizer.happening_participant:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormalizer
         parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: serializer.normalizer }
 
