@@ -24,12 +24,10 @@ Proximum\Vimeet\Domain\Model\Participant:
             inversedBy: participants
             joinColumn:
                 onDelete: CASCADE
-            cascade: ['persist']
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
-            cascade: ['persist']
     oneToMany:
         happeningParticipations:
             targetEntity: Proximum\Vimeet\Domain\Model\HappeningParticipation
