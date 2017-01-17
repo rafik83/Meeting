@@ -21,3 +21,12 @@ services:
         arguments:
             - "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
             - { db_username: "%database_user%", db_password: "%database_password%" }
+
+    #
+    # Form translation CollectionTypeExtension
+    #
+    form.extension.collection_type_extension:
+        decorates: elao.form_translation.extension.collection_type_extension
+        parent: elao.form_translation.extension.collection_type_extension
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\CollectionType, priority: -10 }
