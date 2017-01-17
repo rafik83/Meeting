@@ -51,9 +51,14 @@ class CampaignAssembler
         'category'         => 'form.sheet_filter.children.category.label',
         'follower'         => 'form.sheet_filter.children.follower.label',
         'registeredAt'     => 'form.sheet_filter.children.creation_interval.label',
+        'inCatalog'        => 'form.sheet_filter.children.inCatalog.label',
         Constant::NO_ORDER => 'admin.sheet.filter.no_order',
         Constant::HAS_CART => 'admin.sheet.filter.has_cart',
         'boolean_filters'  => 'admin.sheet.filter.template_filters',
+        'hasRemainingToPay'             => 'form.sheet_filter.children.hasRemainingToPay.label',
+        'hasHappeningParticipation'     => 'form.sheet_filter.children.hasHappeningParticipation.label',
+        'hasNoMeetingRequest'           => 'form.sheet_filter.children.hasNoMeetingRequest.label',
+        'hasPendingMeetingPropositions' => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
     ];
 
     /**
@@ -155,6 +160,15 @@ class CampaignAssembler
                         } else {
                             $currentValue = '';
                         }
+                        break;
+                    case 'inCatalog':
+                    case Constant::NO_ORDER:
+                    case Constant::HAS_CART:
+                    case 'hasRemainingToPay':
+                    case 'hasHappeningParticipation':
+                    case 'hasNoMeetingRequest':
+                    case 'hasPendingMeetingPropositions':
+                        $currentValue = $this->translator->trans('boolean.true');
                         break;
                 }
 

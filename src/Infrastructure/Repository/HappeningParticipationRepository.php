@@ -174,6 +174,29 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
+    public function countParticipationsBySheet(Sheet $sheet)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(participation.id)')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasParticipationsBySheet(Sheet $sheet)
+    {
+        return $this->countParticipationsBySheet($sheet) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getParticipationsForSheet(Sheet $sheet, $happenings)
     {
         $queryBuilder = $this
