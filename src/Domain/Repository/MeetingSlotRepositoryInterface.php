@@ -27,6 +27,11 @@ interface MeetingSlotRepositoryInterface
     public function set(MeetingSlot $meetingSlot);
 
     /**
+     * @param MeetingSlot $meetingSlot
+     */
+    public function remove(MeetingSlot $meetingSlot);
+
+    /**
      * @param Event $event
      *
      * @return MeetingSlot[]
