@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Domain\Transaction;
 
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -48,7 +48,9 @@ class TransactionManager
         $transaction->setPaid();
         $this->transactionRepository->set($transaction);
 
-        $transactionConfirmEvent = new TransactionConfirmEvent($transaction->getUser(), $transaction);
-        $this->eventDispatcher->dispatch(Events::TRANSACTION_CONFIRMED, $transactionConfirmEvent);
+        $this->eventDispatcher->dispatch(
+            Events::TRANSACTION_CONFIRMED,
+            new TransactionConfirmedEvent($transaction->getUser(), $transaction)
+        );
     }
 }

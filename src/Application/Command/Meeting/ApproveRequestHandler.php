@@ -11,10 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ApproveRequestHandler
 {
@@ -39,20 +42,28 @@ class ApproveRequestHandler
     private $permissionManager;
 
     /**
+     * @var DelayedEventDispatcher
+     */
+    private $eventDispatcher;
+
+    /**
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
      * @param RequestPermissionManager   $permissionManager
+     * @param DelayedEventDispatcher     $eventDispatcher
      * @param \DateTimeInterface         $datetime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $permissionManager,
+        DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $datetime
     ) {
         $this->requestRepository = $requestRepository;
         $this->permissionManager = $permissionManager;
         $this->messageRepository = $messageRepository;
+        $this->eventDispatcher   = $eventDispatcher;
         $this->datetime          = $datetime;
     }
 
@@ -94,5 +105,10 @@ class ApproveRequestHandler
                 $this->datetime
             ));
         }
+
+        $this->eventDispatcher->dispatch(
+            Events::MEETING_REQUEST_APPROVED,
+            new ApprovedRequestEvent($approveRequest->request)
+        );
     }
 }

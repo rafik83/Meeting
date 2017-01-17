@@ -21,7 +21,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetDraftEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetValidationValidateEvent;
-use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmEvent;
+use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
@@ -149,9 +149,9 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param TransactionConfirmEvent $event
+     * @param TransactionConfirmedEvent $event
      */
-    public function onTransactionConfirmed(TransactionConfirmEvent $event)
+    public function onTransactionConfirmed(TransactionConfirmedEvent $event)
     {
         $participantMailView = $this->participantMailViewQueryHandler->handle(
             new ParticipantMailViewQuery($event->getTransaction()->getSheet(), $event->getUser())

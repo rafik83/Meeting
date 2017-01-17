@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Order\RemoveRowHandler;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveRowHandlerTest extends \PHPUnit_Framework_TestCase
@@ -48,8 +49,10 @@ class RemoveRowHandlerTest extends \PHPUnit_Framework_TestCase
 
         $removeRow = new RemoveRow($row);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
         // Handler
-        $handler = new RemoveRowHandler($rowRepository->reveal());
+        $handler = new RemoveRowHandler($rowRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($removeRow);
     }
 }

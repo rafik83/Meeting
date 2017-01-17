@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -53,6 +54,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(0);
         $this->expectException(NotEnoughtRemainingParticipationsException::class);
@@ -64,6 +66,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -93,6 +96,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository->getParticipantsForHappening($sheet, $happening)->shouldBeCalled()->willReturn([]);
@@ -110,6 +114,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -137,6 +142,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $this->expectException(ParticipantRequiredException::class);
 
@@ -147,6 +153,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -176,6 +183,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -195,6 +203,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -224,6 +233,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -249,6 +259,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -281,6 +292,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -310,6 +322,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -342,6 +355,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
 
@@ -372,6 +386,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -401,6 +416,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -426,6 +442,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -455,6 +472,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -488,6 +506,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
@@ -517,6 +536,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $participationCount = $this->prophesize(ParticipationCount::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
         $participantRepository
@@ -536,6 +556,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $participantRepository->reveal(),
             $questionRepository->reveal(),
             $participationCount->reveal(),
+            $eventDispatcher->reveal(),
             $datetime
         );
 
