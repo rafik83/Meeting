@@ -21,7 +21,8 @@ class ParticipantImportLogger
     const CREATED_SHEETS          = 'created_sheets';
     const CREATED_USERS           = 'created_users';
     const IMPORT_ERRORS           = 'import_errors';
-    const SESSION_FLASH           = 'session_flash';
+    const PARTICIPANT_IMPORT_ID   = 'participant_import_id';
+
     /**
      * @var int
      */

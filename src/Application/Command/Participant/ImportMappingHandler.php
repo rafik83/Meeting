@@ -18,6 +18,8 @@ use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\ParticipantImport;
+use Proximum\Vimeet\Domain\Repository\ParticipantImportRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
@@ -56,14 +58,20 @@ class ImportMappingHandler
     private $localFileStorage;
 
     /**
+     * @var ParticipantImportRepositoryInterface
+     */
+    private $participantImportRepository;
+
+    /**
      * ImportMappingHandler constructor.
      *
-     * @param DecoderInterface        $csvDecoder
-     * @param SessionInterface        $session
-     * @param DenormalizerInterface   $denormalizer
-     * @param DelayedEventDispatcher  $eventDispatcher
-     * @param LocalFileStorageAdapter $localFileStorage
-     * @param \DateTimeInterface      $date
+     * @param DecoderInterface                     $csvDecoder
+     * @param SessionInterface                     $session
+     * @param DenormalizerInterface                $denormalizer
+     * @param DelayedEventDispatcher               $eventDispatcher
+     * @param LocalFileStorageAdapter              $localFileStorage
+     * @param \DateTimeInterface                   $date
+     * @param ParticipantImportRepositoryInterface $participantImportRepository
      */
     public function __construct(
         DecoderInterface $csvDecoder,
@@ -71,14 +79,16 @@ class ImportMappingHandler
         DenormalizerInterface $denormalizer,
         DelayedEventDispatcher $eventDispatcher,
         LocalFileStorageAdapter $localFileStorage,
-        \DateTimeInterface $date
+        \DateTimeInterface $date,
+        ParticipantImportRepositoryInterface $participantImportRepository
     ) {
-        $this->session          = $session;
-        $this->csvDecoder       = $csvDecoder;
-        $this->denormalizer     = $denormalizer;
-        $this->eventDispatcher  = $eventDispatcher;
-        $this->date             = $date;
-        $this->localFileStorage = $localFileStorage;
+        $this->session                     = $session;
+        $this->csvDecoder                  = $csvDecoder;
+        $this->denormalizer                = $denormalizer;
+        $this->eventDispatcher             = $eventDispatcher;
+        $this->date                        = $date;
+        $this->localFileStorage            = $localFileStorage;
+        $this->participantImportRepository = $participantImportRepository;
     }
 
     /**
@@ -99,7 +109,13 @@ class ImportMappingHandler
             'locale'              => $importMapping->locale,
         ]);
 
-        $this->session->set(ParticipantImportLogger::SESSION_FLASH, $importLogger->toArray());
+        $participantImport = new ParticipantImport(
+            $importMapping->type,
+            $importLogger->toArray(),
+            $this->date
+        );
+
+        $this->participantImportRepository->add($participantImport);
 
         $this->localFileStorage->remove(
             $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE),
@@ -115,6 +131,8 @@ class ImportMappingHandler
             $this->date,
             $importLogger->getSheets()
         ));
+
+        $this->session->set(ParticipantImportLogger::PARTICIPANT_IMPORT_ID, $participantImport->getId());
     }
 
     /**

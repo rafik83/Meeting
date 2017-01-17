@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
+use Proximum\Vimeet\Domain\Repository\ParticipantImportRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Normalizer\ParticipantDenormalizerView;
 
 class ImportResultViewQueryHandler
@@ -22,13 +23,20 @@ class ImportResultViewQueryHandler
     private $session;
 
     /**
+     * @var ParticipantImportRepositoryInterface
+     */
+    private $participantImportRepository;
+
+    /**
      * ImportResultViewQueryHandler constructor.
      *
-     * @param SessionInterface $session
+     * @param SessionInterface                     $session
+     * @param ParticipantImportRepositoryInterface $participantImportRepository
      */
-    public function __construct(SessionInterface $session)
+    public function __construct(SessionInterface $session, ParticipantImportRepositoryInterface $participantImportRepository)
     {
         $this->session = $session;
+        $this->participantImportRepository = $participantImportRepository;
     }
 
     /**
@@ -36,7 +44,11 @@ class ImportResultViewQueryHandler
      */
     public function handle()
     {
-        $loggerData = $this->session->get(ParticipantImportLogger::SESSION_FLASH);
+        $participantImportId = $this->session->get(ParticipantImportLogger::PARTICIPANT_IMPORT_ID);
+
+        $participantImport = $this->participantImportRepository->findById($participantImportId);
+
+        $loggerData = $participantImport->getResult();
 
         return new ParticipantDenormalizerView(
             $loggerData[ParticipantImportLogger::DATABASE_PARTICIPATIONS],
