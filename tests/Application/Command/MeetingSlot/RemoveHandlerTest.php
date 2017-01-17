@@ -38,4 +38,26 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $handler->handle(new Remove($meetingSlot));
     }
+
+    /**
+     * @expectedException        \Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException
+     */
+    public function testIsNotAllowedToRemoveSlotException()
+    {
+        $event = EventFactory::createEvent();
+        $begin = new \DateTime();
+        $end   = new \DateTime();
+
+        $meetingSlot = new MeetingSlot($event, $begin, $end, false);
+
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository->checkMeetingFromSlot($meetingSlot)->shouldBeCalled()->willReturn(null);
+
+        $handler = new RemoveHandler(
+            $meetingSlotRepository->reveal(),
+            $meetingRepository->reveal()
+        );
+        $handler->handle(new Remove($meetingSlot));
+    }
 }
