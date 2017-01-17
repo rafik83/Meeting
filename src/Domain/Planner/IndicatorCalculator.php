@@ -83,11 +83,14 @@ class IndicatorCalculator
             $this->slots = $this->slotRepository->findByEvent($sheet->getEvent());
         }
 
-        $participantsCount    = $sheet->countParticipant();
-        $meetingRequestsCount = $this->requestRepository->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
+        $participantsCount       = $sheet->countParticipant();
         $pendingPropositionCount = $this->requestRepository->countPendingPropositionReceivedBySheet($sheet);
-        $planningQuantity     = $this->planningQuantityGuesser->guess($sheet);
-        $unavailabilities     = [];
+        $planningQuantity        = $this->planningQuantityGuesser->guess($sheet);
+        $unavailabilities        = [];
+
+        $meetingRequestsCount = $this
+            ->requestRepository
+            ->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
 
         foreach ($sheet->getParticipants()->toArray() as $participant) {
             foreach ($this->slots as $slot) {
