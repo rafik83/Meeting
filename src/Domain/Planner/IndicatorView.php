@@ -84,24 +84,34 @@ class IndicatorView
     public $usableSlots;
 
     /**
+     * "Nombre de propositions reçues à valider"
+     *
+     * @var int
+     */
+    public $pendingPropositionCount;
+
+    /**
      * @param int $slotTotal
      * @param int $participantsCount
      * @param int $unavailabilitiesCount
      * @param int $sheetsPlanningQuantity
      * @param int $meetingRequestsCount
+     * @param int $pendingPropositionCount
      */
     public function __construct(
         $slotTotal,
         $participantsCount,
         $unavailabilitiesCount,
         $sheetsPlanningQuantity,
-        $meetingRequestsCount
+        $meetingRequestsCount,
+        $pendingPropositionCount
     ) {
-        $this->slotTotal              = $slotTotal;
-        $this->participantsCount      = $participantsCount;
-        $this->unavailabilitiesCount  = $unavailabilitiesCount;
-        $this->sheetsPlanningQuantity = $sheetsPlanningQuantity;
-        $this->meetingRequestsCount   = $meetingRequestsCount;
+        $this->slotTotal               = $slotTotal;
+        $this->participantsCount       = $participantsCount;
+        $this->unavailabilitiesCount   = $unavailabilitiesCount;
+        $this->sheetsPlanningQuantity  = $sheetsPlanningQuantity;
+        $this->meetingRequestsCount    = $meetingRequestsCount;
+        $this->pendingPropositionCount = $pendingPropositionCount;
 
         $this->slotCount                = $slotTotal * $sheetsPlanningQuantity;
         $this->slotsParticipantsCount   = $slotTotal * $participantsCount;

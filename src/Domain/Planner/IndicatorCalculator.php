@@ -85,6 +85,7 @@ class IndicatorCalculator
 
         $participantsCount    = $sheet->countParticipant();
         $meetingRequestsCount = $this->requestRepository->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
+        $pendingPropositionCount = $this->requestRepository->countPendingPropositionReceivedBySheet($sheet);
         $planningQuantity     = $this->planningQuantityGuesser->guess($sheet);
         $unavailabilities     = [];
 
@@ -103,7 +104,8 @@ class IndicatorCalculator
             $participantsCount,
             $unavailabilitiesCount,
             $planningQuantity,
-            $meetingRequestsCount
+            $meetingRequestsCount,
+            $pendingPropositionCount
         );
     }
 }
