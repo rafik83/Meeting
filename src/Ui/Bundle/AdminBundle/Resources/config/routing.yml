@@ -820,6 +820,13 @@ admin_schedule_slot_unlock:
     requirements:
         event: \d+
         meetingSlot: \d+
+admin_schedule_slot_remove:
+    path: /event/{event}/schedule/slot/{meetingSlot}/remove
+    defaults: { _controller: AdminBundle:Schedule:remove }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        meetingSlot: \d+
 
 admin_schedule_days:
     path: /event/{event}/schedule/days
