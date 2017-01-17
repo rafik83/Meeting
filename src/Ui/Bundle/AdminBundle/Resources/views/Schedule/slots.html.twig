@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             <form action="{{ path('admin_schedule_slot_remove', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    <button type="submit" class="btn btn-danger">{{ 'admin.schedule.slot.remove'|trans }}</button>
                                 </div>
                             </form>
                         </td>
