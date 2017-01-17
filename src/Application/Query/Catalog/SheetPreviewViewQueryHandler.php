@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\CatalogSheetPreviewView;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
@@ -45,24 +46,32 @@ class SheetPreviewViewQueryHandler
     private $meetingRequestRepository;
 
     /**
-     * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param Composer                   $ruleComposer
-     * @param Preview                    $preview
-     * @param RuleRepositoryInterface    $ruleRepository
-     * @param RequestRepositoryInterface $meetingRequestRepository
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
+     * @param SheetInfoGuesser              $sheetInfoGuesser
+     * @param Composer                      $ruleComposer
+     * @param Preview                       $preview
+     * @param RuleRepositoryInterface       $ruleRepository
+     * @param RequestRepositoryInterface    $meetingRequestRepository
+     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         Composer $ruleComposer,
         Preview $preview,
         RuleRepositoryInterface $ruleRepository,
-        RequestRepositoryInterface $meetingRequestRepository
+        RequestRepositoryInterface $meetingRequestRepository,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
-        $this->sheetInfoGuesser         = $sheetInfoGuesser;
-        $this->ruleComposer             = $ruleComposer;
-        $this->preview                  = $preview;
-        $this->ruleRepository           = $ruleRepository;
-        $this->meetingRequestRepository = $meetingRequestRepository;
+        $this->sheetInfoGuesser              = $sheetInfoGuesser;
+        $this->ruleComposer                  = $ruleComposer;
+        $this->preview                       = $preview;
+        $this->ruleRepository                = $ruleRepository;
+        $this->meetingRequestRepository      = $meetingRequestRepository;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
     /**
@@ -84,16 +93,18 @@ class SheetPreviewViewQueryHandler
         }
 
         // Get possible meeting request for this sheet
-        $meetingRequest = $this->meetingRequestRepository->getRequestBetweenSheets($viewer, $sheet);
+        $meetingRequest   = $this->meetingRequestRepository->getRequestBetweenSheets($viewer, $sheet);
+        $meetingPublished = $this->meetingPublishedAccessChecker->allowedToAccess($catalogSheetPreviewViewQuery->event);
 
         return new CatalogSheetPreviewView(
             $sheet->getId(),
             $sheet,
-            $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
             $sheet->getType()->getTitle($locale),
             $this->preview->getPreview($sheet, $locale, $rule),
             $meetingRequest,
-            $viewer === $sheet
+            $viewer === $sheet,
+            $meetingPublished
         );
     }
 }

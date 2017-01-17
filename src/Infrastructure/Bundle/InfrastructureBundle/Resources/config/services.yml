@@ -1985,6 +1985,7 @@ services:
             - '@sheet.preview'
             - '@repository.rule_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
@@ -2396,6 +2397,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting_request.meeting_request_view_query_handler'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
@@ -2643,6 +2645,10 @@ services:
     domain.key_dates.checker.catalog_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments: ['@datetime']
+    domain.key_dates.checker.meeting_published_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
+        arguments:
+            - '@datetime'
 
     #
     # Nomenclature

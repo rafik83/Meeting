@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class MeetingRequestListViewQueryHandler
@@ -26,17 +27,25 @@ class MeetingRequestListViewQueryHandler
     private $meetingRequestViewQueryHandler;
 
     /**
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
      * MeetingRequestListViewQueryHandler constructor.
      *
      * @param RequestRepositoryInterface     $meetingRequestRepository
      * @param MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler
+     * @param MeetingPublishedAccessChecker  $meetingPublishedAccessChecker
      */
     public function __construct(
         RequestRepositoryInterface $meetingRequestRepository,
-        MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler
+        MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
         $this->meetingRequestRepository       = $meetingRequestRepository;
         $this->meetingRequestViewQueryHandler = $meetingRequestViewQueryHandler;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
     /**
@@ -50,13 +59,15 @@ class MeetingRequestListViewQueryHandler
             ->getAllRequestBySheet($query->sheet, $query->filters);
 
         $meetingRequestListView = new MeetingRequestListView();
+        $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
         foreach ($meetingRequests as $meetingRequest) {
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
                 new MeetingRequestViewQuery(
                     $meetingRequest,
                     $query->sheet,
-                    $query->locale
+                    $query->locale,
+                    $isMeetingPublished
                 )
             );
 
