@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Application\Components\Import\MappingGuesser;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectContentException;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -77,13 +78,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * ParticipantDenormalizer constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param UserRepositoryInterface        $userRepository
-     * @param TemplateDataFactory            $templateDataFactory
-     * @param EmailValidator                 $emailValidator
-     * @param Synchronizer                   $synchronizer
-     * @param ParticipantImportLogger        $importLogger
-     * @param \DateTimeInterface             $dateTime
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param UserRepositoryInterface $userRepository
+     * @param TemplateDataFactory $templateDataFactory
+     * @param EmailValidator $emailValidator
+     * @param Synchronizer $synchronizer
+     * @param ParticipantImportLogger $importLogger
+     * @param \DateTimeInterface $dateTime
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
@@ -94,15 +95,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
         Synchronizer $synchronizer,
         ParticipantImportLogger $importLogger,
         \DateTimeInterface $dateTime
-    ) {
+    )
+    {
         $this->participantRepository = $participantRepository;
-        $this->templateDataFactory   = $templateDataFactory;
-        $this->synchronizer          = $synchronizer;
-        $this->dateTime              = $dateTime;
-        $this->userRepository        = $userRepository;
-        $this->emailValidator        = $emailValidator;
-        $this->importLogger          = $importLogger;
-        $this->sheetRepository       = $sheetRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->synchronizer = $synchronizer;
+        $this->dateTime = $dateTime;
+        $this->userRepository = $userRepository;
+        $this->emailValidator = $emailValidator;
+        $this->importLogger = $importLogger;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -123,6 +125,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['locale']
         );
 
+        $users = $this->userRepository->all();
+
         foreach ($data as $key => $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row)) {
                 continue;
@@ -141,7 +145,33 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             try {
                 $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
-                $this->createEntities($context, $email, $registrationTemplate);
+
+                // handle create entities
+                if (($user = $this->hasUserAccount($email, $users)) === false) {
+                    $user = new User($email, '', '', $context['locale']);
+                    $user->setAccount(new User\Account());
+
+                    $this->userRepository->add($user);
+                    $this->importLogger->userImported();
+                }
+
+                $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+
+                $participant = new Participant($sheet, $user, [], false);
+                $participant->setImported(true);
+
+                $hydratedEntities = $this->hydrateEntities($registrationTemplate, $row, $context);
+
+                $sheet->setRegistrationData($hydratedEntities['sheetData']);
+                $participant->setData($hydratedEntities['participantData']);
+
+                $this->sheetRepository->add($sheet);
+                $this->participantRepository->add($participant);
+
+                $this->importLogger->sheetImported();
+
+                $this->synchronizer->set($registrationTemplate, $user);
+
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
                     $key,
@@ -164,7 +194,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param string        $email
+     * @param string $email
      * @param Participant[] $participants
      *
      * @return bool
@@ -198,10 +228,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array          $row
+     * @param array $row
      * @param MappingGuesser $mappingGuesser
-     * @param TemplateData   $registrationTemplate
-     * @param array          $context
+     * @param TemplateData $registrationTemplate
+     * @param array $context
      *
      * @throws InvalidObjectContentException
      */
@@ -210,7 +240,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
         MappingGuesser $mappingGuesser,
         TemplateData $registrationTemplate,
         array $context
-    ) {
+    )
+    {
         foreach ($row as $key => $column) {
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
@@ -224,7 +255,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             if ($templateObject instanceof ContentObjectInterface) {
                 try {
-                    $validator      = ObjectValidatorFactory::create($templateObject);
+                    $validator = ObjectValidatorFactory::create($templateObject);
                     $validatorError = $validator->validate($column, ['locale' => $context['locale']]);
 
                     if (!$validatorError->hasError()) {
@@ -240,35 +271,35 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array        $context
-     * @param string       $email
      * @param TemplateData $registrationTemplate
+     * @param array $row
+     * @param array $context
+     *
+     * @return array
      */
-    private function createEntities(array $context, $email, $registrationTemplate)
+    private function hydrateEntities(TemplateData $registrationTemplate, array $row, array $context)
     {
-        $users = $this->userRepository->all();
+        $sheetData       = [];
+        $participantData = [];
 
-        // handle create entities
-        if (($user = $this->hasUserAccount($email, $users)) === false) {
-            $user = new User($email, '', '', $context['locale']);
-            $user->setAccount(new User\Account());
+        foreach ($context['mappings'] as $rowColumnKey => $mappedTemplateKey) {
 
-            $this->userRepository->add($user);
-            $this->importLogger->userImported();
+            if ($registrationTemplate->hasObject($mappedTemplateKey)) {
+                if ($registrationTemplate->getObject($mappedTemplateKey)->hasTag(Tag::SHEET_DATA)) {
+                    $sheetData = array_merge($sheetData, [$mappedTemplateKey => $row[$rowColumnKey]]);
+                }
+
+
+                if ($registrationTemplate->getObject($mappedTemplateKey)->hasTag(Tag::PARTICIPANT_DATA)) {
+                    $participantData = array_merge($participantData, [$mappedTemplateKey => $row[$rowColumnKey]]);
+                }
+
+            }
         }
 
-        $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
-        $sheet->setRegistrationData([$registrationTemplate->getData()]);
-
-        $this->sheetRepository->add($sheet);
-
-        $this->importLogger->sheetImported();
-
-        $participant = new Participant($sheet, $user, $registrationTemplate->getData(), false);
-        $participant->setImported(true);
-
-        $this->participantRepository->add($participant);
-
-        $this->synchronizer->set($registrationTemplate, $user);
+        return [
+            'participantData' => $participantData,
+            'sheetData'       => $sheetData,
+        ];
     }
 }
