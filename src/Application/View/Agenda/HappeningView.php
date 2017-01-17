@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
-class HappeningView
+class HappeningView extends AbstractTimeEntityView
 {
     /**
      * @var int
@@ -21,16 +21,6 @@ class HappeningView
      * @var string
      */
     public $picto;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $begin;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $end;
 
     /**
      * @var string
@@ -68,6 +58,11 @@ class HappeningView
     public $rightColor;
 
     /**
+     * @var string
+     */
+    public $timeZone;
+
+    /**
      * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
@@ -77,6 +72,7 @@ class HappeningView
      * @param string             $picto
      * @param string             $leftColor
      * @param string             $rightColor
+     * @param string             $timeZone
      * @param null|int           $limitParticipant
      */
     public function __construct(
@@ -89,6 +85,7 @@ class HappeningView
         $picto,
         $leftColor,
         $rightColor,
+        $timeZone,
         $limitParticipant = null
     ) {
         $this->id               = $id;
@@ -100,15 +97,8 @@ class HappeningView
         $this->picto            = $picto;
         $this->leftColor        = $leftColor;
         $this->rightColor       = $rightColor;
+        $this->timeZone         = $timeZone;
         $this->limitParticipant = $limitParticipant;
-    }
-
-    /**
-     * @return \DateInterval
-     */
-    public function getDuration()
-    {
-        return $this->end->diff($this->begin);
     }
 
     /**

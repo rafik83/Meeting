@@ -27,6 +27,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler;
+use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 
 class CategoryViewQueryHandler
 {
@@ -105,7 +106,7 @@ class CategoryViewQueryHandler
     /**
      * @param CategoryViewQuery $categoryViewQuery
      *
-     * @return \Proximum\Vimeet\Application\View\Navigation\CategoryView
+     * @return CategoryView|null
      */
     public function handle(CategoryViewQuery $categoryViewQuery)
     {
@@ -167,5 +168,7 @@ class CategoryViewQueryHandler
                 ));
                 break;
         }
+
+        return null;
     }
 }

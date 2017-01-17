@@ -2,7 +2,7 @@
     <div class="content">
         <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
         <p class="title">
-            {{ unavailability.begin|date('H:i') ~ ' - ' ~ unavailability.end|date('H:i') }}
+            {{ unavailability.begin|date('H:i', unavailability.timeZone) ~ ' - ' ~ unavailability.end|date('H:i', unavailability.timeZone) }}
             -
             {{ 'unavailability.title'|trans }}
         </p>

@@ -10,11 +10,13 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.meeting.details: Details
 agenda.title: 'Mon agenda'
-agenda.unavailability.add: 'Add unavailability'
-agenda.unavailability.back: Back
+agenda.unavailability.add: 'Ajouter une indisponibilité'
+agenda.unavailability.back: 'Retour'
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
-agenda.unavailability.remove: Remove
+agenda.unavailability.remove: 'Supprimer'
+agenda.meeting.details: Details
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -88,14 +90,14 @@ navigation.links.happening.accept: Acceptées
 navigation.links.happening.approved: Acceptées
 navigation.links.happening.decline: Refusées
 navigation.links.happening.open_date: 'Disponible le'
-navigation.links.happening.proposal: 'Meetings requests'
+navigation.links.happening.proposal: 'Propositions de RDV'
 navigation.links.happening.refused: Refusées
 navigation.links.happening.sent: 'Demandes en attente'
 navigation.links.happening.waiting: 'Demandes en attente'
 navigation.links.incoming: 'A venir'
 navigation.links.meetingRequest.approved: Acceptées
 navigation.links.meetingRequest.open_date: 'Disponible le'
-navigation.links.meetingRequest.proposal: 'Meetings requests'
+navigation.links.meetingRequest.proposal: 'Propositions de RDV'
 navigation.links.meetingRequest.refused: Refusées
 navigation.links.meetingRequest.sent: 'Demandes en attente'
 navigation.links.member_space.avatar: Photo
