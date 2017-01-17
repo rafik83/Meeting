@@ -61,7 +61,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRepository->countByParticipant($participant)->shouldBeCalled()->willReturn(55);
 
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
-        $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(new IndicatorView(10, 2, 3, 4, 5));
+        $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(new IndicatorView(10, 2, 3, 4, 5, 6));
 
         $routerInterface->generate('admin_sheet_details', Argument::any())->willReturn('/my-url');
 
@@ -88,6 +88,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             40,
             17,
             55,
+            6,
             null,
             '/my-url'
         );
