@@ -64,6 +64,7 @@
                     <th>{{ 'admin.schedule.slots.table.end'|trans }}</th>
                     <th>{{ 'admin.schedule.slots.table.duration'|trans }}</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -96,6 +97,12 @@
                                     </div>
                                 </form>
                             {% endif %}
+                        </td>
+                        <td>
+                            <form action="{{ path('admin_schedule_slot_remove', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </div>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
