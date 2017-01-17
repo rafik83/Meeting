@@ -6,6 +6,43 @@ var Vue   = require('vue'),
  */
 Vue.prototype.$http = axios;
 
+Vue.component('Modal', {
+    template: '#modal-template',
+    props: ['show'],
+    methods: {
+        close: function () {
+            console.log('close-modal modal');
+            this.$emit('close-modal');
+        }
+    }
+});
+
+Vue.component('MeetingUpdateModal', {
+    template: '#meeting-update-modal-template',
+    props: ['show'],
+    data: function () {
+        return {
+            blockedSlot: false,
+            blockedSpot: false,
+            slot: null
+        };
+    },
+    methods: {
+        reinit: function () {
+            this.blockedSlot = false;
+            this.blockedSpot = false;
+            this.slot = null;
+        },
+        close: function () {
+            this.$emit('close-modal');
+            this.reinit();
+        },
+        save: function () {
+            this.close();
+        }
+    }
+});
+
 new Vue({
     el: '#agenda',
 
@@ -28,7 +65,17 @@ new Vue({
         /**
          * Sheet focused
          */
-        focus: null
+        focus: null,
+
+        /**
+         * Is meeting loading
+         */
+        isMeetingToUpdateLoading: false,
+
+        /**
+         * Meeting to update
+         */
+        meetingToUpdate: null
     },
 
     /**
@@ -251,6 +298,15 @@ new Vue({
                     }
                 }
             }
+        },
+
+        loadMeeting: function (meetingId) {
+            this.isMeetingToUpdateLoading = true;
+
+            setTimeout(function() {
+                this.meetingToUpdate = meetingId;
+                this.isMeetingToUpdateLoading = false;
+            }.bind(this), 1000);
         },
 
         /**
