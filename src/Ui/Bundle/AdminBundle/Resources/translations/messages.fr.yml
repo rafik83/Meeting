@@ -18,6 +18,7 @@ admin.admin_list.table.title.firstname: Prénom
 admin.admin_list.table.title.lastname: Nom
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'Liste des utilisateurs du backoffice'
+admin.agenda.countPendingProposition: 'Nombre de propositions reçues à valider'
 admin.agenda.countPlacedMeetings: 'Nombre de RDV'
 admin.agenda.countProposition: 'Nombre de propositions reçues'
 admin.agenda.countRequest: 'Nombre de demandes'
