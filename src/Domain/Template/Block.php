@@ -488,6 +488,16 @@ class Block extends AbstractChild
     }
 
     /**
+     * Clear objects data
+     */
+    public function clear()
+    {
+        array_map(function (TemplateObject $object) {
+            $object->setData([]);
+        }, $this->getObjects());
+    }
+
+    /**
      * @param array $data
      *
      * @return Block

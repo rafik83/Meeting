@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\Validator\Error\EmailError;
 use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
@@ -78,13 +79,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * ParticipantDenormalizer constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param UserRepositoryInterface $userRepository
-     * @param TemplateDataFactory $templateDataFactory
-     * @param EmailValidator $emailValidator
-     * @param Synchronizer $synchronizer
-     * @param ParticipantImportLogger $importLogger
-     * @param \DateTimeInterface $dateTime
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param UserRepositoryInterface        $userRepository
+     * @param TemplateDataFactory            $templateDataFactory
+     * @param EmailValidator                 $emailValidator
+     * @param Synchronizer                   $synchronizer
+     * @param ParticipantImportLogger        $importLogger
+     * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
@@ -95,16 +96,15 @@ class ParticipantDenormalizer implements DenormalizerInterface
         Synchronizer $synchronizer,
         ParticipantImportLogger $importLogger,
         \DateTimeInterface $dateTime
-    )
-    {
+    ) {
         $this->participantRepository = $participantRepository;
-        $this->templateDataFactory = $templateDataFactory;
-        $this->synchronizer = $synchronizer;
-        $this->dateTime = $dateTime;
-        $this->userRepository = $userRepository;
-        $this->emailValidator = $emailValidator;
-        $this->importLogger = $importLogger;
-        $this->sheetRepository = $sheetRepository;
+        $this->templateDataFactory   = $templateDataFactory;
+        $this->synchronizer          = $synchronizer;
+        $this->dateTime              = $dateTime;
+        $this->userRepository        = $userRepository;
+        $this->emailValidator        = $emailValidator;
+        $this->importLogger          = $importLogger;
+        $this->sheetRepository       = $sheetRepository;
     }
 
     /**
@@ -144,34 +144,9 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             try {
-                $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
+                list($sheetData, $participantData) = $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
 
-                // handle create entities
-                if (($user = $this->hasUserAccount($email, $users)) === false) {
-                    $user = new User($email, '', '', $context['locale']);
-                    $user->setAccount(new User\Account());
-
-                    $this->userRepository->add($user);
-                    $this->importLogger->userImported();
-                }
-
-                $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
-
-                $participant = new Participant($sheet, $user, [], false);
-                $participant->setImported(true);
-
-                $hydratedEntities = $this->hydrateEntities($registrationTemplate, $row, $context);
-
-                $sheet->setRegistrationData($hydratedEntities['sheetData']);
-                $participant->setData($hydratedEntities['participantData']);
-
-                $this->sheetRepository->add($sheet);
-                $this->participantRepository->add($participant);
-
-                $this->importLogger->sheetImported();
-
-                $this->synchronizer->set($registrationTemplate, $user);
-
+                $this->createEntities($context, $email, $users, $sheetData, $participantData, $registrationTemplate);
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
                     $key,
@@ -194,7 +169,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param string $email
+     * @param string        $email
      * @param Participant[] $participants
      *
      * @return bool
@@ -228,11 +203,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array $row
+     * @param array          $row
      * @param MappingGuesser $mappingGuesser
-     * @param TemplateData $registrationTemplate
-     * @param array $context
+     * @param TemplateData   $registrationTemplate
+     * @param array          $context
      *
+     * @return array
      * @throws InvalidObjectContentException
      */
     private function handleRow(
@@ -240,8 +216,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
         MappingGuesser $mappingGuesser,
         TemplateData $registrationTemplate,
         array $context
-    )
-    {
+    ) {
+        $sheetData       = [];
+        $participantData = [];
+
         foreach ($row as $key => $column) {
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
@@ -255,51 +233,88 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             if ($templateObject instanceof ContentObjectInterface) {
                 try {
-                    $validator = ObjectValidatorFactory::create($templateObject);
+                    $validator      = ObjectValidatorFactory::create($templateObject);
                     $validatorError = $validator->validate($column, ['locale' => $context['locale']]);
 
                     if (!$validatorError->hasError()) {
+                        $registrationTemplate->clear();
                         $templateObject->setContentValue($column);
+
+                        if ($templateObject->hasTag(Tag::SHEET_DATA)) {
+                            $sheetData = array_merge($sheetData, [
+                                $registrationObjectKey => $templateObject->getData()
+                            ]);
+                        }
+
+                        if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
+                            $participantData = array_merge($participantData, [
+                                $registrationObjectKey => $templateObject->getData()
+                            ]);
+                        }
+
                     } else {
                         throw new InvalidObjectContentException($validatorError);
                     }
                 } catch (ObjectValidatorNotExistException $exception) {
+                    $registrationTemplate->clear();
                     $templateObject->setContentValue($column);
+
+                    if ($templateObject->hasTag(Tag::SHEET_DATA)) {
+                        $sheetData = array_merge($sheetData, [
+                            $registrationObjectKey => $templateObject->getData()
+                        ]);
+                    }
+
+                    if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
+                        $participantData = array_merge($participantData, [
+                            $registrationObjectKey => $templateObject->getData()
+                        ]);
+                    }
+
                 }
             }
         }
+
+        return [$sheetData, $participantData];
     }
 
     /**
+     * @param array        $context
+     * @param string       $email
+     * @param User[]       $users
+     * @param array        $sheetData
+     * @param array        $participantData
      * @param TemplateData $registrationTemplate
-     * @param array $row
-     * @param array $context
-     *
-     * @return array
      */
-    private function hydrateEntities(TemplateData $registrationTemplate, array $row, array $context)
-    {
-        $sheetData       = [];
-        $participantData = [];
+    private function createEntities(
+        array $context,
+        $email,
+        $users,
+        $sheetData,
+        $participantData,
+        TemplateData $registrationTemplate
+    ) {
+        if (($user = $this->hasUserAccount($email, $users)) === false) {
+            $user = new User($email, '', '', $context['locale']);
+            $user->setAccount(new User\Account());
 
-        foreach ($context['mappings'] as $rowColumnKey => $mappedTemplateKey) {
-
-            if ($registrationTemplate->hasObject($mappedTemplateKey)) {
-                if ($registrationTemplate->getObject($mappedTemplateKey)->hasTag(Tag::SHEET_DATA)) {
-                    $sheetData = array_merge($sheetData, [$mappedTemplateKey => $row[$rowColumnKey]]);
-                }
-
-
-                if ($registrationTemplate->getObject($mappedTemplateKey)->hasTag(Tag::PARTICIPANT_DATA)) {
-                    $participantData = array_merge($participantData, [$mappedTemplateKey => $row[$rowColumnKey]]);
-                }
-
-            }
+            $this->userRepository->add($user);
+            $this->importLogger->userImported();
         }
 
-        return [
-            'participantData' => $participantData,
-            'sheetData'       => $sheetData,
-        ];
+        $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+
+        $participant = new Participant($sheet, $user, [], false);
+        $participant->setImported(true);
+
+        $sheet->setRegistrationData($sheetData);
+        $participant->setData($participantData);
+
+        $this->sheetRepository->add($sheet);
+        $this->participantRepository->add($participant);
+
+        $this->importLogger->sheetImported();
+
+        $this->synchronizer->set($registrationTemplate, $user);
     }
 }
