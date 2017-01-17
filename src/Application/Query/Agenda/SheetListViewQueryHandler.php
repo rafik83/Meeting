@@ -108,6 +108,7 @@ class SheetListViewQueryHandler
                 $indicator->slotCount,
                 $indicator->usableSlots,
                 $this->getPlacedMeetingsNumber($sheet),
+                $indicator->pendingPropositionCount,
                 null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : null,
                 $this->router->generate(
                     'admin_sheet_details',

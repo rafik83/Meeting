@@ -88,7 +88,14 @@ class SheetView
      * @var int
      */
     public $usableSlots;
-    
+
+    /**
+     * "Propositions en attente de validation"
+     *
+     * @var int
+     */
+    public $countPendingPropositions;
+
     /**
      * Sheet details url
      *
@@ -107,6 +114,7 @@ class SheetView
      * @param int         $countSlots
      * @param int         $usableSlots
      * @param int         $countPlacedMeetings
+     * @param int         $countPendingPropositions
      * @param string|null $follower
      * @param string      $url
      */
@@ -121,20 +129,22 @@ class SheetView
         $countSlots,
         $usableSlots,
         $countPlacedMeetings,
+        $countPendingPropositions,
         $follower,
         $url
     ) {
-        $this->id                    = $id;
-        $this->title                 = $title;
-        $this->type                  = $type;
-        $this->countParticipant      = $countParticipant;
-        $this->countRequest          = $countRequest;
-        $this->countProposition      = $countProposition;
-        $this->countValidatedRequest = $countValidatedRequest;
-        $this->countSlots            = $countSlots;
-        $this->countPlacedMeetings   = $countPlacedMeetings;
-        $this->usableSlots           = $usableSlots;
-        $this->url                   = $url;
-        $this->follower              = $follower;
+        $this->id                       = $id;
+        $this->title                    = $title;
+        $this->type                     = $type;
+        $this->countParticipant         = $countParticipant;
+        $this->countRequest             = $countRequest;
+        $this->countProposition         = $countProposition;
+        $this->countValidatedRequest    = $countValidatedRequest;
+        $this->countSlots               = $countSlots;
+        $this->countPlacedMeetings      = $countPlacedMeetings;
+        $this->usableSlots              = $usableSlots;
+        $this->countPendingPropositions = $countPendingPropositions;
+        $this->url                      = $url;
+        $this->follower                 = $follower;
     }
 }
