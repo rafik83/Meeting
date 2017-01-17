@@ -5,6 +5,7 @@ admin.account.link: 'My account'
 admin.account.title: 'My account'
 admin.account.update_password.title: 'Change my password'
 admin.activateAccount.password.title: 'Creation of a password for your account as contributor'
+admin.admin_list.action.create: 'Create a new user'
 admin.admin_list.filter.empty_filter: 'Empty all filters'
 admin.admin_list.link: Users
 admin.admin_list.table.content.admin.events.none: None
@@ -17,6 +18,15 @@ admin.admin_list.table.title.firstname: Firstname
 admin.admin_list.table.title.lastname: Lastname
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'List of backoffice users'
+admin.agenda.countPlacedMeetings: 'Number of meetings'
+admin.agenda.countProposition: 'Number of proposals received'
+admin.agenda.countRequest: 'Number of requests'
+admin.agenda.countSlots: 'Number of slots'
+admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
+admin.agenda.link: 'My meetings'
+admin.agenda.requestsList.title: 'Validated meetings'
+admin.agenda.sheet.see: 'See the presentation sheet'
+admin.agenda.title: 'Meetings planner'
 admin.batch_actions.plural: 'Batch actions on %count% items'
 admin.batch_actions.single: 'Batch actions on one item'
 admin.cancel: Cancel
@@ -54,22 +64,28 @@ admin.filter: Filter
 admin.filter_by: 'Filter by'
 admin.filters.all: All
 admin.filters.reset: 'Reset all the filters'
-admin.goback.link: 'Go back'
+admin.goback.link: Back
 admin.happening_category.add: Add
 admin.happening_category.table.column.color: Color
 admin.happening_category.table.column.picto: Picto
 admin.happening_category.table.column.title: Title
 admin.happening_category.update: Update
+admin.happening_speaker.action.delete: Delete
+admin.happening_speaker.action.edit: Modify
 admin.happening_speaker.action.see: See
 admin.happening_speaker.add: Add
 admin.happening_speaker.addTitle: 'Add Speaker'
 admin.happening_speaker.link: Speakers
 admin.happening_speaker.table.column.photo: 'Speaker picture'
+admin.happening_speaker.update: Modify
 admin.happening.add: Add
 admin.happening.link: Conferences
+admin.happening.menu.link: Programme
+admin.happening.update: Modify
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request.from: From
 admin.meeting_request.link: 'Meeting requests'
+admin.meeting_request.set_a_meeting: 'Organise a meeting'
 admin.meeting_request.state.approved: Approved
 admin.meeting_request.state.cancelled: Cancelled
 admin.meeting_request.state.refused: Refused
@@ -77,7 +93,15 @@ admin.meeting_request.state.sent: sent
 admin.meeting_request.to: To
 admin.meeting.link: Meetings
 admin.menu.link: Menu
+admin.messaging.campaign.message_preview.content: Content
+admin.messaging.campaign.message_preview.subject: Subject
+admin.messaging.campaign.message_preview.title: Preview
+admin.messaging.campaign.send.title: Send
 admin.messaging.link: Emailing
+admin.messaging.message.compose.links.agenda: Planning
+admin.messaging.message.compose.links.catalog: Catalogue
+admin.messaging.message.compose.links.meetingRequest: 'My Meetings'
+admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.content: Content
 admin.messaging.message.create.title: 'Create a new message'
 admin.messaging.message.createdAt: 'Created at'
@@ -88,18 +112,33 @@ admin.messaging.message.name: 'Name emailing'
 admin.messaging.message.subject: Subject
 admin.new.link: admin.new.link
 admin.nomenclature.table.read: See
+admin.operator_list.table.content.admin.events.none: None
 admin.operator_list.table.content.update: Edit
 admin.operator.update.title: 'Edit collaborater'
 admin.order_edit.columns.quantity: Quantity
 admin.order_edit.columns.unitPrice: 'Unit price'
+admin.order_edit.link: Modify
 admin.order_edit.VAT: VAT
+admin.order.cancelled: Cancelled
 admin.order.title: 'Order list'
+admin.package.update: Modify
+admin.participant.export.happening.subscriber.no: 'No'
+admin.participant.export.no: 'No'
 admin.plan.unitPrice: 'Unit price'
 admin.product.unitPrice: 'Unit price'
+admin.product.update.action: Modify
+admin.promotion_code.table.action.edit: Modify
 admin.rule.link: 'Who see who'
+admin.schedule.link: Planning
+admin.schedule.title: Planning
 admin.sheet.change.type.link: Change
 admin.sheet.change.type.title: 'Change the type of participation'
+admin.sheet.details.meeting.proposition.refused: 'Refused proposals'
+admin.sheet.details.meeting.proposition.title: 'Meetings requests'
+admin.sheet.details.meeting.request.pending: 'Pending requests'
+admin.sheet.details.meeting.request.refused: 'Refused requests'
 admin.sheet.details.transactions: Transactions
+admin.sheet.export.no: 'No'
 admin.sheet.link: 'Participation sheets'
 admin.sheet.read: See
 admin.sheet.state: State
@@ -122,12 +161,20 @@ admin.spot.listSpot.reference: Reference
 admin.spot.listSpot.seatCapacity: 'Seats capacity'
 admin.spot.listSpot.size: 'Size (m²)'
 admin.spot.listSpot.yes: 'Yes'
+admin.template.action.edit: Modify
 admin.template.action.save: Save
+admin.template.registration.table.content.edit: Modify
+admin.transaction.column.state: States
+admin.transaction.edit: Modify
 admin.transaction.mode.bank_check: Cheque
 admin.transaction.mode.bank_transfer: Transfer
 admin.transaction.mode.paypal: Paypal
+admin.transaction.state.cancelled: Cancelled
 admin.transaction.state.pending: Pending
 admin.type.link: 'Participation types'
+admin.type.update.link: Modify
+admin.unavailability.category.table.content.update: Modify
+admin.unavailability.mass.table.content.update: Modify
 admin.users.details: 'View the account'
 admin.users.see-sheet: 'See the participation'
 admin.zero-result: 'No result'
@@ -164,14 +211,32 @@ event.meeting.listProposition.informations: 'Proposal details'
 event.meeting.listProposition.participants: Participants
 event.meeting.listProposition.refuse: Reject
 event.meeting.listProposition.show: Show
-event.meeting.listProposition.state: State
+event.meeting.listProposition.state: States
+event.meeting.listProposition.title: 'Meetings requests'
+event.meeting.listProposition.yourParticipants: 'Your participants'
+event.meeting.listRequest.cancel: Cancel
+event.meeting.listRequest.createdAt: 'Sending on'
+event.meeting.listRequest.edit: Modify
+event.meeting.listRequest.informations: Information
+event.meeting.listRequest.participants: 'The participants'
 event.meeting.listRequest.show: See
+event.meeting.listRequest.state: States
+event.meeting.refusedRequest.title: 'Refuse the meeting proposal'
+event.meeting.request.state.from.approved: Approved
+event.meeting.request.state.from.cancelled: Cancelled
+event.meeting.request.state.from.refused: Refused
+event.meeting.request.state.from.sent: Sent
+event.meeting.request.state.to.approved: Approved
+event.meeting.request.state.to.cancelled: Cancelled
+event.meeting.request.state.to.refused: Refused
+event.meeting.request.state.to.sent: Received
 event.meeting.showDetailsRequest.from: From
 event.meeting.showDetailsRequest.message: 'Your conversation'
 event.meeting.showDetailsRequest.participants: Participants
-event.meeting.showDetailsRequest.state: State
+event.meeting.showDetailsRequest.state: States
 event.meeting.showDetailsRequest.title: 'Details request for appointment'
 event.meeting.showDetailsRequest.to: To
+event.schedule.columns.meeting.title: Meeting
 event.sheet.add_participant.title: 'Add participant'
 event.sheet.billing.title: Billing
 event.sheet.block.add_participant.title: 'Fill this participant'
@@ -219,6 +284,9 @@ event.sheet.summary.title: 'Package summary'
 event.sheet.summary.total: Total
 event.sheet.summary.unit_price: 'Unit price'
 event.sheet.summary.update_product: 'Update my participation'
+event.sheet.update_product.title: 'Modify an ordered item'
+event.sheet.validationState.draft: Draft
+event.sheet.validationState.validated: Validated
 login.forgotPassword: 'Forgotten password?'
 login.link: Login
 login.title: Login
@@ -226,5 +294,9 @@ logout.confirmation: 'Are you sure you want to logout of your account?'
 logout.link: Logout
 logout.title: Logout
 new_password.title: 'Create a new password'
+notification.meeting_request.canceled.action: 'Cancelled meeting request'
+notification.meeting_request.refused.action: 'Refused meeting request'
+notification.participant.added.action: 'Participant added'
+notification.participant.removed.action: 'Participant removed'
 register.email_already_exists: 'An account with this email address already exists'
 reset_password.title: 'Request new password'

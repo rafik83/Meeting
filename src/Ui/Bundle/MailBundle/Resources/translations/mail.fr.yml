@@ -38,7 +38,7 @@ mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisat
 mail.resetPassword.end: 'Cordialement,'
 mail.resetPassword.link: 'Réinitialiser le mot de passe'
 mail.resetPassword.subject: '[%event%] Mot de passe oublié'
-mail.sheet.add_participant_confirmation.body: "Bonjour %firstname% %lastname%,\n\nVotre invitation à %guestEmail% pour l’événement %event% a bien été envoyée.\n\nCordialement,"
+mail.sheet.add_participant_confirmation.body: "Bonjour,\n\nVotre invitation à %guestEmail% pour l’événement %event% a bien été envoyée.\n\nCordialement,"
 mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'

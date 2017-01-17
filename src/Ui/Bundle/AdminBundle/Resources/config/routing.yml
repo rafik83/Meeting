@@ -1037,3 +1037,10 @@ admin_messaging_campaign_select_message:
         campaign: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Messaging\Campaign:selectMessage }
+admin_messaging_campaign_send:
+    path: /event/{event}/messaging/campaign/{campaign}/send
+    requirements:
+        event: \d+
+        campaign: \d+
+    methods: [POST]
+    defaults: { _controller: AdminBundle:Messaging\Campaign:send }

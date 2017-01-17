@@ -38,7 +38,7 @@ mail.resetPassword.body: 'Hello, you have asked for a password modification. Ple
 mail.resetPassword.end: 'Best regards,'
 mail.resetPassword.link: 'Reset password'
 mail.resetPassword.subject: '[%event%] Forgotten password'
-mail.sheet.add_participant_confirmation.body: "%firstname% %lastname%, \n\nYour invitation to %guestEmail% for %event% has been sent. \n\nRegards,"
+mail.sheet.add_participant_confirmation.body: "Hello, \n\nYour invitation to %guestEmail% for %event% has been sent. \n\nRegards,"
 mail.sheet.add_participant_confirmation.subject: 'Invitation sent'
 mail.sheet.change_type.body: "%firstname% %lastname%, \n\nYour participation has been converted from %fromType% to %toType%.\n\nRegards,"
 mail.sheet.change_type.end: 'Regards,'
@@ -50,5 +50,9 @@ mail.sheet.submitted.link: 'View sheet'
 mail.sheet.submitted.subject: 'Sheet %sheetName% finalized'
 mail.sheet.validated.body: "%firstname% %lastname%,\n\nWe are pleased to confirm your participation in the event %event% and we thank you for your confidence.\n\nOur entire team will be at your disposal to make your participation a success."
 mail.sheet.validated.subject: 'Your registration as %participationType% for %event% is validated'
+mail.sheet.validation.draft.body: 'Dear %firstname% %lastname%, your presentation sheet as a %participationType% has been changed to draft mode because it''s incomplete. Please fill out your form.'
+mail.sheet.validation.draft.subject: 'Presentation sheet in draft mode'
 mail.sheet.validation.validate.body: 'Hello %firstname% %lastname%, your presentation sheet has been validated'
+mail.sheet.validation.validate.subject: 'Presentation sheet validated'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
+mail.transaction.confirm.subject: '[%event%] Your payment has been received'

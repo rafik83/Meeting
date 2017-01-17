@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-class BillingInfo
+class BillingInfo implements MailRecipientInterface
 {
     /**
      * @var int
@@ -183,6 +183,14 @@ class BillingInfo
     public function getCompleteName()
     {
         return $this->firstname . ' ' .  $this->lastname;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFullname()
+    {
+        return $this->getCompleteName();
     }
 
     /**

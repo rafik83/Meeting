@@ -449,6 +449,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@domain.happening.participation_count'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Participate }
@@ -463,6 +464,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CreateRequest }
@@ -489,6 +491,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }
@@ -506,6 +509,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest }
@@ -522,6 +526,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CancelRequest }
     command.meeting.un_approve_meeting_request_handler:
@@ -529,6 +534,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@meeting.request_permission_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
@@ -1226,6 +1232,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToProductHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToProduct }
 
@@ -1233,6 +1240,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\AddRowToGroup }
 
@@ -1240,6 +1248,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\UpdateRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\UpdateRow }
 
@@ -1247,6 +1256,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\RemoveRowHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
 
@@ -1360,6 +1370,16 @@ services:
             - '@repository.messaging.campaign_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage }
+
+    command.messaging.campaign.send_handler:
+        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@repository.messaging.campaign_repository'
+            - '@adapter.sendgrid_api_adapter'
+            - '@event_sender'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
 
     #
     # Security
@@ -1617,6 +1637,12 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    adapter.sendgrid_api_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
+        arguments:
+            - '@domain.messaging.sendgrid_api_client'
+            - '@twig'
 
     #
     # Proforma component
@@ -2002,6 +2028,7 @@ services:
             - '@sheet.preview'
             - '@repository.rule_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
@@ -2413,6 +2440,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@query.meeting_request.meeting_request_view_query_handler'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
@@ -2474,7 +2502,10 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
             - '@repository.cart_row_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@template.template_data_factory'
+            - '@order.balance'
 
     #
     # Product Transformer
@@ -2657,6 +2688,10 @@ services:
     domain.key_dates.checker.catalog_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments: ['@datetime']
+    domain.key_dates.checker.meeting_published_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker
+        arguments:
+            - '@datetime'
 
     #
     # Nomenclature
@@ -2853,3 +2888,15 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+
+    #
+    # SendGrid API
+    #
+    domain.messaging.sendgrid_api_client.factory:
+        class: Proximum\Vimeet\Domain\Messaging\SendGridApiClientFactory
+        arguments:
+            - '%sendgrid_api_key%'
+
+    domain.messaging.sendgrid_api_client:
+        class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
+        factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFi
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -67,6 +68,10 @@ class TargetFilterType extends AbstractType
                 'multiple'    => true,
                 'expanded'    => true,
             ])
+            ->add('inCatalog', YesNoType::class, [
+                'label'       => 'form.sheet_filter.children.inCatalog.label',
+                'required'    => false,
+            ])
             ->add('completed', Sheet\CompletedChoiceType::class, [
                 'label'       => 'form.sheet_filter.children.completed.label',
                 'required'    => false,
@@ -79,6 +84,22 @@ class TargetFilterType extends AbstractType
                 'required'    => false,
                 'expanded'    => true,
                 'multiple'    => true,
+            ])
+            ->add('hasHappeningParticipation', YesNoType::class, [
+                'label'       => 'form.sheet_filter.children.hasHappeningParticipation.label',
+                'required'    => false,
+            ])
+            ->add('hasRemainingToPay', CheckboxType::class, [
+                'label'       => 'form.sheet_filter.children.hasRemainingToPay.label',
+                'required'    => false,
+            ])
+            ->add('hasNoMeetingRequest', CheckboxType::class, [
+                'label'       => 'form.sheet_filter.children.hasNoMeetingRequest.label',
+                'required'    => false,
+            ])
+            ->add('hasPendingMeetingPropositions', CheckboxType::class, [
+                'label'       => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
+                'required'    => false,
             ])
         ;
 

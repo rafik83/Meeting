@@ -80,7 +80,8 @@ class MeetingRequestController extends Controller
             $filters = $defaults;
         }
 
-        $query       = new MeetingRequestListViewQuery($sheet, $request->getLocale(), $filters);
+        $event       = $eventDomain->getEvent();
+        $query       = new MeetingRequestListViewQuery($event, $sheet, $request->getLocale(), $filters);
         $statusQuery = new StateListViewQuery($sheet, $filters);
 
         /** @var MeetingRequestListView $meetingRequestListView */
@@ -96,7 +97,7 @@ class MeetingRequestController extends Controller
         }
 
         return $this->render($template, [
-            'event'              => $eventDomain->getEvent(),
+            'event'              => $event,
             'sheet'              => $sheet,
             'meetingRequestView' => $meetingRequestListView,
             'stateListsView'     => $stateListsView,

@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -43,6 +44,7 @@ class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest->unRefuse($dateTime);
 
         // Dependencies
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
@@ -52,6 +54,7 @@ class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new UnApproveMeetingRequestHandler(
             $requestRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
 
@@ -80,6 +83,7 @@ class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedRequest->unRefuse($dateTime);
 
         // Dependencies
+        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldNotBeCalled();
         $permissionManager = $this->prophesize(RequestPermissionManager::class);
@@ -89,6 +93,7 @@ class UnApproveMeetingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new UnApproveMeetingRequestHandler(
             $requestRepository->reveal(),
             $permissionManager->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
 
