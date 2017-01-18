@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\View\Planner\Result\ParticipantResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SheetResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SlotResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SpotResult;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -70,8 +71,9 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
         $this->handleData($data); // Create the list of element from the nodes
         $this->createMeetings($data); // Create the meetings after the creation of the list to get the objects
 
-        if (isset($context['object_to_populate']) && $context['object_to_populate'] instanceof PlannerResult) {
-            $plannerResult = $context['object_to_populate'];
+        if (isset($context[AbstractNormalizer::OBJECT_TO_POPULATE])
+            && $context[AbstractNormalizer::OBJECT_TO_POPULATE] instanceof PlannerResult) {
+            $plannerResult = $context[AbstractNormalizer::OBJECT_TO_POPULATE];
         } else {
             $plannerResult = new PlannerResult();
         }
@@ -105,7 +107,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
     /**
      * @param array $data
      */
-    private function handleData(array $data)
+    private function handleData(array &$data)
     {
         if (is_array($data['meetingList']['Meeting'])) {
             foreach ($data['meetingList']['Meeting'] as $meeting) {
@@ -143,7 +145,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @return null|SpotResult
      */
-    private function handleSpot(array $spot)
+    private function handleSpot(array &$spot)
     {
         $spotResult = null;
 
@@ -178,7 +180,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @return null|ParticipantResult
      */
-    private function handleParticipant(array $participant)
+    private function handleParticipant(array &$participant)
     {
         if (isset($participant['@reference'])) {
             if (isset($this->participantList[$participant['@reference']])) {
@@ -221,7 +223,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @return null|SlotResult
      */
-    private function handleSlot(array $slot)
+    private function handleSlot(array &$slot)
     {
         if (isset($slot['@reference'])) {
             if (isset($this->slotList[$slot['@reference']])) {
@@ -246,7 +248,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @return null|SheetResult
      */
-    private function handleSheet(array $sheet)
+    private function handleSheet(array &$sheet)
     {
         if (isset($sheet['@reference'])) {
             if (isset($this->sheetList[$sheet['@reference']])) {
@@ -273,7 +275,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @param array $meeting
      */
-    private function handleMeeting(array $meeting)
+    private function handleMeeting(array &$meeting)
     {
         if (isset($meeting['@reference'])) {
             return;
@@ -323,7 +325,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @param array $meeting
      */
-    private function createMeeting(array $meeting)
+    private function createMeeting(array &$meeting)
     {
         if (isset($meeting['@reference'])) {
             return;
@@ -394,7 +396,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      *
      * @return bool
      */
-    private function isSingle(array $element)
+    private function isSingle(array &$element)
     {
         if (isset($element['@reference']) || isset($element['@id'])) {
             return true;
