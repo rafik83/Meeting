@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.schedule.title'|trans }}</h1>
 
@@ -99,10 +101,13 @@
                             {% endif %}
                         </td>
                         <td>
-                            <form action="{{ path('admin_schedule_slot_remove', { 'event': event.id, 'meetingSlot': slot.id }) }}" method="POST">
-                                    <button type="submit" class="btn btn-danger">{{ 'admin.schedule.slot.remove'|trans }}</button>
-                                </div>
-                            </form>
+                            {{ delete_button(
+                            path('admin_schedule_slot_remove', {
+                                'event': event.id,
+                                'meetingSlot': slot.id,
+                            }),
+                            'admin.schedule.slot.remove'|trans,
+                            {'class': 'btn btn-danger'}) }}
                         </td>
                     </tr>
                 {% endfor %}

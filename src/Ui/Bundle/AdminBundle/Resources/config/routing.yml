@@ -823,7 +823,7 @@ admin_schedule_slot_unlock:
 admin_schedule_slot_remove:
     path: /event/{event}/schedule/slot/{meetingSlot}/remove
     defaults: { _controller: AdminBundle:Schedule:remove }
-    methods: [GET, POST]
+    methods: [DELETE]
     requirements:
         event: \d+
         meetingSlot: \d+
