@@ -100,8 +100,6 @@ class ImportMappingHandler
 
         $csvData = $this->csvDecoder->decode($filename, CsvDecoder::FORMAT);
 
-        array_pop($csvData);
-
         $importLogger = $this->denormalizer->denormalize($csvData, Participant::class, ParticipantDenormalizer::FORMAT, [
             'csvHeaders'          => $importMapping->csvHeaders,
             'registrationHeaders' => $importMapping->registrationHeaders,

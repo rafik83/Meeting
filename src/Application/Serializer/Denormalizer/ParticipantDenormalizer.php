@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\Validator\Error\EmailError;
 use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
@@ -147,6 +148,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 list($sheetData, $participantData) = $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
 
                 $this->createEntities($context, $email, $users, $sheetData, $participantData, $registrationTemplate);
+
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
                     $key,
@@ -231,47 +233,44 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             $templateObject = $registrationTemplate->getObject($registrationObjectKey);
 
-            if ($templateObject instanceof ContentObjectInterface) {
-                try {
-                    $validator      = ObjectValidatorFactory::create($templateObject);
-                    $validatorError = $validator->validate($column, ['locale' => $context['locale']]);
+            if (!$templateObject instanceof ContentObjectInterface) {
+                continue;
+            }
 
-                    if (!$validatorError->hasError()) {
-                        $registrationTemplate->clear();
-                        $templateObject->setContentValue($column);
+            try {
+                $validator      = ObjectValidatorFactory::create($templateObject);
+                $validatorError = $validator->validate($column, [
+                    'locale' => $context['locale'],
+                    'object' => $templateObject,
+                ]);
 
-                        if ($templateObject->hasTag(Tag::SHEET_DATA)) {
-                            $sheetData = array_merge($sheetData, [
-                                $registrationObjectKey => $templateObject->getData(),
-                            ]);
-                        }
-
-                        if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
-                            $participantData = array_merge($participantData, [
-                                $registrationObjectKey => $templateObject->getData(),
-                            ]);
-                        }
-
-                    } else {
-                        throw new InvalidObjectContentException($validatorError);
-                    }
-                } catch (ObjectValidatorNotExistException $exception) {
+                if (!$validatorError->hasError()) {
                     $registrationTemplate->clear();
-                    $templateObject->setContentValue($column);
 
-                    if ($templateObject->hasTag(Tag::SHEET_DATA)) {
-                        $sheetData = array_merge($sheetData, [
-                            $registrationObjectKey => $templateObject->getData(),
-                        ]);
+                    if ($templateObject instanceof TemplateObject\Nomenclature) {
+                        $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
+                        $templateObject->setContentValue($nomenclatureKey);
+                    } else {
+                        $templateObject->setContentValue($column);
                     }
 
-                    if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
-                        $participantData = array_merge($participantData, [
-                            $registrationObjectKey => $templateObject->getData(),
-                        ]);
-                    }
-
+                    $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+                } else {
+                    throw new InvalidObjectContentException($validatorError);
                 }
+
+            } catch (ObjectValidatorNotExistException $exception) {
+                // if not validator defined, set data without check if valid
+                $registrationTemplate->clear();
+
+                if ($templateObject instanceof TemplateObject\Nomenclature) {
+                    $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
+                    $templateObject->setContentValue($nomenclatureKey);
+                } else {
+                    $templateObject->setContentValue($column);
+                }
+
+                $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
             }
         }
 
@@ -318,5 +317,30 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->importLogger->sheetImported($sheet);
 
         $this->synchronizer->set($registrationTemplate, $user);
+    }
+
+    /**
+     * @param TemplateObject $templateObject
+     * @param array          $sheetData
+     * @param array          $participantData
+     * @param                $registrationObjectKey
+     */
+    private function dispatchTemplateData(
+        TemplateObject $templateObject,
+        &$sheetData,
+        &$participantData,
+        $registrationObjectKey
+    ) {
+        if ($templateObject->hasTag(Tag::SHEET_DATA)) {
+            $sheetData = array_merge($sheetData, [
+                $registrationObjectKey => $templateObject->getData(),
+            ]);
+        }
+
+        if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
+            $participantData = array_merge($participantData, [
+                $registrationObjectKey => $templateObject->getData(),
+            ]);
+        }
     }
 }

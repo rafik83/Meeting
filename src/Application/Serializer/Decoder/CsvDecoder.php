@@ -48,7 +48,9 @@ class CsvDecoder implements DecoderInterface
             $csvData[] = $file->fgetcsv();
         }
 
-        return array_slice($csvData, 1);
+        array_pop($csvData); // remove last empty line
+
+        return array_slice($csvData, 1); // first line (headers)
     }
 
     /**

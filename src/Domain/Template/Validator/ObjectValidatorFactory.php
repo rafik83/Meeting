@@ -30,6 +30,8 @@ class ObjectValidatorFactory
             case $object instanceof TemplateObject\Country:
                 return new CountryValidator();
                 break;
+            case $object instanceof TemplateObject\Nomenclature:
+                return new NomenclatureValidator();
             default:
                 throw new ObjectValidatorNotExistException();
         }
