@@ -113,7 +113,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     {
         $participants = $this->participantRepository->findByEvent($context['event']);
 
-        $this->importLogger->init(count($participants), count($data));
+        $this->importLogger->init(count($data));
 
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
@@ -139,6 +139,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             if ($this->isAlreadyParticipant($email, $participants)) {
+                $this->importLogger->existingParticipations();
                 continue;
             }
 
@@ -302,12 +303,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
         }
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+        $sheet->setImported(true);
 
-        $participant = new Participant($sheet, $user, [], false);
+        $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);
 
         $sheet->setRegistrationData($sheetData);
-        $participant->setData($participantData);
 
         $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
