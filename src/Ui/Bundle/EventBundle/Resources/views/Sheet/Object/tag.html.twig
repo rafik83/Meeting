@@ -9,7 +9,11 @@
         <ul>
             {% for tag in item.tags %}
                 <li class="highlight">
-                    {% set value = taggedData[tag.tag]|default([])|join(', ') %}
+                    {% if taggedData[tag.tag]|default([])|length == 1 and (taggedData[tag.tag]|default([])|first is same as(true) or taggedData[tag.tag]|default([])|first is same as(false)) %}
+                        {% set value = taggedData[tag.tag]|default([])|first %}
+                    {% else %}
+                        {% set value = taggedData[tag.tag]|default([])|join(', ') %}
+                    {% endif %}
                     {% if tag.tag in ["sheet_country", "participant_country"] %}
                         {% for taggedInfo in taggedData[tag.tag]|default([]) %}
                             {% if not isCatalog %}
@@ -29,8 +33,16 @@
                             {% if not isCatalog %}
                                 <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
                             {% endif %}
+                            {% if value is same as(true) or value is same as(false) %}
+                                {% if value %}
+                                    {{ 'sheet.object.boolean.true'|trans }}
+                                {% else %}
+                                    {{ 'sheet.object.boolean.false'|trans }}
+                                {% endif %}
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
 
-                            {{ value }}
 
                             {% if not isCatalog %}
                                 </a>
