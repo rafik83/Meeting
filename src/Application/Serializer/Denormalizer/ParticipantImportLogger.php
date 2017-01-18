@@ -104,7 +104,7 @@ class ParticipantImportLogger
     }
 
     /**
-     * @param $sheet
+     * @param Sheet $sheet
      */
     public function sheetImported(Sheet $sheet)
     {

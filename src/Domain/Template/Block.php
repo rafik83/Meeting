@@ -189,7 +189,11 @@ class Block extends AbstractChild
     public function getParticipantAndSheetDataExceptedImageObject()
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return $object->isEditable() && ($object->hasTag(Tag::SHEET_DATA) || $object->hasTag(Tag::PARTICIPANT_DATA) && !$object instanceof TemplateObject\Image);
+            if ($object instanceof TemplateObject\Image) {
+                return false;
+            }
+
+            return $object->isEditable() && ($object->hasTag(Tag::SHEET_DATA) || $object->hasTag(Tag::PARTICIPANT_DATA));
         });
     }
 
@@ -271,7 +275,7 @@ class Block extends AbstractChild
     public function getBlock($index)
     {
         $blocks = $this->getBlocks();
-        $index  = (int) $index - 1;
+        $index  = (int)$index - 1;
 
         return isset($blocks[$index]) ? $blocks[$index] : null;
     }

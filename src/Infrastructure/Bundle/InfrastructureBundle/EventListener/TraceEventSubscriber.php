@@ -191,7 +191,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_CHANGED_TYPE        => 'onSheetChangedType',
             Events::SHEET_VALIDATION_DRAFT    => 'onSheetValidationDraft',
             Events::SHEET_VALIDATION_VALIDATE => 'onSheetValidationValidate',
-            Events::PARTICIPANT_IMPORTED       => 'onParticipantImported',
+            Events::PARTICIPANT_IMPORTED      => 'onParticipantImported',
         ];
     }
 }

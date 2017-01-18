@@ -31,7 +31,7 @@ class EmailValidator
     /**
      * @param string $data
      *
-     * @return mixed
+     * @return bool
      */
     public function validate($data)
     {

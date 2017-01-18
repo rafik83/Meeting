@@ -18,15 +18,15 @@ class MappingView
     public $label;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $value;
 
     /**
      * MappingView constructor.
      *
-     * @param string $label
-     * @param string $value
+     * @param string      $label
+     * @param string|null $value
      */
     public function __construct($label, $value = null)
     {

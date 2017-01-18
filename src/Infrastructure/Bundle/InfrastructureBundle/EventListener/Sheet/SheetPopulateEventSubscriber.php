@@ -208,7 +208,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     {
         if (is_array($sheet)) {
             $this->persister->replaceMany($sheet);
-        } else {
+        } elseif ($sheet instanceof Sheet) {
             $this->persister->replaceOne($sheet);
         }
     }

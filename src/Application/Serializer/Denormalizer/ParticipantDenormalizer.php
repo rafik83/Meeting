@@ -174,7 +174,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return bool
      */
-    private function isAlreadyParticipant($email, array $participants)
+    private function isAlreadyParticipant($email, &$participants)
     {
         foreach ($participants as $participant) {
             if ($participant->getUser()->getEmail() === $email) {
@@ -191,7 +191,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return User|false
      */
-    private function hasUserAccount($email, array $users)
+    private function hasUserAccount($email, &$users)
     {
         foreach ($users as $user) {
             if ($user->getEmail() === $email) {

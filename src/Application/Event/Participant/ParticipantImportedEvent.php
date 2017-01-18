@@ -30,8 +30,9 @@ class ParticipantImportedEvent extends EventDispatcher\Event
      * @var \DateTimeInterface
      */
     private $date;
+
     /**
-     * @var array
+     * @var Sheet[]
      */
     private $sheets;
 
@@ -41,7 +42,7 @@ class ParticipantImportedEvent extends EventDispatcher\Event
      * @param Admin              $admin
      * @param Event              $event
      * @param \DateTimeInterface $date
-     * @param array              $sheets
+     * @param Sheet[]            $sheets
      */
     public function __construct(Admin $admin, Event $event, \DateTimeInterface $date, array $sheets)
     {

@@ -73,6 +73,7 @@ class ImportMappingViewQueryHandler
         $templateObjects = $registrationTemplate->getParticipantAndSheetDataExceptedImageObject();
 
         foreach ($templateObjects as $object) {
+
             if ($object instanceof ContentObjectInterface) {
                 $label = $object->getLabel($query->locale);
                 if ($label !== null) {
