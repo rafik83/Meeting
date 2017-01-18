@@ -113,27 +113,32 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         $locale          = $event->getAvailableLocale($locale);
         $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
+        $gender = isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $participantInfo[Tag::PARTICIPANT_GENDER] : null;
+        if ($gender) {
+            $gender = $this->translator->trans(sprintf('gender.%s', $gender));
+        }
+
         return [
             self::COL_PARTICIPANT_ID      => sprintf("%s-%s", $sheet->getId(), $participant->getId()),
-            self::COL_TITLE               => isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $this->translator->trans(sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])) : null,
+            self::COL_TITLE               => $gender,
             self::COL_FIRSTNAME           => isset($participantInfo[Tag::PARTICIPANT_FIRSTNAME]) ? $participantInfo[Tag::PARTICIPANT_FIRSTNAME] : null,
             self::COL_LASTNAME            => isset($participantInfo[Tag::PARTICIPANT_LASTNAME]) ? $participantInfo[Tag::PARTICIPANT_LASTNAME] : null,
             self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
             self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
-            self::COL_DESCRIPTION         => '',
-            self::COL_POSITION            => isset($participantInfo[Tag::PARTICIPANT_POSITION]) ? $participantInfo[Tag::PARTICIPANT_POSITION] : NULL,
-            self::COL_PHONE_PREFIX        => '',
+            self::COL_DESCRIPTION         => null,
+            self::COL_POSITION            => isset($participantInfo[Tag::PARTICIPANT_POSITION]) ? $participantInfo[Tag::PARTICIPANT_POSITION] : null,
+            self::COL_PHONE_PREFIX        => null,
             self::COL_PHONE_NUMBER        => isset($participantInfo[Tag::PARTICIPANT_PHONE]) ? $participantInfo[Tag::PARTICIPANT_PHONE] : null,
             self::COL_EMAIL               => $participant->getUser()->getEmail(),
-            self::COL_MOBILE_PHONE_PREFIX => '',
+            self::COL_MOBILE_PHONE_PREFIX => null,
             self::COL_MOBILE_PHONE        => isset($participantInfo[Tag::PARTICIPANT_MOBILE]) ? $participantInfo[Tag::PARTICIPANT_MOBILE] : null,
-            self::COL_SCHEDULE            => '',
+            self::COL_SCHEDULE            => null,
         ];
     }
 
     /**
      * Returns an array of normalized data from a participant's schedule raw data
-     * (normalizing includes charset encoding and column labels' translations)
+     * (normalizing includes charset encoding, string substitution for boolean values, etc.)
      *
      * @param array  $rawData
      * @param string $charset
@@ -145,15 +150,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         $normalizedData = [];
 
         foreach ($rawData as $fieldKey => $input) {
-            $translationKey = 'admin.participant_schedule.export.fields.' . $fieldKey;
-
-            $translatedFieldname = $this->convertCharset(
-                $this->translator->trans($translationKey),
-                Charset::UTF_8,
-                $charset
-            );
-
-            $normalizedData[$translatedFieldname] = $this->convertCharset(
+            $normalizedData[$fieldKey] = $this->convertCharset(
                 $input,
                 Charset::UTF_8,
                 $charset
