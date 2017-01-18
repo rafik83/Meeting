@@ -33,16 +33,14 @@
                             {% if not isCatalog %}
                                 <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ tag.tag }}">
                             {% endif %}
-                            {% if value is same as(true) or value is same as(false) %}
-                                {% if value %}
-                                    {{ 'sheet.object.boolean.true'|trans }}
-                                {% else %}
-                                    {{ 'sheet.object.boolean.false'|trans }}
-                                {% endif %}
+
+                            {% if value is same as(true) %}
+                                {{ 'sheet.object.boolean.true'|trans }}
+                            {% elseif value is same as(false) %}
+                                {{ 'sheet.object.boolean.false'|trans }}
                             {% else %}
                                 {{ value }}
                             {% endif %}
-
 
                             {% if not isCatalog %}
                                 </a>
