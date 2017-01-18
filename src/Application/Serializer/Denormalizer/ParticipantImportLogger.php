@@ -26,12 +26,12 @@ class ParticipantImportLogger
     /**
      * @var int
      */
-    private $existingParticipations;
+    private $existingParticipations = 0;
 
     /**
      * @var int
      */
-    private $fileParticipations;
+    private $fileParticipations = 0;
 
     /**
      * @var int
