@@ -10,7 +10,7 @@ account.update.avatar.title: 'Profile picture'
 account.update.company.title: 'Company / Organization'
 account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
-agenda.title: 'My meeting schedules'
+agenda.title: 'Meeting schedules'
 agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirm your absence'

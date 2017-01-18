@@ -10,7 +10,8 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
-agenda.title: 'Mon agenda'
+agenda.title: 'Agenda'
+agenda.participant.view: 'Agenda de %participant%'
 agenda.unavailability.add: 'Add unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
