@@ -18,8 +18,9 @@
                         {% if currentParticipantLooked is not null %}
                             {{ 'agenda.participant.view'|trans({'%participant%': currentParticipantLooked.fullName}) }}
                         {% endif %}
-                        <span class="caret"></span>
+                        {% if agenda.participants|length > 1 %}<span class="caret"></span>{% endif %}
                     </button>
+                    {% if agenda.participants|length > 1 %}
                     <ul class="dropdown-menu">
                         {% for participantName in agenda.participants %}
                             <li {% if participantName.id == agenda.participant.id %}class="active"{% endif %}>
@@ -29,6 +30,7 @@
                             </li>
                         {% endfor %}
                     </ul>
+                    {% endif %}
                 </div>
             {% endif %}
             </div>
