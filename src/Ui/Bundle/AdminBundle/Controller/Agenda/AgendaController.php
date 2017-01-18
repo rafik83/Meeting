@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -65,6 +66,28 @@ class AgendaController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         if ($sheet->getEvent() !== $event) {
+            return new JsonResponse('Sheet are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $agendaSheetView = $this->get('tactician.commandbus.query')->handle(
+            new AgendaSheetViewQuery($sheet, $event->getAvailableLocale($request->getLocale()))
+        );
+
+        return new JsonResponse($agendaSheetView);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting $meeting
+     *
+     * @return JsonResponse
+     */
+    public function updateMeetingAction(Request $request, Event $event, Meeting $meeting)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($meeting->getFromSheet()->getEvent() !== $event) {
             return new JsonResponse('Sheet are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

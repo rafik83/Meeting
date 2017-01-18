@@ -466,6 +466,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Update }
+    vimeet_infrastructure.vimeet.application.command.meeting.update_spot_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\UpdateSpotHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateSpot }
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:

@@ -208,7 +208,7 @@ new Vue({
         /**
          * Find Sheet in opened Agendas or returns null
          *
-         * @param sheetId
+         * @param {int} sheetId
          * @returns null|sheet
          */
         findSheetAgendaBySheetId: function (sheetId) {
@@ -300,6 +300,11 @@ new Vue({
             }
         },
 
+        /**
+         * Load meeting
+         *
+         * @param {int} meetingId
+         */
         loadMeeting: function (meetingId) {
             this.isMeetingToUpdateLoading = true;
 

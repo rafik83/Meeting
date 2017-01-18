@@ -70,6 +70,16 @@ class Meeting implements MessageSubjectInterface
     private $request;
 
     /**
+     * @var bool
+     */
+    private $blockedSpot = false;
+
+    /**
+     * @var bool
+     */
+    private $blockedSlot = false;
+
+    /**
      * Meeting constructor.
      *
      * @param Request            $request
@@ -287,5 +297,15 @@ class Meeting implements MessageSubjectInterface
     public function countParticipants()
     {
         return count($this->fromParticipants) + count($this->toParticipants);
+    }
+
+    /**
+     * @param Spot $spot
+     * @param bool $blockedSpot
+     * @param bool $blockedSlot
+     */
+    public function updateSpot(Spot $spot, $blockedSpot, $blockedSlot)
+    {
+        $this->spot = $spot;
     }
 }
