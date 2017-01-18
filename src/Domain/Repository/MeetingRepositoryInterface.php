@@ -84,5 +84,5 @@ interface MeetingRepositoryInterface
      *
      * @return null|int
      */
-    public function checkMeetingFromSlot(MeetingSlot $meetingSlot);
+    public function hasMeetingOnSlot(MeetingSlot $meetingSlot);
 }

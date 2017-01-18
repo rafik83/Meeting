@@ -204,7 +204,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function checkMeetingFromSlot(MeetingSlot $meetingSlot)
+    public function hasMeetingOnSlot(MeetingSlot $meetingSlot)
     {
         $queryBuilder = $this
             ->entityManager
@@ -218,6 +218,6 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->setMaxResults(1)
         ;
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }
