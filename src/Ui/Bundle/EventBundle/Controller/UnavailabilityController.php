@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
@@ -34,11 +35,12 @@ class UnavailabilityController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Participant $participant
      *
      * @return RedirectResponse|Response
      * @throws \Exception
      */
-    public function createAction(Request $request, EventDomain $eventDomain)
+    public function createAction(Request $request, EventDomain $eventDomain, Participant $participant)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
@@ -54,11 +56,19 @@ class UnavailabilityController extends Controller
             throw $this->createNotFoundException('Sheet not found');
         }
 
+        if (!$sheet->hasParticipant($participant)) {
+            throw $this->createNotFoundException(sprintf(
+                'The given participant %s is not on the sheet %s',
+                $participant->getId(),
+                $sheet->getId()
+            ));
+        }
+
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
 
         $create = new Create($event, $sheet, $user, $request->getLocale());
         $form   = $this->createForm(CreateType::class, $create, [
-            'action'                 => $this->generateUrl('event_unavailability_create'),
+            'action'                 => $this->generateUrl('event_unavailability_create', ['participant' => $participant->getId()]),
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'event'                  => $event,
             'locale'                 => $request->getLocale(),
@@ -76,7 +86,7 @@ class UnavailabilityController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($create);
 
-                return $this->redirectToRoute('event_agenda');
+                return $this->redirectToRoute('event_agenda_participant', ['participant' => $participant->getId()]);
             } catch (NoParticipantSelectedException $exception) {
                 if ($form->has('participants')) {
                     $form->get('participants')->addError($this->createNoParticipantSelectedExceptionError());
@@ -126,14 +136,13 @@ class UnavailabilityController extends Controller
         $agenda = $this
             ->get('tactician.commandbus.query')
             ->handle(
-                new AgendaViewQuery($event, $user, $request->getLocale())
+                new AgendaViewQuery($event, $sheet, $participant, $user, $request->getLocale())
             );
 
         return $this->render('EventBundle:Unavailability:create.html.twig', [
-            'event'                  => $event,
-            'agenda'                 => $agenda,
-            'isUserAloneParticipant' => $isUserAloneParticipant,
-            'form_unavailability'    => $form->createView()
+            'event'               => $event,
+            'agenda'              => $agenda,
+            'form_unavailability' => $form->createView()
         ]);
     }
 
@@ -141,11 +150,16 @@ class UnavailabilityController extends Controller
      * @param Request        $request
      * @param EventDomain    $eventDomain
      * @param Unavailability $unavailability
+     * @param Participant    $participant
      *
      * @return RedirectResponse
      */
-    public function removeAction(Request $request, EventDomain $eventDomain, Unavailability $unavailability)
-    {
+    public function removeAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Unavailability $unavailability,
+        Participant $participant
+    ) {
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $event);
@@ -161,10 +175,13 @@ class UnavailabilityController extends Controller
         if ($sheet != $unavailability->getParticipant()->getSheet()) {
             throw $this->createAccessDeniedException('This user can not remove this unavailability');
         }
+        if (!$sheet->hasParticipant($participant)) {
+            throw $this->createNotFoundException('The participant given is not on the sheet');
+        }
 
         $this->get('tactician.commandbus')->handle(new Remove($unavailability));
 
-        return $this->redirectToRoute('event_agenda');
+        return $this->redirectToRoute('event_agenda_participant', ['participant' => $participant->getId()]);
     }
 
     /**
