@@ -24,7 +24,8 @@ class UnavailabilityViewQueryHandler
         return new UnavailabilityView(
             $query->unavailability->getId(),
             $query->unavailability->getBegin(),
-            $query->unavailability->getEnd()
+            $query->unavailability->getEnd(),
+            $query->event->getTimeZone()
         );
     }
 }

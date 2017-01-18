@@ -82,7 +82,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             function (Sheet $sheet) use ($query) {
                 return $this
                     ->sheetPreviewViewQueryHandler
-                    ->handle(new SheetPreviewViewQuery($sheet, $query->locale, $query->viewer));
+                    ->handle(new SheetPreviewViewQuery($query->event, $sheet, $query->locale, $query->viewer));
             },
             $paginatedResult->results
         );

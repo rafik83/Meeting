@@ -9,19 +9,22 @@
  */
 
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use SendGrid\Mail;
+use SendGrid\Response;
 
 class SendGridApiAdapterTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()
     {
         $event     = EventFactory::createEvent();
-        $receiver  = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $receiver  = new ReceiverView('user@vimeet.com', []);
         $createdAt = new \DateTime();
         $message   = new Message($event, $createdAt, 'test', 'test subject', 'test content');
 
@@ -32,9 +35,12 @@ class SendGridApiAdapterTest extends \PHPUnit_Framework_TestCase
         $twig->load($message->getTemplate())->shouldBeCalled()->willReturn($template);
 
         $client = $this->prophesize(SendGridApiClient::class);
-        $client->send(Argument::type(Mail::class))->shouldBeCalledTimes(1);
+        $client->send(Argument::type(Mail::class))->shouldBeCalledTimes(1)->willReturn(new Response(202));
 
-        $adapter = new SendGridApiAdapter($client->reveal(), $twig->reveal());
-        $adapter->send($message, 'no-reply@vimeet.com', [$receiver]);
+        (new SendGridApiAdapter(
+            $client->reveal(),
+            $twig->reveal(),
+            new EventSender('vimeet.proximum.dev', 'no-reply@vimeet.proximum.dev')
+        ))->send($message, [$receiver]);
     }
 }

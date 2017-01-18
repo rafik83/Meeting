@@ -197,11 +197,27 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        return $this->countPendingPropositionReceivedBySheet($sheet) > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countRequestSentBySheet(Sheet $sheet)
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
         return $queryBuilder->sendBy($sheet)->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRequestSentBySheet(Sheet $sheet)
+    {
+        return $this->countRequestSentBySheet($sheet) > 0;
     }
 
     /**

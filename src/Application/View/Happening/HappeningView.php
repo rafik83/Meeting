@@ -79,6 +79,11 @@ class HappeningView
     public $limitParticipant;
 
     /**
+     * @var string
+     */
+    public $timeZone;
+
+    /**
      * HappeningView constructor.
      *
      * @param int                    $id
@@ -89,6 +94,7 @@ class HappeningView
      * @param string                 $description
      * @param string|null            $picture
      * @param HappeningSpeakerView[] $speakers
+     * @param string                 $timeZone
      * @param null|int               $limitParticipant
      * @param bool                   $isFull
      */
@@ -101,6 +107,7 @@ class HappeningView
         $description,
         $picture,
         array $speakers,
+        $timeZone,
         $limitParticipant = null,
         $isFull = false
     ) {
@@ -114,6 +121,7 @@ class HappeningView
         $this->speakers         = $speakers;
         $this->isFull           = $isFull;
         $this->limitParticipant = $limitParticipant;
+        $this->timeZone         = $timeZone;
     }
 
     /**
