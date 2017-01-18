@@ -101,13 +101,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {{ delete_button(
-                            path('admin_schedule_slot_remove', {
-                                'event': event.id,
-                                'meetingSlot': slot.id,
-                            }),
-                            'admin.schedule.slot.remove'|trans,
-                            {'class': 'btn btn-danger'}) }}
+                            {{ delete_button(path('admin_schedule_slot_remove', {'event': event.id, 'meetingSlot': slot.id, }), 'admin.schedule.slot.remove'|trans, {'class': 'btn btn-danger'}) }}
                         </td>
                     </tr>
                 {% endfor %}

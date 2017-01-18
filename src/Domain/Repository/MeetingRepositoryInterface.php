@@ -82,7 +82,7 @@ interface MeetingRepositoryInterface
     /**
      * @param MeetingSlot $meetingSlot
      *
-     * @return null|int
+     * @return bool
      */
     public function hasMeetingOnSlot(MeetingSlot $meetingSlot);
 }
