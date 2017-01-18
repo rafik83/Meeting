@@ -15,7 +15,7 @@ class ParticipantDenormalizerView
     /**
      * @var int
      */
-    public $databaseParticipations;
+    public $existingParticipations;
 
     /**
      * @var int
@@ -40,20 +40,20 @@ class ParticipantDenormalizerView
     /**
      * ParticipantDenormalizerView constructor.
      *
-     * @param int $databaseParticipations
+     * @param int $existingParticipations
      * @param int $fileParticipations
      * @param int $createdSheets
      * @param int $createdUsers
      * @param array $errors
      */
     public function __construct(
-        $databaseParticipations,
+        $existingParticipations,
         $fileParticipations,
         $createdSheets,
         $createdUsers,
         array $errors
     ) {
-        $this->databaseParticipations = $databaseParticipations;
+        $this->existingParticipations = $existingParticipations;
         $this->fileParticipations     = $fileParticipations;
         $this->createdSheets          = $createdSheets;
         $this->createdUsers           = $createdUsers;

@@ -51,7 +51,7 @@ class ImportResultViewQueryHandler
         $loggerData = $participantImport->getResult();
 
         return new ParticipantDenormalizerView(
-            $loggerData[ParticipantImportLogger::DATABASE_PARTICIPATIONS],
+            $loggerData[ParticipantImportLogger::EXISTING_PARTICIPATIONS],
             $loggerData[ParticipantImportLogger::FILE_PARTICIPATIONS],
             $loggerData[ParticipantImportLogger::CREATED_SHEETS],
             $loggerData[ParticipantImportLogger::CREATED_USERS],
