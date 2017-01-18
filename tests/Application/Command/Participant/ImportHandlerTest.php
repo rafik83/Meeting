@@ -22,22 +22,22 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
     public function handle()
     {
         $publicDir = '/var/participant_import';
-        $filename  = 'vimeet/src/Behat/Resources/fixtures/Files/dummy-image-test.jpg';
-        $file      = new UploadedFile($publicDir . $filename, 'file');
+        $filename  = 'participant.csv';
 
-//        $this
-//            ->getMockBuilder(UploadedFile::class)
-//            ->enableOriginalConstructor()
-//            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
-//            ->getMock();
+        $uploadedFile = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'csv'])
+            ->getMock();
 
-        $command = new Import();
+        $command       = new Import();
+        $command->file = $uploadedFile;
 
         // Mock
         $localFileStorageAdapter = $this->prophesize(FileStorageInterface::class);
         $session                 = $this->prophesize(SessionInterface::class);
 
-        $localFileStorageAdapter->upload($file, $publicDir)->shouldBeCalled();
+        $localFileStorageAdapter->upload($uploadedFile, $publicDir)->shouldBeCalled()->willReturn($filename);
 
         $session->set(ParticipantImportTag::PARTICIPANT_IMPORT_FILE, $filename)->shouldBeCalled();
         $session->set(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET, Charset::WINDOWS_1252)->shouldBeCalled();
@@ -50,7 +50,7 @@ class ImportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler->handle($command);
     }
-    
+
     public function testFileNotFound()
     {
         $this->expectException(FileNotFoundException::class);
