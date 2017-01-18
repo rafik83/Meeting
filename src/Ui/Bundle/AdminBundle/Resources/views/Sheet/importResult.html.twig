@@ -9,34 +9,36 @@
     <div class="col-md-6">
         <table class="table table-striped col-md-6">
             <tbody>
-            <tr>
-                <th>{{ 'admin.participant_import_result.database_participations'|trans }}</th>
-                <td>{{ view.databaseParticipations }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'admin.participant_import_result.file_participations'|trans }}</th>
-                <td>{{ view.fileParticipations }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'admin.participant_import_result.created_sheets'|trans }}</th>
-                <td>{{ view.createdSheets }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'admin.participant_import_result.created_users'|trans }}</th>
-                <td>{{ view.createdUsers }}</td>
-            </tr>
-            <tr>
-                <th colspan="2">{{ 'admin.participant_import_result.errors'|trans }}</th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <ul class="list-unstyled">
-                        {% for error in view.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
+                <tr>
+                    <th>{{ 'admin.participant_import_result.database_participations'|trans }}</th>
+                    <td>{{ view.dataParticipations }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'admin.participant_import_result.file_participations'|trans }}</th>
+                    <td>{{ view.fileParticipations }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'admin.participant_import_result.created_sheets'|trans }}</th>
+                    <td>{{ view.createdSheets }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'admin.participant_import_result.created_users'|trans }}</th>
+                    <td>{{ view.createdUsers }}</td>
+                </tr>
+                {% if view.errors is not empty %}
+                    <tr>
+                        <th colspan="2">{{ 'admin.participant_import_result.errors'|trans }}</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ul class="list-unstyled">
+                                {% for error in view.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>
