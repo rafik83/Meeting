@@ -197,9 +197,9 @@ class ImportHandler
             $this->sheets[$sheet->getId()] = $sheet;
         }
 
-         foreach ($slots as $slot) {
-             $this->slots[$slot->getId()] = $slot;
-         }
+        foreach ($slots as $slot) {
+            $this->slots[$slot->getId()] = $slot;
+        }
 
         foreach ($spots as $spot) {
             $this->spots[$spot->getId()] = $spot;
