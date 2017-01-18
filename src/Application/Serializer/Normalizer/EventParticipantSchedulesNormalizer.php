@@ -143,6 +143,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
+        // TODO Get days from nico's agendaViewHandler
         $planning = $this->formatPlanning($user);
 
         $planning .= $this->formatUnallocated(
@@ -165,7 +166,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             self::COL_EMAIL               => $participant->getUser()->getEmail(),
             self::COL_MOBILE_PHONE_PREFIX => null,
             self::COL_MOBILE_PHONE        => isset($participantInfo[Tag::PARTICIPANT_MOBILE]) ? $participantInfo[Tag::PARTICIPANT_MOBILE] : null,
-            self::COL_SCHEDULE            => null,
+            self::COL_SCHEDULE            => $planning,
         ];
     }
 
