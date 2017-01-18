@@ -18,7 +18,11 @@ class TelephoneValidator implements ObjectValidatorInterface
      */
     public function validate($data, array $options = [])
     {
-        $validation = preg_match('#^\+(?!(?:\d*-){5,})(?!(?:\d* ){5,})[\d- /.]+$#', $data) !== false;
+        if (empty($data) || $data === null) {
+            return new TelephoneError($data, true);
+        }
+
+        $validation = preg_match('#^\+(?!(?:\d*-){5,})(?!(?:\d* ){5,})[\d- /.]+$#', $data) !== 0;
 
         return new TelephoneError($data, $validation);
     }

@@ -244,6 +244,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             try {
+                if ($templateObject instanceof TemplateObject\Telephone) {
+                    $column = $this->denormalizerPhoneNumber($column);
+                }
+
                 $validator      = ObjectValidatorFactory::create($templateObject);
                 $validatorError = $validator->validate($column, [
                     'locale' => $context['locale'],
@@ -281,6 +285,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
         }
 
         return [$sheetData, $participantData];
+    }
+
+    /**
+     * @param $phone
+     *
+     * @return string
+     */
+    private function denormalizerPhoneNumber($phone)
+    {
+        return preg_replace("/(\\'+)|(\\s)+/", '', $phone);
     }
 
     /**
