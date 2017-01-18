@@ -264,25 +264,31 @@ class CatalogController extends Controller
         $ruleApplyer->applyRuleForTemplate($templateData, $rules);
         $ruleApplyer->applyRuleForCardList($participants, $rules);
 
+        $isMeetingPublished = false;
+
         if ($sheet === $userSheet) {
             $meetingRequest = null;
         } else {
             $meetingRequest = $this
                 ->get('vimeet_infrastructure.repository.meeting.request_repository')
                 ->getRequestBetweenSheets($sheet, $userSheet);
+            $isMeetingPublished = $this
+                ->get('domain.key_dates.checker.meeting_published_access_checker')
+                ->allowedToAccess($event);
         }
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'event'          => $eventDomain->getEvent(),
-            'sheet'          => $sheet,
-            'taggedData'     => $taggedData,
-            'locale'         => $locale,
-            'nomenclatures'  => $nomenclatures,
-            'participants'   => $participants,
-            'templateData'   => $templateData,
-            'isCatalog'      => true,
-            'userSheet'      => $userSheet,
-            'meetingRequest' => $meetingRequest,
+            'event'              => $event,
+            'sheet'              => $sheet,
+            'taggedData'         => $taggedData,
+            'locale'             => $locale,
+            'nomenclatures'      => $nomenclatures,
+            'participants'       => $participants,
+            'templateData'       => $templateData,
+            'isCatalog'          => true,
+            'userSheet'          => $userSheet,
+            'meetingRequest'     => $meetingRequest,
+            'isMeetingPublished' => $isMeetingPublished,
         ]);
     }
 

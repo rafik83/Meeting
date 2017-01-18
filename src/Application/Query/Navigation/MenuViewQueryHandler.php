@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Navigation\MenuView;
 
 class MenuViewQueryHandler
@@ -45,24 +46,28 @@ class MenuViewQueryHandler
      */
     public function handle(MenuViewQuery $menuViewQuery)
     {
-        $sheet = $this->sheetGuesser->getUserSheet(
-            $menuViewQuery->user,
-            $menuViewQuery->event,
-            $menuViewQuery->locale
-        );
+        try {
+            $sheet = $this->sheetGuesser->getUserSheet(
+                $menuViewQuery->user,
+                $menuViewQuery->event,
+                $menuViewQuery->locale
+            );
 
-        $categoryView = [];
+            $categoryViews = [];
 
-        foreach (Category::$categories as $category) {
-            $category = $this->categoryViewQueryHandler->handle(new CategoryViewQuery(
-                $sheet, $menuViewQuery->user, $category, $menuViewQuery->locale
-            ));
+            foreach (Category::$categories as $category) {
+                $categoryView = $this->categoryViewQueryHandler->handle(new CategoryViewQuery(
+                    $sheet, $menuViewQuery->user, $category, $menuViewQuery->locale
+                ));
 
-            if (!empty($category)) {
-                $categoryView[] = $category;
+                if (null !== $categoryView) {
+                    $categoryViews[] = $categoryView;
+                }
             }
-        }
 
-        return new MenuView($categoryView);
+            return new MenuView($categoryViews);
+        } catch (SheetNotFoundException $exception) {
+            return new MenuView([]);
+        }
     }
 }

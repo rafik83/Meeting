@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
-class UnavailabilityView
+class UnavailabilityView extends AbstractTimeEntityView
 {
     /**
      * @var int
@@ -18,35 +18,25 @@ class UnavailabilityView
     public $id;
 
     /**
-     * @var \DateTimeInterface
+     * @var string
      */
-    public $begin;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $end;
+    public $timeZone;
 
     /**
      * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param string             $timeZone
      */
     public function __construct(
         $id,
         \DateTimeInterface $begin,
-        \DateTimeInterface $end
+        \DateTimeInterface $end,
+        $timeZone
     ) {
-        $this->id    = $id;
-        $this->begin = $begin;
-        $this->end   = $end;
-    }
-
-    /**
-     * @return \DateInterval
-     */
-    public function getDuration()
-    {
-        return $this->end->diff($this->begin);
+        $this->id       = $id;
+        $this->begin    = $begin;
+        $this->end      = $end;
+        $this->timeZone = $timeZone;
     }
 }

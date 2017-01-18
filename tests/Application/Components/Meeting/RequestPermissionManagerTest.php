@@ -12,13 +12,17 @@ namespace Proximum\Vimeet\Tests\Application\Components\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Components\Sheet\SheetManager;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Tests\Factory\SpotFactory;
 
 class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -256,6 +260,29 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testIsAllowedToEditApprovedFalseAsRequestIsPlaced()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $request->setMeeting($meeting);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
     public function testIsAllowedToEditApprovedTrueForSheetFromAndApprovedRequest()
     {
         list(
@@ -344,6 +371,29 @@ class RequestPermissionManagerTest extends \PHPUnit_Framework_TestCase
         ) = $this->getInitialsValue();
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToCancel(
+            $user,
+            $request,
+            $sheet
+        ));
+    }
+
+    public function testIsAllowedToCancelFalseAsRequestIsPlaced()
+    {
+        list(
+            $datetime,
+            $user,
+            $user2,
+            $sheet,
+            $sheet2,
+            $request
+        ) = $this->getInitialsValue();
+        $request->approve($datetime);
+        $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
+        $spot    = SpotFactory::create($sheet->getEvent());
+        $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot);
+        $request->setMeeting($meeting);
+
+        $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
             $user,
             $request,
             $sheet

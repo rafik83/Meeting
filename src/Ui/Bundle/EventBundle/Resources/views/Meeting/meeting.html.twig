@@ -1,0 +1,50 @@
+<div class="has-details meet" data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}" data-duration="{{ meeting.duration.format('%H:%I') }}">
+    <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">
+        <a class="content" href="#">
+            <span class="prefix"><i class="icon icon-RDV"></i></span>
+            <p class="title">
+                <b>{{ meeting.spotRef }}</b> - {{ meeting.sheetMetTitle }}
+            </p>
+        </a>
+    </header>
+    <div class="details">
+        <div class="row">
+            {#
+                <div class="col-md-4">
+                    {% if meeting.hasPicture %}
+                        <img src="{{ meeting.picture }}"/>
+                    {% endif %}
+                </div>
+            #}
+            <div class="col-md-12">
+                <div class="list list--users">
+                    {% for participantView in meeting.participants %}
+                        {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {#
+            <p>{{ meeting.description }}</p>
+        #}
+        <footer>
+            <p class="hours">
+                <i class="icon icon-Horaire"></i>
+                <span>{{ meeting.begin|date('H:i', meeting.timeZone) }} - {{ meeting.end|date('H:i', meeting.timeZone) }}</span>
+            </p>
+            <a href="{{ path('event_catalog_complete_sheet', {'sheet': meeting.sheetMetId }) }}" target="_blank">
+                <i class="icon icon-Document_1"></i>
+                {{ 'agenda.meeting.details'|trans }}
+            </a>
+            <div class="actions">
+                {#
+                    <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
+                    <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
+                    <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
+                    <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
+                #}
+                <i class="icon icon-Localiser"></i> {{ meeting.spotRef }}
+            </div>
+        </footer>
+    </div>
+</div>

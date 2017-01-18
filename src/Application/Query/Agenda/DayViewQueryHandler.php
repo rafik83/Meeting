@@ -30,18 +30,26 @@ class DayViewQueryHandler
     private $massHandler;
 
     /**
+     * @var MeetingViewQueryHandler
+     */
+    private $meetingHandler;
+
+    /**
      * @param HappeningViewQueryHandler          $happeningHandler
      * @param UnavailabilityViewQueryHandler     $unavailabilityHandler
      * @param MassUnavailabilityViewQueryHandler $massHandler
+     * @param MeetingViewQueryHandler            $meetingHandler
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
         UnavailabilityViewQueryHandler $unavailabilityHandler,
-        MassUnavailabilityViewQueryHandler $massHandler
+        MassUnavailabilityViewQueryHandler $massHandler,
+        MeetingViewQueryHandler $meetingHandler
     ) {
         $this->happeningHandler      = $happeningHandler;
         $this->unavailabilityHandler = $unavailabilityHandler;
         $this->massHandler           = $massHandler;
+        $this->meetingHandler        = $meetingHandler;
     }
 
     /**
@@ -54,6 +62,7 @@ class DayViewQueryHandler
         $happeningViews  = [];
         $unavailabilites = [];
         $masses          = [];
+        $meetings        = [];
 
         foreach ($query->happenings as $happening) {
             if ($happening->getHappening()->getBegin() >= $query->day->getStartTime()
@@ -62,6 +71,7 @@ class DayViewQueryHandler
                 $happeningViews[] = $this->happeningHandler->handle(
                     new HappeningViewQuery(
                         $happening->getHappening(),
+                        $query->event,
                         $query->locale
                     )
                 );
@@ -73,7 +83,7 @@ class DayViewQueryHandler
                 && $unavailability->getEnd() <= $query->day->getEndTime()
             ) {
                 $unavailabilites[] = $this->unavailabilityHandler->handle(
-                    new UnavailabilityViewQuery($unavailability)
+                    new UnavailabilityViewQuery($unavailability, $query->event)
                 );
             }
         }
@@ -85,6 +95,22 @@ class DayViewQueryHandler
                 $masses[] = $this->massHandler->handle(
                     new MassUnavailabilityViewQuery(
                         $mass,
+                        $query->event,
+                        $query->locale
+                    )
+                );
+            }
+        }
+
+        foreach ($query->meetings as $meeting) {
+            if ($meeting->getSlot()->getBegin() >= $query->day->getStartTime()
+                && $meeting->getSlot()->getEnd() <= $query->day->getEndTime()
+            ) {
+                $meetings[] = $this->meetingHandler->handle(
+                    new MeetingViewQuery(
+                        $meeting,
+                        $query->currentSheet,
+                        $query->event,
                         $query->locale
                     )
                 );
@@ -97,7 +123,8 @@ class DayViewQueryHandler
             $query->day->getEvent()->getConfiguration()->getScheduleScale(),
             $happeningViews,
             $unavailabilites,
-            $masses
+            $masses,
+            $meetings
         );
     }
 }

@@ -32,6 +32,9 @@
                         {% for mass in day.masses %}
                             {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
                         {% endfor %}
+                        {% for meeting in day.meetings %}
+                            {{ include('EventBundle:Agenda:meeting.html.twig', {'meeting': meeting }) }}
+                        {% endfor %}
                     </div>
                     <div class="layout"></div>
                 </div>

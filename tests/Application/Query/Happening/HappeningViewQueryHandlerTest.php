@@ -49,7 +49,8 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'title',
             'description',
             null,
-            []
+            [],
+            'Europe/Paris'
         );
 
         // Mock
@@ -69,6 +70,7 @@ class HappeningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $result = $handler->handle(new HappeningViewQuery(
             $happening1,
+            $event,
             'fr'
         ));
 
