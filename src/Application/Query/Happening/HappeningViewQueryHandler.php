@@ -64,6 +64,7 @@ class HappeningViewQueryHandler
             $happening->getDescription($query->locale),
             null, // Happening Picture
             $speakerView,
+            $query->event->getTimeZone(),
             $happening->getLimitParticipant()
         );
     }

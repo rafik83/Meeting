@@ -280,4 +280,20 @@ class Meeting implements MessageSubjectInterface
 
         return $this->fromSheet;
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    public function getParticipants(Sheet $sheet)
+    {
+        if ($sheet === $this->fromSheet) {
+            return $this->getFromParticipants()->toArray();
+        } elseif ($sheet === $this->toSheet) {
+            return $this->getToParticipants()->toArray();
+        }
+
+        return [];
+    }
 }

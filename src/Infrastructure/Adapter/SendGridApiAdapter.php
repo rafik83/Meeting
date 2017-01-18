@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
+use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
-use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use SendGrid\Content;
 use SendGrid\Email;
 use SendGrid\Mail;
@@ -20,6 +22,13 @@ use SendGrid\Personalization;
 
 class SendGridApiAdapter
 {
+    /**
+     * The maximum number of receivers for a sending.
+     *
+     * @var int
+     */
+    const MAX_RECEIVERS = 1000;
+
     /**
      * @var SendGridApiClient
      */
@@ -31,62 +40,105 @@ class SendGridApiAdapter
     private $twig;
 
     /**
-     * @param SendGridApiClient   $client
-     * @param Twig_Environment    $twig
+     * @var EventSender
      */
-    public function __construct(SendGridApiClient $client, \Twig_Environment $twig)
+    private $eventSender;
+
+    /**
+     * @param SendGridApiClient $client
+     * @param \Twig_Environment $twig
+     * @param EventSender       $eventSender
+     */
+    public function __construct(SendGridApiClient $client, \Twig_Environment $twig, EventSender $eventSender)
     {
-        $this->client = $client;
-        $this->twig   = $twig;
+        $this->client      = $client;
+        $this->twig        = $twig;
+        $this->eventSender = $eventSender;
     }
 
     /**
-     * Sends an emailing message to a given list of users.
+     * Sends an emailing message to a given list of receivers.
      *
-     * @param Message                  $message   The message to send
-     * @param string                   $sender    The message sender
-     * @param MailRecipientInterface[] $receivers The message receivers
+     * @param Message $message   The message to send
+     * @param array   $receivers An array of ReceiverView instances indexed by email
+     *
+     * @throws CampaignSendingFailedException
      */
-    public function send(Message $message, $sender, array $receivers)
+    public function send(Message $message, array $receivers)
     {
-        foreach ($receivers as $receiver) {
-            $this->client->send($this->transform($message, $sender, $receiver));
+        $rawMail = $this->transform($message);
+
+        foreach (array_chunk($receivers, self::MAX_RECEIVERS, true) as $receiversChunk) {
+            $this->doSend($this->prepare(clone $rawMail, $receiversChunk));
         }
     }
 
     /**
-     * Transforms a Message to a sendgrid Mail.
+     * Transforms a Message to a SendGrid Mail.
      *
-     * @param Message                $message
-     * @param string                 $sender
-     * @param MailRecipientInterface $receiver
+     * @param Message $message
      *
      * @return Mail
      */
-    private function transform(Message $message, $sender, MailRecipientInterface $receiver)
+    private function transform(Message $message)
     {
+        $event = $message->getEvent();
+        $body  = $this->twig->load($message->getTemplate())->render(['mail' => $message]);
+
         $mail = new Mail();
         $mail->setSubject($message->getSubject());
-        $mail->addContent(new Content('text/html', $this->render($message)));
-        $mail->setFrom(new Email($message->getEvent()->getTitle(), $sender));
-
-        $personalization = new Personalization();
-        $personalization->addTo(new Email(null, $receiver->getEmail()));
-
-        $mail->addPersonalization($personalization);
+        $mail->setFrom(new Email($event->getTitle(), $this->eventSender->generate($event)));
+        $mail->addContent(new Content('text/html', $body));
 
         return $mail;
     }
 
     /**
-     * Renders a Message.
+     * Adds receivers and substitutions to a given SendGrid Mail.
      *
-     * @param Message $message
+     * @param Mail  $mail
+     * @param array $receivers An array of ReceiverView instances indexed by email
      *
-     * @return string
+     * @return Mail
      */
-    private function render(Message $message)
+    private function prepare(Mail $mail, array $receivers)
     {
-        return $this->twig->load($message->getTemplate())->render(['mail' => $message]);
+        /* @var ReceiverView */
+        foreach ($receivers as $email => $receiver) {
+            $personalization = new Personalization();
+            $personalization->addTo(new Email(null, $email));
+
+            foreach ($receiver->getReplaces() as $placeholder => $value) {
+                $personalization->addSubstitution($placeholder, $value);
+            }
+
+            $mail->addPersonalization($personalization);
+        }
+
+        return $mail;
+    }
+
+    /**
+     * Sends a SendGrid Mail through the SendGridApi
+     *
+     * @param Mail $mail
+     *
+     * @throws CampaignSendingFailedException
+     */
+    private function doSend(Mail $mail)
+    {
+        $response   = $this->client->send($mail);
+        $statusCode = (int) $response->statusCode();
+        $statusText = json_decode($response->body(), true);
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            $message = 'An error occured while calling the SendGrid API, please retry later. ';
+
+            if (isset($statusText['errors'])) {
+                $message .= sprintf('Reason: %s', $statusText['errors'][0]['message']);
+            }
+
+            throw new CampaignSendingFailedException($message);
+        }
     }
 }

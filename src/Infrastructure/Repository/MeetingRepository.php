@@ -127,10 +127,15 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting, fromSheet, toSheet')
+            ->select('meeting, fromSheet, toSheet, spot, slot, request, fromParticipantSelected, toParticipantSelected')
             ->from(Meeting::class, 'meeting')
             ->join('meeting.fromSheet', 'fromSheet')
             ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.spot', 'spot')
+            ->join('meeting.slot', 'slot')
+            ->join('meeting.request', 'request')
+            ->leftJoin('meeting.fromParticipants', 'fromParticipantSelected')
+            ->leftJoin('meeting.toParticipants', 'toParticipantSelected')
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
             ->where('fromParticipant = :participant OR toParticipant = :participant')

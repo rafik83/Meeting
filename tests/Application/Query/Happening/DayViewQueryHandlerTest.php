@@ -83,7 +83,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'title',
             'description',
             null,
-            []
+            [],
+            'Europe/Paris'
         );
         $happeningView2 = new HappeningView(
             2,
@@ -93,7 +94,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'title2',
             'description2',
             null,
-            []
+            [],
+            'Europe/Paris'
         );
 
         $massView = new MassUnavailabilityView(
@@ -104,7 +106,8 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'description',
             'picto',
             'leftColor',
-            'rightColor'
+            'rightColor',
+            'Europe/Paris'
         );
 
         $expected = new DayView(
@@ -130,18 +133,20 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $happening1,
+                $event,
                 'fr'
             )
         )->shouldBeCalled()->willReturn($happeningView1);
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $happening2,
+                $event,
                 'fr'
             )
         )->shouldBeCalled()->willReturn($happeningView2);
 
         $massHandler = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
-        $massHandler->handle(new MassUnavailabilityViewQuery($mass, 'fr'))->shouldBeCalled()->willReturn($massView);
+        $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))->shouldBeCalled()->willReturn($massView);
 
 
         $handler = new DayViewQueryHandler(
