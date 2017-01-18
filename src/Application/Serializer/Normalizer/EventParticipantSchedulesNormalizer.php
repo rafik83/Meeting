@@ -10,16 +10,26 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
-
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
+use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Application\View\Agenda\HappeningView;
+use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use IntlDateFormatter;
 
 class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
@@ -38,32 +48,46 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     const COL_MOBILE_PHONE        = 'mobilePhone';
     const COL_SCHEDULE            = 'schedule';
 
-    /** @var ParticipantRepositoryInterface */
+    /**
+     * @var ParticipantRepositoryInterface
+     */
     private $participantRepository;
 
-    /** @var ParticipantInfoGuesser */
+    /**
+     * @var ParticipantInfoGuesser
+     */
     private $participantInfoGuesser;
 
-    /** @var SheetInfoGuesser */
+    /**
+     * @var SheetInfoGuesser
+     */
     private $sheetInfoGuesser;
+
+    /**
+     * @var RequestRepositoryInterface
+     */
+    private $requestRepository;
 
     /**
      * @param TranslatorInterface            $translator
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param SheetInfoGuesser               $sheetInfoGuesser
+     * @param RequestRepositoryInterface     $requestRepository
      */
     public function __construct(
         TranslatorInterface $translator,
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
-        SheetInfoGuesser $sheetInfoGuesser
+        SheetInfoGuesser $sheetInfoGuesser,
+        RequestRepositoryInterface $requestRepository
     ) {
         parent::__construct($translator);
 
         $this->participantRepository  = $participantRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->requestRepository      = $requestRepository;
     }
 
     /**
@@ -73,13 +97,13 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      *
      * @param EventParticipantSchedulesNormalizerView $object
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         $rawParticipants = [];
         $locale          = $context['locale'];
 
         foreach ($this->participantRepository->getParticipantsByEvent($object->event, $locale) as $participant) {
-            $rawParticipants[] = $this->getParticipantRawData($participant, $locale);
+            $rawParticipants[] = $this->getParticipantRawData($participant, $object->user, $locale);
         }
 
         $charset                = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
@@ -102,11 +126,12 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
     /**
      * @param Participant $participant
+     * @param Admin       $user
      * @param string      $locale
      *
      * @return array Raw data about participant's schedule
      */
-    private function getParticipantRawData(Participant $participant, $locale)
+    private function getParticipantRawData(Participant $participant, Admin $user, $locale)
     {
         $sheet           = $participant->getSheet();
         $event           = $sheet->getEvent();
@@ -117,6 +142,14 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         if ($gender) {
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
+
+        $planning = $this->formatPlanning($user);
+
+        $planning .= $this->formatUnallocated(
+            $sheet,
+            $this->requestRepository->getUnassignedRequestsBySheetAndEvent($sheet, Request::STATE_APPROVED),
+            $user
+        );
 
         return [
             self::COL_PARTICIPANT_ID      => sprintf("%s-%s", $sheet->getId(), $participant->getId()),
@@ -158,5 +191,100 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         }
 
         return $normalizedData;
+    }
+
+    /**
+     * @param DayView[] $days
+     * @param Admin     $user
+     */
+    private function formatPlanning(array $days, Admin $user)
+    {
+        $formated = $this->translator->trans(
+            'admin.participant.export.fields.planning.warning',
+            [],
+            'messages',
+            $user->getLocale()
+        ) . PHP_EOL;
+
+        $formatter = new IntlDateFormatter(
+            $user->getLocale(),
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::NONE
+        );
+
+        foreach ($days as $day) {
+            $formated .= $formatter->format($day->getDay()) . PHP_EOL;
+            $formated .= $this->formatTimeEntities($day, $user) . PHP_EOL . PHP_EOL;
+        }
+    }
+
+    /**
+     * @param Sheet     $sheet
+     * @param Request[] $requests
+     * @param Admin     $user
+     *
+     * @return string
+     */
+    private function formatUnallocated(Sheet $sheet, array $requests, Admin $user)
+    {
+        $translation = $this->translator->trans(
+            'admin.participant.export.fields.planning.unallocated_meetings',
+            [],
+            'messages',
+            $user->getLocale()
+        );
+
+        $formatted = (count($requests) > 0) ? $translation . PHP_EOL : '';
+
+        foreach ($requests as $request) {
+            $formatted .= $this->sheetInfoGuesser->guessSheetTitle($request->getSheetMet($sheet)) . ', ';
+        }
+
+        // Remove last comma and space
+        return !empty($formatted) ? substr($formatted, 0, -2) : $formatted;
+    }
+
+    /**
+     * @param AbstractTimeEntityView[] $timeEntities
+     * @param Admin                    $user
+     *
+     * @return string
+     */
+    private function formatTimeEntities(array $timeEntities, Admin $user)
+    {
+        $formatted = '';
+        $formatter = new IntlDateFormatter(
+            $user->getLocale(),
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::SHORT
+        );
+        $formatter->setPattern('hh:mm');
+
+        foreach ($timeEntities as $timeEntity) {
+            $formatted .= $formatter->format($timeEntity->begin) . ' - ' . $formatter->format($timeEntity->end) . ' : ';
+            if ($timeEntity instanceof MeetingView) {
+                $formatted .= $timeEntity->spotRef . ' ' . $timeEntity->sheetMetTitle;
+            }
+            elseif ($timeEntity instanceof MassUnavailabilityView) {
+                $formatted .= $timeEntity->title;
+            }
+            elseif ($timeEntity instanceof HappeningView) {
+                $formatted .= $timeEntity->title;
+            }
+            elseif ($timeEntity instanceof UnavailabilityView) {
+                $formatted .= $this
+                    ->translator
+                    ->trans(
+                        'admin.participant.export.fields.planning.unavailability',
+                        [],
+                        'messages',
+                        $user->getLocale()
+                    )
+                ;
+            }
+            $formatted .= PHP_EOL;
+        }
+
+        return $formatted;
     }
 }
