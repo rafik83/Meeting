@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Event\Participant;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher;
 
 class ParticipantImportedEvent extends EventDispatcher\Event
@@ -77,7 +78,7 @@ class ParticipantImportedEvent extends EventDispatcher\Event
     }
 
     /**
-     * @return array
+     * @return Sheet[]
      */
     public function getSheets()
     {

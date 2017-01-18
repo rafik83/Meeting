@@ -242,13 +242,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
                         if ($templateObject->hasTag(Tag::SHEET_DATA)) {
                             $sheetData = array_merge($sheetData, [
-                                $registrationObjectKey => $templateObject->getData()
+                                $registrationObjectKey => $templateObject->getData(),
                             ]);
                         }
 
                         if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
                             $participantData = array_merge($participantData, [
-                                $registrationObjectKey => $templateObject->getData()
+                                $registrationObjectKey => $templateObject->getData(),
                             ]);
                         }
 
@@ -261,13 +261,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
                     if ($templateObject->hasTag(Tag::SHEET_DATA)) {
                         $sheetData = array_merge($sheetData, [
-                            $registrationObjectKey => $templateObject->getData()
+                            $registrationObjectKey => $templateObject->getData(),
                         ]);
                     }
 
                     if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
                         $participantData = array_merge($participantData, [
-                            $registrationObjectKey => $templateObject->getData()
+                            $registrationObjectKey => $templateObject->getData(),
                         ]);
                     }
 
@@ -289,7 +289,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function createEntities(
         array $context,
         $email,
-        $users,
+        &$users,
         $sheetData,
         $participantData,
         TemplateData $registrationTemplate

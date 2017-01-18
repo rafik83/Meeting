@@ -13,11 +13,11 @@ namespace Proximum\Vimeet\Application\View\Participant;
 class ImportMappingView
 {
     /**
-     * Array of CSV headers column
+     * Array of field headers column
      *
      * @var array
      */
-    public $csvHeaders;
+    public $fieldHeaders;
 
     /**
      * Array of template registration block keys
@@ -29,12 +29,12 @@ class ImportMappingView
     /**
      * ImportMappingView constructor.
      *
-     * @param array $csvHeaders
+     * @param array $fieldHeaders
      * @param array $registrationHeaders
      */
-    public function __construct(array $csvHeaders, array $registrationHeaders)
+    public function __construct(array $fieldHeaders, array $registrationHeaders)
     {
-        $this->csvHeaders          = $csvHeaders;
+        $this->fieldHeaders        = $fieldHeaders;
         $this->registrationHeaders = $registrationHeaders;
     }
 }

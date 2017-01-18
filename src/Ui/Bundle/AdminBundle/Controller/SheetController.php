@@ -463,14 +463,14 @@ class SheetController extends Controller
             $type,
             $this->getUser(),
             $availableLocale,
-            $importMappingView->csvHeaders,
+            $importMappingView->fieldHeaders,
             $importMappingView->registrationHeaders
         );
 
         $form = $this->createForm(ImportMappingType::class, $command, [
             'locale'              => $availableLocale,
             'registrationHeaders' => $importMappingView->registrationHeaders,
-            'csvHeaders'          => $importMappingView->csvHeaders,
+            'csvHeaders'          => $importMappingView->fieldHeaders,
             'submit'              => true,
         ]);
 
