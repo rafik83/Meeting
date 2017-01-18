@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\Validator\Error\EmailError;
+use Proximum\Vimeet\Domain\Template\Validator\Error\EmailExistError;
 use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -136,6 +137,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             if ($this->emailValidator->validate($email) === false) {
                 $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
+                continue;
+            }
+
+            if ($this->importLogger->isImported($email)) {
+                $this->importLogger->addError($key, new EmailExistError($email, true), $email, $context['locale']);
                 continue;
             }
 
@@ -298,7 +304,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $user->setAccount(new User\Account());
 
             $this->userRepository->add($user);
-            $this->importLogger->userImported();
+            $this->importLogger->userImported($user);
         }
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);

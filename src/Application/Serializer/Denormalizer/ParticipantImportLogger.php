@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Validator\Error\ValidatorError;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
@@ -59,6 +60,11 @@ class ParticipantImportLogger
     private $sheets = [];
 
     /**
+     * @var array
+     */
+    private $emails = [];
+
+    /**
      * ParticipantImportLogger constructor.
      *
      * @param TranslatorAdapter $translatorAdapter
@@ -98,8 +104,12 @@ class ParticipantImportLogger
         $this->errors[] = implode(';', $newError);
     }
 
-    public function userImported()
+    /**
+     * @param User $user
+     */
+    public function userImported(User $user)
     {
+        $this->emails[] = $user->getEmail();
         $this->createdUsers++;
     }
 
@@ -112,10 +122,19 @@ class ParticipantImportLogger
         $this->createdSheets++;
     }
 
-
     public function existingParticipations()
     {
         $this->existingParticipations++;
+    }
+
+    /**
+     * @param $fileEmail
+     *
+     * @return bool
+     */
+    public function isImported($fileEmail)
+    {
+        return in_array($fileEmail, $this->emails);
     }
 
     /**

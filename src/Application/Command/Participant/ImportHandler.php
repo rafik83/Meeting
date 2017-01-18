@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
@@ -36,12 +37,12 @@ class ImportHandler
      * ImportHandler constructor.
      *
      * @param FileStorageInterface $localFileStorageAdapter
-     * @param SessionAdapter       $session
+     * @param SessionInterface     $session
      * @param string               $publicDir
      */
     public function __construct(
         FileStorageInterface $localFileStorageAdapter,
-        SessionAdapter $session,
+        SessionInterface $session,
         $publicDir
     ) {
         $this->localFileStorageAdapter = $localFileStorageAdapter;
