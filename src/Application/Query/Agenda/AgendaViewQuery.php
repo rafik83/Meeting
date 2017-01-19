@@ -46,8 +46,8 @@ class AgendaViewQuery
      * @param Event       $event
      * @param Sheet       $sheet
      * @param Participant $participant
-     * @param null|User        $user
      * @param string      $locale
+     * @param null|User   $user
      */
     public function __construct(Event $event, Sheet $sheet, Participant $participant, $locale, User $user = null)
     {
