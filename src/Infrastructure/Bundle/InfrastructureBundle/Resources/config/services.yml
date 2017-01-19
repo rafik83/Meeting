@@ -1360,6 +1360,13 @@ services:
             - '@adapter.sendgrid_api_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+    command.meeting.admin.delete_all_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
     #
     # Security
