@@ -363,6 +363,7 @@ admin.schedule.link: Agenda
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
 admin.schedule.slot.remove: Supprimer
+admin.schedule.slot.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce créneau?'
 admin.schedule.slot.unlock: Débloquer
 admin.schedule.slot.unlocked: Débloqué
 admin.schedule.slots.generate.action: 'Générer des créneaux'
