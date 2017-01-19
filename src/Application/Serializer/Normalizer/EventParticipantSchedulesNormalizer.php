@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
-use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
