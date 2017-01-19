@@ -91,7 +91,7 @@ class ParticipantImportLogger
     public function addError($row, ValidatorError $validatorError, $data, $locale)
     {
         $newError = [
-            $row,
+            $row + 2, // We've removed first and last line, increment 2 to get original file line number
             $this->translatorAdapter->trans($validatorError->getMessage(), [], 'validators', $locale),
         ];
 
