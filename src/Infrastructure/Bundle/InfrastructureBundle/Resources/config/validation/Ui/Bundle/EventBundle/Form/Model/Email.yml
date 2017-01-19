@@ -6,4 +6,3 @@ Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email:
             - Email:
                 message: validators.email
                 strict: true
-                checkMX: true

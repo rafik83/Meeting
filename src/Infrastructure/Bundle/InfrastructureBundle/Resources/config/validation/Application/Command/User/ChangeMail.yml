@@ -5,4 +5,3 @@ Proximum\Vimeet\Application\Command\User\ChangeMail:
             - Email:
                 message: validators.email
                 strict: true
-                checkMX: true
