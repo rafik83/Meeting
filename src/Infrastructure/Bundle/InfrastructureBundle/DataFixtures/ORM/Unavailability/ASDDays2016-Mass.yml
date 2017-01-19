@@ -1,0 +1,26 @@
+Proximum\Vimeet\Domain\Model\Unavailability\Category:
+    asd_days_unavailability_category_big_meal:
+        __construct: ['@event_asddays_2016', 'Dejeuner', 'grand dejeuner', '#123213', '#123123']
+
+Proximum\Vimeet\Domain\Model\Unavailability\Mass:
+    asd_days_unavailability_mass_big_meal:
+        __construct:
+            - '@event_asddays_2016'
+            - '@asd_days_unavailability_category_big_meal'
+            - 'cocktail'
+            - <(new DateTime('2016-10-12 10:00:00'))>
+            - <(new DateTime('2016-10-12 11:00:00'))>
+            - true
+Proximum\Vimeet\Domain\Model\Unavailability\MassTranslation:
+    asd_days_unavailability_mass_big_meal_fr:
+        __construct:
+            - '@asd_days_unavailability_mass_big_meal'
+            - 'fr'
+            - 'cocktail'
+            - 'description'
+    asd_days_unavailability_mass_big_meal_en:
+        __construct:
+            - '@asd_days_unavailability_mass_big_meal'
+            - 'en'
+            - 'cocktail'
+            - 'description'

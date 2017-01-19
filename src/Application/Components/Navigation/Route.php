@@ -56,6 +56,7 @@ final class Route
 
     const AGENDA = [
         'event_agenda',
+        'event_agenda_participant',
         'event_unavailability_create',
     ];
 

@@ -6,4 +6,6 @@ Proximum\Vimeet\Application\Command\Participant\Add:
             - NotBlank: ~
         email:
             - NotBlank: ~
-            - Email: ~
+            - Email:
+                strict: true
+                checkMX: true

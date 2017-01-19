@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 
 class DayViewQuery
 {
@@ -43,23 +46,47 @@ class DayViewQuery
     public $masses;
 
     /**
+     * @var Meeting[]
+     */
+    public $meetings;
+
+    /**
+     * @var Sheet
+     */
+    public $currentSheet;
+
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
      * @param Day                      $day
+     * @param Sheet                    $currentSheet
+     * @param Event                    $event
      * @param string                   $locale
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
      * @param Mass[]                   $masses
+     * @param Meeting[]                $meetings
      */
     public function __construct(
         Day $day,
+        Sheet $currentSheet,
+        Event $event,
         $locale,
         array $happenings = [],
         array $unavailabilities = [],
-        array $masses = []
+        array $masses = [],
+        array $meetings = []
     ) {
         $this->day              = $day;
+        $this->currentSheet     = $currentSheet;
+        $this->event            = $event;
         $this->locale           = $locale;
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;
         $this->masses           = $masses;
+        $this->meetings         = $meetings;
     }
 }

@@ -10,8 +10,7 @@
                 <div class="user clearfix">
                     {% if speaker.hasPicture %}
                         <div class="user__avatar">
-                                                <span class="bullet">
-                                                </span>
+                            <span class="bullet"></span>
                             <div class="avatar">
                                 <img src="{{ speaker.picture|imagine_filter('user_avatar') }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
                             </div>
