@@ -48,8 +48,8 @@ class RemoveHandler
     public function handle(Remove $command)
     {
         if ($this->meetingRepository->hasMeetingOnSlot($command->meetingSlot)) {
-            $this->meetingSlotRepository->remove($command->meetingSlot);
+            throw new IsNotAllowedToRemoveSlotException('Slot already used by scheduled meetings');
         }
-        throw new IsNotAllowedToRemoveSlotException('Slot already used by scheduled meetings');
+        $this->meetingSlotRepository->remove($command->meetingSlot);
     }
 }
