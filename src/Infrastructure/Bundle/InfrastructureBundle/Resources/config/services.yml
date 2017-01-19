@@ -2219,6 +2219,10 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@domain.meeting.slot.slot_availability'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    query.agenda.admin.meeting_update_spot_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
 
     ##
     # Navigation builder

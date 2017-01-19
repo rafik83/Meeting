@@ -2,6 +2,11 @@ var Vue   = require('vue'),
     axios = require('axios');
 
 /**
+ * Customs delimiters to avoid collision with Twig
+ */
+var delimiters = ['${', '}'];
+
+/**
  * Pass axios to Vue
  */
 Vue.prototype.$http = axios;
@@ -11,27 +16,33 @@ Vue.component('Modal', {
     props: ['show'],
     methods: {
         close: function () {
-            console.log('close-modal modal');
             this.$emit('close-modal');
         }
     }
 });
 
 Vue.component('MeetingUpdateModal', {
+    delimiters: delimiters,
     template: '#meeting-update-modal-template',
-    props: ['show'],
-    data: function () {
-        return {
-            blockedSlot: false,
-            blockedSpot: false,
-            slot: null
-        };
+    props: {
+        meetingToUpdate: {
+            type: Object,
+            default: function () {
+                return {
+                    blockedSlot: false,
+                    blockedSpot: false,
+                    spotId: null,
+                    availableSpots: [],
+                }
+            }
+        }
     },
     methods: {
         reinit: function () {
             this.blockedSlot = false;
             this.blockedSpot = false;
-            this.slot = null;
+            this.spotId = null;
+            this.availableSpots = [];
         },
         close: function () {
             this.$emit('close-modal');
@@ -45,12 +56,7 @@ Vue.component('MeetingUpdateModal', {
 
 new Vue({
     el: '#agenda',
-
-    /**
-     * Customs delimiters to avoid collision with Twig
-     */
-    delimiters: ['${', '}'],
-
+    delimiters: delimiters,
     data: {
         /**
          * Array of sheets
@@ -73,7 +79,7 @@ new Vue({
         isMeetingToUpdateLoading: false,
 
         /**
-         * Meeting to update
+         * Meeting to update form
          */
         meetingToUpdate: null
     },
@@ -308,10 +314,15 @@ new Vue({
         loadMeeting: function (meetingId) {
             this.isMeetingToUpdateLoading = true;
 
-            setTimeout(function() {
-                this.meetingToUpdate = meetingId;
-                this.isMeetingToUpdateLoading = false;
-            }.bind(this), 1000);
+            this.$http.get(this.getMeetingUpdateSpotEndpoint(meetingId))
+                .then(function(response) {
+                    this.meetingToUpdate = response.data;
+                    this.isMeetingToUpdateLoading = false;
+                }.bind(this))
+                .catch(function(error) {
+                    this.isMeetingToUpdateLoading = false;
+                    console.log(error);
+                }.bind(this));
         },
 
         /**
@@ -328,10 +339,22 @@ new Vue({
          * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
          * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
          *
+         * @param {int} sheet
          * @returns {string}
          */
         getSheetAgendaEndpoint: function (sheet) {
             return document.location.pathname + '/sheet/' + sheet.id;
+        },
+
+        /**
+         * Returns /admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
+         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
+         *
+         * @param {int} meetingId
+         * @returns {string}
+         */
+        getMeetingUpdateSpotEndpoint: function (meetingId) {
+            return document.location.pathname + '/meeting/' + meetingId + '/update-spot';
         }
     }
 });

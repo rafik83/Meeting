@@ -308,4 +308,20 @@ class Meeting implements MessageSubjectInterface
     {
         $this->spot = $spot;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSpot()
+    {
+        return $this->blockedSpot;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSlot()
+    {
+        return $this->blockedSlot;
+    }
 }
