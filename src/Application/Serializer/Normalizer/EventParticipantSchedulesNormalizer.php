@@ -234,7 +234,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         foreach ($days as $day) {
             $timeEntities = $this->sortChronologicalOrder($day->getTimeEntities());
 
-            $formatted .= '**' . ucfirst($formatter->format($day->getDay())) . PHP_EOL;
+            $formatted .= '**' . ucfirst($formatter->format($day->getDay())) . '**' . PHP_EOL;
             $formatted .= $this->formatTimeEntities($timeEntities, $user). PHP_EOL . PHP_EOL;
         }
 
