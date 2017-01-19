@@ -132,7 +132,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->andWhere('slot.event = :event')
             ->setParameter('beginDate', $day->getStartTime())
             ->setParameter('endDate', $day->getEndTime())
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('slot.begin', 'ASC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
