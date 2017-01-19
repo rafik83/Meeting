@@ -14,7 +14,10 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
+use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
@@ -69,18 +72,25 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     private $requestRepository;
 
     /**
+     * @var AgendaViewQueryHandler
+     */
+    private $agendaViewQueryHandler;
+
+    /**
      * @param TranslatorInterface            $translator
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param SheetInfoGuesser               $sheetInfoGuesser
      * @param RequestRepositoryInterface     $requestRepository
+     * @param AgendaViewQueryHandler         $agendaViewQueryHandler
      */
     public function __construct(
         TranslatorInterface $translator,
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser,
-        RequestRepositoryInterface $requestRepository
+        RequestRepositoryInterface $requestRepository,
+        AgendaViewQueryHandler $agendaViewQueryHandler
     ) {
         parent::__construct($translator);
 
@@ -88,6 +98,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->requestRepository      = $requestRepository;
+        $this->agendaViewQueryHandler = $agendaViewQueryHandler;
     }
 
     /**
@@ -143,8 +154,14 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
-        // TODO Get days from nico's agendaViewHandler
-        $planning = $this->formatPlanning($user);
+        $agenda = $this->agendaViewQueryHandler->handle(new AgendaViewQuery(
+            $event,
+            $sheet,
+            $participant,
+            $locale
+        ));
+
+        $planning = $this->formatPlanning($agenda->days, $user);
 
         $planning .= $this->formatUnallocated(
             $sheet,
@@ -157,7 +174,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             self::COL_TITLE               => $gender,
             self::COL_FIRSTNAME           => isset($participantInfo[Tag::PARTICIPANT_FIRSTNAME]) ? $participantInfo[Tag::PARTICIPANT_FIRSTNAME] : null,
             self::COL_LASTNAME            => isset($participantInfo[Tag::PARTICIPANT_LASTNAME]) ? $participantInfo[Tag::PARTICIPANT_LASTNAME] : null,
-            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetName($sheet, $locale),
+            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
             self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
             self::COL_DESCRIPTION         => null,
             self::COL_POSITION            => isset($participantInfo[Tag::PARTICIPANT_POSITION]) ? $participantInfo[Tag::PARTICIPANT_POSITION] : null,
@@ -197,10 +214,12 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     /**
      * @param DayView[] $days
      * @param Admin     $user
+     *
+     * @return string
      */
     private function formatPlanning(array $days, Admin $user)
     {
-        $formated = $this->translator->trans(
+        $formatted = $this->translator->trans(
             'admin.participant.export.fields.planning.warning',
             [],
             'messages',
@@ -214,9 +233,13 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         );
 
         foreach ($days as $day) {
-            $formated .= $formatter->format($day->getDay()) . PHP_EOL;
-            $formated .= $this->formatTimeEntities($day, $user) . PHP_EOL . PHP_EOL;
+            $timeEntities = $this->sortChronologicalOrder($day->getTimeEntities());
+
+            $formatted .= '**' . ucfirst($formatter->format($day->getDay())) . PHP_EOL;
+            $formatted .= $this->formatTimeEntities($timeEntities, $user). PHP_EOL . PHP_EOL;
         }
+
+        return $formatted;
     }
 
     /**
@@ -287,5 +310,19 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         }
 
         return $formatted;
+    }
+
+    /**
+     * @param array $timeEntities
+     *
+     * @return array
+     */
+    private function sortChronologicalOrder(array $timeEntities)
+    {
+        usort($timeEntities, function(AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
+            return $first->begin > $second->begin;
+        });
+
+        return $timeEntities;
     }
 }

@@ -2807,6 +2807,8 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.agenda.agenda_view_query_handler'
         tags:
             - { name: serializer.normalizer }
 
