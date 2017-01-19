@@ -293,7 +293,7 @@ admin_agenda_meeting_update:
     requirements:
         event: \d+
         meeting: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Meeting:updateSpot }
 
 #

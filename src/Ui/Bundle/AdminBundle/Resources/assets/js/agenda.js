@@ -32,6 +32,7 @@ Vue.component('MeetingUpdateModal', {
             type: Object,
             default: function () {
                 return {
+                    meetingId: null,
                     blockedSlot: false,
                     blockedSpot: false,
                     spotId: null,
@@ -40,19 +41,35 @@ Vue.component('MeetingUpdateModal', {
             }
         }
     },
+    data: function () {
+        return {
+            disabled: false
+        }
+    },
     methods: {
         reinit: function () {
-            this.blockedSlot = false;
-            this.blockedSpot = false;
-            this.spotId = null;
-            this.availableSpots = [];
+            this.disabled = false;
         },
         close: function () {
             this.$emit('close-modal');
             this.reinit();
         },
         save: function () {
-            this.close();
+            this.disabled = true;
+
+            this.$http.post(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.meetingId), {
+                blockedSlot: this.meetingToUpdate.blockedSlot,
+                blockedSpot: this.meetingToUpdate.blockedSpot,
+                spotId: this.meetingToUpdate.spotId
+            })
+            .then(function (response) {
+                console.log(response);
+                this.close();
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+                this.disabled = false;
+            }.bind(this));
         }
     }
 });
@@ -314,7 +331,7 @@ new Vue({
          *
          * @param {int} meetingId
          */
-        loadMeeting: function (meetingId) {
+        loadMeetingUpdateSpot: function (meetingId) {
             this.isMeetingToUpdateLoading = true;
 
             this.$http.get(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(meetingId))

@@ -30,7 +30,7 @@
         </div>
 
         <div class="modal-footer text-right">
-            <button class="btn btn-primary" @click="save()">
+            <button @click="save()" v-bind:class="{ 'btn': true, 'btn-primary': true, 'disabled': disabled}" v-bind:disabled="disabled">
                 Enregistrer
             </button>
         </div>

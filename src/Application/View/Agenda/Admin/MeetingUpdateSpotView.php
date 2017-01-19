@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 class MeetingUpdateSpotView
 {
     /** @var int */
+    public $meetingId;
+
+    /** @var int */
     public $spotId;
 
     /** @var bool */
@@ -25,13 +28,15 @@ class MeetingUpdateSpotView
     public $availableSpots;
 
     /**
+     * @param int        $meetingId
      * @param int        $spotId
-     * @param bool    $blockedSlot
-     * @param bool    $blockedSpot
-     * @param SpotView[]   $availableSpots
+     * @param bool       $blockedSlot
+     * @param bool       $blockedSpot
+     * @param SpotView[] $availableSpots
      */
-    public function __construct($spotId, $blockedSlot, $blockedSpot, array $availableSpots)
+    public function __construct($meetingId, $spotId, $blockedSlot, $blockedSpot, array $availableSpots)
     {
+        $this->meetingId      = $meetingId;
         $this->spotId         = $spotId;
         $this->blockedSlot    = $blockedSlot;
         $this->blockedSpot    = $blockedSpot;

@@ -36,6 +36,7 @@ class MeetingUpdateSpotViewQueryHandler
     public function handle(MeetingUpdateSpotViewQuery $query)
     {
         return new MeetingUpdateSpotView(
+            $query->meeting->getId(),
             $query->meeting->getSpot()->getId(),
             $query->meeting->isBlockedSlot(),
             $query->meeting->isBlockedSpot(),

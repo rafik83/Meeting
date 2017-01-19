@@ -306,7 +306,9 @@ class Meeting implements MessageSubjectInterface
      */
     public function updateSpot(Spot $spot, $blockedSpot, $blockedSlot)
     {
-        $this->spot = $spot;
+        $this->spot        = $spot;
+        $this->blockedSpot = $blockedSpot;
+        $this->blockedSlot = $blockedSlot;
     }
 
     /**
