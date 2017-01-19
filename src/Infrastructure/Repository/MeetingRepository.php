@@ -89,6 +89,8 @@ class MeetingRepository implements MeetingRepositoryInterface
         $pagination->results = array_map(function (Meeting $meeting) use ($locale) {
             return new MeetingView(
                 $meeting->getId(),
+                $meeting->getFromSheet()->getId(),
+                $meeting->getToSheet()->getId(),
                 $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet(), $locale),
                 $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
@@ -173,12 +175,22 @@ class MeetingRepository implements MeetingRepositoryInterface
      */
     public function deleteAll(Event $event)
     {
+        $meetings = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->execute();
+
         $this
             ->entityManager
             ->createQueryBuilder()
             ->delete(Meeting::class, 'meeting')
-            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
-            ->setParameter('event', $event)
+            ->where('meeting.id IN (:ids)')
+            ->setParameter('ids', $meetings)
             ->getQuery()
             ->execute();
 
