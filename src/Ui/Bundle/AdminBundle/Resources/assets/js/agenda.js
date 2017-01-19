@@ -1,5 +1,8 @@
-var Vue   = require('vue'),
-    axios = require('axios');
+var Vue                = require('vue'),
+    axios              = require('axios'),
+    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
+
+var agendaApiEndpoints = new AgendaApiEndpoints();
 
 /**
  * Pass axios to Vue
@@ -52,7 +55,7 @@ new Vue({
          * Load sheets data
          */
         loadSheets: function () {
-            this.$http.get(this.getSheetsEndpoint())
+            this.$http.get(agendaApiEndpoints.getSheetsEndpoint())
                 .then(function(response) {
                     this.sheets = response.data;
                 }.bind(this))
@@ -256,7 +259,7 @@ new Vue({
             if (window.confirm(message)) {
 
                 var sheet = this.findSheetBySheetId(sheetId);
-
+                
                 this.$http.delete(this.getRemoveMeetingEndpoint(sheet , meetingId))
                 .then(function() {
 
@@ -306,36 +309,6 @@ new Vue({
                     }
                 }
             }
-        },
-
-        /**
-         * Returns /admin/fr/event/{event_id}/agenda/sheets
-         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheets
-         *
-         * @returns {string}
-         */
-        getSheetsEndpoint: function () {
-            return document.location.pathname + '/sheets';
-        },
-
-        /**
-         * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
-         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
-         *
-         * @returns {string}
-         */
-        getSheetAgendaEndpoint: function (sheet) {
-            return document.location.pathname + '/sheet/' + sheet.id;
-        },
-
-        /**
-         * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}/meeting/{meeting_id}/remove
-         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}/meeting/{meeting_id}/remove
-         *
-         * @returns {string}
-         */
-        getRemoveMeetingEndpoint: function (sheet, meetingId) {
-            return document.location.pathname + '/sheet/' + sheet.id + '/meeting/' + meetingId + '/remove';
         }
     }
 });
