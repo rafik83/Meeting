@@ -281,20 +281,18 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             IntlDateFormatter::NONE,
             IntlDateFormatter::SHORT
         );
-        $formatter->setPattern('hh:mm');
+        $formatter->setPattern('HH:mm');
 
         foreach ($timeEntities as $timeEntity) {
             $formatted .= $formatter->format($timeEntity->begin) . ' - ' . $formatter->format($timeEntity->end) . ' : ';
+
             if ($timeEntity instanceof MeetingView) {
                 $formatted .= $timeEntity->spotRef . ' ' . $timeEntity->sheetMetTitle;
-            }
-            elseif ($timeEntity instanceof MassUnavailabilityView) {
+            } elseif ($timeEntity instanceof MassUnavailabilityView) {
                 $formatted .= $timeEntity->title;
-            }
-            elseif ($timeEntity instanceof HappeningView) {
+            } elseif ($timeEntity instanceof HappeningView) {
                 $formatted .= $timeEntity->title;
-            }
-            elseif ($timeEntity instanceof UnavailabilityView) {
+            } elseif ($timeEntity instanceof UnavailabilityView) {
                 $formatted .= $this
                     ->translator
                     ->trans(
@@ -305,6 +303,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                     )
                 ;
             }
+
             $formatted .= PHP_EOL;
         }
 
