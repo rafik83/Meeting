@@ -49,6 +49,7 @@ class DayView
      * @param HappeningView[]          $happenings
      * @param UnavailabilityView[]     $unavailabilities
      * @param MassUnavailabilityView[] $masses
+     * @param MeetingView[]            $meetings
      */
     public function __construct(
         \DateTimeInterface $begin,
@@ -56,7 +57,8 @@ class DayView
         $scale,
         array $happenings,
         array $unavailabilities,
-        array $masses
+        array $masses,
+        array $meetings
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
@@ -64,6 +66,7 @@ class DayView
         $this->happenings       = $happenings;
         $this->unavailabilities = $unavailabilities;
         $this->masses           = $masses;
+        $this->meetings         = $meetings;
     }
 
     /**

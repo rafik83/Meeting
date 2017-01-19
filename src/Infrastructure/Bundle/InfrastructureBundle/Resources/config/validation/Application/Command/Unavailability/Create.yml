@@ -1,0 +1,26 @@
+Proximum\Vimeet\Application\Command\Unavailability\Create:
+    properties:
+        day:
+            - NotNull: ~
+        time:
+            - Collection:
+                begin:
+                    - Collection:
+                        hour:
+                            - NotNull: ~
+                        minute:
+                            - NotNull: ~
+                end:
+                    - Collection:
+                        hour:
+                            - NotNull: ~
+                        minute:
+                            - NotNull: ~
+            - Expression:
+                expression: "this.validateDate()"
+                message: "validators.unavailability.startTimeMustBeBeforeEndTime"
+        participants:
+            - Count:
+                min: 1
+                minMessage: validators.unavailability.participantsNotSelected
+

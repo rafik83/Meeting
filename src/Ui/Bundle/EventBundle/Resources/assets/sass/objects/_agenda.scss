@@ -1,5 +1,5 @@
 .agenda-container {
-  margin: 50px 0;
+  margin: 50px 0 0 0;
   z-index: 0;
 
   .agenda-head,
@@ -52,7 +52,6 @@
     position: absolute;
     right: 15px - $agenda-meet-margin;
     width: calc(100% - 30px - 50px + 4px);
-    height: 100%;
     z-index: 1;
   }
 

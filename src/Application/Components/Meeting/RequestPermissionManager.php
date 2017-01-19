@@ -84,7 +84,9 @@ class RequestPermissionManager
     public function isAllowedToEditApproved(User $user, Request $request, Sheet $sheet)
     {
         return $sheet->hasUser($user)
-            && ($request->isSender($sheet) || $request->isReceiver($sheet)) && $request->isApproved();
+            && ($request->isSender($sheet) || $request->isReceiver($sheet))
+            && $request->isApproved()
+            && !$request->hasMeeting();
     }
 
     /**
@@ -100,7 +102,8 @@ class RequestPermissionManager
     {
         return $sheet->hasUser($user)
             && $request->isSender($sheet)
-            && ($request->isSent() || $request->isApproved());
+            && ($request->isSent() || $request->isApproved())
+            && !$request->hasMeeting();
     }
 
     /**

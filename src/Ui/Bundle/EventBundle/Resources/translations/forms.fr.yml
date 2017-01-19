@@ -20,14 +20,19 @@ form.catalog_edit_meeting_request.pending.request.children.submit.label: 'Modifi
 form.catalog_edit_meeting_request.proposition.children.submit.label: Modifier
 form.catalog_edit_meeting_request.request.children.submit.label: Modifier
 form.catalog_refuse_meeting_request.children.message.label: 'Motiver votre refus ?'
-form.catalog_refuse_meeting_request.children.message.placeholder: 'Ecrire une message'
+form.catalog_refuse_meeting_request.children.message.placeholder: 'Ecrire un message'
 form.catalog_refuse_meeting_request.children.submit.label: 'Refuser la proposition'
-form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Annuler la proposition'
+form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Annuler mon acceptation'
 form.catalog_un_refuse_meeting_request.children.submit.label: 'Annuler votre refus'
 form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.change_password_user.children.submit.label: Envoyer
+form.create_unavailability.children.day.label: Le
+form.create_unavailability.children.participants.label: 'Indisponible:'
+form.create_unavailability.children.submit.label: Ajouter
+form.create_unavailability.children.time.children.begin.label: de
+form.create_unavailability.children.time.children.end.label: à
 form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'

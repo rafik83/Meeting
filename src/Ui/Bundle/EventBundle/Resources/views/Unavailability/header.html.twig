@@ -2,7 +2,15 @@
     <div class="content">
         <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
         <p class="title">
+            {{ unavailability.begin|date('H:i', unavailability.timeZone) ~ ' - ' ~ unavailability.end|date('H:i', unavailability.timeZone) }}
+            -
             {{ 'unavailability.title'|trans }}
         </p>
+        {% if participantId is defined %}
+            <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id, 'participant': participantId }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-primary btn-sm btn-inactive">{{ 'agenda.unavailability.remove'|trans }}</button>
+            </form>
+        {% endif %}
     </div>
 </header>

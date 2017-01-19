@@ -10,9 +10,36 @@ account.update.avatar.title: 'Profile picture'
 account.update.company.title: 'Company / Organization'
 account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
+agenda.title: 'Meeting schedules'
+agenda.unavailability.add: 'Add an unavailability'
+agenda.unavailability.back: Back
+agenda.unavailability.confirmRemove: 'Confirm your absence'
+agenda.unavailability.remove: Remove
 'Bad credentials.': 'Bad credentials.'
 billing_info.title: 'Billing information'
+catalog.action.meeting.proposition.approved: 'Accepted proposal'
+catalog.action.meeting.proposition.show.refuse: 'Refused proposal'
+catalog.action.meeting.request.approve: 'Received proposal'
+catalog.action.meeting.request.approved: 'Accepted request'
+catalog.action.meeting.request.back: Back
+catalog.action.meeting.request.create: 'Request a meeting'
+catalog.action.meeting.request.pending: 'Pending request'
+catalog.action.meeting.request.refuse: 'Received proposal'
+catalog.action.meeting.request.show.refuse: 'Refused request'
 catalog.complete_sheet: 'View sheet details'
+catalog.meeting_request.approve: Approve
+catalog.meeting_request.create: 'Request a meeting'
+catalog.meeting_request.pending: 'Pending request'
+catalog.meeting_request.proposition.approved: 'Accepted proposal'
+catalog.meeting_request.proposition.refused: 'Refused proposal'
+catalog.meeting_request.refuse: Refuse
+catalog.meeting_request.request.approved: 'Accepted request'
+catalog.meeting_request.request.refused: 'Refused request'
+catalog.noResult: 'No result'
+catalog.noVisibleTypes: 'You can''t access to any participant''s type'
+catalog.search.no-filter-to-refine: 'No result'
+catalog.seeMore: 'See more'
+catalog.title: Catalogue
 common.backToPackage: 'Back to package'
 common.backToSheet: 'Back to sheet'
 common.need_help: 'Need help'
@@ -23,13 +50,22 @@ event.info.close: Close
 event.info.contact: 'Useful information'
 gender.man: Mr
 gender.woman: Mrs
+happening.participationCancel.action: Cancel
+happening.participationUpdate.action: Edit
+login.connect: Login
+login.connection: Connexion
+login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
+login.memberArea: 'Member area'
+modal.back: Back
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'
+navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Member area'
 navigation.category.package: 'Package of participation'
 navigation.category.planning: 'Planning & Attendance'
+navigation.category.program: Programme
 navigation.category.sheet: 'Presentation Sheet'
 navigation.close: Close
 navigation.links.billing.billing_info: 'Billing information'
@@ -38,30 +74,41 @@ navigation.links.catalog.available_date: 'Available on the'
 navigation.links.catalog.incoming: 'Coming soon'
 navigation.links.catalog.sheet_not_in_catalog: 'Your participation is awaiting validation'
 navigation.links.happening.accept: 'Accepted requests'
+navigation.links.happening.approved: Approved
 navigation.links.happening.decline: 'Refused requests'
 navigation.links.happening.open_date: 'Available on the'
-navigation.links.happening.proposal: 'Proposals received'
+navigation.links.happening.proposal: 'Meetings requests'
+navigation.links.happening.refused: Refused
+navigation.links.happening.sent: 'Pending requests'
 navigation.links.happening.waiting: 'Requests pending'
 navigation.links.incoming: 'Coming soon'
+navigation.links.meetingRequest.approved: Accepted
+navigation.links.meetingRequest.open_date: 'Available on'
+navigation.links.meetingRequest.proposal: 'Meetings requests'
+navigation.links.meetingRequest.refused: Refused
+navigation.links.meetingRequest.sent: 'Pending requests'
 navigation.links.member_space.avatar: 'Profile picture'
 navigation.links.member_space.company: 'Compagny / Organization'
 navigation.links.member_space.profile: Profile
+navigation.links.notification: Notifications
 navigation.links.package.order_list: 'My orders'
 navigation.links.package.order_summary_total: 'Global summary'
 navigation.links.package.payment: Payment
 navigation.links.package.summary: 'Order summary'
-navigation.links.planning.all_schedule: 'All Calendars'
+navigation.links.planning.all_schedule: 'All meeting schedules'
 navigation.links.planning.available_date: 'Available on the'
 navigation.links.planning.conference: Conferences
 navigation.links.planning.final_date: 'Available on the'
 navigation.links.planning.flash_presentation: 'Flash presentations'
-navigation.links.planning.my_schedule: 'My calendar'
-navigation.links.planning.unavailability: 'Confirm my attendance'
+navigation.links.planning.my_schedule: 'My planning'
+navigation.links.planning.unavailability: 'Add an unavailability'
 navigation.links.sheet.locale: Version
 navigation.menu: Menu
 new_password.confirm.title: 'Reset password'
 new_password.help.noaction: 'If you take no action, the current password remains valid'
 new_password.help.reset: 'You can reset your password'
+new_password.mail.title: 'An email has been sent to you!'
+new_password.needHelp: 'Need help'
 nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
 nomenclature.select_none: none
@@ -69,17 +116,24 @@ nomenclature.submit: Save
 notification.category.sheet.label: 'Presentation sheet'
 notification.columns.category: Heading
 notification.columns.createdAt: 'Received on'
+notification.columns.description: Description
+notification.label.important: Important
 notification.label.required: Mandatory
 notification.link.label: See
+notification.list.title.label: Notifications
 notification.package.noOrder: 'You must chose a package of participation'
 notification.sheet.completeTranslation: 'Complete your presentation sheet in %locale%'
+order.list.cancelled: Cancelled
+order.list.column.date: Date
 order.list.column.numero: Number
+order.list.column.pro_forma: Proforma
 order.list.column.total: Total
 order.list.pay_remaining: 'Full payment'
 order.list.pro_forma.link: 'View Proforma'
 order.list.remainingToPay: 'To be paid'
 order.list.title: 'My orders'
 order.transaction.howtopay: 'How to pay?'
+order.transaction.list.column.date: Date
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: State
 order.transaction.list.column.total: Amount
@@ -88,6 +142,7 @@ order.transaction.mode.bank_card: 'Bank card'
 order.transaction.mode.bank_check: Cheque
 order.transaction.mode.bank_transfer: Transfer
 order.transaction.mode.paypal: Paypal
+order.transaction.no: None
 order.transaction.paypal.description: 'Participation of %sheetName% (sheet %sheetId%) on the event "%eventName%"'
 order.transaction.state.cancelled: Cancelled
 order.transaction.state.paid: Paid
@@ -164,35 +219,48 @@ pro_forma.date.title: 'Date:'
 pro_forma.number.title: 'Proforma N°:'
 pro_forma.title: 'Proforma - %date%'
 pro_forma.vatNumber.title: 'VAT number'
+program.title: Programme
 register.already_registered: 'Already registered?'
 register.finalize: Complete
-register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all"
+register.photo: "Why the picture is usefull?\n- Do not stay anonymous for your future partner\n- Enhance your professional network\n- At the event, your contacts can easily identify you and vice versa\n- Complete business cards for all\n- Easily identify individual planning"
+register.privacy_policies: 'Privacy protection: In accordance with the French law on Information Technology and Civil Liberties of January 6, 1978, amended in 2004, you have the right to access and correct personal data/information about you by sending us an e-mail at cnil @ Proximumgroup.com.'
+register.register: Registration
 register.register_as: 'Register as:'
+register.step: Step
 select2.no_results: 'No results'
 sheet.edit.object: Edit
+sheet.maxParticipantReached: 'Maximum participants reached'
 sheet.object.action.add: Add
 sheet.object.action.backToSheet: 'Back to sheet'
 sheet.object.action.edit: Edit
 sheet.object.action.remove: Delete
+sheet.object.image.label: 'Your current image'
 sheet.object.image.remove: 'Delete image'
+sheet.object.option.buyable.label: 'Chargeable option'
 sheet.object.showLess.title: 'See more'
 sheet.object.showMore.title: 'See less'
 sheet.participant.remove: 'Remove from the sheet'
 sheet.participant.sendInvite: 'Send Invitation'
+sheet.request_meeting: 'Request a meeting'
+sheet.submit.completeYourSheet: 'Complete my presentation sheet'
 sheet.submit.validation: 'Submit for validation'
+sheet.submit.validation.moreInfoOnPending: 'Submit your presentation sheet to validation'
 sheet.submit.validation.pending: 'Awaiting for validation'
 sheet.title: 'Presentation sheet'
-sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the online catalogue of participants. You will still be able to modify it later on'
+sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the BtoB plateform of the participants. You will still be able to modify it later on'
 sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory feedls marked with an asterisk.'
 sheet.welcome.packageContent: 'Choose the formula of participation.'
-sheet.welcome.sheetContent: 'Complete your presentation sheet that will be advertised in the online catalogue. The more accurate your information is, the more targeted your appointments will be'
+sheet.welcome.programContent: 'Choose your conferences'
+sheet.welcome.sheetContent: "Complete your presentation sheet.\n\nThen\n\nSubmit it for validation"
 sheet.welcome.subtitle: 'To finalise your request you need to'
 sheet.welcome.title: 'TO FINALISE YOUR REQUEST:'
 summary.column.quantity: Quantity
 summary.column.title: Title
 summary.column.total: Total
 summary.column.unitPrice: 'Unit price'
+summary.group.option.title: Options
 summary.product.included: Included
+summary.promotionCode.free: Free
 summary.promotionCode.title: 'Offers of discounts'
 summary.total: Total
 summary.totalToPay: 'Total to pay'

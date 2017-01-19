@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\View\Happening;
 
 use DateInterval;
-use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
 class HappeningView
 {
@@ -80,18 +79,24 @@ class HappeningView
     public $limitParticipant;
 
     /**
+     * @var string
+     */
+    public $timeZone;
+
+    /**
      * HappeningView constructor.
      *
-     * @param int                   $id
-     * @param HappeningCategoryView $category
-     * @param \DateTimeInterface    $beginHour
-     * @param \DateTimeInterface    $endHour
-     * @param string                $title
-     * @param string                $description
-     * @param string|null           $picture
-     * @param Speaker[]             $speakers
-     * @param null|int              $limitParticipant
-     * @param bool                  $isFull
+     * @param int                    $id
+     * @param HappeningCategoryView  $category
+     * @param \DateTimeInterface     $beginHour
+     * @param \DateTimeInterface     $endHour
+     * @param string                 $title
+     * @param string                 $description
+     * @param string|null            $picture
+     * @param HappeningSpeakerView[] $speakers
+     * @param string                 $timeZone
+     * @param null|int               $limitParticipant
+     * @param bool                   $isFull
      */
     public function __construct(
         $id,
@@ -102,6 +107,7 @@ class HappeningView
         $description,
         $picture,
         array $speakers,
+        $timeZone,
         $limitParticipant = null,
         $isFull = false
     ) {
@@ -115,6 +121,7 @@ class HappeningView
         $this->speakers         = $speakers;
         $this->isFull           = $isFull;
         $this->limitParticipant = $limitParticipant;
+        $this->timeZone         = $timeZone;
     }
 
     /**
@@ -123,14 +130,6 @@ class HappeningView
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCode()
-    {
-        return $this->code;
     }
 
     /**

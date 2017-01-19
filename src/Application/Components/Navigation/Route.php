@@ -51,15 +51,17 @@ final class Route
     ];
 
     const NOTIFICATION = [
-        'event_notification_list'
+        'event_notification_list',
     ];
 
     const AGENDA = [
-        'event_agenda'
+        'event_agenda',
+        'event_agenda_participant',
+        'event_unavailability_create',
     ];
 
     const PROGRAM = [
-        'happening_program'
+        'happening_program',
     ];
 
     /**

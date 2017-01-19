@@ -18,11 +18,13 @@ use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
+use Proximum\Vimeet\Application\Nomenclature\Charset;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -35,6 +37,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class SheetController extends Controller
 {
@@ -143,6 +146,8 @@ class SheetController extends Controller
      */
     public function batchAction(Request $request, Event $event)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $batch     = new Batch($this->getUser(), new \DateTime());
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
@@ -176,6 +181,69 @@ class SheetController extends Controller
         }
 
         return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
+    }
+
+    /**
+     * CSV export of event's sheets. Requires super admin or organizer role.
+     *
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function exportSheetAction(Request $request, Event $event)
+    {
+        // Only super admin & organizers are allowed to export sheets:
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $charset    = Charset::WINDOWS_1252;
+        $serializer = $this->get('serializer');
+        $exportContent = $serializer->serialize($event, 'csv', [
+            'locale'  => $request->getLocale(),
+            'charset' => $charset,
+        ]);
+
+        $response    = new Response($exportContent);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "export_event_sheets_".date("Y_m_d_His").".csv"
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     *
+     * @return Response
+     */
+    public function exportParticipantAction(Request $request, Event $event)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $charset    = Charset::WINDOWS_1252;
+        $normaliserView = new EventParticipantsNormalizerView($event);
+
+        $serializer = $this->get('serializer');
+        $exportContent = $serializer->serialize($normaliserView, 'csv', [
+            'locale'  => $request->getLocale(),
+            'charset' => $charset,
+        ]);
+
+        $response    = new Response($exportContent);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "export_event_participant_".date("Y_m_d_His").".csv"
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));
+
+        return $response;
     }
 
     /**

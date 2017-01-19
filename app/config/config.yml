@@ -20,7 +20,7 @@ framework:
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
-    #serializer:      { enable_annotations: true }
+    serializer:      { enable_annotations: false }
     templating:
         engines: ['twig']
     default_locale:  "%locale%"
@@ -202,6 +202,8 @@ fos_elastica:
                             type: integer
                         createdAt:
                             type: date
+                        remainingToPay:
+                            type: float
                         inCatalog:
                             type: boolean
                         inCatalogAt:
@@ -209,6 +211,12 @@ fos_elastica:
                         hasOrder:
                             type: boolean
                         hasCart:
+                            type: boolean
+                        hasHappeningParticipation:
+                            type: boolean
+                        hasMeetingRequest:
+                            type: boolean
+                        hasPendingMeetingProposition:
                             type: boolean
                         organizationCategory:
                             type: string

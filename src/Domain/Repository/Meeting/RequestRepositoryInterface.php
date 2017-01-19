@@ -161,4 +161,40 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countPendingPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasPendingPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasRequestSentBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $state
+     *
+     * @return Request[]
+     */
+    public function getUnassignedRequestsBySheetAndEvent(Sheet $sheet, $state);
 }

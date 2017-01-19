@@ -12,6 +12,7 @@ form.admin_lib_add.children.submit.label: Add
 form.admin_lib_choice.children.choices.label_add: 'Add item'
 form.admin_lib_choice.children.choices.label_delete: 'Delete item'
 form.admin_lib.children.submit.label: Save
+form.admin.picto.RDV: Meeting
 form.billing_info_update.children.city.label: City
 form.billing_info_update.children.company.label: Company
 form.billing_info_update.children.country.label: Country
@@ -74,7 +75,7 @@ form.create_transaction.children.amount.label: amount
 form.create_transaction.children.date.label: Date
 form.create_transaction.children.mode.label: 'Mode of payment'
 form.create_transaction.children.reference.label: Reference
-form.create_transaction.children.state.label: State
+form.create_transaction.children.state.label: States
 form.create_transaction.children.submit.label: Save
 form.delete_participant.children.submit.label: 'Remove participant'
 form.dont_see_what.children.participant.label: Participant
@@ -87,6 +88,8 @@ form.event_billing_configuration.children.translations.prototype.children.bankIn
 form.event_billing_configuration.children.translations.prototype.children.billingAddress.label: 'Payment address'
 form.event_billing_configuration.children.translations.prototype.children.paymentCondition.label: 'Payment Terms'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
+form.event_configure_date.children.catalogOnlineDate.label: 'Catalogue opening'
+form.event_configure_date.children.schedulePublishDate.label: 'Publication of the final meeting schedules'
 form.event_configure_date.children.submit.label: Save
 form.event_create.children.country.label: Country
 form.event_create.children.currency.label: Currency
@@ -101,12 +104,19 @@ form.event_update.children.submit.label: Save
 form.event_update.children.vat.label: 'VAT (%)'
 form.field.private: 'Private field'
 form.filter_admin.children.submit.label: Filter
+form.filter_spot_type.children.filters.all.label: All
+form.filter_spot_type.children.filters.no.label: 'No'
+form.filter_spot_type.children.meetingCapacity.label: 'Meeting number'
 form.forgotten_password.children.email.label: 'Enter email address'
+form.forgotten_password.children.submit.label: Send
 form.generate_slot.children.submit.label: Save
+form.happening_create.children.questionAllowed.answer.false: 'No'
+form.happening_create.children.submit.label: Send
 form.happening_create.children.talkings.label: Speakers
 form.happening_create.children.talkings.label_add: Add
 form.happening_create.children.talkings.label_delete: Delete
 form.happening_create.children.talkings.prototype.children.speaker.label: Speaker
+form.happening_update.children.submit.label: Send
 form.happening_update.children.talkings.label: Speakers
 form.happening_update.children.talkings.label_add: Add
 form.happening_update.children.talkings.label_delete: Delete
@@ -115,7 +125,28 @@ form.login.children.password.label: Password
 form.login.children.rememberMe.label: 'Remember me 30 days'
 form.login.children.submit.label: Login
 form.login.children.username.label: Email
+form.meeting_cancel.children.message.label: Message
+form.meeting_cancel.children.submit.label: Confirm
+form.meeting_request_approve.children.submit.label: Send
+form.meeting_request_cancel.children.submit.label: Send
+form.meeting_request_create.children.description.label: 'Detail your meeting request'
+form.meeting_request_create.children.submit.label: Send
+form.meeting_request_filter.children.state.label: States
+form.meeting_request_message.children.submit.label: Send
+form.meeting_request_refuse.children.submit.label: Send
+form.meeting_request_update_from.children.submit.label: Send
+form.meeting_request_update_to.children.submit.label: Send
+form.meeting_update.children.message.label: Message
+form.meeting_update.children.participants.label: Participants
 form.meeting_update.children.submit.label: Save
+form.messaging_create_message.children.content.label: Content
+form.messaging_create_message.children.name.label: 'Name emailing'
+form.messaging_create_message.children.subject.label: Subject
+form.messaging_create_message.children.submit.label: Save
+form.messaging_update_message.children.content.label: Content
+form.messaging_update_message.children.name.label: 'Name emailing'
+form.messaging_update_message.children.subject.label: Subject
+form.messaging_update_message.children.submit.label: Save
 form.new_password.children.password.children.first.label: 'New password'
 form.new_password.children.password.children.second.label: 'Confirm new password'
 form.new_password.children.submit.label: Validate
@@ -125,6 +156,7 @@ form.order_row.children.label.label: Title
 form.order_row.children.price.label: 'Unit price'
 form.order_row.children.quantity.label: Quantity
 form.order_row.children.submit.label: Save
+form.organizer_sheet_template_create.children.close.label: Cancel
 form.organizer_sheet_template_create.children.submit.label: Save
 form.organizer_sheet_template_duplicate.children.submit.label: Save
 form.package_create.children.submit.label: Save
@@ -145,6 +177,8 @@ form.participant_create.children.submit.label: Submit
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Submit
 form.planning.add_with_participant: 'Add a meeting package with this participant'
+form.position_meeting.children.fromParticipants.label: Participants
+form.position_meeting.children.toParticipants.label: Participants
 form.product_choice.group_by.type.plan: Formulas
 form.product_choice.group_by.type.planning: 'Package of meetings'
 form.product_create_option.children.submit.label: Save
@@ -177,22 +211,36 @@ form.register.children.password.children.second.label: 'Refill the password'
 form.register.children.submit.label: Submit
 form.rule_see_what.children.submit.label: 'Save rule'
 form.schedule_config.children.submit.label: Save
+form.search_facet_update.children.searchFacets.position.label: Function
+form.search_facet_update.children.searchFacets.type.label: Type
+form.search_facet_update.children.submit.label: Save
+form.sheet_batch.children.accept.label: Accept
 form.sheet_batch.children.addCatalog.label: 'Add to catalogue'
+form.sheet_comment.children.filter.label: Filter
 form.sheet_comment.children.submit.label: Save
 form.sheet_comment.children.text.placeholder: 'Add comment'
+form.sheet_filter.children.orderBy.label: 'Sort by'
 form.sheet_filter.children.state.label: State
 form.sheet_filter.children.text_search.label: 'Title of the presentation sheet, name or participant''s email'
 form.sheet_template_add_locale.children.submit.label: Add
+form.sheet_template_create.children.close.label: Cancel
 form.sheet_template_create.children.submit.label: Save
 form.sheet_template_duplicate.children.submit.label: Save
 form.sheet_template_preview.children.previewObjects.label_add: Add
 form.sheet_template_preview.children.previewObjects.label_delete: 'Delete item'
+form.sheet_template_update.children.close.label: Cancel
 form.sheet_template_update.children.submit.label: Save
+form.spot_batch_create.children.meetingCapacity.label: 'Capacity of the number of meetings'
 form.spot_batch_create.children.recipes.label_add: Add
 form.spot_batch_create.children.recipes.label_delete: Delete
 form.spot_batch_create.children.submit.label: Save
+form.spot_create.children.active.label: Active
+form.spot_create.children.filters.all.label: All
+form.spot_create.children.filters.no.label: 'No'
+form.spot_create.children.filters.yes.label: 'Yes'
 form.spot_create.children.submit.label: Save
 form.template_registration_update.children.submit.label: Save
+form.transaction.children.state.cancelled: Cancelled
 form.transaction.children.state.pending: Pending
 form.transaction.children.transaction_mode.bank_card: 'Bank card'
 form.transaction.children.transaction_mode.bank_cash: Cash
@@ -207,13 +255,21 @@ form.type_template_field_update_lib_choice.children.submit.label: Save
 form.type_template_field_update.children.required.label: Mandatory
 form.type_template_field_update.children.submit.label: Save
 form.type_update.children.submit.label: Save
+form.unavailability.mass.children.blocking.answer.false: 'No'
+form.unavailability.mass.children.blocking.answer.true: 'Yes'
 form.update_admin.children.email.label: Email
 form.update_admin.children.password.label: Password
+form.update_admin.children.submit.label: Send
+form.update_block.children.data.label: 'Edit the information'
+form.update_block.children.submit.label: Send
+form.update_operator.children.submit.label: Send
 form.update_speaker.children.photo.label: 'Speaker picture'
 form.update_speaker.children.submit.label: Save
 form.update_transaction.children.mode.label: 'Mode of payment'
+form.update_transaction.children.state.label: States
 form.update_transaction.children.submit.label: Save
 form.update_unavailability.children.submit.label: Modify
+form.update_unavailability.children.to.label: To
 form.user_filter.children.text_search.label: 'Last name, first name or email of user'
 form.vatMode.ati: 'Incl. Tax'
 form.vatMode.et: 'Ext. Tax'

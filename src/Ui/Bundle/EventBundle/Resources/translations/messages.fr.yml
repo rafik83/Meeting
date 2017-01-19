@@ -10,7 +10,13 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
-agenda.title: 'Mon agenda'
+agenda.meeting.details: Details
+agenda.participant.view: 'Agenda de %participant%'
+agenda.title: 'Agenda'
+agenda.unavailability.add: 'Ajouter une indisponibilité'
+agenda.unavailability.back: Retour
+agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
+agenda.unavailability.remove: Supprimer
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -27,13 +33,16 @@ catalog.meeting_request.approve: Accepter
 catalog.meeting_request.create: 'Demander en RDV'
 catalog.meeting_request.pending: 'Demande en attente'
 catalog.meeting_request.proposition.approved: 'Proposition acceptée'
+catalog.meeting_request.proposition.placed: 'RDV planifié'
 catalog.meeting_request.proposition.refused: 'Proposition refusée'
 catalog.meeting_request.refuse: Refuser
 catalog.meeting_request.request.approved: 'Demande acceptée'
+catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Demande refusée'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
+catalog.seeMore: 'Voir plus'
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
@@ -57,6 +66,7 @@ happening.participationUpdate.action: Modifier
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
+login.forgot_password: 'Mot de passe oublié ?'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
 modal.back: Retour
@@ -248,6 +258,8 @@ sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
+sheet.object.boolean.true: Oui
+sheet.object.boolean.false: Non
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander en RDV'
@@ -256,11 +268,11 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
-sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication dans le catalogue en ligne des participants.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous BtoB.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
-sheet.welcome.packageContent: 'Etape 2 : CHOISISSEZ VOTRE FORMULE'
-sheet.welcome.programContent: 'Etape 3 : CHOISISSEZ VOS CONFÉRENCES'
-sheet.welcome.sheetContent: "Etape 1 :\n\nCOMPLÉTEZ VOTRE FICHE\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
+sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
+sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
+sheet.welcome.sheetContent: "COMPLÉTEZ VOTRE FICHE\n\nET\n\nSOUMETTEZ LA FICHE POUR VALIDATION"
 sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
 summary.column.quantity: Quantité

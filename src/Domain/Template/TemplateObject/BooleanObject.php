@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class BooleanObject extends EditableObject implements ContentObjectInterface
+class BooleanObject extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
     const YES = true;
     const NO  = false;
@@ -100,5 +100,23 @@ class BooleanObject extends EditableObject implements ContentObjectInterface
     public function setContentValue($value)
     {
         $this->setBoolean($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function getExportableContent()
+    {
+        return (bool) $this->getBoolean();
     }
 }

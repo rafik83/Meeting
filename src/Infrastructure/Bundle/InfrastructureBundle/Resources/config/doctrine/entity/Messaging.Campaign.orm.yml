@@ -1,0 +1,49 @@
+Proximum\Vimeet\Domain\Model\Messaging\Campaign:
+    type:  entity
+    table: messaging_campaign
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            nullable: false
+        filters:
+            type: json_array
+            nullable: true
+        recipients:
+            type: simple_array
+            nullable: true
+        createdAt:
+            type: datetime
+            nullable: false
+        sentAt:
+            type: datetime
+            nullable: true
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        message:
+            targetEntity: Proximum\Vimeet\Domain\Model\Messaging\Message
+            joinColumn:
+                onDelete: CASCADE
+                nullable: true
+    manyToMany:
+        sheets:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            indexBy: id
+            joinTable:
+                name: messaging_campaign_sheet
+                joinColumns:
+                    campaign_id:
+                        referencedColumnName: id
+                        onDelete: CASCADE
+                inverseJoinColumns:
+                    sheet_id:
+                        referencedColumnName: id
+                        onDelete: CASCADE

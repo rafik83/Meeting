@@ -37,11 +37,12 @@ class UnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new UnavailabilityViewQueryHandler();
         $result = $handler->handle(new UnavailabilityViewQuery(
-            $unavailability
+            $unavailability,
+            $event
         ));
 
         // Expected
-        $expected = new UnavailabilityView(1, $begin, $end);
+        $expected = new UnavailabilityView(1, $begin, $end, 'Europe/Paris');
 
         $this->assertEquals($expected, $result);
     }

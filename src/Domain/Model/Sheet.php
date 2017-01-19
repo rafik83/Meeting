@@ -103,7 +103,7 @@ class Sheet implements TraceableInterface
     /**
      * "Suivi commercial"
      *
-     * @var Admin
+     * @var Admin|null
      */
     private $follower;
 
@@ -456,7 +456,8 @@ class Sheet implements TraceableInterface
     public function getUserParticipant(User $user)
     {
         foreach ($this->participants as $participant) {
-            if ($participant->getUser() === $user) {
+            // To avoid __isInitialized__: false
+            if ($participant->getUser()->getId() === $user->getId()) {
                 return $participant;
             }
         }
@@ -642,7 +643,7 @@ class Sheet implements TraceableInterface
     /**
      * Get follower
      *
-     * @return Admin
+     * @return Admin|null
      */
     public function getFollower()
     {

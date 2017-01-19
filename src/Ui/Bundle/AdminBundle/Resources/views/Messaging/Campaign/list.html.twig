@@ -1,0 +1,51 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+
+    <h1 class="page-header">
+        {{ 'admin.messaging.campaign.list.title'|trans }}
+        <span class="pull-right">
+            <a href="{{ path('admin_messaging_campaign_select_sheets', { 'event': event.id }) }}" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>
+                {{ 'admin.messaging.campaign.menu.create.title'|trans }}
+            </a>
+        </span>
+    </h1>
+
+    {% if campaigns|length %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{{ 'admin.messaging.campaign.list.columns.title'|trans }}</th>
+                    <th>{{ 'admin.messaging.campaign.list.columns.createdAt'|trans }}</th>
+                    <th>{{ 'admin.messaging.campaign.list.columns.sentAt'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for campaign in campaigns %}
+                    <tr>
+                        <td>{{ campaign.title }}</td>
+                        <td>{{ campaign.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                        <td>
+                            {% if campaign.sent %}
+                                {{ campaign.sentAt|localizeddate('medium', 'short', app.request.locale) }}
+                            {% elseif campaign.hasRecipients and campaign.hasMessage %}
+                                <form action="{{ path('admin_messaging_campaign_send', { 'event': event.id, 'campaign': campaign.id }) }}" method="POST">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('send_campaign') }}">
+                                    <button class="btn btn-primary" type="submit">{{ 'admin.messaging.campaign.send.title'|trans }}</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <p class="text-warning">{{ 'admin.messaging.campaign.list.no_data'|trans }}</p>
+
+    {% endif %}
+
+{% endblock %}

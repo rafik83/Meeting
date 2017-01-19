@@ -82,13 +82,17 @@ class SheetInfoGuesser
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param string|null $locale
      *
      * @return string
      */
-    public function guessSheetTitle(Sheet $sheet, $locale)
+    public function guessSheetTitle(Sheet $sheet, $locale = null)
     {
+        if (null === $locale) {
+            $locale = $sheet->getEvent()->getFallback();
+        }
+
         $template = $sheet->getType()->getRegistrationTemplate();
 
         if (null === $template) {

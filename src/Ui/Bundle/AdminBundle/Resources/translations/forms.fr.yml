@@ -86,6 +86,7 @@ form.change_password.children.submit.label: Envoyer
 form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
+form.common.choices.all: 'Tout sélectionner'
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -275,6 +276,14 @@ form.meeting_request_update_to.children.submit.label: Envoyer
 form.meeting_update.children.message.label: Message
 form.meeting_update.children.participants.label: Participants
 form.meeting_update.children.submit.label: Enregistrer
+form.messaging_create_message.children.content.label: Contenu
+form.messaging_create_message.children.name.label: 'Nom emailing'
+form.messaging_create_message.children.subject.label: Sujet
+form.messaging_create_message.children.submit.label: Enregistrer
+form.messaging_update_message.children.content.label: Contenu
+form.messaging_update_message.children.name.label: 'Nom emailing'
+form.messaging_update_message.children.subject.label: Sujet
+form.messaging_update_message.children.submit.label: Enregistrer
 form.new_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.new_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.new_password.children.submit.label: Envoyez
@@ -503,6 +512,7 @@ form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
+form.select_recipients.children.recipients.label: Destinataires
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
@@ -514,13 +524,20 @@ form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
 form.sheet_batch.children.validationStateDraft.label: 'Remettre la fiche en brouillon'
 form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de la fiche'
+form.sheet_comment.children.filter.label: Filtrer
 form.sheet_comment.children.submit.label: Envoyer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.completed.label: Complétude
+form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
+form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
+form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
+form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
+form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
+form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
@@ -543,6 +560,10 @@ form.sheet_template_update.children.close.label: Annuler
 form.sheet_template_update.children.fallback.label: 'Langue par defaut'
 form.sheet_template_update.children.submit.label: Enregistrer
 form.sheet_template_update.children.title.label: Titre
+form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
+form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
+form.sheet.messaging_campaign.message.submit.label: Terminer
+form.sheet.messaging_campaign.recipients.submit.label: Valider
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.recipes.label: 'Identifiants du lot'

@@ -16,8 +16,14 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
+/**
+ * Agenda
+ */
 class PlanningViewQueryHandler
 {
     /**
@@ -31,17 +37,30 @@ class PlanningViewQueryHandler
     private $happeningsAccessChecker;
 
     /**
+     * @var null|IntlDateFormatter
+     */
+    private $formatter = null;
+
+    /**
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
      * PlanningViewQueryHandler constructor.
      *
-     * @param NavigationBuilderInterface $navigationBuilder
-     * @param HappeningsAccessChecker    $happeningsAccessChecker
+     * @param NavigationBuilderInterface    $navigationBuilder
+     * @param HappeningsAccessChecker       $happeningsAccessChecker
+     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        HappeningsAccessChecker $happeningsAccessChecker
+        HappeningsAccessChecker $happeningsAccessChecker,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
-        $this->navigationBuilder       = $navigationBuilder;
-        $this->happeningsAccessChecker = $happeningsAccessChecker;
+        $this->navigationBuilder             = $navigationBuilder;
+        $this->happeningsAccessChecker       = $happeningsAccessChecker;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
     /**
@@ -51,55 +70,110 @@ class PlanningViewQueryHandler
      */
     public function handle(PlanningViewQuery $planningQuery)
     {
-        $schedulePublishDate = $planningQuery
-            ->sheet
-            ->getEvent()
-            ->getConfiguration()
-            ->getSchedulePublishDate();
+        $event     = $planningQuery->sheet->getEvent();
+        $linkViews = [];
 
-        $happeningOpenDate = $planningQuery
-            ->sheet
+        $linkViews[] = $this->getHappeningAvailableDateLinkView($event, $planningQuery->sheet, $planningQuery->locale);
+
+        $schedulePublishDateLinkView = $this->getSchedulePublishDateLinkView(
+            $event,
+            $planningQuery->sheet,
+            $planningQuery->locale
+        );
+
+        if (null !== $schedulePublishDateLinkView) {
+            $linkViews[] = $schedulePublishDateLinkView;
+        }
+
+        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linkViews);
+    }
+
+    /**
+     * @param Event  $event
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return LinkView
+     */
+    private function getHappeningAvailableDateLinkView(Event $event, Sheet $sheet, $locale)
+    {
+        $happeningOpenDate = $sheet
             ->getEvent()
             ->getConfiguration()
             ->getHappeningsOpenDate();
 
-        $linksView = [];
-
-        if ($schedulePublishDate === null) {
-            $linksView[] = new LinkView('navigation.links.incoming', null);
-        } else {
-            $formatter = new IntlDateFormatter(
-                $planningQuery->locale,
-                IntlDateFormatter::LONG,
-                IntlDateFormatter::LONG
-            );
-            $formatter->setPattern('d MMMM Y');
-
-            $happeningOpenDateFormatted = $formatter->format($happeningOpenDate);
+        if (null !== $happeningOpenDate) {
+            $happeningOpenDateFormatted = $this->getFormatter($locale)->format($happeningOpenDate);
 
             $agendaRoute = null;
 
-            if ($this->happeningsAccessChecker->allowedToAccess($planningQuery->sheet->getEvent())) {
+            if ($this->happeningsAccessChecker->allowedToAccess($event)) {
                 $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
             }
 
-            $linksView[] = new LinkView(
+            return new LinkView(
                 'navigation.links.planning.available_date',
                 $agendaRoute,
                 null,
                 new StateButtonView(false, $happeningOpenDateFormatted ? $happeningOpenDateFormatted : '')
             );
+        }
 
-            $schedulePublishDateFormatted = $formatter->format($schedulePublishDate);
+        return new LinkView('navigation.links.incoming', null);
+    }
 
-            $linksView[] = new LinkView(
+    /**
+     * @param Event  $event
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return null|LinkView
+     */
+    private function getSchedulePublishDateLinkView(Event $event, Sheet $sheet, $locale)
+    {
+        $schedulePublishDate = $sheet
+            ->getEvent()
+            ->getConfiguration()
+            ->getSchedulePublishDate();
+
+        if ($schedulePublishDate !== null) {
+            $schedulePublishDateFormatted = $this->getFormatter($locale)->format($schedulePublishDate);
+
+            $agendaRoute = null;
+
+            if ($this->meetingPublishedAccessChecker->allowedToAccess($event)) {
+                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
+            }
+
+            return new LinkView(
                 'navigation.links.planning.final_date',
-                null,
+                $agendaRoute,
                 null,
                 new StateButtonView(false, $schedulePublishDateFormatted ? $schedulePublishDateFormatted : '')
             );
         }
 
-        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linksView);
+        return null;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return IntlDateFormatter
+     */
+    private function getFormatter($locale)
+    {
+        if (null !== $this->formatter) {
+            return $this->formatter;
+        }
+
+        $this->formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::LONG,
+            IntlDateFormatter::LONG
+        );
+        $this->formatter->setPattern('d MMMM Y');
+
+        return $this->formatter;
     }
 }

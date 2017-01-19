@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class AgendaViewQuery
@@ -19,6 +21,16 @@ class AgendaViewQuery
      * @var Event
      */
     public $event;
+
+    /**
+     * @var Participant
+     */
+    public $participant;
+
+    /**
+     * @var Sheet
+     */
+    public $sheet;
 
     /**
      * @var User
@@ -31,14 +43,18 @@ class AgendaViewQuery
     public $locale;
 
     /**
-     * @param Event  $event
-     * @param User   $user
-     * @param string $locale
+     * @param Event       $event
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     * @param User        $user
+     * @param string      $locale
      */
-    public function __construct(Event $event, User $user, $locale)
+    public function __construct(Event $event, Sheet $sheet, Participant $participant, User $user, $locale)
     {
-        $this->event  = $event;
-        $this->user   = $user;
-        $this->locale = $locale;
+        $this->event       = $event;
+        $this->sheet       = $sheet;
+        $this->participant = $participant;
+        $this->user        = $user;
+        $this->locale      = $locale;
     }
 }

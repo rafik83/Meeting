@@ -53,9 +53,30 @@ interface HappeningParticipationRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return HappeningParticipation[]
+     */
+    public function getByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
      * @return array
      */
     public function countParticipationByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countParticipationsBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    public function hasParticipationsBySheet(Sheet $sheet);
   
     /**
      * @param Sheet       $sheet
@@ -70,4 +91,11 @@ interface HappeningParticipationRepositoryInterface
      * @param Happening   $happening
      */
     public function removeParticipantForHappening(Participant $participant, Happening $happening);
+
+    /**
+     * @param Participant $participant
+     *
+     * @return null|int
+     */
+    public function checkAnyParticipation(Participant $participant);
 }

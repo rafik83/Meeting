@@ -1,0 +1,53 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.messaging.message.link'|trans }}
+{% endblock %}
+
+{% block list_title 'admin.messaging.message.link'|trans %}
+
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block content %}
+    <h1 class="page-header">{{ block('list_title') }}</h1>
+
+    <a class="btn btn-primary btn-sm" href="{{ path('admin_messaging_message_create', { 'event': event.id }) }}">
+        {{ 'admin.messaging.message.create.title'|trans }}
+    </a>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                {{ 'admin.messaging.message.name'|trans }}
+            </th>
+            <th>
+                {{ 'admin.messaging.message.createdAt'|trans }}
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>
+                    {{ message.name }}
+                </td>
+                <td>
+                    {{ message.createdAt|localizeddate('medium', 'short') }}
+                </td>
+                <td class="text-right">
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_messaging_message_update', { 'event': event.id, 'message': message.id }) }}">
+                        {{ 'admin.messaging.message.list.edit_link'|trans }}
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -35,4 +35,12 @@ class TagsCollection extends ItemCollection
     {
         return (bool) $this->getOption('collection');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isExportable()
+    {
+        return false;
+    }
 }

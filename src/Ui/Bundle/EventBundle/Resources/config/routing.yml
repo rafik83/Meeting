@@ -320,13 +320,6 @@ event_sheet_schedule:
     methods:  [GET]
     defaults: { _controller: EventBundle:Schedule:display }
 
-event_sheet_schedule_add_unavailability:
-    path: /sheet/{sheet}/schedule/unavailability/add
-    requirements:
-        sheet: \d+
-    methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Schedule:addUnavailability }
-
 event_sheet_schedule_update_unavailability:
     path: /sheet/{sheet}/schedule/unavailability/{unavailability}/update
     requirements:
@@ -558,6 +551,11 @@ event_agenda:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:index }
 
+event_agenda_participant:
+    path: /agenda/participant/{participant}
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:participant }
+
 happening_program:
     path: /program
     methods: [GET]
@@ -573,3 +571,18 @@ event_sheet_happening_participate:
         happening: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Happening:participate }
+
+#
+# Unavailability
+#
+event_unavailability_create:
+    path: /agenda/participant/{participant}/unavailability/create
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Unavailability:create }
+
+event_unavailability_remove:
+    path: /agenda/participant/{participant}/unavailability/{unavailability}/remove
+    methods: [DELETE]
+    requirements:
+        unavailability: \d+
+    defaults: { _controller: EventBundle:Unavailability:remove }

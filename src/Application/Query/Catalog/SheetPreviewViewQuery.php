@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetPreviewViewQuery
@@ -30,12 +31,19 @@ class SheetPreviewViewQuery
     public $viewer;
 
     /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
      * @param Sheet  $viewer
      */
-    public function __construct(Sheet $sheet, $locale, Sheet $viewer)
+    public function __construct(Event $event, Sheet $sheet, $locale, Sheet $viewer)
     {
+        $this->event  = $event;
         $this->sheet  = $sheet;
         $this->locale = $locale;
         $this->viewer = $viewer;
