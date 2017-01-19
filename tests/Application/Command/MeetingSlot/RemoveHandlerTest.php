@@ -29,7 +29,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->hasMeetingOnSlot($meetingSlot)->shouldBeCalled()->willReturn(true);
+        $meetingRepository->hasMeetingOnSlot($meetingSlot)->shouldBeCalled()->willReturn(false);
         $meetingSlotRepository->remove($meetingSlot)->shouldBeCalled();
 
         $handler = new RemoveHandler(
@@ -52,7 +52,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->hasMeetingOnSlot($meetingSlot)->shouldBeCalled()->willReturn(false);
+        $meetingRepository->hasMeetingOnSlot($meetingSlot)->shouldBeCalled()->willReturn(true);
 
         $handler = new RemoveHandler(
             $meetingSlotRepository->reveal(),
