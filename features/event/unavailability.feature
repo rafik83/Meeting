@@ -19,12 +19,12 @@ Feature: Unavailability
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet"
     When I go to this page "/fr/agenda"
-    Then I should be on this page "/fr/agenda"
+    Then I should be on this page "/fr/agenda/participant/2"
     And I should see "agenda.title"
     And I should see "Mercredi 12 octobre 2016"
     And I should not see "unvailability.title"
     And I follow "agenda.unavailability.add"
-    And I should be on this page "/fr/agenda/unavailability/create"
+    And I should be on this page "/fr/agenda/participant/2/unavailability/create"
     And I should see "form.create_unavailability.children.submit.label"
     And I should see "agenda.unavailability.back"
     Then I fill in the following:
@@ -35,7 +35,7 @@ Feature: Unavailability
       | create_unavailability_time_end_hour           | 13  |
       | create_unavailability_time_end_minute         | 45  |
     And I press "form.create_unavailability.children.submit.label"
-    Then I should be on this page "/fr/agenda"
+    Then I should be on this page "/fr/agenda/participant/2"
     And I should see "unavailability.title"
 
   Scenario: I can remove an unavailability
@@ -43,5 +43,5 @@ Feature: Unavailability
     And I go to this page "/fr/agenda"
     And I should see "unavailability.title"
     When I press "agenda.unavailability.remove"
-    Then I should be on this page "/fr/agenda"
+    Then I should be on this page "/fr/agenda/participant/2"
     And I should not see "unavailability.title"

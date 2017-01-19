@@ -22,7 +22,7 @@ form.catalog_edit_meeting_request.request.children.submit.label: Edit
 form.catalog_refuse_meeting_request.children.message.label: 'Detail your refusal'
 form.catalog_refuse_meeting_request.children.message.placeholder: 'Write a message'
 form.catalog_refuse_meeting_request.children.submit.label: 'Refuse the meeting proposal'
-form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Cancel the proposal'
+form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Cancel my acceptation'
 form.catalog_un_refuse_meeting_request.children.submit.label: 'Cancel your refusal'
 form.change_password_user.children.currentPassword.label: 'Current password'
 form.change_password_user.children.plainPassword.children.first.label: 'New password'

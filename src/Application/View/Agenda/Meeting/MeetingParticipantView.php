@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\View\Agenda\Meeting;
 
 use Proximum\Vimeet\Application\View\Participant\CardView;
 
-class ParticipantView
+class MeetingParticipantView
 {
     /**
      * @var CardView

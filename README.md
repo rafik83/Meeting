@@ -17,32 +17,32 @@
 
 Clone the project in your workspace, and launch setup
 
-    $ make setup
+        $ make setup
 
 You should access the project via http://vimeet.proximum.dev/app_dev.php/admin/fr/event
 
 Load Vimeet fixtures:
 
-    ⇒ make init-db
+        ⇒ make init-db
 
 ### Usage
 
 Launch vagrant box, and ssh into it
 
-    $ vagrant up
-    $ vagrant ssh
+        $ vagrant up
+        $ vagrant ssh
 
 Build assets
 
-    ⇒ gulp
+        ⇒ gulp
 
 Build Vimeet events assets
 
-    ⇒ bin/console vimeet:event:build-guideline-asset
+        ⇒ bin/console vimeet:event:build-guideline-asset
 
 Enable/Disable php xdebug
 
-    ⇒ elao_php_xdebug [on|off]
+        ⇒ elao_php_xdebug [on|off]
 
 * *Supervisor*: http://vimeet.proximum.dev:9001
 * *Log.io*: http://vimeet.proximum.dev:28778
@@ -54,17 +54,17 @@ Enable/Disable php xdebug
 
 Install a package:
 
-    ⇒ npm install <package> --save
+        ⇒ npm install <package> --save
 
 Regenerate manually npm-shrinkwrap.json:
 
-    ⇒ npm shrinkwrap
+        ⇒ npm shrinkwrap
 
 ### Migrations
 
 Drop DB and generate migrations diff:
 
-    ⇒ make migrations
+        ⇒ make migrations
 
 ### Localization
 
@@ -73,12 +73,12 @@ If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and se
 
 Synchronize translations files :
 
-    ⇒ make trans-sync
+        ⇒ make trans-sync
 
 or use one of these commands according to your needs:
 
-    ⇒ openl10n push --locale=all
-    ⇒ openl10n pull --locale=all
+        ⇒ openl10n push --locale=all
+        ⇒ openl10n pull --locale=all
 
 Remarks :
 
@@ -128,3 +128,32 @@ En admin, utiliser la méthode de l'event permettant de fallback, car la locale 
 ```php
 $locale = $event->getAvailableLocale($request->getLocale);
 ```
+
+### Utils
+
+#### Récupérer la DB de prod
+
+Se connecter à la prod pour dumper la DB
+
+        $ ssh proximum-web-apache-01
+        $ cd ~/proximum-vimeet.project.local/htdocs/current
+        $ cat app/config/parameters.yml # pour afficher le databasename, host, port, user et password de la DB
+        $ mysqldump --host [host] --port [port] -u [username] -p[password] [databasename] > prod.sql
+        $ exit
+
+Puis en local, dans le répertoire du projet, télécharger la DB
+
+        $ cd path/to/local/vimeet
+        $ scp proximum-web-apache-01:~/proximum-vimeet.project.local/htdocs/current/prod.sql prod.sql
+
+Importer la DB depuis la VM
+
+        $ vagrant ssh
+        ⇒ bin/console doctrine:schema:drop --force
+        ⇒ mysql -u root proximum_vimeet < prod.sql
+
+Se connecter à la prod et supprimer le fichier dumpé
+
+        $ ssh proximum-web-apache-01
+        $ cd ~/proximum-vimeet.project.local/htdocs/current
+        $ rm prod.sql

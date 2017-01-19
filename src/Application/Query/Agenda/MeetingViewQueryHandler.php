@@ -11,15 +11,15 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingViewQueryHandler
 {
     /**
-     * @var ParticipantViewQueryHandler
+     * @var MeetingParticipantViewQueryHandler
      */
     private $participantHandler;
 
@@ -34,12 +34,12 @@ class MeetingViewQueryHandler
     private $ruleRepository;
 
     /**
-     * @param ParticipantViewQueryHandler $participantHandler
-     * @param SheetInfoGuesser            $sheetInfoGuesser
-     * @param RuleRepositoryInterface     $ruleRepository
+     * @param MeetingParticipantViewQueryHandler $participantHandler
+     * @param SheetInfoGuesser                   $sheetInfoGuesser
+     * @param RuleRepositoryInterface            $ruleRepository
      */
     public function __construct(
-        ParticipantViewQueryHandler $participantHandler,
+        MeetingParticipantViewQueryHandler $participantHandler,
         SheetInfoGuesser $sheetInfoGuesser,
         RuleRepositoryInterface $ruleRepository
     ) {
@@ -64,7 +64,7 @@ class MeetingViewQueryHandler
         foreach ($query->meeting->getParticipants($sheetMet) as $participant) {
             $participants[] = $this
                 ->participantHandler
-                ->handle(new ParticipantViewQuery($participant, $rules, $query->locale));
+                ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
 
         $meeting  = new MeetingView(

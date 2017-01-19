@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Meeting;
 
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
-use Proximum\Vimeet\Application\View\Agenda\Meeting\ParticipantView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 
-class ParticipantViewQueryHandler
+class MeetingParticipantViewQueryHandler
 {
     /**
      * @var Applyer
@@ -38,17 +38,17 @@ class ParticipantViewQueryHandler
     }
 
     /**
-     * @param ParticipantViewQuery $query
+     * @param MeetingParticipantViewQuery $query
      *
-     * @return ParticipantView
+     * @return MeetingParticipantView
      */
-    public function handle(ParticipantViewQuery $query)
+    public function handle(MeetingParticipantViewQuery $query)
     {
         $card = $this->cardViewQueryHandler->handle(
             new CardViewQuery($query->participant, $query->locale, false)
         );
         $this->ruleApplyer->applyRuleForParticipantCard($card, $query->rules);
 
-        return new ParticipantView($card);
+        return new MeetingParticipantView($card);
     }
 }

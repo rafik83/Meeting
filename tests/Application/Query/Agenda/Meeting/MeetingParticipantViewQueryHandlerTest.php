@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Meeting;
 
-use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
-use Proximum\Vimeet\Application\View\Agenda\Meeting\ParticipantView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -23,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {
@@ -42,10 +42,10 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $ruleApplyer          = $this->prophesize(Applyer::class);
         $ruleApplyer->applyRuleForParticipantCard($cardView, $rules)->shouldBeCalled();
 
-        $participantHandler = new ParticipantViewQueryHandler($ruleApplyer->reveal(), $cardViewQueryHandler->reveal());
-        $result = $participantHandler->handle(new ParticipantViewQuery($participant, $rules, 'fr'));
+        $participantHandler = new MeetingParticipantViewQueryHandler($ruleApplyer->reveal(), $cardViewQueryHandler->reveal());
+        $result = $participantHandler->handle(new MeetingParticipantViewQuery($participant, $rules, 'fr'));
 
-        $expected = new ParticipantView($cardView);
+        $expected = new MeetingParticipantView($cardView);
         $this->assertEquals($expected, $result);
     }
 }

@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Rule;
 
-class ParticipantViewQuery
+class MeetingParticipantViewQuery
 {
     /**
      * @var Participant

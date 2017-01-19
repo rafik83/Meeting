@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class AgendaView
@@ -25,13 +26,41 @@ class AgendaView
     public $sheet;
 
     /**
-     * @param array $dayViews
-     * @param Sheet $sheet
+     * Participant that owns the agenda looked
+     *
+     * @var Participant
      */
-    public function __construct(array $dayViews, Sheet $sheet)
-    {
-        $this->days  = $dayViews;
-        $this->sheet = $sheet;
+    public $participant;
+
+    /**
+     * @var bool
+     */
+    public $isUserAloneParticipant;
+
+    /**
+     * @var ParticipantView[]
+     */
+    public $participants;
+
+    /**
+     * @param array             $dayViews
+     * @param Sheet             $sheet
+     * @param Participant       $participant
+     * @param bool              $isUserAloneParticipant
+     * @param ParticipantView[] $participants
+     */
+    public function __construct(
+        array $dayViews,
+        Sheet $sheet,
+        Participant $participant,
+        $isUserAloneParticipant,
+        array $participants
+    ) {
+        $this->days                   = $dayViews;
+        $this->sheet                  = $sheet;
+        $this->participant            = $participant;
+        $this->isUserAloneParticipant = $isUserAloneParticipant;
+        $this->participants           = $participants;
     }
 
     /**
@@ -40,6 +69,20 @@ class AgendaView
     public function getNumberOfDays()
     {
         return count($this->days);
+    }
+
+    /**
+     * @return null|ParticipantView
+     */
+    public function getCurrentParticipantView()
+    {
+        foreach ($this->participants as $participantView) {
+            if ($participantView->id === $this->participant->getId()) {
+                return $participantView;
+            }
+        }
+
+        return null;
     }
 
     /**
