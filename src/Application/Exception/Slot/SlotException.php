@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Slot;
 
-class IsNotAllowedToRemoveSlotException extends SlotException
+class SlotException extends \Exception
 {
 }
