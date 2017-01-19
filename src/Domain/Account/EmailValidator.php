@@ -40,7 +40,7 @@ class EmailValidator
         }
 
         $violation = $this->validator->validate($data, ValidatorInterface::VALIDATOR_EMAIL_TYPE);
-
+        
         return count($violation) === 0;
     }
 }

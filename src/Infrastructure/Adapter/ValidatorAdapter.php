@@ -40,7 +40,11 @@ class ValidatorAdapter implements ValidatorInterface
     {
         switch ($constraintType) {
             case self::VALIDATOR_EMAIL_TYPE:
-                return $this->validator->validate($data, new Email());
+                return $this->validator->validate($data, new Email(
+                    [
+                        'strict' => true,
+                    ]
+                ));
             default:
                 break;
         }
