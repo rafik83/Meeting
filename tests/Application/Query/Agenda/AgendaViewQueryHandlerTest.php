@@ -107,7 +107,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, $user, 'fr'));
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
         // Expected
         $expected = new AgendaView([$dayView], $sheet, $participant, true, [new ParticipantView(1, 'fullName')]);
@@ -187,7 +187,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, $user2, 'fr'));
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user2));
 
         // Expected
         $expected = new AgendaView([$dayView], $sheet, $participant2, false, [new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')]);
