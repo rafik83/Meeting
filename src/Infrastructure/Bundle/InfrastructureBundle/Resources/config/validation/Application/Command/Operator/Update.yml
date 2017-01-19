@@ -4,6 +4,8 @@ Proximum\Vimeet\Application\Command\Operator\Update:
             - NotBlank: ~
             - Email:
                 message: validators.email
+                strict: true
+                checkMX: true
         lastname:
             - NotBlank: ~
         firstname:

@@ -4,6 +4,8 @@ Proximum\Vimeet\Application\Command\Admin\Create:
             - NotBlank: ~
             - Email:
                 message: validators.email
+                strict: true
+                checkMX: true
         password:
             - NotBlank: ~
             - Length:
