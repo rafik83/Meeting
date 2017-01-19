@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
-use Proximum\Vimeet\Application\View\Agenda\Meeting\ParticipantView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 
 class MeetingView extends AbstractTimeEntityView
 {
@@ -25,7 +25,7 @@ class MeetingView extends AbstractTimeEntityView
     public $spotRef;
 
     /**
-     * @var ParticipantView[]
+     * @var MeetingParticipantView[]
      */
     public $participants;
 
@@ -60,15 +60,15 @@ class MeetingView extends AbstractTimeEntityView
     public $rightColor;
 
     /**
-     * @param int                $sheetMetId
-     * @param string             $sheetMetTitle
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param string             $spotRef
-     * @param string             $timeZone
-     * @param string             $leftColor
-     * @param string             $rightColor
-     * @param array              $participants
+     * @param int                      $sheetMetId
+     * @param string                   $sheetMetTitle
+     * @param \DateTimeInterface       $begin
+     * @param \DateTimeInterface       $end
+     * @param string                   $spotRef
+     * @param string                   $timeZone
+     * @param string                   $leftColor
+     * @param string                   $rightColor
+     * @param MeetingParticipantView[] $participants
      */
     public function __construct(
         $sheetMetId,

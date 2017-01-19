@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Meeting\ParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler;
-use Proximum\Vimeet\Application\View\Agenda\Meeting\ParticipantView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -63,8 +63,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $spot
         );
 
-        $participantView1 = new ParticipantView($cardView);
-        $participantView2 = new ParticipantView($cardView2);
+        $participantView1 = new MeetingParticipantView($cardView);
+        $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
 
         $reflection = new \ReflectionClass(Sheet::class);
@@ -80,15 +80,15 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $propertyParticipant->setValue($participant2, 2);
         $propertyParticipant->setAccessible(false);
 
-        $participantHandler = $this->prophesize(ParticipantViewQueryHandler::class);
+        $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $sheetInfoGuesser   = $this->prophesize(SheetInfoGuesser::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
         $participantHandler
-            ->handle(new ParticipantViewQuery($participant, [$rule], 'fr'))
+            ->handle(new MeetingParticipantViewQuery($participant, [$rule], 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantView1);
         $participantHandler
-            ->handle(new ParticipantViewQuery($participant2, [$rule], 'fr'))
+            ->handle(new MeetingParticipantViewQuery($participant2, [$rule], 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantView2);
         $sheetInfoGuesser->guessSheetTitle($sheetMet, 'fr')->shouldBeCalled()->willReturn('sheetMetTitle');
@@ -145,12 +145,12 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $spot
         );
 
-        $participantView1 = new ParticipantView($cardView);
-        $participantView2 = new ParticipantView($cardView2);
+        $participantView1 = new MeetingParticipantView($cardView);
+        $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
 
-        $participantViewQuery1 = new ParticipantViewQuery($participant, [$rule], 'fr');
-        $participantViewQuery2 = new ParticipantViewQuery($participant2, [$rule], 'fr');
+        $participantViewQuery1 = new MeetingParticipantViewQuery($participant, [$rule], 'fr');
+        $participantViewQuery2 = new MeetingParticipantViewQuery($participant2, [$rule], 'fr');
 
         $reflection = new \ReflectionClass(Sheet::class);
         $property   = $reflection->getProperty('id');
@@ -165,7 +165,7 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $propertyParticipant->setValue($participant2, 2);
         $propertyParticipant->setAccessible(false);
 
-        $participantHandler = $this->prophesize(ParticipantViewQueryHandler::class);
+        $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $sheetInfoGuesser   = $this->prophesize(SheetInfoGuesser::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
         $participantHandler

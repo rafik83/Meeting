@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
-use Hautelook\AliceBundle\Tests\Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQuery;
