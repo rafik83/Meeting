@@ -62,7 +62,7 @@ abstract class AbstractRedirectToEventListener
 
         $event = $this->eventRepository->getEventByDomain($request->getHost());
 
-        if (!$event) {
+        if (null === $event) {
             return;
         }
 
