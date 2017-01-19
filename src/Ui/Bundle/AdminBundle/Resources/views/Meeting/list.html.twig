@@ -1,9 +1,20 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block content %}
-    <h2>{{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}</h2>
+{% import 'AdminBundle::macro.html.twig' as macro %}
 
-    <table class="table">
+{% block content %}
+    <h2>
+        {{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}
+        <span class="pull-right">
+            {{ macro.delete_button(
+                path('admin_meeting_delete_all', {'event': event.id}),
+                'admin.meeting.action.deleteAll.title'|trans,
+                {'class': 'btn btn-danger', 'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans}
+            ) }}
+        </span>
+    </h2>
+
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>{{ 'admin.meeting.list.column.head.from'|trans }}</th>
@@ -15,8 +26,18 @@
         <tbody>
             {% for meeting in meetings.results %}
                 <tr>
-                    <td>{{ meeting.sheetNameFrom }}</td>
-                    <td>{{ meeting.sheetNameTo }}</td>
+                    <td>
+                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
+
+                            {{ meeting.sheetNameFrom }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
+
+                            {{ meeting.sheetNameTo }}
+                        </a>
+                    </td>
                     <td>
                         {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                         {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
@@ -25,7 +46,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">
+                    <td colspan="4" class="text-center">
                          {{ 'admin.meeting.list.noResult'|trans }}
                     </td>
                 </tr>
