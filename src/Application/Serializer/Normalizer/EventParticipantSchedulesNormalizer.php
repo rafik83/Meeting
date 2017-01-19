@@ -35,19 +35,19 @@ use IntlDateFormatter;
 
 class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_PARTICIPANT_ID      = 'participantId';
-    const COL_TITLE               = 'title';
-    const COL_FIRSTNAME           = 'firstName';
-    const COL_LASTNAME            = 'lastName';
-    const COL_COMPANY             = 'companyName';
-    const COL_PARTICIPATION_TYPE  = 'type';
-    const COL_DESCRIPTION         = 'description';
-    const COL_POSITION            = 'position';
-    const COL_PHONE_PREFIX        = 'phonePrefix';
-    const COL_PHONE_NUMBER        = 'phoneNumber';
-    const COL_EMAIL               = 'email';
-    const COL_MOBILE_PHONE_PREFIX = 'mobilePhonePrefix';
-    const COL_MOBILE_PHONE        = 'mobilePhone';
+    const COL_PARTICIPANT_ID      = 'ParticipantId';
+    const COL_TITLE               = 'Title';
+    const COL_FIRSTNAME           = 'FirstName';
+    const COL_LASTNAME            = 'LastName';
+    const COL_COMPANY             = 'RaisonSociale';
+    const COL_PARTICIPATION_TYPE  = 'participant_type';
+    const COL_DESCRIPTION         = 'comp_description';
+    const COL_POSITION            = 'Position';
+    const COL_PHONE_PREFIX        = 'PhonePrefix';
+    const COL_PHONE_NUMBER        = 'PhoneNumber';
+    const COL_EMAIL               = 'Email';
+    const COL_MOBILE_PHONE_PREFIX = 'part1_prefix_mobile';
+    const COL_MOBILE_PHONE        = 'part1_mobile';
     const COL_SCHEDULE            = 'schedule';
 
     /**
@@ -170,12 +170,12 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
         return [
             self::COL_PARTICIPANT_ID      => sprintf("%s-%s", $sheet->getId(), $participant->getId()),
+            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+            self::COL_DESCRIPTION         => null,
+            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
             self::COL_TITLE               => $gender,
             self::COL_FIRSTNAME           => isset($participantInfo[Tag::PARTICIPANT_FIRSTNAME]) ? $participantInfo[Tag::PARTICIPANT_FIRSTNAME] : null,
             self::COL_LASTNAME            => isset($participantInfo[Tag::PARTICIPANT_LASTNAME]) ? $participantInfo[Tag::PARTICIPANT_LASTNAME] : null,
-            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
-            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
-            self::COL_DESCRIPTION         => null,
             self::COL_POSITION            => isset($participantInfo[Tag::PARTICIPANT_POSITION]) ? $participantInfo[Tag::PARTICIPANT_POSITION] : null,
             self::COL_PHONE_PREFIX        => null,
             self::COL_PHONE_NUMBER        => isset($participantInfo[Tag::PARTICIPANT_PHONE]) ? $participantInfo[Tag::PARTICIPANT_PHONE] : null,
