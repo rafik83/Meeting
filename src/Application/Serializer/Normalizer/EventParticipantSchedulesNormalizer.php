@@ -223,7 +223,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             [],
             'messages',
             $user->getLocale()
-        ) . PHP_EOL;
+        ) . $this->getEmptyLine();
 
         $formatter = new IntlDateFormatter(
             $user->getLocale(),
@@ -234,11 +234,20 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         foreach ($days as $day) {
             $timeEntities = $this->sortChronologicalOrder($day->getTimeEntities());
 
-            $formatted .= '**' . ucfirst($formatter->format($day->getDay())) . '**' . PHP_EOL;
-            $formatted .= $this->formatTimeEntities($timeEntities, $user). PHP_EOL . PHP_EOL;
+            $formatted .= '**' . ucfirst($formatter->format($day->getDay())) . '**' . $this->getEmptyLine();
+            $formatted .= $this->formatTimeEntities($timeEntities, $user). $this->getEmptyLine() . $this->getEmptyLine();
         }
 
         return $formatted;
+    }
+
+    /**
+     * @return string
+     */
+    private function getEmptyLine()
+    {
+        // As we use markdown, we must double the number of empty line
+        return PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -257,7 +266,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             $user->getLocale()
         );
 
-        $formatted = (count($requests) > 0) ? $translation . PHP_EOL : '';
+        $formatted = (count($requests) > 0) ? $translation . $this->getEmptyLine() : '';
 
         foreach ($requests as $request) {
             $formatted .= $this->sheetInfoGuesser->guessSheetTitle($request->getSheetMet($sheet)) . ', ';
@@ -304,7 +313,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                 ;
             }
 
-            $formatted .= PHP_EOL;
+            $formatted .= $this->getEmptyLine();
         }
 
         return $formatted;
