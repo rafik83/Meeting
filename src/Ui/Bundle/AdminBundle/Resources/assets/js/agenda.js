@@ -1,5 +1,8 @@
-var Vue   = require('vue'),
-    axios = require('axios');
+var Vue                = require('vue'),
+    axios              = require('axios'),
+    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
+
+var agendaApiEndpoints = new AgendaApiEndpoints();
 
 /**
  * Customs delimiters to avoid collision with Twig
@@ -105,7 +108,7 @@ new Vue({
          * Load sheets data
          */
         loadSheets: function () {
-            this.$http.get(this.getSheetsEndpoint())
+            this.$http.get(agendaApiEndpoints.getSheetsEndpoint())
                 .then(function(response) {
                     this.sheets = response.data;
                 }.bind(this))
@@ -120,7 +123,7 @@ new Vue({
          * @param sheet
          */
         loadAgenda: function (sheet) {
-            this.$http.get(this.getSheetAgendaEndpoint(sheet))
+            this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
                     var participants                   = response.data.participants;
                     var requests                       = response.data.requests;
@@ -314,7 +317,7 @@ new Vue({
         loadMeeting: function (meetingId) {
             this.isMeetingToUpdateLoading = true;
 
-            this.$http.get(this.getMeetingUpdateSpotEndpoint(meetingId))
+            this.$http.get(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(meetingId))
                 .then(function(response) {
                     this.meetingToUpdate = response.data;
                     this.isMeetingToUpdateLoading = false;
@@ -323,38 +326,6 @@ new Vue({
                     this.isMeetingToUpdateLoading = false;
                     console.log(error);
                 }.bind(this));
-        },
-
-        /**
-         * Returns /admin/fr/event/{event_id}/agenda/sheets
-         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheets
-         *
-         * @returns {string}
-         */
-        getSheetsEndpoint: function () {
-            return document.location.pathname + '/sheets';
-        },
-
-        /**
-         * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
-         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}
-         *
-         * @param {int} sheet
-         * @returns {string}
-         */
-        getSheetAgendaEndpoint: function (sheet) {
-            return document.location.pathname + '/sheet/' + sheet.id;
-        },
-
-        /**
-         * Returns /admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
-         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
-         *
-         * @param {int} meetingId
-         * @returns {string}
-         */
-        getMeetingUpdateSpotEndpoint: function (meetingId) {
-            return document.location.pathname + '/meeting/' + meetingId + '/update-spot';
         }
     }
 });
