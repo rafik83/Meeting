@@ -49,10 +49,7 @@
                 <td class="text-right">
                     {{ macro.btnGroupAndRightMenuDropdown({
                         ('admin.meeting_request.details'|trans): path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}),
-                    }|merge(meeting_request.state != 'approved'
-                        ? {}
-                        : { ('admin.meeting_request.set_a_meeting'|trans): path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }
-                    )) }}
+                    }) }}
                 </td>
             </tr>
         {% else %}

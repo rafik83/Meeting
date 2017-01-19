@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting;
 use Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetings;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\PositionMeetingType;
@@ -124,42 +123,6 @@ class MeetingRequestController extends Controller
         return $this->render('AdminBundle:MeetingRequest:details.html.twig', [
             'event'              => $event,
             'meetingRequestView' => $meetingRequestView,
-        ]);
-    }
-
-    /**
-     * @param Request        $request
-     * @param Event          $event
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return RedirectResponse|Response
-     */
-    public function positionAction(Request $request, Event $event, MeetingRequest $meetingRequest)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        if (!$meetingRequest->isApproved()) {
-            throw $this->createAccessDeniedException('You can not position a not approved meeting request.');
-        }
-
-        $command = new PositionMeeting($meetingRequest, new \DateTime());
-        $form    = $this->createForm(PositionMeetingType::class, $command, [
-            'event'           => $event,
-            'meeting_request' => $meetingRequest,
-        ]);
-        $form->add('submit', SubmitType::class);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.meeting_request.position.success');
-
-            return $this->redirectToRoute('admin_meeting_request_list', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:MeetingRequest:position.html.twig', [
-            'event'           => $event,
-            'meeting_request' => $meetingRequest,
-            'form'            => $form->createView(),
         ]);
     }
 
