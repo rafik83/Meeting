@@ -17,13 +17,10 @@ Vue.component('Modal', {
     }
 });
 
+Vue.component('FilterSheet', filterSheet);
+
 new Vue({
     el: '#agenda',
-
-    components: {
-        'filterSheet': filterSheet
-    },
-
     /**
      * Customs delimiters to avoid collision with Twig
      */

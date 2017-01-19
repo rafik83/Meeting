@@ -3,17 +3,6 @@
 {% block title 'admin.agenda.title'|trans %}
 
 {% block content %}
-    <!-- template for the Modal component -->
-    <script type="x/template" id="modal-template">
-        <div class="modal-mask" @click="close()" v-show="show">
-            <div class="modal-dialog" role="document" @click.stop>
-                <div class="modal-content">
-                    <slot></slot>
-                </div>
-            </div>
-        </div>
-    </script>
-
 <div id="agenda" class="agenda-container">
     <div class="row" v-cloak>
         <div class="col-xs-2">
@@ -22,9 +11,7 @@
                     <thead>
                         <tr>
                             <td>
-                                <script type="x/template" id="filter-sheet-form">
-                                    {{ include('@Admin/Agenda/filterSheetForm.html.twig') }}
-                                </script>
+                                <filter-sheet v-bind:sheets="sheets"></filter-sheet>
                             </td>
                         </tr>
                         <tr>
@@ -185,6 +172,19 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ include('@Admin/Agenda/filterSheetForm.html.twig') }}
+
+    <!-- template for the Modal component -->
+    <script type="x/template" id="modal-template">
+        <div class="modal-mask" @click="close()" v-show="show">
+            <div class="modal-dialog" role="document" @click.stop>
+                <div class="modal-content">
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    </script>
+
     {{ parent() }}
     <script src="{{ asset('assets/js/agenda.js') }}"></script>
 {% endblock %}
