@@ -1,13 +1,28 @@
-var Vue   = require('vue'),
-    axios = require('axios');
+var Vue         = require('vue'),
+    axios       = require('axios');
+    filterSheet = require('./agenda/filterSheet');
 
 /**
  * Pass axios to Vue
  */
 Vue.prototype.$http = axios;
 
+Vue.component('Modal', {
+    template: '#modal-template',
+    props: ['show'],
+    methods: {
+        close: function () {
+            this.$emit('close-modal');
+        }
+    }
+});
+
 new Vue({
     el: '#agenda',
+
+    components: {
+        'filterSheet': filterSheet
+    },
 
     /**
      * Customs delimiters to avoid collision with Twig

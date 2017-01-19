@@ -3,13 +3,30 @@
 {% block title 'admin.agenda.title'|trans %}
 
 {% block content %}
+    <!-- template for the Modal component -->
+    <script type="x/template" id="modal-template">
+        <div class="modal-mask" @click="close()" v-show="show">
+            <div class="modal-dialog" role="document" @click.stop>
+                <div class="modal-content">
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    </script>
+
 <div id="agenda" class="agenda-container">
     <div class="row" v-cloak>
         <div class="col-xs-2">
-
             <div class="sheets-list">
                 <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
                     <thead>
+                        <tr>
+                            <td>
+                                <script type="x/template" id="filter-sheet-form">
+                                    {{ include('@Admin/Agenda/filterSheetForm.html.twig') }}
+                                </script>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 {{ 'admin.agenda.indicators-caption'|trans }}

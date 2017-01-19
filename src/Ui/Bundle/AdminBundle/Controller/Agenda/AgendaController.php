@@ -22,12 +22,11 @@ use Symfony\Component\HttpFoundation\Response;
 class AgendaController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Event $event
      *
      * @return Response|JsonResponse
      */
-    public function indexAction(Request $request, Event $event)
+    public function indexAction(Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
