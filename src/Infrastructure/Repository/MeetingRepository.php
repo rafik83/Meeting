@@ -89,8 +89,8 @@ class MeetingRepository implements MeetingRepositoryInterface
         $pagination->results = array_map(function (Meeting $meeting) use ($locale) {
             return new MeetingView(
                 $meeting->getId(),
-                $this->sheetInfoGuesser->guessSheetName($meeting->getFromSheet(), $locale),
-                $this->sheetInfoGuesser->guessSheetName($meeting->getToSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
                 $meeting->getSlot()->getBegin(),
                 $meeting->getSlot()->getEnd()

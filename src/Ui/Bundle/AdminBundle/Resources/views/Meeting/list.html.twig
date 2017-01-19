@@ -1,17 +1,15 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>Liste des RDV positionnés</h2>
+    <h2>{{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}</h2>
 
     <table class="table">
         <thead>
             <tr>
-                <th>De</th>
-                <th>à</th>
-                <th>Slot</th>
-                <th>Créé le</th>
+                <th>{{ 'admin.meeting.list.column.head.from'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.slot'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.createdAt'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -20,15 +18,15 @@
                     <td>{{ meeting.sheetNameFrom }}</td>
                     <td>{{ meeting.sheetNameTo }}</td>
                     <td>
-                        {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale) }}
-                        {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale) }}
+                        {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                        {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
                     </td>
                     <td>{{ meeting.createdAt|localizeddate('medium', 'none', app.request.locale) }}</td>
                 </tr>
             {% else %}
                 <tr>
                     <td colspan="3">
-                        Aucun RDV positionné
+                         {{ 'admin.meeting.list.noResult'|trans }}
                     </td>
                 </tr>
             {% endfor %}

@@ -58,6 +58,7 @@ class MeetingRequestController extends Controller
             ['state' => $request->query->get('state')]
         );
 
+        // The form is not valid because of the parameters page sent
         if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
             $filters  = $filterForm->getData();
             $filtered = true;
@@ -67,16 +68,11 @@ class MeetingRequestController extends Controller
             ->get('vimeet_infrastructure.repository.meeting.request_repository')
             ->findByEventAndFilterByState($event, $request->query->getInt('page', 1), 20, $locale, $filters);
 
-        $meetingRequestsAll = $this
-            ->get('vimeet_infrastructure.repository.meeting.request_repository')
-            ->countAllByEvent($event);
-
         $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:MeetingRequest:list.html.twig', [
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
-            'totalRequest'     => $meetingRequestsAll,
             'filter_form'      => $filterFormView,
             'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
             'filtered'         => $filtered,
@@ -101,10 +97,10 @@ class MeetingRequestController extends Controller
             $meetingRequest->getId(),
             $meetingRequest->getFromSheet()->getId(),
             $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-                ->guessSheetName($meetingRequest->getFromSheet(), $locale),
+                ->guessSheetTitle($meetingRequest->getFromSheet(), $locale),
             $meetingRequest->getToSheet()->getId(),
             $this->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-                ->guessSheetName($meetingRequest->getToSheet(), $locale),
+                ->guessSheetTitle($meetingRequest->getToSheet(), $locale),
             array_map(
                 function (Participant $participant) use ($locale) {
                     return $this->get('template.participant_info_guesser')
