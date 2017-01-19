@@ -46,7 +46,7 @@ class ExportParticipantController extends Controller
 
         $charset    = Charset::WINDOWS_1252;
         $serializer = $this->get('serializer');
-        $exportContent = $serializer->serialize(new EventParticipantSchedulesNormalizerView($event), 'csv', [
+        $exportContent = $serializer->serialize(new EventParticipantSchedulesNormalizerView($event, $this->getUser()), 'csv', [
             'locale'  => $request->getLocale(),
             'charset' => $charset,
         ]);
