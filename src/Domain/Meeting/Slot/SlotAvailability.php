@@ -110,6 +110,18 @@ class SlotAvailability
 
     /**
      * @param MeetingSlot $slot
+     *
+     * @return bool
+     */
+    public function isUsable(MeetingSlot $slot)
+    {
+        $this->autoLoading($slot->getEvent());
+
+        return !$this->hasMassUnavailability($slot);
+    }
+
+    /**
+     * @param MeetingSlot $slot
      * @param Participant $participant
      *
      * @return SlotAvailabilityView
