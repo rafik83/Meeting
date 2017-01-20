@@ -1365,6 +1365,7 @@ services:
             - '@repository.billing_info_repository'
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
+            - '@domain.messaging.substitutions_provider'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
 
@@ -1400,6 +1401,11 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
+    adapter.event_url_generator:
+        class: Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator
+        arguments:
+            - '%scheme%'
+            - '@router'
 
     #
     # Components
@@ -2859,3 +2865,10 @@ services:
     domain.messaging.sendgrid_api_client:
         class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
         factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']
+
+    domain.messaging.substitutions_provider:
+        class: Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider
+        arguments:
+            - '@adapter.event_url_generator'
+            - '@template.participant_info_guesser'
+            - '@components.token.user.activate_account_token_generator'
