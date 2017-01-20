@@ -4,3 +4,5 @@ Proximum\Vimeet\Application\Command\User\ChangeMail:
             - NotBlank: ~
             - Email:
                 message: validators.email
+                strict: true
+                checkMX: true

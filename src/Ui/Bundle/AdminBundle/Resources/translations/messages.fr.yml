@@ -295,6 +295,14 @@ admin.package.table.column.event: Evènement
 admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
+admin.participant_import.title: "Importer les participants"
+admin.participant_import_mapping.title: "Correspondance entre colonnes du fichier et champs de l'inscription"
+admin.participant_import_result.title.label: "Resultat de l'importation des participants"
+admin.participant_import_result.database_participations: "Nombre de participations existantes"
+admin.participant_import_result.file_participations: "Nombre de participations dans le fichier"
+admin.participant_import_result.created_sheets: "Nombre de fiches importées"
+admin.participant_import_result.created_users: "Nombre d'utilisateurs importés"
+admin.participant_import_result.errors: "Liste des erreurs dans le fichier"
 admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
 admin.participant.export.fields.participant_created_at: 'Creation Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
@@ -430,6 +438,7 @@ admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
+admin.sheet.import.button.label: Importer
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -452,6 +461,7 @@ admin.sheet.filter.template_filters: 'Filtres supplémentaires'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
+admin.sheet.see_list: 'Voir liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.inCatalog: 'Au catalogue'
@@ -475,6 +485,7 @@ admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
+admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.spot.active.no: Non

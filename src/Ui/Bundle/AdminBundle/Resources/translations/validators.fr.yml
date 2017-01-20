@@ -21,6 +21,8 @@ validators.nomenclature.import.error: 'Votre fichier comporte des erreurs'
 validators.nomenclature.import.missing_keys: 'Vous ne pouvez plus supprimer d''élément de cette nomenclature car il y a déjà des inscriptions'
 validators.option.participant.alreadyAddedBoughtParticipant: 'Vous ne pouvez pas enlever des participants car vous les avez déjà ajouté à votre fiche, vous devez préalablement les enlever depuis votre fiche'
 validators.option.participant.optionCanNotBeUnselected: 'Vous ne pouvez pas désélectionner cette option, vous devez d''abord supprimer des participants depuis votre fiche'
+validators.participant_imported.empty_mail_mapping: 'La sélection du champ email Vimeet est obligatoire'
+validators.participant_imported.duplicate_mail_mapping: "Vous ne pouvez pas selectionner deux fois le champ email"
 validators.option.quantityMustBeAdded: 'Vous devez ajouter une quantité si vous sélectionnez cette option'
 validators.order.numeroNotValid: 'Le numéro de la commande que vous avez entré n''est pas valide'
 validators.order.orderNotFound: 'Aucune commande avec ce numéro'
@@ -49,3 +51,9 @@ validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
 validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.unavailability.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
 validators.whitespace: 'Ce champ ne doit pas contenir d''espace'
+validators.admin.sheet.participant_import.email.error: "Adresse email invalide"
+validators.admin.sheet.participant_import.telephone.error: "Telephone invalide"
+validators.admin.sheet.participant_import.gender.error: "Genre invalide doit être man/woman"
+validators.admin.sheet.import_participant.error.country: "Code ISO invalide"
+validators.admin.sheet.participant_import.nomenclature.error: "Nomenclature invalide"
+validators.admin.sheet.participant_import.email.exist.error: "Adresse email en double dans le fichier"

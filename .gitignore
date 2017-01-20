@@ -1,6 +1,7 @@
 /web/bundles/
 /web/integration/dist/
 /app/config/parameters.yml
+/var/participants_imports
 /var/bootstrap.php.cache
 /var/SymfonyRequirements.php
 /var/cache

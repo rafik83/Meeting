@@ -48,6 +48,12 @@ services:
             - '@domain.key_dates.checker.happenings_access_checker'
         tags:
             - { name: security.voter }
+    security_voter.participant_import_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ParticipantImportAccessVoter
+        arguments:
+            - '@adapter.session'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension

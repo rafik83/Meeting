@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Nomenclature;
+namespace Proximum\Vimeet\Application\Serializer;
 
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetException;
 use Symfony\Component\Debug\Exception\ContextErrorException;

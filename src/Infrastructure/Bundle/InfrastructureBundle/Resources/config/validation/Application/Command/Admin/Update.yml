@@ -4,6 +4,8 @@ Proximum\Vimeet\Application\Command\Admin\Update:
             - NotBlank: ~
             - Email:
                 message: validators.email
+                strict: true
+                checkMX: true
         password:
             - Length:
                 min: 8
