@@ -165,12 +165,11 @@ new Vue({
                 return;
             }
 
-            this.clearAgenda(sheet);
-
             this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
                     var participants = response.data.participants;
                     var requests = response.data.requests;
+                    this.clearAgenda(sheet);
 
                     participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);
@@ -399,8 +398,7 @@ new Vue({
             }
 
             if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
-                console.log(this.meetingToUpdate.slot.sheetMetId);
-                this.loadAgenda(this.meetingToUpdate.slot.sheetMetId);
+                this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId));
             }
         }
     }
