@@ -16,10 +16,11 @@ module.exports = {
             var types = [];
 
             this.sheets.forEach(function (sheet) {
-                // TODO: regarder si type de fiche existe déjà dans types, si non l'ajouter dedans
-            });
 
-            return types;
+                if (types.indexOf(sheet.types) === -1) {
+                    types.push(sheet.types);
+                }
+            });
         }
     }
 };

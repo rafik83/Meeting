@@ -8,9 +8,9 @@
         <div class="modal-body">
             <form>
                 <div class="form-group">
-                    <label for="type">Type</label>
-                    <label>
-                        <input type="checkbox"> Check me out
+                    <label for="type">{{ 'admin.agenda.filters.type'|trans }}</label>
+                    <label v-for="type in types">
+                        <input type="checkbox" v-bind:value="type"> ${ type }
                     </label>
                 </div>
             </form>
