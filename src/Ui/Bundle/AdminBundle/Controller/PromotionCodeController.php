@@ -103,7 +103,12 @@ class PromotionCodeController extends Controller
                     'event' => $event->getId(),
                 ]);
             } catch (NonUniqueCodeException $exception) {
-                $form->get('code')->addError($this->createNonUniqueCodeError($request->getLocale()));
+                $form
+                    ->get('code')
+                    ->addError($this->createNonUniqueCodeError(
+                        $event->getAvailableLocale($request->getLocale()))
+                    )
+                ;
             }
         }
 

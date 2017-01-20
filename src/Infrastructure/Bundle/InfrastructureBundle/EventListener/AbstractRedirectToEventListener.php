@@ -66,7 +66,13 @@ abstract class AbstractRedirectToEventListener
             return;
         }
 
-        return $this->doRedirect($getResponseEvent, $request, $event, $request->getLocale(), $route);
+        return $this->doRedirect(
+            $getResponseEvent,
+            $request,
+            $event,
+            $event->getAvailableLocale($request->getLocale()),
+            $route
+        );
     }
 
     /**
