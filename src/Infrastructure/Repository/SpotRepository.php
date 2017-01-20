@@ -208,12 +208,18 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('participantsQuantity', $participantsQuantity);
 
         if (null !== $exceptMeeting) {
-            // exclude spots assigned to others sheet
             $queryBuilder
+                // Get meeting sheets assigned to spot in order to sort Spots list by assigned spots then by shared spots
+                ->addSelect('sheetAssignedToSpot.id AS HIDDEN hasSheetAssignedFromMeeting')
+                ->leftJoin('spot.sheets', 'sheetAssignedToSpot', 'WITH', 'sheetAssignedToSpot IN (:fromSheetId, :toSheetId)')
+                // Exclude spots assigned to others sheet
                 ->andWhere('NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
                 ->setParameter('fromSheetId', $exceptMeeting->getFromSheet()->getId())
-                ->setParameter('toSheetId', $exceptMeeting->getToSheet()->getId());
+                ->setParameter('toSheetId', $exceptMeeting->getToSheet()->getId())
+                ->addOrderBy('hasSheetAssignedFromMeeting', 'DESC');
         }
+
+        $queryBuilder->addOrderBy('spot.reference');
 
         return $queryBuilder->getQuery()->getResult();
     }
