@@ -470,6 +470,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateSpotHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UpdateSpot }
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:

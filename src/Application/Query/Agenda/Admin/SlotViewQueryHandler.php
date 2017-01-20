@@ -77,6 +77,7 @@ class SlotViewQueryHandler
 
             if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
                 $slotViews[] = new HappeningUnavailabilitySlotView($slot, $slotAvailabilityView->type);
+
                 continue;
             }
 
@@ -93,18 +94,23 @@ class SlotViewQueryHandler
                     $sheetMet->getId(),
                     $this->sheetInfoGuesser->guessSheetTitle($sheetMet),
                     $slotAvailabilityView->meeting->getId(),
-                    $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet)
+                    $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet),
+                    $slotAvailabilityView->meeting->isBlockedSpot(),
+                    $slotAvailabilityView->meeting->isBlockedSlot()
                 );
+
                 continue;
             }
 
             if ($slotAvailabilityView->type === SlotAvailability::UNAVAILABILITY) {
                 $slotViews[] = new UnavailabilitySlotView($slot, $slotAvailabilityView->type);
+
                 continue;
             }
 
             if ($slotAvailabilityView->type === SlotAvailability::MASS_UNAVAILABILITY) {
                 $slotViews[] = new MassUnavailabilitySlotView($slot, $slotAvailabilityView->type);
+
                 continue;
             }
 

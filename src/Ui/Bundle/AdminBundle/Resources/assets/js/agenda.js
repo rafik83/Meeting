@@ -69,8 +69,12 @@ Vue.component('MeetingUpdateModal', {
                 this.close();
             }.bind(this))
             .catch(function (error) {
-                alert(error);
-                console.log(error);
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert(error.message);
+                }
+
                 this.disabled = false;
             }.bind(this));
         }
@@ -133,7 +137,11 @@ new Vue({
                     this.sheets = response.data;
                 }.bind(this))
                 .catch(function(error) {
-                    console.log(error);
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
                 });
         },
 
@@ -183,7 +191,11 @@ new Vue({
                     this.$forceUpdate();
                 }.bind(this))
                 .catch(function(error) {
-                    console.log(error);
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
                 });
         },
 
@@ -211,7 +223,7 @@ new Vue({
             var sheet = this.findSheetBySheetId(sheetMetId);
 
             if (null === sheet) {
-                console.log('Sheet id = ' + sheetMetId + ' not found');
+                alert('Sheet id = ' + sheetMetId + ' not found');
                 return;
             }
 
@@ -373,7 +385,12 @@ new Vue({
                 }.bind(this))
                 .catch(function(error) {
                     this.isMeetingToUpdateLoading = false;
-                    console.log(error);
+
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
                 }.bind(this));
         },
 

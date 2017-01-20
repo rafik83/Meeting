@@ -40,4 +40,20 @@ class UpdateSpot
         $this->blockedSlot = $blockedSlot;
         $this->blockedSpot = $blockedSpot;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSlot()
+    {
+        return $this->blockedSlot;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBlockedSpot()
+    {
+        return $this->blockedSpot;
+    }
 }

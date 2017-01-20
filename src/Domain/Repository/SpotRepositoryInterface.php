@@ -81,7 +81,7 @@ interface SpotRepositoryInterface
      * @param int          $participantsQuantity
      * @param Meeting|null $exceptMeeting
      *
-     * @return mixed
+     * @return Spot[]
      */
     public function getSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
