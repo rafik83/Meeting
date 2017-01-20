@@ -77,7 +77,7 @@ final class MarkdownFormatter
      */
     public static function newLine($string)
     {
-        return sprintf('%s%s %s', $string, "\n" , "\n");
+        return sprintf('%s%s%s', $string, "\n" , "\n");
     }
 
     /**
