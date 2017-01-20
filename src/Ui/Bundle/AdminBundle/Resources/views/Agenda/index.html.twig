@@ -4,7 +4,7 @@
 
 {% block content %}
 <div id="agenda" class="agenda-container">
-    <meeting-update-modal v-bind:meeting-to-update="meetingToUpdate" v-on:close-modal="meetingToUpdate = null"></meeting-update-modal>
+    <meeting-update-modal v-bind:meeting-to-update="meetingToUpdate" v-on:close-modal="clearMeetingToUpdate()" v-on:meeting-updated="meetingUpdated()"></meeting-update-modal>
 
     <div class="row" v-cloak>
         <div class="col-xs-2">

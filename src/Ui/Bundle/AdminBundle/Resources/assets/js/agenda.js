@@ -32,11 +32,13 @@ Vue.component('MeetingUpdateModal', {
             type: Object,
             default: function () {
                 return {
-                    meetingId: null,
-                    blockedSlot: false,
-                    blockedSpot: false,
-                    spotId: null,
-                    availableSpots: [],
+                    form: {
+                        meetingId: null,
+                        blockedSlot: false,
+                        blockedSpot: false,
+                        spotId: null,
+                        availableSpots: []
+                    }
                 }
             }
         }
@@ -57,16 +59,17 @@ Vue.component('MeetingUpdateModal', {
         save: function () {
             this.disabled = true;
 
-            this.$http.post(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.meetingId), {
-                blockedSlot: this.meetingToUpdate.blockedSlot,
-                blockedSpot: this.meetingToUpdate.blockedSpot,
-                spotId: this.meetingToUpdate.spotId
+            this.$http.post(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
+                blockedSlot: this.meetingToUpdate.form.blockedSlot,
+                blockedSpot: this.meetingToUpdate.form.blockedSpot,
+                spotId: this.meetingToUpdate.form.spotId
             })
             .then(function (response) {
-                console.log(response);
+                this.$emit('meeting-updated');
                 this.close();
             }.bind(this))
             .catch(function (error) {
+                alert(error);
                 console.log(error);
                 this.disabled = false;
             }.bind(this));
@@ -156,13 +159,18 @@ new Vue({
          * @param sheet
          */
         loadAgenda: function (sheet) {
+            var sheetId = this.findSheetAgenda(sheet);
+
+            if (-1 === sheetId) {
+                return;
+            }
+
             this.clearAgenda(sheet);
 
             this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
                     var participants = response.data.participants;
                     var requests = response.data.requests;
-                    var sheetId = this.findSheetAgenda(sheet);
 
                     participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);
@@ -357,13 +365,43 @@ new Vue({
 
             this.$http.get(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(slot.meetingId))
                 .then(function(response) {
-                    this.meetingToUpdate = response.data;
+                    this.meetingToUpdate = {
+                        sheet: sheet,
+                        slot: slot,
+                        form: response.data
+                    };
                     this.isMeetingToUpdateLoading = false;
                 }.bind(this))
                 .catch(function(error) {
                     this.isMeetingToUpdateLoading = false;
                     console.log(error);
                 }.bind(this));
+        },
+
+        /**
+         * Clear meetingToUpdate
+         */
+        clearMeetingToUpdate: function () {
+            this.meetingToUpdate = null;
+            this.isMeetingToUpdateLoading = false;
+        },
+
+        /**
+         * Lister for "meeting-update" event
+         */
+        meetingUpdated: function () {
+            if (null === this.meetingToUpdate) {
+                return;
+            }
+
+            if (null !== this.meetingToUpdate.sheet) {
+                this.loadAgenda(this.meetingToUpdate.sheet);
+            }
+
+            if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
+                console.log(this.meetingToUpdate.slot.sheetMetId);
+                this.loadAgenda(this.meetingToUpdate.slot.sheetMetId);
+            }
         }
     }
 });
