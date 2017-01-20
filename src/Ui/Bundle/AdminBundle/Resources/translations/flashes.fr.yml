@@ -19,6 +19,7 @@ flash.admin.happening.category.update.success: 'La catégorie de sous événemen
 flash.admin.happening.create.success: 'Le sous événement a bien été créé'
 flash.admin.happening.participation.empty: 'Il n''y a aucun participant à exporter pour ces conférences'
 flash.admin.happening.update.success: 'Le sous événement a bien été mis à jour'
+flash.admin.meeting.remove.failed: 'Ce rendez-vous est bloqué'
 flash.admin.meeting_request.position.success: 'Le rendez-vous a bien été placé'
 flash.admin.messaging.campaign.create.success: 'Campagne d''emailing créée avec succès. Vous pouvez à présent sélectionner vos destinataires.'
 flash.admin.messaging.campaign.message.success: 'Campagne créée avec succès. Elle est désormais prête à être envoyée.'
