@@ -16,9 +16,14 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
+/**
+ * Agenda
+ */
 class PlanningViewQueryHandler
 {
     /**
@@ -37,17 +42,25 @@ class PlanningViewQueryHandler
     private $formatter = null;
 
     /**
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
      * PlanningViewQueryHandler constructor.
      *
-     * @param NavigationBuilderInterface $navigationBuilder
-     * @param HappeningsAccessChecker    $happeningsAccessChecker
+     * @param NavigationBuilderInterface    $navigationBuilder
+     * @param HappeningsAccessChecker       $happeningsAccessChecker
+     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        HappeningsAccessChecker $happeningsAccessChecker
+        HappeningsAccessChecker $happeningsAccessChecker,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
     ) {
-        $this->navigationBuilder       = $navigationBuilder;
-        $this->happeningsAccessChecker = $happeningsAccessChecker;
+        $this->navigationBuilder             = $navigationBuilder;
+        $this->happeningsAccessChecker       = $happeningsAccessChecker;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
     }
 
     /**
@@ -57,11 +70,13 @@ class PlanningViewQueryHandler
      */
     public function handle(PlanningViewQuery $planningQuery)
     {
+        $event     = $planningQuery->sheet->getEvent();
         $linkViews = [];
 
-        $linkViews[] = $this->getHappeningAvailableDateLinkView($planningQuery->sheet, $planningQuery->locale);
+        $linkViews[] = $this->getHappeningAvailableDateLinkView($event, $planningQuery->sheet, $planningQuery->locale);
 
         $schedulePublishDateLinkView = $this->getSchedulePublishDateLinkView(
+            $event,
             $planningQuery->sheet,
             $planningQuery->locale
         );
@@ -74,12 +89,13 @@ class PlanningViewQueryHandler
     }
 
     /**
+     * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
      *
      * @return LinkView
      */
-    private function getHappeningAvailableDateLinkView(Sheet $sheet, $locale)
+    private function getHappeningAvailableDateLinkView(Event $event, Sheet $sheet, $locale)
     {
         $happeningOpenDate = $sheet
             ->getEvent()
@@ -91,7 +107,7 @@ class PlanningViewQueryHandler
 
             $agendaRoute = null;
 
-            if ($this->happeningsAccessChecker->allowedToAccess($sheet->getEvent())) {
+            if ($this->happeningsAccessChecker->allowedToAccess($event)) {
                 $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
             }
 
@@ -107,12 +123,13 @@ class PlanningViewQueryHandler
     }
 
     /**
+     * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
      *
      * @return null|LinkView
      */
-    private function getSchedulePublishDateLinkView(Sheet $sheet, $locale)
+    private function getSchedulePublishDateLinkView(Event $event, Sheet $sheet, $locale)
     {
         $schedulePublishDate = $sheet
             ->getEvent()
@@ -122,9 +139,15 @@ class PlanningViewQueryHandler
         if ($schedulePublishDate !== null) {
             $schedulePublishDateFormatted = $this->getFormatter($locale)->format($schedulePublishDate);
 
+            $agendaRoute = null;
+
+            if ($this->meetingPublishedAccessChecker->allowedToAccess($event)) {
+                $agendaRoute = $this->navigationBuilder->getRoute('event_agenda');
+            }
+
             return new LinkView(
                 'navigation.links.planning.final_date',
-                null,
+                $agendaRoute,
                 null,
                 new StateButtonView(false, $schedulePublishDateFormatted ? $schedulePublishDateFormatted : '')
             );

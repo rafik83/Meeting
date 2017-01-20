@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Unavailability\Mass;
 
-abstract class AbstractMassView
+use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
+
+abstract class AbstractMassView extends AbstractTimeEntityView
 {
     /**
      * @var int
@@ -21,16 +23,6 @@ abstract class AbstractMassView
      * @var string
      */
     public $picto;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $begin;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $end;
 
     /**
      * @var string
@@ -53,6 +45,11 @@ abstract class AbstractMassView
     public $rightColor;
 
     /**
+     * @var string
+     */
+    public $timeZone;
+
+    /**
      * @param int                $id
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
@@ -61,6 +58,7 @@ abstract class AbstractMassView
      * @param string             $picto
      * @param string             $leftColor
      * @param string             $rightColor
+     * @param string             $timeZone
      */
     public function __construct(
         $id,
@@ -70,7 +68,8 @@ abstract class AbstractMassView
         $description,
         $picto,
         $leftColor,
-        $rightColor
+        $rightColor,
+        $timeZone
     ) {
         $this->id          = $id;
         $this->begin       = $begin;
@@ -80,13 +79,6 @@ abstract class AbstractMassView
         $this->picto       = $picto;
         $this->leftColor   = $leftColor;
         $this->rightColor  = $rightColor;
-    }
-
-    /**
-     * @return \DateInterval
-     */
-    public function getDuration()
-    {
-        return $this->end->diff($this->begin);
+        $this->timeZone    = $timeZone;
     }
 }
