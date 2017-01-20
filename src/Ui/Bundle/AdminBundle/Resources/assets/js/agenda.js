@@ -229,6 +229,45 @@ new Vue({
         },
 
         /**
+         * Remove meeting from sheet (and sheet met) and reload agenda(s)
+         *
+         * @param {int} sheetId
+         * @param {int} meetingId
+         * @param {string} message
+         */
+        removeMeeting: function(sheetId, meetingId, message) {
+
+            if (window.confirm(message)) {
+
+                var sheet = this.findSheetBySheetId(sheetId);
+
+                this.$http.get(this.getRemoveMeetingEndpoint(sheet , meetingId))
+                .then(function() {
+
+                        var meetings = this.findMeetings(sheet);
+
+                        for (var meetingIndex = 0; meetingIndex < meetings.length; meetingIndex++) {
+                            var sheetMet = this.findSheetAgendaBySheetId(meetings[meetingIndex].sheetMetId);
+
+                            if (null !== sheetMet) {
+                                this.loadAgenda(sheetMet);
+                            }
+                        }
+
+                        this.focusAgenda(sheet);
+                        this.loadAgenda(sheet)
+
+                }.bind(this))
+                .catch(function(error) {
+                    if (error.response.status == 423) {
+                        window.alert(error.response.data);
+                    }
+                    console.log(error);
+                });
+            }
+        },
+
+        /**
          * Highlight meetings in common in opened agendas with the given sheet
          *
          * @param sheet
@@ -271,6 +310,16 @@ new Vue({
          */
         getSheetAgendaEndpoint: function (sheet) {
             return document.location.pathname + '/sheet/' + sheet.id;
+        },
+
+        /**
+         * Returns /admin/fr/event/{event_id}/agenda/sheet/{sheet_id}/meeting/{meeting_id}/remove
+         * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheet/{sheet_id}/meeting/{meeting_id}/remove
+         *
+         * @returns {string}
+         */
+        getRemoveMeetingEndpoint: function (sheet, meetingId) {
+            return document.location.pathname + '/sheet/' + sheet.id + '/meeting/' + meetingId + '/remove';
         }
     }
 });
