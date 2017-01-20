@@ -135,18 +135,34 @@ new Vue({
         },
 
         /**
+         * Clear sheet agenda data
+         *
+         * @param sheet
+         */
+        clearAgenda: function (sheet) {
+            var sheetId = this.findSheetAgenda(sheet);
+
+            if (-1 >= sheetId) {
+                return;
+            }
+
+            this.agendas[sheetId].participants = [];
+            this.agendas[sheetId].requests = [];
+        },
+
+        /**
          * Load sheet agenda data
          *
          * @param sheet
          */
         loadAgenda: function (sheet) {
+            this.clearAgenda(sheet);
+
             this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
-                    var participants                   = response.data.participants;
-                    var requests                       = response.data.requests;
-                    var sheetId                        = this.findSheetAgenda(sheet);
-                    this.agendas[sheetId].participants = [];
-                    this.agendas[sheetId].requests     = [];
+                    var participants = response.data.participants;
+                    var requests = response.data.requests;
+                    var sheetId = this.findSheetAgenda(sheet);
 
                     participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);
