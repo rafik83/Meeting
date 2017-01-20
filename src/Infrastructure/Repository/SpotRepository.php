@@ -185,12 +185,14 @@ class SpotRepository implements SpotRepositoryInterface
             ->addSelect('COUNT(meeting.id) AS HIDDEN countMeetings')
             ->addSelect('COUNT(fromParticipant.id) + COUNT(toParticipant.id) AS HIDDEN countParticipants')
             ->from(Spot::class, 'spot')
+            // Get meetings assigned to this spot on current slot
             ->leftJoin(
                 Meeting::class,
                 'meeting',
                 'WITH',
                 sprintf(
                     'meeting.spot = spot AND meeting.state = :state AND meeting.slot = :slot %s',
+                    // Exclude $exceptMeeting
                     null !== $exceptMeeting ? 'AND meeting != :exceptMeeting' : ''
                 )
             )
@@ -204,6 +206,14 @@ class SpotRepository implements SpotRepositoryInterface
             ->andHaving('countMeetings < spot.meetingCapacity')
             ->andHaving('(countParticipants + :participantsQuantity) <= spot.seatCapacity')
             ->setParameter('participantsQuantity', $participantsQuantity);
+
+        if (null !== $exceptMeeting) {
+            // exclude spots assigned to others sheet
+            $queryBuilder
+                ->andWhere('NOT EXISTS(SELECT sheet.id FROM Entity:Sheet sheet WHERE sheet.spot = spot AND sheet NOT IN (:fromSheetId, :toSheetId))')
+                ->setParameter('fromSheetId', $exceptMeeting->getFromSheet()->getId())
+                ->setParameter('toSheetId', $exceptMeeting->getToSheet()->getId());
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
