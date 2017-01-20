@@ -134,6 +134,11 @@
                                                                     <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true }" v-if="slot.type === 'meeting_unavailability'">
                                                                         {#<a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>#}
                                                                         <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <div v-if="slot.locked == false" class="slot-label slot-time">
+                                                                            <small class="slot-remove">
+                                                                                <span v-on:click="removeMeeting(sheet.id, slot.meetingId, '{{ 'admin.agenda.remove.confirm'|trans }}')" class="glyphicon glyphicon-remove"></span>
+                                                                            </small>
+                                                                        </div>
 
                                                                         <div class="slot-label">
                                                                             <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>
