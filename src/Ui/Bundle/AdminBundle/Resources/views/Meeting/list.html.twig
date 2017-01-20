@@ -5,6 +5,7 @@
 {% block content %}
     <h2>
         {{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
         <span class="pull-right">
             {{ macro.delete_button(
                 path('admin_meeting_delete_all', {'event': event.id}),
@@ -12,6 +13,7 @@
                 {'class': 'btn btn-danger', 'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans}
             ) }}
         </span>
+        {% endif %}
     </h2>
 
     <table class="table table-hover">
