@@ -90,6 +90,8 @@ class Meeting implements MessageSubjectInterface
      * @param array              $toParticipants
      * @param \DateTimeInterface $createdAt
      * @param Spot               $spot
+     * @param bool               $blockedSpot
+     * @param bool               $blockedSlot
      */
     public function __construct(
         Request $request,
@@ -99,7 +101,9 @@ class Meeting implements MessageSubjectInterface
         Sheet $toSheet,
         array $toParticipants,
         \DateTimeInterface $createdAt,
-        Spot $spot
+        Spot $spot,
+        $blockedSpot = false,
+        $blockedSlot = false
     ) {
         $this->request          = $request;
         $this->slot             = $slot;
@@ -109,6 +113,8 @@ class Meeting implements MessageSubjectInterface
         $this->toParticipants   = new ArrayCollection($toParticipants);
         $this->createdAt        = $createdAt;
         $this->spot             = $spot;
+        $this->blockedSpot      = $blockedSpot;
+        $this->blockedSlot      = $blockedSlot;
     }
 
     /**
