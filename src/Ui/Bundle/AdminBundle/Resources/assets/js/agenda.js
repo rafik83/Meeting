@@ -241,7 +241,7 @@ new Vue({
 
                 var sheet = this.findSheetBySheetId(sheetId);
 
-                this.$http.get(this.getRemoveMeetingEndpoint(sheet , meetingId))
+                this.$http.delete(this.getRemoveMeetingEndpoint(sheet , meetingId))
                 .then(function() {
 
                         var meetings = this.findMeetings(sheet);

@@ -294,7 +294,7 @@ admin_agenda_sheet_meeting_remove:
         event: \d+
         sheet: \d+
         meeting: \d+
-    methods: [GET, POST]
+    methods: [DELETE]
     defaults: { _controller: AdminBundle:Agenda/Agenda:removeMeeting }
 
 #
