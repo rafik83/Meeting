@@ -69,7 +69,9 @@ class Happening
     private $limitParticipant;
 
     /**
-     * @var HappeningParticipation[]
+     * array of HappeningParticipation
+     *
+     * @var ArrayCollection
      */
     private $participations;
 

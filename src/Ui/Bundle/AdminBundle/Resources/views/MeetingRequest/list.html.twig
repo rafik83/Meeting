@@ -3,7 +3,7 @@
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(totalRequest, {'%count%': totalRequest}) }}</h1>
+    <h1 class="page-header">{{ 'admin.meeting_request.title'|transchoice(meeting_requests.total, {'%count%': meeting_requests.total}) }}</h1>
 
     {{ include('AdminBundle:Common:filters_summary.html.twig', {
         filters:   filters_summary,
@@ -33,7 +33,7 @@
                         {{ meeting_request.sheetNameTo }}
                     </a>
                 </td>
-                <td>{{ meeting_request.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>{{ meeting_request.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>
                     {{ macro.state_label(
                         ('admin.meeting_request.state.' ~ meeting_request.state)|trans,
@@ -49,15 +49,12 @@
                 <td class="text-right">
                     {{ macro.btnGroupAndRightMenuDropdown({
                         ('admin.meeting_request.details'|trans): path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting_request.id}),
-                    }|merge(meeting_request.state != 'approved'
-                        ? {}
-                        : { ('admin.meeting_request.set_a_meeting'|trans): path('admin_meeting_request_position', { 'event': event.id, 'meetingRequest': meeting_request.id }) }
-                    )) }}
+                    }) }}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">
+                <td colspan="5" class="text-center">
                     {{ 'admin.zero-result'|trans }}
                 </td>
             </tr>

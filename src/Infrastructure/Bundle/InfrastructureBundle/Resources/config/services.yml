@@ -543,14 +543,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting }
     vimeet_infrastructure.vimeet.application.command.meeting_request.request_to_meetings_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetingsHandler
         arguments:
@@ -1115,6 +1107,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
+    command.meeting_slot.remove_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Remove }
     command.event.configure_dates_handler:
         class: Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler
         arguments:
@@ -1382,8 +1381,16 @@ services:
             - '@repository.billing_info_repository'
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
+            - '@domain.messaging.substitutions_provider'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+    command.meeting.admin.delete_all_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
     #
     # Security
@@ -1421,10 +1428,17 @@ services:
             - '@security.token_storage'
             - '@session'
             - '@event_dispatcher'
+
     adapter.validator_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter
         arguments:
             - '@validator'
+
+    adapter.event_url_generator:
+        class: Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator
+        arguments:
+            - '%scheme%'
+            - '@router'
 
     #
     # Components
@@ -2930,3 +2944,10 @@ services:
     domain.messaging.sendgrid_api_client:
         class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
         factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']
+
+    domain.messaging.substitutions_provider:
+        class: Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider
+        arguments:
+            - '@adapter.event_url_generator'
+            - '@template.participant_info_guesser'
+            - '@components.token.user.activate_account_token_generator'

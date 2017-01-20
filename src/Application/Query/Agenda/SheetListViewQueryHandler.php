@@ -128,7 +128,7 @@ class SheetListViewQueryHandler
     private function sortSheetsByTitle(array &$sheetList)
     {
         usort($sheetList, function (SheetView $one, SheetView $other) {
-            return strcmp($one->title, $other->title);
+            return strcasecmp($one->title, $other->title);
         });
     }
 
