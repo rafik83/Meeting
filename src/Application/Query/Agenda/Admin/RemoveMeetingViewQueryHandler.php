@@ -37,7 +37,7 @@ class RemoveMeetingViewQueryHandler
         TranslatorInterface $translator
     ) {
         $this->meetingRepository = $meetingRepository;
-        $this->translator = $translator;
+        $this->translator        = $translator;
     }
 
     /**

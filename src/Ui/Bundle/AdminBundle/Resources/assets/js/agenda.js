@@ -77,7 +77,7 @@ new Vue({
             }
 
             this.agendas[sheetId].participants = [];
-            this.agendas[sheetId].requests = [];
+            this.agendas[sheetId].requests     = [];
         },
 
         /**
@@ -91,8 +91,8 @@ new Vue({
             this.$http.get(agendaApiEndpoints.getSheetAgendaEndpoint(sheet))
                 .then(function(response) {
                     var participants = response.data.participants;
-                    var requests = response.data.requests;
-                    var sheetId = this.findSheetAgenda(sheet);
+                    var requests     = response.data.requests;
+                    var sheetId      = this.findSheetAgenda(sheet);
 
                     participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);

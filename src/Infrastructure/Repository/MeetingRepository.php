@@ -217,7 +217,8 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->where('meeting = :meeting')
             ->setParameter('meeting', $meeting)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
 
         $this->entityManager->flush();
     }

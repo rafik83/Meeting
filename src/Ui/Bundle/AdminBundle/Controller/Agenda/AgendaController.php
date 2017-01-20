@@ -100,7 +100,7 @@ class AgendaController extends Controller
             $this->get('tactician.commandbus.query')->handle(new RemoveMeetingViewQuery($meeting, $this->getUser()));
         } catch (LockedException $lockedException) {
             $response->setData($lockedException->getMessage());
-            $response->setStatusCode(423);
+            $response->setStatusCode(Response::HTTP_LOCKED);
         }
 
         return $response;
