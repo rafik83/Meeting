@@ -151,7 +151,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
         $gender = isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $participantInfo[Tag::PARTICIPANT_GENDER] : null;
 
-        if (null !== $gender) {
+        if (null !== $gender && !empty($gender)) {
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
