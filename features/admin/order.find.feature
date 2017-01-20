@@ -28,6 +28,6 @@ Feature: Find a sheet with an order numero
     Then I fill in "form.order_find.children.numero.label" with "01-01-03"
     And I press "form.order_find.children.submit.label"
     Then I should be on this page "/admin/fr/event/1/sheet/1#sheetOrders"
-    And I should see "Onera"
+    And I should see "Aanera"
     And I should see "01-01-03"
 
