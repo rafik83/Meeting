@@ -270,7 +270,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      */
     private function formatTimeEntities(array $timeEntities, Admin $user)
     {
-        $formatted = '';
+        $formattedTimes = [];
         $formatter = new IntlDateFormatter(
             $user->getLocale(),
             IntlDateFormatter::NONE,
@@ -279,7 +279,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         $formatter->setPattern('HH:mm');
 
         foreach ($timeEntities as $timeEntity) {
-            $formatted .= $this->getFormattedDate($formatter, $timeEntity->begin) . ' - ' . $this->getFormattedDate($formatter, $timeEntity->end) . ' : ';
+            $formatted = $this->getFormattedDate($formatter, $timeEntity->begin) . ' - ' . $this->getFormattedDate($formatter, $timeEntity->end) . ' : ';
 
             if ($timeEntity instanceof MeetingView) {
                 $formatted .= $this->translator->trans(
@@ -307,10 +307,10 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                 ;
             }
 
-            $formatted = MarkdownFormatter::newLine($formatted);
+            $formattedTimes[] = $formatted;
         }
 
-        return $formatted;
+        return MarkdownFormatter::lists($formattedTimes);
     }
 
     /**
