@@ -18,7 +18,6 @@ Proximum\Vimeet\Application\Command\Billing\UpdateInfo:
             - NotBlank: ~
             - Email:
                 strict: true
-                checkMX: true
             - Type: { type: string }
         company:
             - NotBlank: ~
