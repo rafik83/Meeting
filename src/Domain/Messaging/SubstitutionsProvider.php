@@ -181,7 +181,7 @@ class SubstitutionsProvider
             $this->eventUrlGenerator->generateEventAbsoluteUrl(
                 $event,
                 'event_activate_account',
-                ['token' => $this->activateAccountTokenGenerator->generate($user, $sheet)]
+                ['token' => $this->activateAccountTokenGenerator->generate($user, $sheet)->getToken()]
             )
         ;
     }
