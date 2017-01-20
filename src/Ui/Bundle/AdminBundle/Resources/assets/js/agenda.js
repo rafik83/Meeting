@@ -343,14 +343,19 @@ new Vue({
         },
 
         /**
-         * Load meeting
+         * Load meeting data
          *
-         * @param {int} meetingId
+         * @param sheet
+         * @param slot
          */
-        loadMeetingUpdateSpot: function (meetingId) {
+        loadMeetingUpdateSpot: function (sheet, slot) {
+            if (slot.meetingId === undefined) {
+                return;
+            }
+
             this.isMeetingToUpdateLoading = true;
 
-            this.$http.get(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(meetingId))
+            this.$http.get(agendaApiEndpoints.getMeetingUpdateSpotEndpoint(slot.meetingId))
                 .then(function(response) {
                     this.meetingToUpdate = response.data;
                     this.isMeetingToUpdateLoading = false;
