@@ -1091,6 +1091,13 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
+    command.meeting_slot.remove_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Remove }
     command.event.configure_dates_handler:
         class: Proximum\Vimeet\Application\Command\Event\ConfigureDatesHandler
         arguments:
