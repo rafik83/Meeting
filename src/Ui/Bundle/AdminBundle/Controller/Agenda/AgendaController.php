@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RemoveMeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -73,5 +76,33 @@ class AgendaController extends Controller
         );
 
         return new JsonResponse($agendaSheetView);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Sheet   $sheet
+     * @param Meeting $meeting
+     *
+     * @return JsonResponse
+     */
+    public function removeMeetingAction(Request $request, Event $event, Sheet $sheet, Meeting $meeting)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($sheet->getEvent() !== $event) {
+            return new JsonResponse('Sheet are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $response = new JsonResponse();
+
+        try {
+            $this->get('tactician.commandbus.query')->handle(new RemoveMeetingViewQuery($meeting, $this->getUser()));
+        } catch (LockedException $lockedException) {
+            $response->setData($lockedException->getMessage());
+            $response->setStatusCode(423);
+        }
+
+        return $response;
     }
 }
