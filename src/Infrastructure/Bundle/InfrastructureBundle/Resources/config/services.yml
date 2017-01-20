@@ -2867,6 +2867,7 @@ services:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\EventParticipantSchedulesNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
