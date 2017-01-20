@@ -24,4 +24,41 @@ class Compose
     const LINK_CATALOG           = '%catalogLink%';
     const LINK_MEETING_REQUEST   = '%meetingRequestLink%';
     const LINK_ACTIVACTE_ACCOUNT = '%activateAccountLink%';
+
+    /**
+     * @return string[]
+     */
+    public static function getAllPlaceholders()
+    {
+        return array_merge(self::getTagPlaceholders(), self::getLinkPlaceholders());
+    }
+
+    /**
+     * @return string[]
+     */
+    private static function getTagPlaceholders()
+    {
+        return [
+            self::TAG_EVENT_NAME,
+            self::TAG_PARTICIPANT,
+            self::TAG_PARTICIPATION_TYPE,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    private static function getLinkPlaceholders()
+    {
+        return [
+            self::LINK_ACTIVACTE_ACCOUNT,
+            self::LINK_AGENDA,
+            self::LINK_CATALOG,
+            self::LINK_MEETING_REQUEST,
+            self::LINK_ORDERS,
+            self::LINK_PACKAGE,
+            self::LINK_PROGRAM,
+            self::LINK_SHEET,
+        ];
+    }
 }

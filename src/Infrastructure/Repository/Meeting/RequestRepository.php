@@ -294,9 +294,9 @@ class RequestRepository implements RequestRepositoryInterface
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetName($request->getToSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
                 $request->getState(),
                 $request->getCreatedAt(),
                 ''

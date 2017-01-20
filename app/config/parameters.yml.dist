@@ -31,6 +31,7 @@ parameters:
     sendgrid_api_key: ~
 
     domain: vimeet.proximum.dev
+    scheme: http
 
     timezone_default: Europe/Paris
 

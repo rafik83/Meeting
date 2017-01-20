@@ -57,6 +57,11 @@ class AgendaViewQueryHandler
     private $meetingRepository;
 
     /**
+     * @var MeetingPublishedAccessChecker
+     */
+    private $meetingPublishedAccessChecker;
+
+    /**
      * @param DayRepositoryInterface                    $dayRepository
      * @param DayViewQueryHandler                       $dayViewQueryHandler
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository

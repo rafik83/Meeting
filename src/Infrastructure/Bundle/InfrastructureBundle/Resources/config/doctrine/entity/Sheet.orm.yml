@@ -33,6 +33,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         inCatalogAt:
             type: datetime
             nullable: true
+        imported:
+            type: boolean
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

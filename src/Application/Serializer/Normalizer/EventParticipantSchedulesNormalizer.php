@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -77,4 +78,11 @@ interface MeetingRepositoryInterface
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return bool
+     */
+    public function hasMeetingOnSlot(MeetingSlot $meetingSlot);
 }
