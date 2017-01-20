@@ -288,6 +288,15 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_sheet_meeting_remove:
+    path: /event/{event}/agenda/sheet/{sheet}/meeting/{meeting}/remove
+    requirements:
+        event: \d+
+        sheet: \d+
+        meeting: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Agenda/Agenda:removeMeeting }
+
 #
 # Meeting
 #
