@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter;
 
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SheetParamConverter implements ParamConverterInterface
 {
@@ -43,11 +43,11 @@ class SheetParamConverter implements ParamConverterInterface
         $sheet       = $this->sheetRepository->getSheetById($sheetId);
 
         if (null === $sheet) {
-            throw new NotFoundHttpException('Sheet not found');
+            throw new SheetNotFoundException('Sheet not found');
         }
 
         if (null !== $eventDomain && $eventDomain->getEvent() !== $sheet->getEvent()) {
-            throw new NotFoundHttpException('Sheet not found in that event');
+            throw new SheetNotFoundException('Sheet not found in that event');
         }
 
         $request->attributes->set($configuration->getName(), $sheet);

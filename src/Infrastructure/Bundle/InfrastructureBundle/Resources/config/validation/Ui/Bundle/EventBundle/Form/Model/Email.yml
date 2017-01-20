@@ -5,3 +5,4 @@ Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email:
                 message: validators.required.email
             - Email:
                 message: validators.email
+                strict: true

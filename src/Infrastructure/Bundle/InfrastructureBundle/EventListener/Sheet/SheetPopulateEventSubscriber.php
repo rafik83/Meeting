@@ -14,14 +14,15 @@ use FOS\ElasticaBundle\Persister\ObjectPersister;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
-use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CancelRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
+use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnapprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\UnRefusedRequestEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
@@ -65,6 +66,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::MEETING_REQUEST_APPROVED   => 'onMeetingRequestApproved',
             Events::MEETING_REQUEST_UNAPPROVED => 'onMeetingRequestUnapproved',
             Events::MEETING_REQUEST_UNREFUSED  => 'onMeetingRequestUnrefused',
+            Events::PARTICIPANT_IMPORTED       => 'onParticipantImported',
         ];
     }
 
@@ -181,6 +183,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param ParticipantImportedEvent $event
+     */
+    public function onParticipantImported(ParticipantImportedEvent $event)
+    {
+        $this->updateSheetIndexation($event->getSheets());
+    }
+
+    /**
      * Update "from" and "to" sheets of the meeting request
      *
      * @param Request $request
@@ -192,10 +202,14 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param Sheet $sheet
+     * @param Sheet|Sheet[] $sheet
      */
-    private function updateSheetIndexation(Sheet $sheet)
+    private function updateSheetIndexation($sheet)
     {
-        $this->persister->replaceOne($sheet);
+        if (is_array($sheet)) {
+            $this->persister->replaceMany($sheet);
+        } elseif ($sheet instanceof Sheet) {
+            $this->persister->replaceOne($sheet);
+        }
     }
 }
