@@ -164,6 +164,14 @@ admin.meeting_request.state.sent: Envoyé
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
 admin.meeting.link: Rendez-vous
+admin.meeting.list.title: 'RDV positionnés'
+admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
+admin.meeting.action.deleteAll.confirm: 'Êtes vous sûr de vouloir supprimer l''ensemble des rendez-vous'
+admin.meeting.list.column.head.from: 'De'
+admin.meeting.list.column.head.to: 'À'
+admin.meeting.list.column.head.slot: 'Créneau'
+admin.meeting.list.column.head.createdAt: 'Créé le'
+admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.menu.link: Menu
 admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'

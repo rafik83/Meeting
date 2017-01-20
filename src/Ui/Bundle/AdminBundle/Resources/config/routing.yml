@@ -299,6 +299,13 @@ admin_meeting_list:
     methods: [GET]
     defaults: { _controller: AdminBundle:Meeting:list }
 
+admin_meeting_delete_all:
+    path: /event/{event}/meeting/delete/all
+    requirements:
+        event: \d+
+    methods: [DELETE]
+    defaults: { _controller: AdminBundle:Meeting:delete }
+
 #
 # Spot
 #
@@ -363,14 +370,6 @@ admin_transform_requests_to_meetings:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:transformRequestsToMeetings }
-
-admin_meeting_request_position:
-    path: /event/{event}/meeting-request/{meetingRequest}/position
-    requirements:
-        event: \d+
-        meetingRequest: \d+
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:MeetingRequest:position }
 
 admin_meeting_request_details:
     path: /event/{event}/meeting-request/{meetingRequest}/details

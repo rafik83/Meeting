@@ -519,14 +519,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
-    vimeet_infrastructure.vimeet.application.command.meeting_request.position_meeting_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeetingHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\PositionMeeting }
     vimeet_infrastructure.vimeet.application.command.meeting_request.request_to_meetings_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\RequestsToMeetingsHandler
         arguments:
@@ -1368,6 +1360,13 @@ services:
             - '@domain.messaging.substitutions_provider'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+    command.meeting.admin.delete_all_handler:
+        class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
     #
     # Security

@@ -43,9 +43,10 @@ class FilterMeetingRequestType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'required'        => false,
-            'method'          => 'GET',
-            'csrf_protection' => false,
+            'required'           => false,
+            'method'             => 'GET',
+            'csrf_protection'    => false,
+            'allow_extra_fields' => true,
         ]);
     }
 }
