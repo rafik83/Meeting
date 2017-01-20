@@ -77,7 +77,7 @@ final class MarkdownFormatter
      */
     public static function newLine($string)
     {
-        return sprintf('%s%s', $string, PHP_EOL . PHP_EOL);
+        return sprintf('%s%s %s', $string, PHP_EOL, PHP_EOL);
     }
 
     /**

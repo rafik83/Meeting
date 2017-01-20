@@ -307,7 +307,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                 ;
             }
 
-            MarkdownFormatter::newLine($formatted);
+            $formatted = MarkdownFormatter::newLine($formatted);
         }
 
         return $formatted;
