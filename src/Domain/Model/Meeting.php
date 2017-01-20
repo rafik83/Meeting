@@ -342,4 +342,12 @@ class Meeting implements MessageSubjectInterface
 
         return [];
     }
+
+    /**
+     * @return Sheet[]
+     */
+    public function getSheets()
+    {
+        return [$this->fromSheet, $this->toSheet];
+    }
 }

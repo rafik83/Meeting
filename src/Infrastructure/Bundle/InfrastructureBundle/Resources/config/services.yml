@@ -2241,6 +2241,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
 
     ##
     # Navigation builder
