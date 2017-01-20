@@ -259,6 +259,8 @@ new Vue({
             if (window.confirm(message)) {
 
                 var sheet = this.findSheetBySheetId(sheetId);
+
+                this.clearAgenda(sheet);
                 
                 this.$http.delete(this.getRemoveMeetingEndpoint(sheet , meetingId))
                 .then(function() {
