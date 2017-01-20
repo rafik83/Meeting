@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCateg
 use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
 use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;

@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\Day\Update;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
+use Proximum\Vimeet\Application\Command\MeetingSlot\Remove;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Unlock;
 use Proximum\Vimeet\Application\Command\Schedule\Configure;
+use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day\UpdateType;
@@ -110,6 +112,17 @@ class ScheduleController extends Controller
     /**
      * @param Event       $event
      * @param MeetingSlot $meetingSlot
+     *
+     * @return RedirectResponse
+     */
+    public function removeAction(Event $event, MeetingSlot $meetingSlot)
+    {
+        return $this->handleAndRedirect($event, $meetingSlot, new Remove($meetingSlot));
+    }
+
+    /**
+     * @param Event       $event
+     * @param MeetingSlot $meetingSlot
      */
     private function denyAccessIfWrongEvent(Event $event, MeetingSlot $meetingSlot)
     {
@@ -130,7 +143,11 @@ class ScheduleController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfWrongEvent($event, $meetingSlot);
 
-        $this->get('tactician.commandbus')->handle($command);
+        try {
+            $this->get('tactician.commandbus')->handle($command);
+        } catch (IsNotAllowedToRemoveSlotException $isNotAllowedToRemoveSlotException) {
+            $this->addFlash('error', 'flash.admin.slot.remove.error');
+        }
 
         return $this->redirectToRoute('admin_schedule_slots', ['event' => $meetingSlot->getEvent()->getId()]);
     }

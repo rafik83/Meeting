@@ -165,6 +165,14 @@ admin.meeting_request.state.sent: Envoyé
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
 admin.meeting.link: Rendez-vous
+admin.meeting.list.title: 'RDV positionnés'
+admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
+admin.meeting.action.deleteAll.confirm: 'Êtes vous sûr de vouloir supprimer l''ensemble des rendez-vous'
+admin.meeting.list.column.head.from: 'De'
+admin.meeting.list.column.head.to: 'À'
+admin.meeting.list.column.head.slot: 'Créneau'
+admin.meeting.list.column.head.createdAt: 'Créé le'
+admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.menu.link: Menu
 admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
@@ -288,6 +296,14 @@ admin.package.table.column.event: Evènement
 admin.package.table.column.title: Titre
 admin.package.title: 'Template de forfait de participation'
 admin.package.update: Modifier
+admin.participant_import.title: "Importer les participants"
+admin.participant_import_mapping.title: "Correspondance entre colonnes du fichier et champs de l'inscription"
+admin.participant_import_result.title.label: "Resultat de l'importation des participants"
+admin.participant_import_result.database_participations: "Nombre de participations existantes"
+admin.participant_import_result.file_participations: "Nombre de participations dans le fichier"
+admin.participant_import_result.created_sheets: "Nombre de fiches importées"
+admin.participant_import_result.created_users: "Nombre d'utilisateurs importés"
+admin.participant_import_result.errors: "Liste des erreurs dans le fichier"
 admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
 admin.participant.export.fields.participant_created_at: 'Creation Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
@@ -365,6 +381,8 @@ admin.schedule.days.title: 'Jours de l''événement'
 admin.schedule.link: Agenda
 admin.schedule.slot.lock: Bloquer
 admin.schedule.slot.locked: Bloqué
+admin.schedule.slot.remove: Supprimer
+admin.schedule.slot.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce créneau?'
 admin.schedule.slot.unlock: Débloquer
 admin.schedule.slot.unlocked: Débloqué
 admin.schedule.slots.generate.action: 'Générer des créneaux'
@@ -421,6 +439,7 @@ admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
+admin.sheet.import.button.label: Importer
 admin.sheet.export.fields.category: Catégorie
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -443,6 +462,7 @@ admin.sheet.filter.template_filters: 'Filtres supplémentaires'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
+admin.sheet.see_list: 'Voir liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.inCatalog: 'Au catalogue'
@@ -466,6 +486,7 @@ admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
+admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.spot.active.no: Non

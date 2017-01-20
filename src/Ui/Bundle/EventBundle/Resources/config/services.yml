@@ -48,6 +48,12 @@ services:
             - '@domain.key_dates.checker.happenings_access_checker'
         tags:
             - { name: security.voter }
+    security_voter.participant_import_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ParticipantImportAccessVoter
+        arguments:
+            - '@adapter.session'
+        tags:
+            - { name: security.voter }
 
     #
     # Form extension
@@ -208,13 +214,21 @@ services:
     #
     # Event Listener
     #
-    vimeet_app.domain_event_listener:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
+    event_listener.abstract_redirect_to_event_listener:
+        abstract: true
         arguments:
             - '@router.default'
             - '@vimeet_infrastructure.repository.event_repository'
+    vimeet_app.domain_event_listener:
+        parent: event_listener.abstract_redirect_to_event_listener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request' }
+    event_listener.sheet_not_found_exception_listener:
+        parent: event_listener.abstract_redirect_to_event_listener
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetNotFoundExceptionListener
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.exception' }
     event_listener.login_event_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LoginEventListener
         arguments:

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -89,8 +90,10 @@ class MeetingRepository implements MeetingRepositoryInterface
         $pagination->results = array_map(function (Meeting $meeting) use ($locale) {
             return new MeetingView(
                 $meeting->getId(),
-                $this->sheetInfoGuesser->guessSheetName($meeting->getFromSheet(), $locale),
-                $this->sheetInfoGuesser->guessSheetName($meeting->getToSheet(), $locale),
+                $meeting->getFromSheet()->getId(),
+                $meeting->getToSheet()->getId(),
+                $this->sheetInfoGuesser->guessSheetTitle($meeting->getFromSheet(), $locale),
+                $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
                 $meeting->getSlot()->getBegin(),
                 $meeting->getSlot()->getEnd()
@@ -173,12 +176,22 @@ class MeetingRepository implements MeetingRepositoryInterface
      */
     public function deleteAll(Event $event)
     {
+        $meetings = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->execute();
+
         $this
             ->entityManager
             ->createQueryBuilder()
             ->delete(Meeting::class, 'meeting')
-            ->join('meeting.slot', 'slot', 'WITH', 'slot.event = :event')
-            ->setParameter('event', $event)
+            ->where('meeting.id IN (:ids)')
+            ->setParameter('ids', $meetings)
             ->getQuery()
             ->execute();
 
@@ -221,5 +234,25 @@ class MeetingRepository implements MeetingRepositoryInterface
         ;
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeetingOnSlot(MeetingSlot $meetingSlot)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.slot = :slot')
+            ->setParameter('slot', $meetingSlot)
+            ->andWhere('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }
