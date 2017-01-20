@@ -137,7 +137,7 @@ class SubstitutionsProvider
             case Compose::LINK_CATALOG:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', []);
             case Compose::LINK_MEETING_REQUEST:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_sheet_meeting_request', ['sheet' => $sheet->getId()]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_list_request', ['sheet' => $sheet->getId()]);
             case Compose::LINK_ORDERS:
                 return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_order_list', ['sheet' => $sheet->getId()]);
             case Compose::LINK_PACKAGE:
