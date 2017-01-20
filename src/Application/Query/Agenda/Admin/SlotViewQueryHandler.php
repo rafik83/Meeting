@@ -93,7 +93,8 @@ class SlotViewQueryHandler
                     $sheetMet->getId(),
                     $this->sheetInfoGuesser->guessSheetTitle($sheetMet),
                     $slotAvailabilityView->meeting->getId(),
-                    $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet)
+                    $slotAvailabilityView->meeting->getRequest()->hasNoPreference($query->sheet),
+                    $slot->isLocked()
                 );
                 continue;
             }

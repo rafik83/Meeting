@@ -45,6 +45,11 @@ class MeetingSlotView extends AbstractSlotView
     public $spotReference;
 
     /**
+     * @var bool
+     */
+    public $locked;
+
+    /**
      * MeetingView constructor.
      *
      * @param MeetingSlot $slot
@@ -55,6 +60,7 @@ class MeetingSlotView extends AbstractSlotView
      * @param string      $sheetMetTitle
      * @param int         $meetingId
      * @param bool        $hasNoPreference
+     * @param bool        $locked
      */
     public function __construct(
         MeetingSlot $slot,
@@ -64,7 +70,8 @@ class MeetingSlotView extends AbstractSlotView
         $sheetMetId,
         $sheetMetTitle,
         $meetingId,
-        $hasNoPreference
+        $hasNoPreference,
+        $locked
     ) {
         parent::__construct($slot, $type);
 
@@ -74,5 +81,6 @@ class MeetingSlotView extends AbstractSlotView
         $this->sheetMetTitle   = $sheetMetTitle;
         $this->hasNoPreference = $hasNoPreference;
         $this->spotReference   = $spotReference;
+        $this->locked          = $locked;
     }
 }
