@@ -59,6 +59,10 @@ Feature: Update meeting spot in agenda via the API
     Given I am logged with "test@test.com" on admin
     When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot"
     Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSpot.error"
+      """
 
   Scenario: I can not change the spot for a meeting because given spot not available
     Given I am logged with "test@test.com" on admin
@@ -71,3 +75,32 @@ Feature: Update meeting spot in agenda via the API
       }
       """
     Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting"
+      """
+
+  Scenario: I can not change the spot for a meeting when spot is blocked
+    Given I am logged with "test@test.com" on admin
+    And I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+      """
+      {
+          "spotId": 2,
+          "blockedSlot": false,
+          "blockedSpot": true
+      }
+      """
+    And the response status code should be 200
+    When I send a POST request to "/admin/fr/event/1/agenda/meeting/1/update-spot" with body:
+      """
+      {
+          "spotId": 3,
+          "blockedSlot": false,
+          "blockedSpot": true
+      }
+      """
+    Then the response status code should be 422
+    And the JSON should be equal to:
+      """
+          "admin.agenda.meeting.updateSpot.isBlockedSpot"
+      """
