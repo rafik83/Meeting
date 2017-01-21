@@ -21,6 +21,7 @@ default:
                     basePath: %paths.base%/src/Behat/Resources/fixtures
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
                 - Proximum\Vimeet\Behat\Context\FeatureContext: ~
+                - Proximum\Vimeet\Behat\Context\Domain\EventContext: ~
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser

@@ -86,4 +86,11 @@ interface AdminRepositoryInterface
      * @return Admin[]
      */
     public function getAllowedOrganizer(Event $event);
+
+    /**
+     * @param $role
+     *
+     * @return null|Admin
+     */
+    public function findOneByRole($role);
 }

@@ -15,12 +15,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 class EventFactory
 {
     /**
+     * @param null $eventTitle
+     *
      * @return Event
      */
-    public static function createEvent()
+    public static function createEvent($eventTitle = null)
     {
         return new Event(
-            'super event',
+            null === $eventTitle ? 'super event' : $eventTitle,
             'fr',
             ['fr', 'en'],
             Event::VAT_MODE_ATI,

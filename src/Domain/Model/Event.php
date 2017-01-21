@@ -185,6 +185,7 @@ class Event implements EventInterface
         $this->domain         = $domain;
         $this->organiserName  = $organiserName;
         $this->emailTeam      = $emailTeam;
+        $this->assetPath      = '';
     }
 
     /**
