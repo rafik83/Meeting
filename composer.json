@@ -64,7 +64,8 @@
         "hautelook/alice-bundle": "~1.2.2",
         "friendsofphp/php-cs-fixer": "^1.10",
         "phpmd/phpmd": "^2.4",
-        "easycorp/easy-log-handler": "^1.0"
+        "easycorp/easy-log-handler": "^1.0",
+        "behatch/contexts": "^2.5"
     },
     "scripts": {
         "post-create-project-cmd": [
