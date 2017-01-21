@@ -137,7 +137,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
         inCatalog: true
         inCatalogAt: <dateTime()>
         completeness: 20
-        spot: '@asddays_spot_4'
 
 Proximum\Vimeet\Domain\Model\SheetCompleteness:
     sheet_completeness_asddays_1_fr:

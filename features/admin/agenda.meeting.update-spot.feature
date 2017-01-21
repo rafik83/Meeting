@@ -19,6 +19,7 @@ Feature: Update meeting spot in agenda via the API
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                            |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Spot.yml                |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml               |
+      | SheetWhichHaveAnAssignedSpot.yml                                           |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml                |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-MeetingSlot.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
