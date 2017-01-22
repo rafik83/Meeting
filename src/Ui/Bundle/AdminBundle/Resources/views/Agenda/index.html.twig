@@ -11,7 +11,8 @@
                     <thead>
                         <tr>
                             <td>
-                                <filter-sheet v-bind:sheets="sheets"></filter-sheet>
+                                <button class="btn btn-default btn-sm" @click="showFilterModal = true">{{ 'admin.agenda.filters.title.label'|trans }}</button>
+                                <button class="btn btn-default btn-sm" @click="resetSheetFilter">{{ 'admin.agenda.filters.reset.label'|trans }}</button>
                             </td>
                         </tr>
                         <tr>
@@ -36,7 +37,7 @@
                         <tr v-if="sheets.length == 0">
                             <td><div class="alert alert-warning">{{ 'admin.agenda.sheet.loader'|trans }}</div></td>
                         </tr>
-                        <tr v-for="sheet in sheets">
+                        <tr v-for="sheet in sheetsIterator" v-on:refresh-list="refreshList">
                             <td>
                                 <span class="label label-info pull-right" v-if="sheet.countParticipant > 1"><i class="icon icon-Profil_1"></i> ${ sheet.countParticipant }</span>
 
@@ -168,6 +169,8 @@
             </div>
         </div>
     </div>
+
+    <filter-sheet :sheets="sheets" :show="showFilterModal" @close-modal="closeSheetFilter" @refresh-list="refreshList"></filter-sheet>
 </div>
 {% endblock %}
 

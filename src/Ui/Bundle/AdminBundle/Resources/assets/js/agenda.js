@@ -1,6 +1,7 @@
 var Vue         = require('vue'),
-    axios       = require('axios');
-    filterSheet = require('./agenda/filterSheet');
+    axios       = require('axios'),
+    filterSheet = require('./agenda/filterSheet'),
+    filterModal = require('./agenda/filterModal');
 
 /**
  * Pass axios to Vue
@@ -17,30 +18,22 @@ Vue.component('Modal', {
     }
 });
 
-Vue.component('FilterSheet', filterSheet);
-
 new Vue({
     el: '#agenda',
     /**
      * Customs delimiters to avoid collision with Twig
      */
     delimiters: ['${', '}'],
-
+    components: {
+        'FilterSheet': filterSheet
+    },
     data: {
-        /**
-         * Array of sheets
-         */
-        sheets: [],
-
-        /**
-         * opened sheet
-         */
-        agendas: [],
-
-        /**
-         * Sheet focused
-         */
-        focus: null
+        sheets: [], /** Sheet[] */
+        filteredSheets: [], /** Sheet[] */
+        showFilterModal: false,
+        hasUsedSheetFilter: false,
+        agendas: [], /** opened sheet */
+        focus: null /** sheet focused */
     },
 
     /**
@@ -60,15 +53,29 @@ new Vue({
             this.loadSheets();
         },
 
+        refreshList: function (filteredSheets) {
+            this.hasUsedSheetFilter = true;
+            this.filteredSheets = filteredSheets;
+        },
+
+        resetSheetFilter: function () {
+            this.hasUsedSheetFilter = false;
+            this.filteredSheets = [];
+        },
+
+        closeSheetFilter: function () {
+            this.showFilterModal = false;
+        },
+
         /**
          * Load sheets data
          */
         loadSheets: function () {
             this.$http.get(this.getSheetsEndpoint())
-                .then(function(response) {
+                .then(function (response) {
                     this.sheets = response.data;
                 }.bind(this))
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
@@ -80,12 +87,12 @@ new Vue({
          */
         loadAgenda: function (sheet) {
             this.$http.get(this.getSheetAgendaEndpoint(sheet))
-                .then(function(response) {
-                    var participants                   = response.data.participants;
-                    var requests                       = response.data.requests;
-                    var sheetId                        = this.findSheetAgenda(sheet);
+                .then(function (response) {
+                    var participants = response.data.participants;
+                    var requests = response.data.requests;
+                    var sheetId = this.findSheetAgenda(sheet);
                     this.agendas[sheetId].participants = [];
-                    this.agendas[sheetId].requests     = [];
+                    this.agendas[sheetId].requests = [];
 
                     participants.forEach(function (participant) {
                         this.agendas[sheetId].participants.push(participant);
@@ -98,7 +105,7 @@ new Vue({
                     this.highlightMeetingsInCommon(sheet, true);
                     this.$forceUpdate();
                 }.bind(this))
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
@@ -109,7 +116,7 @@ new Vue({
          * @param sheet
          */
         showAgenda: function (sheet) {
-            if(-1 === this.findSheetAgenda(sheet)) {
+            if (-1 === this.findSheetAgenda(sheet)) {
                 this.agendas.push(sheet);
             }
 
@@ -216,7 +223,7 @@ new Vue({
          * @returns {Array} of meeting slots
          */
         findMeetings: function (sheet) {
-            var sheetId      = this.findSheetAgenda(sheet);
+            var sheetId = this.findSheetAgenda(sheet);
             var participants = this.agendas[sheetId].participants;
 
             if (this.agendas[sheetId].participants === undefined) {
@@ -283,6 +290,11 @@ new Vue({
          */
         getSheetAgendaEndpoint: function (sheet) {
             return document.location.pathname + '/sheet/' + sheet.id;
+        }
+    },
+    computed: {
+        sheetsIterator: function () {
+            return this.hasUsedSheetFilter ? this.filteredSheets : this.sheets;
         }
     }
 });
