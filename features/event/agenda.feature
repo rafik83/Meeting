@@ -3,7 +3,7 @@ Feature: Agenda
   As a participant, I can see my agenda
 
   Scenario: I can see my agenda
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                    |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml          |

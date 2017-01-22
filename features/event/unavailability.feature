@@ -3,7 +3,7 @@ Feature: Unavailability
   As a participant, I can add and remove an unavailability
 
   Scenario: I can add an unavailability
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
