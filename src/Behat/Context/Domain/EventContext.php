@@ -40,7 +40,10 @@ class EventContext implements Context, KernelAwareContext
     private $kernel;
 
     /** @var null|Event */
-    private $lastEventCreated;
+    private $lastEvent;
+
+    /** @var null|Sheet */
+    private $lastSheet;
 
     /**
      * @param KernelInterface $kernel
@@ -60,7 +63,7 @@ class EventContext implements Context, KernelAwareContext
         $event = EventFactory::createEvent($eventTitle);
         $eventRepository = $this->getEventRepository();
         $eventRepository->add($event);
-        $this->lastEventCreated = $event;
+        $this->lastEvent = $event;
     }
 
     /**
@@ -70,7 +73,7 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createSlots($quantity)
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
@@ -83,7 +86,7 @@ class EventContext implements Context, KernelAwareContext
         $end->add(new \DateInterval(sprintf('PT%sM', $interval * $duration * $quantity)));
 
         $slots = $this->getSlotGenerator()->generate(
-            $this->lastEventCreated,
+            $this->lastEvent,
             [new Recipe($begin, $end, $interval, $duration)]
         );
 
@@ -102,18 +105,18 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createMeetingOnSpot($spotReference)
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
-        $spot = $this->getSpotRepository()->findByReference($this->lastEventCreated, $spotReference);
+        $spot = $this->getSpotRepository()->findByReference($this->lastEvent, $spotReference);
 
         if (null === $spot) {
             throw new \InvalidArgumentException('Given spot reference not exists');
         }
 
         $meetingRequest = $this->createMeetinRequest();
-        $slots = $this->getMeetingSlotRepository()->findByEvent($this->lastEventCreated);
+        $slots = $this->getMeetingSlotRepository()->findByEvent($this->lastEvent);
 
         if (0 === count($slots)) {
             throw new \Exception('There are no available slot for this meeting');
@@ -123,21 +126,24 @@ class EventContext implements Context, KernelAwareContext
     }
 
     /**
-     * @Given /^spot "(?P<spotReference>[^"]+)" is assigned to another sheet$/
+     * @Given /^spot "(?P<spotReference>[^"]+)" is assigned to this sheet$/
      *
      * @param string $spotReference
      */
     public function spotIsAssignedToAnotherSheet($spotReference)
     {
-        $spot = $this->getSpotRepository()->findByReference($this->lastEventCreated, $spotReference);
+        if (null === $this->lastSheet) {
+            throw new \InvalidArgumentException('There is not last sheet');
+        }
+
+        $spot = $this->getSpotRepository()->findByReference($this->lastEvent, $spotReference);
 
         if (null === $spot) {
             throw new \InvalidArgumentException('Given spot reference not exists');
         }
 
-        $sheet = $this->createSheet();
-        $sheet->setSpot($spot);
-        $this->getSheetRepository()->set($sheet);
+        $this->lastSheet->setSpot($spot);
+        $this->getSheetRepository()->set($this->lastSheet);
     }
 
     /**
@@ -171,11 +177,11 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createMeetinRequest()
     {
-        $fromUser        = $this->createUser('user-from@example.net');
+        $fromUser        = $this->createUser();
         $fromSheet       = $this->createSheet($fromUser);
         $fromParticipant = $this->createParticipant($fromSheet, $fromUser);
 
-        $toUser        = $this->createUser('user-to@example.net');
+        $toUser        = $this->createUser();
         $toSheet       = $this->createSheet($toUser);
         $toParticipant = $this->createParticipant($toSheet, $toUser);
 
@@ -199,6 +205,7 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createUser($email = null)
     {
+        $email = sprintf('%s@example.net', uniqid());
         $user = UserFactory::create($email);
         $this->getUserRepository()->add($user);
 
@@ -206,6 +213,8 @@ class EventContext implements Context, KernelAwareContext
     }
 
     /**
+     * @Given there is a sheet
+     *
      * @param User|null $user
      * @param Type|null $type
      *
@@ -213,7 +222,7 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createSheet(User $user = null, Type $type = null)
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
@@ -225,10 +234,12 @@ class EventContext implements Context, KernelAwareContext
             $type = $this->createType();
         }
 
-        $sheet = SheetFactory::create($this->lastEventCreated, $user, new \DateTime(), $type);
+        $sheet = SheetFactory::create($this->lastEvent, $user, new \DateTime(), $type);
         $sheet->setData([]);
         $sheet->setRegistrationData([]);
         $this->getSheetRepository()->add($sheet);
+
+        $this->lastSheet = $sheet;
 
         return $sheet;
     }
@@ -238,14 +249,14 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createType()
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
         $sheetTemplate = $this->createSheetTemplate();
         $registrationTemplate = $this->createRegistrationTemplate();
 
-        $type = new Type($this->lastEventCreated);
+        $type = new Type($this->lastEvent);
         $type->setSheetTemplate($sheetTemplate);
         $type->setRegistrationTemplate($registrationTemplate);
         $this->getTypeRepository()->add($type);
@@ -258,17 +269,17 @@ class EventContext implements Context, KernelAwareContext
      */
     private function createRegistrationTemplate()
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
         $registrationTemplate = new RegistrationTemplate(
             'RegistrationTemplate',
             [],
-            $this->lastEventCreated->getLocales(),
-            $this->lastEventCreated->getFallback(),
+            $this->lastEvent->getLocales(),
+            $this->lastEvent->getFallback(),
             new \DateTime(),
-            $this->lastEventCreated
+            $this->lastEvent
         );
         $this->getRegistrationTemplateRepository()->add($registrationTemplate);
 
@@ -280,18 +291,18 @@ class EventContext implements Context, KernelAwareContext
      */
     private function createSheetTemplate()
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
         $sheetTemplate = new SheetTemplate(
             'SheetTemplate',
             [],
-            $this->lastEventCreated->getLocales(),
-            $this->lastEventCreated->getFallback(),
+            $this->lastEvent->getLocales(),
+            $this->lastEvent->getFallback(),
             new \DateTime(),
             [],
-            $this->lastEventCreated
+            $this->lastEvent
         );
         $this->getSheetTemplateRepository()->add($sheetTemplate);
 
@@ -324,11 +335,11 @@ class EventContext implements Context, KernelAwareContext
      */
     public function createSpot($reference, $meetingCapacity, $seatCapacity)
     {
-        if (!$this->lastEventCreated) {
+        if (!$this->lastEvent) {
             $this->createEvent();
         }
 
-        $spot = new Spot($reference, $this->lastEventCreated, 1, $meetingCapacity, $seatCapacity, true);
+        $spot = new Spot($reference, $this->lastEvent, 1, $meetingCapacity, $seatCapacity, true);
         $this->getSpotRepository()->add($spot);
 
         return $spot;
