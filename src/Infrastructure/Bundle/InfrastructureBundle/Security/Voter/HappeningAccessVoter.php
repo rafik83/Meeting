@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class HappeningAccessVoter extends Voter
 {
-
     /**
      * @var HappeningsAccessChecker
      */

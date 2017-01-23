@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Normalizer\EventParticipantSchedulesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -36,7 +37,7 @@ use IntlDateFormatter;
 class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
     const COL_PARTICIPANT_ID      = 'participantId';
-    const COL_TITLE               = 'title';
+    const COL_TITLE               = 'title'; // Gender
     const COL_FIRSTNAME           = 'firstName';
     const COL_LASTNAME            = 'lastName';
     const COL_COMPANY             = 'companyName';
@@ -48,7 +49,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     const COL_EMAIL               = 'email';
     const COL_MOBILE_PHONE_PREFIX = 'mobilePhonePrefix';
     const COL_MOBILE_PHONE        = 'mobilePhone';
-    const COL_SCHEDULE            = 'schedule';
+    const COL_SCHEDULE            = 'planning';
 
     /**
      * @var ParticipantRepositoryInterface
@@ -149,17 +150,12 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
         $gender = isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $participantInfo[Tag::PARTICIPANT_GENDER] : null;
-        if ($gender) {
+
+        if (null !== $gender && !empty($gender)) {
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
-        $agenda = $this->agendaViewQueryHandler->handle(new AgendaViewQuery(
-            $event,
-            $sheet,
-            $participant,
-            $locale
-        ));
-
+        $agenda   = $this->agendaViewQueryHandler->handle(new AgendaViewQuery($event, $sheet, $participant, $locale));
         $planning = $this->formatPlanning($agenda->days, $user);
 
         $planning .= $this->formatUnallocated(
@@ -170,12 +166,12 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
         return [
             self::COL_PARTICIPANT_ID      => sprintf("%s-%s", $sheet->getId(), $participant->getId()),
+            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+            self::COL_DESCRIPTION         => null,
+            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
             self::COL_TITLE               => $gender,
             self::COL_FIRSTNAME           => isset($participantInfo[Tag::PARTICIPANT_FIRSTNAME]) ? $participantInfo[Tag::PARTICIPANT_FIRSTNAME] : null,
             self::COL_LASTNAME            => isset($participantInfo[Tag::PARTICIPANT_LASTNAME]) ? $participantInfo[Tag::PARTICIPANT_LASTNAME] : null,
-            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
-            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
-            self::COL_DESCRIPTION         => null,
             self::COL_POSITION            => isset($participantInfo[Tag::PARTICIPANT_POSITION]) ? $participantInfo[Tag::PARTICIPANT_POSITION] : null,
             self::COL_PHONE_PREFIX        => null,
             self::COL_PHONE_NUMBER        => isset($participantInfo[Tag::PARTICIPANT_PHONE]) ? $participantInfo[Tag::PARTICIPANT_PHONE] : null,
@@ -218,12 +214,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      */
     private function formatPlanning(array $days, Admin $user)
     {
-        $formatted = $this->translator->trans(
-            'admin.participant.export.fields.planning.warning',
-            [],
-            'messages',
-            $user->getLocale()
-        ) . PHP_EOL;
+        $formatted = '';
 
         $formatter = new IntlDateFormatter(
             $user->getLocale(),
@@ -234,8 +225,8 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         foreach ($days as $day) {
             $timeEntities = $this->sortChronologicalOrder($day->getTimeEntities());
 
-            $formatted .= '**' . ucfirst($formatter->format($day->getDay())) . '**' . PHP_EOL;
-            $formatted .= $this->formatTimeEntities($timeEntities, $user). PHP_EOL . PHP_EOL;
+            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::bold(ucfirst($formatter->format($day->getDay()))));
+            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine($this->formatTimeEntities($timeEntities, $user)));
         }
 
         return $formatted;
@@ -257,14 +248,13 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             $user->getLocale()
         );
 
-        $formatted = (count($requests) > 0) ? $translation . PHP_EOL : '';
+        $formatted = (count($requests) > 0) ? MarkdownFormatter::newLine($translation) : '';
 
-        foreach ($requests as $request) {
-            $formatted .= $this->sheetInfoGuesser->guessSheetTitle($request->getSheetMet($sheet)) . ', ';
-        }
+        $formatted .= implode(', ', array_map(function (Request $request) use ($sheet) {
+            return $this->sheetInfoGuesser->guessSheetTitle($request->getSheetMet($sheet));
+        }, $requests));
 
-        // Remove last comma and space
-        return !empty($formatted) ? substr($formatted, 0, -2) : $formatted;
+        return $formatted;
     }
 
     /**
@@ -275,26 +265,32 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      */
     private function formatTimeEntities(array $timeEntities, Admin $user)
     {
-        $formatted = '';
+        $formattedTimes = [];
         $formatter = new IntlDateFormatter(
             $user->getLocale(),
             IntlDateFormatter::NONE,
             IntlDateFormatter::SHORT
         );
-        $formatter->setPattern('hh:mm');
+        $formatter->setPattern('HH:mm');
 
         foreach ($timeEntities as $timeEntity) {
-            $formatted .= $formatter->format($timeEntity->begin) . ' - ' . $formatter->format($timeEntity->end) . ' : ';
+            $formatted = $this->getFormattedDate($formatter, $timeEntity->begin) . ' - ' . $this->getFormattedDate($formatter, $timeEntity->end) . ' : ';
+
             if ($timeEntity instanceof MeetingView) {
-                $formatted .= $timeEntity->spotRef . ' ' . $timeEntity->sheetMetTitle;
-            }
-            elseif ($timeEntity instanceof MassUnavailabilityView) {
+                $formatted .= $this->translator->trans(
+                    'admin.participant.export.fields.planning.meeting',
+                    [
+                        '%sheetMet%' => $timeEntity->sheetMetTitle,
+                        '%spotRef%'  => $timeEntity->spotRef,
+                    ],
+                    'messages',
+                    $user->getLocale()
+                );
+            } elseif ($timeEntity instanceof MassUnavailabilityView) {
                 $formatted .= $timeEntity->title;
-            }
-            elseif ($timeEntity instanceof HappeningView) {
+            } elseif ($timeEntity instanceof HappeningView) {
                 $formatted .= $timeEntity->title;
-            }
-            elseif ($timeEntity instanceof UnavailabilityView) {
+            } elseif ($timeEntity instanceof UnavailabilityView) {
                 $formatted .= $this
                     ->translator
                     ->trans(
@@ -305,10 +301,11 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                     )
                 ;
             }
-            $formatted .= PHP_EOL;
+
+            $formattedTimes[] = $formatted;
         }
 
-        return $formatted;
+        return MarkdownFormatter::lists($formattedTimes);
     }
 
     /**
@@ -323,5 +320,18 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         });
 
         return $timeEntities;
+    }
+
+    /**
+     * @param IntlDateFormatter  $formatter
+     * @param \DateTimeInterface $date
+     *
+     * @return string
+     */
+    private function getFormattedDate(\IntlDateFormatter $formatter, \DateTimeInterface $date)
+    {
+        $formatted = $formatter->format($date);
+
+        return !is_bool($formatted) ? $formatted : '';
     }
 }

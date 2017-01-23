@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Nomenclature;
 
-use Proximum\Vimeet\Application\Nomenclature\Charset;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Tests\Application\Nomenclature\Id\StaticIdGenerator;

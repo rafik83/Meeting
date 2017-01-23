@@ -54,7 +54,6 @@ class PlanningViewQueryHandler
         $locale          = $planningViewQuery->locale;
         $planningProduct = $planningViewQuery->sheet->getPackage()->getPlanning();
         $included        = 0;
-        $selectedPlan    = null;
 
         if ($planningViewQuery->sheet->hasNotCancelledOrders()) {
             $order        = $this->orderMerger->merge($planningViewQuery->sheet->getNotCancelledOrders());

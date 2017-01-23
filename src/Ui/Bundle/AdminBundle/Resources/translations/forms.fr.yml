@@ -247,6 +247,7 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
 form.login.children.password.label: 'Mot de passe'
@@ -344,6 +345,12 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Libe
 form.package_update.children.title.label: 'Titre du template'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
+form.participant_import.children.charset.label: Encodage
+form.participant_import.children.file.label: 'Fichier CSV'
+form.participant_import.children.submit.label: Importer
+form.participant_import.children.type.label: Type
+form.participant_import.field.ignore: Ignorer
+form.participant_import.field.mail: Email
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'

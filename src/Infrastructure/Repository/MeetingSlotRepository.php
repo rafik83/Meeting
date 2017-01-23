@@ -53,6 +53,15 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(MeetingSlot $meetingSlot)
+    {
+        $this->entityManager->remove($meetingSlot);
+        $this->entityManager->flush($meetingSlot);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this
@@ -132,7 +141,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->andWhere('slot.event = :event')
             ->setParameter('beginDate', $day->getStartTime())
             ->setParameter('endDate', $day->getEndTime())
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('slot.begin', 'ASC')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

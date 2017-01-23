@@ -43,6 +43,11 @@ class DayView
     public $masses;
 
     /**
+     * @var MeetingView[]
+     */
+    public $meetings;
+
+    /**
      * @param \DateTimeInterface       $begin
      * @param \DateTimeInterface       $end
      * @param int                      $scale
