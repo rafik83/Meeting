@@ -134,18 +134,18 @@
                                                                     </div>
 
                                                                     <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true }" v-if="slot.type === 'meeting_unavailability'">
-<<<<<<< HEAD
-                                                                        {#<a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>#}
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
-                                                                        <div v-if="slot.locked == false" class="slot-label slot-time">
-                                                                            <small class="slot-remove">
-                                                                                <span v-on:click="removeMeeting(sheet, slot, '{{ 'admin.agenda.remove.confirm'|trans }}')" class="glyphicon glyphicon-remove"></span>
-                                                                            </small>
-                                                                        </div>
-=======
-                                                                        <a href="#" class="pull-right" @click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null"><span class="glyphicon glyphicon-cog"></span></a>
+
                                                                         <div class="slot-label slot-time"><span class="glyphicon glyphicon-lock" v-show="slot.blockedSlot === true"></span> ${ slot.beginEndHour }</div>
->>>>>>> origin/feature/804-update-meeting-spot
+
+                                                                        <a href="#" class="pull-right">
+                                                                            <div v-if="slot.blockedSlot == false" class="slot-label slot-time">
+                                                                                <span class="glyphicon glyphicon-remove" v-on:click="removeMeeting(sheet, slot, '{{ 'admin.agenda.remove.confirm'|trans }}')"></span>
+                                                                            </div>
+                                                                        </a>
+
+                                                                        <a href="#" class="pull-right" v-on:click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null">
+                                                                            <span class="glyphicon glyphicon-cog"></span>
+                                                                        </a>
 
                                                                         <div class="slot-label">
                                                                             <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>

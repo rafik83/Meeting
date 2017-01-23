@@ -1,5 +1,6 @@
 var Vue                = require('vue'),
-    axios              = require('axios');
+    axios              = require('axios'),
+    AgendaApiEndpoints = require('./components/_AgendaApiEndpoints');
 
 var agendaApiEndpoints = new AgendaApiEndpoints();
 
