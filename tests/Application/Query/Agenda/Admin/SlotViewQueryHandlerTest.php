@@ -181,7 +181,9 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             2,
             'sheetMetTitle',
             1,
-            true
+            true,
+            false,
+            false
         )];
 
         $this->assertEquals($expected, $result);

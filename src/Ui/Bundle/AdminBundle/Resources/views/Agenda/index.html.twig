@@ -4,6 +4,8 @@
 
 {% block content %}
 <div id="agenda" class="agenda-container">
+    <meeting-update-modal v-bind:meeting-to-update="meetingToUpdate" v-on:close-modal="clearMeetingToUpdate()" v-on:meeting-updated="meetingUpdated()"></meeting-update-modal>
+
     <div class="row" v-cloak>
         <div class="col-xs-2">
 
@@ -132,8 +134,8 @@
                                                                     </div>
 
                                                                     <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true }" v-if="slot.type === 'meeting_unavailability'">
-                                                                        {#<a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>#}
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <a href="#" class="pull-right" @click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null"><span class="glyphicon glyphicon-cog"></span></a>
+                                                                        <div class="slot-label slot-time"><span class="glyphicon glyphicon-lock" v-show="slot.blockedSlot === true"></span> ${ slot.beginEndHour }</div>
 
                                                                         <div class="slot-label">
                                                                             <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>
@@ -141,7 +143,11 @@
                                                                         </div>
 
                                                                         <div class="slot-label">
-                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> ${ slot.spotReference }</small>
+                                                                            <small>
+                                                                                <span class="glyphicon glyphicon-lock" v-show="slot.blockedSpot === true"></span>
+                                                                                <span class="glyphicon glyphicon-map-marker"></span>
+                                                                                ${ slot.spotReference }
+                                                                            </small>
                                                                         </div>
                                                                     </div>
 
@@ -165,6 +171,9 @@
         </div>
     </div>
 </div>
+
+    {{ include('AdminBundle:Agenda:modal.html.twig') }}
+    {{ include('AdminBundle:Agenda:meetingUpdateModal.html.twig') }}
 {% endblock %}
 
 {% block javascripts %}

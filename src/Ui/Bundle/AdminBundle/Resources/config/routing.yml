@@ -288,6 +288,14 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+admin_agenda_meeting_update:
+    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateSpot }
+
 #
 # Meeting
 #
