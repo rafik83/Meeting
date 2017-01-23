@@ -307,6 +307,27 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getAllAcceptedByEvent(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request', 'request.id')
+            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
+            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->join('fromSheet.participants', 'fromParticipants')
+            ->join('toSheet.participants', 'toParticipants')
+            ->where('request.state = :approved')
+            ->setParameter('event', $event)
+            ->setParameter('approved', Request::STATE_APPROVED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRequestsByEventAndUser(Event $event, User $user)
     {
         $queryBuilder = $this

@@ -1067,3 +1067,19 @@ admin_messaging_campaign_send:
         campaign: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Messaging\Campaign:send }
+
+#
+# Planner
+#
+admin_planner:
+    path: /event/{event}/planner
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Planner:index }
+admin_export_planner_data:
+    path: /event/{event}/planner/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Planner/Export:export }

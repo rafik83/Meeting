@@ -163,6 +163,13 @@ interface ParticipantRepositoryInterface
     public function getParticipantsForHappening(Sheet $sheet, Happening $happening);
 
     /**
+     * @param int $id
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsBySheetId($id);
+
+    /**
      * @param Event  $event
      * @param string $locale
      *
