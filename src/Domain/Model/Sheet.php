@@ -128,6 +128,11 @@ class Sheet implements TraceableInterface
     private $spot;
 
     /**
+     * @var bool
+     */
+    private $imported = false;
+
+    /**
      * Sheet constructor.
      *
      * @param Event              $event
@@ -775,6 +780,26 @@ class Sheet implements TraceableInterface
     public function removeSpot()
     {
         $this->spot = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImported()
+    {
+        return $this->imported;
+    }
+
+    /**
+     * @param bool $imported
+     *
+     * @return $this
+     */
+    public function setImported($imported)
+    {
+        $this->imported = $imported;
+
+        return $this;
     }
 
     /**

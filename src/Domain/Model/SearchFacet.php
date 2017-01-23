@@ -132,9 +132,9 @@ class SearchFacet
     /**
      * @param SearchFacetTranslation[] $translations
      */
-    public function setTranslations($translations)
+    public function setTranslations(array $translations)
     {
-        $this->translations = $translations;
+        $this->translations = new ArrayCollection($translations);
     }
 
     /**

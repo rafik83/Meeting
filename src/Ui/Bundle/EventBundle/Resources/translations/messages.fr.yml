@@ -12,7 +12,7 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 agenda.meeting.details: Details
 agenda.participant.view: 'Agenda de %participant%'
-agenda.title: 'Agenda'
+agenda.title: 'Mon agenda'
 agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: Retour
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
@@ -253,13 +253,13 @@ sheet.object.action.add: 'Ajouter:'
 sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Compléter
 sheet.object.action.remove: 'Supprimer:'
+sheet.object.boolean.false: Non
+sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'
 sheet.object.image.remove: 'Supprimer cette image'
 sheet.object.option.buyable.label: 'Option payante'
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
-sheet.object.boolean.true: Oui
-sheet.object.boolean.false: Non
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander en RDV'

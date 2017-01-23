@@ -37,6 +37,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMee
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -413,7 +414,7 @@ class MeetingRequestController extends Controller
         return $this->render('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
             'discussion'  => $discussion,
             'isItRequest' => $meetingRequest->isSender($sheet),
-            'form'        => $form !== null ? $form->createView() : null,
+            'form'        => $form instanceof FormInterface ? $form->createView() : null,
         ]);
     }
 
@@ -618,8 +619,8 @@ class MeetingRequestController extends Controller
                     $this->renderView('EventBundle:MeetingRequest:editRequest.html.twig', [
                         'discussion'     => $discussion,
                         'form'           => $form->createView(),
-                        'cancelForm'     => $cancelForm !== null ? $cancelForm->createView() : null,
-                        'unApprovedForm' => $unApprovedForm !== null ? $unApprovedForm->createView() : null,
+                        'cancelForm'     => $cancelForm instanceof FormInterface ? $cancelForm->createView() : null,
+                        'unApprovedForm' => $unApprovedForm instanceof FormInterface ? $unApprovedForm->createView() : null,
                         'isProposition'  => $isProposition,
                         'meetingRequest' => $meetingRequest,
                     ])
@@ -629,9 +630,9 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
             'discussion'     => $discussion,
-            'form'           => $form !== null ? $form->createView() : $form,
-            'cancelForm'     => $cancelForm !== null ? $cancelForm->createView() : null,
-            'unApprovedForm' => $unApprovedForm !== null ? $unApprovedForm->createView() : null,
+            'form'           => $form instanceof FormInterface ? $form->createView() : $form,
+            'cancelForm'     => $cancelForm instanceof FormInterface ? $cancelForm->createView() : null,
+            'unApprovedForm' => $unApprovedForm instanceof FormInterface ? $unApprovedForm->createView() : null,
             'isProposition'  => $isProposition,
             'meetingRequest' => $meetingRequest,
         ]);

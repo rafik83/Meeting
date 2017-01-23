@@ -184,6 +184,20 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getParticipantAndSheetDataExceptedImageObject()
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            if ($object instanceof TemplateObject\Image) {
+                return false;
+            }
+
+            return $object->isEditable() && ($object->hasTag(Tag::SHEET_DATA) || $object->hasTag(Tag::PARTICIPANT_DATA));
+        });
+    }
+
+    /**
      * @deprecated Use {@link Block::getEditableSheetDataExceptedImageObjects()} instead
      *
      * @return TemplateObject[]
@@ -208,7 +222,7 @@ class Block extends AbstractChild
      */
     public function getPreviewAvailableObjects()
     {
-        return array_filter($this->getObjects(), function(TemplateObject $object) {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
             return $object instanceof TemplateObject\Image || $object instanceof TemplateObject\EditableText;
         });
     }
@@ -261,7 +275,7 @@ class Block extends AbstractChild
     public function getBlock($index)
     {
         $blocks = $this->getBlocks();
-        $index  = (int) $index - 1;
+        $index  = (int)$index - 1;
 
         return isset($blocks[$index]) ? $blocks[$index] : null;
     }
@@ -474,6 +488,16 @@ class Block extends AbstractChild
     {
         return array_map(function (TemplateObject $object) {
             return $object->getData();
+        }, $this->getObjects());
+    }
+
+    /**
+     * Clear objects data
+     */
+    public function clear()
+    {
+        array_map(function (TemplateObject $object) {
+            $object->setData([]);
         }, $this->getObjects());
     }
 
