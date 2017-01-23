@@ -106,8 +106,8 @@ class PromotionCodeController extends Controller
                 $form
                     ->get('code')
                     ->addError($this->createNonUniqueCodeError(
-                        $event->getAvailableLocale($request->getLocale()))
-                    )
+                        $event->getAvailableLocale($request->getLocale())
+                    ))
                 ;
             }
         }
