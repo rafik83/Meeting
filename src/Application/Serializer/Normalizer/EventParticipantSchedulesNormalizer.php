@@ -146,7 +146,8 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     {
         $sheet           = $participant->getSheet();
         $event           = $sheet->getEvent();
-        $locale          = $event->getAvailableLocale($locale);
+        $participantLocale = $event->getAvailableLocale($participant->getUser()->getLocale());
+        $adminLocale     = $event->getAvailableLocale($user->getLocale());
         $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
         $gender = isset($participantInfo[Tag::PARTICIPANT_GENDER]) ? $participantInfo[Tag::PARTICIPANT_GENDER] : null;
@@ -155,20 +156,28 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
             $gender = $this->translator->trans(sprintf('gender.%s', $gender));
         }
 
-        $agenda   = $this->agendaViewQueryHandler->handle(new AgendaViewQuery($event, $sheet, $participant, $locale));
-        $planning = $this->formatPlanning($agenda->days, $user);
+        $agenda   = $this->agendaViewQueryHandler->handle(
+            new AgendaViewQuery(
+                $event,
+                $sheet,
+                $participant,
+                $participantLocale
+            )
+        );
+
+        $planning = $this->formatPlanning($agenda->days, $participantLocale);
 
         $planning .= $this->formatUnallocated(
             $sheet,
             $this->requestRepository->getUnassignedRequestsBySheetAndEvent($sheet, Request::STATE_APPROVED),
-            $user
+            $participantLocale
         );
 
         return [
             self::COL_PARTICIPANT_ID      => sprintf("%s-%s", $sheet->getId(), $participant->getId()),
-            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+            self::COL_COMPANY             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $adminLocale),
             self::COL_DESCRIPTION         => null,
-            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($locale),
+            self::COL_PARTICIPATION_TYPE  => $sheet->getType()->getTitle($adminLocale),
             self::COL_TITLE               => $gender,
             self::COL_FIRSTNAME           => isset($participantInfo[Tag::PARTICIPANT_FIRSTNAME]) ? $participantInfo[Tag::PARTICIPANT_FIRSTNAME] : null,
             self::COL_LASTNAME            => isset($participantInfo[Tag::PARTICIPANT_LASTNAME]) ? $participantInfo[Tag::PARTICIPANT_LASTNAME] : null,
@@ -208,16 +217,16 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
     /**
      * @param DayView[] $days
-     * @param Admin     $user
+     * @param string    $participantLocale
      *
      * @return string
      */
-    private function formatPlanning(array $days, Admin $user)
+    private function formatPlanning(array $days, $participantLocale)
     {
         $formatted = '';
 
         $formatter = new IntlDateFormatter(
-            $user->getLocale(),
+            $participantLocale,
             IntlDateFormatter::FULL,
             IntlDateFormatter::NONE
         );
@@ -225,8 +234,12 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
         foreach ($days as $day) {
             $timeEntities = $this->sortChronologicalOrder($day->getTimeEntities());
 
-            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::bold(ucfirst($formatter->format($day->getDay()))));
-            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine($this->formatTimeEntities($timeEntities, $user)));
+            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::bold(
+                ucfirst($formatter->format($day->getDay())))
+            );
+            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine(
+                $this->formatTimeEntities($timeEntities, $participantLocale)))
+            ;
         }
 
         return $formatted;
@@ -235,17 +248,17 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
     /**
      * @param Sheet     $sheet
      * @param Request[] $requests
-     * @param Admin     $user
+     * @param string    $participantLocale
      *
      * @return string
      */
-    private function formatUnallocated(Sheet $sheet, array $requests, Admin $user)
+    private function formatUnallocated(Sheet $sheet, array $requests, $participantLocale)
     {
         $translation = $this->translator->trans(
             'admin.participant.export.fields.planning.unallocated_meetings',
             [],
             'messages',
-            $user->getLocale()
+            $participantLocale
         );
 
         $formatted = (count($requests) > 0) ? MarkdownFormatter::newLine($translation) : '';
@@ -259,15 +272,15 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
 
     /**
      * @param AbstractTimeEntityView[] $timeEntities
-     * @param Admin                    $user
+     * @param string                   $participantLocale
      *
      * @return string
      */
-    private function formatTimeEntities(array $timeEntities, Admin $user)
+    private function formatTimeEntities(array $timeEntities, $participantLocale)
     {
         $formattedTimes = [];
         $formatter = new IntlDateFormatter(
-            $user->getLocale(),
+            $participantLocale,
             IntlDateFormatter::NONE,
             IntlDateFormatter::SHORT
         );
@@ -284,7 +297,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                         '%spotRef%'  => $timeEntity->spotRef,
                     ],
                     'messages',
-                    $user->getLocale()
+                    $participantLocale
                 );
             } elseif ($timeEntity instanceof MassUnavailabilityView) {
                 $formatted .= $timeEntity->title;
@@ -297,7 +310,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
                         'admin.participant.export.fields.planning.unavailability',
                         [],
                         'messages',
-                        $user->getLocale()
+                        $participantLocale
                     )
                 ;
             }
