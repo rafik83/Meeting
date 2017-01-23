@@ -214,12 +214,7 @@ class EventParticipantSchedulesNormalizer extends AbstractNormalizer implements 
      */
     private function formatPlanning(array $days, Admin $user)
     {
-        $formatted = MarkdownFormatter::newLine($this->translator->trans(
-            'admin.participant.export.fields.planning.warning',
-            [],
-            'messages',
-            $user->getLocale()
-        ));
+        $formatted = '';
 
         $formatter = new IntlDateFormatter(
             $user->getLocale(),
