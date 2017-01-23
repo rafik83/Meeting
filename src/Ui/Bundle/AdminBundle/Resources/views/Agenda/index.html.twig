@@ -12,7 +12,9 @@
                         <tr>
                             <td>
                                 <button class="btn btn-default btn-sm" @click="showFilterModal = true">{{ 'admin.agenda.filters.title.label'|trans }}</button>
-                                <button class="btn btn-default btn-sm" @click="resetSheetFilter">{{ 'admin.agenda.filters.reset.label'|trans }}</button>
+                                <button class="btn btn-default btn-sm" @click="resetSheetFilter">
+                                    {{ 'admin.agenda.filters.reset.label'|trans }}
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -170,12 +172,17 @@
         </div>
     </div>
 
-    <filter-sheet :sheets="sheets" :show="showFilterModal" @close-modal="closeSheetFilter" @refresh-list="refreshList"></filter-sheet>
+    <filter-modal :sheets="sheets"
+                  :show="showFilterModal"
+                  @refresh-list="refreshList"
+                  @close-modal="showFilterModal = false"
+                  ref="sheetFilterModal"></filter-modal>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ include('@Admin/Agenda/filterSheetForm.html.twig') }}
+    {{ include('@Admin/Agenda/Components/filterModal.html.twig') }}
+    {{ include('@Admin/Agenda/Components/filterSheetForm.html.twig') }}
 
     <!-- template for the Modal component -->
     <script type="x/template" id="modal-template">

@@ -1,6 +1,5 @@
 var Vue         = require('vue'),
     axios       = require('axios'),
-    filterSheet = require('./agenda/filterSheet'),
     filterModal = require('./agenda/filterModal');
 
 /**
@@ -25,7 +24,7 @@ new Vue({
      */
     delimiters: ['${', '}'],
     components: {
-        'FilterSheet': filterSheet
+        'filter-modal': filterModal
     },
     data: {
         sheets: [], /** Sheet[] */
@@ -59,12 +58,12 @@ new Vue({
         },
 
         resetSheetFilter: function () {
-            this.hasUsedSheetFilter = false;
-            this.filteredSheets = [];
-        },
-
-        closeSheetFilter: function () {
-            this.showFilterModal = false;
+            var child = this.$refs.sheetFilterModal;
+            if (child !== undefined) {
+                child.reset();
+                this.hasUsedSheetFilter = false;
+                this.filteredSheets = [];
+            }
         },
 
         /**
