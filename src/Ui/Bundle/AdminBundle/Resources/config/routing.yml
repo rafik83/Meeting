@@ -288,6 +288,7 @@ admin_agenda_sheet:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Agenda/Agenda:sheet }
 
+<<<<<<< HEAD
 admin_agenda_sheet_meeting_remove:
     path: /event/{event}/agenda/sheet/{sheet}/meeting/{meeting}/remove
     requirements:
@@ -296,6 +297,15 @@ admin_agenda_sheet_meeting_remove:
         meeting: \d+
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Agenda/Agenda:removeMeeting }
+=======
+admin_agenda_meeting_update:
+    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Agenda/Meeting:updateSpot }
+>>>>>>> origin/feature/804-update-meeting-spot
 
 #
 # Meeting

@@ -52,7 +52,7 @@ flash.admin.sheet_batch.validate.success: '{0} aucune fiche n''a été validée.
 flash.admin.sheet_batch.validation.validate.success: '{0} aucune fiche n''a été validée.|{1} 1 fiche a été validée|]1,Inf[ %count% fiches ont été validées'
 flash.admin.sheet.add_comment.success: 'Votre commentaire a bien été ajouté'
 flash.admin.sheet.change_type.success: 'Le type de participation a bien été changé'
-flash.admin.sheet.participant.import.success: "Félicitations, %users% comptes et %sheet% fiches ont été créés"
+flash.admin.sheet.participant.import.success: 'Félicitations, %users% comptes et %sheet% fiches ont été créés'
 flash.admin.slot.remove.error: 'Ce créneau est déjà utilisé par des rendez-vous planifiés'
 flash.admin.speaker.create.success: 'L''intervenant a bien été créé'
 flash.admin.speaker.update.success: 'L''intervenant a bien été mis à jour'

@@ -182,6 +182,7 @@ class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'sheetMetTitle',
             1,
             true,
+            false,
             false
         )];
 

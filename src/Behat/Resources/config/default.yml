@@ -13,7 +13,7 @@ default:
             files_path: %paths.base%/src/Behat/Resources/fixtures/Files
         Fidry\AliceBundleExtension\Extension:
             fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
-
+        Sanpi\Behatch\Extension: ~
     suites:
         default:
             contexts:
@@ -21,3 +21,10 @@ default:
                     basePath: %paths.base%/src/Behat/Resources/fixtures
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
                 - Proximum\Vimeet\Behat\Context\FeatureContext: ~
+                - behatch:json
+                - behatch:rest
+#                - behatch:browser
+#                - behatch:debug
+#                - behatch:system
+#                - behatch:table
+#                - behatch:xml
