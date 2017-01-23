@@ -14,6 +14,7 @@ default:
         Fidry\AliceBundleExtension\Extension:
             fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
         Sanpi\Behatch\Extension: ~
+        FriendsOfBehat\PerformanceExtension: ~
     suites:
         default:
             contexts:
@@ -21,7 +22,17 @@ default:
                     basePath: %paths.base%/src/Behat/Resources/fixtures
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
                 - Proximum\Vimeet\Behat\Context\FeatureContext: ~
-                - Proximum\Vimeet\Behat\Context\Domain\EventContext: ~
+                - Proximum\Vimeet\Behat\Context\Domain\EventContext:
+                    - '@behat_storage'
+                    - '@vimeet_infrastructure.repository.event_repository'
+                - Proximum\Vimeet\Behat\Context\Domain\SlotContext:
+                    - '@behat_storage'
+                    - '@vimeet_infrastructure.repository.meeting_slot_repository'
+                    - '@domain.meeting.slot.slot_generator'
+                - Proximum\Vimeet\Behat\Context\Domain\SpotContext:
+                    - '@behat_storage'
+                    - '@vimeet_infrastructure.repository.spot_repository'
+                    - '@vimeet_infrastructure.repository.sheet_repository'
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser

@@ -1,0 +1,11 @@
+services:
+    behat_context_event:
+        class: Proximum\Vimeet\Behat\Context\Domain\EventContext
+        arguments:
+            - '@behat_storage'
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: fob.context_service }
+
+    behat_storage:
+        class: Proximum\Vimeet\Behat\Service\Storage

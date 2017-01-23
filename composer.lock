@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b463cd673a2fa65de20c589c057b1427",
-    "content-hash": "7ec7b0dce5af3713acfe33992aca68be",
+    "hash": "63df8ec185b429cf2585686bf8c98e69",
+    "content-hash": "16f43fdf640efad3d76f135ea77d8feb",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -5242,6 +5242,93 @@
                 "scraper"
             ],
             "time": "2015-11-05 12:58:44"
+        },
+        {
+            "name": "friends-of-behat/context-service-extension",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfBehat/ContextServiceExtension.git",
+                "reference": "c63bfeb6a5c4b1cf2b88914d7a06a3a95dc9650e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfBehat/ContextServiceExtension/zipball/c63bfeb6a5c4b1cf2b88914d7a06a3a95dc9650e",
+                "reference": "c63bfeb6a5c4b1cf2b88914d7a06a3a95dc9650e",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "^3.1",
+                "php": "^5.6|^7.0",
+                "symfony/dependency-injection": "^2.8|^3.0"
+            },
+            "require-dev": {
+                "friends-of-behat/cross-container-extension": "^0.1.3",
+                "friends-of-behat/test-context": "^0.3",
+                "phpspec/phpspec": "^3.1"
+            },
+            "suggest": {
+                "friends-of-behat/cross-container-extension": "^0.1",
+                "ocramius/proxy-manager": "^1.0|^2.0",
+                "symfony/proxy-manager-bridge": "^2.8|^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FriendsOfBehat\\ContextServiceExtension\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kamil Kokot",
+                    "email": "kamil@kokot.me",
+                    "homepage": "http://kamil.kokot.me"
+                }
+            ],
+            "description": "Allows to declare and use contexts services in scenario scoped container.",
+            "time": "2016-11-03 15:23:17"
+        },
+        {
+            "name": "friends-of-behat/performance-extension",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfBehat/PerformanceExtension.git",
+                "reference": "eb0163ebdfda430e429e0a4c6ec2d9bbbd8a6c4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfBehat/PerformanceExtension/zipball/eb0163ebdfda430e429e0a4c6ec2d9bbbd8a6c4b",
+                "reference": "eb0163ebdfda430e429e0a4c6ec2d9bbbd8a6c4b",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "^3.1",
+                "php": "^5.6|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FriendsOfBehat\\PerformanceExtension\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kamil Kokot",
+                    "email": "kamil@kokot.me",
+                    "homepage": "http://kamil.kokot.me"
+                }
+            ],
+            "description": "Accelerates Behat using features available only for newer PHP versions.",
+            "time": "2016-07-22 21:46:29"
         },
         {
             "name": "friendsofphp/php-cs-fixer",

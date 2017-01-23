@@ -8,7 +8,7 @@ Feature: Update meeting spot in agenda via the API
     Given the database is purged
     And I am logged as admin
     And the event "Best of web" is created
-    And there are 1 slots in this event
+    And there is 1 slot in this event
     And there is an active spot "A1" with meeting capacity of 1, seat capacity of 2
     And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
     And there is an active spot "A3" with meeting capacity of 1, seat capacity of 2

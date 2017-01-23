@@ -1,0 +1,3 @@
+services:
+    behat_storage:
+        class: Proximum\Vimeet\Behat\Service\Storage

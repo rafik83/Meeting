@@ -65,7 +65,9 @@
         "friendsofphp/php-cs-fixer": "^1.10",
         "phpmd/phpmd": "^2.4",
         "easycorp/easy-log-handler": "^1.0",
-        "behatch/contexts": "^2.5"
+        "behatch/contexts": "^2.5",
+        "friends-of-behat/performance-extension": "^1.0",
+        "friends-of-behat/context-service-extension": "^0.3.0"
     },
     "scripts": {
         "post-create-project-cmd": [
