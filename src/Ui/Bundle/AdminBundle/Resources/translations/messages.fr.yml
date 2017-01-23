@@ -319,7 +319,6 @@ admin.participant.export.fields.participant_type: 'Type Participant'
 admin.participant.export.fields.planning.meeting: '%sheetMet% en %spotRef%'
 admin.participant.export.fields.planning.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
 admin.participant.export.fields.planning.unavailability: 'Indisponible'
-admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
 admin.participant.export.happening.subscriber.no: Non
