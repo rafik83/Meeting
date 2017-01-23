@@ -46,8 +46,8 @@ AgendaApiEndpoints.prototype.getMeetingUpdateSpotEndpoint = function (meetingId)
  *
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getRemoveMeetingEndpoint = function (sheet, meetingId) {
-    return document.location.pathname + '/sheet/' + sheet.id + '/meeting/' + meetingId + '/remove';
+AgendaApiEndpoints.prototype.getRemoveMeetingEndpoint = function (sheet, slot) {
+    return document.location.pathname + '/sheet/' + sheet.id + '/meeting/' + slot.meetingId + '/remove';
 };
 
 

@@ -250,43 +250,23 @@ new Vue({
         /**
          * Remove meeting from sheet (and sheet met) and reload agenda(s)
          *
-         * @param {int} sheetId
-         * @param {int} meetingId
+         * @param {Object} sheet
+         * @param {Object} slot
          * @param {string} message
          */
-        removeMeeting: function(sheetId, meetingId, message) {
+        removeMeeting: function(sheet, slot, message) {
 
             if (window.confirm(message)) {
 
-                var sheet = this.findSheetBySheetId(sheetId);
-
-                this.clearAgenda(sheet);
-
-                this.$http.delete(agendaApiEndpoints.getRemoveMeetingEndpoint(sheet , meetingId))
+                this.$http.delete(agendaApiEndpoints.getRemoveMeetingEndpoint(sheet , slot))
                 .then(function() {
 
-                        var meetings = this.findMeetings(sheet);
-
-                        for (var meetingIndex = 0; meetingIndex < meetings.length; meetingIndex++) {
-                            var sheetMet = this.findSheetAgendaBySheetId(meetings[meetingIndex].sheetMetId);
-
-                            if (null !== sheetMet) {
-                                var meetingsSheetMet = this.findMeetings(sheetMet);
-
-                                for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
-                                    if (meetingsSheetMet[meetingSheetMetIndex].meetingId === meetings[meetingIndex].meetingId) {
-                                        this.loadAgenda(sheetMet);
-                                    }
-                                }
-                            }
-                        }
-
-                        this.focusAgenda(sheet);
-                        this.loadAgenda(sheet)
-
+                    this.focusAgenda(sheet);
+                    this.loadAgenda(sheet);
+                    this.loadAgenda(this.findSheetBySheetId(slot.sheetMetId));
                 }.bind(this))
                 .catch(function(error) {
-                    if (error.response.status == 423) {
+                    if (error.response) {
                         window.alert(error.response.data);
                     }
                     console.log(error);
