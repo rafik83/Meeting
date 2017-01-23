@@ -115,7 +115,15 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             $queryBuilder
                 ->andWhere(
                     sprintf(
-                        'NOT EXISTS (SELECT m.id FROM Entity:Meeting m LEFT JOIN m.fromParticipants fp LEFT JOIN m.toParticipants tp WHERE m.slot = slot AND m.state = :meetingState AND (fp.id IN (:ids) OR tp.id IN (:ids)) %s)',
+                        'NOT EXISTS (
+                            SELECT m.id FROM Entity:Meeting m
+                            LEFT JOIN m.fromParticipants fp
+                            LEFT JOIN m.toParticipants tp
+                            WHERE m.slot = slot
+                            AND m.state = :meetingState
+                            AND (fp.id IN (:ids) OR tp.id IN (:ids))
+                            %s
+                        )',
                         null !== $exceptedMeeting ? 'AND m != :exceptedMeeting' : ''
                     )
                 )
@@ -128,15 +136,46 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         // Participants have not unavailability during this slot
         $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT u.id FROM Entity:Unavailability u WHERE u.participant IN (:ids) AND (u.begin BETWEEN slot.begin AND slot.end OR u.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN u.begin AND u.end OR slot.end BETWEEN u.begin AND u.end))');
+            ->andWhere('NOT EXISTS (
+                SELECT u.id FROM Entity:Unavailability u
+                WHERE u.participant IN (:ids)
+                AND (
+                    slot.begin = u.begin
+                    OR u.end = slot.end
+                    OR u.begin < slot.begin AND slot.begin < u.end
+                    OR u.begin < slot.end AND slot.end < u.end
+                    OR slot.begin < u.begin AND u.begin < slot.end
+                )
+            )');
 
         // Participants have not blocking participation
         $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT hp.id FROM Entity:HappeningParticipation hp JOIN hp.happening h WHERE hp.participant IN (:ids) AND (h.begin BETWEEN slot.begin AND slot.end OR h.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN h.begin AND h.end OR slot.end BETWEEN h.begin AND h.end))');
+            ->andWhere('NOT EXISTS (
+                SELECT hp.id FROM Entity:HappeningParticipation hp
+                JOIN hp.happening h
+                WHERE hp.participant IN (:ids)
+                AND (
+                    slot.begin = h.begin
+                    OR h.end = slot.end
+                    OR h.begin < slot.begin AND slot.begin < h.end
+                    OR h.begin < slot.end AND slot.end < h.end
+                    OR slot.begin < h.begin AND h.begin < slot.end
+                )
+            )');
 
         // No blocking mass unvailabilities during this slot
         $queryBuilder
-            ->andWhere('NOT EXISTS (SELECT mass.id FROM Entity:Unavailability\Mass mass WHERE mass.blocking = true AND (mass.begin BETWEEN slot.begin AND slot.end OR mass.end BETWEEN slot.begin AND slot.end OR slot.begin BETWEEN mass.begin AND mass.end OR slot.end BETWEEN mass.begin AND mass.end))');
+            ->andWhere('NOT EXISTS (
+                SELECT mass.id FROM Entity:Unavailability\Mass mass
+                WHERE mass.blocking = true
+                AND (
+                    slot.begin = mass.begin
+                    OR mass.end = slot.end
+                    OR mass.begin < slot.begin AND slot.begin < mass.end
+                    OR mass.begin < slot.end AND slot.end < mass.end
+                    OR slot.begin < mass.begin AND mass.begin < slot.end
+                )
+            )');
 
         $queryBuilder->setParameter('ids', $participantsId);
 
