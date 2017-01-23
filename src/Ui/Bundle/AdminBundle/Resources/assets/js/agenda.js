@@ -271,7 +271,13 @@ new Vue({
                             var sheetMet = this.findSheetAgendaBySheetId(meetings[meetingIndex].sheetMetId);
 
                             if (null !== sheetMet) {
-                                this.loadAgenda(sheetMet);
+                                var meetingsSheetMet = this.findMeetings(sheetMet);
+
+                                for (var meetingSheetMetIndex = 0; meetingSheetMetIndex < meetingsSheetMet.length; meetingSheetMetIndex++) {
+                                    if (meetingsSheetMet[meetingSheetMetIndex].meetingId === meetings[meetingIndex].meetingId) {
+                                        this.loadAgenda(sheetMet);
+                                    }
+                                }
                             }
                         }
 
