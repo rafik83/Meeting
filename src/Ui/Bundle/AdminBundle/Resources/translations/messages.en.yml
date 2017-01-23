@@ -124,7 +124,7 @@ admin.order.title: 'Order list'
 admin.package.update: Modify
 admin.participant.export.fields.planning.meeting: '%sheetMet% at %spotRef%'
 admin.participant.export.fields.planning.unallocated_meetings: 'List of validated meeting requests which have not been planned due to availability conflicts.'
-admin.participant.export.fields.planning.unavailability: 'Unavailable'
+admin.participant.export.fields.planning.unavailability: Unavailable
 admin.participant.export.fields.planning.warning: 'Please check the booth or table number for each appointment.'
 admin.participant.export.happening.subscriber.no: 'No'
 admin.participant.export.no: 'No'
