@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateSpot;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -32,11 +33,7 @@ class MeetingController extends Controller
      */
     public function updateSpotAction(Request $request, Event $event, Meeting $meeting)
     {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        if ($meeting->getFromSheet()->getEvent() !== $event) {
-            return new JsonResponse('Meeting are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $this->checkAccess($event, $meeting);
 
         if (Request::METHOD_POST === $request->getMethod()) {
             return $this->handleUpdateSpotAction($request, $event, $meeting);
@@ -58,6 +55,8 @@ class MeetingController extends Controller
      */
     private function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting)
     {
+        $this->checkAccess($event, $meeting);
+
         $data = json_decode($request->getContent());
 
         if (!isset($data->spotId) || !isset($data->blockedSlot) || !isset($data->blockedSpot)) {
@@ -85,6 +84,41 @@ class MeetingController extends Controller
         }
 
         return new JsonResponse();
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting $meeting
+     *
+     * @return JsonResponse
+     */
+    public function updateSlotAction(Request $request, Event $event, Meeting $meeting)
+    {
+        $this->checkAccess($event, $meeting);
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            return $this->handleUpdateSpotAction($request, $event, $meeting);
+        }
+
+        $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
+            new MeetingUpdateSlotViewQuery($meeting)
+        );
+
+        return new JsonResponse($meetingUpdateSpotView);
+    }
+
+    /**
+     * @param Event   $event
+     * @param Meeting $meeting
+     */
+    private function checkAccess(Event $event, Meeting $meeting)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($meeting->getFromSheet()->getEvent() !== $event) {
+            throw new \InvalidArgumentException('Meeting are not on this event');
+        }
     }
 
     /**
