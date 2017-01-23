@@ -37,9 +37,9 @@ class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2 = SheetFactory::create($event, null, null, $type);
         $sheet3 = SheetFactory::create($event, null, null, $type2);
 
-        $indicator  = new IndicatorView(1, 1, 1, 1, 1);
-        $indicator2 = new IndicatorView(2, 2, 2, 2, 2);
-        $indicator3 = new IndicatorView(3, 3, 3, 3, 3);
+        $indicator  = new IndicatorView(1, 1, 1, 1, 1, 1);
+        $indicator2 = new IndicatorView(2, 2, 2, 2, 2, 2);
+        $indicator3 = new IndicatorView(3, 3, 3, 3, 3, 3);
 
         // Reflection
         $reflection     = new \ReflectionClass(Sheet::class);
