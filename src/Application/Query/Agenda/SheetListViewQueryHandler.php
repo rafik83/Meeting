@@ -139,6 +139,6 @@ class SheetListViewQueryHandler
      */
     private function getPlacedMeetingsNumber(Sheet $sheet)
     {
-        return $this->meetingRepository->countMeetingsOfSheet($sheet);
+        return (int) $this->meetingRepository->countMeetingsOfSheet($sheet);
     }
 }
