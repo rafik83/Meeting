@@ -30,7 +30,7 @@ class UpdateSpotHandler
     public function __construct(MeetingRepositoryInterface $meetingRepository, SpotRepositoryInterface $spotRepository)
     {
         $this->meetingRepository = $meetingRepository;
-        $this->spotRepository = $spotRepository;
+        $this->spotRepository    = $spotRepository;
     }
 
     /**
@@ -41,9 +41,10 @@ class UpdateSpotHandler
      */
     public function handle(UpdateSpot $updateSpot)
     {
-        if ($updateSpot->spot !== $updateSpot->meeting->getSpot()
-            && $updateSpot->meeting->isBlockedSpot() && $updateSpot->isBlockedSpot()
-        ) {
+        $isMeetinSpotChanged     = $updateSpot->spot !== $updateSpot->meeting->getSpot();
+        $isMeetinSpotStayBlocked = $updateSpot->meeting->isBlockedSpot() && $updateSpot->isBlockedSpot();
+
+        if (true === $isMeetinSpotChanged && true === $isMeetinSpotStayBlocked) {
             throw new MeetingIsBlockedSpotException();
         }
 
