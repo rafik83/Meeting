@@ -478,7 +478,18 @@ new Vue({
             }
         },
 
+        /**
+         * Load available slots for given meeting (slot) of participant and sheet
+         *
+         * @param sheet
+         * @param participant
+         * @param slot
+         */
         loadSlotsForMeeting: function (sheet, participant, slot) {
+            if (null == slot.meetingId) {
+                return;
+            }
+
             this.isMeetingToUpdateLoading = true;
             this.meetingSlotToUpdate = {
                 sheet: sheet,
@@ -504,10 +515,17 @@ new Vue({
                 }
             ];
 
-            this.participantAvailableSlots(sheet, participant, true);
+            this.changeSlotsStateAvailability(sheet, participant, true);
         },
 
-        participantAvailableSlots: function (sheet, participant, enabled)
+        /**
+         * Change slots state of given participant and given sheet
+         *
+         * @param sheet
+         * @param participant
+         * @param {boolean} state
+         */
+        changeSlotsStateAvailability: function (sheet, participant, state)
         {
             var participantAgenda = this.findParticipantAgenda(sheet, participant);
 
@@ -517,7 +535,7 @@ new Vue({
 
                     for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
                         if (this.availableSlotsForMeeting[availableSlotIndex].id === currentSlot.id) {
-                            currentSlot.isAvailableForMeeting = enabled;
+                            currentSlot.isAvailableForMeeting = state;
                             break;
                         }
                     }
@@ -525,6 +543,11 @@ new Vue({
             }
         },
 
+        /**
+         * Update meeting slot
+         *
+         * @param newSlot
+         */
         updateMeetingSlot: function (newSlot) {
             this.isMeetingToUpdateLoading = false;
 
@@ -532,7 +555,7 @@ new Vue({
                 return;
             }
 
-            this.participantAvailableSlots(this.meetingSlotToUpdate.sheet, this.meetingSlotToUpdate.participant, false);
+            this.changeSlotsStateAvailability(this.meetingSlotToUpdate.sheet, this.meetingSlotToUpdate.participant, false);
             this.loadAgenda(this.meetingSlotToUpdate.sheet);
 
             if (null !== this.meetingSlotToUpdate.slot && null !== this.meetingSlotToUpdate.slot.sheetMetId) {
@@ -542,7 +565,13 @@ new Vue({
             this.meetingSlotToUpdate = null;
         },
 
-        isActive: function (slot) {
+        /**
+         * Is given slot is available for meeting
+         *
+         * @param slot
+         * @returns {boolean}
+         */
+        isAvailableForMeeting: function (slot) {
             return this.meetingSlotToUpdate !== null && slot.isAvailableForMeeting === true;
         }
     }
