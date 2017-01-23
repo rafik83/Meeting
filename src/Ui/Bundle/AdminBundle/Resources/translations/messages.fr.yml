@@ -50,13 +50,8 @@ admin.category.link: 'Catégories de participation'
 admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
-<<<<<<< HEAD
-admin.common.export.yes: Oui
-admin.common.export.no: Non
-=======
 admin.common.export.no: Non
 admin.common.export.yes: Oui
->>>>>>> origin/master
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.event.billing.configuration.link: 'Information facturation'
