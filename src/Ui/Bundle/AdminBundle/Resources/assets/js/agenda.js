@@ -108,7 +108,17 @@ new Vue({
         /**
          * Meeting to update form
          */
-        meetingToUpdate: null
+        meetingToUpdate: null,
+
+        /**
+         * Meeting slot to update
+         */
+        meetingSlotToUpdate: null,
+
+        /**
+         * Available slots for meeting
+         */
+        availableSlotsForMeeting: []
     },
 
     /**
@@ -118,6 +128,18 @@ new Vue({
         this.$nextTick(function () {
             this.init();
         });
+    },
+
+    /**
+     * Computed values
+     */
+    computed: {
+        noRequestsInFocus: function () {
+            return focus.requests == undefined || focus.requests.length === 0;
+        },
+        noSheets: function () {
+            return this.sheets.length === 0
+        }
     },
 
     methods: {
@@ -200,6 +222,16 @@ new Vue({
         },
 
         /**
+         * Show and focus agenda of given sheet
+         *
+         * @param sheet
+         */
+        showAndFocusAgenda: function (sheet) {
+            this.showAgenda(sheet);
+            this.focusAgenda(sheet);
+        },
+
+        /**
          * Show agenda of given sheet
          *
          * @param sheet
@@ -211,7 +243,6 @@ new Vue({
 
             this.highlightMeetingsInCommon(sheet, true);
             this.loadAgenda(sheet);
-            this.focusAgenda(sheet);
         },
 
         /**
@@ -302,6 +333,10 @@ new Vue({
          * @param sheet
          */
         focusAgenda: function (sheet) {
+            if(-1 === this.findSheetAgenda(sheet)) {
+                return;
+            }
+
             this.focus = sheet;
         },
 
@@ -334,6 +369,30 @@ new Vue({
             }
 
             return meetings;
+        },
+
+        /**
+         * Find Participant agenda
+         *
+         * @param sheet
+         * @param participant
+         *
+         * @returns null|participant
+         */
+        findParticipantAgenda: function (sheet, participant) {
+            var sheetId      = this.findSheetAgenda(sheet);
+
+            if (this.agendas[sheetId].participants === undefined) {
+                return null;
+            }
+
+            var index = this.agendas[sheetId].participants.indexOf(participant);
+
+            if (-1 === index) {
+                return null;
+            }
+
+            return this.agendas[sheetId].participants[index];
         },
 
         /**
@@ -403,7 +462,7 @@ new Vue({
         },
 
         /**
-         * Lister for "meeting-update" event
+         * Listener for "meeting-update" event
          */
         meetingUpdated: function () {
             if (null === this.meetingToUpdate) {
@@ -417,6 +476,74 @@ new Vue({
             if (null !== this.meetingToUpdate.slot && null !== this.meetingToUpdate.slot.sheetMetId) {
                 this.loadAgenda(this.findSheetBySheetId(this.meetingToUpdate.slot.sheetMetId));
             }
+        },
+
+        loadSlotsForMeeting: function (sheet, participant, slot) {
+            this.isMeetingToUpdateLoading = true;
+            this.meetingSlotToUpdate = {
+                sheet: sheet,
+                participant: participant,
+                slot: slot
+            };
+
+            // query available slots for meeting slot.meetingId
+
+            // mock
+            this.availableSlotsForMeeting = [
+                {
+                    id: 29
+                },
+                {
+                    id: 32
+                },
+                {
+                    id: 38
+                },
+                {
+                    id: 39
+                }
+            ];
+
+            this.participantAvailableSlots(sheet, participant, true);
+        },
+
+        participantAvailableSlots: function (sheet, participant, enabled)
+        {
+            var participantAgenda = this.findParticipantAgenda(sheet, participant);
+
+            for (var dayIndex = 0; dayIndex < participantAgenda.days.length; dayIndex++) {
+                for (var slotIndex = 0; slotIndex < participantAgenda.days[dayIndex].slots.length; slotIndex++) {
+                    var currentSlot = participantAgenda.days[dayIndex].slots[slotIndex];
+
+                    for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
+                        if (this.availableSlotsForMeeting[availableSlotIndex].id === currentSlot.id) {
+                            currentSlot.isAvailableForMeeting = enabled;
+                            break;
+                        }
+                    }
+                }
+            }
+        },
+
+        updateMeetingSlot: function (newSlot) {
+            this.isMeetingToUpdateLoading = false;
+
+            if (null === this.meetingSlotToUpdate || null === this.meetingSlotToUpdate.sheet || null === this.meetingSlotToUpdate.slot) {
+                return;
+            }
+
+            this.participantAvailableSlots(this.meetingSlotToUpdate.sheet, this.meetingSlotToUpdate.participant, false);
+            this.loadAgenda(this.meetingSlotToUpdate.sheet);
+
+            if (null !== this.meetingSlotToUpdate.slot && null !== this.meetingSlotToUpdate.slot.sheetMetId) {
+                this.loadAgenda(this.findSheetBySheetId(this.meetingSlotToUpdate.slot.sheetMetId));
+            }
+
+            this.meetingSlotToUpdate = null;
+        },
+
+        isActive: function (slot) {
+            return this.meetingSlotToUpdate !== null && slot.isAvailableForMeeting === true;
         }
     }
 });
