@@ -58,7 +58,7 @@ class SheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $requestRepository->countRequestSentBySheet($sheet)->shouldBeCalled()->willReturn(50);
         $requestRepository->countPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn(100);
         $sheetInfoGuesser->guessSheetTitle($sheet, 'fr')->shouldBeCalled()->willReturn('Titre fiche');
-        $meetingRepository->countByParticipant($participant)->shouldBeCalled()->willReturn(55);
+        $meetingRepository->countMeetingsOfSheet($sheet)->shouldBeCalled()->willReturn(55);
 
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
         $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(new IndicatorView(10, 2, 3, 4, 5, 6));

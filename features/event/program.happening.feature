@@ -3,7 +3,7 @@ Feature: Program Happening
   As a participant, I can see the program of happening of the event
 
   Scenario: I can see the program of happening of the event
-    Given the database is empty
+    Given the database is purged
     And the following fixtures files are loaded:
       | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
       | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |

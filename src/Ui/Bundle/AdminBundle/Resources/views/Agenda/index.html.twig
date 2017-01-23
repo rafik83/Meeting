@@ -4,14 +4,20 @@
 
 {% block content %}
 <div id="agenda" class="agenda-container">
+    <meeting-update-modal v-bind:meeting-to-update="meetingToUpdate" v-on:close-modal="clearMeetingToUpdate()" v-on:meeting-updated="meetingUpdated()"></meeting-update-modal>
+
     <div class="row" v-cloak>
         <div class="col-xs-2">
             <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
                 <thead>
                 <tr>
                     <td>
-                        <button class="btn btn-default btn-sm" @click="showFilterModal = true">{{ 'admin.agenda.filters.title.label'|trans }}</button>
-                        <button class="btn btn-default btn-sm" @click="resetSheetFilter">{{ 'admin.agenda.filters.reset.label'|trans }}</button>
+                        <button class="btn btn-default btn-sm" @click="showFilterModal = true">
+                            <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }}
+                        </button>
+                        <button class="btn btn-default btn-sm" @click="resetSheetFilter">
+                            <i class="glyphicon glyphicon-remove"></i> {{ 'admin.agenda.filters.reset.label'|trans }}
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -139,8 +145,8 @@
                                                                     </div>
 
                                                                     <div v-bind:class="{ 'slot': true, 'meeting': true, 'meeting-common': slot.highlight === true }" v-if="slot.type === 'meeting_unavailability'">
-                                                                        {#<a href="#" class="pull-right"><span class="glyphicon glyphicon-cog"></span></a>#}
-                                                                        <div class="slot-label slot-time">${ slot.beginEndHour }</div>
+                                                                        <a href="#" class="pull-right" @click="loadMeetingUpdateSpot(sheet, slot)" v-show="isMeetingToUpdateLoading === false && meetingToUpdate === null"><span class="glyphicon glyphicon-cog"></span></a>
+                                                                        <div class="slot-label slot-time"><span class="glyphicon glyphicon-lock" v-show="slot.blockedSlot === true"></span> ${ slot.beginEndHour }</div>
 
                                                                         <div class="slot-label">
                                                                             <span class="glyphicon glyphicon-question-sign" title="{{ 'admin.agenda.noPreference'|trans }}" v-show="slot.hasNoPreference === true"></span>
@@ -148,7 +154,11 @@
                                                                         </div>
 
                                                                         <div class="slot-label">
-                                                                            <small><span class="glyphicon glyphicon-map-marker"></span> ${ slot.spotReference }</small>
+                                                                            <small>
+                                                                                <span class="glyphicon glyphicon-lock" v-show="slot.blockedSpot === true"></span>
+                                                                                <span class="glyphicon glyphicon-map-marker"></span>
+                                                                                ${ slot.spotReference }
+                                                                            </small>
                                                                         </div>
                                                                     </div>
 
@@ -181,6 +191,8 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ include('AdminBundle:Agenda:modal.html.twig') }}
+    {{ include('AdminBundle:Agenda:meetingUpdateModal.html.twig') }}
     {{ include('@Admin/Agenda/Components/filterModal.html.twig') }}
     {{ include('@Admin/Agenda/Components/filterSheetForm.html.twig') }}
 

@@ -11,6 +11,14 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: string
         createdAt:
             type: datetime
+        blockedSpot:
+            type: boolean
+            options:
+                default: false
+        blockedSlot:
+            type: boolean
+            options:
+                default: false
     oneToOne:
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request

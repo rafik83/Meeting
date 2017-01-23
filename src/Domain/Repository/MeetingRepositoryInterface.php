@@ -73,6 +73,13 @@ interface MeetingRepositoryInterface
     public function countMeetingsToSheet(Sheet $sheet);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countMeetingsOfSheet(Sheet $sheet);
+
+    /**
      * @param Participant $participant
      *
      * @return int

@@ -51,6 +51,9 @@ class SeeWhatType extends AbstractType
         $builder
             ->add('priority', IntegerType::class, [
                 'required' => true,
+                'attr'     => [
+                    'min' => 1,
+                ],
             ])
             ->add('seeWhat', ChoiceType::class, [
                 'attr'         => [

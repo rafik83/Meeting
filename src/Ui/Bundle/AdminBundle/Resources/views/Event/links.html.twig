@@ -157,6 +157,11 @@
                     {{ 'admin.meeting_request_sheets_list.link'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path ('admin_planner', {'event' : event.id}) }}">
+                    {{ 'admin.planner.index'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
     <li class="dropdown-submenu">

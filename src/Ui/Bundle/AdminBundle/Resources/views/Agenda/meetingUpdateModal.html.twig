@@ -1,0 +1,45 @@
+<!-- template for the MeetingUpdateModal component -->
+<script type="x/template" id="meeting-update-modal-template">
+    <modal v-bind:show="meetingToUpdate !== null && meetingToUpdate !== undefined" v-on:close-modal="close()" v-if="meetingToUpdate != null">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="close()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{ 'admin.agenda.meeting.updateSpot.title'|trans }}</h4>
+        </div>
+
+        <div class="modal-body">
+            <p>
+                <span class="label label-default">${ meetingToUpdate.slot.beginEndHour }</span>
+                ${ meetingToUpdate.sheet.title }
+                <span class="glyphicon glyphicon-resize-horizontal"></span>
+                ${ meetingToUpdate.slot.sheetMetTitle }
+            </p>
+
+            <div class="form-group">
+                <label for="modal_spot">{{ 'admin.agenda.meeting.updateSpot.spot'|trans }}</label>
+                <select id="modal_spot" class="form-control" v-model="meetingToUpdate.form.spotId" :disabled="meetingToUpdate.form.blockedSpot == true">
+                    <option v-for="spot in meetingToUpdate.form.availableSpots" v-bind:value="spot.id">
+                        ${ spot.label }
+                    </option>
+                </select>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" v-model="meetingToUpdate.form.blockedSpot"> {{ 'admin.agenda.meeting.updateSpot.blockedSpot'|trans }}
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" v-model="meetingToUpdate.form.blockedSlot"> {{ 'admin.agenda.meeting.updateSpot.blockedSlot'|trans }}
+                </label>
+            </div>
+        </div>
+
+        <div class="modal-footer text-right">
+            <button @click="save()" v-bind:class="{ 'btn': true, 'btn-primary': true, 'disabled': disabled}" v-bind:disabled="disabled">
+                {{ 'admin.agenda.meeting.updateSpot.save'|trans }}
+            </button>
+        </div>
+    </modal>
+</script>
