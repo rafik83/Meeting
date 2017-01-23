@@ -1,0 +1,15 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+[{{ event.title }}] {{ 'admin.planner.index'|trans }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ 'admin.planner.index'|trans }}</h1>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{{ path('admin_export_planner_data', {'event': event.id}) }}" class="btn btn-primary btn-lg">{{ 'admin.planner.export'|trans }}</a>
+        </div>
+    </div>
+{% endblock %}

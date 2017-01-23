@@ -88,6 +88,13 @@ interface RequestRepositoryInterface
     public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = []);
 
     /**
+     * @param Event $event
+     *
+     * @return Request[]
+     */
+    public function getAllAcceptedByEvent(Event $event);
+
+    /**
      * @param Sheet $one
      * @param Sheet $another
      * @param array $state

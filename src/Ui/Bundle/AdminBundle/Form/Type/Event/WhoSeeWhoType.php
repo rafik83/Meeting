@@ -34,6 +34,9 @@ class WhoSeeWhoType extends AbstractType
             ->add('seeable', WhoType::class, $delegatedOptions)
             ->add('priority', IntegerType::class, [
                 'required' => true,
+                'attr'     => [
+                    'min' => 1,
+                ],
             ])
         ;
     }
