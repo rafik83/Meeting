@@ -38,7 +38,7 @@ class MeetingController extends Controller
             return new JsonResponse('Meeting are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if ('POST' === $request->getMethod()) {
+        if (Request::METHOD_POST === $request->getMethod()) {
             return $this->handleUpdateSpotAction($request, $event, $meeting);
         }
 
