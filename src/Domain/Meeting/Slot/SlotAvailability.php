@@ -126,7 +126,7 @@ class SlotAvailability
      *
      * @return SlotAvailabilityView
      */
-    public function isAvailable(MeetingSlot $slot, Participant $participant)
+    public function getSlotAvailability(MeetingSlot $slot, Participant $participant)
     {
         $this->autoLoading($participant->getSheet()->getEvent());
 
@@ -147,6 +147,17 @@ class SlotAvailability
         }
 
         return new SlotAvailabilityView(self::SLOT_AVAILABLE);
+    }
+
+    /**
+     * @param MeetingSlot $slot
+     * @param Participant $participant
+     *
+     * @return SlotAvailabilityView
+     */
+    public function isAvailable(MeetingSlot $slot, Participant $participant)
+    {
+        return $this->getSlotAvailability($slot, $participant);
     }
 
     /**

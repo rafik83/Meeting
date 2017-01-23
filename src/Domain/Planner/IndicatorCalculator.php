@@ -92,18 +92,20 @@ class IndicatorCalculator
             ->requestRepository
             ->countSheetState($sheet, ['state' => Request::STATE_APPROVED]);
 
-        $slotUsable = 0;
+        $slotUsables = [];
 
         foreach ($this->slots as $slot) {
             if ($this->slotAvailability->isUsable($slot)) {
-                $slotUsable++;
+                $slotUsables[] = $slot;
             }
         }
 
         foreach ($sheet->getParticipants()->toArray() as $participant) {
-            foreach ($this->slots as $slot) {
-                if (!$this->slotAvailability->isAvailable($slot, $participant)->isAvailable()) {
-                    $unavailabilities[] = $slot;
+            foreach ($slotUsables as $slotUsable) {
+                $slotAvailability = $this->slotAvailability->getSlotAvailability($slotUsable, $participant);
+
+                if (!$slotAvailability->isAvailable()) {
+                    $unavailabilities[] = $slotUsable;
                 }
             }
         }
@@ -111,7 +113,7 @@ class IndicatorCalculator
         $unavailabilitiesCount = count($unavailabilities);
 
         return new IndicatorView(
-            $slotUsable,
+            count($slotUsables),
             $participantsCount,
             $unavailabilitiesCount,
             $planningQuantity,
