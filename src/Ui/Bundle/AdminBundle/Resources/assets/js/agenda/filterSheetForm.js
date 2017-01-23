@@ -1,7 +1,9 @@
+var options = require('../vueComponents/options');
+
 module.exports = {
     template: '#filter-sheet-form',
     props: ['sheets', 'filters'],
-    delimiters: ['${', '}'],
+    delimiters: options.delimiters,
     computed: {
         types: function () {
             var types = [];

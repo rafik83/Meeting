@@ -1,6 +1,7 @@
 var Vue         = require('vue'),
     axios       = require('axios'),
-    filterModal = require('./agenda/filterModal');
+    filterModal = require('./agenda/filterModal'),
+    options     = require('./vueComponents/options');
 
 /**
  * Pass axios to Vue
@@ -22,7 +23,7 @@ new Vue({
     /**
      * Customs delimiters to avoid collision with Twig
      */
-    delimiters: ['${', '}'],
+    delimiters: options.delimiters,
     components: {
         'filter-modal': filterModal
     },
