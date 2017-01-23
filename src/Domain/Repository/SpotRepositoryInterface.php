@@ -77,6 +77,13 @@ interface SpotRepositoryInterface
     public function getSpotsForMeeting(Meeting $meeting);
 
     /**
+     * @param Meeting $meeting
+     *
+     * @return bool
+     */
+    public function hasSpotsForMeeting(Meeting $meeting);
+
+    /**
      * @param MeetingSlot  $slot
      * @param int          $participantsQuantity
      * @param Meeting|null $exceptMeeting
@@ -84,6 +91,19 @@ interface SpotRepositoryInterface
      * @return Spot[]
      */
     public function getSpotsForSlotAndParticipantsQuantity(
+        MeetingSlot $slot,
+        $participantsQuantity,
+        Meeting $exceptMeeting = null
+    );
+
+    /**
+     * @param MeetingSlot  $slot
+     * @param int          $participantsQuantity
+     * @param Meeting|null $exceptMeeting
+     *
+     * @return bool
+     */
+    public function hasSpotsForSlotAndParticipantsQuantity(
         MeetingSlot $slot,
         $participantsQuantity,
         Meeting $exceptMeeting = null
