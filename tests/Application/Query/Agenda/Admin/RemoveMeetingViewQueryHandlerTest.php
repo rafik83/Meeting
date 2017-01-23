@@ -46,7 +46,7 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $translator        = $this->prophesize(TranslatorInterface::class);
 
-        if (!$meeting->getSlot()->isLocked()) {
+        if (!$meeting->isBlockedSlot()) {
             $meetingRepository->remove($meeting)->shouldBeCalled();
         }
 
@@ -58,7 +58,7 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $handler->handle(new RemoveMeetingViewQuery($meeting, $admin));
     }
 
-    private function getMeeting($lockedSlot = false)
+    private function getMeeting($blockedSlot = false)
     {
         $dateTime = new \DateTime();
         $user     = UserFactory::create('user@vimeet.com');
@@ -67,9 +67,9 @@ class RemoveMeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2   = SheetFactory::create($event);
 
         $request = new Meeting\Request($sheet1, [], $sheet2, [], $dateTime, $user);
-        $slot    = new MeetingSlot($event, $dateTime, $dateTime, $lockedSlot);
+        $slot    = new MeetingSlot($event, $dateTime, $dateTime, $blockedSlot);
         $spot    = new Spot('ref', $event, 100, 200, 150, true);
 
-        return new Meeting($request, $slot, $sheet1, [], $sheet2, [], $dateTime, $spot);
+        return new Meeting($request, $slot, $sheet1, [], $sheet2, [], $dateTime, $spot, true, $blockedSlot);
     }
 }
