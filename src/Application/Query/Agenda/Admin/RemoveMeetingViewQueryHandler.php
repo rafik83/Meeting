@@ -47,7 +47,7 @@ class RemoveMeetingViewQueryHandler
      */
     public function handle(RemoveMeetingViewQuery $query)
     {
-        if ($query->meeting->getSlot()->isLocked()) {
+        if ($query->meeting->isBlockedSlot()) {
             throw new LockedException($this->translator->trans(
                 'flash.admin.meeting.remove.failed',
                 [],
