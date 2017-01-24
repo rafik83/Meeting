@@ -39,4 +39,15 @@ AgendaApiEndpoints.prototype.getMeetingUpdateSpotEndpoint = function (meetingId)
     return this.getPathname() + '/meeting/' + meetingId + '/update-spot';
 };
 
+/**
+ * Returns /admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-slot
+ * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-slot
+ *
+ * @param {int} meetingId
+ * @returns {string}
+ */
+AgendaApiEndpoints.prototype.getMeetingUpdateSlotEndpoint = function (meetingId) {
+    return this.getPathname() + '/meeting/' + meetingId + '/update-slot';
+};
+
 module.exports = AgendaApiEndpoints;

@@ -318,6 +318,16 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * @param MeetingSlot $slot
+     * @param Spot        $spot
+     */
+    public function updateSlotAndSpot(MeetingSlot $slot, Spot $spot)
+    {
+        $this->slot = $slot;
+        $this->spot = $spot;
+    }
+
+    /**
      * @return boolean
      */
     public function isBlockedSpot()

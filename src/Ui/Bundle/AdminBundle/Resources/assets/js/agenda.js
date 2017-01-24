@@ -139,6 +139,11 @@ new Vue({
         },
         noSheets: function () {
             return this.sheets.length === 0
+        },
+        isAvailableAction: function() {
+            return this.isMeetingToUpdateLoading === false
+                && this.meetingToUpdate === null
+                && this.meetingSlotToUpdate === null;
         }
     },
 
@@ -189,6 +194,8 @@ new Vue({
          * @param sheet
          */
         loadAgenda: function (sheet) {
+            this.cancelUpdateMeetingSlot();
+
             var sheetId = this.findSheetAgenda(sheet);
 
             if (-1 === sheetId) {
@@ -319,6 +326,7 @@ new Vue({
          * @param sheet
          */
         closeAgenda: function (sheet) {
+            this.cancelUpdateMeetingSlot();
             this.highlightMeetingsInCommon(sheet, false);
             this.agendas.splice(this.findSheetAgenda(sheet), 1);
 
@@ -490,32 +498,26 @@ new Vue({
                 return;
             }
 
-            this.isMeetingToUpdateLoading = true;
             this.meetingSlotToUpdate = {
                 sheet: sheet,
                 participant: participant,
                 slot: slot
             };
 
-            // query available slots for meeting slot.meetingId
+            this.$http.get(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(slot.meetingId))
+                .then(function(response) {
+                    this.availableSlotsForMeeting = response.data.availableSlotsId;
+                    this.changeSlotsStateAvailability(sheet, participant, true);
+                }.bind(this))
+                .catch(function(error) {
+                    this.cancelUpdateMeetingSlot();
 
-            // mock
-            this.availableSlotsForMeeting = [
-                {
-                    id: 29
-                },
-                {
-                    id: 32
-                },
-                {
-                    id: 38
-                },
-                {
-                    id: 39
-                }
-            ];
-
-            this.changeSlotsStateAvailability(sheet, participant, true);
+                    if (error.response) {
+                        alert(error.response.data);
+                    } else {
+                        alert(error.message);
+                    }
+                }.bind(this));
         },
 
         /**
@@ -529,39 +531,87 @@ new Vue({
         {
             var participantAgenda = this.findParticipantAgenda(sheet, participant);
 
+            if (null === participantAgenda || null === participantAgenda.days) {
+                return;
+            }
+
             for (var dayIndex = 0; dayIndex < participantAgenda.days.length; dayIndex++) {
                 for (var slotIndex = 0; slotIndex < participantAgenda.days[dayIndex].slots.length; slotIndex++) {
                     var currentSlot = participantAgenda.days[dayIndex].slots[slotIndex];
 
                     for (var availableSlotIndex = 0; availableSlotIndex < this.availableSlotsForMeeting.length; availableSlotIndex++) {
-                        if (this.availableSlotsForMeeting[availableSlotIndex].id === currentSlot.id) {
+                        if (this.availableSlotsForMeeting[availableSlotIndex] === currentSlot.id) {
                             currentSlot.isAvailableForMeeting = state;
                             break;
                         }
                     }
                 }
             }
+
+            this.$forceUpdate();
         },
 
         /**
          * Update meeting slot
          *
-         * @param newSlot
+         * @param slot new selected slot
          */
-        updateMeetingSlot: function (newSlot) {
-            this.isMeetingToUpdateLoading = false;
+        updateMeetingSlot: function (slot) {
+            if (false === this.hasMeetingSlotToUpdate()) {
+                return;
+            }
 
-            if (null === this.meetingSlotToUpdate || null === this.meetingSlotToUpdate.sheet || null === this.meetingSlotToUpdate.slot) {
+            var meetingId = this.meetingSlotToUpdate.slot.meetingId;
+            var sheetMetId = this.meetingSlotToUpdate.slot.sheetMetId;
+            var sheet = this.meetingSlotToUpdate.sheet;
+            this.cancelUpdateMeetingSlot();
+
+            this.$http.post(agendaApiEndpoints.getMeetingUpdateSlotEndpoint(meetingId), {
+                slotId: slot.id
+            })
+            .then(function () {
+                this.loadAgenda(sheet);
+                this.loadAgenda(this.findSheetBySheetId(sheetMetId));
+            }.bind(this))
+            .catch(function (error) {
+                if (error.response) {
+                    alert(error.response.data);
+                } else {
+                    alert(error.message);
+                }
+            }.bind(this));
+        },
+
+        /**
+         * Has meeting slot to update
+         *
+         * @returns {boolean}
+         */
+        hasMeetingSlotToUpdate: function () {
+            return null !== this.meetingSlotToUpdate
+                && null !== this.meetingSlotToUpdate.sheet
+                && null !== this.meetingSlotToUpdate.slot
+                && null !== this.meetingSlotToUpdate.slot.meetingId
+                && null !== this.meetingSlotToUpdate.slot.sheetMetId;
+        },
+
+        /**
+         * Clear available slots
+         */
+        clearAvailableSlots: function () {
+            if (false === this.hasMeetingSlotToUpdate()) {
                 return;
             }
 
             this.changeSlotsStateAvailability(this.meetingSlotToUpdate.sheet, this.meetingSlotToUpdate.participant, false);
-            this.loadAgenda(this.meetingSlotToUpdate.sheet);
+        },
 
-            if (null !== this.meetingSlotToUpdate.slot && null !== this.meetingSlotToUpdate.slot.sheetMetId) {
-                this.loadAgenda(this.findSheetBySheetId(this.meetingSlotToUpdate.slot.sheetMetId));
-            }
-
+        /**
+         * Cancel update meeting slot
+         */
+        cancelUpdateMeetingSlot: function() {
+            this.isMeetingToUpdateLoading = false;
+            this.clearAvailableSlots();
             this.meetingSlotToUpdate = null;
         },
 

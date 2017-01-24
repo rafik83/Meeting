@@ -63,6 +63,24 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function find(Event $event, $slotId)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.id = :slotId')
+            ->andWhere('slot.event = :event')
+            ->setParameter('event', $event)
+            ->setParameter('slotId', $slotId);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event)
     {
         $queryBuilder = $this

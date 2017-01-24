@@ -34,6 +34,14 @@ interface MeetingSlotRepositoryInterface
 
     /**
      * @param Event $event
+     * @param int   $slotId
+     *
+     * @return null|MeetingSlot
+     */
+    public function find(Event $event, $slotId);
+
+    /**
+     * @param Event $event
      *
      * @return MeetingSlot[]
      */

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Command\Meeting\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateSpot;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
@@ -35,10 +36,6 @@ class MeetingController extends Controller
     {
         $this->checkAccess($event, $meeting);
 
-        if (Request::METHOD_POST === $request->getMethod()) {
-            return $this->handleUpdateSpotAction($request, $event, $meeting);
-        }
-
         $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_spot_view_query_handler')->handle(
             new MeetingUpdateSpotViewQuery($meeting)
         );
@@ -53,7 +50,7 @@ class MeetingController extends Controller
      *
      * @return JsonResponse
      */
-    private function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting)
+    public function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting)
     {
         $this->checkAccess($event, $meeting);
 
@@ -106,6 +103,40 @@ class MeetingController extends Controller
         );
 
         return new JsonResponse($meetingUpdateSpotView);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Meeting $meeting
+     *
+     * @return JsonResponse
+     */
+    public function handleUpdateSlotAction(Request $request, Event $event, Meeting $meeting)
+    {
+        $this->checkAccess($event, $meeting);
+
+        $data = json_decode($request->getContent());
+
+        if (!isset($data->slotId)) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.error');
+        }
+
+        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+            $event,
+            (int) $data->slotId
+        );
+
+        $updateSlot = new UpdateSlot($meeting, $slot);
+        dump($updateSlot);
+
+        try {
+            $this->get('tactician.commandbus')->handle($updateSlot);
+        } catch (\Exception $exception) {
+            return $this->createErrorJsonResponse($exception->getMessage().' - '. $exception->getFile().' - '.$exception->getLine());
+        }
+
+        return new JsonResponse();
     }
 
     /**
