@@ -35,8 +35,6 @@ final class SheetNotFoundExceptionListener extends AbstractRedirectToEventListen
         }
 
         $this->handleRedirect($getResponseForExceptionEvent);
-
-        return $getResponseForExceptionEvent;
     }
 
     /**
