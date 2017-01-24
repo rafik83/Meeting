@@ -33,6 +33,14 @@ admin.agenda.export.title: 'Rendez-vous / Export'
 admin.agenda.indicators-caption: 'Légende indicateurs'
 admin.agenda.indicators-help: 'Passer le curseur sur les icones'
 admin.agenda.link: 'Gestion des rendez-vous'
+admin.agenda.meeting.updateSpot.blockedSlot: 'Créneau bloqué'
+admin.agenda.meeting.updateSpot.blockedSpot: 'Lieu bloqué'
+admin.agenda.meeting.updateSpot.error: 'Impossible de modifier ce rendez-vous'
+admin.agenda.meeting.updateSpot.isBlockedSpot: 'Il n''est pas possible de modifier le lieu de ce rendez-vous car il est bloqué'
+admin.agenda.meeting.updateSpot.spot: 'Lieu'
+admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
+admin.agenda.meeting.updateSpot.save: 'Enregistrer'
+admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
 admin.agenda.noPreference: 'Pas de préférences'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
 admin.agenda.requestsList.noPreference: 'Pas de préférence'
@@ -333,6 +341,13 @@ admin.plan.name: Nom
 admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
+admin.planner.index: Planification
+admin.planner.export: Exporter
+admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvelle solution supprime l''ensemble des rendez-vous positionnés sur cet événement'
+admin.planner.import.link: 'Importer'
+admin.planner.import.title: 'Importation d''une solution'
+admin.planner.heading.export: 'Exporter les données pour l''algorithme'
+admin.planner.heading.import: 'Importer une solution depuis l''algorithme'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -769,3 +784,8 @@ reset_password.title: 'Demande de nouveau mot de passe'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
+
+admin:
+    planner:
+        export:
+            heading: 'admin.planner.export.heading'

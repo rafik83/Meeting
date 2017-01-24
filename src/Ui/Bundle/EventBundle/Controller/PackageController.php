@@ -118,7 +118,7 @@ class PackageController extends Controller
         }
         
         $command = $this->get('components.step.step_command_factory')
-            ->create($currentStep->type, $sheet, $currentStep->index, $request->getLocale());
+            ->create($currentStep->type, $sheet, $currentStep->index);
 
         $form = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
             'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
