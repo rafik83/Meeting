@@ -13,7 +13,9 @@
             <button type="button" class="btn btn-default" data-dismiss="modal" @click="$emit('close-modal')">
                 {{ 'admin.common.close'|trans }}
             </button>
-            <button type="button" class="btn btn-primary" @click="save()">Ok</button>
+            <button type="button" class="btn btn-primary" @click="save()">
+                {{ 'admin.agenda.filters.submit.label'|trans }}
+            </button>
         </div>
     </modal>
 </script>

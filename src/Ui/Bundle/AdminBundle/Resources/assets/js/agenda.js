@@ -138,7 +138,7 @@ new Vue({
 
         resetSheetFilter: function () {
             var child = this.$refs.sheetFilterModal;
-            if (child !== undefined) {
+            if (typeof child !== 'undefined') {
                 child.reset();
                 this.hasUsedSheetFilter = false;
                 this.filteredSheets = [];
