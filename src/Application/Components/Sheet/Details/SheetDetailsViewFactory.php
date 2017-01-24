@@ -138,7 +138,7 @@ class SheetDetailsViewFactory
             // Completeness
             $sheet->getCompleteness(),
             // Company Objects
-            $templateDataFactory->createCompanyTemplate($sheet, $locale)->getCompanyObjects()
+            $templateDataFactory->createCompanyTemplate($sheet, $locale)->getEditableSheetDataExceptedImageObjects()
         );
     }
 }

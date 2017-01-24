@@ -1693,18 +1693,6 @@ services:
             - '@event_sender'
 
     #
-    # Proforma component
-    #
-    components.sheet.billing_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Proforma\BillingViewFactory
-        arguments:
-            - '@components.sheet.billing_info_guesser'
-    components.sheet.billing_info_guesser:
-        class: Proximum\Vimeet\Application\Components\Sheet\BillingInfoGuesser
-        arguments:
-            - '@tagged_info_guesser'
-
-    #
     # Notification component
     #
     notification.notification_view_factory:
